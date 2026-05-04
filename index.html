@@ -866,6 +866,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   }
   .info-panel { width: 92vw !important; }
   .back-btn span:last-child { display: none !important; }
+  /* Home info button — always visible on mobile */
+  #homeInfoBtn { display: block !important; font-size: 20px !important; color: rgba(255,255,255,.55) !important; }
   .graph-wrap { padding: 12px 10px 8px !important; }
   .night-watch { padding: 20px !important; }
   .nw-quote { font-size: clamp(14px, 4vw, 19px) !important; }
@@ -1709,47 +1711,61 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 </div>
 
 <!-- ═══════════════════════════════════════════
-     THE OFFICE
+     THE OFFICE — Vigils, Lauds, Compline
+     Complete in-app. Douay-Rheims. Seasonal.
+     Auto-detects current hour.
 ═══════════════════════════════════════════ -->
 <div id="screen-office" class="screen">
   <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title">The Office</span>
+    <span class="screen-title" id="officeScreenTitle">The Office</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <!-- Office mode toggle — visible on the screen itself -->
-  <div style="display:flex;justify-content:center;padding:10px 38px 0;gap:0;position:relative;z-index:55">
-    <button onclick="setOfficeMode('concise')" id="officeScreenConcise"
-      style="flex:1;max-width:140px;padding:9px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(200,146,12,.4);border-right:none;cursor:pointer;background:rgba(200,146,12,.14);color:#f0c040;transition:all .2s">
-      Concise
-    </button>
-    <button onclick="setOfficeMode('full');window.open('https://universalis.com/today.htm','_blank')" id="officeScreenFull"
-      style="flex:1;max-width:140px;padding:9px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(200,146,12,.4);cursor:pointer;background:none;color:rgba(255,255,255,.45);transition:all .2s">
-      Full Office →
-    </button>
-  </div>
-  <div class="feature-main">
-    <div class="content-card">
-      <div class="feat-eyebrow" id="officeTimeLabel">Morning Prayer · Lauds</div>
-      <div class="feat-heading">The prayer monks<br>have said for<br>1,500 years.</div>
-      <div class="feat-divider"></div>
-      <p class="feat-eyebrow" style="margin-bottom:10px">Opening</p>
-      <p class="feat-body" style="margin-bottom:18px;font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:rgba(255,255,255,.75);line-height:1.7">"O God, come to my assistance.<br>O Lord, make haste to help me."</p>
-      <p class="feat-eyebrow" style="margin-bottom:10px">Psalm 63</p>
-      <p class="feat-body" style="margin-bottom:18px;font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.68);line-height:1.75">
-        "O God, you are my God; for you I long,<br>for you my soul is thirsting.<br>My body pines for you<br>like a dry, weary land without water.<br>So I gaze on you in the sanctuary<br>to see your strength and your glory."
-      </p>
-      <p class="feat-eyebrow" style="margin-bottom:10px">Scripture · Romans 8:26</p>
-      <p class="feat-body" style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.68);line-height:1.75;margin-bottom:18px">
-        "The Spirit helps us in our weakness. We do not know what we ought to pray for, but the Spirit himself intercedes for us through wordless groans."
-      </p>
-      <div class="feat-divider"></div>
-      <p class="feat-eyebrow" style="margin-bottom:10px">Collect</p>
-      <p class="feat-body" style="font-family:'Playfair Display',serif;font-style:italic;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:20px">
-        "Lord, as light fills this morning, fill us. Let the first hour belong to you before it belongs to anything else."
-      </p>
-      <button class="btn-primary gold" onclick="goHome()" style="width:100%;justify-content:center">Close · Return to Stillness</button>
+
+  <!-- Hour selector -->
+  <div id="officeChooser" style="max-width:520px;margin:0 auto;padding:16px 38px 0;position:relative;z-index:55">
+    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px">The Liturgy of the Hours</p>
+    <!-- Mode toggle -->
+    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.1);margin-bottom:20px;max-width:260px">
+      <button onclick="setOfficeModeAndRender('concise')" id="officeConciseBtn2"
+        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1);transition:all .2s">
+        Concise
+      </button>
+      <button onclick="setOfficeModeAndRender('full')" id="officeFullBtn2"
+        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);transition:all .2s">
+        Full
+      </button>
     </div>
+    <!-- Hour buttons -->
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button onclick="enterOfficeHour('vigils')"
+        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
+        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Vigils</div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Night Prayer · Midnight–5am</div>
+      </button>
+      <button onclick="enterOfficeHour('lauds')"
+        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
+        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Lauds</div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Morning Prayer · 5am–11am</div>
+      </button>
+      <button onclick="enterOfficeHour('compline')"
+        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
+        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
+        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Compline</div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Night Prayer · 8pm–Midnight</div>
+      </button>
+    </div>
+    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px;font-style:italic">Opening automatically to the current hour</p>
+  </div>
+
+  <!-- Hour content — rendered by JS -->
+  <div class="feature-main" id="officeContent" style="display:none">
+    <div class="content-card" id="officeCard" style="max-width:620px;margin:0 auto"></div>
   </div>
 </div>
 
@@ -1888,35 +1904,38 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
           <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="rgba(200,220,255,.6)" stroke-width="1.2"/>
         </svg>
       </div>
-      <p class="feat-eyebrow" style="text-align:center">Deeper · The Cross</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.62);text-align:center;margin-bottom:22px">Theological investigation · Catechism-grounded</p>
+      <p class="feat-eyebrow" style="text-align:center;color:rgba(200,220,255,.75)">Deeper · The Cross</p>
+      <p style="font-family:'Heebo',sans-serif;font-size:14px;font-weight:400;color:rgba(220,228,255,.85);text-align:center;margin-bottom:22px;letter-spacing:.01em">Theological investigation · Catechism-grounded</p>
 
       <div id="deeperInput" class="companion-state active">
-        <p class="companion-prompt-text">"What mystery are you wrestling with?"</p>
-        <textarea class="companion-textarea" id="deeperText" placeholder="Bring your question, your confusion, or what you noticed in prayer today…" rows="5"></textarea>
+        <p class="companion-prompt-text" style="color:rgba(230,235,255,.9)">"What mystery are you wrestling with?"</p>
+        <textarea class="companion-textarea" id="deeperText"
+          placeholder="Bring your question, your confusion, or what you noticed in prayer today…"
+          rows="5"
+          style="color:#ffffff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.35);font-size:15px"></textarea>
         <div class="companion-meta" style="margin-top:14px">
-          <span class="companion-rate" style="color:rgba(255,255,255,.55)">Theological reflection · CCC-grounded</span>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:rgba(210,220,255,.9)" onclick="askDeeper()">Go Deeper →</button>
+          <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,218,255,.75)">Theological reflection · CCC-grounded</span>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper →</button>
         </div>
         <div class="companion-error" id="deeperErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
 
       <div id="deeperLoading" class="companion-state">
         <div class="companion-candle" style="padding:30px 0 20px">
-          <p class="loading-text">Searching the tradition…</p>
-          <p class="loading-sub">CCC · Philokalia · Desert Fathers</p>
+          <p class="loading-text" style="color:rgba(220,228,255,.85)">Searching the tradition…</p>
+          <p class="loading-sub" style="color:rgba(180,200,255,.6)">CCC · Philokalia · Desert Fathers</p>
         </div>
       </div>
 
       <div id="deeperResponse" class="companion-state">
-        <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.7)"></div>
-        <div class="companion-response-card" style="border-color:rgba(178,200,245,.14)">
-          <div class="companion-response-text" id="dResponseText"></div>
-          <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.1)"></div>
+        <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.85);font-size:9px"></div>
+        <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75)">
+          <div class="companion-response-text" id="dResponseText" style="color:rgba(230,235,255,.92)"></div>
+          <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.2);color:rgba(210,220,255,.85)"></div>
         </div>
         <div class="companion-silence">
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.35);color:rgba(210,220,255,.85);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
-          <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
+          <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
         </div>
       </div>
     </div>
@@ -2413,7 +2432,7 @@ const W=[
   {r:162,g:10, b:52, i:.88,base:'#060002'}, // Office — rose
   {r:8,  g:120,b:32, i:.88,base:'#010600'}, // Rule — forest
   {r:70, g:8,  b:152,i:.90,base:'#040007'}, // Autobiography — purple
-  {r:178,g:200,b:245,i:.82,base:'#030408'}, // Deeper — blue-white
+  {r:120,g:148,b:200,i:.55,base:'#020308'}, // Deeper — softer blue, less blinding
 ];
 const HOME={r:82,g:20,b:140,i:.28,base:'#030305'};
 const NIGHTWATCH={r:4,g:4,b:30,i:.12,base:'#010108'};
@@ -2590,6 +2609,7 @@ function enterFeature(i){
   showScreen(F[i].screen,i);
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
+  if(F[i].screen==='office') initOfficeScreen();
 }
 
 function homeReset(){
@@ -4335,16 +4355,463 @@ document.addEventListener('keydown',e=>{
 /* ═══════════════════════════════════════════
    OFFICE — detect morning/evening
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   THE OFFICE — Complete in-app implementation
+   Vigils · Lauds · Compline
+   Douay-Rheims (public domain)
+   Seasonal antiphons · Auto-detection
+═══════════════════════════════════════════ */
+
+// Get current liturgical season
+function getLiturgicalSeason() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const md = now.getMonth() * 100 + now.getDate(); // MMMDD
+
+  // Approximate season boundaries (varies by year but close enough)
+  const advent   = new Date(y, 10, 27).getMonth() * 100 + new Date(y, 10, 27).getDate();
+  const christmas = 1225;
+  const epiphany  = 112;
+  // Lent / Easter vary — use approximations
+  const ashWed = getAshWednesday(y);
+  const easterSunday = getEaster(y);
+  const pentecost = easterSunday + 49;
+
+  const easterMD = (easterSunday.getMonth()) * 100 + easterSunday.getDate();
+  const ashMD    = (ashWed.getMonth()) * 100 + ashWed.getDate();
+  const pentMD   = (new Date(easterSunday.getTime() + 49*86400000).getMonth()) * 100
+                 + new Date(easterSunday.getTime() + 49*86400000).getDate();
+
+  if (md >= 1225 || md <= 112) return 'christmas';
+  if (md >= ashMD && md < easterMD) return 'lent';
+  if (md >= easterMD && md <= pentMD) return 'easter';
+  if (md >= (new Date(y, 10, 27).getMonth() * 100 + 27) && md < 1225) return 'advent';
+  return 'ordinary';
+}
+
+function getEaster(y) {
+  // Anonymous Gregorian algorithm
+  const a = y % 19, b = Math.floor(y/100), c = y % 100;
+  const d = Math.floor(b/4), e = b % 4, f = Math.floor((b+8)/25);
+  const g = Math.floor((b-f+1)/3), h = (19*a+b-d-g+15) % 30;
+  const i = Math.floor(c/4), k = c % 4;
+  const l = (32+2*e+2*i-h-k) % 7;
+  const m = Math.floor((a+11*h+22*l)/451);
+  const month = Math.floor((h+l-7*m+114)/31) - 1;
+  const day   = ((h+l-7*m+114) % 31) + 1;
+  return new Date(y, month, day);
+}
+
+function getAshWednesday(y) {
+  const easter = getEaster(y);
+  return new Date(easter.getTime() - 46*86400000);
+}
+
+// Get psalm week (1-4) from date
+function getPsalmWeek() {
+  const now = new Date();
+  const weekOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 1)) / (7*86400000));
+  return (weekOfYear % 4) + 1;
+}
+
+// Seasonal antiphon data
+const OFFICE_SEASONS = {
+  ordinary: {
+    label: 'Ordinary Time',
+    laudsAntiphon: 'The Lord is my light and my salvation.',
+    vigils: 'In the night my soul watcheth for Thee, O God.',
+    complineAntiphon: 'He who dwells in the shelter of the Most High.',
+    marian: 'salve',
+  },
+  advent: {
+    label: 'Advent',
+    laudsAntiphon: 'Come, Lord Jesus. Do not delay.',
+    vigils: 'Lift up your heads, for your redemption draws near.',
+    complineAntiphon: 'The Lord will come and will not delay.',
+    marian: 'alma',
+  },
+  christmas: {
+    label: 'Christmas',
+    laudsAntiphon: 'Today Christ is born; today the Saviour has appeared.',
+    vigils: 'The Word was made flesh and dwelt among us.',
+    complineAntiphon: 'God sent his Son into the world to save the world.',
+    marian: 'alma',
+  },
+  lent: {
+    label: 'Lent',
+    laudsAntiphon: 'Create in me a clean heart, O God.',
+    vigils: 'Out of the depths I cry to you, O Lord.',
+    complineAntiphon: 'Have mercy on me, O God, according to your steadfast love.',
+    marian: 'ave',
+  },
+  easter: {
+    label: 'Easter',
+    laudsAntiphon: 'Alleluia, alleluia, alleluia.',
+    vigils: 'This is the day the Lord has made; let us rejoice and be glad. Alleluia.',
+    complineAntiphon: 'The Lord is risen from the tomb. Alleluia.',
+    marian: 'regina',
+  },
+};
+
+// Psalm library — Douay-Rheims (public domain)
+const PSALMS = {
+  // Morning psalms
+  ps63: {
+    ref: 'Psalm 62 (63)',
+    text: `O God, thou art my God: I will watch for thee at the break of day.\nFor thee my soul hath thirsted; for thee my flesh, O how many ways!\nIn a desert land, and where there is no way, and no water: so in the sanctuary have I come before thee, to see thy power and thy glory.\nFor thy mercy is better than lives: thee my lips shall praise.\nThus will I bless thee all my life long: and in thy name I will lift up my hands.\nLet my soul be filled as with marrow and fatness: and my mouth shall praise thee with joyful lips.\nIf I have remembered thee upon my bed, I will meditate on thee in the morning.`,
+  },
+  ps5: {
+    ref: 'Psalm 5',
+    text: `Give ear, O Lord, to my words, understand my cry.\nAttend to the voice of my prayer, O my King and my God.\nFor to thee will I pray: O Lord, in the morning thou shalt hear my voice.\nIn the morning I will stand before thee, and will see: because thou art not a God that willest iniquity.`,
+  },
+  ps100: {
+    ref: 'Psalm 99 (100)',
+    text: `Sing joyfully to God, all the earth: serve ye the Lord with gladness.\nCome in before his presence with exceeding great joy.\nKnow ye that the Lord he is God: he made us, and not we ourselves.\nWe are his people and the sheep of his pasture.\nGo ye into his gates with praise, into his courts with hymns: and give glory to him.`,
+  },
+  ps141: {
+    ref: 'Psalm 141 (142)',
+    text: `I cried to the Lord with my voice: with my voice I made supplication to the Lord.\nIn his sight I pour out my prayer, and before him I declare my trouble.\nWhen my spirit failed me, then thou knewest my paths.\nIn this way wherein I walked, they have hidden a snare for me.\nI looked on my right hand, and beheld, and there was no one that would know me.\nFlight hath failed me: and there is no one that hath regard to my soul.\nI cried to thee, O Lord: I said: Thou art my hope, my portion in the land of the living.`,
+  },
+  ps134: {
+    ref: 'Psalm 133 (134)',
+    text: `Behold now bless ye the Lord, all ye servants of the Lord:\nwho stand in the house of the Lord, in the courts of the house of our God.\nIn the nights lift up your hands to the holy places, and bless ye the Lord.\nThe Lord out of Sion bless thee, he that made heaven and earth.`,
+  },
+  ps91: {
+    ref: 'Psalm 90 (91)',
+    text: `He that dwelleth in the aid of the most High, shall abide under the protection of the God of Jacob.\nHe shall say to the Lord: Thou art my protector, and my refuge: my God, in him will I trust.\nFor he hath delivered me from the snare of the hunters: and from the sharp word.\nHe will overshadow thee with his shoulders: and under his wings thou shalt trust.\nThou shalt not be afraid of the terror of the night, nor of the arrow that flieth in the day.`,
+  },
+  ps4: {
+    ref: 'Psalm 4',
+    text: `When I called upon him, the God of my justice heard me: when I was in distress, thou hast enlarged me.\nHave mercy on me: and hear my prayer.\nKnow ye also that the Lord hath made his holy one wonderful: the Lord will hear me when I shall cry unto him.\nBe ye angry, and sin not: the things you say in your hearts, be sorry for them upon your beds.\nIn peace in the selfsame I will sleep, and I will rest: For thou, O Lord, singularly hast settled me in hope.`,
+  },
+  // Vigils psalms
+  ps1: {
+    ref: 'Psalm 1',
+    text: `Blessed is the man who hath not walked in the counsel of the ungodly, nor stood in the way of sinners, nor sat in the chair of pestilence.\nBut his will is in the law of the Lord, and on his law he shall meditate day and night.\nAnd he shall be like a tree which is planted near the running waters, which shall bring forth its fruit, in due season.\nAnd his leaf shall not fall off: and all whatsoever he shall do shall prosper.\nNot so the wicked, not so: but like the dust, which the wind driveth from the face of the earth.\nTherefore the wicked shall not rise again in judgment: nor sinners in the council of the just.\nFor the Lord knoweth the way of the just: and the way of the wicked shall perish.`,
+  },
+  ps22: {
+    ref: 'Psalm 22 (23)',
+    text: `The Lord ruleth me: and I shall want nothing.\nHe hath set me in a place of pasture. He hath brought me up, on the water of refreshment.\nHe hath converted my soul. He hath led me on the paths of justice, for his own name's sake.\nFor though I should walk in the midst of the shadow of death, I will fear no evils, for thou art with me.\nThy rod and thy staff, they have comforted me.\nThou hast prepared a table before me against them that afflict me.\nThou hast anointed my head with oil; and my chalice which inebriateth me, how goodly is it!\nAnd thy mercy will follow me all the days of my life. And that I may dwell in the house of the Lord unto length of days.`,
+  },
+  ps130: {
+    ref: 'Psalm 129 (130)',
+    text: `Out of the depths I have cried to thee, O Lord: Lord, hear my voice.\nLet thine ears be attentive to the voice of my supplication.\nIf thou, O Lord, wilt mark iniquities: Lord, who shall stand it?\nFor with thee there is merciful forgiveness: and by reason of thy law, I have waited for thee, O Lord.\nMy soul hath relied on his word: my soul hath hoped in the Lord.\nFrom the morning watch even until night, let Israel hope in the Lord.\nBecause with the Lord there is mercy: and with him plentiful redemption.\nAnd he shall redeem Israel from all his iniquities.`,
+  },
+};
+
+// Short readings — seasonal
+const OFFICE_READINGS = {
+  vigils: {
+    ordinary: { text: '"My soul waiteth for the Lord more than they that watch for the morning."', ref: 'Psalm 129:6' },
+    advent:   { text: '"Behold, the Lord cometh with many thousands of his saints, to execute judgment upon all."', ref: 'Jude 14-15' },
+    christmas:{ text: '"The Word was made flesh, and dwelt among us."', ref: 'John 1:14' },
+    lent:     { text: '"Rend your hearts and not your garments, and turn to the Lord your God."', ref: 'Joel 2:13' },
+    easter:   { text: '"If ye be risen with Christ, seek the things that are above. Alleluia."', ref: 'Colossians 3:1' },
+  },
+  lauds: {
+    ordinary: { text: '"The Spirit helpeth our infirmity. For we know not what we should pray for as we ought."', ref: 'Romans 8:26' },
+    advent:   { text: '"The night is past and the day is at hand. Let us put off the works of darkness."', ref: 'Romans 13:12' },
+    christmas:{ text: '"God, who at sundry times and in divers manners spoke in times past to the fathers by the prophets, last of all hath spoken to us by his Son."', ref: 'Hebrews 1:1-2' },
+    lent:     { text: '"We then, as workers together with him, beseech you also that ye receive not the grace of God in vain."', ref: '2 Corinthians 6:1' },
+    easter:   { text: '"Blessed be the God and Father of our Lord Jesus Christ, who according to his great mercy hath regenerated us. Alleluia."', ref: '1 Peter 1:3' },
+  },
+  compline: {
+    ordinary: { text: '"Be sober and watch: because your adversary the devil, as a roaring lion, goeth about seeking whom he may devour."', ref: '1 Peter 5:8' },
+    advent:   { text: '"Behold I come quickly. Hold fast that which thou hast, that no man take thy crown."', ref: 'Revelation 3:11' },
+    christmas:{ text: '"The grace of God our Saviour hath appeared to all men, instructing us to live soberly."', ref: 'Titus 2:11-12' },
+    lent:     { text: '"He that shall endure to the end, he shall be saved."', ref: 'Matthew 24:13' },
+    easter:   { text: '"Dying, he died to sin once; but in that he liveth, he liveth unto God. Alleluia."', ref: 'Romans 6:10' },
+  },
+};
+
+// Collects — seasonal
+const OFFICE_COLLECTS = {
+  vigils: {
+    ordinary: 'Lord of the night watch, as we keep the ancient vigil of thy servants, receive our prayer and grant us at the last to see thy glory undimmed. Through Christ our Lord.',
+    advent: 'Come, Lord Jesus, and do not delay. As we watch through this holy night, make straight our paths and purify our hearts to receive thee. Through Christ our Lord.',
+    christmas: 'O God, who hast made this most holy night to shine with the brightness of the true Light: grant that we who have known the mysteries of his light on earth may likewise enjoy his delights in heaven. Through Christ our Lord.',
+    lent: 'Grant us, O Lord, to keep this night watch in union with thy holy Church, and to rise refreshed for the labours of the holy fast. Through Christ our Lord.',
+    easter: 'O God of the night vigil, by whose power Christ rose from the tomb and shone as the light of the world: let his resurrection joy fill us through this night and every night, until we rise to meet him. Alleluia.',
+  },
+  lauds: {
+    ordinary: 'Lord, as light fills this morning, fill us. Let this first hour belong to thee before it belongs to anything else. Through Christ our Lord.',
+    advent: 'Stir up thy power, O Lord, and come. With great might succour us, that through thy grace and mercy the swift approach of thy Son may find us neither sleeping nor afraid. Through Christ our Lord.',
+    christmas: 'O God, who hast made this day sacred by the birth of thy Son: grant that we who receive him as Redeemer may behold him with joy when he comes as Judge. Through Christ our Lord.',
+    lent: 'O Lord our God, grant us the grace to begin this day in penitence and to end it in praise, that through thy mercy the labours of this holy season may bear fruit in our lives. Through Christ our Lord.',
+    easter: 'O God, who on this day didst overcome death and open unto us the gate of everlasting life: do thou follow up by thy hidden inspirations, and precede them by thine aid. Alleluia. Through Christ our Lord.',
+  },
+  compline: {
+    ordinary: 'Visit this place, O Lord, and drive far from it all snares of the enemy; let thy holy angels dwell herein to keep us in peace; and let thy blessing be always upon us. Through Christ our Lord.',
+    advent: 'Lord Jesus, who art to come to judge the living and the dead: enlighten the darkness of our hearts with thy grace, that we may be ready when thou comest. Through Christ our Lord.',
+    christmas: 'O God, who hast gladdened us by the birth of thy Son: grant that thy light, which hath enlightened us this day, may guide our steps through the darkness of this night. Through Christ our Lord.',
+    lent: 'Be our light in the darkness, O Lord, and in thy great mercy defend us from all perils and dangers of this night. Through Christ our Lord.',
+    easter: 'Enlighten our darkness, O Lord, and by thy great mercy defend us from all the perils and dangers of this night. Alleluia. Through Christ our Lord.',
+  },
+};
+
+// Marian antiphons
+const MARIAN = {
+  salve: {
+    title: 'Salve Regina',
+    text: `Hail, holy Queen, Mother of mercy, our life, our sweetness and our hope.\nTo thee do we cry, poor banished children of Eve.\nTo thee do we send up our sighs, mourning and weeping in this vale of tears.\nTurn then, most gracious advocate, thine eyes of mercy toward us;\nand after this our exile show unto us the blessed fruit of thy womb, Jesus.\nO clement, O loving, O sweet Virgin Mary.`,
+  },
+  alma: {
+    title: 'Alma Redemptoris Mater',
+    text: `Alma Redemptoris Mater, quae pervia caeli\nporta manes, et stella maris, succurre cadenti,\nsurgere qui curat, populo:\ntu quae genuisti, natura mirante, tuum sanctum Genitorem,\nVirgo prius ac posterius, Gabrielis ab ore\nsumens illud Ave, peccatorum miserere.`,
+    subtitle: '(Loving Mother of the Redeemer — traditional Advent and Christmas antiphon)',
+  },
+  ave: {
+    title: 'Ave Regina Caelorum',
+    text: `Ave, Regina caelorum, Ave, Domina angelorum:\nSalve, radix, salve, porta, ex qua mundo lux est orta.\nGaude, Virgo gloriosa, super omnes speciosa;\nVale, O valde decora, et pro nobis Christum exora.`,
+    subtitle: '(Hail, O Queen of Heaven — traditional Lenten antiphon)',
+  },
+  regina: {
+    title: 'Regina Caeli',
+    text: `Queen of heaven, rejoice. Alleluia.\nFor he whom thou wast worthy to bear. Alleluia.\nHath risen, as he said. Alleluia.\nPray for us to God. Alleluia.\nRejoice and be glad, O Virgin Mary. Alleluia.\nFor the Lord hath truly risen. Alleluia.`,
+  },
+};
+
+// Te Deum — sung at Vigils on Sundays and feasts
+const TE_DEUM = `We praise thee, O God: we acknowledge thee to be the Lord.\nAll the earth doth worship thee, the Father everlasting.\nTo thee all Angels cry aloud, the Heavens and all the Powers therein.\nTo thee Cherubim and Seraphim continually do cry:\nHoly, Holy, Holy, Lord God of Sabaoth;\nHeaven and earth are full of the majesty of thy glory.\nThe glorious company of the Apostles praise thee.\nThe goodly fellowship of the Prophets praise thee.\nThe noble army of Martyrs praise thee.\nThe holy Church throughout all the world doth acknowledge thee;\nThe Father of an infinite majesty;\nThine adorable, true, and only Son;\nAlso the Holy Ghost, the Comforter.\nThou art the King of glory, O Christ.\nThou art the everlasting Son of the Father.\nWhen thou tookest upon thee to deliver man, thou didst humble thyself to be born of a Virgin.\nWhen thou hadst overcome the sharpness of death, thou didst open the Kingdom of Heaven to all believers.\nThou sittest at the right hand of God, in the glory of the Father.\nWe believe that thou shalt come to be our Judge.\nWe therefore pray thee, help thy servants, whom thou hast redeemed with thy precious blood.\nMake them to be numbered with thy Saints, in glory everlasting.`;
+
+// Office rendering
+let currentOfficeHour = null;
+
+function setOfficeModeAndRender(mode) {
+  setOfficeMode(mode);
+  if (currentOfficeHour) renderOfficeHour(currentOfficeHour);
+}
+
+function enterOfficeHour(hour) {
+  currentOfficeHour = hour;
+  document.getElementById('officeChooser').style.display = 'none';
+  document.getElementById('officeContent').style.display = 'block';
+  renderOfficeHour(hour);
+  // Save to autobiography
+  const season = getLiturgicalSeason();
+  DB.save('office', { hour: hour.charAt(0).toUpperCase() + hour.slice(1), season: OFFICE_SEASONS[season].label });
+}
+
+function officeGoChooser() {
+  currentOfficeHour = null;
+  document.getElementById('officeChooser').style.display = 'block';
+  document.getElementById('officeContent').style.display = 'none';
+}
+
+function renderOfficeHour(hour) {
+  const card = document.getElementById('officeCard');
+  if (!card) return;
+  const mode   = getOfficeMode();
+  const season = getLiturgicalSeason();
+  const sData  = OFFICE_SEASONS[season];
+  const isFull = mode === 'full';
+  const isSunday = new Date().getDay() === 0;
+  const psalmWeek = getPsalmWeek();
+
+  const p = (text, style='') =>
+    `<p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.8;white-space:pre-line;${style}">${text}</p>`;
+  const eyebrow = (text) =>
+    `<p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:18px 0 8px">${text}</p>`;
+  const versicle = (text) =>
+    `<p style="font-family:'Playfair Display',serif;font-size:15px;color:rgba(255,255,255,.82);line-height:1.7;white-space:pre-line;font-style:italic">${text}</p>`;
+  const divider = () =>
+    `<div style="width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,146,12,.25),transparent);margin:18px 0"></div>`;
+  const seasonBadge = () =>
+    `<p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.55);margin-bottom:6px">${sData.label}</p>`;
+
+  let html = '';
+
+  if (hour === 'vigils') {
+    html += seasonBadge();
+    html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Vigils</h2>`;
+    html += eyebrow('Opening');
+    html += versicle('V. O Lord, open thou my lips.\nR. And my mouth shall shew forth thy praise.');
+    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.');
+    html += versicle('Glory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += divider();
+
+    if (isFull) {
+      html += eyebrow('Hymn');
+      html += p(`${sData.vigils}\n\nO Brightness of the Father's face,\nImmortal Light of Light begone,\nO Jesus, Saviour of our race,\nHear us as we come to thee at dawn.`);
+      html += divider();
+    }
+
+    // Vigils psalms — vary by psalm week
+    const vigilsPsalms = [
+      [PSALMS.ps1, PSALMS.ps22, PSALMS.ps130],
+      [PSALMS.ps22, PSALMS.ps130, PSALMS.ps1],
+      [PSALMS.ps130, PSALMS.ps1, PSALMS.ps22],
+      [PSALMS.ps22, PSALMS.ps1, PSALMS.ps130],
+    ];
+    const todayPsalms = isFull ? vigilsPsalms[(psalmWeek-1) % 4] : [vigilsPsalms[(psalmWeek-1) % 4][0]];
+
+    todayPsalms.forEach((ps, i) => {
+      html += eyebrow((isFull ? `Psalm ${i+1} · ` : '') + ps.ref);
+      if (i === 0) html += versicle(sData.vigils);
+      html += p(ps.text);
+    });
+
+    html += divider();
+    html += eyebrow('Reading · ' + OFFICE_READINGS.vigils[season].ref);
+    html += p(`"${OFFICE_READINGS.vigils[season].text}"`);
+
+    if (isFull) {
+      html += eyebrow('Responsory');
+      html += versicle('V. In the night my soul longeth for thee, O God.\nR. My spirit within me watcheth for thee.');
+    }
+
+    if (isFull && isSunday) {
+      html += divider();
+      html += eyebrow('Te Deum — Sung on Sundays and Feasts');
+      html += p(TE_DEUM);
+    }
+
+    html += divider();
+    html += eyebrow('Collect');
+    html += p(OFFICE_COLLECTS.vigils[season]);
+    html += versicle('R. Amen.');
+
+  } else if (hour === 'lauds') {
+    html += seasonBadge();
+    html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Lauds</h2>`;
+    html += eyebrow('Opening');
+    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += divider();
+
+    // Morning antiphon
+    html += eyebrow('Antiphon');
+    html += versicle(sData.laudsAntiphon);
+
+    // Morning psalm — varies by week
+    const laudsPsalms = [PSALMS.ps63, PSALMS.ps5, PSALMS.ps100, PSALMS.ps63];
+    const mainPs = laudsPsalms[(psalmWeek-1) % 4];
+    html += eyebrow('Morning Psalm · ' + mainPs.ref);
+    html += p(mainPs.text);
+
+    if (isFull) {
+      html += eyebrow('Canticle · Benedictus · Zechariah 1:68-79');
+      html += versicle(sData.laudsAntiphon);
+      html += p(`Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.`);
+      html += versicle(sData.laudsAntiphon);
+    }
+
+    html += divider();
+    html += eyebrow('Short Reading · ' + OFFICE_READINGS.lauds[season].ref);
+    html += p(`"${OFFICE_READINGS.lauds[season].text}"`);
+
+    if (isFull) {
+      html += eyebrow('Responsorium Breve');
+      html += versicle('V. The Lord hath prepared his throne in heaven.\nR. And his kingdom shall rule over all.');
+    }
+
+    html += divider();
+    html += eyebrow('Collect');
+    html += p(OFFICE_COLLECTS.lauds[season]);
+    html += versicle('R. Amen.');
+    html += divider();
+    html += versicle('V. Let us bless the Lord.\nR. Thanks be to God.');
+
+  } else if (hour === 'compline') {
+    html += seasonBadge();
+    html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Compline</h2>`;
+
+    if (isFull) {
+      html += eyebrow('Examination of Conscience');
+      html += p('Pause briefly. Call to mind the faults of this day.', 'font-size:13px;color:rgba(255,255,255,.55);font-style:normal');
+      html += versicle('I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.');
+      html += versicle('V. Have mercy on us, O Lord.\nR. For we have sinned against thee.');
+      html += divider();
+    }
+
+    html += eyebrow('Opening');
+    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += divider();
+
+    // Night psalm — alternates Ps 91 / Ps 4
+    const nightPsalm = new Date().getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
+    html += eyebrow('Antiphon');
+    html += versicle(sData.complineAntiphon);
+    html += eyebrow('Night Psalm · ' + nightPsalm.ref);
+    html += p(nightPsalm.text);
+    if (isFull) {
+      html += eyebrow('Psalm 133 (134) · Night Praise');
+      html += p(PSALMS.ps134.text);
+    }
+    html += versicle(sData.complineAntiphon);
+
+    html += divider();
+    html += eyebrow('Short Reading · ' + OFFICE_READINGS.compline[season].ref);
+    html += p(`"${OFFICE_READINGS.compline[season].text}"`);
+
+    if (isFull) {
+      html += eyebrow('Responsorium');
+      html += versicle('V. Into thy hands, O Lord, I commend my spirit.\nR. Into thy hands, O Lord, I commend my spirit.\nV. For thou hast redeemed me, O Lord, thou God of truth.\nR. I commend my spirit.');
+    }
+
+    html += divider();
+    html += eyebrow('Nunc Dimittis · Canticle of Simeon');
+    html += versicle(sData.complineAntiphon);
+    html += p(`Lord, now lettest thou thy servant depart in peace, according to thy word.\nFor mine eyes have seen thy salvation,\nwhich thou hast prepared before the face of all people;\nA light to lighten the Gentiles, and the glory of thy people Israel.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.`);
+    html += versicle(sData.complineAntiphon);
+
+    html += divider();
+    html += eyebrow('Collect');
+    html += p(OFFICE_COLLECTS.compline[season]);
+    html += versicle('R. Amen.');
+
+    html += divider();
+    const mar = MARIAN[sData.marian];
+    html += eyebrow(mar.title + ' · Marian Antiphon');
+    if (mar.subtitle) html += p(mar.subtitle, 'font-size:12px;font-style:normal;color:rgba(255,255,255,.45)');
+    html += p(mar.text);
+
+    html += divider();
+    html += eyebrow('Blessing');
+    html += versicle('May the all-powerful Lord grant us a restful night and a peaceful death.\nR. Amen.');
+  }
+
+  html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
+    <button class="btn-primary gold" onclick="officeGoChooser()" style="justify-content:center">← Other Hours</button>
+    <button class="btn-primary" onclick="goHome()">Return to Still</button>
+  </div>`;
+
+  card.innerHTML = html;
+}
+
 function setOfficeTime(){
-  const h=new Date().getHours();
-  const label=h<12?'Morning Prayer · Lauds':h<17?'Midday Prayer · Sext':'Evening Prayer · Vespers';
-  const el=document.getElementById('officeTimeLabel');
-  if(el)el.textContent=label;
+  // Auto-detect hour and enter it on office screen open
+  const h = new Date().getHours();
+  let autoHour = 'lauds';
+  if (h >= 0 && h < 5)   autoHour = 'vigils';
+  else if (h >= 5 && h < 20) autoHour = 'lauds';
+  else autoHour = 'compline';
+  // Store for use when office screen opens
+  window._officeAutoHour = autoHour;
 }
 
 /* ═══════════════════════════════════════════
    RULE OF LIFE DATE
 ═══════════════════════════════════════════ */
+function initOfficeScreen() {
+  // Reset to chooser
+  const chooser = document.getElementById('officeChooser');
+  const content = document.getElementById('officeContent');
+  if (chooser) chooser.style.display = 'block';
+  if (content) content.style.display = 'none';
+  currentOfficeHour = null;
+  // Sync mode buttons
+  const mode = getOfficeMode();
+  const c2 = document.getElementById('officeConciseBtn2');
+  const f2 = document.getElementById('officeFullBtn2');
+  const activeS   = 'background:rgba(200,146,12,.14);color:#f0c040;';
+  const inactiveS = 'background:none;color:rgba(255,255,255,.38);';
+  if (c2) c2.style.cssText += mode === 'concise' ? activeS : inactiveS;
+  if (f2) f2.style.cssText += mode === 'full'    ? activeS : inactiveS;
+  // Auto-enter the current hour
+  const autoHour = window._officeAutoHour || 'lauds';
+  setTimeout(() => enterOfficeHour(autoHour), 150);
+}
+
 function setRuleDate(){
   const m=['January','February','March','April','May','June','July','August','September','October','November','December'];
   const d=new Date();
