@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Still — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Heebo:wght@300;400;500&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Heebo',sans-serif;background:#f8f7f2;color:#1a1a22;min-height:100vh;}
+
+/* ── AUTH SCREEN ── */
+.auth-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;
+}
+.auth-card{
+  background:#fff;border:1px solid #e8e0c8;
+  padding:48px 40px;max-width:380px;width:100%;
+  text-align:center;
+}
+.auth-logo{font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:#1a1a22;margin-bottom:6px;}
+.auth-sub{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#9a7020;margin-bottom:32px;}
+.auth-input{
+  width:100%;border:1px solid #d0c8b0;padding:12px 16px;
+  font-family:'Heebo',sans-serif;font-size:14px;outline:none;
+  letter-spacing:.08em;margin-bottom:14px;background:#faf9f5;
+  transition:border-color .2s;
+}
+.auth-input:focus{border-color:#9a7020;}
+.auth-btn{
+  width:100%;background:#1a1a22;color:#f0c040;border:none;
+  padding:14px;font-family:'Montserrat',sans-serif;font-size:10px;
+  font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  cursor:pointer;transition:background .2s;
+}
+.auth-btn:hover{background:#2a2a32;}
+.auth-error{color:#cc2200;font-size:12px;margin-top:8px;display:none;}
+
+/* ── ADMIN SHELL ── */
+.admin-shell{display:none;}
+.admin-header{
+  background:#1a1a22;color:#fff;
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.admin-logo{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:#f0c040;}
+.admin-nav{display:flex;gap:24px;}
+.admin-nav button{
+  background:none;border:none;cursor:pointer;
+  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);
+  transition:color .2s;padding:4px 0;border-bottom:2px solid transparent;
+}
+.admin-nav button.active,
+.admin-nav button:hover{color:#fff;}
+.admin-nav button.active{border-bottom-color:#f0c040;}
+
+.admin-main{max-width:900px;margin:0 auto;padding:32px 24px;}
+
+/* ── SECTIONS ── */
+.admin-section{display:none;}
+.admin-section.active{display:block;}
+.section-title{
+  font-family:'Playfair Display',serif;font-size:24px;font-style:italic;
+  color:#1a1a22;margin-bottom:6px;
+}
+.section-sub{font-family:'Heebo',sans-serif;font-size:13px;color:#666;margin-bottom:28px;}
+
+/* ── QUESTION CARDS ── */
+.q-card{
+  background:#fff;border:1px solid #e8e0c8;
+  border-left:3px solid #c8920c;
+  padding:20px 22px;margin-bottom:12px;
+}
+.q-card.rejected{border-left-color:#cc2200;opacity:.6;}
+.q-card.approved{border-left-color:#227722;}
+.q-num{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#9a7020;margin-bottom:8px;}
+.q-text-display{font-family:'Playfair Display',serif;font-size:17px;font-style:italic;line-height:1.6;color:#1a1a22;margin-bottom:12px;}
+.q-edit{
+  width:100%;border:1px solid #d0c8b0;padding:10px 14px;
+  font-family:'Playfair Display',serif;font-style:italic;font-size:15px;
+  outline:none;background:#faf9f5;margin-bottom:12px;resize:none;
+  line-height:1.6;transition:border-color .2s;
+}
+.q-edit:focus{border-color:#9a7020;}
+.q-meta{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#aaa;margin-bottom:10px;}
+.q-date-input{
+  border:1px solid #d0c8b0;padding:7px 12px;
+  font-family:'Heebo',sans-serif;font-size:13px;
+  outline:none;background:#faf9f5;margin-left:8px;
+  transition:border-color .2s;
+}
+.q-date-input:focus{border-color:#9a7020;}
+
+.q-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.btn{
+  padding:8px 18px;font-family:'Montserrat',sans-serif;font-size:9px;
+  font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  border:none;cursor:pointer;transition:all .2s;
+}
+.btn-approve{background:#1a1a22;color:#f0c040;}
+.btn-approve:hover{background:#2a2a32;}
+.btn-reject{background:none;border:1px solid #cc2200;color:#cc2200;}
+.btn-reject:hover{background:#cc2200;color:#fff;}
+.btn-save{background:#227722;color:#fff;}
+.btn-save:hover{background:#1a5c1a;}
+.btn-delete{background:none;border:1px solid #cc2200;color:#cc2200;margin-left:auto;}
+.btn-delete:hover{background:#cc2200;color:#fff;}
+.btn-ghost{background:none;border:1px solid #ccc;color:#666;}
+.btn-ghost:hover{border-color:#999;color:#1a1a22;}
+.btn-generate{background:#9a7020;color:#fff;}
+.btn-generate:hover{background:#7a5010;}
+
+/* ── MANUAL QUESTION ── */
+.manual-form{background:#fff;border:1px solid #e8e0c8;padding:24px;margin-top:24px;}
+.manual-form label{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#666;display:block;margin-bottom:8px;}
+.manual-textarea{
+  width:100%;border:1px solid #d0c8b0;padding:12px 14px;
+  font-family:'Playfair Display',serif;font-style:italic;font-size:16px;
+  outline:none;background:#faf9f5;resize:none;line-height:1.65;
+  margin-bottom:16px;transition:border-color .2s;
+}
+.manual-textarea:focus{border-color:#9a7020;}
+.manual-date{border:1px solid #d0c8b0;padding:10px 14px;font-family:'Heebo',sans-serif;font-size:14px;outline:none;background:#faf9f5;width:180px;margin-bottom:16px;display:block;}
+
+/* ── SCHEDULE ── */
+.schedule-row{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 0;border-bottom:1px solid #e8e0c8;
+}
+.schedule-date{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a7020;min-width:90px;padding-top:3px;}
+.schedule-text{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#1a1a22;flex:1;line-height:1.55;}
+.schedule-status{font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;flex-shrink:0;}
+.status-approved{color:#227722;background:#e8f5e8;border:1px solid #b0d8b0;}
+.status-sent{color:#9a7020;background:#fdf5e0;border:1px solid #e8d8a0;}
+.status-draft{color:#888;background:#f0f0f0;border:1px solid #ccc;}
+.schedule-empty{font-family:'Playfair Display',serif;font-style:italic;color:#aaa;padding:24px 0;text-align:center;}
+
+/* ── STATS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:28px;}
+.stat-box{background:#fff;border:1px solid #e8e0c8;padding:16px;text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:#9a7020;}
+.stat-label{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#aaa;margin-top:4px;}
+
+/* ── LOADING + FEEDBACK ── */
+.loading{text-align:center;padding:40px;color:#aaa;font-family:'Playfair Display',serif;font-style:italic;}
+.toast{position:fixed;bottom:24px;right:24px;background:#1a1a22;color:#f0c040;padding:12px 20px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;transform:translateY(100px);transition:transform .3s;z-index:100;}
+.toast.show{transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">Still</div>
+    <div class="auth-sub">Admin · Question Review</div>
+    <input class="auth-input" type="password" id="authPassword"
+      placeholder="Enter admin password"
+      onkeydown="if(event.key==='Enter')login()"/>
+    <button class="auth-btn" onclick="login()">Enter →</button>
+    <p class="auth-error" id="authError">Incorrect password.</p>
+  </div>
+</div>
+
+<!-- ADMIN SHELL -->
+<div class="admin-shell" id="adminShell">
+  <header class="admin-header">
+    <div class="admin-logo">Still Admin</div>
+    <nav class="admin-nav">
+      <button class="active" onclick="showSection('queue',this)">Queue</button>
+      <button onclick="showSection('schedule',this)">Schedule</button>
+      <button onclick="showSection('manual',this)">Write</button>
+      <button onclick="showSection('stats',this)">Stats</button>
+    </nav>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- QUEUE SECTION -->
+    <div class="admin-section active" id="section-queue">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+        <h1 class="section-title">Pending Review</h1>
+        <button class="btn btn-generate" onclick="generateNewBatch()">Generate New Batch →</button>
+      </div>
+      <p class="section-sub">Claude has written these questions. Approve each, edit if needed, assign a date, then save.</p>
+      <div id="queueList"><div class="loading">Loading…</div></div>
+    </div>
+
+    <!-- SCHEDULE SECTION -->
+    <div class="admin-section" id="section-schedule">
+      <h1 class="section-title">Upcoming Questions</h1>
+      <p class="section-sub">Questions scheduled for the next 14 days.</p>
+      <div id="scheduleList"><div class="loading">Loading…</div></div>
+    </div>
+
+    <!-- MANUAL WRITE SECTION -->
+    <div class="admin-section" id="section-manual">
+      <h1 class="section-title">Write a Question</h1>
+      <p class="section-sub">Write your own question and schedule it for a specific date.</p>
+      <div class="manual-form">
+        <label>Question text</label>
+        <textarea class="manual-textarea" id="manualText" rows="3"
+          placeholder="What is one thing you have been avoiding looking at honestly?"></textarea>
+        <label>Schedule for</label>
+        <input class="manual-date" type="date" id="manualDate"/>
+        <div class="q-actions">
+          <button class="btn btn-approve" onclick="createManual()">Schedule Question →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS SECTION -->
+    <div class="admin-section" id="section-stats">
+      <h1 class="section-title">Moderation</h1>
+      <p class="section-sub">All-time moderation decisions. No response text is stored.</p>
+      <div class="stats-grid" id="statsGrid"><div class="loading">Loading…</div></div>
+      <div id="statsList"></div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG — replace with your values ────────────────────
+const SUPABASE_URL  = 'https://YOUR_PROJECT.supabase.co'
+const ADMIN_SECRET  = '' // entered at login
+const FUNCTIONS_URL = `${SUPABASE_URL}/functions/v1`
+
+// ── AUTH ──────────────────────────────────────────────────
+let adminSecret = ''
+
+function login() {
+  const pw = document.getElementById('authPassword').value
+  if (!pw) return
+  // Test auth by hitting admin-queue
+  fetch(`${FUNCTIONS_URL}/admin-queue`, {
+    headers: { 'x-admin-secret': pw }
+  }).then(r => {
+    if (r.ok) {
+      adminSecret = pw
+      document.getElementById('authScreen').style.display = 'none'
+      document.getElementById('adminShell').style.display = 'block'
+      loadQueue()
+      loadSchedule()
+    } else {
+      document.getElementById('authError').style.display = 'block'
+    }
+  }).catch(() => {
+    document.getElementById('authError').style.display = 'block'
+  })
+}
+
+// ── NAVIGATION ────────────────────────────────────────────
+function showSection(id, btn) {
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'))
+  document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'))
+  document.getElementById('section-' + id).classList.add('active')
+  btn.classList.add('active')
+  if (id === 'queue') loadQueue()
+  if (id === 'schedule') loadSchedule()
+  if (id === 'stats') loadStats()
+  if (id === 'manual') {
+    // Default date to next available
+    const d = new Date()
+    d.setDate(d.getDate() + 1)
+    document.getElementById('manualDate').value = d.toISOString().split('T')[0]
+  }
+}
+
+// ── API HELPERS ───────────────────────────────────────────
+async function api(action, data = {}) {
+  const res = await fetch(`${FUNCTIONS_URL}/admin-queue`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+    body: JSON.stringify({ action, ...data })
+  })
+  return res.json()
+}
+
+async function getData() {
+  const res = await fetch(`${FUNCTIONS_URL}/admin-queue`, {
+    headers: { 'x-admin-secret': adminSecret }
+  })
+  return res.json()
+}
+
+// ── LOAD QUEUE ────────────────────────────────────────────
+let queueData = []
+async function loadQueue() {
+  const list = document.getElementById('queueList')
+  list.innerHTML = '<div class="loading">Loading…</div>'
+  const data = await getData()
+  queueData = data.queue || []
+
+  if (!queueData.length) {
+    list.innerHTML = `<div class="loading">No questions pending review.<br>Generate a new batch or write one manually.</div>`
+    return
+  }
+
+  // Calculate next 7 available dates
+  const used = new Set((data.schedule || []).map(q => q.scheduled_for))
+  const availableDates = []
+  const d = new Date()
+  while (availableDates.length < 14) {
+    d.setDate(d.getDate() + 1)
+    const ds = d.toISOString().split('T')[0]
+    if (!used.has(ds)) availableDates.push(ds)
+  }
+
+  list.innerHTML = queueData.map((q, i) => {
+    const suggestedDate = availableDates[i] || availableDates[availableDates.length - 1]
+    return `
+    <div class="q-card" id="qc-${q.id}">
+      <div class="q-num">Question ${i + 1} · Generated ${new Date(q.generated_at).toLocaleDateString()}</div>
+      <textarea class="q-edit" id="qt-${q.id}" rows="2">${q.text}</textarea>
+      <div class="q-actions">
+        <span style="font-family:'Heebo',sans-serif;font-size:13px;color:#666">Schedule for:</span>
+        <input class="q-date-input" type="date" id="qd-${q.id}" value="${suggestedDate}"/>
+        <button class="btn btn-approve" onclick="approveQueue('${q.id}')">Approve →</button>
+        <button class="btn btn-reject" onclick="rejectQueue('${q.id}')">Reject</button>
+      </div>
+    </div>`
+  }).join('')
+}
+
+async function approveQueue(id) {
+  const text = document.getElementById('qt-' + id)?.value?.trim()
+  const date = document.getElementById('qd-' + id)?.value
+  if (!date) { toast('Please select a date.'); return }
+  const btn = document.querySelector(`#qc-${id} .btn-approve`)
+  if (btn) btn.textContent = 'Saving…'
+  await api('approve_queue', { queue_id: id, text, scheduled_for: date })
+  document.getElementById('qc-' + id)?.remove()
+  toast('Question scheduled for ' + date)
+  loadSchedule()
+}
+
+async function rejectQueue(id) {
+  await api('reject_queue', { queue_id: id })
+  document.getElementById('qc-' + id)?.remove()
+  toast('Question rejected.')
+}
+
+// ── LOAD SCHEDULE ─────────────────────────────────────────
+async function loadSchedule() {
+  const list = document.getElementById('scheduleList')
+  list.innerHTML = '<div class="loading">Loading…</div>'
+  const data = await getData()
+  const schedule = data.schedule || []
+
+  if (!schedule.length) {
+    list.innerHTML = '<div class="schedule-empty">No questions scheduled yet. Approve from the queue or write one manually.</div>'
+    return
+  }
+
+  list.innerHTML = schedule.map(q => `
+    <div class="schedule-row">
+      <div class="schedule-date">${formatDate(q.scheduled_for)}</div>
+      <div class="schedule-text">"${q.text}"</div>
+      <span class="schedule-status status-${q.status}">${q.status}</span>
+      ${q.status !== 'sent' ? `<button class="btn btn-delete" onclick="deleteQuestion('${q.id}')">×</button>` : ''}
+    </div>
+  `).join('')
+}
+
+async function deleteQuestion(id) {
+  if (!confirm('Delete this question?')) return
+  await api('delete_question', { question_id: id })
+  toast('Question deleted.')
+  loadSchedule()
+}
+
+// ── MANUAL WRITE ──────────────────────────────────────────
+async function createManual() {
+  const text = document.getElementById('manualText').value.trim()
+  const date = document.getElementById('manualDate').value
+  if (!text || !date) { toast('Enter both question text and a date.'); return }
+  await api('create_manual', { text, scheduled_for: date })
+  document.getElementById('manualText').value = ''
+  toast('Question scheduled for ' + date)
+  loadSchedule()
+}
+
+// ── GENERATE NEW BATCH ────────────────────────────────────
+async function generateNewBatch() {
+  const btn = document.querySelector('.btn-generate')
+  if (btn) btn.textContent = 'Generating…'
+  try {
+    const res = await fetch(`${FUNCTIONS_URL}/generate-questions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-admin-secret': adminSecret },
+    })
+    const data = await res.json()
+    toast(`Generated ${data.generated || 0} questions. Check your email.`)
+    setTimeout(() => loadQueue(), 1500)
+  } catch (e) {
+    toast('Generation failed. Check console.')
+  } finally {
+    if (btn) btn.textContent = 'Generate New Batch →'
+  }
+}
+
+// ── STATS ─────────────────────────────────────────────────
+async function loadStats() {
+  const grid = document.getElementById('statsGrid')
+  const list = document.getElementById('statsList')
+  grid.innerHTML = '<div class="loading">Loading…</div>'
+  const data = await getData()
+  const stats = data.moderation_stats || []
+
+  const totals = { approved: 0, rejected: 0, crisis: 0 }
+  const categories = {}
+  stats.forEach(s => {
+    totals[s.decision] = (totals[s.decision] || 0) + parseInt(s.total)
+    if (s.category && s.decision !== 'approved') {
+      categories[s.category] = (categories[s.category] || 0) + parseInt(s.total)
+    }
+  })
+  const total = totals.approved + totals.rejected + totals.crisis
+  const approvalRate = total > 0 ? Math.round((totals.approved / total) * 100) : 0
+
+  grid.innerHTML = [
+    { num: total, label: 'Total submissions' },
+    { num: totals.approved, label: 'Approved' },
+    { num: totals.rejected, label: 'Rejected' },
+    { num: totals.crisis, label: 'Crisis events' },
+    { num: approvalRate + '%', label: 'Approval rate' },
+  ].map(s => `<div class="stat-box"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('')
+
+  if (Object.keys(categories).length) {
+    list.innerHTML = `<h3 style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#aaa;margin:24px 0 12px">Rejection categories</h3>` +
+      Object.entries(categories).map(([cat, count]) =>
+        `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e8e0c8;font-family:'Heebo',sans-serif;font-size:13px;color:#555"><span>${cat}</span><span style="font-weight:500;color:#1a1a22">${count}</span></div>`
+      ).join('')
+  }
+}
+
+// ── HELPERS ───────────────────────────────────────────────
+function formatDate(ds) {
+  const d = new Date(ds + 'T12:00:00')
+  return d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' })
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast')
+  el.textContent = msg
+  el.classList.add('show')
+  setTimeout(() => el.classList.remove('show'), 3000)
+}
+</script>
+</body>
+</html>
