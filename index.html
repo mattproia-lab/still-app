@@ -757,11 +757,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   /* ── Rope area — HIDE the vertical rope on mobile ── */
   .home-rope-area { display: none !important; }
 
-  /* ── Feature list — left-aligned, scrollable on mobile ── */
+  /* ── Feature list — scrollable, tight spacing so all fit ── */
   .feat-list-wrap {
     width: 100% !important;
-    height: calc(100vh - env(safe-area-inset-top, 44px) - 60px) !important;
-    padding: 10px 0 100px 28px !important;
+    height: calc(100vh - env(safe-area-inset-top, 44px) - 52px) !important;
+    padding: 2px 0 72px 22px !important;
     overflow-y: scroll !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -772,47 +772,50 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
     z-index: 55 !important;
   }
 
+  /* Featured Practices — bigger, separated from items */
   .feat-eyebrow-home {
     text-align: left !important;
-    margin-bottom: 8px !important;
-    font-size: 8px !important;
-    letter-spacing: .3em !important;
-    color: rgba(255,255,255,.72) !important;
+    margin-bottom: 16px !important;
+    font-size: 10px !important;
+    letter-spacing: .32em !important;
+    color: rgba(255,255,255,.85) !important;
+    font-weight: 700 !important;
   }
 
-  /* Feature items — left aligned, large tap targets */
+  /* Feature items — tight so Deeper & Autobiography both fit */
   .feat-item {
     justify-content: flex-start !important;
     text-align: left !important;
-    padding: 4px 0 !important;
-    min-height: 44px !important;
+    padding: 1px 0 !important;
+    min-height: 32px !important;
     align-items: baseline !important;
     gap: 8px !important;
   }
   .feat-item .fb { display: none !important; }
 
   .feat-item.is-active .fn {
-    font-size: clamp(26px, 7.5vw, 36px) !important;
+    font-size: clamp(22px, 6.5vw, 32px) !important;
     color: #ffffff !important;
-    line-height: 1.08 !important;
+    line-height: 1.04 !important;
     white-space: normal !important;
     word-break: break-word !important;
+    max-width: calc(100vw - 44px) !important;
   }
   .feat-item.is-near .fn {
-    font-size: clamp(17px, 5vw, 22px) !important;
+    font-size: clamp(15px, 4.5vw, 20px) !important;
     color: rgba(255,255,255,.65) !important;
-    line-height: 1.12 !important;
+    line-height: 1.1 !important;
   }
   .feat-item.is-far .fn {
-    font-size: clamp(14px, 4vw, 18px) !important;
+    font-size: clamp(13px, 3.6vw, 16px) !important;
     color: rgba(255,255,255,.48) !important;
-    line-height: 1.14 !important;
+    line-height: 1.1 !important;
   }
 
-  /* Divider before Deeper */
+  /* Divider before Deeper — minimal */
   .feat-divider-line {
-    margin: 3px 0 !important;
-    width: 20px !important;
+    margin: 2px 0 !important;
+    width: 18px !important;
   }
 
   /* ── Description — hide on mobile, go straight in ── */
@@ -946,7 +949,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
       <span class="h-arrow">›</span>
       <span id="homeHeaderLabel">Featured Practices</span>
     </div>
-    <div class="hamburger" onclick="openSettings()"><span></span><span></span></div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <!-- Info button — shows info for active feature -->
+      <button id="homeInfoBtn"
+        style="display:none;background:none;border:none;cursor:pointer;font-size:17px;color:rgba(255,255,255,.38);padding:4px 6px;line-height:1;transition:color .2s"
+        onmouseover="this.style.color='rgba(200,146,12,.8)'"
+        onmouseout="this.style.color='rgba(255,255,255,.38)'"
+        onclick="openHomeInfo()">ⓘ</button>
+      <div class="hamburger" onclick="openSettings()"><span></span><span></span></div>
+    </div>
   </header>
   <div class="home-main">
     <div class="feat-list-wrap">
@@ -1706,6 +1717,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
     <span class="screen-title">The Office</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
+  <!-- Office mode toggle — visible on the screen itself -->
+  <div style="display:flex;justify-content:center;padding:10px 38px 0;gap:0;position:relative;z-index:55">
+    <button onclick="setOfficeMode('concise')" id="officeScreenConcise"
+      style="flex:1;max-width:140px;padding:9px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(200,146,12,.4);border-right:none;cursor:pointer;background:rgba(200,146,12,.14);color:#f0c040;transition:all .2s">
+      Concise
+    </button>
+    <button onclick="setOfficeMode('full');window.open('https://universalis.com/today.htm','_blank')" id="officeScreenFull"
+      style="flex:1;max-width:140px;padding:9px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(200,146,12,.4);cursor:pointer;background:none;color:rgba(255,255,255,.45);transition:all .2s">
+      Full Office →
+    </button>
+  </div>
   <div class="feature-main">
     <div class="content-card">
       <div class="feat-eyebrow" id="officeTimeLabel">Morning Prayer · Lauds</div>
@@ -1867,13 +1889,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         </svg>
       </div>
       <p class="feat-eyebrow" style="text-align:center">Deeper · The Cross</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);text-align:center;margin-bottom:22px">Theological investigation · Catechism-grounded</p>
+      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.62);text-align:center;margin-bottom:22px">Theological investigation · Catechism-grounded</p>
 
       <div id="deeperInput" class="companion-state active">
         <p class="companion-prompt-text">"What mystery are you wrestling with?"</p>
         <textarea class="companion-textarea" id="deeperText" placeholder="Bring your question, your confusion, or what you noticed in prayer today…" rows="5"></textarea>
         <div class="companion-meta" style="margin-top:14px">
-          <span class="companion-rate">Theological reflection · CCC-grounded</span>
+          <span class="companion-rate" style="color:rgba(255,255,255,.55)">Theological reflection · CCC-grounded</span>
           <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:rgba(210,220,255,.9)" onclick="askDeeper()">Go Deeper →</button>
         </div>
         <div class="companion-error" id="deeperErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
@@ -2494,15 +2516,17 @@ function buildFeatList(){
     const item=document.createElement('div');
     item.className='feat-item is-far';item.dataset.i=i;
     item.innerHTML=`<span class="fb">${f.badge}</span><span class="fn">${f.name}</span>`;
-    item.addEventListener('mouseenter',()=>homeActivate(i));
     item.addEventListener('click',()=>{
       if(IS_MOBILE){
-        // On mobile: tap activates + shows door. ENTER is the threshold.
         homeActivate(i);
       } else {
         enterFeature(i);
       }
     });
+    // Hover fires only on the text span — not the full-width row
+    // This prevents selection changing when mouse travels to Enter or Info buttons
+    const nameSpan = item.querySelector('.fn');
+    if(nameSpan) nameSpan.addEventListener('mouseenter',()=>homeActivate(i));
     list.appendChild(item);
   });
 }
@@ -2534,6 +2558,9 @@ function homeActivate(i){
   document.getElementById('bgBase').style.backgroundColor=w.base;
   document.getElementById('homeHeaderLabel').textContent=f.name;
   document.getElementById('homeHeaderMid').classList.add('show');
+  // Show info button for active feature
+  const homeInfoBtn = document.getElementById('homeInfoBtn');
+  if (homeInfoBtn) homeInfoBtn.style.display = 'block';
   document.querySelectorAll('.feat-item').forEach((item,j)=>{
     const dist=Math.abs(j-i);
     item.className='feat-item '+(j===i?'is-active':dist===1?'is-near':'is-far');
@@ -2570,6 +2597,8 @@ function homeReset(){
   animateTo(HOME);
   document.getElementById('bgBase').style.backgroundColor='#030305';
   document.getElementById('homeHeaderMid').classList.remove('show');
+  const homeInfoBtn = document.getElementById('homeInfoBtn');
+  if (homeInfoBtn) homeInfoBtn.style.display = 'none';
   document.querySelectorAll('.feat-item').forEach(item=>item.className='feat-item is-far');
   document.getElementById('homeDesc').classList.remove('show');
   document.getElementById('sectionCtr').classList.remove('show');
@@ -2588,8 +2617,7 @@ function homeReset(){
   if(IS_MOBILE) hideDoor();
 }
 
-// Override goHome to also reset home state
-const _goHome=goHome;
+// goHome — resets home state and stops sitting
 function goHome(){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('home').classList.add('active');
@@ -2619,6 +2647,7 @@ function loadBellFile(input){
 }
 
 function playBell(cb){
+  if(!bellEnabled){ if(cb) setTimeout(cb,300); return; }
   if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
   if(bellBuffer){
     const src=audioCtx.createBufferSource();
@@ -2962,12 +2991,7 @@ function playAnchor() {
   }
 }
 
-function completeSitting() {
-  setSittingPhase('complete');
-  const sitOnly = sThoughts.filter(t => t.phase === 'sit');
-  document.getElementById('completeTotalCount').textContent = sitOnly.length;
-  drawThoughtGraph();
-}
+// completeSitting is defined below with DB.save integrated
 
 function drawThoughtGraph() {
   const svg = document.getElementById('thoughtGraphSvg');
@@ -3621,11 +3645,12 @@ const DB = {
   }
 };
 
-/* Wire completeSitting to auto-save */
-const _origComplete = completeSitting;
+/* Wire completeSitting to auto-save — merged directly */
 function completeSitting() {
-  _origComplete();
+  setSittingPhase('complete');
   const sitOnly = sThoughts.filter(t => t.phase === 'sit');
+  document.getElementById('completeTotalCount').textContent = sitOnly.length;
+  drawThoughtGraph();
   DB.save('sitting', {
     duration: sDuration,
     totalThoughts: sitOnly.length,
@@ -4245,6 +4270,14 @@ const INFO_CONTENT = {
 
 };
 
+function openHomeInfo() {
+  // Open info panel for currently active home feature
+  const screenKeys = ['sitting','lectio','examen','darkness','community','companion','saint','office','rule','autobiography','deeper'];
+  if (homeActive >= 0 && homeActive < screenKeys.length) {
+    openInfo(screenKeys[homeActive]);
+  }
+}
+
 function openInfo(key) {
   const content = INFO_CONTENT[key];
   if (!content) return;
@@ -4401,12 +4434,7 @@ function setBell(on) {
   if (offBtn) offBtn.style.cssText += !on ? activeStyle : inactiveStyle;
 }
 
-// Wrap playBell to respect the toggle
-const _playBellOrig = playBell;
-function playBell(cb) {
-  if (!bellEnabled) { if (cb) setTimeout(cb, 300); return; }
-  _playBellOrig(cb);
-}
+// Bell toggle check is built into playBell directly — no override needed
 
 /* ═══════════════════════════════════════════
    OFFICE MODE — concise / full, persists
