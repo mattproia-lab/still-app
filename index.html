@@ -100,7 +100,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 /* Typography shared */
 .feat-eyebrow{
   font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
-  letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.45);
+  letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.62);
   margin-bottom:10px;
 }
 .feat-heading{
@@ -109,12 +109,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   color:#fff;margin-bottom:14px;
 }
 .feat-subhead{
-  font-family:'Playfair Display',serif;font-size:clamp(14px,1.5vw,17px);
-  font-style:italic;color:rgba(255,255,255,.7);line-height:1.6;margin-bottom:18px;
+  font-family:'Playfair Display',serif;font-size:clamp(15px,1.5vw,18px);
+  font-style:italic;color:rgba(255,255,255,.82);line-height:1.6;margin-bottom:18px;
 }
 .feat-body{
-  font-family:'Heebo',sans-serif;font-size:clamp(13px,1.2vw,15px);
-  font-weight:300;color:rgba(255,255,255,.62);line-height:1.78;
+  font-family:'Heebo',sans-serif;font-size:clamp(14px,1.2vw,16px);
+  font-weight:300;color:rgba(255,255,255,.78);line-height:1.78;
 }
 .feat-divider{
   width:100%;height:1px;
@@ -774,9 +774,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
   .feat-eyebrow-home {
     text-align: left !important;
-    margin-bottom: 6px !important;
-    font-size: 7px !important;
+    margin-bottom: 8px !important;
+    font-size: 8px !important;
     letter-spacing: .3em !important;
+    color: rgba(255,255,255,.72) !important;
   }
 
   /* Feature items — left aligned, large tap targets */
@@ -790,22 +791,22 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   }
   .feat-item .fb { display: none !important; }
 
-  /* ALL 11 features + divider must fit in one screen */
-  /* Tight but readable — Dogstudio aesthetic */
   .feat-item.is-active .fn {
-    font-size: clamp(28px, 8vw, 38px) !important;
+    font-size: clamp(26px, 7.5vw, 36px) !important;
     color: #ffffff !important;
-    line-height: 1.05 !important;
+    line-height: 1.08 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
   }
   .feat-item.is-near .fn {
-    font-size: clamp(18px, 5.2vw, 24px) !important;
-    color: rgba(255,255,255,.55) !important;
-    line-height: 1.1 !important;
+    font-size: clamp(17px, 5vw, 22px) !important;
+    color: rgba(255,255,255,.65) !important;
+    line-height: 1.12 !important;
   }
   .feat-item.is-far .fn {
-    font-size: clamp(15px, 4.2vw, 19px) !important;
-    color: rgba(255,255,255,.36) !important;
-    line-height: 1.12 !important;
+    font-size: clamp(14px, 4vw, 18px) !important;
+    color: rgba(255,255,255,.48) !important;
+    line-height: 1.14 !important;
   }
 
   /* Divider before Deeper */
@@ -839,9 +840,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
     padding-left: 18px !important;
     padding-right: 18px !important;
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 50px) !important;
+    font-size: 16px !important;
   }
   .content-card { padding: 18px 16px !important; }
+  /* Larger text inside feature screens on mobile */
+  .feat-body { font-size: 16px !important; color: rgba(255,255,255,.85) !important; }
+  .feat-subhead { font-size: 17px !important; color: rgba(255,255,255,.88) !important; }
+  .feat-eyebrow { color: rgba(255,255,255,.68) !important; }
+  .feat-heading { font-size: clamp(26px,7vw,38px) !important; }
   .tap-zone { min-height: 150px !important; }
+  .phase-instruction { font-size: 16px !important; color: rgba(255,255,255,.82) !important; }
+  .timer-label { color: rgba(255,255,255,.58) !important; font-size: 10px !important; }
   .lectio-curr-phrase {
     font-size: clamp(17px, 5vw, 26px) !important;
     min-height: 70px !important;
@@ -868,9 +877,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   left: 0;
   right: 0;
   z-index: 70;
-  padding: 18px 0 calc(env(safe-area-inset-bottom, 0px) + 18px);
-  background: rgba(4,4,10,.92);
-  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 16px 0 calc(env(safe-area-inset-bottom, 0px) + 16px);
+  background: rgba(3,3,8,.96);
+  border-top: 1px solid rgba(255,255,255,.14);
   text-align: center;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -884,11 +893,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 }
 #mobileEnterLabel {
   font-family: 'Playfair Display', serif;
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 700;
-  letter-spacing: .12em;
+  letter-spacing: .18em;
   color: #ffffff;
   display: block;
+  text-shadow: 0 0 20px rgba(255,255,255,.2);
 }
 @media (max-width: 1024px), body.is-mobile {
   #mobileEnterTab { display: block; }
@@ -2674,10 +2684,17 @@ async function beginRecording(type) {
   recChunks  = [];
   recElapsed = 0;
 
-  activeMediaRecorder = new MediaRecorder(activeStream);
+  // iOS Safari supports audio/mp4, Chrome supports audio/webm
+  const mimeType = MediaRecorder.isTypeSupported('audio/mp4')
+    ? 'audio/mp4'
+    : MediaRecorder.isTypeSupported('audio/webm')
+    ? 'audio/webm'
+    : '';
+
+  activeMediaRecorder = new MediaRecorder(activeStream, mimeType ? { mimeType } : {});
   activeMediaRecorder.ondataavailable = e => { if(e.data.size > 0) recChunks.push(e.data); };
   activeMediaRecorder.onstop = () => {
-    const blob = new Blob(recChunks, { type:'audio/webm' });
+    const blob = new Blob(recChunks, { type: mimeType || 'audio/mpeg' });
     const url  = URL.createObjectURL(blob);
     if (recTarget === 'opening') {
       openingRecUrl = url;
@@ -2687,6 +2704,9 @@ async function beginRecording(type) {
       useVoiceAnchor = true;
       setRecUI('anchor', 'saved');
     }
+    // Also update settings anchor preview button
+    const sp = document.getElementById('settingsAnchorPreview');
+    if (sp && recTarget === 'anchor') sp.style.display = 'block';
     activeStream.getTracks().forEach(t => t.stop());
     activeStream = null;
   };
@@ -2732,7 +2752,15 @@ function setRecUI(type, state) {
 
 function previewRecording(type) {
   const url = type === 'opening' ? openingRecUrl : anchorRecUrl;
-  if (url) new Audio(url).play();
+  if (!url) return;
+  // Create audio element and play — more reliable than new Audio() on iOS
+  const audio = document.createElement('audio');
+  audio.src = url;
+  audio.controls = false;
+  audio.style.display = 'none';
+  document.body.appendChild(audio);
+  audio.play().catch(e => console.log('Preview error:', e));
+  audio.onended = () => document.body.removeChild(audio);
 }
 
 function chooseAnchor(btn, text) {
