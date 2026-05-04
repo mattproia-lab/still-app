@@ -857,7 +857,58 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .autobio-tab { font-size: 7px !important; letter-spacing: .1em !important; }
 }
 
-/* ── ARC ROPE — mobile only ── */
+/* ── DOOR ENTER — mobile only ── */
+.mobile-door-wrap {
+  display: none;
+  position: fixed;
+  bottom: 100px;
+  left: 0;
+  width: 100%;
+  z-index: 57;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.mobile-door-wrap.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+.door-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-height: 200px;
+}
+.door-enter-btn {
+  position: absolute;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #c8920c;
+  text-shadow:
+    0 0 30px rgba(200,146,12,.9),
+    0 0 60px rgba(200,146,12,.5),
+    0 0 100px rgba(200,146,12,.25);
+  transition: color .5s ease, text-shadow .5s ease;
+  pointer-events: all;
+  white-space: nowrap;
+  padding: 12px 24px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .mobile-door-wrap { display: block; }
+}
+
 .mobile-arc-wrap {
   display: none;
   position: fixed;
@@ -1060,6 +1111,107 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         stroke="rgba(240,192,64,.65)" stroke-width="1.4"/>
     </g>
   </svg>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MOBILE DOOR — appears above arc when feature active
+     Light pours through gap, ENTER glows in feature color
+═══════════════════════════════════════════ -->
+<div class="mobile-door-wrap" id="mobileDoor">
+  <svg class="door-svg" viewBox="0 0 393 280"
+    xmlns="http://www.w3.org/2000/svg" overflow="visible">
+    <defs>
+      <!-- Light pouring through door gap — color set by JS -->
+      <radialGradient id="doorGlow" cx="50%" cy="100%" r="80%">
+        <stop id="dg0" offset="0%"  stop-color="#c8920c" stop-opacity="0.95"/>
+        <stop id="dg1" offset="40%" stop-color="#c8920c" stop-opacity="0.35"/>
+        <stop id="dg2" offset="100%" stop-color="#c8920c" stop-opacity="0"/>
+      </radialGradient>
+      <!-- Floor light pool from gap -->
+      <radialGradient id="floorGlow" cx="50%" cy="0%" r="70%">
+        <stop id="fg0" offset="0%"  stop-color="#c8920c" stop-opacity="0.5"/>
+        <stop id="fg1" offset="100%" stop-color="#c8920c" stop-opacity="0"/>
+      </radialGradient>
+      <!-- ENTER text glow -->
+      <filter id="enterGlow" x="-30%" y="-60%" width="160%" height="220%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Floor light spill from gap -->
+    <ellipse cx="196" cy="272" rx="90" ry="18"
+      fill="url(#floorGlow)" id="doorFloor"/>
+
+    <!-- Left door panel -->
+    <rect x="42" y="30" width="148" height="242" rx="3"
+      fill="#0e0b07" stroke="rgba(100,70,20,.45)" stroke-width="1.2"/>
+    <!-- Left panel inner frame -->
+    <rect x="52" y="40" width="128" height="110" rx="2"
+      fill="none" stroke="rgba(120,80,25,.35)" stroke-width="1"/>
+    <rect x="52" y="162" width="128" height="100" rx="2"
+      fill="none" stroke="rgba(120,80,25,.35)" stroke-width="1"/>
+    <!-- Left panel carved cross detail -->
+    <line x1="116" y1="52" x2="116" y2="138" stroke="rgba(140,95,25,.28)" stroke-width="1"/>
+    <line x1="64" y1="95" x2="168" y2="95" stroke="rgba(140,95,25,.28)" stroke-width="1"/>
+    <!-- Left column -->
+    <rect x="22" y="22" width="20" height="258" rx="2"
+      fill="#0c0904" stroke="rgba(80,55,15,.4)" stroke-width="1"/>
+
+    <!-- Right door panel — slightly open, rotated perspective -->
+    <rect x="203" y="30" width="148" height="242" rx="3"
+      fill="#120e08" stroke="rgba(100,70,20,.45)" stroke-width="1.2"
+      transform="skewX(-4) translate(0,0)"/>
+    <!-- Right panel inner frame -->
+    <rect x="213" y="40" width="128" height="110" rx="2"
+      fill="none" stroke="rgba(120,80,25,.35)" stroke-width="1"
+      transform="skewX(-4)"/>
+    <rect x="213" y="162" width="128" height="100" rx="2"
+      fill="none" stroke="rgba(120,80,25,.35)" stroke-width="1"
+      transform="skewX(-4)"/>
+    <!-- Right panel carved cross detail -->
+    <line x1="277" y1="52" x2="277" y2="138" stroke="rgba(140,95,25,.28)" stroke-width="1"/>
+    <line x1="225" y1="95" x2="329" y2="95" stroke="rgba(140,95,25,.28)" stroke-width="1"/>
+    <!-- Right column -->
+    <rect x="351" y="22" width="20" height="258" rx="2"
+      fill="#0c0904" stroke="rgba(80,55,15,.4)" stroke-width="1"/>
+
+    <!-- Door top arch / header -->
+    <rect x="22" y="12" width="349" height="18" rx="2"
+      fill="#100d06" stroke="rgba(100,70,20,.5)" stroke-width="1"/>
+    <!-- Header detail lines -->
+    <line x1="35" y1="21" x2="358" y2="21" stroke="rgba(140,95,25,.3)" stroke-width=".8"/>
+
+    <!-- The gap — light pouring through -->
+    <rect x="185" y="14" width="22" height="258"
+      fill="url(#doorGlow)" id="doorGap"/>
+
+    <!-- Light rays fanning out from gap -->
+    <line x1="196" y1="30" x2="40"  y2="0"
+      stroke="rgba(200,146,12,.12)" stroke-width="1.5" id="ray1"/>
+    <line x1="196" y1="30" x2="100" y2="0"
+      stroke="rgba(200,146,12,.10)" stroke-width="1"   id="ray2"/>
+    <line x1="196" y1="30" x2="290" y2="0"
+      stroke="rgba(200,146,12,.10)" stroke-width="1"   id="ray3"/>
+    <line x1="196" y1="30" x2="355" y2="0"
+      stroke="rgba(200,146,12,.12)" stroke-width="1.5" id="ray4"/>
+    <!-- Candles visible through gap -->
+    <rect x="188" y="210" width="3" height="16" rx="1"
+      fill="rgba(255,220,100,.35)"/>
+    <rect x="196" y="200" width="3" height="22" rx="1"
+      fill="rgba(255,220,100,.45)"/>
+    <rect x="204" y="214" width="3" height="14" rx="1"
+      fill="rgba(255,220,100,.35)"/>
+    <!-- Candle flames -->
+    <ellipse cx="189.5" cy="208" rx="2" ry="3" fill="rgba(255,240,140,.6)"/>
+    <ellipse cx="197.5" cy="197" rx="2.5" ry="4" fill="rgba(255,240,140,.75)"/>
+    <ellipse cx="205.5" cy="212" rx="2" ry="3" fill="rgba(255,240,140,.6)"/>
+  </svg>
+
+  <!-- ENTER word — the threshold -->
+  <button class="door-enter-btn" id="doorEnterBtn" onclick="enterActiveFeature()">
+    ENTER
+  </button>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -4362,6 +4514,110 @@ function setRuleDate(){
 function setAutobioDate(){
   const el=document.getElementById('autobioDate');
   if(el){const d=new Date();el.textContent=`${d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`;}
+}
+
+/* ═══════════════════════════════════════════
+   MOBILE DOOR — show/hide + color update
+═══════════════════════════════════════════ */
+
+// Feature accent colors for door light
+const DOOR_COLORS = [
+  {r:205,g:155,b:10},  // Sitting — gold
+  {r:0,  g:172,b:192}, // Lectio — teal
+  {r:22, g:50, b:215}, // Examen — cobalt
+  {r:60, g:10, b:80},  // Darkness — deep violet
+  {r:192,g:28, b:172}, // Community — violet
+  {r:6,  g:34, b:98},  // Companion — navy
+  {r:188,g:110,b:12},  // Saint — amber
+  {r:162,g:10, b:52},  // Office — rose
+  {r:8,  g:120,b:32},  // Rule — forest
+  {r:70, g:8,  b:152}, // Autobiography — purple
+  {r:178,g:200,b:245}, // Deeper — blue-white
+];
+
+let doorActiveIdx = -1;
+
+function showDoor(i) {
+  if (window.innerWidth > 768) return;
+  doorActiveIdx = i;
+  const door = document.getElementById('mobileDoor');
+  if (!door) return;
+
+  const col = DOOR_COLORS[i] || DOOR_COLORS[0];
+  const {r,g,b} = col;
+  const rgb = `rgb(${r},${g},${b})`;
+
+  // Update gradient colors
+  ['dg0','dg1','dg2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('stop-color', rgb);
+  });
+  ['fg0','fg1'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('stop-color', rgb);
+  });
+  // Update light rays
+  ['ray1','ray2','ray3','ray4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.setAttribute('stroke', `rgba(${r},${g},${b},.14)`);
+  });
+
+  // Update ENTER button color
+  const btn = document.getElementById('doorEnterBtn');
+  if (btn) {
+    btn.style.color = rgb;
+    btn.style.textShadow = `
+      0 0 30px rgba(${r},${g},${b},.95),
+      0 0 60px rgba(${r},${g},${b},.55),
+      0 0 100px rgba(${r},${g},${b},.28)
+    `;
+  }
+
+  door.classList.add('show');
+}
+
+function hideDoor() {
+  const door = document.getElementById('mobileDoor');
+  if (door) door.classList.remove('show');
+  doorActiveIdx = -1;
+}
+
+function enterActiveFeature() {
+  if (doorActiveIdx >= 0) {
+    const i = doorActiveIdx;
+    // Brief flash then enter
+    document.getElementById('mobileDoor').style.opacity = '0';
+    setTimeout(() => {
+      document.getElementById('mobileDoor').style.opacity = '';
+      enterFeature(i);
+    }, 280);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL ACTIVATION — auto-activate on scroll
+   Whichever feature is centered activates
+═══════════════════════════════════════════ */
+function initMobileScroll() {
+  if (window.innerWidth > 768) return;
+  const list = document.getElementById('featList');
+  if (!list) return;
+
+  list.addEventListener('scroll', () => {
+    const items = list.querySelectorAll('.feat-item');
+    const listRect = list.getBoundingClientRect();
+    const centerY = listRect.top + listRect.height / 2;
+    let closest = -1, closestDist = Infinity;
+    items.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const itemCenter = rect.top + rect.height / 2;
+      const dist = Math.abs(itemCenter - centerY);
+      if (dist < closestDist) { closestDist = dist; closest = i; }
+    });
+    if (closest >= 0 && closest !== homeActive) {
+      homeActivate(closest);
+    }
+  }, { passive: true });
 }
 
 /* ═══════════════════════════════════════════
