@@ -699,182 +699,182 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
 /* ═══════════════════════════════════════════
    MOBILE RESPONSIVE — iPhone / Android
-   Vertical stack layout for small screens
-   Safe area support for Dynamic Island + home bar
+   All features visible, no scroll
+   Arc of beads at bottom
+   Dogstudio left-aligned list
 ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
 
-  /* ── Safe area insets — Dynamic Island + home bar ── */
+  /* ── Safe area — Dynamic Island + home bar ── */
   .home-header {
-    padding-top: calc(env(safe-area-inset-top, 20px) + 12px) !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-top: calc(env(safe-area-inset-top, 20px) + 8px) !important;
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+    padding-bottom: 0 !important;
   }
   .app-header {
-    padding-top: calc(env(safe-area-inset-top, 20px) + 12px) !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
-  .dot-nav {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px) !important;
-  }
-  .fasting-btn {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 14px) !important;
-    left: 20px !important;
-  }
-  .section-ctr {
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 16px) !important;
-    right: 20px !important;
+    padding-top: calc(env(safe-area-inset-top, 20px) + 8px) !important;
+    padding-left: 22px !important;
+    padding-right: 22px !important;
   }
 
-  /* ── Lancet window — centered on mobile ── */
+  /* ── Lancet window — full bleed centered on mobile ── */
   .lancet-wrap {
     left: 0 !important;
     top: 0 !important;
     width: 100% !important;
-    height: 48% !important;
+    height: 100% !important;
     align-items: center !important;
     justify-content: center !important;
+    opacity: 1 !important;
   }
   .lancet-svg {
-    width: 72vw !important;
-    height: 44vh !important;
+    width: 88vw !important;
+    height: 70vh !important;
+    margin-top: -5vh !important;
   }
-  .floor-pool {
-    left: 30% !important;
-    width: 40% !important;
-  }
+  .floor-pool { display: none !important; }
 
-  /* ── Stone border — centered vignette on mobile ── */
+  /* ── Stone border — centered on mobile ── */
   .stone-border {
     background: radial-gradient(
-      ellipse 68% 52% at 50% 40%,
+      ellipse 72% 60% at 50% 44%,
       transparent 0%,
-      transparent 35%,
-      rgba(2,2,4,.22) 52%,
-      rgba(2,2,4,.58) 68%,
-      rgba(1,1,3,.82) 80%,
-      rgba(1,1,2,.95) 90%,
+      transparent 30%,
+      rgba(2,2,4,.18) 50%,
+      rgba(2,2,4,.52) 66%,
+      rgba(1,1,3,.80) 79%,
+      rgba(1,1,2,.94) 89%,
       #010102 100%
     ) !important;
   }
 
-  /* ── Home screen — vertical stack ── */
+  /* ── Home layout — full screen stacked ── */
   .home-main {
     flex-direction: column !important;
+    position: relative !important;
   }
 
-  /* ── Rope area — top 44% ── */
-  .home-rope-area {
-    width: 100% !important;
-    height: 44vh !important;
-    flex-shrink: 0 !important;
-    justify-content: center !important;
-  }
-  .rope-svg-home {
-    width: 65px !important;
-    height: 36vh !important;
-  }
+  /* ── Rope area — HIDE the vertical rope on mobile ── */
+  .home-rope-area { display: none !important; }
 
-  /* ── Feature list — bottom portion, scrollable ── */
+  /* ── Feature list — left-aligned, fills screen, no scroll ── */
   .feat-list-wrap {
     width: 100% !important;
-    flex: 1 !important;
-    padding: 10px 20px calc(env(safe-area-inset-bottom, 0px) + 72px) !important;
-    overflow-y: auto !important;
-    justify-content: flex-start !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  .feat-eyebrow-home {
-    text-align: center !important;
-    margin-bottom: 10px !important;
+    height: calc(100vh - env(safe-area-inset-top, 44px) - 120px) !important;
+    padding: 6px 0 0 28px !important;
+    overflow: hidden !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    z-index: 55 !important;
   }
 
-  /* Feature items — centered, large tap targets */
-  .feat-item {
-    justify-content: center !important;
-    text-align: center !important;
-    padding: 5px 0 !important;
-    min-height: 44px !important;
-    align-items: center !important;
+  .feat-eyebrow-home {
+    text-align: left !important;
+    margin-bottom: 6px !important;
+    font-size: 7px !important;
+    letter-spacing: .3em !important;
   }
-  /* Hide badges on mobile — too cluttered */
+
+  /* Feature items — left aligned, Dogstudio style, no scroll */
+  .feat-item {
+    justify-content: flex-start !important;
+    text-align: left !important;
+    padding: 1px 0 !important;
+    min-height: 0 !important;
+    align-items: baseline !important;
+    gap: 8px !important;
+  }
   .feat-item .fb { display: none !important; }
 
-  /* Font sizes — readable at all states */
+  /* ALL 11 features + divider must fit in one screen */
+  /* Tight but readable — Dogstudio aesthetic */
   .feat-item.is-active .fn {
-    font-size: clamp(26px, 7.5vw, 38px) !important;
-    color: #fff !important;
+    font-size: clamp(22px, 6.5vw, 32px) !important;
+    color: #ffffff !important;
+    line-height: 1.05 !important;
   }
   .feat-item.is-near .fn {
-    font-size: clamp(17px, 5vw, 24px) !important;
-    color: rgba(255,255,255,.58) !important;
+    font-size: clamp(14px, 4.2vw, 20px) !important;
+    color: rgba(255,255,255,.55) !important;
+    line-height: 1.1 !important;
   }
   .feat-item.is-far .fn {
-    font-size: clamp(14px, 4vw, 19px) !important;
-    color: rgba(255,255,255,.40) !important;
+    font-size: clamp(12px, 3.5vw, 17px) !important;
+    color: rgba(255,255,255,.36) !important;
+    line-height: 1.12 !important;
   }
 
-  /* Hide description block on mobile — tap goes straight in */
-  .home-desc { display: none !important; }
+  /* Divider before Deeper */
+  .feat-divider-line {
+    margin: 3px 0 !important;
+    width: 20px !important;
+  }
 
-  /* ── Feature screens — safe area padding ── */
+  /* ── Description — hide on mobile, go straight in ── */
+  .home-desc { display: none !important; }
+  .home-header-mid { display: none !important; }
+
+  /* ── Dot nav — HIDE on mobile, replaced by arc ── */
+  .dot-nav { display: none !important; }
+
+  /* ── Fasting toggle ── */
+  .fasting-btn {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+    left: 16px !important;
+    font-size: 7px !important;
+  }
+  .section-ctr {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+    right: 16px !important;
+  }
+
+  /* ── Feature screens ── */
   .feature-main {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 18px !important;
+    padding-right: 18px !important;
     padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 50px) !important;
   }
-
-  /* ── Content cards — full width on mobile ── */
-  .content-card {
-    padding: 20px 18px !important;
-  }
-
-  /* ── Sitting — tap zone bigger on mobile ── */
-  .tap-zone { min-height: 160px !important; }
-
-  /* ── Lectio phrase — smaller on mobile ── */
+  .content-card { padding: 18px 16px !important; }
+  .tap-zone { min-height: 150px !important; }
   .lectio-curr-phrase {
-    font-size: clamp(18px, 5.5vw, 28px) !important;
-    min-height: 80px !important;
-    padding: 16px 8px !important;
+    font-size: clamp(17px, 5vw, 26px) !important;
+    min-height: 70px !important;
+    padding: 14px 6px !important;
   }
-
-  /* ── Settings modal — full height on mobile ── */
   .modal-overlay { align-items: flex-end !important; }
   .modal-panel {
     max-height: 88vh !important;
-    padding: 24px 24px calc(env(safe-area-inset-bottom, 0px) + 30px) !important;
+    padding: 24px 22px calc(env(safe-area-inset-bottom, 0px) + 28px) !important;
   }
-
-  /* ── Info panel — full width on mobile ── */
-  .info-panel {
-    width: 92vw !important;
-  }
-
-  /* ── Dot nav — hide on home, show on feature screens ── */
-  /* (dots stay visible, just repositioned via safe-area above) */
-
-  /* ── Back button text — shorten ── */
+  .info-panel { width: 92vw !important; }
   .back-btn span:last-child { display: none !important; }
-
-  /* ── Sitting complete graph ── */
-  .graph-wrap { padding: 14px 12px 10px !important; }
-
-  /* ── Night watch ── */
+  .graph-wrap { padding: 12px 10px 8px !important; }
   .night-watch { padding: 20px !important; }
-  .nw-quote { font-size: clamp(15px, 4.5vw, 20px) !important; }
-
-  /* ── Autobiography tabs ── */
+  .nw-quote { font-size: clamp(14px, 4vw, 19px) !important; }
   .autobio-tab { font-size: 7px !important; letter-spacing: .1em !important; }
-
 }
 
-/* Extra small phones */
-@media (max-width: 390px) {
-  .feat-item.is-active .fn { font-size: 24px !important; }
-  .feat-item.is-near .fn   { font-size: 16px !important; }
-  .feat-item.is-far .fn    { font-size: 13px !important; }
+/* ── ARC ROPE — mobile only ── */
+.mobile-arc-wrap {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 130px;
+  z-index: 58;
+  pointer-events: none;
+}
+.mobile-arc-wrap svg { pointer-events: all; }
+
+@media (max-width: 768px) {
+  .mobile-arc-wrap {
+    display: block;
+    height: calc(118px + env(safe-area-inset-bottom, 0px));
+  }
 }
 </style>
 </head>
@@ -989,6 +989,77 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
       <button class="home-desc-cta" id="homeDescCta"><span id="homeCtaLabel">Enter</span><span>→</span></button>
     </div>
   </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MOBILE ARC ROPE — replaces dot nav on mobile
+     Prayer rope laid in arc, beads left to right
+     Cross hangs below center
+═══════════════════════════════════════════ -->
+<div class="mobile-arc-wrap" id="mobileArcWrap">
+  <svg id="arcSvg" width="100%" height="100%"
+    viewBox="0 0 393 118"
+    preserveAspectRatio="xMidYMid meet"
+    xmlns="http://www.w3.org/2000/svg"
+    overflow="visible">
+    <defs>
+      <radialGradient id="agGold" cx="30%" cy="24%" r="72%">
+        <stop offset="0%"  stop-color="#fffce0"/>
+        <stop offset="14%" stop-color="#f4cc48"/>
+        <stop offset="40%" stop-color="#c8920c"/>
+        <stop offset="68%" stop-color="#7a5008"/>
+        <stop offset="100%" stop-color="#281400"/>
+      </radialGradient>
+      <radialGradient id="agDark" cx="28%" cy="20%" r="68%">
+        <stop offset="0%"  stop-color="#2c2216"/>
+        <stop offset="35%" stop-color="#0e0a06"/>
+        <stop offset="100%" stop-color="#050403"/>
+      </radialGradient>
+      <radialGradient id="agPast" cx="30%" cy="24%" r="72%">
+        <stop offset="0%"  stop-color="#e8d880"/>
+        <stop offset="20%" stop-color="#c09828"/>
+        <stop offset="50%" stop-color="#886010"/>
+        <stop offset="80%" stop-color="#4a3006"/>
+        <stop offset="100%" stop-color="#1c0e02"/>
+      </radialGradient>
+      <radialGradient id="agHalo" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="rgba(240,192,64,.45)"/>
+        <stop offset="50%"  stop-color="rgba(200,146,12,.12)"/>
+        <stop offset="100%" stop-color="transparent"/>
+      </radialGradient>
+      <filter id="afGlow" x="-100%" y="-100%" width="300%" height="300%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="afSoft" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- Arc rope cord -->
+    <path id="arcCord"
+      d="M 18 62 Q 196 -28 375 62"
+      fill="none" stroke="rgba(8,6,4,.92)" stroke-width="2.5"
+      stroke-linecap="round"/>
+
+    <!-- Beads rendered by JS along the arc -->
+    <g id="arcBeadsG"></g>
+
+    <!-- Cross — hangs below center of arc -->
+    <g id="arcCrossG" transform="translate(196,88)" style="cursor:pointer">
+      <circle cx="0" cy="0" r="28" fill="url(#agHalo)" opacity="0" id="arcCrossHalo"
+        style="transition:opacity .4s ease"/>
+      <rect x="-7" y="-20" width="14" height="40" rx="2"
+        fill="#0a0704" stroke="rgba(200,146,12,.55)" stroke-width="1.2" id="arcCrossV"/>
+      <rect x="-13" y="-7" width="26" height="10" rx="1.5"
+        fill="#0a0704" stroke="rgba(200,146,12,.55)" stroke-width="1.2"/>
+      <line x1="0" y1="-17" x2="0" y2="17"
+        stroke="rgba(240,192,64,.65)" stroke-width="1.4"/>
+      <line x1="-10" y1="-2" x2="10" y2="-2"
+        stroke="rgba(240,192,64,.65)" stroke-width="1.4"/>
+    </g>
+  </svg>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -2525,6 +2596,8 @@ function homeActivate(i){
   const ch=document.getElementById('crossHalo'),cv=document.getElementById('crossV'),cg=document.getElementById('crossG');
   if(i===10){ch.style.opacity='1';cv.setAttribute('stroke','rgba(240,192,64,.9)');cg.setAttribute('filter','url(#fCross)');document.getElementById('haloC').style.opacity='0';}
   else{ch.style.opacity='0';cv.setAttribute('stroke','rgba(200,146,12,.48)');cg.removeAttribute('filter');}
+  // Update arc beads on mobile
+  if(window.innerWidth<=768) updateArcBeads(i);
 }
 
 function enterFeature(i){
@@ -2553,6 +2626,26 @@ function homeReset(){
   document.getElementById('crossV').setAttribute('stroke','rgba(200,146,12,.48)');
   document.getElementById('crossG').removeAttribute('filter');
   updateDots(-1);
+  // Reset arc beads on mobile
+  if(window.innerWidth<=768){
+    for(let i=0;i<10;i++){
+      const b=document.getElementById(`ab${i}`);
+      const gl=document.getElementById(`agl${i}`);
+      const t=document.getElementById(`abn${i}`);
+      if(!b)continue;
+      b.setAttribute('fill','url(#agDark)');
+      b.setAttribute('stroke','rgba(30,22,12,.65)');
+      b.removeAttribute('filter');
+      gl.setAttribute('fill','rgba(240,192,64,0)');
+      if(t)t.setAttribute('fill','rgba(255,255,255,.18)');
+    }
+    const ch=document.getElementById('arcCrossHalo');
+    const cv=document.getElementById('arcCrossV');
+    const cg=document.getElementById('arcCrossG');
+    if(ch)ch.style.opacity='0';
+    if(cv)cv.setAttribute('stroke','rgba(200,146,12,.55)');
+    if(cg)cg.removeAttribute('filter');
+  }
 }
 
 // Override goHome to also reset home state
@@ -4274,8 +4367,131 @@ function setAutobioDate(){
 }
 
 /* ═══════════════════════════════════════════
-   BELL TOGGLE — global, persists across sessions
+   MOBILE ARC ROPE — bead placement + interaction
+   10 beads along a quadratic bezier arc
+   Cross at the bottom center
 ═══════════════════════════════════════════ */
+
+// Points along arc: quadratic bezier from (18,62) control (196,-28) to (375,62)
+function arcPoint(t) {
+  const p0x=18, p0y=62, p1x=196, p1y=-28, p2x=375, p2y=62;
+  const x = (1-t)*(1-t)*p0x + 2*(1-t)*t*p1x + t*t*p2x;
+  const y = (1-t)*(1-t)*p0y + 2*(1-t)*t*p1y + t*t*p2y;
+  return {x, y};
+}
+
+const ARC_R = 11; // bead radius on arc
+
+function buildArcBeads() {
+  const g = document.getElementById('arcBeadsG');
+  if (!g) return;
+  g.innerHTML = '';
+
+  // 10 beads evenly spaced along the arc (t from 0.06 to 0.94)
+  for (let i = 0; i < 10; i++) {
+    const t = 0.06 + (i / 9) * 0.88;
+    const {x, y} = arcPoint(t);
+
+    // Glow circle
+    const gl = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    gl.setAttribute('cx', x.toFixed(1));
+    gl.setAttribute('cy', y.toFixed(1));
+    gl.setAttribute('r', (ARC_R + 12).toString());
+    gl.setAttribute('fill', 'rgba(240,192,64,0)');
+    gl.id = `agl${i}`;
+    gl.style.transition = 'fill .4s ease';
+    g.appendChild(gl);
+
+    // Bead
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx', x.toFixed(1));
+    c.setAttribute('cy', y.toFixed(1));
+    c.setAttribute('r', ARC_R.toString());
+    c.setAttribute('fill', 'url(#agDark)');
+    c.setAttribute('stroke', 'rgba(30,22,12,.65)');
+    c.setAttribute('stroke-width', '1');
+    c.id = `ab${i}`;
+    c.style.cursor = 'pointer';
+    c.style.transition = 'fill .35s ease';
+    // Large tap target
+    c.addEventListener('click', () => arcBeadTap(i));
+    g.appendChild(c);
+
+    // Number
+    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x', x.toFixed(1));
+    txt.setAttribute('y', (y + 3.5).toFixed(1));
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-family', 'Montserrat,sans-serif');
+    txt.setAttribute('font-size', '6');
+    txt.setAttribute('font-weight', '700');
+    txt.setAttribute('fill', 'rgba(255,255,255,.18)');
+    txt.id = `abn${i}`;
+    txt.style.pointerEvents = 'none';
+    txt.style.transition = 'fill .35s ease';
+    txt.textContent = String(i + 1).padStart(2, '0');
+    g.appendChild(txt);
+  }
+
+  // Cross tap
+  const cg = document.getElementById('arcCrossG');
+  if (cg) cg.addEventListener('click', () => arcBeadTap(10));
+}
+
+function arcBeadTap(i) {
+  // Activate the color world
+  homeActivate(i);
+  // Brief flash then enter
+  setTimeout(() => enterFeature(i), 220);
+}
+
+function updateArcBeads(activeIdx) {
+  for (let i = 0; i < 10; i++) {
+    const b   = document.getElementById(`ab${i}`);
+    const gl  = document.getElementById(`agl${i}`);
+    const txt = document.getElementById(`abn${i}`);
+    if (!b) continue;
+
+    if (i < activeIdx) {
+      b.setAttribute('fill', 'url(#agPast)');
+      b.setAttribute('stroke', 'rgba(180,130,8,.38)');
+      b.setAttribute('filter', 'url(#afSoft)');
+      gl.setAttribute('fill', 'rgba(240,192,64,.07)');
+      txt.setAttribute('fill', 'rgba(255,238,140,.5)');
+    } else if (i === activeIdx) {
+      b.setAttribute('fill', 'url(#agGold)');
+      b.setAttribute('stroke', 'rgba(255,248,160,.95)');
+      b.setAttribute('stroke-width', '1.8');
+      b.setAttribute('filter', 'url(#afGlow)');
+      gl.setAttribute('fill', 'rgba(240,192,64,.32)');
+      txt.setAttribute('fill', 'rgba(255,255,215,.95)');
+    } else {
+      b.setAttribute('fill', 'url(#agDark)');
+      b.setAttribute('stroke', 'rgba(30,22,12,.65)');
+      b.setAttribute('stroke-width', '1');
+      b.removeAttribute('filter');
+      gl.setAttribute('fill', 'rgba(240,192,64,0)');
+      txt.setAttribute('fill', 'rgba(255,255,255,.18)');
+    }
+  }
+
+  // Cross
+  const ch = document.getElementById('arcCrossHalo');
+  const cv = document.getElementById('arcCrossV');
+  const cg = document.getElementById('arcCrossG');
+  if (activeIdx === 10) {
+    if (ch) ch.style.opacity = '1';
+    if (cv) cv.setAttribute('stroke', 'rgba(240,192,64,.9)');
+    if (cg) cg.setAttribute('filter', 'url(#afGlow)');
+  } else {
+    if (ch) ch.style.opacity = '0';
+    if (cv) cv.setAttribute('stroke', 'rgba(200,146,12,.55)');
+    if (cg) cg.removeAttribute('filter');
+  }
+}
+
+// Arc beads are updated directly inside homeActivate and homeReset below
+
 let bellEnabled = localStorage.getItem('still_bell') !== 'off';
 
 function setBell(on) {
@@ -4340,6 +4556,7 @@ function openSettings() {
 ═══════════════════════════════════════════ */
 document.getElementById('bgBase').style.transition='background-color .9s ease';
 buildBeads();buildFeatList();buildDots();buildPassageList();
+buildArcBeads();
 injectInfoButtons();
 homeReset();
 checkNightWatch();
