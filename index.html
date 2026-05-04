@@ -792,17 +792,17 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   /* ALL 11 features + divider must fit in one screen */
   /* Tight but readable — Dogstudio aesthetic */
   .feat-item.is-active .fn {
-    font-size: clamp(22px, 6.5vw, 32px) !important;
+    font-size: clamp(28px, 8vw, 38px) !important;
     color: #ffffff !important;
     line-height: 1.05 !important;
   }
   .feat-item.is-near .fn {
-    font-size: clamp(14px, 4.2vw, 20px) !important;
+    font-size: clamp(18px, 5.2vw, 24px) !important;
     color: rgba(255,255,255,.55) !important;
     line-height: 1.1 !important;
   }
   .feat-item.is-far .fn {
-    font-size: clamp(12px, 3.5vw, 17px) !important;
+    font-size: clamp(15px, 4.2vw, 19px) !important;
     color: rgba(255,255,255,.36) !important;
     line-height: 1.12 !important;
   }
@@ -2535,11 +2535,9 @@ function buildFeatList(){
     item.innerHTML=`<span class="fb">${f.badge}</span><span class="fn">${f.name}</span>`;
     item.addEventListener('mouseenter',()=>homeActivate(i));
     item.addEventListener('click',()=>{
-      // On mobile: tap activates then enters immediately
-      // On desktop: hover activates, click enters
-      if(window.innerWidth <= 768){
+      if(window.innerWidth<=768){
         homeActivate(i);
-        setTimeout(()=>enterFeature(i), 80);
+        setTimeout(()=>enterFeature(i), 400);
       } else {
         enterFeature(i);
       }
@@ -4439,10 +4437,10 @@ function buildArcBeads() {
 }
 
 function arcBeadTap(i) {
-  // Activate the color world
+  // Activate color world + highlight name
   homeActivate(i);
-  // Brief flash then enter
-  setTimeout(() => enterFeature(i), 220);
+  // Wait 400ms so user sees the flash, then enter
+  setTimeout(() => enterFeature(i), 400);
 }
 
 function updateArcBeads(activeIdx) {
@@ -4567,6 +4565,11 @@ setBell(bellEnabled);
 
 // Restore office mode preference
 setOfficeMode(getOfficeMode());
+
+// On mobile — activate first feature by default so names aren't all tiny
+if(window.innerWidth <= 768) {
+  homeActivate(0);
+}
 
 // Re-check companion API key when screen is shown
 document.getElementById('screen-companion').addEventListener('transitionend',checkApiKey);
