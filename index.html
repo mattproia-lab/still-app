@@ -1652,19 +1652,11 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
   <div class="feature-main">
-    <div class="content-card">
-      <div class="feat-eyebrow">Anonymous · 9pm Daily</div>
-      <div class="feat-heading">Tonight's<br>question.</div>
-      <div class="feat-divider"></div>
-      <div class="silence-block" style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:20px 22px;margin-bottom:22px">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.6">
-          "What is one thing you have been avoiding looking at honestly?"
-        </p>
+    <div class="content-card" id="communityCard">
+      <!-- Rendered by initCommunity() -->
+      <div style="text-align:center;padding:40px 0">
+        <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">Loading tonight's question…</p>
       </div>
-      <p class="feat-body" style="margin-bottom:18px">Your answer is private. After you submit, three anonymous answers from others appear. No names. No likes. Just the knowledge that you are not alone in this.</p>
-      <textarea class="companion-textarea" placeholder="Write your answer here. No one will know it's you." rows="5" style="margin-bottom:16px"></textarea>
-      <button class="btn-primary gold" style="width:100%;justify-content:center">Submit & See Others →</button>
-      <p class="feat-body" style="text-align:center;margin-top:14px;font-size:11px;opacity:.4">Next question in 4h 22m</p>
     </div>
   </div>
 </div>
@@ -2774,6 +2766,7 @@ function enterFeature(i){
   if(F[i].screen==='examen') initExamen();
   if(F[i].screen==='darkness') initDarknessScreen();
   if(F[i].screen==='rule') loadRuleItems();
+  if(F[i].screen==='community') initCommunity();
 }
 
 function homeReset(){
@@ -6026,8 +6019,204 @@ document.addEventListener('keydown',e=>{
    OFFICE — detect morning/evening
 ═══════════════════════════════════════════ */
 /* ═══════════════════════════════════════════
-   ONBOARDING — show once on first visit
+   COMMUNITY — Live Supabase backend
+   Anonymous daily question + 3 responses
 ═══════════════════════════════════════════ */
+const SUPA_URL  = 'https://zbskapivansfewegllnz.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI';
+
+async function supaFetch(path, opts={}) {
+  const res = await fetch(SUPA_URL + path, {
+    ...opts,
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPA_ANON,
+      'Authorization': 'Bearer ' + SUPA_ANON,
+      ...(opts.headers||{})
+    }
+  });
+  if (!res.ok) throw new Error('Supabase error ' + res.status);
+  return res.json();
+}
+
+// Generate a stable anonymous device ID
+function getDeviceId() {
+  let id = localStorage.getItem('still_device_id');
+  if (!id) {
+    id = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('still_device_id', id);
+  }
+  return id;
+}
+
+// Check if this device already submitted today
+function getTodaySubmitKey(questionId) {
+  return 'still_submitted_' + questionId;
+}
+function hasSubmittedToday(questionId) {
+  return !!localStorage.getItem(getTodaySubmitKey(questionId));
+}
+function markSubmitted(questionId) {
+  localStorage.setItem(getTodaySubmitKey(questionId), '1');
+}
+
+// Time until midnight
+function timeUntilMidnight() {
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  const diff = midnight - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  return `${h}h ${m}m`;
+}
+
+let communityQuestion = null;
+
+async function initCommunity() {
+  const card = document.getElementById('communityCard');
+  if (!card) return;
+
+  // Loading state
+  card.innerHTML = `<div style="text-align:center;padding:40px 0">
+    <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">Loading tonight's question…</p>
+  </div>`;
+
+  try {
+    // Get today's question
+    const today = new Date().toISOString().split('T')[0];
+    const data = await supaFetch(
+      `/rest/v1/questions?active_date=eq.${today}&approved=eq.true&limit=1`
+    );
+
+    if (!data || !data.length) {
+      renderCommunityEmpty(card);
+      return;
+    }
+
+    communityQuestion = data[0];
+
+    if (hasSubmittedToday(communityQuestion.id)) {
+      // Already answered — show others' responses
+      await renderCommunityResponses(card, communityQuestion);
+    } else {
+      renderCommunityQuestion(card, communityQuestion);
+    }
+
+  } catch(err) {
+    card.innerHTML = `
+      <div style="text-align:center;padding:40px 20px">
+        <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:12px">The question isn't ready yet.</p>
+        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.3);line-height:1.6">Check back this evening. The community question arrives daily.</p>
+        <button class="btn-ghost" onclick="goHome()" style="margin-top:24px">Return to Still</button>
+      </div>`;
+  }
+}
+
+function renderCommunityQuestion(card, q) {
+  card.innerHTML = `
+    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:16px">Anonymous · Daily</p>
+    <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:20px 22px;margin-bottom:24px">
+      <p style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.65" id="communityQText">${q.text}</p>
+    </div>
+    <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:18px">Your answer is anonymous. After you submit, three responses from others appear. No names. No likes. Just the knowledge that you are not alone.</p>
+    <textarea id="communityAnswer" class="companion-textarea"
+      placeholder="Write your answer here. No one will know it's you."
+      rows="5" style="margin-bottom:16px"></textarea>
+    <div id="communityErr" style="display:none;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center;margin-bottom:10px"></div>
+    <button class="btn-primary gold" onclick="submitCommunity()" id="communitySubmitBtn" style="width:100%;justify-content:center">Submit & See Others →</button>
+    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px">New question in ${timeUntilMidnight()}</p>`;
+}
+
+async function submitCommunity() {
+  const answer = document.getElementById('communityAnswer')?.value.trim();
+  const errEl  = document.getElementById('communityErr');
+  const btn    = document.getElementById('communitySubmitBtn');
+
+  if (!answer) {
+    if (errEl) { errEl.textContent = 'Write something first.'; errEl.style.display = 'block'; }
+    return;
+  }
+  if (answer.length < 10) {
+    if (errEl) { errEl.textContent = 'A little more — say what is true.'; errEl.style.display = 'block'; }
+    return;
+  }
+
+  if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
+
+  try {
+    await supaFetch('/rest/v1/responses', {
+      method: 'POST',
+      headers: { 'Prefer': 'return=minimal' },
+      body: JSON.stringify({
+        question_id: communityQuestion.id,
+        text: answer,
+        device_id: getDeviceId()
+      })
+    });
+
+    markSubmitted(communityQuestion.id);
+    DB.save('community', { question: communityQuestion.text, answer });
+
+    const card = document.getElementById('communityCard');
+    await renderCommunityResponses(card, communityQuestion);
+
+  } catch(err) {
+    if (btn) { btn.textContent = 'Submit & See Others →'; btn.disabled = false; }
+    if (errEl) { errEl.textContent = 'Something went quiet — try once more.'; errEl.style.display = 'block'; }
+  }
+}
+
+async function renderCommunityResponses(card, q) {
+  card.innerHTML = `<div style="text-align:center;padding:30px 0 10px">
+    <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.4)">Finding others who answered…</p>
+  </div>`;
+
+  try {
+    // Get up to 3 random responses that aren't from this device
+    const deviceId = getDeviceId();
+    const all = await supaFetch(
+      `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&limit=50`
+    );
+
+    // Pick 3 at random
+    const shuffled = (all || []).sort(() => Math.random() - 0.5).slice(0, 3);
+
+    let responsesHtml = '';
+    if (shuffled.length === 0) {
+      responsesHtml = `<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;padding:20px 0">You are the first to answer today.<br>Others will appear as the community gathers.</p>`;
+    } else {
+      responsesHtml = shuffled.map(r => `
+        <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${r.text}</p>
+        </div>`).join('');
+    }
+
+    card.innerHTML = `
+      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:14px">Tonight's Question</p>
+      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:16px 20px;margin-bottom:24px">
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:rgba(255,255,255,.7);line-height:1.6">${q.text}</p>
+      </div>
+      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px">From the Community</p>
+      ${responsesHtml}
+      <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:18px">You've answered. New question in ${timeUntilMidnight()}.</p>
+      <button class="btn-ghost" onclick="goHome()" style="margin-top:16px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>`;
+
+  } catch(err) {
+    card.innerHTML += `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.3);text-align:center;padding:20px">Could not load responses right now.</p>
+      <button class="btn-ghost" onclick="goHome()" style="display:block;margin:0 auto">Return to Still</button>`;
+  }
+}
+
+function renderCommunityEmpty(card) {
+  card.innerHTML = `
+    <div style="text-align:center;padding:40px 20px">
+      <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;margin-bottom:12px">No question today.</p>
+      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.4);line-height:1.65;margin-bottom:24px">The community question arrives each evening.<br>Come back after 9pm.</p>
+      <button class="btn-ghost" onclick="goHome()">Return to Still</button>
+    </div>`;
+}
+
 function checkOnboarding() {
   if (!localStorage.getItem('still_onboarded')) {
     document.getElementById('screen-onboarding').style.display = 'block';
