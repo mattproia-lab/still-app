@@ -2677,7 +2677,7 @@ function buildBeads(){
     t.setAttribute('fill','rgba(255,255,255,.14)');t.id=`bn${i}`;t.textContent=String(i+1).padStart(2,'0');
     t.style.pointerEvents='none';t.style.transition='fill .42s ease';g.appendChild(t);
   });
-  document.getElementById('crossG').addEventListener('click',()=>homeActivate(10));
+  document.getElementById('crossG').addEventListener('click',()=>homeActivate(11));
 }
 
 function buildFeatList(){
@@ -2741,7 +2741,7 @@ function homeActivate(i){
   document.getElementById('homeCtaLabel').textContent=f.cta;
   document.getElementById('homeDesc').classList.add('show');
   const sc=document.getElementById('sectionCtr');
-  sc.textContent=i<10?`0${i+1} — 10`:'✝';sc.classList.add('show');
+  sc.textContent=i<F.length-1?`0${i+1} — ${F.length-1}`:'✝';sc.classList.add('show');
   updateDots(i);
   // Update rope beads
   BY.forEach((_,j)=>{
@@ -2751,7 +2751,7 @@ function homeActivate(i){
     else{b.setAttribute('fill','url(#gDark)');b.setAttribute('stroke','rgba(30,22,12,.65)');b.setAttribute('stroke-width','1');b.removeAttribute('filter');gl.setAttribute('fill','rgba(240,192,64,0)');bn.setAttribute('fill','rgba(255,255,255,.14)');}
   });
   const ch=document.getElementById('crossHalo'),cv=document.getElementById('crossV'),cg=document.getElementById('crossG');
-  if(i===10){ch.style.opacity='1';cv.setAttribute('stroke','rgba(240,192,64,.9)');cg.setAttribute('filter','url(#fCross)');document.getElementById('haloC').style.opacity='0';}
+  if(i===F.length-1){ch.style.opacity='1';cv.setAttribute('stroke','rgba(240,192,64,.9)');cg.setAttribute('filter','url(#fCross)');document.getElementById('haloC').style.opacity='0';}
   else{ch.style.opacity='0';cv.setAttribute('stroke','rgba(200,146,12,.48)');cg.removeAttribute('filter');}
   // Show door overlay on mobile
   if(IS_MOBILE) showDoor(i);
@@ -6022,7 +6022,7 @@ function injectInfoButtons() {
 ═══════════════════════════════════════════ */
 document.addEventListener('keydown',e=>{
   if(currentScreen!=='home')return;
-  if(e.key==='ArrowDown'||e.key==='ArrowRight'){if(homeActive<10)homeActivate(homeActive+1);}
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'){if(homeActive<F.length-1)homeActivate(homeActive+1);}
   if(e.key==='ArrowUp'||e.key==='ArrowLeft'){if(homeActive>0)homeActivate(homeActive-1);else homeReset();}
   if(e.key==='Enter'&&homeActive>=0)enterFeature(homeActive);
   if(e.key==='Escape')homeReset();
