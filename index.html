@@ -2704,17 +2704,19 @@ function buildFeatList(){
 
 function buildDots(){
   const nav=document.getElementById('dotNav');
-  for(let i=0;i<10;i++){
+  const total = F.length; // dynamic — works with any number of features
+  for(let i=0;i<total-1;i++){
     if(i>0){const ln=document.createElement('div');ln.className='dn-line';nav.appendChild(ln);}
     const d=document.createElement('div');d.className='dn-item';d.dataset.i=i;
     d.innerHTML='<span class="dn-pip"></span>';
     d.addEventListener('click',()=>enterFeature(i));
     nav.appendChild(d);
   }
+  // Cross = last feature (Deeper)
   const ln=document.createElement('div');ln.className='dn-line';nav.appendChild(ln);
-  const cd=document.createElement('div');cd.className='dn-item';cd.dataset.i=10;
+  const cd=document.createElement('div');cd.className='dn-item';cd.dataset.i=total-1;
   cd.innerHTML='<div class="dn-cross"></div>';
-  cd.addEventListener('click',()=>enterFeature(10));
+  cd.addEventListener('click',()=>enterFeature(total-1));
   nav.appendChild(cd);
 }
 
@@ -6040,17 +6042,23 @@ const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIs
 
 async function supaFetch(path, opts={}) {
   const isGet = !opts.method || opts.method === 'GET';
+  const headers = {
+    'apikey': SUPA_ANON,
+    'Authorization': `Bearer ${SUPA_ANON}`,
+  };
+  if (!isGet) headers['Content-Type'] = 'application/json';
+  if (opts.headers) Object.assign(headers, opts.headers);
+
   const res = await fetch(SUPA_URL + path, {
     ...opts,
-    headers: {
-      // Only include Content-Type on non-GET requests to avoid CORS preflight
-      ...(isGet ? {} : {'Content-Type': 'application/json'}),
-      'apikey': SUPA_ANON,
-      'Authorization': 'Bearer ' + SUPA_ANON,
-      ...(opts.headers||{})
-    }
+    headers
   });
-  if (!res.ok) throw new Error('Supabase error ' + res.status);
+
+  if (res.status === 204) return null;
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Supabase ${res.status}: ${txt}`);
+  }
   return res.json();
 }
 
@@ -6119,11 +6127,13 @@ async function initCommunity() {
     }
 
   } catch(err) {
+    console.error('Community fetch error:', err.message);
     card.innerHTML = `
       <div style="text-align:center;padding:40px 20px">
-        <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:12px">The question isn't ready yet.</p>
-        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.3);line-height:1.6">Check back this evening. The community question arrives daily.</p>
-        <button class="btn-ghost" onclick="goHome()" style="margin-top:24px">Return to Still</button>
+        <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:12px">Could not load the question.</p>
+        <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,73,64,.5);margin-bottom:8px">${err.message}</p>
+        <button class="btn-ghost" onclick="initCommunity()" style="margin-top:12px">Try Again</button>
+        <button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>
       </div>`;
   }
 }
