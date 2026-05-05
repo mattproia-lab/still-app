@@ -2648,13 +2648,13 @@ function goHome(){
 
 function activateCompanion(){
   goHome();
-  setTimeout(()=>showScreen('companion',5),100);
+  setTimeout(()=>showScreen('companion',6),100);
 }
 
 /* ═══════════════════════════════════════════
    HOME SCREEN
 ═══════════════════════════════════════════ */
-const BY=[50,108,166,224,282,339,395,449,502,550];
+const BY=[50,100,150,200,250,300,350,400,450,500,550,600];
 const BR=19;
 let homeActive=-1,fasting=false;
 
@@ -5833,6 +5833,19 @@ const INFO_CONTENT = {
     `
   },
 
+  breath: {
+    title: 'Breath Prayer · Jesus Prayer Counter',
+    body: `
+      <p>The Jesus Prayer — "Lord Jesus Christ, Son of God, have mercy on me, a sinner" — is the most ancient form of continuous prayer in the Christian tradition. Its roots are in the Desert Fathers of fourth-century Egypt and the hesychast monks of Sinai and Athos, who sought to fulfill Paul's command to "pray without ceasing" by anchoring the prayer to the rhythm of breathing.</p>
+      <div class="info-panel-quote">
+        <p>"Lord Jesus Christ, Son of God, have mercy on me, a sinner."</p>
+        <span>— The Jesus Prayer · Desert Fathers, 4th century</span>
+      </div>
+      <p>The prayer rope — the chotki in Orthodox tradition, the komboskini in Greek — is a physical counter for repetitions. Monks counted hundreds or thousands of repetitions daily, not as mechanical repetition but as a way of returning the attention to God each time it wandered. The count is not the point. The returning is the point.</p>
+      <p>Any short prayer can serve this purpose. Augustine's "Our heart is restless until it rests in Thee." Francis of Assisi's "My God and my All." The name of Jesus alone. The practice adapts to whatever phrase carries weight for you in this season.</p>
+    `
+  },
+
   community: {
     title: 'Community',
     body: `
@@ -5955,7 +5968,7 @@ const INFO_CONTENT = {
 
 function openHomeInfo() {
   // Open info panel for currently active home feature
-  const screenKeys = ['sitting','lectio','examen','darkness','community','companion','saint','office','rule','autobiography','deeper'];
+  const screenKeys = ['sitting','lectio','examen','darkness','breath','community','companion','saint','office','rule','autobiography','deeper'];
   if (homeActive >= 0 && homeActive < screenKeys.length) {
     openInfo(screenKeys[homeActive]);
   }
@@ -6026,10 +6039,12 @@ const SUPA_URL  = 'https://zbskapivansfewegllnz.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI';
 
 async function supaFetch(path, opts={}) {
+  const isGet = !opts.method || opts.method === 'GET';
   const res = await fetch(SUPA_URL + path, {
     ...opts,
     headers: {
-      'Content-Type': 'application/json',
+      // Only include Content-Type on non-GET requests to avoid CORS preflight
+      ...(isGet ? {} : {'Content-Type': 'application/json'}),
       'apikey': SUPA_ANON,
       'Authorization': 'Bearer ' + SUPA_ANON,
       ...(opts.headers||{})
