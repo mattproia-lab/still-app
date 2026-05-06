@@ -1,4 +1,5 @@
 
+
 <!-- ═══════════════════════════════════════════
      THE SACRISTY — hidden gallery
      Discovered by holding the Still wordmark
@@ -2808,7 +2809,13 @@ function buildFeatList(){
     item.innerHTML=`<span class="fb">${f.badge}</span><span class="fn">${f.name}</span>`;
     item.addEventListener('click',()=>{
       if(IS_MOBILE){
+        // Suppress the scroll-watcher briefly so it doesn't override our tap,
+        // then scroll the tapped item to the visual center of the list.
+        _suppressScrollActivate = true;
+        clearTimeout(_suppressScrollTimer);
+        _suppressScrollTimer = setTimeout(()=>{ _suppressScrollActivate = false; }, 700);
         homeActivate(i);
+        try { item.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch(e) {}
       } else {
         enterFeature(i);
       }
@@ -7448,11 +7455,17 @@ function enterActiveFeature() {
   enterFeature(doorActiveIdx);
 }
 
+// Set by tap handler to briefly tell the scroll-watcher "don't override the tap"
+let _suppressScrollActivate = false;
+let _suppressScrollTimer = null;
+
 function initMobileScroll() {
   if (!IS_MOBILE) return;
   const list = document.getElementById('featList');
   if (!list) return;
   list.addEventListener('scroll', () => {
+    // Honor the brief tap suppression so taps don't get overridden
+    if (_suppressScrollActivate) return;
     const items = list.querySelectorAll('.feat-item');
     const listRect = list.getBoundingClientRect();
     const centerY = listRect.top + listRect.height / 2;
