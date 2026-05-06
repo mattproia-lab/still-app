@@ -1,5 +1,74 @@
 
 
+
+<!-- ═══════════════════════════════════════════
+     PAYWALL OVERLAY
+     Triggers after 30 days OR 20 sessions
+═══════════════════════════════════════════ -->
+<div id="paywall" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(2,3,12,.94);overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px">
+    <div style="width:100%;max-width:520px">
+
+      <!-- Header -->
+      <div style="text-align:center;margin-bottom:32px">
+        <p id="paywallBadge" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:0 0 10px">Your free trial has ended</p>
+        <h1 style="font-family:'Playfair Display',serif;font-size:36px;font-weight:400;font-style:italic;color:#fff;margin:0 0 8px">Still</h1>
+        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0">Choose a plan to continue your practice</p>
+      </div>
+
+      <!-- Plans -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px">
+
+        <!-- Personal -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);padding:22px 14px 18px;text-align:center;position:relative">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 12px">Personal</p>
+          <p style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:#fff;margin:0;line-height:1">$4.99</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:3px 0 16px">per month</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">1 user</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">All 11 features</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 20px">All devices</p>
+          <button onclick="startCheckout('personal')" style="width:100%;background:none;border:1px solid rgba(200,146,12,.55);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:11px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Subscribe →</button>
+        </div>
+
+        <!-- Family — highlighted -->
+        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:22px 14px 18px;text-align:center;position:relative">
+          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#c8920c;color:#000;font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;white-space:nowrap">Most popular</div>
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 12px">Family</p>
+          <p style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:3px 0 16px">per month</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">Up to 5 users</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">All 11 features</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 20px">Shared plan</p>
+          <button onclick="startCheckout('family')" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:11px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.25)'" onmouseout="this.style.background='rgba(200,146,12,.15)'">Subscribe →</button>
+        </div>
+
+        <!-- Parish -->
+        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);padding:22px 14px 18px;text-align:center;position:relative">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 12px">Parish</p>
+          <p style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:#fff;margin:0;line-height:1">$49.99</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:3px 0 16px">per month</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">Unlimited users</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 4px">All 11 features</p>
+          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.5);margin:0 0 20px">Parish-wide license</p>
+          <button onclick="contactParish()" style="width:100%;background:none;border:1px solid rgba(200,146,12,.55);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:11px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Contact us →</button>
+        </div>
+
+      </div>
+
+      <!-- Trial info -->
+      <p id="paywallTrialInfo" style="text-align:center;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);margin:0 0 10px">Your trial included 30 days and 20 sessions of full access.</p>
+
+      <!-- Footer links -->
+      <div style="text-align:center">
+        <button onclick="restorePurchase()" style="background:none;border:none;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;text-decoration:underline;padding:4px 8px">Restore purchase</button>
+        <span style="color:rgba(255,255,255,.15);font-size:11px"> · </span>
+        <a href="mailto:matt@stillprayer.app" style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);text-decoration:underline">Contact</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════
      THE SACRISTY — hidden gallery
      Discovered by holding the Still wordmark
@@ -2888,6 +2957,10 @@ function homeActivate(i){
 }
 
 function enterFeature(i){
+  // Check paywall before entering any feature
+  incrementSession();
+  if (shouldShowPaywall()) { showPaywall(); return; }
+
   showScreen(F[i].screen,i);
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
@@ -6561,6 +6634,129 @@ function enterFromSacristy() {
   }
 }
 
+
+/* ═══════════════════════════════════════════
+   PAYWALL — 30 days OR 20 sessions, whichever first
+   Stripe keys: replace STRIPE_PERSONAL_LINK and STRIPE_FAMILY_LINK
+   with your actual Stripe Payment Links when ready
+═══════════════════════════════════════════ */
+const PAYWALL_DAYS     = 30;
+const PAYWALL_SESSIONS = 20;
+const STRIPE_PERSONAL_LINK = 'https://buy.stripe.com/test_aFadR91Jw8ho75zeO16J200';
+const STRIPE_FAMILY_LINK   = 'https://buy.stripe.com/test_fZu4gz87U7dkey1eO16J201';
+const PARISH_EMAIL         = 'admin@stillprayer.app';
+
+// Keys
+const PW_START_KEY   = 'still_trial_start';
+const PW_SESSIONS_KEY= 'still_trial_sessions';
+const PW_PAID_KEY    = 'still_paid';
+const PW_PLAN_KEY    = 'still_plan';
+
+function initTrial() {
+  if (!localStorage.getItem(PW_START_KEY)) {
+    localStorage.setItem(PW_START_KEY, Date.now().toString());
+    localStorage.setItem(PW_SESSIONS_KEY, '0');
+  }
+}
+
+function isPaid() {
+  return localStorage.getItem(PW_PAID_KEY) === '1';
+}
+
+function getTrialDaysLeft() {
+  const start = parseInt(localStorage.getItem(PW_START_KEY) || Date.now());
+  const elapsed = (Date.now() - start) / 86400000;
+  return Math.max(0, PAYWALL_DAYS - elapsed);
+}
+
+function getTrialSessionsLeft() {
+  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
+  return Math.max(0, PAYWALL_SESSIONS - used);
+}
+
+function incrementSession() {
+  if (isPaid()) return;
+  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
+  localStorage.setItem(PW_SESSIONS_KEY, (used + 1).toString());
+}
+
+function shouldShowPaywall() {
+  if (isPaid()) return false;
+  if (getTrialDaysLeft() <= 0) return true;
+  if (getTrialSessionsLeft() <= 0) return true;
+  return false;
+}
+
+function showPaywall() {
+  const daysLeft = getTrialDaysLeft();
+  const sessionsLeft = getTrialSessionsLeft();
+  const badge = document.getElementById('paywallBadge');
+  const info  = document.getElementById('paywallTrialInfo');
+
+  if (daysLeft <= 0) {
+    badge.textContent = 'Your 30-day free trial has ended';
+  } else {
+    badge.textContent = "You've used all 20 free sessions";
+  }
+
+  document.getElementById('paywall').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function hidePaywall() {
+  document.getElementById('paywall').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function startCheckout(plan) {
+  const url = plan === 'personal' ? STRIPE_PERSONAL_LINK : STRIPE_FAMILY_LINK;
+  window.open(url, '_blank');
+}
+
+function contactParish() {
+  window.location.href = 'mailto:' + PARISH_EMAIL + '?subject=Still Parish License Inquiry';
+}
+
+function restorePurchase() {
+  const email = prompt('Enter the email address used when you subscribed:');
+  if (!email) return;
+  // For now — simple restore flow. 
+  // In production this would verify with Stripe Customer Portal.
+  alert('Please check your email for a restore link, or contact ' + PARISH_EMAIL + ' for help.');
+}
+
+// Called after successful Stripe payment (via URL param)
+function checkStripeReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    const plan = params.get('plan') || 'personal';
+    localStorage.setItem(PW_PAID_KEY, '1');
+    localStorage.setItem(PW_PLAN_KEY, plan);
+    hidePaywall();
+    // Clean URL
+    window.history.replaceState({}, '', window.location.pathname);
+    // Show confirmation
+    setTimeout(() => {
+      alert('Welcome to Still. Your practice continues.');
+    }, 500);
+  }
+}
+
+// Admin bypass for testing — type stillAdmin() in console
+window.stillAdmin = function() {
+  localStorage.setItem(PW_PAID_KEY, '1');
+  hidePaywall();
+  console.log('Paywall bypassed');
+};
+
+// Reset trial for testing
+window.stillResetTrial = function() {
+  localStorage.removeItem(PW_PAID_KEY);
+  localStorage.removeItem(PW_START_KEY);
+  localStorage.removeItem(PW_SESSIONS_KEY);
+  console.log('Trial reset');
+};
+
 function checkOnboarding() {
   if (!localStorage.getItem('still_onboarded')) {
     document.getElementById('screen-onboarding').style.display = 'block';
@@ -7554,6 +7750,8 @@ setOfficeTime();setRuleDate();setAutobioDate();
 initMobileScroll();
 loadCompanionUses();
 loadRuleItems();
+initTrial();
+checkStripeReturn();
 checkOnboarding();
 initSacristy();
 

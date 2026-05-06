@@ -9,7 +9,7 @@
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/still-splash-iphone.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#120500"
     },
     "ios": {
