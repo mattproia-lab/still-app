@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Still</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Heebo:wght@300;400;500&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   RESET + BASE
+═══════════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  font-family: 'Heebo', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════
+   GOLD SHIMMER
+═══════════════════════════════════════════════════════ */
+@keyframes goldShimmer {
+  0%   { background-position: 240% center; }
+  50%  { background-position: 0% center; }
+  100% { background-position: 240% center; }
+}
+.gold {
+  background: linear-gradient(118deg,#3d2600 0%,#7a5010 10%,#c8920c 22%,#f0c040 33%,#fff8c0 44%,#ffe060 50%,#f0c040 58%,#c8920c 70%,#7a5010 82%,#3d2600 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 7s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATED GRADIENT BACKGROUND — DOGSTUDIO STYLE
+═══════════════════════════════════════════════════════ */
+.scene {
+  position: fixed; inset: 0; z-index: 0;
+  transition: background-color 0.9s ease;
+  background-color: #06071a;
+}
+
+/* Grain overlay */
+.scene::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Blobs */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(88px);
+  pointer-events: none;
+  transition: background-color 0.9s ease, opacity 0.9s ease;
+}
+.blob-1 { width: 580px; height: 460px; top: -120px; left: -140px; animation: drift1 30s ease-in-out infinite; }
+.blob-2 { width: 500px; height: 580px; top: -180px; right: -100px; animation: drift2 36s ease-in-out infinite; }
+.blob-3 { width: 420px; height: 420px; bottom: -80px; left: 25%; animation: drift3 24s ease-in-out infinite; }
+.blob-4 { width: 320px; height: 320px; top: 30%; left: 50%; animation: drift4 42s ease-in-out infinite; }
+
+@keyframes drift1 {
+  0%,100%{transform:translate(0,0) scale(1);} 25%{transform:translate(70px,90px) scale(1.1);} 50%{transform:translate(35px,160px) scale(0.94);} 75%{transform:translate(-50px,70px) scale(1.06);}
+}
+@keyframes drift2 {
+  0%,100%{transform:translate(0,0) scale(1);} 30%{transform:translate(-80px,60px) scale(1.12);} 60%{transform:translate(-35px,120px) scale(0.91);} 80%{transform:translate(60px,80px) scale(1.05);}
+}
+@keyframes drift3 {
+  0%,100%{transform:translate(0,0) scale(1);opacity:0.85;} 40%{transform:translate(-90px,-50px) scale(1.18);opacity:0.65;} 70%{transform:translate(70px,-90px) scale(0.88);opacity:0.78;}
+}
+@keyframes drift4 {
+  0%,100%{transform:translate(0,0) scale(1);opacity:0.75;} 33%{transform:translate(-110px,-70px) scale(1.22);opacity:0.55;} 66%{transform:translate(90px,110px) scale(0.84);opacity:0.68;}
+}
+
+/* ═══════════════════════════════════════════════════════
+   APP SHELL
+═══════════════════════════════════════════════════════ */
+.app {
+  position: relative; z-index: 10;
+  width: 100%; height: 100vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HEADER — exactly Dogstudio layout
+═══════════════════════════════════════════════════════ */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 36px 0;
+  flex-shrink: 0;
+  position: relative; z-index: 20;
+}
+.header-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-style: italic; font-weight: 400;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  text-decoration: none;
+}
+.header-feature {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Heebo', sans-serif;
+  font-size: 13px; font-weight: 400;
+  color: #c8ccdf;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.header-feature.visible { opacity: 1; }
+.header-feature-arrow {
+  color: #f0c040;
+  font-size: 12px;
+}
+.header-menu {
+  display: flex; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 4px;
+}
+.header-menu span {
+  display: block; width: 22px; height: 1.5px;
+  background: #d0d4e8;
+  transition: all 0.2s;
+}
+
+/* ═══════════════════════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════════════════════ */
+.hero {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  padding: 0 36px;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* LEFT — Text content */
+.hero-text {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding-top: 20px;
+  z-index: 10;
+  position: relative;
+}
+
+/* HOME state */
+.hero-home {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 0;
+  z-index: 5;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.hero-home.hidden { opacity: 0; pointer-events: none; transform: translateY(-16px); }
+
+.home-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.38em; text-transform: uppercase;
+  color: #b8bdd8;
+  margin-bottom: 16px;
+}
+.home-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(72px, 10vw, 120px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
+  margin-bottom: 24px;
+}
+.home-subtitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(16px, 2vw, 20px);
+  font-style: italic; font-weight: 400;
+  color: #c0c5dc;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  max-width: 380px;
+}
+
+/* FEATURE state */
+.hero-feature {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 0;
+  z-index: 5;
+  opacity: 0; pointer-events: none;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.hero-feature.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+.feature-eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.38em; text-transform: uppercase;
+  color: #b8bdd8;
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.feature-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #f0c040;
+  box-shadow: 0 0 8px rgba(240,192,64,0.8);
+  flex-shrink: 0;
+}
+.feature-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4.5vw, 58px);
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 22px;
+}
+.feature-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 1.6vw, 18px);
+  font-style: italic; font-weight: 400;
+  color: #d0d4ea;
+  line-height: 1.65;
+  max-width: 420px;
+  margin-bottom: 20px;
+}
+.feature-body {
+  font-family: 'Heebo', sans-serif;
+  font-size: 14px; font-weight: 400;
+  color: #b8bdd8;
+  line-height: 1.75;
+  max-width: 400px;
+  letter-spacing: -0.01em;
+}
+.feature-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: #f0c040;
+  cursor: pointer;
+  transition: gap 0.2s ease;
+  background: none; border: none; padding: 0;
+}
+.feature-cta:hover { gap: 16px; }
+.feature-cta-arrow { font-size: 14px; }
+
+/* RIGHT — Prayer Rope */
+.hero-rope {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  z-index: 8;
+}
+
+/* Bottom-left body copy (Dogstudio style) */
+.hero-desc {
+  grid-column: 1;
+  grid-row: 2;
+  padding-bottom: 20px;
+  z-index: 10;
+}
+.hero-desc p {
+  font-family: 'Heebo', sans-serif;
+  font-size: 15px; font-weight: 400;
+  color: #c0c5dc;
+  line-height: 1.7;
+  letter-spacing: -0.01em;
+  max-width: 480px;
+}
+.hero-desc p + p { margin-top: 6px; }
+
+/* ═══════════════════════════════════════════════════════
+   PRAYER ROPE SVG
+═══════════════════════════════════════════════════════ */
+.rope-container {
+  position: relative;
+  width: 140px;
+  height: min(580px, 70vh);
+  cursor: pointer;
+  filter: drop-shadow(0 0 40px rgba(240,192,64,0.08));
+  transition: filter 0.5s ease;
+}
+.rope-container:hover { filter: drop-shadow(0 0 60px rgba(240,192,64,0.15)); }
+
+/* Rope sway animation */
+@keyframes ropeSway {
+  0%,100% { transform: rotate(-0.8deg) translateX(0); }
+  33%      { transform: rotate(0.6deg) translateX(2px); }
+  66%      { transform: rotate(-0.4deg) translateX(-1px); }
+}
+.rope-svg {
+  width: 100%; height: 100%;
+  animation: ropeSway 8s ease-in-out infinite;
+  transform-origin: center top;
+  overflow: visible;
+}
+
+/* Bead glow animation for active bead */
+@keyframes beadPulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0.75; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTTOM BEAD NAVIGATION
+═══════════════════════════════════════════════════════ */
+.bead-nav {
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  gap: 0;
+  padding: 14px 0 22px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(4,4,12,0.7);
+  backdrop-filter: blur(20px);
+  position: relative; z-index: 20;
+}
+
+.nav-bead-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  cursor: pointer;
+  padding: 0 12px;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+.nav-bead-wrap:hover { transform: translateY(-2px); }
+
+.nav-bead {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  transition: all 0.35s ease;
+  position: relative;
+}
+.nav-bead.active {
+  background: radial-gradient(circle at 35% 30%, #fff8c0, #f0c040, #c8920c, #7a5008);
+  border-color: rgba(240,192,64,0.8);
+  box-shadow: 0 0 12px rgba(240,192,64,0.7), 0 0 24px rgba(240,192,64,0.3);
+  transform: scale(1.25);
+}
+.nav-bead-wrap:hover .nav-bead:not(.active) {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.4);
+}
+
+.nav-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 7px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(192,196,220,0.7);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+.nav-bead-wrap.active .nav-label,
+.nav-bead-wrap:hover .nav-label { color: #d8dce8; }
+
+/* Connector line between beads */
+.nav-connector {
+  width: 24px; height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin-bottom: 20px;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+/* Cross nav element */
+.nav-cross-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  cursor: pointer;
+  padding: 0 12px;
+  transition: transform 0.2s ease;
+}
+.nav-cross-wrap:hover { transform: translateY(-2px); }
+.nav-cross {
+  width: 16px; height: 20px;
+  position: relative;
+  transition: all 0.35s ease;
+}
+.nav-cross::before {
+  content: '';
+  position: absolute;
+  width: 2px; height: 100%;
+  left: 50%; transform: translateX(-50%);
+  background: rgba(255,255,255,0.25);
+  transition: background 0.35s ease;
+}
+.nav-cross::after {
+  content: '';
+  position: absolute;
+  width: 100%; height: 2px;
+  top: 35%; 
+  background: rgba(255,255,255,0.25);
+  transition: background 0.35s ease;
+}
+.nav-cross-wrap.active .nav-cross::before,
+.nav-cross-wrap.active .nav-cross::after {
+  background: #f0c040;
+  box-shadow: 0 0 8px rgba(240,192,64,0.8);
+}
+.nav-cross-wrap:hover .nav-cross::before,
+.nav-cross-wrap:hover .nav-cross::after {
+  background: rgba(240,192,64,0.6);
+}
+.nav-cross-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 7px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(240,192,64,0.7);
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+.nav-cross-wrap.active .nav-cross-label,
+.nav-cross-wrap:hover .nav-cross-label { color: #f0c040; }
+
+/* ═══════════════════════════════════════════════════════
+   FASTING TOGGLE
+═══════════════════════════════════════════════════════ */
+.fasting-toggle {
+  position: fixed;
+  bottom: 110px; right: 28px;
+  z-index: 30;
+  display: flex; align-items: center; gap: 10px;
+  cursor: pointer;
+  padding: 8px 14px;
+  border: 1px solid rgba(200,146,12,0.3);
+  background: rgba(8,8,16,0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.25s;
+}
+.fasting-toggle:hover { border-color: rgba(240,192,64,0.5); background: rgba(8,8,16,0.95); }
+.fasting-toggle-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1px solid rgba(200,146,12,0.5);
+  transition: all 0.25s;
+}
+.fasting-toggle.on .fasting-toggle-dot {
+  background: #f0c040;
+  border-color: #f0c040;
+  box-shadow: 0 0 8px rgba(240,192,64,0.7);
+}
+.fasting-toggle-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 8px; font-weight: 600;
+  letter-spacing: 0.24em; text-transform: uppercase;
+  color: #c0c5dc;
+}
+.fasting-toggle.on .fasting-toggle-label { color: #f0c040; }
+
+/* ═══════════════════════════════════════════════════════
+   TRANSITIONS
+═══════════════════════════════════════════════════════ */
+.content-transition {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- Animated gradient background -->
+<div class="scene" id="scene">
+  <div class="blob blob-1" id="blob1"></div>
+  <div class="blob blob-2" id="blob2"></div>
+  <div class="blob blob-3" id="blob3"></div>
+  <div class="blob blob-4" id="blob4"></div>
+</div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <a class="header-logo gold" onclick="goHome()">Still</a>
+    <div class="header-feature" id="headerFeature">
+      <span class="header-feature-arrow">›</span>
+      <span id="headerFeatureLabel"></span>
+    </div>
+    <div class="header-menu" aria-label="Menu">
+      <span></span><span></span>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <!-- Text: home state -->
+    <div class="hero-text">
+      <div class="hero-home" id="heroHome">
+        <div class="home-eyebrow">A Contemplative Practice</div>
+        <div class="home-title" style="color:#ffffff">Still</div>
+        <div class="home-subtitle">
+          For the age of noise.<br>
+          Rooted in 1,500 years of prayer.
+        </div>
+      </div>
+
+      <!-- Text: feature states -->
+      <div class="hero-feature" id="heroFeature">
+        <div class="feature-eyebrow">
+          <span class="feature-eyebrow-dot"></span>
+          <span id="featureEyebrow"></span>
+        </div>
+        <div class="feature-headline" id="featureHeadline"></div>
+        <div class="feature-tagline" id="featureTagline"></div>
+        <div class="feature-body" id="featureBody"></div>
+        <button class="feature-cta" id="featureCta">
+          <span>Enter</span>
+          <span class="feature-cta-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Prayer Rope -->
+    <div class="hero-rope">
+      <div class="rope-container" id="ropeContainer">
+        <svg class="rope-svg" id="ropeSvg" viewBox="0 0 140 600" xmlns="http://www.w3.org/2000/svg" overflow="visible">
+          <defs>
+            <!-- Gold bead gradient -->
+            <radialGradient id="rg-gold" cx="32%" cy="28%" r="68%">
+              <stop offset="0%"   stop-color="#fff8c0"/>
+              <stop offset="18%"  stop-color="#f0c040"/>
+              <stop offset="45%"  stop-color="#c8920c"/>
+              <stop offset="72%"  stop-color="#7a5008"/>
+              <stop offset="100%" stop-color="#2e1800"/>
+            </radialGradient>
+            <!-- Dim bead gradient -->
+            <radialGradient id="rg-dim" cx="32%" cy="28%" r="68%">
+              <stop offset="0%"   stop-color="#2e2318"/>
+              <stop offset="60%"  stop-color="#1a1510"/>
+              <stop offset="100%" stop-color="#0e0c08"/>
+            </radialGradient>
+            <!-- Glow filter -->
+            <filter id="bead-glow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <filter id="cross-glow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <!-- Ambient halo -->
+            <radialGradient id="rg-halo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="rgba(240,192,64,0.18)"/>
+              <stop offset="60%"  stop-color="rgba(200,146,12,0.05)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Rope path — slight natural curve -->
+          <path id="ropePath"
+            d="M 70 18 Q 68 65 70 112 Q 72 158 70 205 Q 68 250 70 295 Q 72 340 70 385 Q 68 428 70 468 Q 72 500 70 522"
+            fill="none" stroke="rgba(200,180,130,0.28)" stroke-width="2.5"
+            stroke-linecap="round"/>
+
+          <!-- Halo rays for active bead (hidden by default) -->
+          <g id="activeHalo" opacity="0" style="transition:opacity 0.4s ease">
+            <circle cx="70" cy="70" r="50" fill="url(#rg-halo)"/>
+          </g>
+
+          <!-- 10 Beads — built by JS -->
+          <g id="ropeBeads"></g>
+
+          <!-- Cross -->
+          <g id="crossGroup" transform="translate(70, 550)" style="cursor:pointer">
+            <!-- Cross body -->
+            <rect x="-9" y="-22" width="18" height="44" rx="2"
+              fill="#1c1200" stroke="rgba(200,146,12,0.55)" stroke-width="1.2" id="crossRect"/>
+            <rect x="-15" y="-8" width="30" height="12" rx="1.5"
+              fill="#1c1200" stroke="rgba(200,146,12,0.55)" stroke-width="1.2"/>
+            <!-- Cross inner detail -->
+            <line x1="0" y1="-18" x2="0" y2="18" stroke="rgba(248,200,64,0.7)" stroke-width="1.5"/>
+            <line x1="-11" y1="-2" x2="11" y2="-2" stroke="rgba(248,200,64,0.7)" stroke-width="1.5"/>
+            <!-- Highlight -->
+            <line x1="-0.6" y1="-18" x2="-0.6" y2="18" stroke="rgba(255,248,180,0.3)" stroke-width="0.6"/>
+            <!-- Corner decorations -->
+            <rect x="-14" y="-22" width="5" height="5" rx="0.5"
+              fill="none" stroke="rgba(200,146,12,0.4)" stroke-width="0.8"/>
+            <rect x="9" y="-22" width="5" height="5" rx="0.5"
+              fill="none" stroke="rgba(200,146,12,0.4)" stroke-width="0.8"/>
+            <rect x="-14" y="17" width="5" height="5" rx="0.5"
+              fill="none" stroke="rgba(200,146,12,0.4)" stroke-width="0.8"/>
+            <rect x="9" y="17" width="5" height="5" rx="0.5"
+              fill="none" stroke="rgba(200,146,12,0.4)" stroke-width="0.8"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Bottom-left desc (Dogstudio style) -->
+    <div class="hero-desc" id="heroDesc">
+      <p id="descLine1" style="color:#c0c5dc">A prayer app unlike anything built before.</p>
+      <p id="descLine2" style="color:#9098b8">Rooted in the Desert Fathers. Designed for right now.</p>
+    </div>
+
+  </section>
+
+  <!-- BEAD NAVIGATION -->
+  <nav class="bead-nav" id="beadNav">
+    <!-- Built by JS -->
+  </nav>
+
+</div>
+
+<!-- Fasting Mode Toggle -->
+<div class="fasting-toggle" id="fastingToggle" onclick="toggleFasting()">
+  <div class="fasting-toggle-dot" id="fastingDot"></div>
+  <div class="fasting-toggle-label">Fasting Mode</div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   FEATURE DATA
+═══════════════════════════════════════════════════════ */
+const features = [
+  {
+    id: 1,
+    name: 'Contemplative\nSitting',
+    eyebrow: 'Feature 01 — Stillness',
+    headline: 'Train your mind\nto be quiet.',
+    tagline: 'St. Seraphim said the goal is acquisition of the Holy Spirit. This is where it begins.',
+    body: 'Four phases: Settle · Watch · Enter Stillness · Return. Your own recorded voice as anchor. A thought-count graph that shows your mind quieting over time.',
+    desc1: 'Trained intentional stillness that carries into your whole day.',
+    desc2: 'The hesychast tradition made immediate.'
+  },
+  {
+    id: 2,
+    name: 'Lectio\nDivina',
+    eyebrow: 'Feature 02 — Sacred Reading',
+    headline: 'Let one word\nfind you.',
+    tagline: 'Not chosen — received. The word catches you the way a physician\'s hand finds the wound.',
+    body: 'Scripture phrase by phrase. Four movements from Guigo II\'s 12th-century Ladder of Monastics. One contemplative question, generated once, never repeated.',
+    desc1: 'Father Michael Casey O.C.S.O. calls it Sacred Reading.',
+    desc2: 'The word does not get chosen. It finds you.'
+  },
+  {
+    id: 3,
+    name: 'Examen',
+    eyebrow: 'Feature 03 — Daily Conscience',
+    headline: 'The most honest\nconversation\nof your day.',
+    tagline: 'Four minutes. St. Ignatius. Five questions at the end of the day.',
+    body: 'Where did I feel most alive today? Where did I resist? What do I want to say to God? Builds a private journal over time. St. Ignatius meets the Notes app.',
+    desc1: 'Reflective, honest, non-performative.',
+    desc2: 'Takes four minutes. Reveals everything.'
+  },
+  {
+    id: 4,
+    name: 'Darkness\nMode',
+    eyebrow: 'Feature 04 — Lament',
+    headline: 'For when God\nfeels absent.',
+    tagline: 'Most wellness apps only speak to people who are doing okay. This is for when you\'re not.',
+    body: 'Lamentations. The dark Psalms. Job. John of the Cross. Thérèse of Lisieux. When you tap "I\'m not okay" — the app pivots entirely.',
+    desc1: 'Built for desolation, not performance.',
+    desc2: 'The mystics who wrote from the dark night are here.'
+  },
+  {
+    id: 5,
+    name: 'Community',
+    eyebrow: 'Feature 05 — Together, Alone',
+    headline: 'Every night\nat 9pm.\nOne question.',
+    tagline: 'Three strangers. No usernames. No likes. Just the knowledge that others are asking the same things.',
+    body: 'Not a feed. Not comments. One contemplative prompt, sent to every user. Answer privately. See three anonymous answers from others. Sacred and viral.',
+    desc1: 'Community without social media.',
+    desc2: 'The most human thing this app does.'
+  },
+  {
+    id: 6,
+    name: 'The\nCompanion',
+    eyebrow: 'Feature 06 — AI Spiritual Direction',
+    headline: 'A Desert Father\nin your pocket.',
+    tagline: 'Not a chatbot. Not therapy. A voice drawn from 1,400 years of tradition.',
+    body: 'Every response rooted in the Desert Fathers, the Philokalia, the Catholic mystics. One quote. One question. Always ends in silence. Never pushes more conversation.',
+    desc1: 'Appears after 7 days of practice.',
+    desc2: 'Found, not assigned.'
+  },
+  {
+    id: 7,
+    name: 'Saint of\nthe Day',
+    eyebrow: 'Feature 07 — Daily Letter',
+    headline: 'One saint.\nOne moment.\nDelivered daily.',
+    tagline: 'Not a biography. A moment from their life that speaks to where you are right now.',
+    body: 'One icon. One era. One line they are remembered by. One prayer. Feels like discovering a friend across time. Deeply shareable without being social.',
+    desc1: 'A letter from someone who has already walked this.',
+    desc2: 'Delivered every morning like correspondence.'
+  },
+  {
+    id: 8,
+    name: 'The\nOffice',
+    eyebrow: 'Feature 08 — Daily Prayer',
+    headline: 'The prayer monks\nhave said\nfor 1,500 years.',
+    tagline: 'Morning and Evening. Three minutes. No rubrics, no Latin, no intimidation.',
+    body: 'One psalm. One scripture. One collect. The ancient rhythm made frictionless. St. Benedict built his entire Rule around it. Now it fits in your morning.',
+    desc1: 'Morning and Evening. Simple.',
+    desc2: 'The daily skeleton of the contemplative life.'
+  },
+  {
+    id: 9,
+    name: 'Rule of\nLife',
+    eyebrow: 'Feature 09 — Personal Compass',
+    headline: 'Not a habit\ntracker.\nA mirror.',
+    tagline: 'Three commitments you shape yourself. No streaks. No guilt. A quiet reflection of who you\'re trying to become.',
+    body: 'Parchment-style. Lives quietly in the background. The "boring by design" feature that becomes the most important one after six months.',
+    desc1: 'Not assigned. Discovered.',
+    desc2: 'The feature everyone quietly relies on.'
+  },
+  {
+    id: 10,
+    name: 'Spiritual\nAutobiography',
+    eyebrow: 'Feature 10 — The Record',
+    headline: 'The record of\nwho you are\nbecoming.',
+    tagline: 'Everything the practice leaves behind — gathered quietly, returned to you when you need it.',
+    body: 'Every Lectio word. Every Examen answer. Every fast day. Every Companion exchange. Free-form writing. An Echoes section that surfaces what you wrote a year ago.',
+    desc1: 'The most honest record of a life.',
+    desc2: 'Written through practice, not performance.'
+  },
+  {
+    id: 11,
+    name: 'Deeper',
+    eyebrow: 'The Cross — Theological Investigation',
+    headline: 'Where all\nof it leads.',
+    tagline: 'AI-assisted investigation into the mysteries of Christ. Catechism-grounded. Always ends in silence.',
+    body: 'One concise theological ground. One question that pulls you forward. Draws on your entire Spiritual Autobiography. Knows when to say: bring this to a confessor.',
+    desc1: 'Every feature leads here.',
+    desc2: 'The cross is not one of the beads. It\'s what they all point to.'
+  }
+];
+
+/* ═══════════════════════════════════════════════════════
+   COLOR WORLDS — 10 beads + cross, Dogstudio palette
+═══════════════════════════════════════════════════════ */
+const worlds = [
+  // 1. Contemplative Sitting — deep violet/indigo
+  { bg:'#05061a', b1:'rgba(88,26,162,0.50)', b2:'rgba(22,12,108,0.40)', b3:'rgba(42,22,136,0.34)', b4:'rgba(58,10,118,0.24)' },
+  // 2. Lectio Divina — amber/gold/parchment
+  { bg:'#0e0902', b1:'rgba(195,112,8,0.46)', b2:'rgba(132,82,0,0.38)', b3:'rgba(72,36,0,0.32)', b4:'rgba(155,78,5,0.22)' },
+  // 3. Examen — deep teal/emerald
+  { bg:'#01100e', b1:'rgba(0,108,92,0.46)', b2:'rgba(0,74,56,0.38)', b3:'rgba(0,46,38,0.32)', b4:'rgba(0,88,68,0.22)' },
+  // 4. Darkness Mode — near-black crimson
+  { bg:'#0d0204', b1:'rgba(112,0,14,0.50)', b2:'rgba(70,0,8,0.40)', b3:'rgba(40,0,4,0.34)', b4:'rgba(92,0,6,0.24)' },
+  // 5. Community — deep mauve/violet
+  { bg:'#09081  2', b1:'rgba(102,28,122,0.46)', b2:'rgba(70,12,90,0.38)', b3:'rgba(54,8,74,0.32)', b4:'rgba(80,20,98,0.22)' },
+  // 6. The Companion — midnight navy
+  { bg:'#030810', b1:'rgba(8,46,94,0.50)', b2:'rgba(4,24,62,0.40)', b3:'rgba(0,8,16,0.34)', b4:'rgba(6,32,78,0.24)' },
+  // 7. Saint of the Day — warm sepia/gold
+  { bg:'#0e0906', b1:'rgba(152,90,12,0.46)', b2:'rgba(108,60,28,0.38)', b3:'rgba(76,46,12,0.32)', b4:'rgba(124,76,8,0.22)' },
+  // 8. The Office — deep rose/dawn
+  { bg:'#0e0608', b1:'rgba(120,0,60,0.46)', b2:'rgba(120,60,0,0.38)', b3:'rgba(90,8,30,0.32)', b4:'rgba(92,38,0,0.22)' },
+  // 9. Rule of Life — deep forest
+  { bg:'#030e06', b1:'rgba(8,76,30,0.46)', b2:'rgba(6,60,22,0.38)', b3:'rgba(2,30,14,0.32)', b4:'rgba(4,58,20,0.22)' },
+  // 10. Spiritual Autobiography — midnight purple + gold
+  { bg:'#080610', b1:'rgba(70,14,120,0.50)', b2:'rgba(40,8,90,0.40)', b3:'rgba(90,60,0,0.28)', b4:'rgba(54,12,78,0.24)' },
+  // Cross/Deeper — deep space, near void
+  { bg:'#020308', b1:'rgba(8,6,46,0.60)', b2:'rgba(14,30,78,0.44)', b3:'rgba(1,1,8,0.50)', b4:'rgba(6,16,62,0.30)' }
+];
+
+/* ═══════════════════════════════════════════════════════
+   BUILD ROPE BEADS
+═══════════════════════════════════════════════════════ */
+const BEAD_COUNT = 10;
+const BEAD_Y_START = 52;
+const BEAD_Y_STEP = 47;
+const BEAD_R = 14;
+
+function buildRope() {
+  const g = document.getElementById('ropeBeads');
+  for (let i = 0; i < BEAD_COUNT; i++) {
+    const y = BEAD_Y_START + i * BEAD_Y_STEP;
+    // Glow circle (behind bead)
+    const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    glow.setAttribute('cx','70'); glow.setAttribute('cy', y);
+    glow.setAttribute('r', BEAD_R + 8);
+    glow.setAttribute('fill','rgba(240,192,64,0)');
+    glow.setAttribute('class','bead-glow-el');
+    glow.setAttribute('data-index', i);
+    glow.style.transition = 'fill 0.4s ease';
+    g.appendChild(glow);
+
+    // Bead circle
+    const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx','70'); c.setAttribute('cy', y);
+    c.setAttribute('r', BEAD_R);
+    c.setAttribute('fill','url(#rg-dim)');
+    c.setAttribute('stroke','rgba(74,48,8,0.4)');
+    c.setAttribute('stroke-width','0.8');
+    c.setAttribute('class','rope-bead');
+    c.setAttribute('data-index', i);
+    c.style.cursor = 'pointer';
+    c.style.transition = 'fill 0.35s ease, r 0.3s ease';
+    c.addEventListener('click', () => activateBead(i));
+    g.appendChild(c);
+
+    // Bead number (tiny)
+    const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+    t.setAttribute('x','70'); t.setAttribute('y', y + 4);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-family','Montserrat,sans-serif');
+    t.setAttribute('font-size','7');
+    t.setAttribute('font-weight','600');
+    t.setAttribute('fill','rgba(255,255,255,0.25)');
+    t.setAttribute('class','bead-num');
+    t.setAttribute('data-index', i);
+    t.textContent = String(i + 1).padStart(2,'0');
+    t.style.pointerEvents = 'none';
+    t.style.transition = 'fill 0.35s ease';
+    g.appendChild(t);
+  }
+
+  // Cross click handler
+  document.getElementById('crossGroup').addEventListener('click', () => activateBead(10));
+}
+
+/* ═══════════════════════════════════════════════════════
+   BUILD NAV BEADS
+═══════════════════════════════════════════════════════ */
+function buildNav() {
+  const nav = document.getElementById('beadNav');
+  const labels = ['Sitting','Lectio','Examen','Dark','Together','Companion','Saint','Office','Rule','Journal'];
+
+  for (let i = 0; i < BEAD_COUNT; i++) {
+    // Connector before first bead only if not first
+    if (i > 0) {
+      const conn = document.createElement('div');
+      conn.className = 'nav-connector';
+      nav.appendChild(conn);
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'nav-bead-wrap';
+    wrap.dataset.index = i;
+    wrap.innerHTML = `
+      <div class="nav-bead" data-index="${i}"></div>
+      <div class="nav-label">${labels[i]}</div>`;
+    wrap.addEventListener('click', () => activateBead(i));
+    nav.appendChild(wrap);
+  }
+
+  // Connector before cross
+  const conn = document.createElement('div');
+  conn.className = 'nav-connector';
+  nav.appendChild(conn);
+
+  // Cross nav
+  const crossWrap = document.createElement('div');
+  crossWrap.className = 'nav-cross-wrap';
+  crossWrap.dataset.index = 10;
+  crossWrap.innerHTML = `
+    <div class="nav-cross"></div>
+    <div class="nav-cross-label">Deeper</div>`;
+  crossWrap.addEventListener('click', () => activateBead(10));
+  nav.appendChild(crossWrap);
+}
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let currentBead = -1; // -1 = home
+let fastingOn = false;
+
+/* ═══════════════════════════════════════════════════════
+   ACTIVATE BEAD — the core interaction
+═══════════════════════════════════════════════════════ */
+function activateBead(index) {
+  currentBead = index;
+  const f = features[index];
+  const w = worlds[index];
+
+  // 1. Shift color world
+  shiftWorld(w);
+
+  // 2. Update rope beads
+  updateRopeBeads(index);
+
+  // 3. Update content
+  updateContent(f, index);
+
+  // 4. Update nav
+  updateNav(index);
+
+  // 5. Show header feature label
+  const hf = document.getElementById('headerFeature');
+  document.getElementById('headerFeatureLabel').textContent = f.name.replace('\n',' ');
+  hf.classList.add('visible');
+}
+
+function goHome() {
+  currentBead = -1;
+  shiftWorld({ bg:'#06071a', b1:'rgba(88,30,160,0.44)', b2:'rgba(0,130,150,0.30)', b3:'rgba(50,15,100,0.26)', b4:'rgba(0,90,120,0.18)' });
+  updateRopeBeads(-1);
+  // Show home content
+  document.getElementById('heroHome').classList.remove('hidden');
+  document.getElementById('heroFeature').classList.remove('visible');
+  document.getElementById('headerFeature').classList.remove('visible');
+  document.getElementById('descLine1').textContent = 'A prayer app unlike anything built before.';
+  document.getElementById('descLine2').textContent = 'Rooted in the Desert Fathers. Designed for right now.';
+  updateNav(-1);
+}
+
+/* ═══════════════════════════════════════════════════════
+   SHIFT COLOR WORLD
+═══════════════════════════════════════════════════════ */
+function shiftWorld(w) {
+  const scene = document.getElementById('scene');
+  scene.style.backgroundColor = w.bg;
+  document.getElementById('blob1').style.backgroundColor = w.b1;
+  document.getElementById('blob2').style.backgroundColor = w.b2;
+  document.getElementById('blob3').style.backgroundColor = w.b3;
+  document.getElementById('blob4').style.backgroundColor = w.b4;
+}
+
+/* ═══════════════════════════════════════════════════════
+   UPDATE ROPE BEADS
+═══════════════════════════════════════════════════════ */
+function updateRopeBeads(activeIndex) {
+  document.querySelectorAll('.rope-bead').forEach((bead, i) => {
+    if (i === activeIndex) {
+      bead.setAttribute('fill','url(#rg-gold)');
+      bead.setAttribute('stroke','rgba(255,248,160,0.9)');
+      bead.setAttribute('stroke-width','1.2');
+      bead.setAttribute('filter','url(#bead-glow)');
+    } else if (i < activeIndex) {
+      bead.setAttribute('fill','url(#rg-gold)');
+      bead.setAttribute('stroke','rgba(200,146,12,0.5)');
+      bead.setAttribute('stroke-width','0.8');
+      bead.removeAttribute('filter');
+    } else {
+      bead.setAttribute('fill','url(#rg-dim)');
+      bead.setAttribute('stroke','rgba(74,48,8,0.35)');
+      bead.setAttribute('stroke-width','0.8');
+      bead.removeAttribute('filter');
+    }
+  });
+
+  // Glow els
+  document.querySelectorAll('.bead-glow-el').forEach((el, i) => {
+    el.setAttribute('fill', i === activeIndex ? 'rgba(240,192,64,0.18)' : 'rgba(240,192,64,0)');
+  });
+
+  // Bead numbers
+  document.querySelectorAll('.bead-num').forEach((t, i) => {
+    t.setAttribute('fill', i <= activeIndex ? 'rgba(255,248,180,0.55)' : 'rgba(255,255,255,0.2)');
+  });
+
+  // Cross
+  const crossRect = document.getElementById('crossRect');
+  const crossGroup = document.getElementById('crossGroup');
+  if (activeIndex === 10) {
+    crossRect.setAttribute('stroke','rgba(240,192,64,0.9)');
+    crossGroup.setAttribute('filter','url(#cross-glow)');
+  } else {
+    crossRect.setAttribute('stroke','rgba(200,146,12,0.55)');
+    crossGroup.removeAttribute('filter');
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   UPDATE CONTENT
+═══════════════════════════════════════════════════════ */
+function updateContent(f, index) {
+  // Fade out home, fade in feature
+  const homeEl = document.getElementById('heroHome');
+  const featEl = document.getElementById('heroFeature');
+
+  homeEl.classList.add('hidden');
+
+  document.getElementById('featureEyebrow').textContent = f.eyebrow;
+  document.getElementById('featureHeadline').innerHTML = f.headline.replace(/\n/g,'<br>');
+  document.getElementById('featureTagline').textContent = f.tagline;
+  document.getElementById('featureBody').textContent = f.body;
+  document.getElementById('descLine1').textContent = f.desc1;
+  document.getElementById('descLine2').textContent = f.desc2;
+
+  featEl.classList.add('visible');
+}
+
+/* ═══════════════════════════════════════════════════════
+   UPDATE NAV
+═══════════════════════════════════════════════════════ */
+function updateNav(activeIndex) {
+  document.querySelectorAll('.nav-bead-wrap').forEach(wrap => {
+    const i = parseInt(wrap.dataset.index);
+    wrap.classList.toggle('active', i === activeIndex);
+    wrap.querySelector('.nav-bead').classList.toggle('active', i === activeIndex);
+  });
+  const crossWrap = document.querySelector('.nav-cross-wrap');
+  crossWrap.classList.toggle('active', activeIndex === 10);
+}
+
+/* ═══════════════════════════════════════════════════════
+   FASTING TOGGLE
+═══════════════════════════════════════════════════════ */
+function toggleFasting() {
+  fastingOn = !fastingOn;
+  document.getElementById('fastingToggle').classList.toggle('on', fastingOn);
+}
+
+/* ═══════════════════════════════════════════════════════
+   KEYBOARD NAVIGATION
+═══════════════════════════════════════════════════════ */
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    const next = Math.min(currentBead + 1, 10);
+    if (next >= 0) activateBead(next);
+  }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    const prev = currentBead - 1;
+    if (prev < 0) goHome();
+    else activateBead(prev);
+  }
+  if (e.key === 'Escape') goHome();
+});
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+buildRope();
+buildNav();
+
+// Set initial home world (Dogstudio-style dark navy/violet/teal)
+shiftWorld({ bg:'#080b14', b1:'rgba(88,30,160,0.44)', b2:'rgba(0,130,150,0.30)', b3:'rgba(50,15,100,0.26)', b4:'rgba(0,90,120,0.18)' });
+
+// Smooth transition on blobs
+document.querySelectorAll('.blob').forEach(b => {
+  b.style.transition = 'background-color 0.9s ease';
+});
+document.getElementById('scene').style.transition = 'background-color 0.9s ease';
+</script>
+</body>
+</html>
