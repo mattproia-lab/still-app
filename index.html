@@ -935,7 +935,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   /* ── Dot nav — restore on mobile, positioned with safe area ── */
   .dot-nav {
     bottom: calc(env(safe-area-inset-bottom, 0px) + 14px) !important;
+    pointer-events: none !important;  /* show as indicator only — Enter tab is the only way in */
   }
+  .dot-nav .dn-item { cursor: default !important; }
 
   /* ── Fasting toggle ── */
   .fasting-wrap {
