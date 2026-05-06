@@ -3607,7 +3607,7 @@ function resetDeeper(){showDeeperState('deeperInput');document.getElementById('d
 
 async function askDeeper(){
   trackEvent('deeper');
-  if(!key){openSettings();return;}
+  
   const input=document.getElementById('deeperText').value.trim();
   if(!input){showError('deeperErr','Bring your question first.');return;}
   showDeeperState('deeperLoading');
