@@ -1,3 +1,4 @@
+import { SACRISTY_IMAGES } from './src/constants/sacristy-data';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
