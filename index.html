@@ -8267,15 +8267,14 @@ async function sendPhoneCode() {
   errEl.textContent = 'Sending...';
 
   const token = localStorage.getItem('still_access_token');
-  const res = await fetch(`${SUPA_URL}/auth/v1/user/phone`, {
-    method: 'PUT',
-    headers: {
-      'apikey': SUPA_ANON,
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ phone })
-  });
+  const res = await fetch(`${SUPA_URL}/auth/v1/otp`, {
+  method: 'POST',
+  headers: {
+    'apikey': SUPA_ANON,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ phone, channel: 'sms' })
+});
 
   const text = await res.text();
   console.log('phone response:', text);
@@ -8300,15 +8299,14 @@ async function verifyCode() {
   errEl.textContent = '';
 
   const token = localStorage.getItem('still_access_token');
-  const res = await fetch(`${SUPA_URL}/auth/v1/user/phone/verify`, {
-    method: 'POST',
-    headers: {
-      'apikey': SUPA_ANON,
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ token: code, type: 'phone_change' })
-  });
+  const res = await fetch(`${SUPA_URL}/auth/v1/verify`, {
+  method: 'POST',
+  headers: {
+    'apikey': SUPA_ANON,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ phone: document.getElementById('phoneInput').value.trim().replace(/\D/g,'').replace(/^(\d{10})$/, '+1$1').replace(/^1(\d{10})$/, '+1$1'), token: code, type: 'sms' })
+});
 
   if (res.ok) {
     localStorage.setItem('still_phone_verified', 'true');
