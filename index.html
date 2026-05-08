@@ -6537,6 +6537,54 @@ document.addEventListener('keydown',e=>{
 const SUPA_URL  = 'https://zbskapivansfewegllnz.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI';
 
+// ── AUTH ──
+let currentUser = null;
+let authMode = 'signup';
+
+async function initAuth() {
+  // Check for existing session
+  const res = await fetch(`${SUPA_URL}/auth/v1/user`, {
+    headers: {
+      'apikey': SUPA_ANON,
+      'Authorization': `Bearer ${localStorage.getItem('still_access_token') || ''}`
+    }
+  });
+  if (res.ok) {
+    currentUser = await res.json();
+  } else {
+    document.getElementById('authOverlay').style.display = 'flex';
+  }
+}
+
+function toggleAuthMode() {
+  authMode = authMode === 'signup' ? 'signin' : 'signup';
+  document.getElementById('authTitle').textContent = authMode === 'signup' ? 'Create your account' : 'Welcome back';
+  document.getElementById('authToggle').innerHTML = authMode === 'signup'
+    ? 'Already have an account? <span>Sign in</span>'
+    : 'New here? <span>Create account</span>';
+}
+
+async function submitAuth() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value.trim();
+  const errEl = document.getElementById('authErr');
+  if (!email || !password) { errEl.textContent = 'Email and password required.'; return; }
+  errEl.textContent = '';
+  const endpoint = authMode === 'signup' ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
+  const res = await fetch(`${SUPA_URL}${endpoint}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  if (data.error || data.error_description) {
+    errEl.textContent = data.error_description || data.error;
+    return;
+  }
+  localStorage.setItem('still_access_token', data.access_token);
+  currentUser = data.user;
+  document.getElementById('authOverlay').style.display = 'none';
+}
 async function supaFetch(path, opts={}) {
   const isGet = !opts.method || opts.method === 'GET';
   const headers = {
@@ -8058,6 +8106,7 @@ loadRuleItems();
 initTrial();
 checkStripeReturn();
 checkOnboarding();
+initAuth();
 initSacristy();
 
 // Restore bell preference
