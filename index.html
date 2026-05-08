@@ -3748,7 +3748,17 @@ async function askCompanion(){
       body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:300,system:COMPANION_SYSTEM,messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
-    if(data.error){throw new Error(data.error.message);}
+    if(data.error === 'upgrade_required') {
+  showCompanionState('companionInput');
+  showError('companionErr', 'This feature is available with Still Premium. Upgrade for $9.99/month.');
+  return;
+}
+if(data.error === 'limit_reached') {
+  showCompanionState('companionInput');
+  showError('companionErr', 'You have reached your limit. Purchase a reflection pack to continue.');
+  return;
+}
+if(data.error){throw new Error(data.error.message);}
     const full=data.content?.[0]?.text||'';
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
     const src=srcMatch?srcMatch[1].trim():'The Fathers';
@@ -3874,7 +3884,19 @@ async function askMystic() {
       })
     });
     const data = await res.json();
-    if (data.error) throw new Error(data.error.message);
+    if (data.error === 'upgrade_required') {
+  showMysticState('mysticInput');
+  const errEl = document.getElementById('mysticErr');
+  if (errEl) { errEl.textContent = 'Amma Sophia is available with Still Premium — $9.99/month.'; errEl.style.display = 'block'; }
+  return;
+}
+if (data.error === 'limit_reached') {
+  showMysticState('mysticInput');
+  const errEl = document.getElementById('mysticErr');
+  if (errEl) { errEl.textContent = 'You have reached your daily limit. Purchase a reflection pack to continue.'; errEl.style.display = 'block'; }
+  return;
+}
+if (data.error) throw new Error(data.error.message);
     const text = data.content?.[0]?.text || '';
     document.getElementById('mysticResponseText').textContent = text.trim();
     showMysticState('mysticResponse');
@@ -3909,7 +3931,9 @@ async function askDeeper(){
       body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:350,system:DEEPER_SYSTEM,messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    if(data.error==='upgrade_required'){showDeeperState('deeperInput');showError('deeperErr','Deeper is available with Still Premium — $9.99/month.');return;}
+if(data.error==='limit_reached'){showDeeperState('deeperInput');showError('deeperErr','You have reached your daily limit. Purchase a reflection pack to continue.');return;}
+if(data.error)throw new Error(data.error.message);
     const full=data.content?.[0]?.text||'';
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
     const src=srcMatch?srcMatch[1].trim():'Catechism of the Catholic Church';
