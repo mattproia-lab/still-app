@@ -1187,8 +1187,27 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
     <p onclick="closeUpgrade()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em">Return to stillness</p>
   </div>
 </div>
+<div id="phoneVerifyScreen" style="display:none;position:fixed;inset:0;background:rgba(4,4,14,.98);z-index:1000;align-items:center;justify-content:center;padding:40px 24px;box-sizing:border-box;">
+  <div style="max-width:360px;width:100%;text-align:center">
+    <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:8px">One moment</p>
+    <p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(178,200,245,.5);text-transform:uppercase;margin-bottom:32px">Verify your phone to begin</p>
 
-    <p onclick="closeUpgrade()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em">Return to stillness</p>
+    <div id="phoneStep">
+      <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(200,215,255,.6);margin-bottom:20px;line-height:1.6">Enter your phone number to unlock your free session with the Companion.</p>
+      <input id="phoneInput" class="auth-input" type="tel" placeholder="+1 555 000 0000" />
+      <button class="auth-btn" onclick="sendPhoneCode()">Send code →</button>
+      <p id="phoneErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-top:8px"></p>
+    </div>
+
+    <div id="codeStep" style="display:none">
+      <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(200,215,255,.6);margin-bottom:20px;line-height:1.6">Enter the 6-digit code sent to your phone.</p>
+      <input id="codeInput" class="auth-input" type="number" placeholder="000000" />
+      <button class="auth-btn" onclick="verifyCode()">Verify →</button>
+      <p id="codeErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-top:8px"></p>
+    </div>
+
+    <p onclick="closePhoneVerify()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em;margin-top:24px">Return to stillness</p>
+  </div>
   </div>
 </div>
 <!-- ═══════════════════════════════════════════
@@ -8211,6 +8230,7 @@ async function startCheckout() {
   try {
     const res = await fetch('/.netlify/functions/stripe-checkout', {
       method: 'POST',
+
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: currentUser.id,
