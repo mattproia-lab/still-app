@@ -12,23 +12,26 @@ exports.handler = async function(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { user_id, email } = body;
+  const { user_id, email, type } = body;
   if (!user_id || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
   }
 
+  const isReflectionPack = type === 'reflection_pack';
+  const priceId = isReflectionPack 
+    ? process.env.STRIPE_REFLECTION_PRICE_ID 
+    : process.env.STRIPE_PRICE_ID;
+  const mode = isReflectionPack ? 'payment' : 'subscription';
+
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: 'subscription',
+      mode,
       customer_email: email,
-      line_items: [{
-        price: process.env.STRIPE_PRICE_ID,
-        quantity: 1
-      }],
-      metadata: { user_id },
-      success_url: 'https://still-prayer.netlify.app/?upgraded=true',
-      cancel_url: 'https://still-prayer.netlify.app/?upgraded=false',
+      line_items: [{ price: priceId, quantity: 1 }],
+      metadata: { user_id, type: type || 'premium' },
+      success_url: `${process.env.SITE_URL}?upgraded=true`,
+      cancel_url: `${process.env.SITE_URL}?upgraded=false`,
     });
 
     return {

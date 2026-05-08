@@ -14,6 +14,26 @@ async function updateProfile(userId, status) {
   });
 }
 
+async function addReflections(userId, amount) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}&select=reflection_credits`, {
+    headers: {
+      'apikey': SUPA_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`
+    }
+  });
+  const data = await res.json();
+  const current = data?.[0]?.reflection_credits || 0;
+  await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPA_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ reflection_credits: current + amount })
+  });
+}
+
 exports.handler = async function(event) {
   const sig = event.headers['stripe-signature'];
   let stripeEvent;
@@ -32,7 +52,12 @@ exports.handler = async function(event) {
 
   if (stripeEvent.type === 'checkout.session.completed') {
     const userId = session.metadata?.user_id;
-    if (userId) await updateProfile(userId, 'premium');
+    const type = session.metadata?.type;
+    if (userId && type === 'reflection_pack') {
+      await addReflections(userId, 10);
+    } else if (userId) {
+      await updateProfile(userId, 'premium');
+    }
   }
 
   if (stripeEvent.type === 'customer.subscription.deleted') {
