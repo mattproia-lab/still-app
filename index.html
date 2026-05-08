@@ -8258,10 +8258,13 @@ function closePhoneVerify() {
 }
 
 async function sendPhoneCode() {
-  const phone = document.getElementById('phoneInput').value.trim();
+  let phone = document.getElementById('phoneInput').value.trim().replace(/\D/g, '');
+  if (phone.length === 10) phone = '+1' + phone;
+  else if (phone.length === 11) phone = '+' + phone;
+  
   const errEl = document.getElementById('phoneErr');
   if (!phone) { errEl.textContent = 'Enter your phone number.'; return; }
-  errEl.textContent = '';
+  errEl.textContent = 'Sending...';
 
   const token = localStorage.getItem('still_access_token');
   const res = await fetch(`${SUPA_URL}/auth/v1/user/phone`, {
@@ -8274,12 +8277,19 @@ async function sendPhoneCode() {
     body: JSON.stringify({ phone })
   });
 
+  const text = await res.text();
+  console.log('phone response:', text);
+  
   if (res.ok) {
     document.getElementById('phoneStep').style.display = 'none';
     document.getElementById('codeStep').style.display = 'block';
   } else {
-    const data = await res.json();
-    errEl.textContent = data.error_description || 'Could not send code. Try again.';
+    try {
+      const data = JSON.parse(text);
+      errEl.textContent = data.error_description || data.msg || 'Could not send code. Try again.';
+    } catch(e) {
+      errEl.textContent = text || 'Could not send code. Try again.';
+    }
   }
 }
 
