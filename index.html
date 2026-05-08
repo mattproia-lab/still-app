@@ -8191,6 +8191,35 @@ document.getElementById('screen-companion').addEventListener('transitionend',() 
   loadCompanionUses();
   checkApiKey();
 });
+function showUpgrade() {
+  document.getElementById('upgradeScreen').style.display = 'block';
+}
+
+function closeUpgrade() {
+  document.getElementById('upgradeScreen').style.display = 'none';
+}
+
+async function startCheckout() {
+  if (!currentUser) { showUpgrade(); return; }
+  try {
+    const res = await fetch('/.netlify/functions/stripe-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        email: currentUser.email
+      })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  } catch(err) {
+    console.error('Checkout error:', err);
+  }
+}
+
+async function buyReflectionPack() {
+  alert('Reflection packs coming soon!');
+}
 </script>
 </body>
 </html>
