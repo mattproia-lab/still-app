@@ -6582,12 +6582,20 @@ async function submitAuth() {
     body: JSON.stringify({ email, password })
   });
   const data = await res.json();
+  console.log('auth response:', JSON.stringify(data));
   if (data.error || data.error_description) {
     errEl.textContent = data.error_description || data.error;
     return;
   }
-  localStorage.setItem('still_access_token', data.access_token);
-  currentUser = data.user;
+  // Token is in different places for signup vs signin
+  const token = data.access_token || data.session?.access_token;
+  const user = data.user || data.session?.user;
+  if (!token) {
+    errEl.textContent = 'Check your email to confirm your account, then sign in.';
+    return;
+  }
+  localStorage.setItem('still_access_token', token);
+  currentUser = user;
   document.getElementById('authOverlay').style.display = 'none';
 }
 async function supaFetch(path, opts={}) {
