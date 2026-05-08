@@ -2,7 +2,7 @@ const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
 const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const LIMITS = {
-  free:    { companion: 0, deeper: 0, sophia: 0 },
+  free:    { companion: 1, deeper: 0, sophia: 0 },
   premium: { companion: 3, deeper: 14, sophia: 14 } // per week for companion, per day x7 for deeper/sophia
 };
 
