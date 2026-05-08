@@ -3771,7 +3771,7 @@ function returnFromCompanion(){
 async function askCompanion(){
   const input=document.getElementById('companionText').value.trim();
   if(!input){showError('companionErr','Speak first. Then the Fathers will answer.');return;}
-  if(companionUses<=0){showError('companionErr','You have reached your reflections for this week. Return to stillness.');return;}
+  if(companionUses<=0){showUpgrade();return;}
   showCompanionState('companionLoading');
   document.getElementById('companionErr').style.display='none';
   try{
