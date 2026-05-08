@@ -15,6 +15,7 @@ async function updateProfile(userId, status) {
 }
 
 async function addReflections(userId, amount) {
+  console.log('addReflections called for:', userId, 'amount:', amount);
   const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}&select=reflection_credits`, {
     headers: {
       'apikey': SUPA_SERVICE_KEY,
@@ -22,8 +23,10 @@ async function addReflections(userId, amount) {
     }
   });
   const data = await res.json();
+  console.log('current profile data:', JSON.stringify(data));
   const current = data?.[0]?.reflection_credits || 0;
-  await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
+  console.log('current credits:', current, 'adding:', amount);
+  const patchRes = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: 'PATCH',
     headers: {
       'apikey': SUPA_SERVICE_KEY,
@@ -32,6 +35,7 @@ async function addReflections(userId, amount) {
     },
     body: JSON.stringify({ reflection_credits: current + amount })
   });
+  console.log('patch status:', patchRes.status);
 }
 
 exports.handler = async function(event) {
