@@ -73,7 +73,17 @@ async function logUsage(userId, feature) {
     feature: feature
   });
 }
-
+async function useCredit(userId, currentCredits) {
+  await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPA_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ reflection_credits: currentCredits - 1 })
+  });
+}
 exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -105,19 +115,27 @@ exports.handler = async function(event) {
     const status = profile?.subscription_status || 'free';
     const limits = LIMITS[status] || LIMITS.free;
     const limit = limits[feature] ?? 0;
+    const credits = profile?.reflection_credits || 0;
 
-    if (limit === 0) {
+    if (limit === 0 && credits <= 0) {
       return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
     }
 
     const count = await getUsageCount(user.id, feature);
-    if (count >= limit) {
+
+    if (count >= limit && credits <= 0) {
       return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
     }
 
-    // Log usage before calling Claude
-    await logUsage(user.id, feature);
+    // Use a credit if over limit, otherwise log usage
+    if (count >= limit && credits > 0) {
+      await useCredit(user.id, credits);
+    } else {
+      await logUsage(user.id, feature);
+    }
   }
+
+  // Forward to Anthropic
 
   // Forward to Anthropic
   try {
