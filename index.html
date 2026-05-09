@@ -1349,7 +1349,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   <!-- Candle video background — contemplative sitting -->
   <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
     <video autoplay muted loop playsinline
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.95">
+  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.95">
       <source src="assets/candle.mp4" type="video/mp4">
     </video>
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,2,.85) 0%,rgba(2,2,2,.45) 22%,rgba(2,2,2,.12) 50%,rgba(2,2,2,.45) 100%)"></div>
@@ -2057,9 +2057,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 <div id="screen-office" class="screen">
   <!-- Candle background — office -->
   <div style="position:absolute;inset:0;z-index:0;pointer-events:none">
-    <img src="assets/candlelauds.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.4"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,2,.75) 0%,rgba(2,2,2,.45) 50%,rgba(2,2,2,.75) 100%)"></div>
-  </div>
+  <img src="assets/candlelauds.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:1"/>
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,2,.6) 0%,rgba(2,2,2,.3) 50%,rgba(2,2,2,.6) 100%)"></div>
+</div>
   <header class="app-header" style="position:relative;z-index:10">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title" id="officeScreenTitle">The Office</span>
