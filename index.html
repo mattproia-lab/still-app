@@ -7146,8 +7146,8 @@ function incrementSession() {
 
 function shouldShowPaywall() {
   if (isPaid()) return false;
-  if (getTrialDaysLeft() <= 0) return true;
-  if (getTrialSessionsLeft() <= 0) return true;
+  if (getTrialDaysLeft() <= 0) return false;
+  if (getTrialSessionsLeft() <= 0) return false;
   return false;
 }
 
