@@ -7792,7 +7792,6 @@ function setOfficeModeAndRender(mode) {
 
 function enterOfficeHour(hour) {
   currentOfficeHour = hour;
-  // Update header title to reflect current hour
   const hourLabels = { vigils:'Vigils', lauds:'Lauds', vespers:'Vespers', compline:'Compline' };
   const titleEl = document.getElementById('officeScreenTitle');
   if (titleEl) titleEl.textContent = hourLabels[hour] || 'The Office';
@@ -7801,8 +7800,16 @@ function enterOfficeHour(hour) {
   renderOfficeHour(hour);
   const season = getLiturgicalSeason();
   trackEvent('office', { hour });
-  DB.save('office', { hour: hour.charAt(0).toUpperCase() + hour.slice(1), season: OFFICE_SEASONS[season].label });
-  requestOfficeLock();
+  // Only save once per hour per day
+  const today = new Date().toDateString();
+  const alreadySaved = DB.all().some(e => 
+    e.type === 'office' && 
+    e.hour === hour.charAt(0).toUpperCase() + hour.slice(1) && 
+    new Date(e.date).toDateString() === today
+  );
+  if (!alreadySaved) {
+    DB.save('office', { hour: hour.charAt(0).toUpperCase() + hour.slice(1), season: OFFICE_SEASONS[season].label });
+  }
 }
 
 function officeGoChooser() {
