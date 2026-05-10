@@ -8149,7 +8149,22 @@ function hideDoor() {
   const tab = document.getElementById('mobileEnterTab');
   if (tab) tab.classList.remove('show');
 }
+function enterFeature(i){
+  hideDoor(); // hide the mobile enter tab
+  // Check paywall before entering any feature
+  incrementSession();
+  if (shouldShowPaywall()) { showPaywall(); return; }
 
+  showScreen(F[i].screen,i);
+  if(F[i].screen==='lectio') initLectio();
+  if(F[i].screen==='autobiography') initAutobio();
+  if(F[i].screen==='office') initOfficeScreen();
+  if(F[i].screen==='saint') initSaintScreen();
+  if(F[i].screen==='examen') initExamen();
+  if(F[i].screen==='darkness') initDarknessScreen();
+  if(F[i].screen==='rule') loadRuleItems();
+  if(F[i].screen==='community') initCommunity();
+}
 function enterActiveFeature() {
   if (doorActiveIdx < 0) return;
   enterFeature(doorActiveIdx);
