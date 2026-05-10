@@ -6706,6 +6706,10 @@ async function submitAuth() {
     errEl.textContent = 'Check your email to confirm your account, then sign in.';
     return;
   }
+  localStorage.setItem('still_access_token', token);
+  localStorage.setItem('still_refresh_token', data.refresh_token);
+  currentUser = user;
+  document.getElementById('authOverlay').style.display = 'none';
  localStorage.setItem('still_refresh_token', data.refresh_token);
   currentUser = user;
   document.getElementById('authOverlay').style.display = 'none';
