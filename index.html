@@ -6654,6 +6654,22 @@ async function signOut() {
   document.getElementById('authOverlay').style.display = 'flex';
 }
 async function initAuth() {
+  // Auto-refresh token every 50 minutes
+setInterval(async () => {
+  const refresh = localStorage.getItem('still_refresh_token');
+  if (!refresh) return;
+  const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refresh_token: refresh })
+  });
+  if (r.ok) {
+    const data = await r.json();
+    localStorage.setItem('still_access_token', data.access_token);
+    localStorage.setItem('still_refresh_token', data.refresh_token);
+    if (data.user) currentUser = data.user;
+  }
+}, 50 * 60 * 1000);
   const token = localStorage.getItem('still_access_token');
   const refresh = localStorage.getItem('still_refresh_token');
   
