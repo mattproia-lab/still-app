@@ -22,11 +22,14 @@ async function supaPost(path, body) {
     headers: {
       'apikey': SUPA_SERVICE_KEY,
       'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
     },
     body: JSON.stringify(body)
   });
-  return res.json();
+  if (res.status === 204 || res.headers.get('content-length') === '0') return null;
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
 async function getUserFromToken(token) {
