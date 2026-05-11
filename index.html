@@ -177,7 +177,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Still</title>
@@ -326,25 +325,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   background:linear-gradient(to right,transparent,rgba(255,255,255,.1),transparent);
   margin:22px 0;
 }
-.share-card-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(0,0,0,.85);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  box-sizing: border-box;
-}
 
-.share-card {
-  background: #04040e;
-  padding: 28px;
-  width: 100%;
-  max-width: 420px;
-  border: 1px solid rgba(255,255,255,.08);
-}
 /* Buttons */
 .btn-primary{
   display:inline-flex;align-items:center;gap:9px;
@@ -2033,7 +2014,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
             <rect x="8" y="17" width="8" height="17" rx="1" fill="rgba(22,14,4,.9)" stroke="rgba(200,146,12,.25)" stroke-width=".8"/>
           </svg>
           <br>
-          <button class="btn-ghost" onclick="showShareCard(document.getElementById('companionText').value, document.getElementById('cResponseText').textContent, document.getElementById('cSource').textContent, 'companion', null)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">Share →</button>
           <button class="btn-primary gold" onclick="returnFromCompanion()" style="margin-top:6px">Return to Stillness</button>
           <br><button class="btn-ghost" onclick="resetCompanion()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Ask Again</button>
         </div>
@@ -2310,7 +2290,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
           style="color:#fff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.3);font-size:15px;margin-bottom:14px"></textarea>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-primary" style="border-color:rgba(178,200,245,.5);color:#fff;background:rgba(30,50,120,.3)" onclick="askMystic()">Speak to me →</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="showShareCard(document.getElementById('mysticText').value, document.getElementById('mysticResponseText').textContent, 'Amma Sophia', 'sophia', null)">Share →</button>
         </div>
         <div id="mysticErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
@@ -2326,11 +2305,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         <div style="border:1px solid rgba(178,200,245,.15);padding:20px;margin-bottom:16px;position:relative">
           <p style="position:absolute;top:0;left:14px;transform:translateY(-50%);background:rgba(4,4,14,.95);padding:0 7px;font-family:'Montserrat',sans-serif;font-size:6px;letter-spacing:.25em;color:rgba(178,200,245,.6);text-transform:uppercase">Amma Sophia</p>
           <p id="mysticResponseText" style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(220,230,255,.9);line-height:1.75"></p>
-          <p class="share-watermark">stillprayer.app</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another →</button>
+        </div>
       </div>
+
+    </div>
+
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════
      DEEPER (THE CROSS)
@@ -2367,7 +2351,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         <div class="companion-meta" style="margin-top:14px">
           <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,218,255,.75)">Theological reflection · CCC-grounded</span>
           <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper →</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="showShareCard(document.getElementById('deeperText')?.value, document.getElementById('deeperResponseText')?.textContent, 'Deeper', 'deeper', null)">Share →</button>
         </div>
         <div class="companion-error" id="deeperErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
@@ -2380,18 +2363,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
       </div>
 
       <div id="deeperResponse" class="companion-state">
-  <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.85);font-size:9px"></div>
-  <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75)">
-    <div class="companion-response-text" id="dResponseText" style="color:rgba(230,235,255,.92)"></div>
-    <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.2);color:rgba(210,220,255,.85)"></div>
-    <p class="share-watermark">stillprayer.app</p>
-  </div>
-  <div class="companion-silence">
-    <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper →</button>
-    <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="showShareCard(document.getElementById('deeperText')?.value, document.getElementById('dResponseText')?.textContent, 'Deeper', 'deeper', null)">Share →</button>
-    <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
-    <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
-  </div>
+        <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.85);font-size:9px"></div>
+        <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75)">
+          <div class="companion-response-text" id="dResponseText" style="color:rgba(230,235,255,.92)"></div>
+          <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.2);color:rgba(210,220,255,.85)"></div>
+        </div>
+        <div class="companion-silence">
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
+          <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
+        </div>
       </div>
     </div>
   </div>
@@ -4015,70 +3995,6 @@ async function askDeeper(){
 }
 
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}
-function showShareCard(question, response, source, feature, imgSrc) {
-  _shareQuestion = question;
-  _shareResponse = response;
-  _shareSource = source;
-  _shareFeature = feature;
-
-  var portraits = {
-  'Amma Sophia': {
-    src: 'still-mobile/src/image/amma-sophia.jpg',
-    tagline: 'She has walked this road a long time.'
-  },
-  'Companion': {
-    src: 'still-mobile/src/image/companion.jpg',
-    tagline: 'What is it you are actually looking for?'
-  },
-  'Deeper': {
-    src: 'still-mobile/src/image/deeper.jpg',
-    tagline: 'Is there a word of Christ that has quietly frightened you — one you\'ve returned to, unable to fully set it down?'
-  }
-};
-
-  var portrait = portraits[source] || null;
-  var portraitHtml = portrait
-    ? '<div style="position:relative;width:100%;height:220px;overflow:hidden;border-radius:6px;margin-bottom:20px">'
-      + '<img src="' + portrait.src + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"/>'
-      + '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(4,4,14,.92) 100%)"></div>'
-      + '<div style="position:absolute;bottom:14px;left:18px">'
-      + '<p style="font-family:\'Montserrat\',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,220,255,.7);margin-bottom:3px">' + source + '</p>'
-      + '<p style="font-family:\'Playfair Display\',serif;font-size:13px;font-style:italic;color:rgba(230,235,255,.75)">' + portrait.tagline + '</p>'
-      + '</div></div>'
-    : '';
-
-  var imgHtml = imgSrc ? '<img src="' + imgSrc + '" style="width:100%;height:160px;object-fit:cover;object-position:center top;margin-bottom:20px;"/>' : '';
-  var questionHtml = question ? '"' + question + '"' : '';
-
-  var overlay = document.createElement('div');
-  overlay.className = 'share-card-overlay';
-  overlay.id = 'shareCardOverlay';
-  overlay.innerHTML = '<div style="width:100%;max-width:420px">'
-    + '<div class="share-card" id="shareCardContent">'
-    + portraitHtml
-    + imgHtml
-    + '<p class="share-card-question">' + questionHtml + '</p>'
-    + '<p class="share-card-response">' + response + '</p>'
-    + '<p class="share-card-source">— ' + source + '</p>'
-    + '<p class="share-card-url">stillprayer.app</p>'
-    + '</div>'
-    + '<div style="display:flex;gap:10px;margin-top:16px;justify-content:center">'
-    + '<button onclick="downloadShareCard()" style="padding:12px 24px;background:rgba(178,200,245,.12);border:1px solid rgba(178,200,245,.3);color:#fff;font-family:\'Montserrat\',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Save Image →</button>'
-    + '<button onclick="document.getElementById(\'shareCardOverlay\').remove()" style="padding:12px 24px;background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:\'Montserrat\',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Close</button>'
-    + '</div></div>';
-  document.body.appendChild(overlay);
-}
-
-function downloadShareCard() {
-  const card = document.getElementById('shareCardContent');
-  if (!card) return;
-  html2canvas(card, { scale: 2, useCORS: true, backgroundColor: '#04040e' }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'still-reflection.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-}
 
 /* ═══════════════════════════════════════════
    OTHER FEATURE HELPERS
@@ -6977,54 +6893,22 @@ async function renderCommunityResponses(card, q) {
   </div>`;
 
   try {
+    // Get up to 3 random responses that aren't from this device
     const deviceId = getDeviceId();
     const all = await supaFetch(
       `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&limit=50`
     );
 
+    // Pick 3 at random
     const shuffled = (all || []).sort(() => Math.random() - 0.5).slice(0, 3);
 
-    // Fill remaining slots with AI backstop if fewer than 3 real responses
-    const needed = 3 - shuffled.length;
-    let aiResponses = [];
-    if (needed > 0) {
-      try {
-        const aiResult = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            system: `You generate ${needed} anonymous, honest, human-feeling responses to a contemplative question. 
-              Each response should feel like a real person wrote it at 9pm — unpolished, genuine, a little vulnerable. 
-              Not theological. Not perfect. Just true. 
-              Return only a JSON array of strings, nothing else. No preamble.`,
-            messages: [{
-              role: 'user',
-              content: `Question: "${q.text}"\n\nGenerate ${needed} responses.`
-            }]
-          })
-        });
-        const aiData = await aiResult.json();
-        const raw = aiData.content[0].text;
-        aiResponses = JSON.parse(raw);
-      } catch(e) {
-        // Silent — AI backstop fails gracefully
-      }
-    }
-
-    const allResponses = [
-      ...shuffled.map(r => r.text),
-      ...aiResponses
-    ];
-
     let responsesHtml = '';
-    if (allResponses.length === 0) {
+    if (shuffled.length === 0) {
       responsesHtml = `<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;padding:20px 0">You are the first to answer today.<br>Others will appear as the community gathers.</p>`;
     } else {
-      responsesHtml = allResponses.map(text => `
+      responsesHtml = shuffled.map(r => `
         <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${text}</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${r.text}</p>
         </div>`).join('');
     }
 
