@@ -177,43 +177,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Still</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Heebo:wght@300;400;500&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
-  .share-card-overlay {
-  position:fixed;inset:0;background:rgba(4,4,14,.97);z-index:9999;
-  display:flex;align-items:center;justify-content:center;padding:24px;
-  box-sizing:border-box;
-}
-.share-card {
-  width:100%;max-width:420px;background:rgba(4,4,14,.98);
-  border:1px solid rgba(178,200,245,.15);padding:32px 28px;
-  position:relative;
-}
-.share-card-question {
-  font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(178,200,245,.5);margin-bottom:16px;
-}
-.share-card-response {
-  font-family:'Playfair Display',serif;font-size:15px;font-style:italic;
-  color:rgba(220,230,255,.92);line-height:1.75;margin-bottom:20px;
-}
-.share-card-source {
-  font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.2em;
-  text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:20px;
-}
-.share-card-url {
-  font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.15em;
-  color:rgba(178,200,245,.35);text-align:right;
-}
-.share-watermark {
-  font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.12em;
-  color:rgba(178,200,245,.2);position:absolute;bottom:10px;right:14px;
-}
   .auth-overlay {
   position:fixed;inset:0;background:rgba(4,4,14,.97);z-index:1000;
   display:flex;align-items:center;justify-content:center;
@@ -498,7 +467,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 /* Section counter + fasting */
 .section-ctr{position:fixed;right:38px;bottom:24px;z-index:200;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.4);opacity:0;transition:opacity .4s;}
 .section-ctr.show{opacity:1;}
-.fasting-btn{display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.45);background:rgba(0,0,0,.35);border:none;transition:color .25s;padding:6px 0;}
+.fasting-btn{position:fixed;left:38px;bottom:22px;z-index:200;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.45);background:rgba(0,0,0,.35);border:none;transition:color .25s;padding:6px 0;}
 .fasting-btn:hover{color:rgba(255,255,255,.75);}
 .fasting-btn.on{color:#f0c040;}
 .ft-pip{width:7px;height:7px;border-radius:50%;border:1px solid rgba(255,255,255,.24);transition:all .25s;}
@@ -914,8 +883,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 /* ═══════════════════════════════════════════
    SETTINGS MODAL
 ═══════════════════════════════════════════ */
-.modal-overlay {
-  position:fixed;inset:0;z-index:1000;background:rgba(0,0,4,.82);
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;background:rgba(0,0,4,.82);
   display:none;align-items:flex-end;
 }
 .modal-overlay.open{display:flex;}
@@ -1066,8 +1035,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
   /* ── Fasting toggle ── */
   .fasting-wrap {
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 22px) !important;
-  left: 16px !important;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 8px) !important;
+    left: 16px !important;
   }
   .fasting-btn {
     font-size: 7px !important;
@@ -1295,10 +1264,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.28)'"
         title="Gallery"
         onclick="openSacristy(0)">G</button>
-      <button class="hamburger" onclick="openSettings()" style="background:none;border:none;cursor:pointer;padding:0">
-  <span></span><span></span>
-</button>
-  </div>
+      <div class="hamburger" onclick="openSettings()"><span></span><span></span></div>
+    </div>
   </header>
   <div class="home-main">
     <div class="feat-list-wrap">
@@ -2029,13 +1996,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         </div>
       </div>
 
-   <!-- RESPONSE STATE -->
+      <!-- RESPONSE STATE -->
       <div id="companionResponse" class="companion-state">
         <div class="companion-source" id="cSource"></div>
-        <div class="companion-response-card" style="position:relative">
+        <div class="companion-response-card">
           <div class="companion-response-text" id="cResponseText"></div>
           <div class="companion-invitation" id="cInvitation"></div>
-          <p class="share-watermark">stillprayer.app</p>
         </div>
         <div class="companion-silence">
           <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
@@ -2048,12 +2014,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
             <rect x="8" y="17" width="8" height="17" rx="1" fill="rgba(22,14,4,.9)" stroke="rgba(200,146,12,.25)" stroke-width=".8"/>
           </svg>
           <br>
-          <button class="btn-ghost" onclick="showShareCard(document.getElementById('companionText').value, document.getElementById('cResponseText').textContent, document.getElementById('cSource').textContent, 'companion', null)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">Share →</button>
           <button class="btn-primary gold" onclick="returnFromCompanion()" style="margin-top:6px">Return to Stillness</button>
           <br><button class="btn-ghost" onclick="resetCompanion()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Ask Again</button>
         </div>
-      </div>   
-    </div>
+      </div>
 
     </div>
   </div>
@@ -2341,13 +2305,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         <div style="border:1px solid rgba(178,200,245,.15);padding:20px;margin-bottom:16px;position:relative">
           <p style="position:absolute;top:0;left:14px;transform:translateY(-50%);background:rgba(4,4,14,.95);padding:0 7px;font-family:'Montserrat',sans-serif;font-size:6px;letter-spacing:.25em;color:rgba(178,200,245,.6);text-transform:uppercase">Amma Sophia</p>
           <p id="mysticResponseText" style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(220,230,255,.9);line-height:1.75"></p>
-          <p class="share-watermark">stillprayer.app</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another →</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="showShareCard(document.getElementById('mysticText').value, document.getElementById('mysticResponseText').textContent, 'Amma Sophia', 'sophia', null)">Share →</button>
         </div>
       </div>
+
     </div>
 
   </div>
@@ -2401,17 +2364,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
       <div id="deeperResponse" class="companion-state">
         <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.85);font-size:9px"></div>
-        <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75);position:relative">
+        <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75)">
           <div class="companion-response-text" id="dResponseText" style="color:rgba(230,235,255,.92)"></div>
           <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.2);color:rgba(210,220,255,.85)"></div>
-          <p class="share-watermark">stillprayer.app</p>
         </div>
         <div class="companion-silence">
-          <button class="btn-ghost" onclick="showShareCard(document.getElementById('deeperText').value, document.getElementById('dResponseText').textContent, document.getElementById('dSource').textContent, 'deeper', null)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">Share →</button>
           <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
           <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════
      NIGHT WATCH (hidden, time-locked 2–4am)
 ═══════════════════════════════════════════ -->
@@ -2548,7 +2513,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 <div class="dot-nav" id="dotNav"></div>
 <div class="section-ctr" id="sectionCtr"></div>
 <!-- Fasting Mode + its own info button — wrapped so info ⓘ is a true sibling, not nested -->
-<div class="fasting-wrap" style="position:fixed;left:38px;bottom:calc(env(safe-area-inset-bottom, 0px) + 22px);z-index:200;display:flex;align-items:center;gap:6px">
+<div class="fasting-wrap" style="position:fixed;left:38px;bottom:22px;z-index:200;display:flex;align-items:center;gap:6px">
   <button class="fasting-btn" id="fastingBtn" onclick="toggleFasting()" style="position:static;left:auto;bottom:auto">
     <div class="ft-pip" id="ftPip"></div>
     <span>Fasting Mode</span>
@@ -2824,14 +2789,14 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 .info-btn:hover{color:rgba(200,146,12,.8);}
 
 /* ── Info panel — slides in from right ────── */
-.info-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.45);display:none;}
+.info-overlay{position:fixed;inset:0;z-index:198;background:rgba(0,0,0,.45);display:none;}
 .info-overlay.open{display:block;}
 .info-panel{
   position:fixed;top:0;right:-100%;
   width:min(400px,94vw);height:100vh;
   background:rgba(9,8,16,.97);
   border-left:1px solid rgba(200,146,12,.22);
-  z-index:1001;transition:right .42s cubic-bezier(.4,0,.2,1);
+  z-index:199;transition:right .42s cubic-bezier(.4,0,.2,1);
   overflow-y:auto;padding:32px 28px 60px;
 }
 .info-panel::-webkit-scrollbar{width:0;}
@@ -3831,6 +3796,7 @@ async function askCompanion(){
   }
   const input=document.getElementById('companionText').value.trim();
   if(!input){showError('companionErr','Speak first. Then the Fathers will answer.');return;}
+  if(companionUses<=0){showUpgrade();return;}
   showCompanionState('companionLoading');
   document.getElementById('companionErr').style.display='none';
   try{
@@ -6658,22 +6624,6 @@ async function signOut() {
   document.getElementById('authOverlay').style.display = 'flex';
 }
 async function initAuth() {
-  // Auto-refresh token every 50 minutes
-setInterval(async () => {
-  const refresh = localStorage.getItem('still_refresh_token');
-  if (!refresh) return;
-  const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
-    method: 'POST',
-    headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refresh_token: refresh })
-  });
-  if (r.ok) {
-    const data = await r.json();
-    localStorage.setItem('still_access_token', data.access_token);
-    localStorage.setItem('still_refresh_token', data.refresh_token);
-    if (data.user) currentUser = data.user;
-  }
-}, 50 * 60 * 1000);
   const token = localStorage.getItem('still_access_token');
   const refresh = localStorage.getItem('still_refresh_token');
   
@@ -6756,10 +6706,6 @@ async function submitAuth() {
     errEl.textContent = 'Check your email to confirm your account, then sign in.';
     return;
   }
-  localStorage.setItem('still_access_token', token);
-  localStorage.setItem('still_refresh_token', data.refresh_token);
-  currentUser = user;
-  document.getElementById('authOverlay').style.display = 'none';
  localStorage.setItem('still_refresh_token', data.refresh_token);
   currentUser = user;
   document.getElementById('authOverlay').style.display = 'none';
@@ -8203,22 +8149,7 @@ function hideDoor() {
   const tab = document.getElementById('mobileEnterTab');
   if (tab) tab.classList.remove('show');
 }
-function enterFeature(i){
-  hideDoor(); // hide the mobile enter tab
-  // Check paywall before entering any feature
-  incrementSession();
-  if (shouldShowPaywall()) { showPaywall(); return; }
 
-  showScreen(F[i].screen,i);
-  if(F[i].screen==='lectio') initLectio();
-  if(F[i].screen==='autobiography') initAutobio();
-  if(F[i].screen==='office') initOfficeScreen();
-  if(F[i].screen==='saint') initSaintScreen();
-  if(F[i].screen==='examen') initExamen();
-  if(F[i].screen==='darkness') initDarknessScreen();
-  if(F[i].screen==='rule') loadRuleItems();
-  if(F[i].screen==='community') initCommunity();
-}
 function enterActiveFeature() {
   if (doorActiveIdx < 0) return;
   enterFeature(doorActiveIdx);
@@ -8473,77 +8404,7 @@ async function verifyCode() {
     const data = await res.json();
     errEl.textContent = data.error_description || 'Invalid code. Try again.';
   }
-}
-
-let _shareQuestion = '';
-let _shareResponse = '';
-let _shareSource = '';
-let _shareFeature = '';
-
-function showShareCard(question, response, source, feature, imgSrc) {
-  _shareQuestion = question;
-  _shareResponse = response;
-  _shareSource = source;
-  _shareFeature = feature;
-  var portraits = {
-  'Amma Sophia': {
-    src: 'images/amma-sophia.jpeg',
-    tagline: 'She has walked this road a long time.'
-  },
-  'Companion': {
-    src: 'images/companion.jpeg',
-    tagline: 'What is it you are actually looking for?'
-  },
-  'Deeper': {
-    src: 'images/deeper.jpeg',
-    tagline: 'Is there a word of Christ that has quietly frightened you — one you\'ve returned to, unable to fully set it down?'
-  }
-};
-var portrait = portraits[source] || null;
-var portraitHtml = portrait
-  ? '<div style="position:relative;width:100%;height:220px;overflow:hidden;border-radius:6px;margin-bottom:20px">'
-    + '<img src="' + portrait.src + '" style="width:100%;height:100%;object-fit:cover;object-position:center 20%"/>'
-    + '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(4,4,14,.92) 100%)"></div>'
-    + '<div style="position:absolute;bottom:14px;left:18px">'
-    + '<p style="font-family:\'Montserrat\',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,220,255,.7);margin-bottom:3px">' + source + '</p>'
-    + '<p style="font-family:\'Playfair Display\',serif;font-size:13px;font-style:italic;color:rgba(230,235,255,.75)">' + portrait.tagline + '</p>'
-    + '</div></div>'
-  : '';
-
-  var imgHtml = imgSrc ? '<img src="' + imgSrc + '" style="width:100%;height:160px;object-fit:cover;object-position:center top;margin-bottom:20px;"/>' : '';
-  var questionHtml = question ? '"' + question + '"' : '';
-
-  var overlay = document.createElement('div');
-  overlay.className = 'share-card-overlay';
-  overlay.id = 'shareCardOverlay';
-  overlay.innerHTML = '<div style="width:100%;max-width:420px">'
-    + '<div class="share-card" id="shareCardContent">'
-    + imgHtml
-    + '<p class="share-card-question">' + questionHtml + '</p>'
-    + '<p class="share-card-response">' + response + '</p>'
-    + '<p class="share-card-source">— ' + source + '</p>'
-    + '<p class="share-card-url">stillprayer.app</p>'
-    + '</div>'
-    + '<div style="display:flex;gap:10px;margin-top:16px;justify-content:center">'
-    + '<button onclick="downloadShareCard()" style="padding:12px 24px;background:rgba(178,200,245,.12);border:1px solid rgba(178,200,245,.3);color:#fff;font-family:\'Montserrat\',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Save Image →</button>'
-    + '<button onclick="document.getElementById(\'shareCardOverlay\').remove()" style="padding:12px 24px;background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:\'Montserrat\',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Close</button>'
-    + '</div></div>';
-  document.body.appendChild(overlay);
-}
-
-async function downloadShareCard() {
-  const card = document.getElementById('shareCardContent');
-  const canvas = await html2canvas(card, {
-    backgroundColor: '#04040e',
-    scale: 2,
-    useCORS: true,
-    allowTaint: true
-  });
-  const link = document.createElement('a');
-  link.download = 'still-' + _shareFeature + '.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
-</script>
+}</script>
 </body>
 </html>
+c

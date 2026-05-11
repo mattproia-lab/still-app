@@ -3,7 +3,7 @@ const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const LIMITS = {
   free:    { companion: 1, deeper: 0, sophia: 0 },
-  premium: { companion: 3, deeper: 14, sophia: 14 }
+  premium: { companion: 3, deeper: 14, sophia: 14 } // per week for companion, per day x7 for deeper/sophia
 };
 
 async function supaGet(path) {
@@ -22,14 +22,11 @@ async function supaPost(path, body) {
     headers: {
       'apikey': SUPA_SERVICE_KEY,
       'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
   });
-  if (res.status === 204 || res.headers.get('content-length') === '0') return null;
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
+  return res.json();
 }
 
 async function getUserFromToken(token) {
@@ -52,12 +49,14 @@ async function getUsageCount(userId, feature) {
   const now = new Date();
   let since;
   if (feature === 'companion') {
+    // weekly — start of current week (Monday)
     const day = now.getDay() || 7;
     const monday = new Date(now);
     monday.setDate(now.getDate() - day + 1);
     monday.setHours(0,0,0,0);
     since = monday.toISOString();
   } else {
+    // daily
     const today = new Date(now);
     today.setHours(0,0,0,0);
     since = today.toISOString();
@@ -74,21 +73,17 @@ async function logUsage(userId, feature) {
     feature: feature
   });
 }
-
 async function useCredit(userId, currentCredits) {
-  const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
+  await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: 'PATCH',
     headers: {
       'apikey': SUPA_SERVICE_KEY,
       'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({ reflection_credits: currentCredits - 1 })
   });
-  console.log('useCredit patch status:', res.status);
 }
-
 exports.handler = async function(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
@@ -106,9 +101,10 @@ exports.handler = async function(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const feature = body.feature;
+  const feature = body.feature; // 'companion', 'deeper', 'sophia'
   const token = body.access_token;
 
+  // If feature requires auth, enforce limits
   if (feature && token) {
     const user = await getUserFromToken(token);
     if (!user) {
@@ -121,19 +117,17 @@ exports.handler = async function(event) {
     const limit = limits[feature] ?? 0;
     const credits = profile?.reflection_credits || 0;
 
-    console.log(`feature:${feature} status:${status} limit:${limit} credits:${credits}`);
-
     if (limit === 0 && credits <= 0) {
       return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
     }
 
     const count = await getUsageCount(user.id, feature);
-    console.log(`count:${count} limit:${limit}`);
 
     if (count >= limit && credits <= 0) {
       return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
     }
 
+    // Use a credit if over limit, otherwise log usage
     if (count >= limit && credits > 0) {
       await useCredit(user.id, credits);
     } else {
@@ -141,6 +135,9 @@ exports.handler = async function(event) {
     }
   }
 
+  // Forward to Anthropic
+
+  // Forward to Anthropic
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
