@@ -6893,22 +6893,54 @@ async function renderCommunityResponses(card, q) {
   </div>`;
 
   try {
-    // Get up to 3 random responses that aren't from this device
     const deviceId = getDeviceId();
     const all = await supaFetch(
       `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&limit=50`
     );
 
-    // Pick 3 at random
     const shuffled = (all || []).sort(() => Math.random() - 0.5).slice(0, 3);
 
+    // Fill remaining slots with AI backstop if fewer than 3 real responses
+    const needed = 3 - shuffled.length;
+    let aiResponses = [];
+    if (needed > 0) {
+      try {
+        const aiResult = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            system: `You generate ${needed} anonymous, honest, human-feeling responses to a contemplative question. 
+              Each response should feel like a real person wrote it at 9pm — unpolished, genuine, a little vulnerable. 
+              Not theological. Not perfect. Just true. 
+              Return only a JSON array of strings, nothing else. No preamble.`,
+            messages: [{
+              role: 'user',
+              content: `Question: "${q.text}"\n\nGenerate ${needed} responses.`
+            }]
+          })
+        });
+        const aiData = await aiResult.json();
+        const raw = aiData.content[0].text;
+        aiResponses = JSON.parse(raw);
+      } catch(e) {
+        // Silent — AI backstop fails gracefully
+      }
+    }
+
+    const allResponses = [
+      ...shuffled.map(r => r.text),
+      ...aiResponses
+    ];
+
     let responsesHtml = '';
-    if (shuffled.length === 0) {
+    if (allResponses.length === 0) {
       responsesHtml = `<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;padding:20px 0">You are the first to answer today.<br>Others will appear as the community gathers.</p>`;
     } else {
-      responsesHtml = shuffled.map(r => `
+      responsesHtml = allResponses.map(text => `
         <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${r.text}</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${text}</p>
         </div>`).join('');
     }
 
