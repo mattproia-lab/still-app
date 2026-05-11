@@ -2330,8 +2330,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another →</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="showShareCard(document.getElementById('mysticText').value, document.getElementById('mysticResponseText').textContent, 'Amma Sophia', 'sophia', null)">Share →</button>
-        </div>
       </div>
 
 <!-- ═══════════════════════════════════════════
@@ -4024,19 +4022,19 @@ function showShareCard(question, response, source, feature, imgSrc) {
   _shareFeature = feature;
 
   var portraits = {
-    'Amma Sophia': {
-      src: 'src/image/amma-sophia.jpg',
-      tagline: 'She has walked this road a long time.'
-    },
-    'Companion': {
-      src: 'src/image/companion.jpg',
-      tagline: 'What is it you are actually looking for?'
-    },
-    'Deeper': {
-      src: 'src/image/deeper.jpg',
-      tagline: 'Is there a word of Christ that has quietly frightened you — one you\'ve returned to, unable to fully set it down?'
-    }
-  };
+  'Amma Sophia': {
+    src: 'still-mobile/src/image/amma-sophia.jpg',
+    tagline: 'She has walked this road a long time.'
+  },
+  'Companion': {
+    src: 'still-mobile/src/image/companion.jpg',
+    tagline: 'What is it you are actually looking for?'
+  },
+  'Deeper': {
+    src: 'still-mobile/src/image/deeper.jpg',
+    tagline: 'Is there a word of Christ that has quietly frightened you — one you\'ve returned to, unable to fully set it down?'
+  }
+};
 
   var portrait = portraits[source] || null;
   var portraitHtml = portrait
