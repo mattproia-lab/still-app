@@ -103,17 +103,35 @@
 
 </div>
 
-
 <div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:9000;background:#030305;overflow-y:auto">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
 
-    <!-- STEP 1 -->
-    <div class="ob-step" id="ob-1">
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:32px">Still</p>
-      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,8vw,52px);font-weight:700;font-style:italic;color:#fff;line-height:1;margin-bottom:20px">A school<br>of prayer.</h1>
-      <p style="font-family:'Heebo',sans-serif;font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:16px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:40px">Not a productivity app. Not a streak counter. A place to be still.</p>
-      <button onclick="obNext(2)" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 28px;cursor:pointer;transition:all .2s;width:100%">Begin →</button>
+    <!-- STEP 1 — Video Hero -->
+    <div class="ob-step" id="ob-1" style="position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
+      <video id="heroVideo" autoplay muted loop playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity 1.4s ease"
+        src="still-mobile/src/image/hero.mp4"></video>
+      <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
+      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px">
+        <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.42em;text-transform:uppercase;color:rgba(190,140,255,.65);margin-bottom:18px">A school of prayer</p>
+        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(72px,14vw,128px);font-weight:400;font-style:italic;line-height:.88;color:#fff;margin-bottom:10px;text-shadow:0 0 80px rgba(160,80,255,.35)">Still</h1>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(18px,2.8vw,26px);font-style:italic;color:rgba(210,180,255,.75);margin-bottom:32px">A school of prayer.</p>
+        <div style="width:1px;height:38px;background:linear-gradient(to bottom,transparent,rgba(190,140,255,.4),transparent);margin:0 auto 32px"></div>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
+        <button onclick="obNext(2)"
+          style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
+          onmouseover="this.style.boxShadow='0 0 28px rgba(160,32,240,.35)';this.style.borderColor='rgba(200,140,255,.8)'"
+          onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
+          Begin →
+        </button>
+      </div>
+      <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(190,140,255,.5),transparent)"></div>
+        <span style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(190,140,255,.4)">Scroll</span>
+      </div>
     </div>
 
     <!-- STEP 2 -->
@@ -173,6 +191,14 @@
 
   </div>
 </div>
+
+<script>
+  const hv = document.getElementById('heroVideo');
+  if (hv) {
+    hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
+    if (hv.readyState >= 3) hv.style.opacity = '1';
+  }
+</script>
 
 <!DOCTYPE html>
 <html lang="en">
