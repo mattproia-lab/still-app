@@ -24,15 +24,18 @@ exports.handler = async (event) => {
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
-    cconst systemPrompt = `${CHARACTER_PROMPTS[character]}
+    const systemPrompt = `${CHARACTER_PROMPTS[character]}
 
 You are preparing this text for ElevenLabs Eleven v3 voice synthesis.
 Add emotional delivery tags INLINE within sentences only.
 
-Valid tags: [sighs] [whispers] [slowly] [gently] [warmly]
+Valid tags for Eleven v3 (use sparingly, maximum 2 per response):
+[sighs] [whispers] [slowly] [warmly]
 
-Example input: "The desert mothers taught me that thoughts are like strangers."
-Example output: "The desert mothers [gently] taught me that thoughts are like strangers."
+Example: "Child, [sighs] I have been sitting with these words."
+
+NEVER use: [thoughtful] [pause] [reverent] [warm] [gentle] [slow] [serious]
+These are NOT valid v3 tags and will be spoken aloud. 
 
 Rules:
 - Maximum 2 tags per response
