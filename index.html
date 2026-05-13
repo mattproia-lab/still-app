@@ -2067,6 +2067,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
             <rect x="8" y="17" width="8" height="17" rx="1" fill="rgba(22,14,4,.9)" stroke="rgba(200,146,12,.25)" stroke-width=".8"/>
           </svg>
           <br>
+          <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
           <button class="btn-primary gold" onclick="returnFromCompanion()" style="margin-top:6px">Return to Stillness</button>
           <br><button class="btn-ghost" onclick="resetCompanion()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Ask Again</button>
         </div>
@@ -2361,6 +2362,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
           <p class="share-watermark">stillprayer.app</p>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
           <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another →</button>
         </div>
       </div>
@@ -2424,6 +2426,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
           <p class="share-watermark">stillprayer.app</p>
         </div>
         <div class="companion-silence">
+          <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
           <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another →</button>
           <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
         </div>
@@ -2895,7 +2898,115 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.5);
 }
 </style>
+// ═══════════════════════════════════════════
+// STILL — Voice Player
+// Add this to your index.html script section
+// ═══════════════════════════════════════════
 
+// Current audio instance for replay
+let _currentAudio = null;
+let _currentAudioUrl = null;
+
+// Request voice for a character response
+async function requestVoice(text, character, buttonEl) {
+  if (!text || !text.trim()) return;
+
+  // Update button to loading state
+  const originalHtml = buttonEl.innerHTML;
+  buttonEl.innerHTML = '◌ Preparing…';
+  buttonEl.disabled = true;
+
+  try {
+    const res = await fetch('/.netlify/functions/elevenlabs-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text.trim(), character })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.url) {
+      throw new Error(data.error || 'Could not generate audio');
+    }
+
+    // Store URL for replay
+    _currentAudioUrl = data.url;
+
+    // Play audio
+    playVoiceUrl(data.url, buttonEl, originalHtml);
+
+  } catch (err) {
+    console.error('Voice error:', err.message);
+    buttonEl.innerHTML = originalHtml;
+    buttonEl.disabled = false;
+    // Silent fail — voice is enhancement not core feature
+  }
+}
+
+// Play audio from URL and update button to replay state
+function playVoiceUrl(url, buttonEl, originalHtml) {
+  // Stop any existing audio
+  if (_currentAudio) {
+    _currentAudio.pause();
+    _currentAudio = null;
+  }
+
+  const audio = new Audio(url);
+  _currentAudio = audio;
+
+  // Update button to playing state
+  buttonEl.innerHTML = '▐▐ Playing…';
+  buttonEl.disabled = false;
+
+  audio.play().catch(err => {
+    console.error('Audio play error:', err);
+    buttonEl.innerHTML = originalHtml;
+  });
+
+  // When audio ends — show replay button
+  audio.addEventListener('ended', () => {
+    buttonEl.innerHTML = '↺ Hear Again';
+    buttonEl.disabled = false;
+    buttonEl.onclick = () => {
+      playVoiceUrl(url, buttonEl, originalHtml);
+    };
+  });
+
+  // Click during playback = pause/resume
+  buttonEl.onclick = () => {
+    if (audio.paused) {
+      audio.play();
+      buttonEl.innerHTML = '▐▐ Playing…';
+    } else {
+      audio.pause();
+      buttonEl.innerHTML = '▶ Resume';
+    }
+  };
+}
+
+// ── COMPANION VOICE BUTTON ──
+// Add this button to your companion silence section:
+// <button class="btn-ghost" id="companionVoiceBtn"
+//   onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)"
+//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
+//   ◎ Hear Response
+// </button>
+
+// ── AMMA SOPHIA VOICE BUTTON ──
+// Add this button after your mysticResponseText:
+// <button class="btn-ghost" id="ammaSophiaVoiceBtn"
+//   onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)"
+//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
+//   ◎ Hear Response
+// </button>
+
+// ── DEEPER VOICE BUTTON ──
+// Add this button after your dResponseText:
+// <button class="btn-ghost" id="deeperVoiceBtn"
+//   onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)"
+//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
+//   ◎ Hear Response
+// </button>
 <script>
 /* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
