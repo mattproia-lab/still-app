@@ -3953,7 +3953,7 @@ RULES YOU NEVER BREAK:
 — Never address the soul as "Scrupulous soul." Use "Beloved," or no direct address.
 — Never end with more than one question. Never invite more conversation.
 — Begin with: SOURCE: [specific CCC paragraph or Magisterial document]
-— Tone: Tender. Precise. Unhurried. Truthful. The voice of someone who has studied for decades and prayed for longer — and loves this person too much to give them anything less than the full truth, delivered with the full warmth of a father who has never stopped believing in their return.`;
+— The SOURCE line is metadata only — never speak it aloud or include it in the body of the response.— Tone: Tender. Precise. Unhurried. Truthful. The voice of someone who has studied for decades and prayed for longer — and loves this person too much to give them anything less than the full truth, delivered with the full warmth of a father who has never stopped believing in their return.`;
 
 let companionUses=3;
 
@@ -4181,8 +4181,15 @@ async function askDeeper(){
       else main.unshift(sentences[i]);
     }
     document.getElementById('dSource').textContent=src;
-    document.getElementById('dResponseText').textContent=main.join(' ').trim()||body;
-    document.getElementById('dInvitation').textContent=inv||(sentences[sentences.length-1]||'');
+    const cleanBody = (main.join(' ').trim()||body).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
+document.getElementById('dResponseText').textContent=cleanBody;const cleanBody = (main.join(' ').trim()||body)
+  .replace(/\(CCC\s*\d+[\d\-–]*\)/g,'')
+  .replace(/CCC\s*\d+[\d\-–]*/g,'')
+  .replace(/\(ST\s+[^)]+\)/g,'')
+  .replace(/Rest here\./gi,'')
+  .trim();
+    const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
+document.getElementById('dInvitation').textContent=cleanInv;
    showDeeperState('deeperResponse');
 prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deeper');
   }catch(err){
