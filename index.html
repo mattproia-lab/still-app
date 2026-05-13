@@ -4181,13 +4181,14 @@ async function askDeeper(){
       else main.unshift(sentences[i]);
     }
     document.getElementById('dSource').textContent=src;
-    const cleanBody = (main.join(' ').trim()||body).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
-document.getElementById('dResponseText').textContent=cleanBody;const cleanBody = (main.join(' ').trim()||body)
+    const cleanBody = (main.join(' ').trim()||body)
   .replace(/\(CCC\s*\d+[\d\-–]*\)/g,'')
   .replace(/CCC\s*\d+[\d\-–]*/g,'')
   .replace(/\(ST\s+[^)]+\)/g,'')
   .replace(/Rest here\./gi,'')
   .trim();
+document.getElementById('dResponseText').textContent=cleanBody;
+
     const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
 document.getElementById('dInvitation').textContent=cleanInv;
    showDeeperState('deeperResponse');
