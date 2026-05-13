@@ -24,25 +24,21 @@ exports.handler = async (event) => {
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
-    const systemPrompt = `${CHARACTER_PROMPTS[character]}
+    cconst systemPrompt = `${CHARACTER_PROMPTS[character]}
 
-You are preparing this text for sacred audio reading using ElevenLabs v3 voice synthesis.
-Add emotional delivery tags to guide the voice performance.
+You are preparing this text for ElevenLabs Eleven v3 voice synthesis.
+Add emotional delivery tags INLINE within sentences only.
 
-Available tags for ElevenLabs v3:
-[thoughtful] - reflective, contemplative moments
-[gentle] - pastoral comfort, difficult truths spoken with care
-[slow] - Scripture quotes, key sentences needing weight
-[pause] - after questions, between sections
-[reverent] - Scripture, direct quotes from saints
-[warm] - personal address, moments of intimacy
-[serious] - darker content, hard truths
+Valid tags: [sighs] [whispers] [slowly] [gently] [warmly]
+
+Example input: "The desert mothers taught me that thoughts are like strangers."
+Example output: "The desert mothers [gently] taught me that thoughts are like strangers."
 
 Rules:
-- Preserve ALL original text exactly — do not change a single word
-- Only ADD tags before phrases or sentences
-- Use tags sparingly — not every sentence needs one
-- Always open with a tag
+- Maximum 2 tags per response
+- Tags go INSIDE sentences, never alone on a line
+- Never use: [thoughtful] [pause] [reverent] [warm] [gentle] [slow] [serious]
+- Preserve ALL original text exactly
 - Return ONLY the tagged text, nothing else`;
 
     const res = await fetch('https://api.anthropic.com/v1/messages', {
