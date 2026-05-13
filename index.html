@@ -2898,116 +2898,50 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.5);
 }
 </style>
-// ═══════════════════════════════════════════
-// STILL — Voice Player
-// Add this to your index.html script section
-// ═══════════════════════════════════════════
 
-// Current audio instance for replay
-let _currentAudio = null;
+<script>
+  let _currentAudio = null;
 let _currentAudioUrl = null;
 
-// Request voice for a character response
 async function requestVoice(text, character, buttonEl) {
   if (!text || !text.trim()) return;
-
-  // Update button to loading state
   const originalHtml = buttonEl.innerHTML;
   buttonEl.innerHTML = '◌ Preparing…';
   buttonEl.disabled = true;
-
   try {
     const res = await fetch('/.netlify/functions/elevenlabs-tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text.trim(), character })
     });
-
     const data = await res.json();
-
-    if (!res.ok || !data.url) {
-      throw new Error(data.error || 'Could not generate audio');
-    }
-
-    // Store URL for replay
+    if (!res.ok || !data.url) throw new Error(data.error || 'Could not generate audio');
     _currentAudioUrl = data.url;
-
-    // Play audio
     playVoiceUrl(data.url, buttonEl, originalHtml);
-
   } catch (err) {
     console.error('Voice error:', err.message);
     buttonEl.innerHTML = originalHtml;
     buttonEl.disabled = false;
-    // Silent fail — voice is enhancement not core feature
   }
 }
 
-// Play audio from URL and update button to replay state
 function playVoiceUrl(url, buttonEl, originalHtml) {
-  // Stop any existing audio
-  if (_currentAudio) {
-    _currentAudio.pause();
-    _currentAudio = null;
-  }
-
+  if (_currentAudio) { _currentAudio.pause(); _currentAudio = null; }
   const audio = new Audio(url);
   _currentAudio = audio;
-
-  // Update button to playing state
   buttonEl.innerHTML = '▐▐ Playing…';
   buttonEl.disabled = false;
-
-  audio.play().catch(err => {
-    console.error('Audio play error:', err);
-    buttonEl.innerHTML = originalHtml;
-  });
-
-  // When audio ends — show replay button
+  audio.play().catch(err => { buttonEl.innerHTML = originalHtml; });
   audio.addEventListener('ended', () => {
     buttonEl.innerHTML = '↺ Hear Again';
     buttonEl.disabled = false;
-    buttonEl.onclick = () => {
-      playVoiceUrl(url, buttonEl, originalHtml);
-    };
+    buttonEl.onclick = () => playVoiceUrl(url, buttonEl, originalHtml);
   });
-
-  // Click during playback = pause/resume
   buttonEl.onclick = () => {
-    if (audio.paused) {
-      audio.play();
-      buttonEl.innerHTML = '▐▐ Playing…';
-    } else {
-      audio.pause();
-      buttonEl.innerHTML = '▶ Resume';
-    }
+    if (audio.paused) { audio.play(); buttonEl.innerHTML = '▐▐ Playing…'; }
+    else { audio.pause(); buttonEl.innerHTML = '▶ Resume'; }
   };
 }
-
-// ── COMPANION VOICE BUTTON ──
-// Add this button to your companion silence section:
-// <button class="btn-ghost" id="companionVoiceBtn"
-//   onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)"
-//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
-//   ◎ Hear Response
-// </button>
-
-// ── AMMA SOPHIA VOICE BUTTON ──
-// Add this button after your mysticResponseText:
-// <button class="btn-ghost" id="ammaSophiaVoiceBtn"
-//   onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)"
-//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
-//   ◎ Hear Response
-// </button>
-
-// ── DEEPER VOICE BUTTON ──
-// Add this button after your dResponseText:
-// <button class="btn-ghost" id="deeperVoiceBtn"
-//   onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)"
-//   style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">
-//   ◎ Hear Response
-// </button>
-<script>
 /* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
 ═══════════════════════════════════════════ */
