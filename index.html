@@ -3927,6 +3927,7 @@ async function askCompanion(){
     document.getElementById('cInvitation').textContent=inv||(sentences[sentences.length-1]||'');
     document.getElementById('companionRate').textContent=`${companionUses} reflection${companionUses!==1?'s':''} remaining this week`;
     showCompanionState('companionResponse');
+    prepareVoiceResponse(document.getElementById('cResponseText').textContent, 'companion');
   }catch(err){
     showCompanionState('companionInput');
     showError('companionErr','Something stirred in the silence — try once more.');
