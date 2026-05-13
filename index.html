@@ -2900,24 +2900,71 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 </style>
 
 <script>
-  let _currentAudio = null;
+  // ═══════════════════════════════════════════
+// STILL — Voice Player v2
+// Three-step architecture:
+// 1. AI generates response (existing)
+// 2. Background tagging runs while user reads
+// 3. ElevenLabs speaks pre-tagged text on demand
+// ═══════════════════════════════════════════
+
+let _currentAudio = null;
 let _currentAudioUrl = null;
 
-async function requestVoice(text, character, buttonEl) {
+// Stores tagged text per character while user reads
+const _taggedResponses = {
+  companion: null,
+  ammaSophia: null,
+  deeper: null
+};
+
+// Called immediately after AI response is displayed
+// Runs in background — user never waits for this
+async function prepareVoiceResponse(text, character) {
   if (!text || !text.trim()) return;
-  const originalHtml = buttonEl.innerHTML;
-  buttonEl.innerHTML = '◌ Preparing…';
-  buttonEl.disabled = true;
+  _taggedResponses[character] = null; // Reset while preparing
+
   try {
-    const res = await fetch('/.netlify/functions/elevenlabs-tts', {
+    const res = await fetch('/.netlify/functions/tag-response', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text.trim(), character })
     });
     const data = await res.json();
+    if (data.taggedText) {
+      _taggedResponses[character] = data.taggedText;
+    }
+  } catch (err) {
+    // Silent fail — fall back to untagged text
+    _taggedResponses[character] = text;
+  }
+}
+
+// Called when user taps Hear Response button
+async function requestVoice(text, character, buttonEl) {
+  if (!text || !text.trim()) return;
+
+  const originalHtml = buttonEl.innerHTML;
+  buttonEl.innerHTML = '◌ Preparing…';
+  buttonEl.disabled = true;
+
+  try {
+    // Use tagged text if ready, fall back to original
+    const voiceText = _taggedResponses[character] || text.trim();
+
+    const res = await fetch('/.netlify/functions/elevenlabs-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: voiceText, character })
+    });
+
+    const data = await res.json();
+
     if (!res.ok || !data.url) throw new Error(data.error || 'Could not generate audio');
+
     _currentAudioUrl = data.url;
     playVoiceUrl(data.url, buttonEl, originalHtml);
+
   } catch (err) {
     console.error('Voice error:', err.message);
     buttonEl.innerHTML = originalHtml;
@@ -2925,21 +2972,67 @@ async function requestVoice(text, character, buttonEl) {
   }
 }
 
-function playVoiceUrl(url, buttonEl, originalHtml) {
+// Play audio with pause/resume/replay
+const CHARACTER_AMBIENCE = {
+  companion: 'still-mobile/src/audio/nature_sounds.mp3',
+  ammaSophia: 'still-mobile/src/audio/deeper_music.mp3',
+  deeper: 'still-mobile/src/audio/deeper_music.mp3'
+};
+
+let _ambienceAudio = null;
+
+function playVoiceUrl(url, buttonEl, originalHtml, character) {
   if (_currentAudio) { _currentAudio.pause(); _currentAudio = null; }
+  if (_ambienceAudio) { _ambienceAudio.pause(); _ambienceAudio = null; }
+
   const audio = new Audio(url);
   _currentAudio = audio;
+
+  // Start ambience
+  const ambienceSrc = CHARACTER_AMBIENCE[character];
+  if (ambienceSrc) {
+    const ambience = new Audio(ambienceSrc);
+    ambience.loop = true;
+    ambience.volume = 0;
+    _ambienceAudio = ambience;
+    ambience.play().catch(() => {});
+
+    // Fade ambience in
+    let fadeIn = setInterval(() => {
+      if (ambience.volume < 0.12) ambience.volume = Math.min(0.12, ambience.volume + 0.01);
+      else clearInterval(fadeIn);
+    }, 150);
+
+    // Fade ambience out when voice ends
+    audio.addEventListener('ended', () => {
+      let fadeOut = setInterval(() => {
+        if (ambience.volume > 0) ambience.volume = Math.max(0, ambience.volume - 0.01);
+        else { clearInterval(fadeOut); ambience.pause(); _ambienceAudio = null; }
+      }, 150);
+    });
+  }
+
   buttonEl.innerHTML = '▐▐ Playing…';
   buttonEl.disabled = false;
-  audio.play().catch(err => { buttonEl.innerHTML = originalHtml; });
+
+  audio.play().catch(() => { buttonEl.innerHTML = originalHtml; });
+
   audio.addEventListener('ended', () => {
     buttonEl.innerHTML = '↺ Hear Again';
     buttonEl.disabled = false;
-    buttonEl.onclick = () => playVoiceUrl(url, buttonEl, originalHtml);
+    buttonEl.onclick = () => playVoiceUrl(url, buttonEl, originalHtml, character);
   });
+
   buttonEl.onclick = () => {
-    if (audio.paused) { audio.play(); buttonEl.innerHTML = '▐▐ Playing…'; }
-    else { audio.pause(); buttonEl.innerHTML = '▶ Resume'; }
+    if (audio.paused) {
+      audio.play();
+      if (_ambienceAudio) _ambienceAudio.play();
+      buttonEl.innerHTML = '▐▐ Playing…';
+    } else {
+      audio.pause();
+      if (_ambienceAudio) _ambienceAudio.pause();
+      buttonEl.innerHTML = '▶ Resume';
+    }
   };
 }
 /* ═══════════════════════════════════════════
@@ -4042,6 +4135,7 @@ async function askMystic() {
     const text = data.content?.[0]?.text || '';
     document.getElementById('mysticResponseText').textContent = text.trim();
     showMysticState('mysticResponse');
+prepareVoiceResponse(document.getElementById('mysticResponseText').textContent, 'ammaSophia');
   } catch(err) {
     showMysticState('mysticInput');
     const errEl = document.getElementById('mysticErr');
@@ -4088,7 +4182,8 @@ async function askDeeper(){
     document.getElementById('dSource').textContent=src;
     document.getElementById('dResponseText').textContent=main.join(' ').trim()||body;
     document.getElementById('dInvitation').textContent=inv||(sentences[sentences.length-1]||'');
-    showDeeperState('deeperResponse');
+   showDeeperState('deeperResponse');
+prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deeper');
   }catch(err){
     showDeeperState('deeperInput');
     showError('deeperErr','Something stirred — try once more.');
