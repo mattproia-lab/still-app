@@ -105,7 +105,7 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify({
           text: text.trim(),
-          model_id: 'eleven_v3',
+          model_id: 'eleven_flash_v2_5',
           voice_settings: {
             stability: 0.75,
             similarity_boost: 0.75,
