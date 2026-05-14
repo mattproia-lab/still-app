@@ -3093,7 +3093,20 @@ const _taggedResponses = {
 // Runs in background — user never waits for this
 async function prepareVoiceResponse(text, character) {
   if (!text || !text.trim()) return;
-  _taggedResponses[character] = text.trim();
+  _taggedResponses[character] = null;
+  try {
+    const res = await fetch('/.netlify/functions/tag-response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text.trim(), character })
+    });
+    const data = await res.json();
+    if (data.taggedText) {
+      _taggedResponses[character] = data.taggedText;
+    }
+  } catch (err) {
+    _taggedResponses[character] = text;
+  }
 }
 // Called when user taps Hear Response button
 async function requestVoice(text, character, buttonEl) {
@@ -3106,7 +3119,7 @@ async function requestVoice(text, character, buttonEl) {
   try {
     const voiceText = _taggedResponses[character] || text.trim();
 
-    const res = await fetch('/.netlify/functions/elevenlabs-tts', {
+    const res = await fetch('https://still-tts.onrender.com/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: voiceText, character })
