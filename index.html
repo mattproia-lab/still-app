@@ -2922,24 +2922,8 @@ const _taggedResponses = {
 // Runs in background — user never waits for this
 async function prepareVoiceResponse(text, character) {
   if (!text || !text.trim()) return;
-  _taggedResponses[character] = null; // Reset while preparing
-
-  try {
-    const res = await fetch('/.netlify/functions/tag-response', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text.trim(), character })
-    });
-    const data = await res.json();
-    if (data.taggedText) {
-      _taggedResponses[character] = data.taggedText;
-    }
-  } catch (err) {
-    // Silent fail — fall back to untagged text
-    _taggedResponses[character] = text;
-  }
+  _taggedResponses[character] = text.trim();
 }
-
 // Called when user taps Hear Response button
 async function requestVoice(text, character, buttonEl) {
   if (!text || !text.trim()) return;
