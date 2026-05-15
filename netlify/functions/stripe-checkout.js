@@ -12,16 +12,19 @@ exports.handler = async function(event) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const { user_id, email, type } = body;
+  const { user_id, email, tier } = body;
   if (!user_id || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
   }
 
-  const isReflectionPack = type === 'reflection_pack';
-  const priceId = isReflectionPack 
-    ? process.env.STRIPE_REFLECTION_PRICE_ID 
-    : process.env.STRIPE_PRICE_ID;
-  const mode = isReflectionPack ? 'payment' : 'subscription';
+  let priceId;
+  let mode = 'subscription';
+
+  if (tier === 'contemplative') {
+    priceId = process.env.STRIPE_CONTEMPLATIVE_PRICE_ID;
+  } else {
+    priceId = process.env.STRIPE_PRICE_ID; // personal
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -29,7 +32,7 @@ exports.handler = async function(event) {
       mode,
       customer_email: email,
       line_items: [{ price: priceId, quantity: 1 }],
-      metadata: { user_id, type: type || 'premium' },
+      metadata: { user_id, tier: tier || 'personal' },
       success_url: `${process.env.SITE_URL}?upgraded=true`,
       cancel_url: `${process.env.SITE_URL}?upgraded=false`,
     });

@@ -8719,16 +8719,16 @@ function closeUpgrade() {
   document.getElementById('upgradeScreen').style.display = 'none';
 }
 
-async function startCheckout() {
+async function startCheckout(tier) {
   if (!currentUser) { showUpgrade(); return; }
   try {
     const res = await fetch('/.netlify/functions/stripe-checkout', {
       method: 'POST',
-
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         user_id: currentUser.id,
-        email: currentUser.email
+        email: currentUser.email,
+        tier: tier || 'personal'
       })
     });
     const data = await res.json();
@@ -8830,4 +8830,3 @@ async function verifyCode() {
 }</script>
 </body>
 </html>
-c
