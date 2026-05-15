@@ -1,6 +1,9 @@
 [build]
   publish = "."
 
+[functions]
+  timeout = 90
+
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"

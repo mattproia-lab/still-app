@@ -7026,6 +7026,7 @@ async function initAuth() {
 
   if (res.ok) {
     currentUser = await res.json();
+    updateLastActive();
   } else if (refresh) {
     const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
       method: 'POST',
@@ -7037,12 +7038,26 @@ async function initAuth() {
       localStorage.setItem('still_access_token', data.access_token);
       localStorage.setItem('still_refresh_token', data.refresh_token);
       currentUser = data.user;
+      updateLastActive();
     } else {
       document.getElementById('authOverlay').style.display = 'flex';
     }
   } else {
     document.getElementById('authOverlay').style.display = 'flex';
   }
+  async function updateLastActive() {
+  if (!currentUser) return;
+  try {
+    await supaFetch('/rest/v1/user_activity', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        last_active: new Date().toISOString()
+      })
+    });
+  } catch(e) {}
+}
 }
 async function forgotPassword() {
   const email = document.getElementById('authEmail').value.trim();
@@ -7627,6 +7642,7 @@ function checkStripeReturn() {
           headers: { 'apikey': SUPA_ANON, 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) currentUser = await res.json();
+        updateLastActive();
       }
       showWelcomePremium();
     }, 500);
