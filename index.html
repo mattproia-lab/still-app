@@ -3145,7 +3145,8 @@ async function requestVoice(text, character, buttonEl) {
     } else {
       throw new Error('No audio returned');
     }
-
+    console.log('audioUrl created:', audioUrl);
+    playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
     _currentAudioUrl = audioUrl;
     playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
 
@@ -3159,7 +3160,7 @@ async function requestVoice(text, character, buttonEl) {
 // Play audio with pause/resume/replay
 const CHARACTER_AMBIENCE = {
   companion: 'still-mobile/src/audio/nature_sounds.mp3',
-  ammaSophia: 'still-mobile/src/audio/AmmaSound.mp3',
+  ammaSophia: 'still-mobile/src/audio/amma_ambient.mp3',
   deeper: 'still-mobile/src/audio/deeper_music.mp3'
 };
 
