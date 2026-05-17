@@ -47,7 +47,7 @@
       <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
       <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px">
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:ce<div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))"></div>nter;min-height:100vh;text-align:center;padding:0 28px">
         <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
         <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
         <button onclick="obNext(2)"
@@ -97,8 +97,8 @@
         <div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)">
           <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;color:rgba(200,146,12,.6);min-width:48px;padding-top:2px">TODAY</span>
           <div>
-            <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#fff;margin-bottom:4px">Speak with the Companion</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.42);line-height:1.65">Tell it what brought you here. Let the wisdom of the Desert Fathers speak into your life.</p>
+             <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:#fff;margin-bottom:4px">Meet Amma Sophia</p>
+             <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.42);line-height:1.65">Tell her what brought you here. Let an ancient desert mother speak into your life.</p>
           </div>
         </div>
         <div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)">
@@ -130,7 +130,7 @@
           </div>
         </div>
       </div>
-      <button onclick="obFinish()" style="background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 28px;cursor:pointer;transition:all .2s;width:100%">Speak to the Companion →</button>
+      <button onclick="obFinish()" style="background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 28px;cursor:pointer;transition:all .2s;width:100%">Meet Amma Sophia →</button>
     </div>
 
   </div>
@@ -7773,18 +7773,16 @@ function obNext(step) {
 }
 function obFinish() {
   localStorage.setItem('still_onboarded', '1');
+  localStorage.setItem('still_sophia_onboarding_free', '1');
   document.getElementById('screen-onboarding').style.display = 'none';
-  // First-time users land directly in The Companion
   setTimeout(() => {
-    showScreen('companion', 0);
-    // Pre-fill with a gentle opening prompt
-    const ta = document.getElementById('companionText');
+    showScreen('ammaSophia', 0);
+    const ta = document.getElementById('ammaSophiaText');
     if (ta && !ta.value) {
-      ta.placeholder = 'Tell me what brought you here…';
+      ta.placeholder = 'Tell her what brought you here…';
     }
-    // Show a first-time welcome note
-    const rate = document.getElementById('companionRate');
-    if (rate) rate.textContent = 'Tell the Companion what brought you to Still.';
+    const rate = document.getElementById('ammaSophiaRate');
+    if (rate) rate.textContent = 'Amma Sophia is waiting. Tell her what brought you to Still.';
   }, 400);
 }
 
