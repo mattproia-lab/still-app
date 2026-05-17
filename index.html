@@ -3461,7 +3461,11 @@ let currentScreen='home';
 
 function showScreen(screenId,worldIdx){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+screenId).classList.add('active');
+  const screenEl = document.getElementById('screen-'+screenId);
+  screenEl.classList.add('active');
+  // Scroll to top so input is always visible on mobile
+  screenEl.scrollTop = 0;
+  window.scrollTo(0, 0);
   if(worldIdx!==undefined){
     animateTo({...W[worldIdx]});
     document.getElementById('bgBase').style.backgroundColor=W[worldIdx].base;
@@ -3469,6 +3473,11 @@ function showScreen(screenId,worldIdx){
   currentScreen=screenId;
   updateDots(-1); // hide on feature screens
   document.getElementById('sectionCtr').classList.remove('show');
+  // Focus the textarea if present so keyboard appears and input is visible
+  setTimeout(() => {
+    const textarea = screenEl.querySelector('textarea');
+    if (textarea) textarea.focus();
+  }, 350);
 }
 
 function goHome(){
@@ -4380,6 +4389,7 @@ async function askMystic() {
       body: JSON.stringify({
         feature: 'sophia',
         access_token: localStorage.getItem('still_access_token'),
+        onboarding_free: localStorage.getItem('still_sophia_onboarding_free') === '1',
         model: 'claude-sonnet-4-20250514',
         max_tokens: 250,
         system: system,
@@ -4392,7 +4402,8 @@ async function askMystic() {
     const text = data.content?.[0]?.text || '';
     document.getElementById('mysticResponseText').textContent = text.trim();
     showMysticState('mysticResponse');
-prepareVoiceResponse(document.getElementById('mysticResponseText').textContent, 'ammaSophia');
+    localStorage.removeItem('still_sophia_onboarding_free');
+    prepareVoiceResponse(document.getElementById('mysticResponseText').textContent, 'ammaSophia');
   } catch(err) {
     showMysticState('mysticInput');
     const errEl = document.getElementById('mysticErr');
