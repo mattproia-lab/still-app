@@ -7302,12 +7302,12 @@ async function playDarknessReflection(idx) {
   if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
 
   // Tag the reflection text for dark mode delivery
-  let taggedText = t.reflection;
+  let taggedText = `${t.text}\n\n${t.reflection}`;
   try {
     const tagRes = await fetch('/.netlify/functions/tag-darkness', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: t.reflection, title: t.title })
+      body: JSON.stringify({ text: taggedText, title: t.title })
     });
     const tagData = await tagRes.json();
     if (tagData.taggedText) taggedText = tagData.taggedText;
