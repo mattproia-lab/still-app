@@ -2,11 +2,20 @@
   publish = "."
 
 [functions]
+  directory = "netlify/functions"
   node_bundler = "esbuild"
-  
+
+[functions.send-notifications]
+  schedule = "0 1 * * *"
+
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*.js"
+  to = "/:splat.js"
   status = 200
 
 [[redirects]]
@@ -14,5 +23,12 @@
   to = "/index.html"
   status = 200
 
-[functions.send-notifications]
-  schedule = "0 1 * * *"
+[[redirects]]
+  from   = "/api/sing-the-hours"
+  to     = "/.netlify/functions/rss-proxy"
+  status = 200
+
+[[headers]]
+  for = "/api/sing-the-hours"
+  [headers.values]
+    Cache-Control = "public, s-maxage=1800, stale-while-revalidate=3600"
