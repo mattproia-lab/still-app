@@ -47,8 +47,7 @@
       <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
       <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:ce<div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))"></div>nter;min-height:100vh;text-align:center;padding:0 28px">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
         <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
         <button onclick="obNext(2)"
           style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
@@ -1130,9 +1129,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 }
 .auth-toggle span { color:rgba(178,200,245,.7);text-decoration:underline; }
 
-@media (max-width: 1024px), body.is-mobile {
+@media (max-width: 1024px) {
   #mobileEnterTab { display: block; }
 }
+body.is-mobile #mobileEnterTab { display: block; }
 </style>
 </head>
 <body>
@@ -6693,7 +6693,7 @@ function initDarknessScreen() {
 }
 
 function renderDarknessText() {
-  const card = document.querySelector('#screen-darkness .content-card');
+  const card = document.querySelector('#screen-darkness .feature-main');
   if (!card) return;
   const t = DARKNESS_TEXTS[darknessIdx];
   const total = DARKNESS_TEXTS.length;
@@ -6711,6 +6711,7 @@ function renderDarknessText() {
       <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,18px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.9;white-space:pre-line">${t.text}</p>
     </div>
     <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.48);line-height:1.7;margin-bottom:24px;font-style:italic">${t.reflection}</p>
+    <button id="darknessPlayBtn" onclick="playDarknessReflection(${darknessIdx})" class="btn-ghost" style="display:block;margin:0 auto 16px;color:rgba(255,255,255,.45)">◎ Hear Reflection</button>
     <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">
       <button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">
         ${darknessIdx < total-1 ? 'Next →' : 'Begin Again ↺'}
@@ -7138,6 +7139,51 @@ async function initAuth() {
       })
     });
   } catch(e) {}
+}
+async function playDarknessReflection(idx) {
+  const t = DARKNESS_TEXTS[idx];
+  const cacheKey = hashText(`darkness-${t.title}`);
+  const btn = document.getElementById('darknessPlayBtn');
+  if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
+
+  // Tag the reflection text for dark mode delivery
+  let taggedText = t.reflection;
+  try {
+    const tagRes = await fetch('/.netlify/functions/tag-darkness', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: t.reflection, title: t.title })
+    });
+    const tagData = await tagRes.json();
+    if (tagData.taggedText) taggedText = tagData.taggedText;
+  } catch(e) {}
+
+  try {
+    const res = await fetch('https://still-tts.onrender.com/office-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: taggedText, cacheKey })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    let audioUrl;
+    if (data.cached && data.url) {
+      audioUrl = data.url;
+    } else if (data.audio) {
+      const binary = atob(data.audio);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      audioUrl = URL.createObjectURL(blob);
+    }
+
+    playVoiceUrl(audioUrl, btn, '◎ Hear Reflection', 'ammaSophia');
+
+  } catch(err) {
+    console.error('Darkness audio error:', err.message);
+    if (btn) { btn.textContent = '◎ Hear Reflection'; btn.disabled = false; }
+  }
 }
 }
 async function forgotPassword() {
@@ -8402,7 +8448,7 @@ function renderOfficeHour(hour) {
 
     if (isFull) {
       html += eyebrow('Responsory');
-      html += versicle('V. In the night my soul longeth for thee, O God.\nR. My spirit within me watcheth for thee.');
+      html += versicle('In the night my soul longeth for thee, O God.\n My spirit within me watcheth for thee.');
     }
 
     if (isFull && isTeDeum) {
@@ -8414,14 +8460,14 @@ function renderOfficeHour(hour) {
     html += divider();
     html += eyebrow('Collect');
     html += p(OFFICE_COLLECTS.vigils[season]);
-    html += versicle('R. Amen.'); 
+    html += versicle('Amen.'); 
     html += `<button id="vigilsPlayBtn" onclick="playVigilsAudio()" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">◎ Hear Vigils</button>`;
 
   } else if (hour === 'lauds') {
     html += seasonBadge();
     html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Lauds</h2>`;
     html += eyebrow('Opening');
-    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += versicle('O God, come to my assistance.\n O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
     html += divider();
 
     // Morning antiphon
@@ -8447,21 +8493,21 @@ function renderOfficeHour(hour) {
 
     if (isFull) {
       html += eyebrow('Responsorium Breve');
-      html += versicle('V. The Lord hath prepared his throne in heaven.\nR. And his kingdom shall rule over all.');
+      html += versicle('The Lord hath prepared his throne in heaven.\n And his kingdom shall rule over all.');
     }
 
     html += divider();
     html += eyebrow('Collect');
     html += p(OFFICE_COLLECTS.lauds[season]);
-    html += versicle('R. Amen.');
+    html += versicle(' Amen.');
     html += divider();
-    html += versicle('V. Let us bless the Lord.\nR. Thanks be to God.');
+    html += versicle(' Let us bless the Lord.\n Thanks be to God.');
 
   } else if (hour === 'vespers') {
     html += seasonBadge();
     html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Vespers</h2>`;
     html += eyebrow('Opening');
-    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += versicle(' O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
     html += divider();
 
     if (isFull) {
@@ -8490,7 +8536,7 @@ function renderOfficeHour(hour) {
 
     if (isFull) {
       html += eyebrow('Responsorium');
-      html += versicle('V. Our heart hath rejoiced in him,\nbecause we have hoped in his holy name.\nR. Let thy mercy, O Lord, be upon us,\nas we have hoped in thee.');
+      html += versicle('Our heart hath rejoiced in him,\nbecause we have hoped in his holy name.\n Let thy mercy, O Lord, be upon us,\nas we have hoped in thee.');
     }
 
     html += divider();
@@ -8516,7 +8562,7 @@ function renderOfficeHour(hour) {
     html += p(mar.text);
 
     html += divider();
-    html += versicle('V. Let us bless the Lord.\nR. Thanks be to God.');
+    html += versicle('Let us bless the Lord.\n Thanks be to God.');
 
   } else if (hour === 'compline') {
     html += seasonBadge();
@@ -8526,12 +8572,12 @@ function renderOfficeHour(hour) {
       html += eyebrow('Examination of Conscience');
       html += p('Pause briefly. Call to mind the faults of this day.', 'font-size:13px;color:rgba(255,255,255,.55);font-style:normal');
       html += versicle('I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.');
-      html += versicle('V. Have mercy on us, O Lord.\nR. For we have sinned against thee.');
+      html += versicle(' Have mercy on us, O Lord.\n For we have sinned against thee.');
       html += divider();
     }
 
     html += eyebrow('Opening');
-    html += versicle('V. O God, come to my assistance.\nR. O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
+    html += versicle('O God, come to my assistance.\n O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
     html += divider();
 
     // Night psalm — alternates Ps 91 / Ps 4
@@ -8552,7 +8598,7 @@ function renderOfficeHour(hour) {
 
     if (isFull) {
       html += eyebrow('Responsorium');
-      html += versicle('V. Into thy hands, O Lord, I commend my spirit.\nR. Into thy hands, O Lord, I commend my spirit.\nV. For thou hast redeemed me, O Lord, thou God of truth.\nR. I commend my spirit.');
+      html += versicle('Into thy hands, O Lord, I commend my spirit.\n Into thy hands, O Lord, I commend my spirit.\nV. For thou hast redeemed me, O Lord, thou God of truth.\nR. I commend my spirit.');
     }
 
     html += divider();
