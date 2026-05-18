@@ -3149,9 +3149,7 @@ async function requestVoice(text, character, buttonEl) {
     } else {
       throw new Error('No audio returned');
     }
-    console.log('audioUrl created:', audioUrl);
-    playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
-    _currentAudioUrl = audioUrl;
+   _currentAudioUrl = audioUrl;
     playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
 
   } catch (err) {
@@ -3224,15 +3222,8 @@ function playVoiceUrl(url, buttonEl, originalHtml, character) {
       buttonEl.innerHTML = '▶ Resume';
     }
   };
-  function hashText(text) {
-  let hash = 0;
-  for (let i = 0; i < text.length; i++) {
-    const char = text.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash = hash & hash;
-  }
-  return Math.abs(hash).toString(36);
 }
+
 
 async function playVigilsAudio() {
   const season = getLiturgicalSeason();
@@ -3288,8 +3279,17 @@ async function playVigilsAudio() {
   } catch(err) {
     console.error('Vigils audio error:', err.message);
     if (btn) { btn.textContent = '◎ Hear Vigils'; btn.disabled = false; }
-  }
+   }
 }
+
+function hashText(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(36);
 }
 /* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
