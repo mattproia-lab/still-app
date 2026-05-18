@@ -2162,7 +2162,7 @@ body.is-mobile #mobileEnterTab { display: block; }
       </button>
       <div id="sth-slot-compline" data-sth-hour="compline"></div>
     </div>
-    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px;font-style:italic">Opening automatically to the current hour</p>
+    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px;font-style:italic">Sing the Hours · Paul Rose</p>  
   </div>
 
   <!-- Hour content — rendered by JS -->
@@ -8676,9 +8676,9 @@ function initOfficeScreen() {
   const inactiveS = 'background:none;color:rgba(255,255,255,.38);';
   if (c2) c2.style.cssText += mode === 'concise' ? activeS : inactiveS;
   if (f2) f2.style.cssText += mode === 'full'    ? activeS : inactiveS;
-  // Auto-enter the current hour
-  const autoHour = window._officeAutoHour || 'lauds';
-  setTimeout(() => enterOfficeHour(autoHour), 150);
+  // Auto-enter the current hour — disabled, stay on chooser
+  // const autoHour = window._officeAutoHour || 'lauds';
+  // setTimeout(() => enterOfficeHour(autoHour), 150);
 }
 
 function setRuleDate(){
