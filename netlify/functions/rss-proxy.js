@@ -8,7 +8,7 @@
  *   OR (if you've added a redirect in netlify.toml): /api/sing-the-hours
  */
 
-const FEED_URL = "https://singthehours.castos.com/feed/podcast";
+const FEED_URL = "https://singthehours.castos.com/feed";
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 // Module-level cache (persists across warm lambda invocations)
