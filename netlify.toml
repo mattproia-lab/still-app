@@ -1,5 +1,5 @@
 [build]
-  publish = "."
+  publish = "still-mobile"
 
 [functions]
   node_bundler = "esbuild"
@@ -7,11 +7,6 @@
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
-  status = 200
-
-[[redirects]]
-  from = "/.netlify/*"
-  to = "/.netlify/:splat"
   status = 200
 
 [[redirects]]
