@@ -150,6 +150,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Still</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Heebo:wght@300;400;500&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="sing-the-hours.js"></script>
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
@@ -2139,9 +2140,11 @@ body.is-mobile #mobileEnterTab { display: block; }
         style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
         onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
         onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Lauds</div>
         <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Morning Prayer · 5am–11am</div>
       </button>
+      <div id="sth-slot-lauds" data-sth-hour="lauds"></div>
       <button onclick="enterOfficeHour('vespers')"
         style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
         onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
@@ -2149,6 +2152,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Vespers</div>
         <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Evening Prayer · 5pm–8pm</div>
       </button>
+      <div id="sth-slot-vespers"" data-sth-hour="vespers"></div>
       <button onclick="enterOfficeHour('compline')"
         style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
         onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
@@ -2156,6 +2160,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Compline</div>
         <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Night Prayer · 8pm–Midnight</div>
       </button>
+      <div id="sth-slot-compline" data-sth-hour="compline"></div>
     </div>
     <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px;font-style:italic">Opening automatically to the current hour</p>
   </div>
@@ -7500,7 +7505,20 @@ function renderCommunityEmpty(card) {
       <button class="btn-ghost" onclick="goHome()">Return to Still</button>
     </div>`;
 }
+async function initSingTheHours() {
+  const slots = document.querySelectorAll('[data-sth-hour]');
+  for (const slot of slots) {
+    const hour = slot.getAttribute('data-sth-hour');
+    try {
+      const episode = await SingTheHours.getForHour(hour);
+      if (episode) SingTheHours.mountPlayer(episode, slot);
+    } catch (err) {
+      console.warn('[SingTheHours] Failed to load', hour, err);
+    }
+  }
+}
 
+document.addEventListener('DOMContentLoaded', initSingTheHours);
 /* ═══════════════════════════════════════════
    THE SACRISTY — hidden image gallery
    Hold "Still" wordmark 3 seconds to enter
