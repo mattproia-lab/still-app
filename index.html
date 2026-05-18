@@ -6698,27 +6698,26 @@ function renderDarknessText() {
   const t = DARKNESS_TEXTS[darknessIdx];
   const total = DARKNESS_TEXTS.length;
 
-  card.innerHTML = `
-    <div style="display:flex;gap:5px;margin-bottom:20px;align-items:center">
-      ${DARKNESS_TEXTS.map((_,i) =>
-        `<div onclick="darknessGoto(${i})" style="width:${i===darknessIdx?'20px':'6px'};height:6px;border-radius:3px;background:${i===darknessIdx?'rgba(255,255,255,.55)':'rgba(255,255,255,.15)'};cursor:pointer;transition:all .3s"></div>`
-      ).join('')}
-    </div>
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px">${t.label}</p>
-    <p style="font-family:'Playfair Display',serif;font-size:clamp(22px,3.5vw,30px);font-weight:700;font-style:italic;color:#fff;margin-bottom:4px">${t.title}</p>
-    <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:22px">${t.sub}</p>
-    <div style="background:rgba(255,255,255,.02);border-left:2px solid rgba(255,255,255,.08);padding:18px 20px;margin-bottom:20px">
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,18px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.9;white-space:pre-line">${t.text}</p>
-    </div>
-    <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.48);line-height:1.7;margin-bottom:24px;font-style:italic">${t.reflection}</p>
-    <button id="darknessPlayBtn" onclick="playDarknessReflection(${darknessIdx})" class="btn-ghost" style="display:block;margin:0 auto 16px;color:rgba(255,255,255,.45)">Hear Reflection</button>
-    <div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">
-      <button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">
-        ${darknessIdx < total-1 ? 'Next →' : 'Begin Again ↺'}
-      </button>
-      <button class="btn-ghost" onclick="activateCompanion()">Speak to the Companion</button>
-    </div>
-    <button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>`;
+let html = '';
+  html += '<div style="display:flex;gap:5px;margin-bottom:20px;align-items:center">';
+  DARKNESS_TEXTS.forEach(function(_, i) {
+    html += '<div onclick="darknessGoto(' + i + ')" style="width:' + (i===darknessIdx?'20px':'6px') + ';height:6px;border-radius:3px;background:' + (i===darknessIdx?'rgba(255,255,255,.55)':'rgba(255,255,255,.15)') + ';cursor:pointer;transition:all .3s"></div>';
+  });
+  html += '</div>';
+  html += '<p style="font-family:\'Montserrat\',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px">' + t.label + '</p>';
+  html += '<p style="font-family:\'Playfair Display\',serif;font-size:clamp(22px,3.5vw,30px);font-weight:700;font-style:italic;color:#fff;margin-bottom:4px">' + t.title + '</p>';
+  html += '<p style="font-family:\'Heebo\',sans-serif;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:22px">' + t.sub + '</p>';
+  html += '<div style="background:rgba(255,255,255,.02);border-left:2px solid rgba(255,255,255,.08);padding:18px 20px;margin-bottom:20px">';
+  html += '<p style="font-family:\'Playfair Display\',serif;font-size:clamp(15px,1.8vw,18px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.9;white-space:pre-line">' + t.text + '</p>';
+  html += '</div>';
+  html += '<p style="font-family:\'Heebo\',sans-serif;font-size:13px;color:rgba(255,255,255,.48);line-height:1.7;margin-bottom:24px;font-style:italic">' + t.reflection + '</p>';
+  html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost" style="display:block;margin:0 auto 16px;color:rgba(255,255,255,.45)">Hear Reflection</button>';
+  html += '<div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">';
+  html += '<button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">' + (darknessIdx < total-1 ? 'Next →' : 'Begin Again ↺') + '</button>';
+  html += '<button class="btn-ghost" onclick="activateCompanion()">Speak to the Companion</button>';
+  html += '</div>';
+  html += '<button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>';
+  card.innerHTML = html;
 }
 
 function darknessNext() {
@@ -7140,51 +7139,7 @@ async function initAuth() {
     });
   } catch(e) {}
 }
-async function playDarknessReflection(idx) {
-  const t = DARKNESS_TEXTS[idx];
-  const cacheKey = hashText(`darkness-${t.title}`);
-  const btn = document.getElementById('darknessPlayBtn');
-  if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
 
-  // Tag the reflection text for dark mode delivery
-  let taggedText = t.reflection;
-  try {
-    const tagRes = await fetch('/.netlify/functions/tag-darkness', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: t.reflection, title: t.title })
-    });
-    const tagData = await tagRes.json();
-    if (tagData.taggedText) taggedText = tagData.taggedText;
-  } catch(e) {}
-
-  try {
-    const res = await fetch('https://still-tts.onrender.com/office-tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: taggedText, cacheKey })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-
-    let audioUrl;
-    if (data.cached && data.url) {
-      audioUrl = data.url;
-    } else if (data.audio) {
-      const binary = atob(data.audio);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      audioUrl = URL.createObjectURL(blob);
-    }
-
-    playVoiceUrl(audioUrl, btn, '◎ Hear Reflection', 'ammaSophia');
-
-  } catch(err) {
-    console.error('Darkness audio error:', err.message);
-    if (btn) { btn.textContent = '◎ Hear Reflection'; btn.disabled = false; }
-  }
-}
 }
 async function forgotPassword() {
   const email = document.getElementById('authEmail').value.trim();
@@ -7340,7 +7295,51 @@ async function initCommunity() {
       </div>`;
   }
 }
+async function playDarknessReflection(idx) {
+  const t = DARKNESS_TEXTS[idx];
+  const cacheKey = hashText(`darkness-${t.title}`);
+  const btn = document.getElementById('darknessPlayBtn');
+  if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
 
+  // Tag the reflection text for dark mode delivery
+  let taggedText = t.reflection;
+  try {
+    const tagRes = await fetch('/.netlify/functions/tag-darkness', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: t.reflection, title: t.title })
+    });
+    const tagData = await tagRes.json();
+    if (tagData.taggedText) taggedText = tagData.taggedText;
+  } catch(e) {}
+
+  try {
+    const res = await fetch('https://still-tts.onrender.com/office-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: taggedText, cacheKey })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    let audioUrl;
+    if (data.cached && data.url) {
+      audioUrl = data.url;
+    } else if (data.audio) {
+      const binary = atob(data.audio);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      audioUrl = URL.createObjectURL(blob);
+    }
+
+    playVoiceUrl(audioUrl, btn, '◎ Hear Reflection', 'ammaSophia');
+
+  } catch(err) {
+    console.error('Darkness audio error:', err.message);
+    if (btn) { btn.textContent = '◎ Hear Reflection'; btn.disabled = false; }
+  }
+}
 function renderCommunityQuestion(card, q) {
   card.innerHTML = `
     <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:16px">Anonymous · Daily</p>
