@@ -84,8 +84,8 @@ async function useCredit(userId, currentCredits) {
     body: JSON.stringify({ reflection_credits: currentCredits - 1 })
   });
 }
-exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') {
+  exports.handler = async function(event) {
+    if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
@@ -117,15 +117,20 @@ exports.handler = async function(event) {
     const limit = limits[feature] ?? 0;
     const credits = profile?.reflection_credits || 0;
 
-    if (limit === 0 && credits <= 0) {
-      return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
-    }
+    // Allow one free onboarding response for Amma Sophia
+   const onboardingFree = body.onboarding_free === true && feature === 'sophia';
 
-    const count = await getUsageCount(user.id, feature);
+   if (!onboardingFree) {
+   if (limit === 0 && credits <= 0) {
+   return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
+  }
 
-    if (count >= limit && credits <= 0) {
-      return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
-    }
+  const count = await getUsageCount(user.id, feature);
+
+  if (count >= limit && credits <= 0) {
+    return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
+  }
+
 
     // Use a credit if over limit, otherwise log usage
     if (count >= limit && credits > 0) {
@@ -134,7 +139,7 @@ exports.handler = async function(event) {
       await logUsage(user.id, feature);
     }
   }
-
+  } // closes if (feature && token)
   // Forward to Anthropic
 
   // Forward to Anthropic

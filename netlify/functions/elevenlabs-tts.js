@@ -6,7 +6,7 @@ const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
 
 const VOICE_IDS = {
   companion:  'B5jEZPqk2OJ2vkPw3wBM',
-  ammaSophia: 'uhYnkYTBc711oAY590Ea',
+  ammaSophia: 'ULbmvN3ajvtnzNTG88G8',
   deeper:     'DzcRs71mIqvZ5truEdVC'
 };
 
