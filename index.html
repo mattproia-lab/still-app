@@ -8110,18 +8110,9 @@ function openSettings(section) {
         console.warn('bells-settings element not found');
       }
     }, 600); // increased from 320 to 600
-  }
-}
-        // Flash the section border briefly to draw attention
-        bellsEl.style.transition = 'outline .2s';
-        bellsEl.style.outline = '1px solid rgba(200,146,12,.5)';
-        setTimeout(() => { bellsEl.style.outline = 'none'; }, 1800);
-        // Also call initBellSettings if not already called
-        if (typeof initBellSettings === 'function') initBellSettings();
-      }
-    }, 320);
-  }
-}
+  
+     }
+}   
  
 // ─── Day-30 discount trigger ─────────────────────────────────────────────
 // Call this on app load. If user has been using Still for 30+ days
