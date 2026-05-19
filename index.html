@@ -181,12 +181,12 @@
 <!-- STEP 4 — The Companion -->
 <div class="ob-step" id="ob-4" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
 
-  <!-- Background image -->
-  <img src="/still-mobile/src/image/companion.jpg"
-style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0"/>
-  <!-- Overlays -->
-  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(3,2,6,.58) 0%,rgba(3,2,6,.32) 40%,rgba(3,2,6,.78) 100%)"></div>
-  <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,1,5,.62) 100%)"></div>
+  <!-- Background image + overlay -->
+  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
+    <img src="/still-mobile/src/image/companion.jpg"
+      style="width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:0.95"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,18,.55) 0%,rgba(2,4,18,.20) 40%,rgba(2,4,18,.55) 100%);pointer-events:none"></div>
+  </div>
 
   <!-- Content -->
   <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto">
@@ -244,7 +244,7 @@ style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-
         style="width:100%;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;margin-bottom:12px">
         Go to Settings — Set Your Bells →
       </button>
-      <button onclick="obFinish()"
+      <button onclick="obNext(5)">Continue →</button>  ✅
         style="width:100%;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer">
         Skip for now
       </button>
@@ -7959,61 +7959,70 @@ function checkOnboarding() {
   }
 }
 const ONBOARDING_DEMOS = {
-  2: { character: 'ammaSophia', audio: '/assets/ammaSophia_demo.mp3' },
-  3: { character: 'deeper',     audio: '/assets/deeper_demo.mp3'     },
-  4: { character: 'companion',  audio: '/assets/companion_demo.mp3'  },
+  2: { character: 'ammaSophia', audio: '/still-mobile/assets/ammaSophia_demo.mp3' },
+  3: { character: 'deeper',     audio: '/still-mobile/assets/deeper_demo.mp3'     },
+  4: { character: 'companion',  audio: '/still-mobile/assets/companion_demo.mp3'  },
 };
  
 // Override obNext to trigger audio on character steps
 const _obNextOriginal = window.obNext || function(){};
- 
-function obNext(step) {
-  // Hide all steps
+ function obNext(step) {
   document.querySelectorAll('.ob-step').forEach(s => s.style.display = 'none');
- 
-  // Stop any playing demo audio
   stopDemoAudio();
- 
-  // Show target step
+
+  // If past the last step, finish onboarding
+  if (step > 5) {
+    obFinish();
+    return;
+  }
+
   const el = document.getElementById('ob-' + step);
   if (el) {
     el.style.display = 'block';
     el.scrollTop = 0;
     window.scrollTo(0, 0);
   }
- 
-  // Auto-play demo audio for character steps
+
   const demo = ONBOARDING_DEMOS[step];
   if (demo) {
-    // Small delay so the screen transition settles first
     setTimeout(() => playDemoAudio(demo.character, demo.audio, step), 600);
   }
 }
  
 function playDemoAudio(character, audioSrc, step) {
-  // Use your existing ambience system
+  stopDemoAudio();
+
   const CHARACTER_AMBIENCE = {
-    companion:  'still-mobile/src/audio/nature_sounds.mp3',
-    ammaSophia: 'still-mobile/src/audio/amma_ambient.mp3',
-    deeper:     'still-mobile/src/audio/deeper_music.mp3',
+    companion:  '/still-mobile/src/audio/nature_sounds.mp3',
+    ammaSophia: '/still-mobile/src/audio/amma_ambient.mp3',
+    deeper:     '/still-mobile/src/audio/deeper_music.mp3',
   };
- 
-  const voiceAudio   = new Audio(audioSrc);
-  const ambienceSrc  = CHARACTER_AMBIENCE[character];
-  let   ambienceAudio = null;
- 
-  window._demoVoiceAudio   = voiceAudio;
-  window._demoAmbienceAudio = null;
- 
-  // Start ambience
+
+  const voicePaths = {
+    ammaSophia: '/still-mobile/assets/ammaSophia_demo.mp3',
+    deeper:     '/still-mobile/assets/deeper_demo.mp3',
+    companion:  '/still-mobile/assets/companion_demo.mp3'
+  };
+
+  const voiceSrc    = voicePaths[character] || audioSrc;
+  const ambienceSrc = CHARACTER_AMBIENCE[character];
+
+  const voiceAudio = new Audio(voiceSrc);
+  voiceAudio.volume = 1.0;
+  window._demoVoiceAudio = voiceAudio;
+
+  // Debug
+  voiceAudio.onerror = (e) => console.error('Voice failed:', voiceSrc, e);
+
+  let ambienceAudio = null;
   if (ambienceSrc) {
     ambienceAudio = new Audio(ambienceSrc);
     ambienceAudio.loop   = true;
     ambienceAudio.volume = 0;
     window._demoAmbienceAudio = ambienceAudio;
- 
+
     ambienceAudio.play().catch(() => {});
- 
+
     // Fade ambience in
     let fadeIn = setInterval(() => {
       if (ambienceAudio.volume < 0.12) {
@@ -8022,7 +8031,7 @@ function playDemoAudio(character, audioSrc, step) {
         clearInterval(fadeIn);
       }
     }, 150);
- 
+
     // Fade ambience out when voice ends
     voiceAudio.addEventListener('ended', () => {
       let fadeOut = setInterval(() => {
@@ -8034,16 +8043,14 @@ function playDemoAudio(character, audioSrc, step) {
           window._demoAmbienceAudio = null;
         }
       }, 150);
- 
-      // Show a subtle "hear again" button
+
       const replayBtn = document.getElementById(`ob-replay-${step}`);
       if (replayBtn) replayBtn.style.display = 'inline-block';
     });
   }
- 
+
   // Play voice
   voiceAudio.play().catch(() => {
-    // Autoplay blocked — show a play button instead
     const playBtn = document.getElementById(`ob-play-${step}`);
     if (playBtn) {
       playBtn.style.display = 'inline-block';
