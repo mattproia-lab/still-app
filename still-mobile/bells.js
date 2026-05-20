@@ -139,18 +139,33 @@ async function saveBellSettings() {
   }
 
   // Schedule via Netlify function
+  // Save bell preferences to Supabase
   try {
-    const res = await fetch('/.netlify/functions/schedule-bells', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, bells: settings }),
-    });
-    const data = await res.json();
-    console.log('[Bells] Schedule result:', data);
+    const token = localStorage.getItem('still_access_token');
+    if (token && window.currentUser) {
+      const supaRes = await fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
+        method: 'POST',
+        headers: {
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTcwMzIsImV4cCI6MjA2MDIzMzAzMn0.LzSFsR0oRkVNmFMLyJLsZGMZmxLhZVNqFWMXBIOzSvA',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: window.currentUser.id,
+          vigils: settings.vigils.enabled,
+          lauds: settings.lauds.enabled,
+          vespers: settings.vespers.enabled,
+          compline: settings.compline.enabled,
+          updated_at: new Date().toISOString()
+        })
+      });
+      if (!supaRes.ok) console.warn('[Bells] Supabase save failed:', await supaRes.text());
+    }
   } catch (err) {
-    console.warn('[Bells] Could not reach schedule-bells function:', err);
+    console.warn('[Bells] Could not save to Supabase:', err);
   }
-
+  
   btn.style.display = 'none';
   btn.style.opacity = '1';
   btn.disabled = false;
