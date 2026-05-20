@@ -8009,11 +8009,14 @@ const _obNextOriginal = window.obNext || function(){};
     window.scrollTo(0, 0);
   }
 
+ ;
   const demo = ONBOARDING_DEMOS[step];
   if (demo) {
-    setTimeout(() => playDemoAudio(demo.character, demo.audio, step), 600);
+    // Show the play button instead of auto-playing
+    const playBtn = document.getElementById('ob-play-' + step);
+    if (playBtn) playBtn.style.display = 'inline-block';
   }
-}
+  }
  
 function playDemoAudio(character, audioSrc, step) {
   stopDemoAudio();
