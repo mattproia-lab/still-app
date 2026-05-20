@@ -8003,6 +8003,7 @@ const _obNextOriginal = window.obNext || function(){};
   const el = document.getElementById('ob-' + step);
   if (el) {
     el.style.display = 'block';
+    el.style.zIndex = '9999';
     el.scrollTop = 0;
     window.scrollTo(0, 0);
   }
