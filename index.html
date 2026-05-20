@@ -7248,6 +7248,7 @@ async function signOut() {
   document.getElementById('authOverlay').style.display = 'flex';
 }
 async function initAuth() {
+  if (!localStorage.getItem('still_onboarded')) return;
   const token = localStorage.getItem('still_access_token');
   const refresh = localStorage.getItem('still_refresh_token');
   
@@ -9233,7 +9234,7 @@ setBell(bellEnabled);
 setOfficeMode(getOfficeMode());
 
 // On mobile — activate first feature by default so names aren't all tiny
-if(IS_MOBILE) {
+if(IS_MOBILE && localStorage.getItem('still_onboarded')) {
   homeActivate(0);
 }
 
