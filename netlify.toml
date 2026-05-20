@@ -8,6 +8,18 @@
 [functions.send-notifications]
   schedule = "0 1 * * *"
 
+[functions.bell-vigils]
+  schedule = "0 9 * * *"
+
+[functions.bell-lauds]
+  schedule = "0 11 * * *"
+
+[functions.bell-vespers]
+  schedule = "0 23 * * *"
+
+[functions.bell-compline]
+  schedule = "0 2 * * *"
+
 [[redirects]]
   from = "/assets/*"
   to = "/assets/:splat"
