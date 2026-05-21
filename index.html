@@ -7980,6 +7980,7 @@ window.stillResetTrial = function() {
 
 function checkOnboarding() {
   if (!localStorage.getItem('still_onboarded')) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-onboarding').style.display = 'block';
   }
 }
