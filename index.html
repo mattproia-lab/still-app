@@ -36,7 +36,7 @@
 
 </div>
 
-<div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:9000;background:#030305;overflow-y:auto">
+<div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
 
     <!-- STEP 1 — Video Hero -->
@@ -47,7 +47,8 @@
       <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
       <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</p>
         <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
         <button onclick="obNext(2)"
           style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
@@ -62,190 +63,116 @@
       </div>
     </div>
 
-    <!-- 
-     ONBOARDING STEPS 2–5
-     Replace your existing ob-2 and ob-3 with these four steps.
-     Step 1 (video hero) stays exactly as-is.
--->
-
-
-<!-- STEP 2 — Amma Sophia -->
-<div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
-
-  <!-- Background image -->
-  <img src="/still-mobile/src/image/amma-sophia.jpg"
-    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0"/>
-
-  <!-- Overlays -->
-  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(3,1,8,.55) 0%,rgba(3,1,8,.35) 40%,rgba(3,1,8,.75) 100%)"></div>
-  <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.6) 100%)"></div>
-
-  <!-- Content -->
-  <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto">
-
-    <!-- Eyebrow -->
-    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:auto;padding-top:8px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">Amma Sophia</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">She has walked this road a long time.</p>
+    <!-- STEP 2 — Guestmaster Letter -->
+    <div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000">
+      <div style="position:relative;min-height:100vh;display:flex;flex-direction:column">
+        <img src="/still-mobile/src/image/guestmaster_letter.jpg" style="width:100%;display:block"/>
+        <div style="background:#000;padding:28px 28px max(32px,env(safe-area-inset-bottom))">
+          <button onclick="obNext(3)"
+            style="width:100%;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;margin-bottom:12px">
+            Meet Your Guides →
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- Question card -->
-    <div style="background:rgba(8,4,20,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin:28px 0">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to her</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">Amma Sophia, the first time I truly surrendered to a life with God alone, eternity opened and swallowed me whole. Time fell away. A sacred vastness poured in, and suddenly I saw everything through the eyes of the Eternal. In that holy instant, His voice was not something I heard — it was the living silence breathing within me. Beloved Amma, how do I return to that place? How do I abide in the eternal hearing once more, so that His presence becomes my constant home?</p>
+    <!-- STEP 3 — Amma Sophia -->
+    <div class="ob-step" id="ob-3" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
+      <img src="/still-mobile/src/image/amma-sophia.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0"/>
+      <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(3,1,8,.55) 0%,rgba(3,1,8,.35) 40%,rgba(3,1,8,.75) 100%)"></div>
+      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.6) 100%)"></div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto;overflow-y:auto">
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-top:8px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">Amma Sophia</p>
+          <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">She has walked this road a long time.</p>
+        </div>
+        <div style="background:rgba(8,4,20,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin-bottom:16px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to her</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">Amma Sophia, when I first contemplated a life with God alone, it felt as if I stepped into eternity itself. Everything shifted. The eternal changed how I saw all of life, and I heard Him with unmistakable clarity. How can I return to that hearing? How do I open myself so His voice becomes constant again?</p>
+        </div>
+        <div style="background:rgba(30,18,50,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:16px;max-height:35vh;overflow-y:auto">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">She speaks</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">Ah, beloved, you have not lost what you think you have lost. The silence you now meet is not God's absence — it is God's deeper presence, beyond the sweetness that first drew you to prayer. I know this darkness well, for I too have sat in what feels like emptiness until I learned that emptiness itself can be full. The mystics call this the dark night, and it comes not as punishment but as invitation. Your soul is being prepared for a love that needs no feelings to sustain it, no consolations to prove its reality. In this silence, God is teaching you to love Him not for what He gives you in prayer, but for who He is beyond all your experiences of Him. The prayers we think are dead are often the most alive — when we continue to show up in faithfulness even when heaven seems brass above us. The very fact that you still come to prayer, still seek His face in this barrenness, is itself a profound act of love. Can you trust that this silence, too, is holy ground?</p>
+        </div>
+        <div style="text-align:center;margin-bottom:16px">
+          <button id="ob-play-3" onclick="playDemoAudio('ammaSophia','/still-mobile/assets/ammaSophia_demo.mp3',3)" style="display:none;background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">▶ Hear Her Speak</button>
+          <button id="ob-replay-3" onclick="playDemoAudio('ammaSophia','/still-mobile/assets/ammaSophia_demo.mp3',3)" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">↺ Hear Again</button>
+        </div>
+        <button onclick="obNext(4)" style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Continue →</button>
+      </div>
     </div>
 
-    <!-- Answer card -->
-    <div style="background:rgba(30,18,50,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:32px;max-height:40vh;overflow-y:auto">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">She speaks</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">Ah, beloved, you have not lost what you think you have lost. The silence you now meet is not God's absence — it is God's deeper presence... beyond the sweetness that first drew you to prayer. I know this darkness well, for I too have sat in what feels like emptiness until I learned that emptiness itself can be full. The mystics call this the dark night, and it comes not as punishment but as invitation. Your soul is being prepared for a love that needs no feelings to sustain it... no consolations to prove its reality. In this silence, God is teaching you to love Him not for what He gives you in prayer, but for who He is beyond all your experiences of Him. I have found that the prayers we think are "dead" are often the most alive — when we continue to show up in faithfulness even when heaven seems brass above us. The very fact that you still come to prayer... still seek His face in this barrenness... is itself a profound act of love. Can you trust that this silence, too, is holy ground?
-
-    <div style="text-align:center;margin:0 0 16px">
-    <button id="ob-play-2" onclick="playDemoAudio('ammaSophia','/still-mobile/assets/ammaSophia_demo.mp3',2)" style="display:none;background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">
-    ▶ Hear Her Speak
-    </button>
-     <button id="ob-replay-2" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer"
-    onclick="playDemoAudio('ammaSophia','/assets/ammaSophia_demo.mp3',2)">
-    ↺ Hear Again
-    </button>
+    <!-- STEP 4 — Deeper -->
+    <div class="ob-step" id="ob-4" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
+      <img src="/still-mobile/src/image/deeper.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0"/>
+      <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(1,3,10,.65) 0%,rgba(1,3,10,.4) 40%,rgba(1,3,10,.8) 100%)"></div>
+      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(0,2,8,.65) 100%)"></div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto;overflow-y:auto">
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-top:8px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">Deeper · The Cross</p>
+          <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">Theological investigation · Catechism-grounded</p>
+        </div>
+        <div style="background:rgba(4,8,20,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin-bottom:16px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to him</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">Amma Sophia just spoke to me about this silence being a deeper presence — the dark night that invites me to love God for who He is, beyond feelings or consolations. She says the very act of continuing to show up is already profound love. What is the single most important inner gesture or practice that actually allows me to consent to this stripping and remain faithful in this barrenness — not just enduring it, but truly cooperating with what God is doing in the depths?</p>
+        </div>
+        <div style="background:rgba(4,8,25,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:16px;max-height:35vh;overflow-y:auto">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">He responds</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">You are carrying the question that has made saints weep and philosophers abandon their faith — the weight of watching innocence meet agony in a world overseen by infinite love. The Church teaches that God permits evil but never wills it, and that His permission serves a greater good we cannot always see (CCC 311). St. Augustine reminds us that God is so good He can bring good even from evil. St. Thomas adds that God's power is shown not in preventing all suffering, but in ordering all things — even suffering — toward ultimate good. Your ache at innocent suffering proves you carry the heart of God, who also weeps. Yet even here, there is room for hope. The God who allows suffering is the same God who entered it — taking flesh, taking wounds, taking death itself into His own body. Christ did not explain suffering away. He sanctified it from the inside. Every innocent tear now falls into wounds that understand. What would it look like to bring this exact ache — this burning question that honors both God's love and human pain — directly to the foot of the Cross?</p>
+        </div>
+        <div style="text-align:center;margin-bottom:16px">
+          <button id="ob-play-4" onclick="playDemoAudio('deeper','/still-mobile/assets/deeper_demo.mp3',4)" style="display:none;background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">▶ Hear Him Speak</button>
+          <button id="ob-replay-4" onclick="playDemoAudio('deeper','/still-mobile/assets/deeper_demo.mp3',4)" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">↺ Hear Again</button>
+        </div>
+        <button onclick="obNext(5)" style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Continue →</button>
+      </div>
     </div>
-    <!-- Continue -->
-    <button onclick="obNext(3)"
-      style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s"
-      onmouseover="this.style.background='rgba(200,146,12,.1)'"
-      onmouseout="this.style.background='none'">
-      Continue →
-    </button>
+
+    <!-- STEP 5 — The Companion -->
+    <div class="ob-step" id="ob-5" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
+      <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
+        <img src="/still-mobile/src/image/companion.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:0.95"/>
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,18,.55) 0%,rgba(2,4,18,.20) 40%,rgba(2,4,18,.55) 100%);pointer-events:none"></div>
+      </div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto;overflow-y:auto">
+        <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:24px;padding-top:8px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">The Companion</p>
+          <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">A voice from the Desert Fathers</p>
+        </div>
+        <div style="background:rgba(8,5,16,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin-bottom:16px">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to him</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">Father, I have found something beautiful and I ache for others to know it. Should I speak of it loudly so many may find it, or keep it hidden as the desert teaches?</p>
+        </div>
+        <div style="background:rgba(12,8,22,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:16px;max-height:35vh;overflow-y:auto">
+          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">He speaks</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">A brother once came to Abba Poemen saying he had received a great grace in prayer and wished to tell others. The old man replied: A tree heavy with fruit bows its branches low and speaks not of its sweetness. But the barren tree stretches high and makes much noise in the wind. The most fragrant myrrh remains sealed in the alabaster jar until the appointed hour. What the heart has tasted in the secret place with the Beloved often loses its savor when poured out too quickly in words. Let your prayer be like the deep well — drawing others not by speaking of its depths, but by the sweet water that flows quietly from your transformed countenance. Rest now in the silence where this beauty was born.</p>
+        </div>
+        <div style="text-align:center;margin-bottom:16px">
+          <button id="ob-play-5" onclick="playDemoAudio('companion','/still-mobile/assets/companion_demo.mp3',5)" style="display:none;background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">▶ Hear Him Speak</button>
+          <button id="ob-replay-5" onclick="playDemoAudio('companion','/still-mobile/assets/companion_demo.mp3',5)" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">↺ Hear Again</button>
+        </div>
+        <button onclick="obNext(6)" style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6 — Go to Settings -->
+    <div class="ob-step" id="ob-6" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#030305">
+      <div style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px max(48px,env(safe-area-inset-bottom))">
+        <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:24px;text-align:center">You have heard them.</p>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(18px,2vw,22px);font-style:italic;color:rgba(230,220,255,.8);line-height:1.75;margin-bottom:40px;text-align:center;max-width:420px">The bells are waiting. Go now to Settings and choose the hours when you wish to be summoned to prayer.</p>
+        <button onclick="obFinish(); openSettings('bells')"
+          style="width:100%;max-width:360px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;margin-bottom:12px">
+          Go to Settings — Set Your Bells →
+        </button>
+        <button onclick="obFinish()"
+          style="width:100%;max-width:360px;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer">
+          Skip for now
+        </button>
+      </div>
+    </div>
 
   </div>
 </div>
-
-
-<!-- STEP 3 — Deeper -->
-<div class="ob-step" id="ob-3" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
-
-  <!-- Background image -->
-  <img src="/still-mobile/src/image/deeper.jpg"
-    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0"/>
-
-  <!-- Overlays -->
-  <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(1,3,10,.65) 0%,rgba(1,3,10,.4) 40%,rgba(1,3,10,.8) 100%)"></div>
-  <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(0,2,8,.65) 100%)"></div>
-
-  <!-- Content -->
-  <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto">
-
-    <!-- Eyebrow -->
-    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:auto;padding-top:8px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">Deeper · The Cross</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">Theological investigation · Catechism-grounded</p>
-    </div>
-
-    <!-- Question card -->
-    <div style="background:rgba(4,8,20,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin:28px 0">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to him</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">"If God is all-powerful and all-loving, why does He allow some people to go through hell on earth and then possibly hell after death?"</p>
-    </div>
-
-    <!-- Answer card -->
-    <div style="background:rgba(4,8,25,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:32px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">He responds</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">"You are carrying the question that has made saints weep and philosophers abandon their faith — the weight of watching innocence meet agony in a world overseen by infinite love. The Church teaches that God permits evil but never wills it, and that His permission serves a greater good we cannot always see (CCC 311). St. Augustine reminds us that God is so good He can bring good even from evil. St. Thomas adds that God's power is shown not in preventing all suffering, but in ordering all things — even suffering — toward ultimate good. Your ache at innocent suffering proves you carry the heart of God, who also weeps. Yet even here, there is room for hope. The God who allows suffering is the same God who entered it — taking flesh, taking wounds, taking death itself into His own body. Christ did not explain suffering away. He sanctified it from the inside. Every innocent tear now falls into wounds that understand. What would it look like to bring this exact ache — this burning question that honors both God's love and human pain — directly to the foot of the Cross? The God who permits your suffering is the God who chose to suffer with you, and that choice has transformed every wound into a possible doorway to deeper union with Him."</p>
-    </div>
-    <div style="text-align:center;margin:0 0 16px">
-    <button id="ob-play-3" onclick="playDemoAudio('deeper','/still-mobile/assets/deeper_demo.mp3',3)" 
-     ▶ Hear Him Speak
-    </button>
-    <button id="ob-replay-3" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer"
-    onclick="playDemoAudio('deeper','/assets/deeper_demo.mp3',3)">
-    ↺ Hear Again
-    </button>
-  </div>
-    <!-- Continue -->
-    <button onclick="obNext(4)"
-      style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s"
-      onmouseover="this.style.background='rgba(200,146,12,.1)'"
-      onmouseout="this.style.background='none'">
-      Continue →
-    </button>
-
-  </div>
-</div>
-
-
-<!-- STEP 4 — The Companion -->
-<div class="ob-step" id="ob-4" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden">
-
-  <!-- Background image + overlay -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="/still-mobile/src/image/companion.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center 15%;opacity:0.95"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,18,.55) 0%,rgba(2,4,18,.20) 40%,rgba(2,4,18,.55) 100%);pointer-events:none"></div>
-  </div>
-
-  <!-- Content -->
-  <div style="position:relative;z-index:10;display:flex;flex-direction:column;min-height:100vh;padding:52px 28px max(48px,env(safe-area-inset-bottom));max-width:520px;margin:0 auto">
-
-    <!-- Eyebrow -->
-    <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:auto;padding-top:8px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:6px">The Companion</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.38);margin-bottom:0">A voice from the Desert Fathers</p>
-    </div>
-
-    <!-- Question card -->
-    <div style="background:rgba(8,5,16,.45);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.08);padding:26px 24px;margin:28px 0">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">A question brought to him</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.7vw,17px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin:0">"Father, I have found something beautiful and I ache for others to know it. Should I speak of it loudly so many may find it, or keep it hidden as the desert teaches?"</p>
-    </div>
-
-    <!-- Answer card -->
-    <div style="background:rgba(12,8,22,.40);backdrop-filter:blur(10px);border:1px solid rgba(200,146,12,.15);padding:26px 24px;margin-bottom:32px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:14px">He speaks</p>
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,16px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.85;margin:0">"A brother once came to Abba Poemen saying he had received a great grace in prayer... and wished to tell others. The old man replied: "A tree heavy with fruit bows its branches low and speaks not of its sweetness. But the barren tree stretches high and makes much noise in the wind." The most fragrant myrrh remains sealed in the alabaster jar until the appointed hour. What the heart has tasted in the secret place with the Beloved... often loses its savor when poured out too quickly in words. Let your prayer be like the deep well - drawing others not by speaking of its depths, but by the sweet water that flows quietly from your transformed countenance. Rest now in the silence where this beauty was born."</p>
-    </div>
-    <div style="text-align:center;margin:0 0 16px">
-    <button id="ob-play-4" onclick="playDemoAudio('companion','/still-mobile/assets/companion_demo.mp3',4)"
-    ▶ Hear Him Speak
-    </button>
-    <button id="ob-replay-4" style="display:none;background:none;border:none;color:rgba(200,146,12,.5);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer"
-    onclick="playDemoAudio('companion','/assets/companion_demo.mp3',4)">
-    ↺ Hear Again
-    </button>
-   </div>
-    <!-- Continue -->
-    <button onclick="obNext(5)"
-      style="width:100%;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:none;border:1px solid rgba(200,146,12,.45);color:#f0c040;cursor:pointer;transition:all .2s"
-      onmouseover="this.style.background='rgba(200,146,12,.1)'"
-      onmouseout="this.style.background='none'">
-      Continue →
-    </button>
-
-  </div>
-</div>
-
-
-<!-- STEP 5 — Guestmaster Letter -->
-<div class="ob-step" id="ob-5" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000">
-
-  <div style="position:relative;min-height:100vh;display:flex;flex-direction:column">
-
-    <!-- Parchment letter as full image -->
-    <img src="/still-mobile/src/image/guestmaster_letter.jpg"
-  style="width:100%;display:block"/>
-
-    <!-- Button below the letter -->
-    <div style="background:#000;padding:28px 28px max(32px,env(safe-area-inset-bottom))">
-      <button onclick="obFinish(); openSettings('bells')"
-        style="width:100%;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;margin-bottom:12px">
-        Go to Settings — Set Your Bells →
-      </button>
-      <button onclick="obFinish()"
-        style="width:100%;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,.25);cursor:pointer">
-        Skip for now
-      </button>
-    </div>
-
-  </div>
 
 <script>
   const hv = document.getElementById('heroVideo');
@@ -7985,9 +7912,9 @@ function checkOnboarding() {
   }
 }
 const ONBOARDING_DEMOS = {
-  2: { character: 'ammaSophia', audio: '/still-mobile/assets/ammaSophia_demo.mp3' },
-  3: { character: 'deeper',     audio: '/still-mobile/assets/deeper_demo.mp3'     },
-  4: { character: 'companion',  audio: '/still-mobile/assets/companion_demo.mp3'  },
+  3: { character: 'ammaSophia', audio: '/still-mobile/assets/ammaSophia_demo.mp3' },
+  4: { character: 'deeper',     audio: '/still-mobile/assets/deeper_demo.mp3'     },
+  5: { character: 'companion',  audio: '/still-mobile/assets/companion_demo.mp3'  },
 };
  
 // Override obNext to trigger audio on character steps
@@ -7998,7 +7925,7 @@ function obNext(step) {
   if (ob1 && step > 1) ob1.style.display = 'none';
   stopDemoAudio();
   // If past the last step, finish onboarding
-  if (step > 5) {
+  if (step > 6) {
     obFinish();
     return;
   }
