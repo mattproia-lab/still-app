@@ -2704,114 +2704,140 @@ body.is-mobile #mobileEnterTab { display: block; }
      SETTINGS MODAL — user-facing only
 ═══════════════════════════════════════════ -->
 <div class="modal-overlay" id="settingsModal">
-  <div class="modal-panel">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px">
-      <div class="modal-title" id="settingsTitle">Settings</div>
-      <button class="btn-ghost" onclick="closeSettings()" id="settingsCloseBtn">Close ×</button>
-    </div>
+  <div class="modal-panel" style="background:#0d0d0f;border-radius:16px;padding:0;overflow:hidden;max-width:420px;width:100%">
 
-    <!-- Bell -->
-    <span class="modal-section-label" id="settingsBellLabel">Bell</span>
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);margin-bottom:8px;max-width:260px">
-      <button id="bellOnBtn" onclick="setBell(true)"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1)">
-        On
-      </button>
-      <button id="bellOffBtn" onclick="setBell(false)"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.38)">
-        Off
-      </button>
-    </div>
-    <p class="modal-note" id="settingsBellNote">Monastery bell rings at the opening of sitting and each Office hour.</p>
-
-    <!-- Fasting Mode -->
-    <span class="modal-section-label" id="settingsFastLabel">Fasting Mode</span>
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);margin-bottom:22px;max-width:260px">
-      <button id="fastOnBtn" onclick="toggleFastingFromSettings(true)"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.38);border-right:1px solid rgba(255,255,255,.1)">
-        On
-      </button>
-      <button id="fastOffBtn" onclick="toggleFastingFromSettings(false)"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.14);color:#f0c040">
-        Off
-      </button>
-    </div>
-
-    <!-- Office Mode -->
-    <span class="modal-section-label" id="settingsOfficeModeLabel">Office Mode</span>
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);margin-bottom:22px;max-width:260px">
-      <button id="officeConciseBtn" onclick="setOfficeMode('concise')"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1)">
-        Concise
-      </button>
-      <button id="officeFullBtn" onclick="setOfficeMode('full')"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.38)">
-        Full
-      </button>
-    </div>
-
-    <!-- Anchor Prayer re-record -->
-    <span class="modal-section-label" id="settingsAnchorLabel">Anchor Prayer</span>
-    <p class="modal-note" id="settingsAnchorNote">Re-record your anchor prayer for Contemplative Sitting.</p>
-    <div style="display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap">
-      <button class="btn-primary" onclick="toggleRecording('anchor')" id="settingsAnchorBtn">◎ Record</button>
-      <button class="rec-preview" id="settingsAnchorPreview" onclick="previewRecording('anchor')"
-        style="display:none;padding:8px 16px">▶ Preview</button>
-    </div>
-
-    <!-- Spiritual Depth -->
-    <span class="modal-section-label">Spiritual Depth</span>
-    <p class="modal-note" style="margin-bottom:8px">Adjusts how Amma Sophia and Deeper speak to you.</p>
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);margin-bottom:22px;max-width:260px">
-      <button id="depthBeginnerBtn" onclick="setDepth('beginner')"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1)">
-        Beginner
-      </button>
-      <button id="depthChallengeBtn" onclick="setDepth('challenge')"
-        style="flex:1;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.38)">
-        Challenge Me
-      </button>
-    </div>
-
-  <!-- Bell Schedule -->
-    <div id="bells-settings" style="margin-bottom:22px">
-      <span class="modal-section-label">Bell Schedule</span>
-      <p class="modal-note" style="margin-bottom:16px">Ring the monastery bell at the Hours.</p>
-      <div class="bell-row" data-hour="vigils" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Vigils</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:2px">4:00 AM</div>
-        </div>
-        <button class="bell-toggle" data-hour="vigils" aria-pressed="false" onclick="toggleBell('vigils',this)" style="width:38px;height:20px;border-radius:10px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s"><span style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span></button>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 24px 20px;border-bottom:1px solid rgba(255,255,255,.07)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:22px">✝</span>
+        <span style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(200,146,12,.9)">Settings</span>
       </div>
-      <div class="bell-row" data-hour="lauds" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Lauds</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:2px">6:00 AM</div>
-        </div>
-        <button class="bell-toggle" data-hour="lauds" aria-pressed="false" onclick="toggleBell('lauds',this)" style="width:38px;height:20px;border-radius:10px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s"><span style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span></button>
-      </div>
-      <div class="bell-row" data-hour="vespers" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Vespers</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:2px">6:00 PM</div>
-        </div>
-        <button class="bell-toggle" data-hour="vespers" aria-pressed="false" onclick="toggleBell('vespers',this)" style="width:38px;height:20px;border-radius:10px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s"><span style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span></button>
-      </div>
-      <div class="bell-row" data-hour="compline" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.07)">
-        <div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.7)">Compline</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:2px">9:00 PM</div>
-        </div>
-        <button class="bell-toggle" data-hour="compline" aria-pressed="false" onclick="toggleBell('compline',this)" style="width:38px;height:20px;border-radius:10px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s"><span style="position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span></button>
-      </div>
-      <button id="bellsSaveBtn" onclick="saveBellSettings()" style="display:none;width:100%;margin-top:16px;padding:12px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer">Save Bell Schedule</button>
-      <div id="bellsSavedMsg" style="display:none;text-align:center;padding:8px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.7);margin-top:8px">Bell schedule saved</div>
+      <button class="btn-ghost" onclick="closeSettings()" id="settingsCloseBtn" style="color:rgba(255,255,255,.4);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase">Close ×</button>
     </div>
-    <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px">Done</button>
-<button onclick="signOut()" style="width:100%;padding:12px;background:transparent;border:1px solid rgba(255,73,64,.3);color:rgba(255,73,64,.6);font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Sign Out</button>
+
+    <div style="padding:20px 24px;overflow-y:auto;max-height:75vh">
+
+      <!-- Bell -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsBellLabel">Bell</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:4px" id="settingsBellNote">Monastery bell rings at sitting and each Office hour.</div>
+          </div>
+          <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;flex-shrink:0;margin-left:16px">
+            <button id="bellOnBtn" onclick="setBell(true)" style="padding:8px 16px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">On</button>
+            <button id="bellOffBtn" onclick="setBell(false)" style="padding:8px 16px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Off</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fasting Mode -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsFastLabel">Fasting Mode</div>
+          <button id="fastingToggle" onclick="toggleFastingFromSettings(document.getElementById('fastingToggle').getAttribute('aria-pressed') !== 'true')"
+            aria-pressed="false"
+            style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Office Mode -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px" id="settingsOfficeModeLabel">Office Mode</div>
+        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
+          <button id="officeConciseBtn" onclick="setOfficeMode('concise')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Concise</button>
+          <button id="officeFullBtn" onclick="setOfficeMode('full')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Full</button>
+        </div>
+      </div>
+
+      <!-- Anchor Prayer -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsAnchorLabel">Anchor Prayer</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:4px" id="settingsAnchorNote">Re-record for Contemplative Sitting.</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-shrink:0;margin-left:16px">
+            <button class="btn-primary" onclick="toggleRecording('anchor')" id="settingsAnchorBtn" style="padding:8px 16px;border-radius:8px">◎ Record</button>
+            <button class="rec-preview" id="settingsAnchorPreview" onclick="previewRecording('anchor')" style="display:none;padding:8px 16px;border-radius:8px">▶</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spiritual Depth -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Spiritual Depth</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:12px">Adjusts how Amma Sophia and Deeper speak to you.</div>
+        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
+          <button id="depthBeginnerBtn" onclick="setDepth('beginner')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Beginner</button>
+          <button id="depthChallengeBtn" onclick="setDepth('challenge')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Challenge Me</button>
+        </div>
+      </div>
+
+      <!-- Bell Schedule -->
+      <div id="bells-settings" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Bell Schedule</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:16px">Ring the monastery bell at the Hours.</div>
+
+        <!-- Vigils -->
+        <div class="bell-row" data-hour="vigils" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Vigils</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">4:00 AM</div>
+          </div>
+          <button class="bell-toggle" data-hour="vigils" aria-pressed="false" onclick="toggleBell('vigils',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+
+        <!-- Lauds -->
+        <div class="bell-row" data-hour="lauds" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Lauds</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">6:00 AM</div>
+          </div>
+          <button class="bell-toggle" data-hour="lauds" aria-pressed="false" onclick="toggleBell('lauds',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+
+        <!-- Vespers -->
+        <div class="bell-row" data-hour="vespers" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Vespers</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">6:00 PM</div>
+          </div>
+          <button class="bell-toggle" data-hour="vespers" aria-pressed="false" onclick="toggleBell('vespers',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+
+        <!-- Compline -->
+        <div class="bell-row" data-hour="compline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
+          <div style="display:flex;align-items:center;gap:16px">
+            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Compline</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">9:00 PM</div>
+          </div>
+          <button class="bell-toggle" data-hour="compline" aria-pressed="false" onclick="toggleBell('compline',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+
+        <button id="bellsSaveBtn" onclick="saveBellSettings()" style="display:none;width:100%;margin-top:16px;padding:12px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Save Bell Schedule</button>
+        <div id="bellsSavedMsg" style="display:none;text-align:center;padding:8px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.7);margin-top:8px">✓ Bell schedule saved</div>
+      </div>
+
+      <!-- Done -->
+      <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px;border-radius:10px;padding:14px">Done</button>
+      <button onclick="signOut()" style="width:100%;padding:12px;background:transparent;border:1px solid rgba(255,73,64,.3);color:rgba(255,73,64,.6);font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:10px">Sign Out</button>
+
+    </div>
   </div>
 </div>
+
+<!-- tap dim overlay for anchor playback -->
 
 <!-- tap dim overlay for anchor playback -->
 <div class="tap-dim" id="tapDim"></div>
