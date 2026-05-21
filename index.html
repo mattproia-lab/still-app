@@ -160,7 +160,7 @@
       <div style="position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px max(48px,env(safe-area-inset-bottom))">
         <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:24px;text-align:center">You have heard them.</p>
         <p style="font-family:'Playfair Display',serif;font-size:clamp(18px,2vw,22px);font-style:italic;color:rgba(230,220,255,.8);line-height:1.75;margin-bottom:40px;text-align:center;max-width:420px">The bells are waiting. Go now to Settings and choose the hours when you wish to be summoned to prayer.</p>
-        <button onclick="obFinish(); openSettings('bells')"
+        <button onclick="obFinish(); setTimeout(() => openSettings('bells'), 600)"
           style="width:100%;max-width:360px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;margin-bottom:12px">
           Go to Settings — Set Your Bells →
         </button>
