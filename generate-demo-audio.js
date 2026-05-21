@@ -27,7 +27,7 @@ const VOICE_IDS = {
 // ─── The three demo responses (plain text, before tagging) ───────────────
 
 const SAMPLE_QUESTIONS = {
-  ammaSophia: `I used to feel God very close in prayer. Now there is only silence and I wonder if I have lost something.`,
+  ammaSophia: `Amma Sophia, the first time I truly surrendered to a life with God alone, eternity opened and swallowed me whole. Time fell away. A sacred vastness poured in, and suddenly I saw everything through the eyes of the Eternal. In that holy instant, His voice was not something I heard — it was the living silence breathing within me. Beloved Amma, how do I return to that place? How do I abide in the eternal hearing once more, so that His presence becomes my constant home?`,
   deeper: `If God is all-powerful and all-loving, why does He allow innocent people to suffer so deeply?`,
   companion: `Father, I have found something beautiful in prayer and I ache for others to know it. Should I speak of it?`,
 };
