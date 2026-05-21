@@ -26,6 +26,11 @@
   status = 200
 
 [[redirects]]
+  from = "/still-mobile/*"
+  to = "/still-mobile/:splat"
+  status = 200
+  
+[[redirects]]
   from = "/*.js"
   to = "/:splat.js"
   status = 200
