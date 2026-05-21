@@ -7991,11 +7991,12 @@ const ONBOARDING_DEMOS = {
 };
  
 // Override obNext to trigger audio on character steps
-const _obNextOriginal = window.obNext || function(){};
- function obNext(step) {
+function obNext(step) {
   document.querySelectorAll('.ob-step').forEach(s => s.style.display = 'none');
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const ob1 = document.getElementById('ob-1');
+  if (ob1 && step > 1) ob1.style.display = 'none';
   stopDemoAudio();
-
   // If past the last step, finish onboarding
   if (step > 5) {
     obFinish();
