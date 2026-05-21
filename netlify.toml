@@ -1,6 +1,21 @@
 [build]
   publish = "."
 
+[[headers]]
+  for = "/still-mobile/assets/*.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/src/audio/*.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/src/audio/*.mp4"
+  [headers.values]
+    Content-Type = "audio/mp4"
+    
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
@@ -29,7 +44,7 @@
   from = "/still-mobile/*"
   to = "/still-mobile/:splat"
   status = 200
-  
+
 [[redirects]]
   from = "/*.js"
   to = "/:splat.js"
