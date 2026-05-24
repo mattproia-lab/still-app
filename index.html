@@ -3563,6 +3563,7 @@ const F=[
   {name:'Deeper',badge:'The Cross',screen:'deeper',
    h:'Where all of it leads.',
    b:'AI-assisted investigation into the mysteries of Christ. Catechism-grounded. Always ends in silence.',cta:'Go Deeper'},
+  {name:'Night Stories', badge:'Premium · Sleep', screen:'stories', h:'A story to carry you into sleep.', b:'8–10 minutes. Desert Fathers, Scripture, saints\' lives, and original parables. Voiced. Still.', cta:'Begin Tonight'},
   {name:'Resources', badge:'Books · Retreats · Parish', screen:'resources', h:'Books, monasteries, and tools for going deeper.', b:'Recommended reading, retreat houses, and resources for your parish.', cta:'Explore'}
 ];
 
@@ -3579,6 +3580,7 @@ const W=[
   {r:8,  g:120,b:32, i:.88,base:'#010600'}, // Rule — forest
   {r:70, g:8,  b:152,i:.90,base:'#040007'}, // Autobiography — purple
   {r:120,g:148,b:200,i:.55,base:'#020308'}, // Deeper — softer blue
+  {r:4,  g:8,  b:48, i:.90,base:'#010108'}, // Night Stories — deep midnight
 ];
 const HOME={r:82,g:20,b:140,i:.28,base:'#030305'};
 const NIGHTWATCH={r:4,g:4,b:30,i:.12,base:'#010108'};
@@ -3852,6 +3854,7 @@ function enterFeature(i){
   if(F[i].screen==='darkness') initDarknessScreen();
   if(F[i].screen==='rule') loadRuleItems();
   if(F[i].screen==='community') initCommunity();
+  if(F[i].screen==='stories') loadStoriesScreen();
 }
 
 function homeReset(){
