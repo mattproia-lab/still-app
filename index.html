@@ -68,9 +68,9 @@
       <div style="width:100%;background:#000">
         <img src="/still-mobile/src/image/guestmaster_letter.jpg" style="width:100%;height:auto;display:block"/>
         <div style="padding:24px 24px max(32px,env(safe-area-inset-bottom));background:#000">
-          <button onclick="obNext(3)"
+          <button onclick="obFinish()"
             style="width:100%;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
-            Meet Your Guides →
+            Begin →
           </button>
         </div>
       </div>
@@ -7939,11 +7939,7 @@ function checkOnboarding() {
     document.getElementById('screen-onboarding').style.display = 'block';
   }
 }
-const ONBOARDING_DEMOS = {
-  3: { character: 'ammaSophia', audio: '/still-mobile/assets/ammaSophia_demo.mp3' },
-  4: { character: 'deeper',     audio: '/still-mobile/assets/deeper_demo.mp3'     },
-  5: { character: 'companion',  audio: '/still-mobile/assets/companion_demo.mp3'  },
-};
+const ONBOARDING_DEMOS = {};
  
 // Override obNext to trigger audio on character steps
 function obNext(step) {
@@ -7953,7 +7949,7 @@ function obNext(step) {
   if (ob1 && step > 1) ob1.style.display = 'none';
   stopDemoAudio();
   // If past the last step, finish onboarding
-  if (step > 6) {
+  if (step > 2) {
     obFinish();
     return;
   }
