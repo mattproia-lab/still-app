@@ -8125,8 +8125,12 @@ function obFinish() {
     setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 400);
   }
  
-  // Show home screen
-  showScreen('home'); // use your existing showScreen function name
+// Show home screen
+  showScreen('home');
+  setTimeout(() => {
+    if (typeof homeActivate === 'function') homeActivate(0);
+    if (typeof initAuth === 'function') initAuth();
+  }, 500);
 }
  
 // ─── Settings deep link ───────────────────────────────────────────────────
