@@ -9445,6 +9445,169 @@ async function verifyCode() {
     const data = await res.json();
     errEl.textContent = data.error_description || 'Invalid code. Try again.';
   }
-}</script>
+  if (res.ok) {
+    localStorage.setItem('still_phone_verified', 'true');
+    closePhoneVerify();
+    // Now let them use the Companion
+    askCompanion();
+  } else {
+    const data = await res.json();
+    errEl.textContent = data.error_description || 'Invalid code. Try again.';
+  }
+}
+
+// ─── Bedtime Stories ──────────────────────────────────────────────────────────
+let storyAudio = null;
+let nightSoundsAudio = null;
+let nightSoundsEnabled = true;
+let currentStoryId = null;
+let storiesManifest = null;
+
+async function loadStoriesScreen() {
+  // Check premium
+  const isPremium = localStorage.getItem('still_premium') === 'true';
+  document.getElementById('storiesPremiumGate').style.display = isPremium ? 'none' : 'block';
+  if (!isPremium) return;
+
+  // Load manifest
+  if (!storiesManifest) {
+    try {
+      const res = await fetch('/still-mobile/assets/stories/manifest.json');
+      storiesManifest = await res.json();
+    } catch(e) {
+      console.warn('Stories manifest not found yet');
+      storiesManifest = [];
+    }
+  }
+  renderStoriesList();
+}
+
+function renderStoriesList() {
+  const list = document.getElementById('storiesList');
+  if (!storiesManifest || storiesManifest.length === 0) {
+    list.innerHTML = '<p style="font-family:\'Cormorant Garamond\',serif;font-size:16px;color:rgba(255,255,255,.35);text-align:center;padding:40px 0">Stories coming soon...</p>';
+    return;
+  }
+  const types = ['scripture','desert','parable','saint','advent','lent','easter','ordinary','compline'];
+  const labels = { scripture:'Scripture', desert:'Desert Fathers', parable:'Parables', saint:"Saints' Lives", advent:'Advent', lent:'Lent', easter:'Easter', ordinary:'Ordinary Time', compline:'Compline' };
+  types.forEach(type => {
+    const stories = storiesManifest.filter(s => s.type === type);
+    if (!stories.length) return;
+    list.innerHTML += `<p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:24px 0 8px">${labels[type]}</p>`;
+    stories.forEach(story => {
+      const listened = localStorage.getItem(`story_listened_${story.id}`) === '1';
+      list.innerHTML += `
+        <div onclick="playStory(${story.id},'${story.file}','${story.title.replace(/'/g,"&#39;")}')"
+          style="background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,${listened ? '.12' : '.07'});padding:16px 18px;margin-bottom:4px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s"
+          onmouseover="this.style.borderColor='rgba(200,146,12,.35)'"
+          onmouseout="this.style.borderColor='rgba(255,255,255,${listened ? '.12' : '.07'})'">
+          <div>
+            <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(230,220,255,${listened ? '.5' : '.88'});margin-bottom:4px;line-height:1.3">${story.title}</p>
+            <p style="font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.25)">8–10 min</p>
+          </div>
+          <span style="color:rgba(200,146,12,${listened ? '.3' : '.6'});font-size:18px;flex-shrink:0;margin-left:12px">${listened ? '✓' : '▶'}</span>
+        </div>`;
+    });
+  });
+}
+
+function playStory(id, file, title) {
+  if (storyAudio) {
+    storyAudio.pause();
+    storyAudio = null;
+  }
+  currentStoryId = id;
+  const nowPlaying = document.getElementById('storiesNowPlaying');
+  nowPlaying.style.display = 'block';
+  document.getElementById('storiesNowTitle').textContent = title;
+  document.getElementById('storiesProgress').style.width = '0%';
+  document.getElementById('storiesCurrentTime').textContent = '0:00';
+  document.getElementById('storiesTotalTime').textContent = '--:--';
+  document.getElementById('storiesPlayBtn').textContent = '⏸';
+
+  storyAudio = new Audio(`/still-mobile/assets/stories/${file}`);
+  storyAudio.play();
+
+  storyAudio.addEventListener('loadedmetadata', () => {
+    const mins = Math.floor(storyAudio.duration / 60);
+    const secs = Math.floor(storyAudio.duration % 60);
+    document.getElementById('storiesTotalTime').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+  });
+
+  storyAudio.addEventListener('timeupdate', () => {
+    if (!storyAudio.duration) return;
+    const pct = (storyAudio.currentTime / storyAudio.duration) * 100;
+    document.getElementById('storiesProgress').style.width = pct + '%';
+    const mins = Math.floor(storyAudio.currentTime / 60);
+    const secs = Math.floor(storyAudio.currentTime % 60);
+    document.getElementById('storiesCurrentTime').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+  });
+
+  storyAudio.addEventListener('ended', () => {
+    document.getElementById('storiesPlayBtn').textContent = '▶';
+    localStorage.setItem(`story_listened_${id}`, '1');
+    if (nightSoundsEnabled) startNightSounds();
+  });
+
+  // Scroll to now playing
+  nowPlaying.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleStoryPlayback() {
+  if (!storyAudio) return;
+  if (storyAudio.paused) {
+    storyAudio.play();
+    document.getElementById('storiesPlayBtn').textContent = '⏸';
+  } else {
+    storyAudio.pause();
+    document.getElementById('storiesPlayBtn').textContent = '▶';
+  }
+}
+
+function storySkipBack() {
+  if (storyAudio) storyAudio.currentTime = Math.max(0, storyAudio.currentTime - 15);
+}
+
+function storySkipForward() {
+  if (storyAudio) storyAudio.currentTime = Math.min(storyAudio.duration, storyAudio.currentTime + 15);
+}
+
+function storySeek(e, bar) {
+  if (!storyAudio) return;
+  const rect = bar.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  storyAudio.currentTime = pct * storyAudio.duration;
+}
+
+function startNightSounds() {
+  nightSoundsAudio = new Audio('/still-mobile/src/audio/nature_sounds.mp3');
+  nightSoundsAudio.loop = true;
+  nightSoundsAudio.volume = 0;
+  nightSoundsAudio.play();
+  let vol = 0;
+  const fade = setInterval(() => {
+    vol = Math.min(0.4, vol + 0.01);
+    nightSoundsAudio.volume = vol;
+    if (vol >= 0.4) clearInterval(fade);
+  }, 200);
+}
+
+function toggleNightSounds() {
+  nightSoundsEnabled = !nightSoundsEnabled;
+  const btn = document.getElementById('nightSoundsToggle');
+  const dot = btn.querySelector('span');
+  if (nightSoundsEnabled) {
+    btn.style.background = 'rgba(200,146,12,.5)';
+    dot.style.right = '3px';
+    dot.style.left = 'auto';
+  } else {
+    btn.style.background = 'rgba(255,255,255,.1)';
+    dot.style.left = '3px';
+    dot.style.right = 'auto';
+    if (nightSoundsAudio) { nightSoundsAudio.pause(); nightSoundsAudio = null; }
+  }
+  btn.setAttribute('aria-pressed', nightSoundsEnabled);
+}
+</script>
 </body>
 </html>
