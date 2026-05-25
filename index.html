@@ -8165,43 +8165,35 @@ function saveBellSettings() {
   document.querySelectorAll('.bell-toggle').forEach(btn => {
     settings[btn.dataset.hour] = btn.getAttribute('aria-pressed') === 'true';
   });
-
-  // Always save to localStorage first
   localStorage.setItem('still_bells', JSON.stringify(settings));
-
-  // Show saved message immediately
   const saveBtn = document.getElementById('bellsSaveBtn');
   const savedMsg = document.getElementById('bellsSavedMsg');
   if (saveBtn) saveBtn.style.display = 'none';
   if (savedMsg) { savedMsg.style.display = 'block'; setTimeout(() => savedMsg.style.display = 'none', 2000); }
-
-  // Sync to Supabase if logged in
   const token = localStorage.getItem('still_access_token');
   if (!token || !window.currentUser) return;
   fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
-      method: 'POST',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTcwMzIsImV4cCI6MjA2MDIzMzAzMn0.LzSFsR0oRkVNmFMLyJLsZGMZmxLhZVNqFWMXBIOzSvA',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'resolution=merge-duplicates,return=minimal'
-      },
-      body: JSON.stringify({
-        user_id: window.currentUser.id,
-        vigils: settings.vigils || false,
-        lauds: settings.lauds || false,
-        vespers: settings.vespers || false,
-        compline: settings.compline || false,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        updated_at: new Date().toISOString()
-      })
-    }).then(() => {
-      const saveBtn = document.getElementById('bellsSaveBtn');
-      const savedMsg = document.getElementById('bellsSavedMsg');
-      if (saveBtn) saveBtn.style.display = 'none';
-      if (savedMsg) { savedMsg.style.display = 'block'; setTimeout(() => savedMsg.style.display = 'none', 2000); }
-    });
-  }
+    method: 'POST',
+    headers: {
+      'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTcwMzIsImV4cCI6MjA2MDIzMzAzMn0.LzSFsR0oRkVNmFMLyJLsZGMZmxLhZVNqFWMXBIOzSvA',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates,return=minimal'
+    },
+    body: JSON.stringify({
+      user_id: window.currentUser.id,
+      vigils: settings.vigils || false,
+      lauds: settings.lauds || false,
+      vespers: settings.vespers || false,
+      compline: settings.compline || false,
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      updated_at: new Date().toISOString()
+    })
+  }).then(() => {
+    console.log('[Bells] Saved to Supabase');
+  }).catch(err => {
+    console.warn('[Bells] Supabase save failed:', err);
+  });
 }
 
 function openSettings(section) {
