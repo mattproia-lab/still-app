@@ -333,7 +333,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 /* Home main grid */
 .home-main{flex:1;min-height:0;display:flex;position:relative;}
 .feat-list-wrap{
-  width:42%;padding:clamp(6px,1.5vh,22px) 0 60px 38px;
+  width:42%;padding:clamp(6px,1.5vh,22px) 0 120px 38px;
   display:flex;flex-direction:column;justify-content:center;
   position:relative;z-index:55;flex-shrink:0;
 }
@@ -8145,7 +8145,53 @@ function obFinish() {
 // ─── Settings deep link ───────────────────────────────────────────────────
 // Call openSettings('bells') to open settings AND scroll to the bells section.
 // If you already have an openSettings() function, add the section parameter to it.
- 
+
+function toggleBell(hour, btn) {
+  const isOn = btn.getAttribute('aria-pressed') === 'true';
+  btn.setAttribute('aria-pressed', !isOn);
+  btn.style.background = !isOn ? 'rgba(200,146,12,.5)' : 'rgba(255,255,255,.1)';
+  const span = btn.querySelector('span');
+  if (span) {
+    span.style.transform = !isOn ? 'translateX(20px)' : 'none';
+  }
+  const saveBtn = document.getElementById('bellsSaveBtn');
+  if (saveBtn) saveBtn.style.display = 'block';
+}
+
+function saveBellSettings() {
+  const settings = {};
+  document.querySelectorAll('.bell-toggle').forEach(btn => {
+    const hour = btn.dataset.hour;
+    settings[hour] = btn.getAttribute('aria-pressed') === 'true';
+  });
+  const token = localStorage.getItem('still_access_token');
+  if (token && window.currentUser) {
+    fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
+      method: 'POST',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTcwMzIsImV4cCI6MjA2MDIzMzAzMn0.LzSFsR0oRkVNmFMLyJLsZGMZmxLhZVNqFWMXBIOzSvA',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=minimal'
+      },
+      body: JSON.stringify({
+        user_id: window.currentUser.id,
+        vigils: settings.vigils || false,
+        lauds: settings.lauds || false,
+        vespers: settings.vespers || false,
+        compline: settings.compline || false,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        updated_at: new Date().toISOString()
+      })
+    }).then(() => {
+      const saveBtn = document.getElementById('bellsSaveBtn');
+      const savedMsg = document.getElementById('bellsSavedMsg');
+      if (saveBtn) saveBtn.style.display = 'none';
+      if (savedMsg) { savedMsg.style.display = 'block'; setTimeout(() => savedMsg.style.display = 'none', 2000); }
+    });
+  }
+}
+
 function openSettings(section) {
   showScreen('settings');
 
