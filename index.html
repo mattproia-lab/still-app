@@ -8178,8 +8178,7 @@ function saveBellSettings() {
   // Sync to Supabase if logged in
   const token = localStorage.getItem('still_access_token');
   if (!token || !window.currentUser) return;
-
-    fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
+  fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
       method: 'POST',
       headers: {
         'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ2NTcwMzIsImV4cCI6MjA2MDIzMzAzMn0.LzSFsR0oRkVNmFMLyJLsZGMZmxLhZVNqFWMXBIOzSvA',
