@@ -9576,12 +9576,28 @@ function startNightSounds() {
   nightSoundsAudio.loop = true;
   nightSoundsAudio.volume = 0;
   nightSoundsAudio.play();
+
+  // Fade in
   let vol = 0;
-  const fade = setInterval(() => {
+  const fadeIn = setInterval(() => {
     vol = Math.min(0.4, vol + 0.01);
     nightSoundsAudio.volume = vol;
-    if (vol >= 0.4) clearInterval(fade);
+    if (vol >= 0.4) clearInterval(fadeIn);
   }, 200);
+
+  // Fade out and stop after 15 minutes
+  setTimeout(() => {
+    if (!nightSoundsAudio) return;
+    const fadeOut = setInterval(() => {
+      if (!nightSoundsAudio) { clearInterval(fadeOut); return; }
+      nightSoundsAudio.volume = Math.max(0, nightSoundsAudio.volume - 0.01);
+      if (nightSoundsAudio.volume <= 0) {
+        clearInterval(fadeOut);
+        nightSoundsAudio.pause();
+        nightSoundsAudio = null;
+      }
+    }, 200);
+  }, 15 * 60 * 1000); // 15 minutes
 }
 
 function toggleNightSounds() {
