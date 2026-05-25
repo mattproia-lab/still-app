@@ -2884,6 +2884,16 @@ body.is-mobile #mobileEnterTab { display: block; }
         <button id="bellsSaveBtn" onclick="saveBellSettings()" style="display:none;width:100%;margin-top:16px;padding:12px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Save Bell Schedule</button>
         <div id="bellsSavedMsg" style="display:none;text-align:center;padding:8px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.7);margin-top:8px">✓ Bell schedule saved</div>
       </div>
+      <!-- Promo Code -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px">Promo Code</div>
+        <div style="display:flex;gap:8px">
+          <input id="promoCodeInput" type="text" placeholder="Enter code"
+            style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;padding:10px 14px;letter-spacing:.1em;text-transform:uppercase;outline:none"/>
+          <button onclick="redeemPromoCode()" style="padding:10px 16px;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:6px">Redeem</button>
+        </div>
+        <div id="promoMsg" style="display:none;margin-top:10px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8)"></div>
+      </div>
 
       <!-- Done -->
       <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px;border-radius:10px;padding:14px">Done</button>
@@ -8159,7 +8169,50 @@ function toggleBell(hour, btn) {
   const saveBtn = document.getElementById('bellsSaveBtn');
   if (saveBtn) saveBtn.style.display = 'block';
 }
+async function redeemPromoCode() {
+  const code = document.getElementById('promoCodeInput').value.trim().toUpperCase();
+  const msg = document.getElementById('promoMsg');
+  if (!code) { msg.textContent = 'Enter a code.'; msg.style.display = 'block'; return; }
+  if (!window.currentUser) { msg.textContent = 'Sign in first to redeem a code.'; msg.style.display = 'block'; return; }
 
+  msg.textContent = 'Checking...';
+  msg.style.display = 'block';
+
+  try {
+    const res = await fetch('/.netlify/functions/redeem-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, user_id: window.currentUser.id })
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      msg.textContent = data.error || 'Invalid code.';
+      msg.style.color = 'rgba(255,73,64,.8)';
+      return;
+    }
+
+    // Grant benefits
+    if (data.ai_sessions) {
+      const current = parseInt(localStorage.getItem('still_promo_ai_sessions') || '0');
+      localStorage.setItem('still_promo_ai_sessions', current + data.ai_sessions);
+    }
+    if (data.stories_days) {
+      const expires = new Date();
+      expires.setDate(expires.getDate() + data.stories_days);
+      localStorage.setItem('still_stories_expires', expires.toISOString());
+      localStorage.setItem('still_premium', 'true');
+    }
+
+    msg.textContent = '✦ Code redeemed. Welcome.';
+    msg.style.color = 'rgba(200,146,12,.8)';
+    document.getElementById('promoCodeInput').value = '';
+
+  } catch(err) {
+    msg.textContent = 'Something went wrong. Try again.';
+    msg.style.color = 'rgba(255,73,64,.8)';
+  }
+}
 function saveBellSettings() {
   const settings = {};
   document.querySelectorAll('.bell-toggle').forEach(btn => {
