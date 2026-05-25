@@ -352,9 +352,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   line-height:1.03;display:block;transition:all .38s cubic-bezier(.4,0,.2,1);
   white-space:nowrap;
 }
-.feat-item.is-active .fn{font-size:clamp(42px,5.8vw,72px);color:#fff;text-shadow:0 0 30px rgba(255,255,255,.1);}
-.feat-item.is-near   .fn{font-size:clamp(26px,3.4vw,44px);color:rgba(255,255,255,.58);}
-.feat-item.is-far    .fn{font-size:clamp(18px,2.2vw,28px);color:rgba(255,255,255,.38);}
+.feat-item.is-active .fn{font-size:clamp(32px,5.8vw,72px);color:#fff;text-shadow:0 0 30px rgba(255,255,255,.1);}
+.feat-item.is-near   .fn{font-size:clamp(20px,3.4vw,44px);color:rgba(255,255,255,.58);}
+.feat-item.is-far    .fn{font-size:clamp(13px,2.2vw,28px);color:rgba(255,255,255,.38);}
 .feat-item .fb{
   font-family:'Montserrat',sans-serif;font-size:7.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -912,7 +912,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .feat-list-wrap {
     width: 100% !important;
     height: calc(100vh - env(safe-area-inset-top, 44px) - 52px) !important;
-    padding: 2px 0 140px 22px !important;
+    padding: 2px 0 80px 22px !important;
     overflow-y: scroll !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -8161,11 +8161,22 @@ function toggleBell(hour, btn) {
 function saveBellSettings() {
   const settings = {};
   document.querySelectorAll('.bell-toggle').forEach(btn => {
-    const hour = btn.dataset.hour;
-    settings[hour] = btn.getAttribute('aria-pressed') === 'true';
+    settings[btn.dataset.hour] = btn.getAttribute('aria-pressed') === 'true';
   });
+
+  // Always save to localStorage first
+  localStorage.setItem('still_bells', JSON.stringify(settings));
+
+  // Show saved message immediately
+  const saveBtn = document.getElementById('bellsSaveBtn');
+  const savedMsg = document.getElementById('bellsSavedMsg');
+  if (saveBtn) saveBtn.style.display = 'none';
+  if (savedMsg) { savedMsg.style.display = 'block'; setTimeout(() => savedMsg.style.display = 'none', 2000); }
+
+  // Sync to Supabase if logged in
   const token = localStorage.getItem('still_access_token');
-  if (token && window.currentUser) {
+  if (!token || !window.currentUser) return;
+  
     fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {
       method: 'POST',
       headers: {
