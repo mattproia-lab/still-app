@@ -1,8 +1,6 @@
 
 <!-- ═══════════════════════════════════════════
-     THE SACRISTY — hidden gallery
-     Discovered by holding the Still wordmark
-     for 3 seconds on the home screen
+     THE SACRISTY 
 ═══════════════════════════════════════════ -->
 <div id="screen-sacristy" style="display:none;position:fixed;inset:0;z-index:8000;background:#000;overflow:hidden">
 
@@ -7870,7 +7868,7 @@ function renderSacristySlide() {
   let resolvedSrc = entry.src || null;
   if (!resolvedSrc && entry.screen) {
     const screenEl = document.getElementById('screen-' + entry.screen);
-    const bgImg = screenEl ? screenEl.querySelector('img[src^="data:image"]') : null;
+    const bgImg = screenEl ? screenEl.querySelector('img[src^="/still-mobile/src/image"]') : null;
     if (bgImg) resolvedSrc = bgImg.src;
   }
   if (imgEl && resolvedSrc) {
