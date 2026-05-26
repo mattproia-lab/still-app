@@ -119,6 +119,8 @@
   });
 </script>
 <style>
+  * { touch-action: manipulation; }
+body { -webkit-text-size-adjust: 100%; }
   .share-watermark {
   font-family: 'Montserrat', sans-serif;
   font-size: 7px;
@@ -1093,7 +1095,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 }
 body.is-mobile #mobileEnterTab { display: block; }
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 </head>
 <body>
 <div id="authOverlay" class="auth-overlay" style="display:none">
@@ -9692,6 +9694,16 @@ function toggleNightSounds() {
   }
   btn.setAttribute('aria-pressed', nightSoundsEnabled);
 }
+
+</script>
+<script>
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    if (window._demoVoiceAudio) { window._demoVoiceAudio.pause(); }
+    if (window._demoAmbienceAudio) { window._demoAmbienceAudio.pause(); }
+    if (window.storyAudio) { window.storyAudio.pause(); }
+  }
+});
 </script>
 </body>
 </html>
