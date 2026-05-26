@@ -2142,7 +2142,7 @@ body.is-mobile #mobileEnterTab { display: block; }
   </div>
 
   <!-- Hour content — rendered by JS -->
-  <div class="feature-main" id="officeContent" style="display:none;position:relative;z-index:10">
+  <div class="feature-main" id="officeContent" style="display:none;position:relative;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100vh - 120px);padding-bottom:80px">
     <div class="content-card" id="officeCard" style="max-width:620px;margin:0 auto"></div>
   </div>
 </div>
@@ -9753,13 +9753,13 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   // Also run when screens change
   document.addEventListener('click', () => setTimeout(bumpFonts, 300));
 }
-</script>
-  if (document.visibilityState === 'hidden') {
-    if (window._demoVoiceAudio) { window._demoVoiceAudio.pause(); }
-    if (window._demoAmbienceAudio) { window._demoAmbienceAudio.pause(); }
-    if (window.storyAudio) { window.storyAudio.pause(); }
+<script>
+// Keepalive to prevent Safari from killing the tab when idle
+setInterval(function() {
+  if (document.visibilityState === 'visible') {
+    fetch('/favicon.ico', { cache: 'no-store' }).catch(function() {});
   }
-;
+}, 30000);
 </script>
 </body>
 </html>
