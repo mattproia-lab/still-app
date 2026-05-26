@@ -51,9 +51,10 @@
   status = 200
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  from = "https://stillprayer.app/*"
+  to = "https://www.stillprayer.app/:splat"
+  status = 301
+  force = true
 
 [[redirects]]
   from   = "/api/sing-the-hours"
