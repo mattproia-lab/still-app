@@ -6944,6 +6944,13 @@ let html = '';
   html += '</div>';
   html += '<button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>';
   card.innerHTML = html;
+  // Force larger text on mobile
+  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+    card.querySelectorAll('p').forEach(p => {
+      const size = parseFloat(window.getComputedStyle(p).fontSize);
+      if (size < 20) p.style.fontSize = '20px';
+    });
+  }
   if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 }
 function darknessNext() {
@@ -9776,7 +9783,7 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
                                el.closest('#cResponseText') ||
                                el.closest('#mysticResponseText') ||
                                el.closest('#dResponseText');
-      const minSize = isReadingContent ? 18 : 14;
+      const minSize = isReadingContent ? 22 : 14;
       if (size && size < minSize) el.style.fontSize = minSize + 'px';
     });
   }
