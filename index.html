@@ -9744,14 +9744,20 @@ function toggleNightSounds() {
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   function bumpFonts() {
     document.querySelectorAll('*').forEach(el => {
-      // Skip fasting button, dot nav, and section counter
       if (el.closest('.fasting-btn') || el.closest('.fasting-wrap') || 
           el.closest('.dot-nav') || el.closest('.dn-item') ||
-          el.closest('.section-ctr') || el.closest('#dotNav') ||
+          el.closest('#dotNav') ||
           el.closest('#sectionCtr') || el.closest('.feat-item')) return;
       const fs = window.getComputedStyle(el).fontSize;
       const size = parseFloat(fs);
-      if (size && size < 14) el.style.fontSize = '14px';
+      // Reading content needs bigger minimum
+      const isReadingContent = el.closest('#officeCard') || 
+                               el.closest('#screen-darkness .content-card') ||
+                               el.closest('#cResponseText') ||
+                               el.closest('#mysticResponseText') ||
+                               el.closest('#dResponseText');
+      const minSize = isReadingContent ? 18 : 14;
+      if (size && size < minSize) el.style.fontSize = minSize + 'px';
     });
   }
   document.addEventListener('DOMContentLoaded', () => {
