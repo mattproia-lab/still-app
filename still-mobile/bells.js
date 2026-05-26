@@ -152,14 +152,15 @@ async function saveBellSettings() {
           'Prefer': 'resolution=merge-duplicates,return=minimal'
         },
         body: JSON.stringify({
-  user_id: window.currentUser.id,
-  vigils: settings.vigils.enabled,
-  lauds: settings.lauds.enabled,
-  vespers: settings.vespers.enabled,
-  compline: settings.compline.enabled,
-  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-  updated_at: new Date().toISOString()
-})
+          user_id: window.currentUser.id,
+          vigils: settings.vigils.enabled,
+          lauds: settings.lauds.enabled,
+          vespers: settings.vespers.enabled,
+          compline: settings.compline.enabled,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          updated_at: new Date().toISOString()
+        })
+      });
       if (!supaRes.ok) console.warn('[Bells] Supabase save failed:', await supaRes.text());
     }
   } catch (err) {
