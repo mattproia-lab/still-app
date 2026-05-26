@@ -8285,7 +8285,7 @@ function openSettings(section) {
 
   // Initialize settings content if it hasn't been yet
   if (typeof initSettingsScreen === 'function') initSettingsScreen();
-  if (typeof initBellSettings === 'function') setTimeout(() => initBellSettings(), 300);
+  if (typeof initBellSettings === 'function') setTimeout(() => initBellSettings(), 800);
 
   if (section === 'bells') {
     // Increase delay to give settings screen time to fully render
