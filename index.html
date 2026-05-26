@@ -4496,6 +4496,7 @@ async function askCompanion(){
     trackEvent('companion');
     document.getElementById('cSource').textContent=src;
     document.getElementById('cResponseText').textContent=main.join(' ').trim()||body;
+    if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
     document.getElementById('cInvitation').textContent=inv||(sentences[sentences.length-1]||'');
     document.getElementById('companionRate').textContent=`${companionUses} reflection${companionUses!==1?'s':''} remaining this week`;
     showCompanionState('companionResponse');
@@ -4614,6 +4615,7 @@ async function askMystic() {
     if(data.error) throw new Error(data.error.message);
     const text = data.content?.[0]?.text || '';
     document.getElementById('mysticResponseText').textContent = text.trim();
+    if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
     showMysticState('mysticResponse');
     localStorage.removeItem('still_sophia_onboarding_free');
     prepareVoiceResponse(document.getElementById('mysticResponseText').textContent, 'ammaSophia');
@@ -4668,6 +4670,7 @@ async function askDeeper(){
   .replace(/Rest here\./gi,'')
   .trim();
 document.getElementById('dResponseText').textContent=cleanBody;
+if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 
     const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
 document.getElementById('dInvitation').textContent=cleanInv;
@@ -6931,8 +6934,8 @@ let html = '';
   html += '</div>';
   html += '<button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>';
   card.innerHTML = html;
+  if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 }
-
 function darknessNext() {
   darknessIdx = (darknessIdx + 1) % DARKNESS_TEXTS.length;
   renderDarknessText();
@@ -8941,8 +8944,14 @@ function enterOfficeHour(hour) {
   const titleEl = document.getElementById('officeScreenTitle');
   if (titleEl) titleEl.textContent = hourLabels[hour] || 'The Office';
   document.getElementById('officeChooser').style.display = 'none';
-  document.getElementById('officeContent').style.display = 'block';
+  const officeContent = document.getElementById('officeContent');
+  officeContent.style.display = 'block';
+  officeContent.style.overflowY = 'auto';
+  officeContent.style.webkitOverflowScrolling = 'touch';
+  officeContent.style.height = 'calc(100vh - 120px)';
+  officeContent.style.paddingBottom = '80px';
   renderOfficeHour(hour);
+  if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 300);
   const season = getLiturgicalSeason();
   trackEvent('office', { hour });
   // Only save once per hour per day
