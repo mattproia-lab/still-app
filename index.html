@@ -9354,8 +9354,8 @@ function openSettings() {
   if (k) document.getElementById('settingsApiKey').value = k;
   const ap = document.getElementById('settingsAnchorPreview');
   if (ap) ap.style.display = anchorRecUrl ? 'block' : 'none';
-  // sync depth toggle to current saved value
   setDepth(getDepth());
+  if (typeof initBellSettings === 'function') setTimeout(() => initBellSettings(), 500);
 }
 
 function closeSettings() {
