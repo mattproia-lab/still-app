@@ -9733,17 +9733,25 @@ function toggleNightSounds() {
 </script>
 <script>
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+  function bumpFonts() {
+    document.querySelectorAll('*').forEach(el => {
+      // Skip fasting button, dot nav, and section counter
+      if (el.closest('.fasting-btn') || el.closest('.fasting-wrap') || 
+          el.closest('.dot-nav') || el.closest('.dn-item') ||
+          el.closest('.section-ctr') || el.closest('#dotNav') ||
+          el.closest('#sectionCtr') || el.closest('.feat-item')) return;
+      const fs = window.getComputedStyle(el).fontSize;
+      const size = parseFloat(fs);
+      if (size && size < 14) el.style.fontSize = '14px';
+    });
+  }
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      document.querySelectorAll('*').forEach(el => {
-        const fs = window.getComputedStyle(el).fontSize;
-        const size = parseFloat(fs);
-        if (size && size < 14) {
-          el.style.fontSize = '14px';
-        }
-      });
-    }, 1000);
+    setTimeout(bumpFonts, 500);
+    setTimeout(bumpFonts, 1500);
+    setTimeout(bumpFonts, 3000);
   });
+  // Also run when screens change
+  document.addEventListener('click', () => setTimeout(bumpFonts, 300));
 }
 </script>
   if (document.visibilityState === 'hidden') {
