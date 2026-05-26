@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Still",
+    "slug": "still-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/still-icon-1024.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/still-splash-iphone.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#120500"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.stillprayer.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/still-icon-1024.png",
+        "backgroundColor": "#120500"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.stillprayer.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset"
+    ]
+  }
+}
