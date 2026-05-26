@@ -8162,6 +8162,47 @@ function obFinish() {
 // Call openSettings('bells') to open settings AND scroll to the bells section.
 // If you already have an openSettings() function, add the section parameter to it.
 
+async function initBellSettings() {
+  const token = localStorage.getItem('still_access_token');
+  if (!token || !window.currentUser) {
+    // Fall back to localStorage
+    const saved = localStorage.getItem('still_bells');
+    if (saved) {
+      const settings = JSON.parse(saved);
+      document.querySelectorAll('.bell-toggle').forEach(btn => {
+        const hour = btn.dataset.hour;
+        if (settings[hour]) {
+          btn.setAttribute('aria-pressed', 'true');
+          btn.style.background = 'rgba(200,146,12,.5)';
+          const span = btn.querySelector('span');
+          if (span) span.style.transform = 'translateX(20px)';
+        }
+      });
+    }
+    return;
+  }
+  try {
+    const res = await fetch(
+      `https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences?user_id=eq.${window.currentUser.id}&select=*`,
+      { headers: { 'apikey': SUPA_ANON, 'Authorization': `Bearer ${token}` } }
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.length) return;
+    const prefs = data[0];
+    ['vigils', 'lauds', 'vespers', 'compline'].forEach(hour => {
+      const btn = document.querySelector(`.bell-toggle[data-hour="${hour}"]`);
+      if (btn && prefs[hour]) {
+        btn.setAttribute('aria-pressed', 'true');
+        btn.style.background = 'rgba(200,146,12,.5)';
+        const span = btn.querySelector('span');
+        if (span) span.style.transform = 'translateX(20px)';
+      }
+    });
+  } catch(e) {
+    console.warn('[Bells] Could not load preferences:', e);
+  }
+}
 function toggleBell(hour, btn) {
   const isOn = btn.getAttribute('aria-pressed') === 'true';
   btn.setAttribute('aria-pressed', !isOn);
