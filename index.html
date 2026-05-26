@@ -1899,40 +1899,49 @@ body.is-mobile #mobileEnterTab { display: block; }
     <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:10px">Jesus Prayer</p>
     <p id="breathPrayer" style="font-family:'Playfair Display',serif;font-size:clamp(14px,2vw,18px);font-style:italic;color:rgba(255,255,255,.55);text-align:center;line-height:1.6;margin-bottom:36px;max-width:320px">Lord Jesus Christ,<br>Son of God,<br>have mercy on me, a sinner.</p>
 
-    <!-- The count -->
-    <div id="breathCount" style="font-family:'Playfair Display',serif;font-size:clamp(96px,20vw,140px);font-weight:700;color:#fff;line-height:1;margin-bottom:8px;cursor:default;user-select:none;text-align:center;letter-spacing:-.04em;transition:transform .08s ease">0</div>
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:44px">repetitions</p>
+    <!-- Prayer of the Heart -->
+    <div id="prayerOfHeart" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:20px">
+      
+      <!-- Time in prayer -->
+      <div id="heartTimer" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:32px">0:00</div>
 
-    <!-- Tap zone -->
-    <button id="breathTap" onclick="breathTap()"
-      style="width:180px;height:180px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s ease;margin-bottom:36px"
-      onmousedown="this.style.transform='scale(.95)';this.style.background='rgba(200,146,12,.08)'"
-      onmouseup="this.style.transform='scale(1)';this.style.background='rgba(255,255,255,.03)'"
-      ontouchstart="breathTouchStart(event)"
-      ontouchend="breathTouchEnd(event)">
-      <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.3)">tap</p>
-    </button>
+      <!-- Breathing orb -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:40px">
+        <div id="heartOrb" style="width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,146,12,.35) 0%,rgba(100,60,0,.15) 60%,transparent 100%);transition:transform 4s ease-in-out,opacity 4s ease-in-out;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="startHeartPrayer()">
+          <div style="width:120px;height:120px;border-radius:50%;border:1px solid rgba(200,146,12,.25);display:flex;align-items:center;justify-content:center">
+            <div style="width:60px;height:60px;border-radius:50%;border:1px solid rgba(200,146,12,.4);background:rgba(200,146,12,.08)"></div>
+          </div>
+        </div>
+      </div>
 
-    <!-- Controls -->
-    <div style="display:flex;gap:16px;align-items:center">
-      <button onclick="breathReset()" class="btn-ghost" style="font-size:12px">Reset</button>
-      <div style="width:1px;height:16px;background:rgba(255,255,255,.1)"></div>
-      <!-- Custom prayer toggle -->
-      <button onclick="toggleBreathPrayer()" class="btn-ghost" style="font-size:12px">Change Prayer</button>
+      <!-- Prayer text — inhale line -->
+      <p id="heartLine1" style="font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,22px);font-style:italic;color:rgba(255,255,255,.85);text-align:center;margin-bottom:6px;transition:opacity 2s ease;letter-spacing:.02em">Lord Jesus Christ, Son of God,</p>
+      
+      <!-- Prayer text — exhale line -->
+      <p id="heartLine2" style="font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,22px);font-style:italic;color:rgba(255,255,255,.55);text-align:center;margin-bottom:40px;transition:opacity 2s ease;letter-spacing:.02em">have mercy on me, a sinner.</p>
+
+      <!-- Start / pause -->
+      <button id="heartStartBtn" onclick="startHeartPrayer()" 
+        style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.7);background:none;border:1px solid rgba(200,146,12,.3);padding:14px 32px;cursor:pointer;margin-bottom:24px;transition:all .3s">
+        Begin
+      </button>
+
+      <!-- Bell toggle -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:32px">
+        <button id="heartBellBtn" onclick="toggleHeartBell()" 
+          style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);background:none;border:none;cursor:pointer;transition:color .3s">
+          ◎ Bell every 10
+        </button>
+      </div>
+
+      <!-- Milestone -->
+      <div id="heartMilestone" style="display:none;text-align:center;padding:16px 24px;border-top:1px solid rgba(200,146,12,.15)">
+        <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(200,146,12,.8)"></p>
+      </div>
+
+      <!-- Tradition note -->
+      <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.2);text-align:center;max-width:280px;line-height:1.6;margin-top:16px">The prayer the hesychasts prayed without ceasing · Let it breathe itself</p>
     </div>
-
-    <!-- Custom prayer input (hidden by default) -->
-    <div id="breathCustomWrap" style="display:none;margin-top:24px;width:100%;max-width:340px">
-      <textarea id="breathCustomText" class="companion-textarea" rows="3"
-        placeholder="Enter your prayer…" style="font-size:14px;margin-bottom:8px">Lord Jesus Christ, Son of God, have mercy on me, a sinner.</textarea>
-      <button onclick="setBreathPrayer()" class="btn-primary gold" style="width:100%;justify-content:center">Set →</button>
-    </div>
-
-    <!-- Milestones -->
-    <div id="breathMilestone" style="display:none;margin-top:24px;text-align:center">
-      <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(200,146,12,.8)"></p>
-    </div>
-
   </div>
 </div>
 
@@ -8519,6 +8528,120 @@ function updateCompanionRateDisplay() {
 let breathCount = 0;
 const BREATH_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 500, 1000];
 
+// ─── Prayer of the Heart ───────────────────────────────────────────────────
+let heartRunning = false;
+let heartPhase = 'inhale'; // inhale | exhale
+let heartSeconds = 0;
+let heartTimerInterval = null;
+let heartBreathInterval = null;
+let heartRepetitions = 0;
+let heartBellEnabled = true;
+
+function startHeartPrayer() {
+  if (heartRunning) {
+    pauseHeartPrayer();
+    return;
+  }
+  heartRunning = true;
+  document.getElementById('heartStartBtn').textContent = 'Pause';
+  document.getElementById('heartStartBtn').style.color = 'rgba(255,255,255,.4)';
+  
+  // Start timer
+  heartTimerInterval = setInterval(() => {
+    heartSeconds++;
+    const m = Math.floor(heartSeconds / 60);
+    const s = heartSeconds % 60;
+    const el = document.getElementById('heartTimer');
+    if (el) el.textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+
+  // Start breath cycle
+  runHeartBreath();
+}
+
+function pauseHeartPrayer() {
+  heartRunning = false;
+  clearInterval(heartTimerInterval);
+  clearTimeout(heartBreathInterval);
+  document.getElementById('heartStartBtn').textContent = 'Continue';
+  document.getElementById('heartStartBtn').style.color = 'rgba(200,146,12,.7)';
+  const orb = document.getElementById('heartOrb');
+  if (orb) orb.style.transform = 'scale(1)';
+}
+
+function runHeartBreath() {
+  if (!heartRunning) return;
+  
+  // Inhale — orb expands, line 1 brightens
+  heartPhase = 'inhale';
+  const orb = document.getElementById('heartOrb');
+  const line1 = document.getElementById('heartLine1');
+  const line2 = document.getElementById('heartLine2');
+  
+  if (orb) orb.style.transform = 'scale(1.3)';
+  if (line1) line1.style.color = 'rgba(255,255,255,.95)';
+  if (line2) line2.style.color = 'rgba(255,255,255,.25)';
+
+  heartBreathInterval = setTimeout(() => {
+    if (!heartRunning) return;
+    
+    // Exhale — orb contracts, line 2 brightens
+    heartPhase = 'exhale';
+    if (orb) orb.style.transform = 'scale(0.85)';
+    if (line1) line1.style.color = 'rgba(255,255,255,.25)';
+    if (line2) line2.style.color = 'rgba(255,255,255,.95)';
+
+    heartBreathInterval = setTimeout(() => {
+      if (!heartRunning) return;
+      
+      heartRepetitions++;
+      
+      // Bell every 10
+      if (heartBellEnabled && heartRepetitions % 10 === 0) {
+        playBell();
+        showHeartMilestone(heartRepetitions);
+      }
+
+      runHeartBreath();
+    }, 4000); // exhale duration
+  }, 4000); // inhale duration
+}
+
+function showHeartMilestone(count) {
+  const milestones = {
+    10:  'Ten repetitions. The mind begins to settle.',
+    25:  'Twenty-five. The prayer is finding its rhythm.',
+    50:  'Fifty. The hesychasts called this the beginning.',
+    100: 'One hundred. The prayer is becoming prayer.',
+    300: 'Three hundred. St. Seraphim prayed a thousand before dawn.',
+    500: 'Five hundred. The prayer is praying itself.',
+  };
+  const msg = milestones[count];
+  if (!msg) return;
+  const el = document.getElementById('heartMilestone');
+  if (!el) return;
+  el.querySelector('p').textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+function toggleHeartBell() {
+  heartBellEnabled = !heartBellEnabled;
+  const btn = document.getElementById('heartBellBtn');
+  if (btn) btn.style.color = heartBellEnabled ? 'rgba(200,146,12,.7)' : 'rgba(255,255,255,.2)';
+}
+
+function resetHeartPrayer() {
+  pauseHeartPrayer();
+  heartSeconds = 0;
+  heartRepetitions = 0;
+  const el = document.getElementById('heartTimer');
+  if (el) el.textContent = '0:00';
+  document.getElementById('heartStartBtn').textContent = 'Begin';
+  document.getElementById('heartStartBtn').style.color = 'rgba(200,146,12,.7)';
+  const orb = document.getElementById('heartOrb');
+  if (orb) orb.style.transform = 'scale(1)';
+}
 function breathTap() {
   breathCount++;
   const el = document.getElementById('breathCount');
