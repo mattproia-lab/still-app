@@ -8164,23 +8164,7 @@ function obFinish() {
 
 async function initBellSettings() {
   const token = localStorage.getItem('still_access_token');
-  if (!token || !window.currentUser) {
-    // Fall back to localStorage
-    const saved = localStorage.getItem('still_bells');
-    if (saved) {
-      const settings = JSON.parse(saved);
-      document.querySelectorAll('.bell-toggle').forEach(btn => {
-        const hour = btn.dataset.hour;
-        if (settings[hour]) {
-          btn.setAttribute('aria-pressed', 'true');
-          btn.style.background = 'rgba(200,146,12,.5)';
-          const span = btn.querySelector('span');
-          if (span) span.style.transform = 'translateX(20px)';
-        }
-      });
-    }
-    return;
-  }
+  if (!token || !window.currentUser) return;
   try {
     const res = await fetch(
       `https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences?user_id=eq.${window.currentUser.id}&select=*`,
@@ -8190,15 +8174,17 @@ async function initBellSettings() {
     const data = await res.json();
     if (!data.length) return;
     const prefs = data[0];
-    ['vigils', 'lauds', 'vespers', 'compline'].forEach(hour => {
-      const btn = document.querySelector(`.bell-toggle[data-hour="${hour}"]`);
-      if (btn && prefs[hour]) {
+    setTimeout(() => {
+      ['vigils', 'lauds', 'vespers', 'compline'].forEach(hour => {
+        if (!prefs[hour]) return;
+        const btn = document.querySelector(`.bell-toggle[data-hour="${hour}"]`);
+        if (!btn) return;
         btn.setAttribute('aria-pressed', 'true');
         btn.style.background = 'rgba(200,146,12,.5)';
         const span = btn.querySelector('span');
         if (span) span.style.transform = 'translateX(20px)';
-      }
-    });
+      });
+    }, 100);
   } catch(e) {
     console.warn('[Bells] Could not load preferences:', e);
   }
