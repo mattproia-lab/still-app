@@ -50,7 +50,6 @@
   to = "/:splat.js"
   status = 200
 
-[[redirects]]
   from = "https://stillprayer.app/*"
   to = "https://www.stillprayer.app/:splat"
   status = 301
