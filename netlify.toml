@@ -50,11 +50,6 @@
   to = "/:splat.js"
   status = 200
 
-  from = "https://stillprayer.app/*"
-  to = "https://www.stillprayer.app/:splat"
-  status = 301
-  force = true
-
 [[redirects]]
   from   = "/api/sing-the-hours"
   to     = "/.netlify/functions/rss-proxy"
