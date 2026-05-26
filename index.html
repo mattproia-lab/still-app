@@ -9734,20 +9734,15 @@ function toggleNightSounds() {
 <script>
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   document.addEventListener('DOMContentLoaded', () => {
-    const style = document.createElement('style');
-    style.textContent = `
-      * { -webkit-text-size-adjust: none !important; }
-      .modal-note { font-size: 13px !important; }
-      .modal-section-label { font-size: 12px !important; }
-      .modal-panel { font-size: 14px !important; }
-      .feature-main p, .feature-main span { font-size: 15px !important; }
-      .btn-primary { font-size: 12px !important; }
-      .app-header .screen-title { font-size: 14px !important; }
-      .back-btn { font-size: 13px !important; }
-      .fasting-btn { font-size: 10px !important; }
-      .dn-item { font-size: 13px !important; }
-    `;
-    document.head.appendChild(style);
+    setTimeout(() => {
+      document.querySelectorAll('*').forEach(el => {
+        const fs = window.getComputedStyle(el).fontSize;
+        const size = parseFloat(fs);
+        if (size && size < 14) {
+          el.style.fontSize = '14px';
+        }
+      });
+    }, 1000);
   });
 }
 </script>
@@ -9756,7 +9751,7 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
     if (window._demoAmbienceAudio) { window._demoAmbienceAudio.pause(); }
     if (window.storyAudio) { window.storyAudio.pause(); }
   }
-});
+;
 </script>
 </body>
 </html>
