@@ -7284,6 +7284,7 @@ async function initAuth() {
 
   if (res.ok) {
     currentUser = await res.json();
+    window.currentUser = currentUser;
     updateLastActive();
   } else if (refresh) {
     const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
@@ -7296,6 +7297,7 @@ async function initAuth() {
       localStorage.setItem('still_access_token', data.access_token);
       localStorage.setItem('still_refresh_token', data.refresh_token);
       currentUser = data.user;
+      window.currentUser = currentUser;
       updateLastActive();
     } else {
       document.getElementById('authOverlay').style.display = 'flex';
@@ -7373,6 +7375,8 @@ async function submitAuth() {
   }
  localStorage.setItem('still_refresh_token', data.refresh_token);
   currentUser = user;
+  window.currentUser = user;
+  window.currentUser = user;
   document.getElementById('authOverlay').style.display = 'none';
 }
 async function supaFetch(path, opts={}) {
