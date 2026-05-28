@@ -770,15 +770,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
 /* Lectio */
 .lectio-phrase{
-  font-family:'Playfair Display',serif;font-size:clamp(18px,2.5vw,26px);
-  font-style:italic;color:rgba(255,255,255,.85);line-height:1.65;
+  font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,30px);
+  font-style:italic;color:rgba(255,255,255,.85);line-height:1.75;
   text-align:center;padding:20px;
   border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);
   margin-bottom:16px;letter-spacing:.01em;
 }
+
 .lectio-phrase .highlight{color:#f0c040;text-shadow:0 0 20px rgba(240,192,64,.3);}
 .lectio-ref{
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
   letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.6);
   text-align:center;margin-bottom:22px;
 }
@@ -1010,7 +1011,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .phase-instruction { font-size: 19px !important; color: rgba(255,255,255,.88) !important; line-height: 1.7 !important; }
   .timer-label { color: rgba(255,255,255,.58) !important; font-size: 10px !important; }
   .lectio-curr-phrase {
-    font-size: clamp(17px, 5vw, 26px) !important;
+    font-size: clamp(22px, 5vw, 30px) !important;
     min-height: 70px !important;
     padding: 14px 6px !important;
   }
@@ -2964,7 +2965,10 @@ body.is-mobile #mobileEnterTab { display: block; }
 @media (max-width: 768px) {
   .letter-mobile { display: block; }
   .letter-desktop { display: none; }
-
+  .lectio-passage-title { font-size: 20px !important; }
+  .lectio-passage-preview { font-size: 16px !important; }
+  .lectio-section-label { font-size: 13px !important; }
+  
   /* Larger fonts for mobile readability */
   .feat-item.is-active .fn { font-size: 36px !important; }
   .feat-item.is-near .fn { font-size: 22px !important; }
