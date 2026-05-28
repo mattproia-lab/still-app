@@ -2968,7 +2968,7 @@ body.is-mobile #mobileEnterTab { display: block; }
   .lectio-passage-title { font-size: 20px !important; }
   .lectio-passage-preview { font-size: 16px !important; }
   .lectio-section-label { font-size: 13px !important; }
-  
+
   /* Larger fonts for mobile readability */
   .feat-item.is-active .fn { font-size: 36px !important; }
   .feat-item.is-near .fn { font-size: 22px !important; }
@@ -3708,6 +3708,9 @@ function showScreen(screenId,worldIdx){
   }
   currentScreen=screenId;
   updateDots(-1); // hide on feature screens
+  // Hide mobile enter tab on feature screens
+  const enterTab = document.getElementById('mobileEnterTab');
+  if (enterTab) { enterTab.classList.remove('show'); }
   document.getElementById('sectionCtr').classList.remove('show');
   // Focus the textarea if present so keyboard appears and input is visible
   setTimeout(() => {
