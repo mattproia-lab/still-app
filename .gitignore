@@ -1,2 +1,24 @@
+﻿# Dependencies
 node_modules/
-still-tts/
+
+# AI-generated content (don't commit these)
+generate-videos.py
+generate-bedtime-stories.js
+extract-images.js
+still-mobile/assets/stories/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
