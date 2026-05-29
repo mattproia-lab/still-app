@@ -2968,7 +2968,58 @@ body.is-mobile #mobileEnterTab { display: block; }
   .lectio-passage-title { font-size: 20px !important; }
   .lectio-passage-preview { font-size: 16px !important; }
   .lectio-section-label { font-size: 13px !important; }
-
+/* ── LECTIO mobile overrides ─────────── */
+.lectio-section-label {
+  font-size: 15px !important;
+  letter-spacing: .18em !important;
+  margin-bottom: 14px !important;
+}
+.lectio-source-summary {
+  font-size: 22px !important;
+  padding: 18px 20px !important;
+}
+.lectio-source-count {
+  font-size: 14px !important;
+}
+.passage-choice {
+  padding: 22px 20px !important;
+}
+.passage-choice-ref {
+  font-size: 13px !important;
+  letter-spacing: .16em !important;
+  margin-bottom: 12px !important;
+}
+.passage-choice-preview {
+  font-size: 19px !important;
+  line-height: 1.55 !important;
+}
+#lp-choose .feat-body {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+}
+#lp-choose .feat-eyebrow {
+  font-size: 15px !important;
+  letter-spacing: .18em !important;
+}
+/* Reading phase */
+.lectio-prev-phrase { font-size: 16px !important; line-height: 1.65 !important; }
+.lectio-curr-phrase { font-size: 26px !important; line-height: 1.5 !important; padding: 22px 8px !important; min-height: 140px !important; }
+.lectio-ref-small { font-size: 11px !important; letter-spacing: .22em !important; }
+#passLabel { font-size: 12px !important; letter-spacing: .18em !important; }
+#passBannerMsg { font-size: 17px !important; line-height: 1.7 !important; }
+/* Meditatio */
+.lectio-word-field { font-size: 24px !important; }
+.echo-title { font-size: 17px !important; }
+.echo-subtitle { font-size: 14px !important; line-height: 1.5 !important; }
+.echo-textarea { font-size: 16px !important; line-height: 1.7 !important; }
+/* Oratio */
+.oratio-textarea { font-size: 18px !important; line-height: 1.75 !important; }
+#oratioWordDisplay { font-size: 20px !important; }
+.claude-q-text { font-size: 18px !important; line-height: 1.75 !important; }
+/* Contemplatio */
+.contemplatio-timer { font-size: 64px !important; }
+/* Closing */
+#closingPrayerText { font-size: 18px !important; line-height: 1.75 !important; }
   /* Larger fonts for mobile readability */
   .feat-item.is-active .fn { font-size: 36px !important; }
   .feat-item.is-near .fn { font-size: 22px !important; }
@@ -3048,17 +3099,20 @@ body.is-mobile #mobileEnterTab { display: block; }
 
 /* Passage choice */
 .passage-choice{
-  background:none;border:1px solid rgba(255,255,255,.09);
-  padding:14px 18px;text-align:left;cursor:pointer;
+  background:none;border:1px solid rgba(255,255,255,.12);
+  padding:18px 20px;text-align:left;cursor:pointer;
   transition:all .22s;width:100%;
 }
-.passage-choice:hover{border-color:rgba(200,146,12,.38);background:rgba(200,146,12,.04);}
+.passage-choice:hover{border-color:rgba(200,146,12,.45);background:rgba(200,146,12,.05);}
 .passage-choice-ref{
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.58);margin-bottom:5px;display:block;
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(220,165,30,.85);margin-bottom:8px;display:block;
 }
-.passage-choice-preview{font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.6);line-height:1.5;}
-
+.passage-choice-preview{
+  font-family:'Playfair Display',serif;font-size:17px;font-style:italic;
+  color:rgba(255,255,255,.85);line-height:1.55;display:block;
+}
 /* Word field */
 .lectio-word-field{
   width:100%;background:none;border:none;border-bottom:2px solid rgba(200,146,12,.3);
@@ -5887,11 +5941,13 @@ function buildPassageList() {
   const todayIdx = PASSAGES.indexOf(today);
   const sources = ['Psalms','Gospels','Paul','Prophets','Wisdom','Other NT','OT Narrative'];
 
+  const sectionLabel = `font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;`;
+
   let html = '';
 
-  // Today's passage — always first
-  html += `<div style="margin-bottom:14px">
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:8px">Today's Passage</p>
+  // Today's passage
+  html += `<div style="margin-bottom:18px">
+    <p class="lectio-section-label" style="${sectionLabel}color:rgba(220,165,30,.85);margin-bottom:10px">Today's Passage</p>
     <button class="passage-choice" onclick="chooseLectioPassage(${todayIdx})" style="border-color:rgba(200,146,12,.4);background:rgba(200,146,12,.06)">
       <span class="passage-choice-ref">${today.ref} · ${today.ctx}</span>
       <span class="passage-choice-preview">${today.phrases[0]}…</span>
@@ -5899,17 +5955,17 @@ function buildPassageList() {
   </div>`;
 
   // Category buttons
-  html += `<p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px">Browse by Source</p>`;
+  html += `<p class="lectio-section-label" style="${sectionLabel}color:rgba(255,255,255,.55);margin-bottom:12px">Browse by Source</p>`;
   html += `<div id="lectioCategories" style="display:flex;flex-direction:column;gap:6px">`;
 
   sources.forEach(src => {
     const srcPassages = PASSAGES.filter(p => p.source === src);
     if (!srcPassages.length) return;
-    html += `<details style="border:1px solid rgba(255,255,255,.08)">
-      <summary style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.75);padding:10px 14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">
-        ${src} <span style="font-family:'Montserrat',sans-serif;font-size:7px;color:rgba(255,255,255,.3);font-style:normal">${srcPassages.length}</span>
+    html += `<details class="lectio-source-group" style="border:1px solid rgba(255,255,255,.1)">
+      <summary class="lectio-source-summary" style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.88);padding:14px 18px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">
+        ${src} <span class="lectio-source-count" style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);font-style:normal;letter-spacing:.08em">${srcPassages.length}</span>
       </summary>
-      <div style="padding:8px 10px;display:flex;flex-direction:column;gap:5px">
+      <div style="padding:10px 12px;display:flex;flex-direction:column;gap:6px">
         ${srcPassages.map(p => {
           const i = PASSAGES.indexOf(p);
           return `<button class="passage-choice" onclick="chooseLectioPassage(${i})" style="text-align:left">
