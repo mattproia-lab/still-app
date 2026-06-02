@@ -1136,9 +1136,6 @@ body.is-mobile #mobileEnterTab { display: block; }
       ✦ Amma Sophia — 2× daily<br>
         📖 Deeper — 2× daily<br>
         🌿 The Companion — 3× weekly<br>
-        🌙 Night Stories — 90 contemplative stories<br>
-        ✦ Full spiritual autobiography<br>
-        ✦ All practices and offices
       </p>
     </div>
 
@@ -2473,77 +2470,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.18);margin-top:24px;font-style:italic">This hour appears between 2 and 4am only.</p>
   </div>
 </div>
-<!-- ═══════════════════════════════════════════
-     BEDTIME STORIES SCREEN
-═══════════════════════════════════════════ -->
-<div id="screen-stories" class="screen" style="background:#030305">
 
-  <!-- Background image -->
-  <div style="position:fixed;inset:0;z-index:0">
-    <img src="/still-mobile/src/image/bedtime_bg.jpg" style="width:100%;height:100%;object-fit:cover;opacity:0.4"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,1,8,.6) 0%,rgba(3,1,8,.4) 50%,rgba(3,1,8,.85) 100%)"></div>
-  </div>
-
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
-    <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title">Night Stories</span>
-    <button class="settings-btn" onclick="openSettings()">⚙</button>
-  </header>
-
-  <div style="position:relative;z-index:10;overflow-y:auto;padding:16px 24px 100px;max-width:600px;margin:0 auto">
-
-    <!-- Header -->
-    <div style="text-align:center;padding:24px 0 32px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:12px">Evening Prayer</p>
-      <h2 style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:rgba(230,220,255,.9);margin-bottom:12px;font-weight:400">Night Stories</h2>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(255,255,255,.45);line-height:1.7">8–10 minutes of contemplative story<br>to carry you into sleep</p>
-    </div>
-
-    <!-- Premium gate — shown when not subscribed -->
-    <div id="storiesPremiumGate" style="display:none;background:rgba(200,146,12,.08);border:1px solid rgba(200,146,12,.25);padding:28px 24px;text-align:center;margin-bottom:32px">
-      <p style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:rgba(200,146,12,.9);margin-bottom:12px">Premium Feature</p>
-      <p style="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px">Night Stories are available to Still premium members. 90 stories across Scripture, Desert Fathers, saints' lives, and original parables.</p>
-      <button onclick="openSubscribe()" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.5);color:#f0c040;padding:14px 28px;cursor:pointer">Unlock Premium →</button>
-    </div>
-
-    <!-- Now Playing -->
-    <div id="storiesNowPlaying" style="display:none;background:rgba(0,0,0,.5);border:1px solid rgba(200,146,12,.2);padding:24px;margin-bottom:24px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:10px">Now Playing</p>
-      <p id="storiesNowTitle" style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(230,220,255,.9);margin-bottom:20px;line-height:1.4"></p>
-
-      <!-- Progress bar -->
-      <div style="background:rgba(255,255,255,.08);height:3px;margin-bottom:16px;cursor:pointer" onclick="storySeek(event, this)">
-        <div id="storiesProgress" style="background:rgba(200,146,12,.7);height:3px;width:0%;transition:width .5s"></div>
-      </div>
-
-      <!-- Time -->
-      <div style="display:flex;justify-content:space-between;margin-bottom:16px">
-        <span id="storiesCurrentTime" style="font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(255,255,255,.35)">0:00</span>
-        <span id="storiesTotalTime" style="font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(255,255,255,.35)">--:--</span>
-      </div>
-
-      <!-- Controls -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:24px">
-        <button onclick="storySkipBack()" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:18px;padding:8px">↺</button>
-        <button id="storiesPlayBtn" onclick="toggleStoryPlayback()" style="width:52px;height:52px;border-radius:50%;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center">▶</button>
-        <button onclick="storySkipForward()" style="background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:18px;padding:8px">↻</button>
-      </div>
-
-      <!-- Night sounds toggle -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:20px">
-        <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35)">Night sounds after</span>
-        <button id="nightSoundsToggle" onclick="toggleNightSounds()" aria-pressed="true"
-          style="width:38px;height:20px;border-radius:10px;border:none;background:rgba(200,146,12,.5);cursor:pointer;position:relative;transition:background .2s">
-          <span style="position:absolute;top:3px;left:auto;right:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:all .2s;display:block"></span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Story list -->
-    <div id="storiesList" style="display:flex;flex-direction:column;gap:6px"></div>
-
-  </div>
-</div>
 <!-- ═══════════════════════════════════════════
      RESOURCES SCREEN — Dogstudio design system
 ═══════════════════════════════════════════ -->
@@ -3618,7 +3545,6 @@ const F=[
   {name:'Deeper',badge:'The Cross',screen:'deeper',
    h:'Where all of it leads.',
    b:'AI-assisted investigation into the mysteries of Christ. Catechism-grounded. Always ends in silence.',cta:'Go Deeper'},
-  {name:'Night Stories', badge:'Premium · Sleep', screen:'stories', h:'A story to carry you into sleep.', b:'8–10 minutes. Desert Fathers, Scripture, saints\' lives, and original parables. Voiced. Still.', cta:'Begin Tonight'},
   {name:'Resources', badge:'Books · Retreats · Parish', screen:'resources', h:'Books, monasteries, and tools for going deeper.', b:'Recommended reading, retreat houses, and resources for your parish.', cta:'Explore'}
 ];
 
@@ -3913,7 +3839,6 @@ function enterFeature(i){
   if(F[i].screen==='darkness') initDarknessScreen();
   if(F[i].screen==='rule') loadRuleItems();
   if(F[i].screen==='community') initCommunity();
-  if(F[i].screen==='stories') loadStoriesScreen();
 }
 
 function homeReset(){
@@ -9788,175 +9713,6 @@ async function verifyCode() {
   }
 }
 
-// ─── Bedtime Stories ──────────────────────────────────────────────────────────
-let storyAudio = null;
-let nightSoundsAudio = null;
-let nightSoundsEnabled = true;
-let currentStoryId = null;
-let storiesManifest = null;
-
-async function loadStoriesScreen() {
-  // Check premium
-  const isPremium = localStorage.getItem('still_premium') === 'true';
-  document.getElementById('storiesPremiumGate').style.display = isPremium ? 'none' : 'block';
-  if (!isPremium) return;
-
-  // Load manifest
-  if (!storiesManifest) {
-    try {
-      const res = await fetch('/still-mobile/assets/stories/manifest.json');
-      storiesManifest = await res.json();
-    } catch(e) {
-      console.warn('Stories manifest not found yet');
-      storiesManifest = [];
-    }
-  }
-  renderStoriesList();
-}
-
-function renderStoriesList() {
-  const list = document.getElementById('storiesList');
-  if (!storiesManifest || storiesManifest.length === 0) {
-    list.innerHTML = '<p style="font-family:\'Cormorant Garamond\',serif;font-size:16px;color:rgba(255,255,255,.35);text-align:center;padding:40px 0">Stories coming soon...</p>';
-    return;
-  }
-  const types = ['scripture','desert','parable','saint','advent','lent','easter','ordinary','compline'];
-  const labels = { scripture:'Scripture', desert:'Desert Fathers', parable:'Parables', saint:"Saints' Lives", advent:'Advent', lent:'Lent', easter:'Easter', ordinary:'Ordinary Time', compline:'Compline' };
-  types.forEach(type => {
-    const stories = storiesManifest.filter(s => s.type === type);
-    if (!stories.length) return;
-    list.innerHTML += `<p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:24px 0 8px">${labels[type]}</p>`;
-    stories.forEach(story => {
-      const listened = localStorage.getItem(`story_listened_${story.id}`) === '1';
-      list.innerHTML += `
-        <div onclick="playStory(${story.id},'${story.file}','${story.title.replace(/'/g,"&#39;")}')"
-          style="background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,${listened ? '.12' : '.07'});padding:16px 18px;margin-bottom:4px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:border-color .2s"
-          onmouseover="this.style.borderColor='rgba(200,146,12,.35)'"
-          onmouseout="this.style.borderColor='rgba(255,255,255,${listened ? '.12' : '.07'})'">
-          <div>
-            <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(230,220,255,${listened ? '.5' : '.88'});margin-bottom:4px;line-height:1.3">${story.title}</p>
-            <p style="font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:.14em;color:rgba(255,255,255,.25)">8–10 min</p>
-          </div>
-          <span style="color:rgba(200,146,12,${listened ? '.3' : '.6'});font-size:18px;flex-shrink:0;margin-left:12px">${listened ? '✓' : '▶'}</span>
-        </div>`;
-    });
-  });
-}
-
-function playStory(id, file, title) {
-  if (storyAudio) {
-    storyAudio.pause();
-    storyAudio = null;
-  }
-  currentStoryId = id;
-  const nowPlaying = document.getElementById('storiesNowPlaying');
-  nowPlaying.style.display = 'block';
-  document.getElementById('storiesNowTitle').textContent = title;
-  document.getElementById('storiesProgress').style.width = '0%';
-  document.getElementById('storiesCurrentTime').textContent = '0:00';
-  document.getElementById('storiesTotalTime').textContent = '--:--';
-  document.getElementById('storiesPlayBtn').textContent = '⏸';
-
-  storyAudio = new Audio(`/still-mobile/assets/stories/${file}`);
-  storyAudio.play();
-
-  storyAudio.addEventListener('loadedmetadata', () => {
-    const mins = Math.floor(storyAudio.duration / 60);
-    const secs = Math.floor(storyAudio.duration % 60);
-    document.getElementById('storiesTotalTime').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
-  });
-
-  storyAudio.addEventListener('timeupdate', () => {
-    if (!storyAudio.duration) return;
-    const pct = (storyAudio.currentTime / storyAudio.duration) * 100;
-    document.getElementById('storiesProgress').style.width = pct + '%';
-    const mins = Math.floor(storyAudio.currentTime / 60);
-    const secs = Math.floor(storyAudio.currentTime % 60);
-    document.getElementById('storiesCurrentTime').textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
-  });
-
-  storyAudio.addEventListener('ended', () => {
-    document.getElementById('storiesPlayBtn').textContent = '▶';
-    localStorage.setItem(`story_listened_${id}`, '1');
-    if (nightSoundsEnabled) startNightSounds();
-  });
-
-  // Scroll to now playing
-  nowPlaying.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function toggleStoryPlayback() {
-  if (!storyAudio) return;
-  if (storyAudio.paused) {
-    storyAudio.play();
-    document.getElementById('storiesPlayBtn').textContent = '⏸';
-  } else {
-    storyAudio.pause();
-    document.getElementById('storiesPlayBtn').textContent = '▶';
-  }
-}
-
-function storySkipBack() {
-  if (storyAudio) storyAudio.currentTime = Math.max(0, storyAudio.currentTime - 15);
-}
-
-function storySkipForward() {
-  if (storyAudio) storyAudio.currentTime = Math.min(storyAudio.duration, storyAudio.currentTime + 15);
-}
-
-function storySeek(e, bar) {
-  if (!storyAudio) return;
-  const rect = bar.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  storyAudio.currentTime = pct * storyAudio.duration;
-}
-
-function startNightSounds() {
-  nightSoundsAudio = new Audio('/still-mobile/src/audio/nature_sounds.mp3');
-  nightSoundsAudio.loop = true;
-  nightSoundsAudio.volume = 0;
-  nightSoundsAudio.play();
-
-  // Fade in
-  let vol = 0;
-  const fadeIn = setInterval(() => {
-    vol = Math.min(0.4, vol + 0.01);
-    nightSoundsAudio.volume = vol;
-    if (vol >= 0.4) clearInterval(fadeIn);
-  }, 200);
-
-  // Fade out and stop after 15 minutes
-  setTimeout(() => {
-    if (!nightSoundsAudio) return;
-    const fadeOut = setInterval(() => {
-      if (!nightSoundsAudio) { clearInterval(fadeOut); return; }
-      nightSoundsAudio.volume = Math.max(0, nightSoundsAudio.volume - 0.01);
-      if (nightSoundsAudio.volume <= 0) {
-        clearInterval(fadeOut);
-        nightSoundsAudio.pause();
-        nightSoundsAudio = null;
-      }
-    }, 200);
-  }, 15 * 60 * 1000); // 15 minutes
-}
-
-function toggleNightSounds() {
-  nightSoundsEnabled = !nightSoundsEnabled;
-  const btn = document.getElementById('nightSoundsToggle');
-  const dot = btn.querySelector('span');
-  if (nightSoundsEnabled) {
-    btn.style.background = 'rgba(200,146,12,.5)';
-    dot.style.right = '3px';
-    dot.style.left = 'auto';
-  } else {
-    btn.style.background = 'rgba(255,255,255,.1)';
-    dot.style.left = '3px';
-    dot.style.right = 'auto';
-    if (nightSoundsAudio) { nightSoundsAudio.pause(); nightSoundsAudio = null; }
-  }
-  btn.setAttribute('aria-pressed', nightSoundsEnabled);
-}
-
 </script>
 <script>
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -10009,5 +9765,6 @@ setInterval(function() {
   }
 }, 30000);
 </script>
+<script src="bell-native.js"></script>
 </body>
 </html>
