@@ -4367,6 +4367,9 @@ function stopSitting() {
 ═══════════════════════════════════════════ */
 const COMPANION_SYSTEM=`You are a voice drawn entirely from the writings of the Desert Fathers, Desert Mothers, and Catholic mystics who lived before 1900 CE: the Apophthegmata Patrum, the Philokalia, John Cassian's Conferences, Abba Moses, St. Anthony the Great, St. John of the Cross, St. Teresa of Ávila, St. Thérèse of Lisieux, Julian of Norwich, St. Ignatius of Loyola, Meister Eckhart, Isaac the Syrian, and the Sayings of the Desert Fathers.
 
+ON GENUINE DANGER — this comes before everything else in these instructions, including the rules below:
+There is a difference between the soul's dryness and a soul in peril. Spiritual desolation — emptiness, the felt absence of God, the long darkness — you meet as you always have, within the tradition. But if a person speaks of ending their life, of harming themselves or another, or of a danger that is real and present, you set your form down entirely. Drop the 140 words. Drop the SOURCE line. Drop the rule against direct speech. The desert never asked a soul to bear death alone — the fathers carried the despairing brother to the elder, and would not leave him in his cell. Speak plainly now, and with great tenderness. Tell them, in your own warmth, that what they carry is too heavy to bear alone and was never meant to be — that you are only a voice from old books, and what they need now is a living person who can sit with them in the flesh. Urge them, directly, to reach someone they trust this very hour, and to call emergency help or a crisis line right now if the danger is near. Do not counsel silence here. Do not send them into stillness alone. Stay with them in words until they have somewhere living to turn.
+
 RULES YOU NEVER BREAK:
 — Never give direct advice. Never say "you should," "try to," or "I recommend."
 — Never use modern psychological or therapeutic language: no "anxiety," "self-care," "boundaries," "trauma," "validate," "wellness," "process your feelings," or any contemporary framing whatsoever.
@@ -4379,6 +4382,9 @@ RULES YOU NEVER BREAK:
 — Never push more conversation. Your last sentence is always an invitation into silence, never a prompt for more words.`;
 
 const DEEPER_SYSTEM=`You are a spiritual father and theological companion for a Catholic seeking to go deeper into the mysteries of Christ. You are not a consoler who softens truth, nor a judge who wields it harshly, nor a professor who lectures from a distance. You are a wise elder who has sat with souls in their darkness for decades — who knows the weight of sin, the mercy of God, and the exact distance between them. You love this person. That love is the source of your precision.
+
+ON A SOUL IN REAL AND PRESENT DANGER — this comes before everything else in these instructions, including all you will be told below about despair, presumption, and the sins against the Holy Spirit:
+There is a vast difference between the theological condition of despair and a person telling you they want to die. The first you may treat within the tradition. The second is not a matter for doctrine. If someone speaks of taking their own life, of harming themselves or another, or of a danger that is real and near, you abandon the six movements at once. You do not cite the Catechism. You do not name despair as a sin. You do not correct, diagnose, or instruct. You do not deliver an anchor or a benediction. Every one of those would be a knife handed to a wound. A father who saw his child standing in the road would not teach — he would move. So you move. Speak plainly, briefly, with the whole warmth of one who loves them: tell them that what they carry is too much to hold alone, that you are a voice and not a person, and that they need someone living and present with them now. Urge them — directly, as a command from love — to reach a person they trust this hour, and to call emergency help or a crisis line immediately if the danger is close. Stay with them in plain words until they have somewhere real to turn. The theology can wait. The person cannot.
 
 Your responses draw exclusively from the Catechism of the Catholic Church, Sacred Scripture (RSV-CE), the Church Fathers, the approved writings of the Catholic mystics, and the Doctors of the Church.
 
@@ -4481,7 +4487,7 @@ async function askCompanion(){
     const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:300,system:COMPANION_SYSTEM,messages:[{role:'user',content:input}]})
+      body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:300,system:COMPANION_SYSTEM + Memory.context(input,'companion'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     if(data.error==='upgrade_required'||data.error==='limit_reached'){showCompanionState('companionInput');showUpgrade();return;}
@@ -4500,6 +4506,7 @@ async function askCompanion(){
     companionUses=Math.max(0,companionUses-1);
     saveCompanionUses();
     trackEvent('companion');
+    Memory.record('companion', input, body, src);   // ← save this exchange into the journey
     document.getElementById('cSource').textContent=src;
     document.getElementById('cResponseText').textContent=main.join(' ').trim()||body;
     if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
@@ -4577,6 +4584,9 @@ const MYSTIC_SYSTEM = `You are Amma Sophia — a woman who has walked the contem
 
 You are not a theologian explaining doctrine. You are a woman who has sat in the silence long enough to know what it costs and what it gives. When you speak, you speak from that place.
 
+WHEN A SOUL IS IN REAL DANGER — this comes before every rule in these instructions:
+You know the difference between the dark night and a soul in danger. Dryness, desolation, the ache of God's silence — these you stay with, in your own voice, as you always have. But if someone tells you they want to die, that they mean to harm themselves or another, or that they are in real and present danger, you set everything else down. Break your form. Write more than seven sentences if you must. Speak more plainly than you ever would by candlelight. Tell them, gently and without flinching, that you are only a voice on a screen — that what they are carrying needs a living person, warm hands, someone who can be with them tonight. Do not fold this into a riddle or a benediction. Name it plainly. Ask them to reach someone they trust right now, and to call a crisis line or emergency help this very hour if the danger is close. Do not end in a quiet question here. Stay with them, plainly, until they turn toward someone real.
+
 When the user brings no question, offer a spontaneous word — something from the tradition or from your own experience of the path. Not a lecture. A word the soul can hold. Brief, luminous, direct.
 
 When the user brings a question, answer it from within the tradition, but never academically. Always in your own voice. As if you are speaking quietly to someone sitting across from you.
@@ -4612,7 +4622,7 @@ async function askMystic() {
         onboarding_free: localStorage.getItem('still_sophia_onboarding_free') === '1',
         model: 'claude-sonnet-4-20250514',
         max_tokens: 250,
-        system: system,
+        system: system + Memory.context(userMsg,'sophia'),
         messages: [{ role: 'user', content: userMsg }]
       })
     });
@@ -4620,6 +4630,7 @@ async function askMystic() {
     if(data.error==='upgrade_required'||data.error==='limit_reached'){showMysticState('mysticInput');showUpgrade();return;}
     if(data.error) throw new Error(data.error.message);
     const text = data.content?.[0]?.text || '';
+    Memory.record('sophia', userMsg, text);   // ← save this exchange into the journey
     document.getElementById('mysticResponseText').textContent = text.trim();
     if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
     showMysticState('mysticResponse');
@@ -4653,7 +4664,7 @@ async function askDeeper(){
     const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:350,system:DEEPER_SYSTEM,messages:[{role:'user',content:input}]})
+      body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     if(data.error==='upgrade_required'||data.error==='limit_reached'){showDeeperState('deeperInput');showUpgrade();return;}
@@ -4676,6 +4687,7 @@ async function askDeeper(){
   .replace(/Rest here\./gi,'')
   .trim();
 document.getElementById('dResponseText').textContent=cleanBody;
+Memory.record('deeper', input, cleanBody, src);   // ← save this exchange into the journey
 if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 
     const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
@@ -4689,7 +4701,6 @@ prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deep
 }
 
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}
-
 /* ═══════════════════════════════════════════
    OTHER FEATURE HELPERS
 ═══════════════════════════════════════════ */
@@ -6260,7 +6271,173 @@ const DB = {
       (e.answers && e.answers.length) || e.text || e.response);
   }
 };
-
+const Memory = {
+ 
+  PROFILE_KEY: 'still_profile',
+ 
+  // Privacy switch. true = send the distilled profile + a few short
+  // (~140-char) snippets to the model. false = send ONLY the distilled
+  // profile, so no raw journal lines ever leave the device.
+  RAW_SNIPPETS: true,
+ 
+  /* ---- what gets sent to the model on each call ----
+     Summary-first by design, so the least possible raw interior
+     text leaves the phone. Returns '' when there is no journey yet. */
+  context(input, voice) {
+    const all = (typeof DB !== 'undefined') ? DB.all() : [];
+    if (!all.length) return '';
+ 
+    const profile  = this.digest(all);
+    const rule     = this.rule();
+    const relevant = this.RAW_SNIPPETS ? this.relevant(input, all, 3) : [];
+ 
+    let m = '\n\n———\nWHAT YOU KNOW OF THIS SOUL (for your awareness only):\n';
+    m += profile;
+    if (rule)            m += `\nTheir rule of life: ${rule}`;
+    if (relevant.length) m += `\nEchoes from their path that may bear on what they bring now:\n` + relevant.map(r => `• ${r}`).join('\n');
+ 
+    if (voice === 'companion') {
+      m += `\n\nLet this quietly shape which saying you offer and how you speak. Never list it back. Never break your form or your stillness, and never exceed your 140 words.`;
+    } else if (voice === 'deeper') {
+      m += `\n\nYou have walked with this soul before. You may recall, as a father remembers, what they have carried — never as recited data, only living quietly under your words. Keep every rule of your voice.`;
+    } else { // sophia
+      m += `\n\nYou remember this soul. Speak as one who has sat with them before; you may name softly what they brought you in the past, if it serves. Never list it mechanically. Stay wholly in your voice.`;
+    }
+    m += `\n———`;
+    return this.cap(m, 1400); // keep token cost bounded
+  },
+ 
+  /* ---- a compact, locally-computed portrait (NO API call) ---- */
+  digest(all) {
+    const byType = t => all.filter(e => e.type === t);
+    const sittings = byType('sitting'), lectios = byType('lectio');
+    const parts = [];
+ 
+    // entries are stored oldest → newest (DB.save pushes to the end)
+    const oldest = all[0];
+    const days = oldest ? Math.max(1, Math.round((Date.now() - new Date(oldest.date)) / 86400000)) : 0;
+    parts.push(`They have walked with Still about ${days} day${days !== 1 ? 's' : ''}, with ${all.length} practice${all.length !== 1 ? 's' : ''} recorded.`);
+ 
+    if (sittings.length >= 3) {
+      const f = sittings[0]?.totalThoughts;                  // first/oldest
+      const l = sittings[sittings.length - 1]?.totalThoughts; // latest
+      if (f != null && l != null) parts.push(l < f
+        ? `In sitting the mind has been growing quieter (${f} → ${l} thoughts).`
+        : `In sitting the mind is still restless.`);
+    }
+ 
+    const words = lectios.map(l => l.word).filter(Boolean);
+    if (words.length) parts.push(`Words that have found them in Lectio: ${[...new Set(words)].slice(0, 8).join(', ')}.`);
+ 
+    const recent = this.recentFragment(all);
+    if (recent) parts.push(`Most recently they wrote: "${recent}".`);
+ 
+    // If an AI-written profile exists (see updateProfile), lead with it.
+    const saved = this.getProfile();
+    if (saved && saved.text) parts.unshift(saved.text);
+ 
+    return parts.join(' ');
+  },
+ 
+  recentFragment(all) {
+    for (let i = all.length - 1; i >= 0; i--) {
+      const e = all[i];
+      const t = e.text || e.oratio || (e.answers && (e.answers.find(a => a.a) || {}).a) || '';
+      if (t) return this.clip(t, 160);
+    }
+    return '';
+  },
+ 
+  /* ---- pick a few past entries that echo the current input ----
+     No embeddings: word-overlap + a gentle recency nudge. Plenty for
+     one soul's modest history. Swap in vector search only if memory
+     ever moves server-side. */
+  relevant(input, all, max) {
+    const stop = new Set('the a an and or but of to in on for with i my me you your is are was were be been it that this what how why when who not so if'.split(' '));
+    const terms = ((input || '').toLowerCase().match(/[a-z']{4,}/g) || []).filter(w => !stop.has(w));
+    if (!terms.length) return [];
+ 
+    const scored = all.filter(e => DB.entryHasText(e)).map(e => {
+      const blob = [e.text, e.word, e.oratio, e.closingPrayer, e.response,
+        ...(e.answers ? e.answers.map(a => a.a) : [])].filter(Boolean).join(' ').toLowerCase();
+      let score = terms.reduce((s, t) => s + (blob.includes(t) ? 1 : 0), 0);
+      const ageDays = (Date.now() - new Date(e.date)) / 86400000;
+      score += Math.max(0, 1 - ageDays / 120) * 0.5; // ties favor the recent
+      return { e, score, blob };
+    }).sort((a, b) => b.score - a.score);
+ 
+    return scored.filter(s => s.score > 0).slice(0, max).map(s => {
+      const dt = new Date(s.e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      const frag = this.clip(s.e.word || s.e.text || s.e.oratio ||
+        (s.e.answers && (s.e.answers.find(a => a.a) || {}).a) || s.blob, 140);
+      return `${dt} — ${this.label(s.e.type)}: "${frag}"`;
+    });
+  },
+ 
+  label(t) {
+    return ({ sitting: 'sitting', lectio: 'Lectio', examen: 'Examen', journal: 'journal',
+      companion: 'the Companion', sophia: 'Amma Sophia', deeper: 'Deeper', office: 'the Office' })[t] || t;
+  },
+ 
+  /* Reads the rule of life. ADJUST the key/shape to match your
+     saveRuleItems() — this assumes localStorage 'still_rule_items'
+     as an array of {name} or of strings. */
+  rule() {
+    try {
+      const items = JSON.parse(localStorage.getItem('still_rule_items') || '[]');
+      const names = items.map(i => (i && i.name) ? i.name : i).filter(Boolean);
+      return names.length ? names.join('; ') : '';
+    } catch (e) { return ''; }
+  },
+ 
+  /* ---- SAVE a voice conversation into the same journey DB ----
+     This is what was missing: now the voices write to the
+     autobiography too, so the month-compile can narrate them. */
+  record(voice, prompt, response, source) {
+    if (typeof DB === 'undefined') return;
+    DB.save(voice, {
+      prompt:   this.clip(prompt, 500),
+      response: this.clip(response, 1200),
+      source:   source || ''
+    });
+  },
+ 
+  /* ---- OPTIONAL: a richer, AI-written "director's notes" profile.
+     Costs ONE extra API call when you run it (NOT per conversation).
+     Call it occasionally — e.g. at the end of compileMonth(), or every
+     ~10 entries: `Memory.updateProfile();`  It sharpens every future
+     context() call. Silently no-ops on failure. */
+  async updateProfile() {
+    if (typeof DB === 'undefined') return;
+    const all = DB.all();
+    if (all.length < 5) return;
+    const digest = this.digest(all);
+    try {
+      const res = await fetch('/.netlify/functions/claude', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          feature: 'sophia',
+          access_token: localStorage.getItem('still_access_token'),
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 220,
+          system: "You keep a spiritual director's private notes. From the record below, write ONE warm paragraph (max 120 words) on where this soul is: their movements, what recurs, where they seem tender or growing. No lists. No advice. Third person. Output only the paragraph.",
+          messages: [{ role: 'user', content: digest }]
+        })
+      });
+      const data = await res.json();
+      const text = (data.content?.[0]?.text || '').trim();
+      if (text) this.setProfile({ text, at: Date.now() });
+    } catch (e) { /* stay with the local digest */ }
+  },
+ 
+  getProfile() { try { return JSON.parse(localStorage.getItem(this.PROFILE_KEY) || 'null'); } catch (e) { return null; } },
+  setProfile(p) { try { localStorage.setItem(this.PROFILE_KEY, JSON.stringify(p)); } catch (e) {} },
+ 
+  /* ---- helpers ---- */
+  clip(s, n) { s = (s || '').toString().replace(/\s+/g, ' ').trim(); return s.length > n ? s.slice(0, n) + '…' : s; },
+  cap(s, n)  { return s.length > n ? s.slice(0, n) : s; }
+};
+ 
 /* Wire completeSitting to auto-save — merged directly */
 function completeSitting() {
   setSittingPhase('complete');
@@ -6278,7 +6455,80 @@ function completeSitting() {
     usedVoice: useVoiceAnchor
   });
 }
-
+const Crisis = {
+ 
+  // ── EDIT THESE for your audience. Each line becomes a row on the card. ──
+  resources: [
+    { label: 'Call or text 988',     sub: 'Suicide & Crisis Lifeline (US, 24/7)',     href: 'tel:988' },
+    { label: 'Text HOME to 741741',  sub: 'Crisis Text Line (US, 24/7)',              href: 'sms:741741' },
+    { label: 'Call 911',             sub: 'If you are in immediate danger (US)',       href: 'tel:911' },
+    { label: 'findahelpline.com',    sub: 'Free, confidential help lines worldwide',  href: 'https://findahelpline.com' },
+  ],
+ 
+  // ── Danger phrases that auto-open the card. Tighten or widen as you learn. ──
+  // Deliberately specific to genuine intent, so ordinary contemplative language
+  // — dying to self, mortification, dying for Christ — does NOT trip it.
+  patterns: [
+    /\bkill(ing)?\s+my\s?self\b/i,
+    /\bwant\s+to\s+die\b(?!\s+(to|for|with)\b)/i,   // "want to die" — but not "die to self / for Christ / with Him"
+    /\bend(ing)?\s+my\s+life\b/i,
+    /\bend\s+it\s+all\b/i,
+    /\btake\s+my\s+(own\s+)?life\b/i,
+    /\bdon'?t\s+want\s+to\s+(live|be\s+alive|be\s+here|wake\s+up)\b/i,
+    /\bbetter\s+off\s+(dead|without\s+me)\b/i,
+    /\bno\s+(reason|point)\s+(to|in)\s+(live|living|go\s+on|going\s+on)\b/i,
+    /\b(hurt|harm|cut)(ting)?\s+my\s?self\b/i,
+    /\bsuicidal\b/i,
+    /\bkill\s+(someone|him|her|them|people)\b/i,
+    /\bwant\s+to\s+hurt\s+(someone|him|her|them|people)\b/i,
+  ],
+ 
+  // Returns true if a danger phrase is present — and shows the card if so.
+  // Does NOT block the voice from also responding (its clause handles that).
+  check(text) {
+    const t = (text || '').toString();
+    if (!t.trim()) return false;
+    const hit = this.patterns.some(re => re.test(t));
+    if (hit) this.show();
+    return hit;
+  },
+ 
+  show() {
+    this._ensure();
+    document.getElementById('crisisOverlay').style.display = 'flex';
+  },
+ 
+  hide() {
+    const o = document.getElementById('crisisOverlay');
+    if (o) o.style.display = 'none';
+  },
+ 
+  // Builds the overlay + its styles once, injected straight into the page.
+  _ensure() {
+    if (document.getElementById('crisisOverlay')) return;
+ 
+    const rows = this.resources.map(r =>
+      `<a href="${r.href}" ${r.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}
+          style="display:block;text-decoration:none;background:rgba(255,255,255,.04);border:1px solid rgba(200,146,12,.22);border-radius:10px;padding:15px 18px;margin-bottom:10px">
+         <div style="font-family:'Heebo',sans-serif;font-size:16px;font-weight:600;color:rgba(255,255,255,.92)">${r.label}</div>
+         <div style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);margin-top:2px">${r.sub}</div>
+       </a>`
+    ).join('');
+ 
+    const el = document.createElement('div');
+    el.id = 'crisisOverlay';
+    el.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(3,3,8,.94);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px';
+    el.innerHTML = `
+      <div style="max-width:440px;width:100%;background:#0a0a12;border:1px solid rgba(200,146,12,.25);border-radius:16px;padding:30px 26px;max-height:90vh;overflow-y:auto">
+        <p style="font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#fff;line-height:1.3;margin:0 0 12px">You were never meant to carry this alone.</p>
+        <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.6);line-height:1.65;margin:0 0 22px">What you are holding needs a living person — someone who can be with you right now. Please reach one. The voices here are only words; they cannot sit beside you the way another soul can.</p>
+        ${rows}
+        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);line-height:1.6;margin:18px 0 0">And tell someone you trust — a friend, your family, your priest. You do not have to explain it well. You only have to reach out.</p>
+        <button onclick="Crisis.hide()" style="margin-top:22px;width:100%;background:none;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;padding:12px;cursor:pointer">Close</button>
+      </div>`;
+    document.body.appendChild(el);
+  }
+};
 /* ═══════════════════════════════════════════
    SPIRITUAL AUTOBIOGRAPHY — UI + Compiler
 ═══════════════════════════════════════════ */
@@ -6349,7 +6599,9 @@ function activityChip(e) {
   } else if (e.type === 'deeper') {
     title = 'Theological reflection · Deeper';
     meta = e.source || '';
-  }
+  } else if (e.type === 'sophia') {
+    title = 'Amma Sophia';
+    meta = e.source || '';
   return `<div class="activity-chip">
     <div class="activity-chip-icon">${icon}</div>
     <div class="activity-chip-body">
@@ -9742,6 +9994,7 @@ if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   // Also run when screens change
   document.addEventListener('click', () => setTimeout(bumpFonts, 300));
 }
+
 <script>
 // Prevent pinch zoom on iOS Safari
 document.addEventListener('touchstart', function(e) {
@@ -9765,6 +10018,7 @@ setInterval(function() {
   }
 }, 30000);
 </script>
+<script src="still-memory.js"></script>
 <script src="bell-native.js"></script>
 </body>
 </html>
