@@ -7140,7 +7140,7 @@ const Sync = {
     }, 500);
   }
 };
-
+if (typeof DB!=='undefined' && !DB._syncWrapped){const _o=DB.save.bind(DB);DB.save=(t,d)=>{const r=_o(t,d);try{Sync.pushLatest&&Sync.pushLatest();}catch(e){}return r;};DB._syncWrapped=true;}
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
 ═══════════════════════════════════════════ */
