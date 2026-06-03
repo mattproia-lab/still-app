@@ -7140,6 +7140,181 @@ const Sync = {
     }, 500);
   }
 };
+/* ═══════════════════════════════════════════
+   STILL — STORAGE & PRIVACY SETTINGS (Stage 3)
+
+   The controls for the Stage 2 sync layer:
+     • choose Cloud backup (default) or Device-only
+     • an HONEST explanation shown BEFORE device-only is chosen
+     • Delete my cloud backup (true erasure)
+
+   Self-contained: it injects its own panel, and it tries to add
+   its own button to your Settings (next to Sign Out) — so in most
+   cases you add nothing by hand.
+
+   ─────────── INTEGRATION ───────────
+   1) Paste this whole block into your big file as CODE (no
+      <script> tag), below the Sync block.
+
+   2) That's usually it. When you open Settings you should see a
+      "Storage & Privacy" button appear next to Sign Out on its own.
+
+      If it does NOT appear, add this one button anywhere inside
+      your Settings modal (then you're done):
+
+        <button id="storageTrigger" onclick="StorageSettings.open()"
+          style="width:100%;margin-top:10px;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer">
+          Storage &amp; Privacy
+        </button>
+   ──────────────────────────────────── */
+
+const StorageSettings = {
+  _view: 'main',
+  _note: '',
+
+  open()  { this._view = 'main'; this._note = ''; this._ensure(); this._render(); document.getElementById('storageOverlay').style.display = 'flex'; },
+  close() { const o = document.getElementById('storageOverlay'); if (o) o.style.display = 'none'; },
+  back()  { this._view = 'main'; this._render(); },
+
+  _isCloud() {
+    return (typeof Sync !== 'undefined')
+      ? Sync.isCloud()
+      : (localStorage.getItem('still_storage_mode') || 'cloud') === 'cloud';
+  },
+
+  // tapped "keep on device" → show the explanation BEFORE switching
+  goDevice() { this._view = 'device'; this._render(); },
+
+  confirmDevice() {
+    if (typeof Sync !== 'undefined') Sync.setMode('device');
+    else localStorage.setItem('still_storage_mode', 'device');
+    this._view = 'main';
+    this._note = 'Saved. Your journey now stays on this device.';
+    this._render();
+  },
+
+  // tapped "back up to cloud" → switch and push local entries up now
+  goCloud() {
+    if (typeof Sync !== 'undefined') { Sync.setMode('cloud'); try { Sync.reconcile(); } catch (e) {} }
+    else localStorage.setItem('still_storage_mode', 'cloud');
+    this._view = 'main';
+    this._note = 'Saved. Your journey is backing up to the cloud.';
+    this._render();
+  },
+
+  goDelete() { this._view = 'delete'; this._render(); },
+
+  async confirmDelete() {
+    this._note = 'Deleting…'; this._render();
+    let ok = false;
+    if (typeof Sync !== 'undefined') {
+      try { ok = await Sync.deleteCloud(); } catch (e) {}
+      // Also switch to device-only — otherwise the next sync would
+      // quietly re-upload the journey and the "deletion" wouldn't stick.
+      if (ok) Sync.setMode('device');
+    }
+    this._view = 'main';
+    this._note = ok
+      ? 'Your cloud backup is deleted. Your journey is now kept on this device only.'
+      : 'Could not delete just now — please try again.';
+    this._render();
+  },
+
+  _ensure() {
+    if (document.getElementById('storageOverlay')) return;
+    const el = document.createElement('div');
+    el.id = 'storageOverlay';
+    el.style.cssText = 'display:none;position:fixed;inset:0;z-index:9998;background:rgba(3,3,8,.94);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px';
+    el.innerHTML = '<div id="storagePanel" style="max-width:440px;width:100%;background:#0a0a12;border:1px solid rgba(200,146,12,.25);border-radius:16px;padding:28px 24px;max-height:90vh;overflow-y:auto"></div>';
+    document.body.appendChild(el);
+  },
+
+  _choice(label, onclick, active) {
+    const border = active ? 'rgba(200,146,12,.8)' : 'rgba(255,255,255,.18)';
+    const color  = active ? '#f0c040' : 'rgba(255,255,255,.85)';
+    const bg     = active ? 'rgba(200,146,12,.10)' : 'rgba(255,255,255,.03)';
+    return `<button onclick="${onclick}" style="display:block;width:100%;text-align:left;background:${bg};border:1px solid ${border};border-radius:10px;padding:14px 16px;margin-bottom:8px;cursor:pointer;color:${color};font-family:'Heebo',sans-serif;font-size:15px;font-weight:600">${active ? '\u2713 ' : ''}${label}</button>`;
+  },
+
+  _sub(text) {
+    return `<p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);line-height:1.55;margin:0 4px 16px">${text}</p>`;
+  },
+
+  _points(items, accent) {
+    return `<div style="margin-bottom:20px">` + items.map(t =>
+      `<p style="font-family:'Heebo',sans-serif;font-size:13.5px;color:rgba(255,255,255,.75);line-height:1.6;margin:0 0 12px;padding-left:14px;border-left:2px solid ${accent}">${t}</p>`
+    ).join('') + `</div>`;
+  },
+
+  _render() {
+    const p = document.getElementById('storagePanel');
+    if (!p) return;
+    const cloud = this._isCloud();
+    let h = '';
+
+    if (this._view === 'main') {
+      h += `<p style="font-family:'Playfair Display',serif;font-size:23px;font-style:italic;color:#fff;margin:0 0 6px">Storage &amp; Privacy</p>`;
+      h += `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 18px">${cloud ? 'Your journey is backed up to the cloud and synced across your devices.' : 'Your journey is kept on this device only.'}</p>`;
+      if (this._note) h += `<p style="font-family:'Heebo',sans-serif;font-size:12.5px;color:#f0c040;margin:0 0 16px">${this._note}</p>`;
+
+      h += this._choice('Back up to the cloud', cloud ? 'void 0' : 'StorageSettings.goCloud()', cloud);
+      h += this._sub('Recommended. Synced across all your devices. If you lose or replace your phone, your prayer journey is safe.');
+
+      h += this._choice('Keep on this device only', cloud ? 'StorageSettings.goDevice()' : 'void 0', !cloud);
+      h += this._sub('The most private option. Nothing about your prayer leaves this device.');
+
+      h += `<div style="height:1px;background:rgba(255,255,255,.08);margin:6px 0 16px"></div>`;
+      h += `<button onclick="StorageSettings.goDelete()" style="background:none;border:none;color:rgba(255,120,110,.85);font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer;padding:4px 0;text-decoration:underline">Delete my cloud backup</button>`;
+      h += `<button onclick="StorageSettings.close()" style="margin-top:16px;width:100%;background:none;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;padding:12px;cursor:pointer">Close</button>`;
+    }
+
+    else if (this._view === 'device') {
+      h += `<p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;margin:0 0 4px">Keep on this device only?</p>`;
+      h += `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0 0 18px">Please read this first.</p>`;
+      h += this._points([
+        'Your prayer journey will stay on this device. Nothing new will be sent to the cloud.',
+        'Your existing cloud backup is <strong>not</strong> deleted \u2014 it is kept, untouched, in case you ever switch back. To remove it completely, use \u201cDelete my cloud backup.\u201d',
+        'The risk: if you clear your browser, switch phones, or the browser clears unused data on its own, the journey on this device can be lost \u2014 with no way to recover it.'
+      ], 'rgba(200,146,12,.35)');
+      h += `<button onclick="StorageSettings.confirmDevice()" style="width:100%;margin-bottom:10px;padding:14px;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);border-radius:10px;color:#f0c040;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">Yes, keep it on this device</button>`;
+      h += `<button onclick="StorageSettings.back()" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Cancel</button>`;
+    }
+
+    else if (this._view === 'delete') {
+      h += `<p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;margin:0 0 14px">Delete your cloud backup?</p>`;
+      h += this._points([
+        'This permanently erases your journey from our servers.',
+        'The copy on this device stays exactly as it is.',
+        'Syncing turns off, so it will not be re-uploaded. This cannot be undone.'
+      ], 'rgba(255,73,64,.4)');
+      h += `<button onclick="StorageSettings.confirmDelete()" style="width:100%;margin-bottom:10px;padding:14px;background:rgba(255,73,64,.12);border:1px solid rgba(255,73,64,.5);border-radius:10px;color:rgba(255,120,110,.95);font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">Delete forever</button>`;
+      h += `<button onclick="StorageSettings.back()" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Cancel</button>`;
+    }
+
+    p.innerHTML = h;
+  }
+};
+
+/* Try to place a "Storage & Privacy" button next to Sign Out automatically,
+   so nothing has to be added by hand. Harmless if Sign Out isn't found. */
+(function () {
+  function addTrigger() {
+    if (document.getElementById('storageTrigger')) return true;
+    const signout = Array.from(document.querySelectorAll('button'))
+      .find(b => (b.getAttribute('onclick') || '').includes('signOut'));
+    if (!signout || !signout.parentNode) return false;
+    const b = document.createElement('button');
+    b.id = 'storageTrigger';
+    b.textContent = 'Storage & Privacy';
+    b.onclick = () => StorageSettings.open();
+    b.style.cssText = "width:100%;margin-top:10px;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer";
+    signout.parentNode.insertBefore(b, signout);
+    return true;
+  }
+  // try a few times as the page settles
+  let n = 0;
+  const t = setInterval(() => { if (addTrigger() || ++n > 20) clearInterval(t); }, 400);
+})();
 if (typeof DB!=='undefined' && !DB._syncWrapped){const _o=DB.save.bind(DB);DB.save=(t,d)=>{const r=_o(t,d);try{Sync.pushLatest&&Sync.pushLatest();}catch(e){}return r;};DB._syncWrapped=true;}
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
