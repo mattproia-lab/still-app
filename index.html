@@ -6992,7 +6992,154 @@ function addRuleItem(){
   items.appendChild(d);
   inp.value='';
   saveRuleItems();
-}
+} 
+
+const Sync = {
+  MODE_KEY: 'still_storage_mode',   // 'cloud' | 'device'
+  TABLE: 'journey_entries',
+ 
+  mode()    { return localStorage.getItem(this.MODE_KEY) || 'cloud'; },   // default: cloud
+  setMode(m){ localStorage.setItem(this.MODE_KEY, m); },
+  isCloud() { return this.mode() === 'cloud'; },
+ 
+  _token()  { return localStorage.getItem('still_access_token'); },
+  _userId() { return (window.currentUser && window.currentUser.id) || null; },
+  _ready()  { return !!(this._token() && this._userId()); },
+ 
+  /* Authenticated fetch — uses the USER's token, so Row Level Security
+     can tell whose rows these are. Refreshes once on a 401. */
+  async _fetch(path, opts = {}, _retried = false) {
+    const headers = Object.assign({
+      'apikey': SUPA_ANON,
+      'Authorization': 'Bearer ' + this._token(),
+    }, opts.headers || {});
+    if (opts.method && opts.method !== 'GET') headers['Content-Type'] = 'application/json';
+    const res = await fetch(SUPA_URL + path, { ...opts, headers });
+    if (res.status === 401 && !_retried && await this._refresh()) {
+      return this._fetch(path, opts, true);   // retry once with a fresh token
+    }
+    return res;
+  },
+ 
+  async _refresh() {
+    const refresh = localStorage.getItem('still_refresh_token');
+    if (!refresh) return false;
+    try {
+      const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: refresh })
+      });
+      if (!r.ok) return false;
+      const d = await r.json();
+      localStorage.setItem('still_access_token', d.access_token);
+      localStorage.setItem('still_refresh_token', d.refresh_token);
+      if (d.user) window.currentUser = d.user;
+      return true;
+    } catch (e) { return false; }
+  },
+ 
+  /* Push ONE entry up (upsert — safe to call repeatedly). */
+  async pushEntry(entry) {
+    if (!this.isCloud() || !this._ready() || !entry) return;
+    try {
+      await this._fetch(`/rest/v1/${this.TABLE}`, {
+        method: 'POST',
+        headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+        body: JSON.stringify({
+          user_id:    this._userId(),
+          entry_id:   entry.id,
+          type:       entry.type,
+          entry_date: entry.date,
+          data:       entry            // the full entry, lossless
+        })
+      });
+    } catch (e) { console.warn('[Sync] push failed (kept safely on device):', e); }
+  },
+ 
+  /* Mirror the most recent local save (called right after DB.save). */
+  pushLatest() {
+    if (!this.isCloud() || !this._ready()) return;
+    const all = (typeof DB !== 'undefined') ? DB.all() : [];
+    if (all.length) this.pushEntry(all[all.length - 1]);
+  },
+ 
+  /* Two-way reconcile: push local-only up, pull cloud-only down. */
+  async reconcile() {
+    if (!this.isCloud() || !this._ready() || typeof DB === 'undefined') return;
+    try {
+      const res = await this._fetch(
+        `/rest/v1/${this.TABLE}?user_id=eq.${this._userId()}&select=entry_id,data&order=entry_date.asc`
+      );
+      if (!res.ok) { console.warn('[Sync] reconcile fetch failed', res.status); return; }
+      const cloud = await res.json();
+ 
+      const local    = DB.all();
+      const localIds = new Set(local.map(e => e.id));
+      const cloudIds = new Set(cloud.map(r => r.entry_id));
+ 
+      // pull DOWN: cloud entries we don't have locally
+      let added = false;
+      cloud.forEach(r => {
+        if (!localIds.has(r.entry_id) && r.data) { local.push(r.data); added = true; }
+      });
+      if (added) {
+        local.sort((a, b) => new Date(a.date) - new Date(b.date));
+        try { localStorage.setItem(DB.KEY, JSON.stringify(local)); } catch (e) {}
+      }
+ 
+      // push UP: local entries the cloud doesn't have yet (one bulk request)
+      const toPush = local.filter(e => !cloudIds.has(e.id)).map(e => ({
+        user_id: this._userId(), entry_id: e.id, type: e.type, entry_date: e.date, data: e
+      }));
+      if (toPush.length) {
+        await this._fetch(`/rest/v1/${this.TABLE}`, {
+          method: 'POST',
+          headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+          body: JSON.stringify(toPush)
+        });
+      }
+ 
+      // refresh the autobiography view if it happens to be open
+      if (added && typeof renderTodayLog === 'function') { try { renderTodayLog(); } catch (e) {} }
+      if (added && typeof surfaceEcho   === 'function') { try { surfaceEcho();   } catch (e) {} }
+      if (added && typeof renderEchoesTab === 'function') { try { renderEchoesTab(); } catch (e) {} }
+    } catch (e) { console.warn('[Sync] reconcile error:', e); }
+  },
+ 
+  /* Delete the cloud backup entirely — for the "erase from cloud" option.
+     Returns true on success. The local copy is untouched. */
+  async deleteCloud() {
+    if (!this._ready()) return false;
+    try {
+      const res = await this._fetch(
+        `/rest/v1/${this.TABLE}?user_id=eq.${this._userId()}`, { method: 'DELETE' }
+      );
+      return res.ok;
+    } catch (e) { return false; }
+  },
+ 
+  init() {
+    // 1) Capture every future save. Local stays the source of truth;
+    //    this just mirrors each new entry up. Wrapped once, safely.
+    if (typeof DB !== 'undefined' && !DB._syncWrapped) {
+      const orig = DB.save.bind(DB);
+      DB.save = (type, data) => {
+        const result = orig(type, data);
+        try { Sync.pushLatest(); } catch (e) {}
+        return result;
+      };
+      DB._syncWrapped = true;
+    }
+    // 2) Reconcile as soon as the user is known (polls up to ~60s,
+    //    covering the sign-in flow, then stops).
+    let tries = 0;
+    const t = setInterval(() => {
+      if (this._ready()) { clearInterval(t); this.reconcile(); }
+      else if (++tries > 120) clearInterval(t);
+    }, 500);
+  }
+};
 
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
