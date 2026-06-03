@@ -61,40 +61,31 @@
       </div>
     </div>
 
-    <!-- STEP 2 — Guestmaster Letter -->
+    <!-- STEP 2 — Guestmaster Welcome Film -->
     <div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000;-webkit-overflow-scrolling:touch">
-      <div style="width:100%;background:#000">
-        <!-- Desktop: show image -->
-<img src="/still-mobile/src/image/guestmaster_letter.jpg" class="letter-desktop" style="width:100%;height:auto;display:block"/>
-<!-- Mobile: show HTML letter -->
-<div class="letter-mobile" style="background:#f4e9d8;padding:32px 24px 80px;position:relative;font-family:Georgia,serif;color:#3c2f2f;line-height:1.8">
-  <div style="text-align:center;margin-bottom:12px;font-size:40px;color:#b8860b">✝</div>
-  <h1 style="text-align:center;font-size:26px;margin:0 0 28px;color:#3c2f2f;letter-spacing:1px">Cell of the Guest – Still</h1>
-  <p style="font-size:18px;margin-bottom:20px">My dear guest,</p>
-  <p style="font-size:18px;margin-bottom:20px">You have arrived at Still. May this place of quiet become for you a true haven of the soul.</p>
-  <p style="font-size:18px;margin-bottom:20px">The bells are waiting for you. In the ancient rhythm of our life, they call the community together. Go now to the Settings and choose the hours when you wish to be summoned to prayer. Even when you have stepped away, the bell will sound — drawing you back, as the monastery bell has ever drawn scattered hearts home to God.</p>
-  <p style="font-size:18px;margin-bottom:20px">Begin today with one contemplative sitting. Let it be in the gentle light of morning, before the weight of the day presses upon you. In time, may this quiet root grow into two sittings of thirty minutes each. From this hidden place all true transformation slowly unfolds.</p>
-  <p style="font-size:18px;margin-bottom:20px">When you enter the Hours of the Office, you may receive the words as text upon the page or let them come to you as living voice. Try both. Let the Spirit teach you which way best serves your prayer.</p>
-  <p style="font-size:18px;margin-bottom:20px">Amma Sophia awaits you in the Spiritual Autobiography, under the Inspiration. Bring her something real from your own heart — she speaks only to those who come in truth.</p>
-  <p style="font-size:18px;margin-bottom:20px">Before the week is out, set your Rule. St Benedict taught us that without a rule, even the holiest intention remains only a passing wish. Choose the practices to which you will bind yourself with gentle fidelity.</p>
-  <p style="font-size:18px;margin-bottom:20px">Look always to the small mark in the upper right corner when something is yet unfamiliar. There you will find understanding.</p>
-  <p style="font-size:18px;margin-bottom:32px">You are not here by accident, dear guest. Begin.</p>
-  <div style="display:flex;justify-content:space-between;align-items:flex-end">
-    <p style="font-size:17px;font-style:italic;line-height:1.7">In peace and prayer,<br><strong>Brother Guestmaster Still</strong></p>
-    <div style="width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#c0392b,#7b1a10);border:4px solid #d4af37;display:flex;align-items:center;justify-content:center;color:#d4af37;font-size:22px;flex-shrink:0">✝</div>
-  </div>
-</div>
-        <div style="padding:24px 24px max(32px,env(safe-area-inset-bottom));background:#000">
-          <button onclick="obFinish()"
-            style="width:100%;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
-            Begin →
-          </button>
+      <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 90px;box-sizing:border-box">
+
+        <div style="text-align:center;font-size:34px;color:#b8860b;margin-bottom:4px">✝</div>
+        <h1 style="text-align:center;font-family:Georgia,serif;font-size:24px;letter-spacing:1px;color:#f4e9d8;margin:0 0 6px">Cell of the Guest</h1>
+        <p style="text-align:center;font-family:Georgia,serif;font-style:italic;font-size:15px;color:rgba(244,233,216,.6);margin:0 0 24px;max-width:480px">A word of welcome from Brother Guestmaster, before you begin.</p>
+
+        <!-- The welcome film -->
+        <div style="position:relative;width:100%;max-width:860px;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.55)">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/ZPLuMv8aKJA?rel=0&modestbranding=1&playsinline=1"
+            title="Welcome to Still"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
         </div>
+
+        <button onclick="obFinish()"
+          style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
+          Begin →
+        </button>
+
       </div>
     </div>
-
-  </div>
-</div>
 
 <script>
   const hv = document.getElementById('heroVideo');
