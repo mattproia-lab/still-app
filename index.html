@@ -7316,6 +7316,513 @@ const StorageSettings = {
   const t = setInterval(() => { if (addTrigger() || ++n > 20) clearInterval(t); }, 400);
 })();
 if (typeof DB!=='undefined' && !DB._syncWrapped){const _o=DB.save.bind(DB);DB.save=(t,d)=>{const r=_o(t,d);try{Sync.pushLatest&&Sync.pushLatest();}catch(e){}return r;};DB._syncWrapped=true;}
+
+const Paths = {
+ 
+  USE_AI_REFLECTION: true,   // set false to force the built-in reflection only
+ 
+  /* ============ CONTENT: the 14-day discernment ============ */
+  DISCERNMENT: {
+    id: 'discernment',
+    title: 'Discernment of a Decision',
+    subtitle: 'A 14-day Ignatian discernment, walked one day at a time.',
+    days: [
+      { day:1,  phase:'Freedom',      type:'free',     voice:'Deeper',
+        ref:'Psalm 25:4', scripture:'Show me your ways, O Lord; teach me your paths.',
+        teaching:"You are not here to get God to ratify a choice you've already made. You are here to become free enough to want what God wants.",
+        practice:'Sit a few minutes in stillness, asking only: make me free.',
+        prompt:'What do I already feel pulled toward — and can I admit it?' },
+ 
+      { day:2,  phase:'Freedom',      type:'free',     voice:'Amma Sophia',
+        ref:'Matthew 6:33', scripture:'Seek first the kingdom of God.',
+        teaching:"Indifference is not 'not caring.' It is holding the outcome loosely enough that God can move you either way.",
+        practice:'Pray slowly: "Take, Lord, and receive." Notice where it catches.',
+        prompt:'Which option would be hardest to surrender? Sit with that.' },
+ 
+      { day:3,  phase:'Freedom',      type:'free',     voice:'Amma Sophia',
+        ref:'Psalm 139:1', scripture:'O Lord, you have searched me and known me.',
+        teaching:"You don't have to manufacture an answer. The God who knows you is already drawing you.",
+        practice:'Rest in being fully known. Ask for trust, not yet for the answer.',
+        prompt:'Where am I trying to control this rather than receive it?' },
+ 
+      { day:4,  phase:'Dwelling',     type:'movement', optionRef:0, voice:'Amma Sophia',
+        ref:'Proverbs 3:5', scripture:'Trust in the Lord with all your heart.',
+        teaching:'Step imaginatively into a life where you have chosen this path. Walk through an ordinary day inside it, in God\u2019s presence.',
+        practice:'Imaginative contemplation of this option, lived out.',
+        prompt:'As I lived inside this choice, what rose — peace, or unease?' },
+ 
+      { day:5,  phase:'Dwelling',     type:'movement', optionRef:0, voice:'Amma Sophia',
+        ref:'Isaiah 30:21', scripture:'This is the way; walk in it.',
+        teaching:'First impressions can deceive. Return to the same path a second day and notice whether the movement holds or shifts.',
+        practice:'Return to this option in prayer. Don\u2019t force a verdict.',
+        prompt:'Did yesterday\u2019s movement deepen, fade, or turn?' },
+ 
+      { day:6,  phase:'Dwelling',     type:'movement', optionRef:1, voice:'Amma Sophia',
+        ref:'Jeremiah 29:11', scripture:'Plans to give you a future and a hope.',
+        teaching:'Now the same, with the other path. Live an ordinary day inside it, with God.',
+        practice:'Imaginative contemplation of this option, lived out.',
+        prompt:'What rose as I lived inside this one — toward God, or away?' },
+ 
+      { day:7,  phase:'Dwelling',     type:'movement', optionRef:1, voice:'Amma Sophia',
+        ref:'Psalm 37:7', scripture:'Be still before the Lord, and wait patiently.',
+        teaching:'Return a second day, as you did with the first path, so the comparison is fair.',
+        practice:'Return to this option in prayer.',
+        prompt:'Did this movement deepen, fade, or turn?' },
+ 
+      { day:8,  phase:'Reason',       type:'reflection', voice:'Amma Sophia',
+        ref:'1 Kings 19:12', scripture:'After the fire, a still small voice.',
+        teaching:'A day of rest. Read back what your heart has shown you these days \u2014 not to decide, but to see the pattern.',
+        practice:'Read the reflection below. Sit with it before God.',
+        prompt:'Does the pattern surprise me, or confirm something I already sensed?' },
+ 
+      { day:9,  phase:'Reason',       type:'proscons', voice:'Deeper',
+        ref:'James 1:5', scripture:'If anyone lacks wisdom, let him ask of God.',
+        teaching:'For the calm mind: weigh the real advantages and disadvantages of each path \u2014 prayed, asking which better frees you to love and serve.',
+        practice:'Write the advantages and disadvantages of each option, under prayer.',
+        prompt:'Which path, weighed honestly, more frees me to love and serve?' },
+ 
+      { day:10, phase:'Reason',       type:'exercise', voice:'Deeper',
+        ref:'Proverbs 11:14', scripture:'In an abundance of counselors there is safety.',
+        teaching:'Imagine a stranger comes to you facing this exact choice, with your circumstances. What would you counsel them, freely, without your own fear?',
+        practice:'Counsel the stranger. Write what you would tell them.',
+        prompt:'What did I tell them \u2014 and why can\u2019t I tell myself the same?' },
+ 
+      { day:11, phase:'Reason',       type:'exercise', voice:'Deeper',
+        ref:'Psalm 90:12', scripture:'Teach us to number our days, that we may gain a heart of wisdom.',
+        teaching:'Imagine yourself at the end of your life, looking back on this moment. Which choice will you wish you had made?',
+        practice:'Stand at the end, and look back.',
+        prompt:'From there, which path do I hope I chose?' },
+ 
+      { day:12, phase:'Reason',       type:'exercise', voice:'Deeper',
+        ref:'Romans 12:2', scripture:'\u2026that you may discern the will of God.',
+        teaching:'Imagine presenting each choice to God, to lay before him on the last day. Which one can you offer in peace?',
+        practice:'Offer each option to God. Notice which you can hand over freely.',
+        prompt:'Which choice can I place in God\u2019s hands without flinching?' },
+ 
+      { day:13, phase:'Confirmation', type:'reflection', emergingChoice:true, voice:'Amma Sophia',
+        ref:'Philippians 4:7', scripture:'The peace of God will guard your hearts.',
+        teaching:'A choice has likely begun to emerge. Don\u2019t seize it \u2014 bring it back to God and watch for the peace that settles, or the unrest that says wait.',
+        practice:'Hold the emerging choice before God. Ask for confirmation, in peace.',
+        prompt:'As I hold this choice before God, does peace settle on it \u2014 or does something resist?' },
+ 
+      { day:14, phase:'Confirmation', type:'decision', voice:'Amma Sophia',
+        ref:'John 14:27', scripture:'My peace I give to you.',
+        teaching:'If peace has held, make the choice and receive it as a gift. If unrest persists, that is itself fruit \u2014 it may not be time, or a director may help. There is no failure here.',
+        practice:'Make the decision, before God.',
+        prompt:'Name the choice. Name the peace \u2014 or the unrest \u2014 you carry into it.' }
+    ]
+  },
+ 
+  /* ============ small helpers ============ */
+  _today() { return new Date().toISOString().slice(0,10); },
+  _esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
+  _pending: null,
+  _emerging: null,
+ 
+  _all() { try { return (typeof DB!=='undefined') ? DB.all() : JSON.parse(localStorage.getItem('still_entries')||'[]'); } catch(e){ return []; } },
+ 
+  _loadActive() {
+    return this._all().filter(e => e.type==='discernment' && (e.status==='discerning'||e.status==='paused_desolation'))
+                      .sort((a,b)=>b.id-a.id)[0] || null;
+  },
+ 
+  _persist(disc) {
+    // write the row in place in localStorage, then upsert to cloud via Sync
+    let arr = this._all();
+    const i = arr.findIndex(e => e.id===disc.id);
+    if (i>=0) arr[i]=disc; else arr.push(disc);
+    try { localStorage.setItem((typeof DB!=='undefined'?DB.KEY:'still_entries'), JSON.stringify(arr)); } catch(e){}
+    try { if (typeof Sync!=='undefined') Sync.pushEntry(disc); } catch(e){}
+  },
+ 
+  _crisis() {
+    try { if (window.Crisis) { if (Crisis.open) Crisis.open(); else if (Crisis.show) Crisis.show(); } } catch(e){}
+  },
+ 
+  /* ============ open / route / overlay ============ */
+  open() { this._ensure(); this._route(); document.getElementById('pathsOverlay').style.display='flex'; },
+  close() { const o=document.getElementById('pathsOverlay'); if (o) o.style.display='none'; },
+ 
+  _ensure() {
+    if (document.getElementById('pathsOverlay')) return;
+    const el = document.createElement('div');
+    el.id='pathsOverlay';
+    el.style.cssText='display:none;position:fixed;inset:0;z-index:9997;background:rgba(3,3,8,.96);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 18px 60px;-webkit-overflow-scrolling:touch';
+    el.innerHTML='<div id="pathsPanel" style="max-width:560px;width:100%"></div>';
+    document.body.appendChild(el);
+  },
+ 
+  _route() {
+    const disc = this._loadActive();
+    if (!disc) return this._renderHome();
+    if (disc.status==='paused_desolation') return this._renderDesolation(disc);
+    if (disc.currentDay>14 || disc.status==='confirmed') return this._renderDone(disc);
+    if (disc.lastCompletedDate===this._today()) return this._renderRest(disc);
+    return this._renderDay(disc);
+  },
+ 
+  /* ============ shared UI bits ============ */
+  _frame(inner) {
+    document.getElementById('pathsPanel').innerHTML =
+      `<div style="background:#0a0a12;border:1px solid rgba(200,146,12,.22);border-radius:18px;padding:30px 26px 34px">${inner}</div>
+       <button onclick="Paths.close()" style="margin-top:14px;width:100%;background:none;border:1px solid rgba(255,255,255,.14);border-radius:10px;color:rgba(255,255,255,.55);font-family:'Heebo',sans-serif;font-size:14px;padding:11px;cursor:pointer">Close</button>`;
+  },
+  _h(t){ return `<p style="font-family:'Playfair Display',serif;font-size:25px;font-style:italic;color:#fff;margin:0 0 8px;line-height:1.25">${t}</p>`; },
+  _sub(t){ return `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 18px">${t}</p>`; },
+  _gold(label,onclick){ return `<button onclick="${onclick}" style="width:100%;padding:15px;margin-top:8px;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.55);border-radius:11px;color:#f0c040;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">${label}</button>`; },
+  _ghost(label,onclick){ return `<button onclick="${onclick}" style="width:100%;padding:12px;margin-top:8px;background:none;border:1px solid rgba(255,255,255,.16);border-radius:11px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">${label}</button>`; },
+  _scripture(d){ return `<div style="border-left:2px solid rgba(200,146,12,.4);padding:2px 0 2px 14px;margin:0 0 18px"><p style="font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:rgba(244,233,216,.92);line-height:1.5;margin:0">${d.scripture}</p><p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:8px 0 0">${d.ref}</p></div>`; },
+  _body(t){ return `<p style="font-family:'Heebo',sans-serif;font-size:14.5px;color:rgba(255,255,255,.8);line-height:1.65;margin:0 0 14px">${t}</p>`; },
+  _label(t){ return `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.65);margin:18px 0 8px">${t}</p>`; },
+  _textarea(ph){ return `<textarea id="discInput" placeholder="${this._esc(ph)}" style="width:100%;min-height:90px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;line-height:1.55;padding:12px;resize:vertical"></textarea>`; },
+  _struggleLink(){ return `<button onclick="Paths.reportStruggle()" style="display:block;width:100%;margin-top:16px;background:none;border:none;color:rgba(255,140,130,.8);font-family:'Heebo',sans-serif;font-size:12.5px;cursor:pointer;text-decoration:underline">I\u2019m struggling right now</button>`; },
+ 
+  /* ============ HOME ============ */
+  _renderHome() {
+    const p = this.DISCERNMENT;
+    this._frame(
+      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:rgba(200,146,12,.65);margin:0 0 14px">Spiritual Paths</p>` +
+      this._h(p.title) + this._sub(p.subtitle) +
+      this._body('A guided way of bringing a real decision to God \u2014 not to be told the answer, but to grow free enough to recognise it. Walked over about two weeks, a few quiet minutes a day.') +
+      `<p style="font-family:'Heebo',sans-serif;font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.6;margin:14px 0 0">This accompanies your prayer; it never replaces a spiritual director or confessor. For grave matters \u2014 vocation, marriage \u2014 please walk it with one.</p>` +
+      this._gold('Begin a Discernment', 'Paths.startSetup()')
+    );
+  },
+ 
+  /* ============ SETUP + GATE ============ */
+  startSetup() {
+    this._frame(
+      this._h('Name the decision') +
+      this._sub('What are you trying to decide? Write it as a question, then name the two paths before you.') +
+      this._label('The decision') +
+      `<input id="discDecision" placeholder="e.g. Should I take the role in Denver?" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px;margin-bottom:6px">` +
+      this._label('Option A') +
+      `<input id="discOptA" placeholder="e.g. Take the role" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px;margin-bottom:6px">` +
+      this._label('Option B') +
+      `<input id="discOptB" placeholder="e.g. Stay where I am" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px">` +
+      this._gold('Continue', 'Paths.toGate()') +
+      this._ghost('Back', 'Paths._route()')
+    );
+  },
+ 
+  toGate() {
+    const decision=(document.getElementById('discDecision').value||'').trim();
+    const a=(document.getElementById('discOptA').value||'').trim();
+    const b=(document.getElementById('discOptB').value||'').trim();
+    if (!decision||!a||!b) { alert('Please name the decision and both paths.'); return; }
+    this._draft = { decision, a, b };
+    this._frame(
+      this._h('Before you begin') +
+      this._body('Discernment is for choosing between <strong>good paths</strong> \u2014 two roads that could each honour God. If what you\u2019re weighing is something you sense is wrong, that belongs in the confessional, not here.') +
+      this._body('And if this isn\u2019t really a decision but a heaviness you\u2019re carrying \u2014 despair, or thoughts of harming yourself \u2014 this path is not the place. There is immediate help, and it matters more than any choice.') +
+      this._ghost('I need help right now', 'Paths._crisis()') +
+      this._gold('These are two good paths \u2014 begin', 'Paths.createDiscernment()') +
+      this._ghost('Back', 'Paths.startSetup()')
+    );
+  },
+ 
+  createDiscernment() {
+    const d = this._draft || {};
+    const disc = {
+      id: Date.now(), type:'discernment', date:new Date().toISOString(),
+      status:'discerning',
+      decision: d.decision,
+      options: [ {id:'a', label:d.a}, {id:'b', label:d.b} ],
+      currentDay: 1, lastCompletedDate: null, inDesolationNow:false,
+      days: {}, emergingChoice:null, finalChoice:null, confirmedInPeace:null, decidedAt:null
+    };
+    this._persist(disc);
+    this._draft=null;
+    this._route();
+  },
+ 
+  /* ============ DAILY CARD ============ */
+  _dayDef(n){ return this.DISCERNMENT.days.find(x=>x.day===n); },
+ 
+  _renderDay(disc) {
+    const n = disc.currentDay;
+    const d = this._dayDef(n);
+    this._pending=null; this._emerging=disc.emergingChoice||null;
+ 
+    let inner =
+      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:0 0 6px">${d.phase} \u00b7 Day ${n} of 14</p>` +
+      this._h(`\u201c${this._esc(disc.decision)}\u201d`) +
+      this._scripture(d) +
+      this._body(d.teaching) +
+      this._label('Today') + this._body(d.practice);
+ 
+    if (d.type==='reflection') {
+      const ref = (disc.reflections && disc.reflections[n]) ? disc.reflections[n] : this._composeReflection(disc);
+      inner += this._label('What these days have shown');
+      inner += `<p id="discReflection" style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(244,233,216,.85);line-height:1.65;background:rgba(200,146,12,.06);border-radius:10px;padding:14px;margin:0 0 14px">${this._esc(ref)}</p>`;
+      if (d.emergingChoice) {
+        inner += this._label('Which choice is beginning to emerge?');
+        inner += this._optionButtons(disc, 'emerging');
+      }
+      inner += this._label('Your reflection') + this._textarea(d.prompt);
+      inner += this._gold('Complete today', 'Paths.completeDay()');
+    }
+    else if (d.type==='movement') {
+      const opt = disc.options[d.optionRef];
+      inner = inner.replace('Today</p>', `Today \u00b7 ${this._esc(opt.label)}</p>`);
+      inner += this._label('Your reflection') + this._textarea(d.prompt);
+      inner += this._label('As you held this path in prayer, what moved?');
+      inner += this._movementButtons();
+      inner += this._gold('Complete today', 'Paths.completeDay()');
+    }
+    else if (d.type==='proscons') {
+      inner += this._label(`Advantages \u0026 disadvantages \u2014 ${this._esc(disc.options[0].label)}`);
+      inner += `<textarea id="discProsA" style="width:100%;min-height:70px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:12px;resize:vertical"></textarea>`;
+      inner += this._label(`Advantages \u0026 disadvantages \u2014 ${this._esc(disc.options[1].label)}`);
+      inner += `<textarea id="discProsB" style="width:100%;min-height:70px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:12px;resize:vertical"></textarea>`;
+      inner += this._gold('Complete today', 'Paths.completeDay()');
+    }
+    else if (d.type==='decision') {
+      inner += this._label('The choice you make');
+      inner += this._optionButtons(disc, 'final');
+      inner += this._label('Does peace hold on this choice?');
+      inner += `<div style="display:flex;gap:8px;margin-bottom:4px">
+        <button id="peaceYes" onclick="Paths._setPeace(true)" style="flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Yes, peace holds</button>
+        <button id="peaceNo" onclick="Paths._setPeace(false)" style="flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Some unrest remains</button>
+      </div>`;
+      inner += this._label('Your reflection') + this._textarea(d.prompt);
+      inner += this._gold('Make the decision', 'Paths.recordDecision()');
+    }
+    else { // free
+      inner += this._label('Your reflection') + this._textarea(d.prompt);
+      inner += this._gold('Complete today', 'Paths.completeDay()');
+    }
+ 
+    inner += this._struggleLink();
+    this._frame(inner);
+ 
+    if (d.type==='reflection') this._upgradeReflection(disc);
+  },
+ 
+  _movementButtons() {
+    const opts=[['consolation','Toward God \u00b7 peace'],['desolation','Away \u00b7 unrest'],['mixed','Mixed'],['neutral','Quiet']];
+    return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px">' + opts.map(([v,l])=>
+      `<button id="mv_${v}" onclick="Paths.chooseMovement('${v}')" style="flex:1 1 45%;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.82);font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer">${l}</button>`
+    ).join('') + '</div>';
+  },
+  chooseMovement(v) {
+    this._pending=v;
+    ['consolation','desolation','mixed','neutral'].forEach(k=>{
+      const b=document.getElementById('mv_'+k); if(!b)return;
+      const on=(k===v);
+      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
+      b.style.color=on?'#f0c040':'rgba(255,255,255,.82)';
+      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+    });
+  },
+ 
+  _optionButtons(disc, kind) {
+    return '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:6px">' + disc.options.map(o=>
+      `<button id="${kind}_${o.id}" onclick="Paths.chooseOption('${kind}','${o.id}')" style="width:100%;text-align:left;padding:13px 15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">${this._esc(o.label)}</button>`
+    ).join('') + '</div>';
+  },
+  chooseOption(kind, id) {
+    if (kind==='emerging') this._emerging=id; else this._finalChoice=id;
+    const disc=this._loadActive();
+    (disc?disc.options:[]).forEach(o=>{
+      const b=document.getElementById(kind+'_'+o.id); if(!b)return;
+      const on=(o.id===id);
+      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
+      b.style.color=on?'#f0c040':'rgba(255,255,255,.85)';
+      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+    });
+  },
+  _setPeace(v) {
+    this._peace=v;
+    [['peaceYes',true],['peaceNo',false]].forEach(([id,val])=>{
+      const b=document.getElementById(id); if(!b)return;
+      const on=(val===v);
+      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
+      b.style.color=on?'#f0c040':'rgba(255,255,255,.85)';
+      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+    });
+  },
+ 
+  /* ============ completing a day ============ */
+  completeDay() {
+    const disc=this._loadActive(); if(!disc) return;
+    const n=disc.currentDay; const d=this._dayDef(n);
+    const entry={ done:true };
+    const ta=document.getElementById('discInput');
+    if (ta) entry.journal=ta.value.trim();
+ 
+    if (d.type==='movement') {
+      if (!this._pending) { alert('Take a moment to notice what moved, and choose one.'); return; }
+      const opt=disc.options[d.optionRef];
+      entry.movement={}; entry.movement[opt.id]=this._pending;
+    }
+    if (d.type==='proscons') {
+      const pa=document.getElementById('discProsA'), pb=document.getElementById('discProsB');
+      entry.prosCons={ a:(pa?pa.value.trim():''), b:(pb?pb.value.trim():'') };
+    }
+    if (d.type==='reflection' && d.emergingChoice) disc.emergingChoice=this._emerging||disc.emergingChoice;
+ 
+    disc.days[n]=entry;
+    disc.lastCompletedDate=this._today();
+    disc.currentDay=n+1;
+    this._persist(disc);
+    this._route();
+  },
+ 
+  recordDecision() {
+    const disc=this._loadActive(); if(!disc) return;
+    if (!this._finalChoice) { alert('Name the choice you are making.'); return; }
+    if (this._peace===undefined||this._peace===null) { alert('Notice whether peace holds, and choose.'); return; }
+    const ta=document.getElementById('discInput');
+    disc.days[14]={ done:true, journal: ta?ta.value.trim():'' };
+    disc.finalChoice=this._finalChoice;
+    disc.confirmedInPeace=this._peace;
+    disc.status='confirmed';
+    disc.decidedAt=new Date().toISOString();
+    this._persist(disc);
+ 
+    // leave a quiet mark in the autobiography via a normal journal entry
+    const label=(disc.options.find(o=>o.id===disc.finalChoice)||{}).label||'';
+    const line = `Discernment \u2014 \u201c${disc.decision}\u201d: I chose \u201c${label}.\u201d ` +
+                 (disc.confirmedInPeace ? 'Confirmed in peace.' : 'Carried with some unrest \u2014 to revisit with a director.');
+    try { if (typeof DB!=='undefined') DB.save('journal', { text: line }); } catch(e){}
+ 
+    this._finalChoice=null; this._peace=null;
+    this._route();
+  },
+ 
+  /* ============ rest / desolation / done ============ */
+  _renderRest(disc) {
+    this._frame(
+      this._h('Rest until tomorrow') +
+      this._body('You\u2019ve walked today\u2019s step. Discernment unfolds slowly \u2014 let what you prayed today settle overnight before you take the next. Come back tomorrow.') +
+      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:14px 0 0">Day ${Math.min(disc.currentDay,14)} of 14 awaits</p>` +
+      this._struggleLink()
+    );
+  },
+ 
+  reportStruggle() {
+    const disc=this._loadActive();
+    if (disc && disc.status==='discerning') { disc.status='paused_desolation'; this._persist(disc); }
+    this._renderDesolation(disc);
+  },
+ 
+  _renderDesolation(disc) {
+    this._frame(
+      this._h('Be gentle with yourself') +
+      this._body('A word from St Ignatius, for moments like this: <em>in desolation, never make a change, and never reverse a decision.</em> Hold steady. Desolation lifts \u2014 it is not where choices are made.') +
+      this._body('Stay with your prayer, rest, and return to the discernment when the unrest eases. Nothing is lost by waiting.') +
+      this._ghost('I need help right now', 'Paths._crisis()') +
+      this._gold('I\u2019m steadier \u2014 return when ready', 'Paths.resume()')
+    );
+  },
+  resume() {
+    const disc=this._loadActive();
+    if (disc) { disc.status='discerning'; this._persist(disc); }
+    this._route();
+  },
+ 
+  _renderDone(disc) {
+    const label=(disc.options.find(o=>o.id===disc.finalChoice)||{}).label||'';
+    this._frame(
+      this._h('A discernment, made') +
+      this._scripture(this._dayDef(14)) +
+      this._body(`You brought \u201c${this._esc(disc.decision)}\u201d to God over these days, and chose: <strong>${this._esc(label)}</strong>.`) +
+      this._body(disc.confirmedInPeace
+        ? 'You carried peace into it. Receive the choice as a gift, not a gamble \u2014 and bring it to your director or confessor, who can confirm what the Spirit has shown.'
+        : 'Some unrest remained \u2014 and that is itself fruit, not failure. It may not yet be time. Please bring this to a spiritual director, who can help you see what you cannot see alone.') +
+      this._ghost('Begin another discernment', 'Paths._startAnother()')
+    );
+  },
+  _startAnother() { this.startSetup(); },
+ 
+  /* ============ the reflection (works with zero AI) ============ */
+  _moves(disc, optId, dayA, dayB) {
+    const a=disc.days[dayA]&&disc.days[dayA].movement?disc.days[dayA].movement[optId]:null;
+    const b=disc.days[dayB]&&disc.days[dayB].movement?disc.days[dayB].movement[optId]:null;
+    return [a,b].filter(Boolean);
+  },
+  _phrase(code) {
+    return ({consolation:'a peace that drew you toward prayer',
+             desolation:'a restlessness that pulled away',
+             mixed:'a mixed, unsettled stirring',
+             neutral:'quiet, without strong movement'})[code] || 'something hard to name';
+  },
+  _trajectory(moves) {
+    if (!moves.length) return 'no movement yet recorded';
+    if (moves.length===1) return this._phrase(moves[0]);
+    if (moves[0]===moves[1]) return 'consistently ' + this._phrase(moves[0]);
+    return this._phrase(moves[0]) + ', then ' + this._phrase(moves[1]);
+  },
+  _composeReflection(disc) {
+    const A=disc.options[0], B=disc.options[1];
+    const ta=this._trajectory(this._moves(disc,A.id,4,5));
+    const tb=this._trajectory(this._moves(disc,B.id,6,7));
+    return `As you dwelt with \u201c${A.label},\u201d you noticed ${ta}. As you dwelt with \u201c${B.label},\u201d you noticed ${tb}. ` +
+           `Sit with that contrast before God \u2014 not as a conclusion, but as something the Spirit may be showing you. What do you notice in yourself as you read it back?`;
+  },
+ 
+  _movementSummaryText(disc) {
+    const A=disc.options[0], B=disc.options[1];
+    let s=`Decision: "${disc.decision}".\n`;
+    s+=`Option A ("${A.label}"): ${this._trajectory(this._moves(disc,A.id,4,5))}.\n`;
+    s+=`Option B ("${B.label}"): ${this._trajectory(this._moves(disc,B.id,6,7))}.\n`;
+    if (disc.days[9]&&disc.days[9].prosCons) s+=`Weighing A: ${disc.days[9].prosCons.a}\nWeighing B: ${disc.days[9].prosCons.b}\n`;
+    s+='Reflect these interior movements back to help the person see the pattern. Do not decide for them.';
+    return s;
+  },
+ 
+  async _upgradeReflection(disc) {
+    if (!this.USE_AI_REFLECTION) return;
+    const n = disc.currentDay;
+    if (disc.reflections && disc.reflections[n]) return;   // already generated — don't spend another call
+    try {
+      // Matches your askMystic exactly: access_token in the BODY, model + max_tokens sent,
+      // reply read from data.content[0].text.
+      const res = await fetch('/.netlify/functions/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          feature: 'sophia',
+          access_token: localStorage.getItem('still_access_token'),
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 260,
+          system: "You are accompanying a discernment, not conducting one. Reflect the person's interior movements back gently and concretely so they can see the pattern. You may name what the movements seem to show. You must NEVER state which option to choose, imply a right answer, or speak with certainty \u2014 the person discerns. For grave matters (vocation, marriage), urge them to bring it to a spiritual director or confessor. End with a question, not a verdict. Three to five sentences, warm and unhurried.",
+          messages: [{ role: 'user', content: this._movementSummaryText(disc) }]
+        })
+      });
+      const data = await res.json();
+      if (data.error) return;   // limit reached / upgrade required → keep the built-in reflection
+      const text = (data.content && data.content[0] && data.content[0].text) || '';
+      if (typeof text === 'string' && text.trim().length > 40) {
+        disc.reflections = disc.reflections || {};
+        disc.reflections[n] = text.trim();
+        this._persist(disc);            // cache it so re-opening this day won't spend another call
+        const el = document.getElementById('discReflection');
+        if (el) el.textContent = text.trim();
+      }
+    } catch (e) { /* keep the built-in reflection */ }
+  }
+};
+ 
+/* Temporary launcher: a "Spiritual Paths" button next to Sign Out so you can
+   test now. Move Paths.open() into your main nav when ready, then delete this. */
+(function () {
+  function add() {
+    if (document.getElementById('pathsLauncher')) return true;
+    const so = Array.from(document.querySelectorAll('button'))
+      .find(b => (b.getAttribute('onclick')||'').includes('signOut'));
+    if (!so || !so.parentNode) return false;
+    const b=document.createElement('button');
+    b.id='pathsLauncher'; b.textContent='Spiritual Paths';
+    b.onclick=()=>Paths.open();
+    b.style.cssText="width:100%;margin-top:10px;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer";
+    so.parentNode.insertBefore(b, so);
+    return true;
+  }
+  let n=0; const t=setInterval(()=>{ if(add()||++n>20) clearInterval(t); },400);
+})();
+ 
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
 ═══════════════════════════════════════════ */
