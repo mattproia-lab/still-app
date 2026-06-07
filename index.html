@@ -3512,6 +3512,9 @@ const F=[
   {name:'Examen',badge:'Daily Conscience',screen:'examen',
    h:'The most honest four minutes of your day.',
    b:'St. Ignatius. Five questions. A private journal that builds over time.',cta:'Begin Examen'},
+  {name:'The Guide',badge:'The Seven Roots',screen:'theguide',
+  h:'Search the heart. Root out what binds it.',
+  b:'Ven. Louis of Granada. Five movements — the seven roots, their remedy, and a journal that builds over time.',cta:'Begin'},
   {name:'Darkness Mode',badge:'For When You\'re Not OK',screen:'darkness',
    h:'For when God feels absent.',
    b:'Lamentations. The dark Psalms. John of the Cross. Thérèse of Lisieux.',cta:'Enter'},
@@ -3821,6 +3824,7 @@ function enterFeature(i){
   incrementSession();
   if (shouldShowPaywall()) { showPaywall(); return; }
 
+if (F[i].screen === 'theguide') { Guide.open(); return; }
   showScreen(F[i].screen,i);
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
@@ -3831,7 +3835,6 @@ function enterFeature(i){
   if(F[i].screen==='rule') loadRuleItems();
   if(F[i].screen==='community') initCommunity();
 }
-
 function homeReset(){
   homeActive=-1;
   animateTo(HOME);
