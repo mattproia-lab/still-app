@@ -3823,9 +3823,10 @@ function enterFeature(i){
   incrementSession();
   if (shouldShowPaywall()) { showPaywall(); return; }
 
-if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
+  if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
+  if (F[i].screen === 'paths') { Paths.open(); return; }
+
   showScreen(F[i].screen,i);
-  if (F[i].screen === 'paths') { Paths.open(); return; }   // ← add this
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
   if(F[i].screen==='office') initOfficeScreen();
