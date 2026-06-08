@@ -3547,6 +3547,7 @@ const W=[
   {r:205,g:155,b:10, i:.92,base:'#070600'}, // Sitting — gold
   {r:0,  g:172,b:192,i:.90,base:'#010909'}, // Lectio — teal
   {r:22, g:50, b:215,i:.90,base:'#010109'}, // Examen — cobalt
+  {r:156,g:74, b:47, i:.86,base:'#070301'}, // The Guide — ember
   {r:8,  g:5,  b:16, i:.15,base:'#030303'}, // Darkness — near void
   {r:100,g:20, b:200,i:.82,base:'#040007'}, // Breath Prayer — deep violet
   {r:192,g:28, b:172,i:.88,base:'#060006'}, // Community — violet
@@ -3555,7 +3556,6 @@ const W=[
   {r:8,  g:120,b:32, i:.88,base:'#010600'}, // Rule — forest
   {r:70, g:8,  b:152,i:.90,base:'#040007'}, // Autobiography — purple
   {r:120,g:148,b:200,i:.55,base:'#020308'}, // Deeper — softer blue
-  {r:4,  g:8,  b:48, i:.90,base:'#010108'}, // Night Stories — deep midnight
   {r:70, g:70, b:90, i:.50,base:'#020208'}, // Resources — muted blue-grey
 ];
 const HOME={r:82,g:20,b:140,i:.28,base:'#030305'};
@@ -9020,6 +9020,20 @@ const INFO_CONTENT = {
     `
   },
 
+  theguide: {
+    title: 'The Guide',
+    body: `
+      <p>For more than four hundred years, Ven. Louis of Granada's <em>The Sinner's Guide</em> (1555) has been one of the most beloved maps of the spiritual life — translated across Europe and beyond within its author's own lifetime. This is its whole arc, rendered as a contemplative path you can walk in a single evening.</p>
+      <div class="info-panel-quote">
+        <p>"In all your works remember your last end, and you shall never sin."</p>
+        <span>— Sirach 7:40, the book's own epigraph</span>
+      </div>
+      <p>The way runs in five movements, following the book's own architecture. <strong>The Motives</strong> ask why one would turn toward God at all — and Louis answers, for many chapters, with nothing but God's goodness and mercy. <strong>The Four Last Things</strong> — death, judgment, heaven, hell — set what is at stake, soberly and never luridly. <strong>The Excuses</strong> name the quiet lies that keep us from beginning. <strong>Searching the Heart</strong> is the engine — an examination across the seven capital roots of sin, and for whichever stirs most strongly, its contrary virtue, a Scripture, and a seven-day remedy. <strong>The Threefold Life</strong> turns from rooting out to building up: the virtues owed to yourself, your neighbor, and God.</p>
+      <p>The old guides taught that each soul has a <em>predominant fault</em> — one root from which most of its sins quietly grow. Tending that one root, rather than scattering effort across all seven, is the whole strategy. As you return to the practice, your examinations build a quiet record, and the predominant root over time becomes visible — the way a director would notice it.</p>
+      <p>This is not a checklist or a verdict. Louis wrote to free souls, not to frighten them, and the practice ends not in the ledger of sins but in the peace of a good conscience. Come without fear. And let it send you toward the sacrament of Reconciliation, a confessor, or a spiritual director — never around them. A practice can prepare the heart; it cannot absolve it.</p>
+    `
+  },
+
   darkness: {
     title: 'Darkness Mode',
     body: `
@@ -9168,10 +9182,9 @@ const INFO_CONTENT = {
 };
 
 function openHomeInfo() {
-  // Open info panel for currently active home feature
-  const screenKeys = ['companion','sitting','lectio','examen','darkness','breath','community','saint','office','rule','autobiography','deeper'];
-  if (homeActive >= 0 && homeActive < screenKeys.length) {
-    openInfo(screenKeys[homeActive]);
+  // Read the screen directly from F so this can never fall out of sync
+  if (homeActive >= 0 && homeActive < F.length) {
+    openInfo(F[homeActive].screen);
   }
 }
 
