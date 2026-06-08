@@ -11927,15 +11927,6 @@ async function verifyCode() {
     const data = await res.json();
     errEl.textContent = data.error_description || 'Invalid code. Try again.';
   }
-  if (res.ok) {
-    localStorage.setItem('still_phone_verified', 'true');
-    closePhoneVerify();
-    // Now let them use the Companion
-    askCompanion();
-  } else {
-    const data = await res.json();
-    errEl.textContent = data.error_description || 'Invalid code. Try again.';
-  }
 }
 
 </script>
