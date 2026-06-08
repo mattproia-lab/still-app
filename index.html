@@ -1174,33 +1174,36 @@ body.is-mobile #mobileEnterTab { display: block; }
   <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px">
     <div style="width:100%;max-width:420px">
 
-      <!-- Header -->
-      <div style="text-align:center;margin-bottom:32px">
+      <div style="text-align:center;margin-bottom:28px">
         <p id="paywallBadge" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:0 0 10px">Your free trial has ended</p>
         <h1 style="font-family:'Playfair Display',serif;font-size:38px;font-weight:400;font-style:italic;color:#fff;margin:0 0 8px">Still</h1>
         <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0">Continue your practice</p>
       </div>
 
-      <!-- Plan (single) -->
-      <div style="max-width:340px;margin:0 auto 22px">
-        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:28px 24px 22px;text-align:center;position:relative">
-          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 14px">Membership</p>
-          <p style="font-family:'Playfair Display',serif;font-size:36px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:4px 0 18px">per month</p>
+      <div style="max-width:360px;margin:0 auto">
+        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:22px 22px;text-align:center">
+
+          <div style="display:flex;gap:6px;margin:0 0 20px">
+            <button id="pwTabMonthly" onclick="pwBill('monthly')" style="flex:1;padding:9px 4px;border-radius:9px;border:1px solid rgba(200,146,12,.8);background:rgba(200,146,12,.16);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer">Monthly</button>
+            <button id="pwTabAnnual" onclick="pwBill('annual')" style="flex:1;padding:9px 4px;border-radius:9px;border:1px solid rgba(255,255,255,.16);background:none;color:rgba(255,255,255,.55);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">Annual · Save 25%</button>
+          </div>
+
+          <p id="pwPrice" style="font-family:'Playfair Display',serif;font-size:36px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
+          <p id="pwPeriod" style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:4px 0 18px">per month</p>
+
           <div style="border-top:1px solid rgba(200,146,12,.2);padding-top:16px;margin-bottom:20px;text-align:left">
             <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; All practices &amp; the Office</p>
             <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; The Companion, Amma Sophia &amp; Deeper</p>
             <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; Your spiritual autobiography</p>
             <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);margin:0">✦&nbsp; Hear any voice aloud with audio credit — pay only for what you play</p>
           </div>
-          <button onclick="startCheckout('premium')" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.25)'" onmouseout="this.style.background='rgba(200,146,12,.15)'">Subscribe →</button>
+
+          <button onclick="pwSubscribe()" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer">Subscribe →</button>
         </div>
       </div>
 
-      <!-- Trial info -->
-      <p id="paywallTrialInfo" style="text-align:center;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);margin:0 0 14px">Your trial included 30 days and 20 sessions of full access.</p>
+      <p id="paywallTrialInfo" style="text-align:center;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);margin:18px 0 14px">Your trial included 30 days and 20 sessions of full access.</p>
 
-      <!-- Footer links -->
       <div style="text-align:center">
         <button onclick="restorePurchase()" style="background:none;border:none;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;text-decoration:underline;padding:4px 8px">Restore purchase</button>
         <span style="color:rgba(255,255,255,.15);font-size:11px"> · </span>
@@ -1210,6 +1213,25 @@ body.is-mobile #mobileEnterTab { display: block; }
     </div>
   </div>
 </div>
+<script>
+  window._pwBilling = 'monthly';
+  function pwBill(b){
+    window._pwBilling = b;
+    var mo = (b === 'monthly');
+    var price = document.getElementById('pwPrice');
+    var period = document.getElementById('pwPeriod');
+    if (price)  price.textContent  = mo ? '$9.99' : '$89.99';
+    if (period) period.textContent = mo ? 'per month' : 'per year · $7.50/month';
+    var on  = {b:'1px solid rgba(200,146,12,.8)', bg:'rgba(200,146,12,.16)', c:'#e8c860'};
+    var off = {b:'1px solid rgba(255,255,255,.16)', bg:'none', c:'rgba(255,255,255,.55)'};
+    function sty(el,s){ if(!el) return; el.style.border=s.b; el.style.background=s.bg; el.style.color=s.c; }
+    sty(document.getElementById('pwTabMonthly'), mo?on:off);
+    sty(document.getElementById('pwTabAnnual'),  mo?off:on);
+  }
+  function pwSubscribe(){
+    startCheckout(window._pwBilling === 'annual' ? 'annual' : 'personal');
+  }
+</script>
 
 <!-- ═══════════════════════════════════════════
      BACKGROUND (persists behind all screens)
@@ -2604,7 +2626,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           onmouseout="this.style.borderColor='#454856'">
           <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
           <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">The Examen</p>
+            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">The Examen, The Guide</p>
             <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">The Sinner's Guide</p>
             <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Venerable Louis of Granada, O.P.</p>
             <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">With unflinching honesty, Louis of Granada lays bare the misery of a life enslaved to sin — and the incomparable joy, peace, and freedom of living for God. He meditates on the Four Last Things and the beauty of the virtues, making it an ideal companion for honest self-examination and deeper contemplative prayer. Perfect for anyone seeking real conversion of heart.</p>

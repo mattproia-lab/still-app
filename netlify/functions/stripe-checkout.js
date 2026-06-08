@@ -10,18 +10,18 @@ exports.handler = async function(event) {
   const { user_id, email, tier } = body;
   if (!user_id || !email) return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
 
-  let priceId, mode = 'subscription', metadata = { user_id, tier: tier || 'personal' };
+  let priceId, mode = 'subscription', metadata = { user_id, tier: 'premium' };
   let successUrl = `${process.env.SITE_URL}?upgraded=true`;
 
   if (tier === 'audio_credit') {
     priceId = process.env.STRIPE_AUDIO_CREDIT_PRICE_ID;
-    mode = 'payment';                                       // one-time, not a subscription
-    metadata = { user_id, type: 'audio_topup', credit_cents: '1000' }; // $10 → 1000¢ granted
+    mode = 'payment';
+    metadata = { user_id, type: 'audio_topup', credit_cents: '1000' };
     successUrl = `${process.env.SITE_URL}?credit=added`;
-  } else if (tier === 'contemplative') {
-    priceId = process.env.STRIPE_CONTEMPLATIVE_PRICE_ID;
+  } else if (tier === 'annual') {
+    priceId = process.env.STRIPE_ANNUAL_PRICE_ID;     // $89.99 / year
   } else {
-    priceId = process.env.STRIPE_PRICE_ID; // personal
+    priceId = process.env.STRIPE_PRICE_ID;            // $9.99 / month
   }
 
   try {
