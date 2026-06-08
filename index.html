@@ -3824,7 +3824,7 @@ function enterFeature(i){
   incrementSession();
   if (shouldShowPaywall()) { showPaywall(); return; }
 
-if (F[i].screen === 'theguide') { Guide.open(); return; }
+if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   showScreen(F[i].screen,i);
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
@@ -8074,22 +8074,22 @@ const Guide = (function () {
   #stillGuide .rail .num.done{ color:var(--gold); }
   #stillGuide .rail .num.active{ color:var(--ember); transform:scale(1.32); }
   #stillGuide .rail .label{ font-size:0.68rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--ink-faint); }
-  #stillGuide .stage{ flex:1; display:flex; flex-direction:column; justify-content:center; }
-  #stillGuide .screen{ opacity:0; }
-  #stillGuide .screen.in{ opacity:1; }
-  #stillGuide .screen.leaving{ opacity:0; transform:translateY(-8px); transition:opacity .34s ease, transform .34s ease; }
-  #stillGuide .screen-inner{ display:flex; flex-direction:column; }
-  #stillGuide .screen.in .screen-inner > *{ animation:sg-rise .85s cubic-bezier(.2,.7,.25,1) both; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(1){ animation-delay:.02s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(2){ animation-delay:.10s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(3){ animation-delay:.18s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(4){ animation-delay:.26s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(5){ animation-delay:.34s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(6){ animation-delay:.42s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(7){ animation-delay:.50s; }
-  #stillGuide .screen.in .screen-inner > *:nth-child(8){ animation-delay:.58s; }
+  #stillGuide .stage{ flex:1; display:flex; flex-direction:column; justify-content:center; position:relative; }
+#stillGuide .sg-screen{ opacity:0; position:relative; z-index:2; }
+#stillGuide .sg-screen.in{ opacity:1; }
+#stillGuide .sg-screen.leaving{ opacity:0; transform:translateY(-8px); transition:opacity .34s ease, transform .34s ease; pointer-events:none; z-index:1; }
+#stillGuide .sg-screen-inner{ display:flex; flex-direction:column; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *{ animation:sg-rise .85s cubic-bezier(.2,.7,.25,1) both; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(1){ animation-delay:.02s; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(2){ animation-delay:.10s; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(3){ animation-delay:.18s; }
+ #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(4){ animation-delay:.26s; }
+ #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(5){ animation-delay:.34s; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(6){ animation-delay:.42s; }
+  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(7){ animation-delay:.50s; }
+  #stillGuide .sg-screen .screen.in .sg-screen-inner > *:nth-child(8){ animation-delay:.58s; }
   @keyframes sg-rise{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
-  @media (prefers-reduced-motion: reduce){ #stillGuide .screen.in .screen-inner > *{ animation:none; } #stillGuide .screen, #stillGuide .screen.leaving{ transition:none; } }
+  @media (prefers-reduced-motion: reduce){ #stillGuide .sg-screen.in .sg-screen-inner > *{ animation:none; } #stillGuide .sg-screen, #stillGuide .sg-screen.leaving{ transition:none; } }
   #stillGuide .overline{ font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 1.1rem; }
   #stillGuide h1.title{ font-family:"Cormorant Garamond", serif; font-weight:500; font-size:clamp(2.8rem,9vw,3.9rem); line-height:1.02; letter-spacing:0.005em; margin:0 0 0.5rem; }
   #stillGuide .subtitle{ font-style:italic; font-size:1.08rem; color:var(--ink-soft); margin:0 0 1.8rem; }
@@ -8317,7 +8317,7 @@ const Guide = (function () {
   /* ── NAV ── */
   function transition(fn){
     if(transitioning) return; transitioning=true;
-    const cur=stage.querySelector(".screen");
+    const cur=stage.querySelector(".sg-screen");
     const finish=()=>{ fn(); render(); persist(); transitioning=false; };
     if(cur){ cur.classList.add("leaving"); setTimeout(finish,320); } else finish();
     if(root) root.scrollTo({top:0,behavior:"smooth"});
@@ -8327,7 +8327,7 @@ const Guide = (function () {
 
   /* ── SCREENS ── */
   function screenWelcome(){
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">Welcome</p>
       <h1 class="title">The Guide</h1>
       <p class="subtitle">the whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></p>
@@ -8346,7 +8346,7 @@ const Guide = (function () {
       if(p.step>=1 && p.step<=7){ const r=CONTENT.roots[p.step-1]; where=`You were searching the root of <strong style="font-weight:500;color:var(--ember);">${r.name.toLowerCase()}</strong>.`; }
       else { where=`You were near the end of your searching.`; }
     }
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">Welcome back</p>
       <hr class="rule">
       <p class="body lead">You left an examination unfinished. ${where}</p>
@@ -8365,7 +8365,7 @@ const Guide = (function () {
       { v:"examen", n:"IV", name:"Searching the Heart", sub:"The seven roots, and their cure" },
       { v:"threefold", n:"V", name:"The Threefold Life", sub:"How then to live" }
     ].map(m=>`<button class="mv" data-view="${m.v}"><span class="mv-num">${m.n}</span><span class="mv-body"><span class="mv-name">${m.name}</span><span class="mv-sub">${m.sub}</span></span><span class="mv-arrow">›</span></button>`).join("");
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">A Contemplative Path</p>
       <h1 class="title">The Guide</h1>
       <p class="subtitle">the whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></p>
@@ -8396,7 +8396,7 @@ const Guide = (function () {
         return `<div class="harvest-row"><div class="h-date">${ds}</div><div class="h-root">${e.root||"—"}</div><div class="h-res">${res}</div></div>`;
       }).join("");
     }
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <button class="home-link" data-home="1">‹ The Guide</button>
       <p class="overline">My Harvest</p>
       <hr class="rule">${crown}
@@ -8409,7 +8409,7 @@ const Guide = (function () {
     const i=state.cardIndex, c=set[i], isLast=i===set.length-1;
     const overline= kind==="motives" ? "I · The Motives" : "II · The Four Last Things";
     const tender = c.tender ? `<p class="tender-note">There is no need to press on tonight. You may rest here, and return another time — the door of mercy stays open.</p>` : ``;
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <button class="home-link" data-home="1">‹ The Guide</button>
       <p class="card-counter">${overline} &nbsp;·&nbsp; ${i+1} of ${set.length}</p>
       <h2 class="card-title">${c.title}</h2>
@@ -8437,7 +8437,7 @@ const Guide = (function () {
         <div class="note-wrap"><textarea class="note" data-exnote="1" placeholder="Name it honestly here (optional)&hellip;">${esc(state.excuseNote)}</textarea></div>
       </div>`;
     }
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <button class="home-link" data-home="1">‹ The Guide</button>
       <p class="overline">III · The Excuses</p>
       <hr class="rule">
@@ -8449,7 +8449,7 @@ const Guide = (function () {
     </div></div>`;
   }
   function examenStillness(){
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <button class="home-link" data-home="1">‹ The Guide</button>
       <p class="overline">IV · Searching the Heart</p>
       <hr class="rule">
@@ -8463,7 +8463,7 @@ const Guide = (function () {
     const r=CONTENT.roots[i], st=state.roots[i];
     const opts=RES_OPTS.map(o=>`<button class="opt" aria-pressed="${st.resonance===o.v?'true':'false'}" data-res="${o.v}" data-root="${i}">${o.label}<span class="o-sub">${o.sub}</span></button>`).join("");
     const qs=r.questions.map(q=>`<li>${q}</li>`).join("");
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="root-numeral">${r.numeral}</p>
       <h2 class="root-name">${r.name}</h2>
       <p class="root-latin">${r.latin}</p>
@@ -8488,7 +8488,7 @@ const Guide = (function () {
     const opening= value===0
       ? `<p class="body lead">Across all seven, your heart seems at peace today &mdash; and that, too, is grace. If you wish, choose one root simply to tend with care.</p>`
       : `<p class="body lead">The old guides taught that each soul has a <em>predominant fault</em> &mdash; one root from which most of its sins quietly grow.</p><p class="body">To weed the whole garden at once is to weed none. So look honestly: which root stirred most? That is not the place of your shame &mdash; it is the place of your next freedom.</p>`;
-    return `<div class="screen"><div class="screen-inner">
+    return `<divclass="sg-screen"><div class="sg-screen-inner">
       <p class="overline">What rose to the surface</p>
       <hr class="rule">${opening}
       <div><p class="section-label" style="margin-top:0.4rem;">Choose the one to tend</p><div class="choose-list">${list}</div></div>
@@ -8500,7 +8500,7 @@ const Guide = (function () {
     const gen=r.remediesGeneral.map(x=>`<li>${x}</li>`).join("");
     const par=r.remediesParticular.map(x=>`<li>${x}</li>`).join("");
     const steps=r.regimen.steps.map(x=>`<li>${x}</li>`).join("");
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">For the root of ${r.name.toLowerCase()}</p>
       <p class="body" style="margin-bottom:1.3rem; color:var(--ink-soft); font-style:italic;">No vice is driven out by force. Each is healed only by the slow growth of its contrary virtue.</p>
       <p class="section-label">Cultivate, in its place</p>
@@ -8518,7 +8518,7 @@ const Guide = (function () {
   }
   function examenResolution(){
     const i=state.chosenRoot==null?predominantIndex().index:state.chosenRoot; const r=CONTENT.roots[i];
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">The first remedy</p>
       <hr class="rule">
       <p class="body lead">Louis names the first remedy against any sin a <em>firm and definite resolution</em> against it.</p>
@@ -8538,7 +8538,7 @@ const Guide = (function () {
     const ruleBtn=hasRes ? (state.resAddedToRule
         ? `<button class="res-rule-btn added" disabled>&#10003; Added to your Rule of Life</button>`
         : `<button class="res-rule-btn" data-addres="1">Add this resolution to my Rule</button>`) : ``;
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <p class="overline">The peace of a good conscience</p>
       <hr class="rule">
       <p class="body lead">You have looked at yourself honestly &mdash; and you are still held.</p>
@@ -8569,7 +8569,7 @@ const Guide = (function () {
       const added=state.ruleAdded[v.name];
       return `<div class="virtue-row"><div class="vr-head"><span class="vr-name">${v.name}</span><button class="add-rule ${added?'added':''}" data-rule="${esc(v.name)}" ${added?'disabled':''}>${added?'✓ in your rule':'+ add to rule'}</button></div><p class="vr-line">${v.line}</p><p class="vr-practice">${v.practice}</p></div>`;
     }).join("");
-    return `<div class="screen"><div class="screen-inner">
+    return `<div class="sg-screen"><div class="sg-screen-inner">
       <button class="home-link" data-home="1">‹ The Guide</button>
       <p class="overline">V · The Threefold Life</p>
       <hr class="rule">
@@ -8595,7 +8595,9 @@ const Guide = (function () {
     else if(state.view==="threefold") html=screenThreefold();
     else if(state.view==="harvest") html=screenHarvest();
     stage.innerHTML=html;
-    requestAnimationFrame(()=>{ const sc=stage.querySelector(".screen"); if(sc) sc.classList.add("in"); });
+    stage.style.position='relative';
+    var _sc=stage.querySelector('.screen'); if(_sc){ _sc.style.position='relative'; _sc.style.zIndex='2'; }
+    requestAnimationFrame(()=>{ const sc=stage.querySelector(".sg-screen"); if(sc) sc.classList.add("in"); });
     if(typeof bumpFonts==="function") setTimeout(bumpFonts,80);
     wire();
   }
