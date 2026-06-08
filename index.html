@@ -9456,7 +9456,7 @@ async function initAuth() {
   if (!localStorage.getItem('still_onboarded')) return;
   const token = localStorage.getItem('still_access_token');
   const refresh = localStorage.getItem('still_refresh_token');
-  
+
   if (!token) { document.getElementById('authOverlay').style.display = 'flex'; return; }
 
   const res = await fetch(`${SUPA_URL}/auth/v1/user`, {
@@ -9486,7 +9486,9 @@ async function initAuth() {
   } else {
     document.getElementById('authOverlay').style.display = 'flex';
   }
-  async function updateLastActive() {
+}
+
+async function updateLastActive() {
   if (!currentUser) return;
   try {
     await supaFetch('/rest/v1/user_activity', {
@@ -9500,7 +9502,6 @@ async function initAuth() {
   } catch(e) {}
 }
 
-}
 async function forgotPassword() {
   const email = document.getElementById('authEmail').value.trim();
   const errEl = document.getElementById('authErr');
