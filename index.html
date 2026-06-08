@@ -3521,6 +3521,9 @@ const F=[
   {name:'Breath Prayer',badge:'Jesus Prayer Counter',screen:'breath',
    h:'Lord Jesus Christ, Son of God,\nhave mercy on me, a sinner.',
    b:'A tap counter for the Jesus Prayer or any breath prayer. No timer. Just count.',cta:'Begin'},
+  {name:'Spiritual Paths',badge:'Guided Journeys',screen:'paths',
+   h:'Some things must be walked, not prayed once.',
+   b:'Guided journeys through the tradition — beginning with a 14-day Ignatian discernment of a decision.',cta:'Begin'},
   {name:'Community',badge:'Anonymous · 9pm',screen:'community',
    h:'Every night at 9pm. One question.',
    b:'Three strangers. No usernames. No likes. Just the knowledge that others are asking the same things.',cta:'Enter'},
@@ -3550,6 +3553,7 @@ const W=[
   {r:156,g:74, b:47, i:.86,base:'#070301'}, // The Guide — ember
   {r:8,  g:5,  b:16, i:.15,base:'#030303'}, // Darkness — near void
   {r:100,g:20, b:200,i:.82,base:'#040007'}, // Breath Prayer — deep violet
+  {r:64, g:52, b:150,i:.74,base:'#030214'}, // Guided Journeys- a twilight indigo;
   {r:192,g:28, b:172,i:.88,base:'#060006'}, // Community — violet
   {r:188,g:110,b:12, i:.90,base:'#070400'}, // Saint — amber
   {r:162,g:10, b:52, i:.88,base:'#060002'}, // Office — rose
@@ -3826,6 +3830,7 @@ function enterFeature(i){
 
 if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   showScreen(F[i].screen,i);
+  if (F[i].screen === 'paths') { Paths.open(); return; }   // ← add this
   if(F[i].screen==='lectio') initLectio();
   if(F[i].screen==='autobiography') initAutobio();
   if(F[i].screen==='office') initOfficeScreen();
@@ -9058,6 +9063,20 @@ const INFO_CONTENT = {
       </div>
       <p>The prayer rope — the chotki in Orthodox tradition, the komboskini in Greek — is a physical counter for repetitions. Monks counted hundreds or thousands of repetitions daily, not as mechanical repetition but as a way of returning the attention to God each time it wandered. The count is not the point. The returning is the point.</p>
       <p>Any short prayer can serve this purpose. Augustine's "Our heart is restless until it rests in Thee." Francis of Assisi's "My God and my All." The name of Jesus alone. The practice adapts to whatever phrase carries weight for you in this season.</p>
+    `
+  },
+
+  paths: {
+    title: 'Spiritual Paths',
+    body: `
+      <p>Some things cannot be prayed in a single sitting. A grief, a long darkness, a decision that will shape years — these ask to be <em>walked</em>, a little each day, until the heart has time to catch up with what God is doing. <strong>Spiritual Paths</strong> are guided journeys for exactly that: a few quiet minutes a day, over days or weeks, along a way the tradition has walked for centuries.</p>
+      <div class="info-panel-quote">
+        <p>"Make me to know your ways, O Lord; teach me your paths."</p>
+        <span>— Psalm 25:4</span>
+      </div>
+      <p>The first path is the <strong>Discernment of a Decision</strong>, drawn from the Spiritual Exercises of St. Ignatius. Over about two weeks it moves through four movements. <strong>Freedom</strong> loosens your grip on the outcome you already want, so you can truly hear. <strong>Dwelling</strong> lives imaginatively inside each path in prayer, noticing what each one stirs — the consolation that draws you toward God, or the desolation that pulls away. <strong>Reason</strong> weighs the matter in tranquil prayer, with the old exercises: counsel a stranger facing your choice, stand at the end of your life and look back, lay each option before God. And <strong>Confirmation</strong> brings the choice that has emerged back to God, watching for the peace that settles on it.</p>
+      <p>Ignatius taught a rule worth keeping close: <em>in desolation, never make a change, and never reverse a decision.</em> When the way feels dark, hold steady — it will lift. The path will wait gently with you.</p>
+      <p>This never tells you what to choose. It is a way of becoming free enough to recognize the answer yourself — and it points you always toward a spiritual director or confessor, never around them. A path can prepare the heart; only the Spirit, and the people God gives you, can confirm it. For grave matters — a vocation, a marriage — walk it with a director. Come without fear, and unhurried.</p>
     `
   },
 
