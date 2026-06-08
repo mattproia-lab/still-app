@@ -10043,21 +10043,34 @@ function enterFromSacristy() {
 
 
 /* ═══════════════════════════════════════════
-   PAYWALL — 30 days OR 20 sessions, whichever first
-   Stripe keys: replace STRIPE_PERSONAL_LINK and STRIPE_FAMILY_LINK
-   with your actual Stripe Payment Links when ready
+   STILL — PAYWALL  (trial → lock, keyed to Supabase subscription)
+
+   Two modes for the same screen:
+     • PREVIEW  — shown gently DURING the trial, dismissible ("Keep
+       exploring"), so people see what's coming and decide early.
+     • ENFORCED — shown when the trial is over AND they're not subscribed.
+       No dismiss. The app is locked until they subscribe.
+
+   "Are they subscribed?" reads profiles.subscription_status from Supabase
+   (the source of truth your Stripe webhook writes) — not a local flag.
+
+   NOTE: the legacy payment-link startCheckout was REMOVED from this file.
+   Your real startCheckout (the one that POSTs to /.netlify/functions/
+   stripe-checkout) lives in your other script and is the only one now.
+   Requires the new paywall markup (with the monthly/annual toggle) to be
+   in place, and SUPA_URL / SUPA_ANON to be defined globally (they are).
 ═══════════════════════════════════════════ */
+
 const PAYWALL_DAYS     = 30;
 const PAYWALL_SESSIONS = 20;
-const STRIPE_PERSONAL_LINK = 'https://buy.stripe.com/test_aFadR91Jw8ho75zeO16J200';
-const STRIPE_FAMILY_LINK   = 'https://buy.stripe.com/test_fZu4gz87U7dkey1eO16J201';
-const PARISH_EMAIL         = 'admin@stillprayer.app';
+const PARISH_EMAIL     = 'admin@stillprayer.app';
 
-// Keys
-const PW_START_KEY   = 'still_trial_start';
-const PW_SESSIONS_KEY= 'still_trial_sessions';
-const PW_PAID_KEY    = 'still_paid';
-const PW_PLAN_KEY    = 'still_plan';
+const PW_START_KEY    = 'still_trial_start';
+const PW_SESSIONS_KEY = 'still_trial_sessions';
+const PW_PAID_KEY     = 'still_paid';
+const PW_PLAN_KEY     = 'still_plan';
+const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_status
+const PW_PREVIEW_KEY  = 'still_preview_shown';  // which preview milestones have fired
 
 function initTrial() {
   if (!localStorage.getItem(PW_START_KEY)) {
@@ -10066,9 +10079,37 @@ function initTrial() {
   }
 }
 
-function isPaid() {
-  return localStorage.getItem(PW_PAID_KEY) === '1';
+/* ---------- subscription (Supabase = source of truth) ---------- */
+
+// Reads the cached status synchronously. refreshSubscription() keeps it fresh.
+function isSubscribed() {
+  const s = window._subStatus || localStorage.getItem(PW_SUB_KEY);
+  if (s === 'premium' || s === 'active') return true;
+  if (localStorage.getItem(PW_PAID_KEY) === '1') return true; // legacy / admin bypass
+  return false;
 }
+
+// Fetches profiles.subscription_status for the signed-in user and caches it.
+async function refreshSubscription() {
+  try {
+    const token = localStorage.getItem('still_access_token');
+    const uid = (window.currentUser && currentUser.id);
+    if (!token || !uid) return;
+    const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=subscription_status`, {
+      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const status = (data && data[0] && data[0].subscription_status) || 'free';
+    window._subStatus = status;
+    localStorage.setItem(PW_SUB_KEY, status);
+  } catch (e) { /* keep last-known status */ }
+}
+
+// Legacy helper kept for compatibility
+function isPaid() { return isSubscribed(); }
+
+/* ---------- trial counters ---------- */
 
 function getTrialDaysLeft() {
   const start = parseInt(localStorage.getItem(PW_START_KEY) || Date.now());
@@ -10082,43 +10123,76 @@ function getTrialSessionsLeft() {
 }
 
 function incrementSession() {
-  if (isPaid()) return;
+  if (isSubscribed()) return;
   const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
   localStorage.setItem(PW_SESSIONS_KEY, (used + 1).toString());
 }
 
-function shouldShowPaywall() {
-  if (isPaid()) return false;
-  if (getTrialDaysLeft() <= 0) return false;
-  if (getTrialSessionsLeft() <= 0) return false;
-  return false;
+function trialIsOver() {
+  return getTrialDaysLeft() <= 0 || getTrialSessionsLeft() <= 0;
 }
 
-function showPaywall() {
-  const daysLeft = getTrialDaysLeft();
-  const sessionsLeft = getTrialSessionsLeft();
-  const badge = document.getElementById('paywallBadge');
-  const info  = document.getElementById('paywallTrialInfo');
+/* ---------- the gate ---------- */
 
-  if (daysLeft <= 0) {
-    badge.textContent = 'Your 30-day free trial has ended';
-  } else {
-    badge.textContent = "You've used all 20 free sessions";
+// The HARD gate, called by enterFeature. True only when locked out.
+function shouldShowPaywall() {
+  if (isSubscribed()) return false;
+  return trialIsOver();
+}
+
+// preview === true  → dismissible, trial-day wording (shown DURING the trial)
+// preview falsy      → enforced, "ended" wording, no dismiss (the lock)
+function showPaywall(preview) {
+  const badge = document.getElementById('paywallBadge');
+  if (badge) {
+    badge.textContent = preview
+      ? ("You're on the free trial \u2014 " + Math.ceil(getTrialDaysLeft()) + " days left")
+      : "Your free trial has ended";
   }
 
-  document.getElementById('paywall').style.display = 'block';
+  const pw = document.getElementById('paywall');
+  let dismiss = document.getElementById('pwDismiss');
+  if (!dismiss && pw) {
+    dismiss = document.createElement('button');
+    dismiss.id = 'pwDismiss';
+    dismiss.textContent = 'Keep exploring \u2715';
+    dismiss.onclick = hidePaywall;
+    dismiss.style.cssText = "position:fixed;top:16px;right:16px;z-index:9600;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-family:'Heebo',sans-serif;font-size:12px;padding:8px 14px;border-radius:20px;cursor:pointer";
+    pw.appendChild(dismiss);
+  }
+  if (dismiss) dismiss.style.display = preview ? 'block' : 'none';
+
+  if (pw) pw.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
 function hidePaywall() {
-  document.getElementById('paywall').style.display = 'none';
+  const pw = document.getElementById('paywall');
+  if (pw) pw.style.display = 'none';
   document.body.style.overflow = '';
 }
 
-function startCheckout(plan) {
-  const url = plan === 'personal' ? STRIPE_PERSONAL_LINK : STRIPE_FAMILY_LINK;
-  window.open(url, '_blank');
+// Gently show the PREVIEW a few times across the trial — never on launch one,
+// never twice for the same milestone, never once subscribed or once locked.
+function maybeShowTrialPreview() {
+  if (isSubscribed() || trialIsOver()) return;
+  const days = getTrialDaysLeft();
+  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
+
+  let milestone = null;
+  if (days <= 3) milestone = 'd3';
+  else if (days <= 7) milestone = 'd7';
+  else if (used >= 2) milestone = 's2';
+  if (!milestone) return;
+
+  const shown = (localStorage.getItem(PW_PREVIEW_KEY) || '').split(',').filter(Boolean);
+  if (shown.indexOf(milestone) !== -1) return;
+  shown.push(milestone);
+  localStorage.setItem(PW_PREVIEW_KEY, shown.join(','));
+  showPaywall(true);
 }
+
+/* ---------- restore / parish ---------- */
 
 function contactParish() {
   window.location.href = 'mailto:' + PARISH_EMAIL + '?subject=Still Parish License Inquiry';
@@ -10127,19 +10201,21 @@ function contactParish() {
 function restorePurchase() {
   const email = prompt('Enter the email address used when you subscribed:');
   if (!email) return;
-  // For now — simple restore flow. 
-  // In production this would verify with Stripe Customer Portal.
   alert('Please check your email for a restore link, or contact ' + PARISH_EMAIL + ' for help.');
 }
 
-// Called after successful Stripe payment (via URL param)
+/* ---------- return from Stripe ---------- */
+
 function checkStripeReturn() {
   const params = new URLSearchParams(window.location.search);
-  
+
   if (params.get('upgraded') === 'true') {
-    // Clean URL
+    // Optimistically unlock immediately; the webhook is the real source,
+    // and refreshSubscription() below confirms it in the background.
+    window._subStatus = 'premium';
+    localStorage.setItem(PW_SUB_KEY, 'premium');
+    hidePaywall();
     window.history.replaceState({}, '', window.location.pathname);
-    // Refresh user profile to get new subscription status
     setTimeout(async () => {
       const token = localStorage.getItem('still_access_token');
       if (token) {
@@ -10147,8 +10223,9 @@ function checkStripeReturn() {
           headers: { 'apikey': SUPA_ANON, 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) currentUser = await res.json();
-        updateLastActive();
+        if (typeof updateLastActive === 'function') updateLastActive();
       }
+      refreshSubscription();
       showWelcomePremium();
     }, 500);
   }
@@ -10181,18 +10258,25 @@ function showWelcomePremium() {
   document.body.appendChild(overlay);
 }
 
-// Admin bypass for testing — type stillAdmin() in console
+/* ---------- testing helpers ---------- */
+
+// Admin bypass — type stillAdmin() in console
 window.stillAdmin = function() {
   localStorage.setItem(PW_PAID_KEY, '1');
+  window._subStatus = 'premium';
+  localStorage.setItem(PW_SUB_KEY, 'premium');
   hidePaywall();
   console.log('Paywall bypassed');
 };
 
 // Reset trial for testing
 window.stillResetTrial = function() {
-  localStorage.removeItem('still_trial_start');
+  localStorage.removeItem(PW_START_KEY);
   localStorage.removeItem(PW_SESSIONS_KEY);
   localStorage.removeItem(PW_PAID_KEY);
+  localStorage.removeItem(PW_SUB_KEY);
+  localStorage.removeItem(PW_PREVIEW_KEY);
+  window._subStatus = null;
   console.log('Trial reset. Refresh the page.');
 };
 
@@ -10202,6 +10286,21 @@ function checkOnboarding() {
     document.getElementById('screen-onboarding').style.display = 'block';
   }
 }
+
+/* ---------- startup: confirm subscription, then preview-or-enforce ---------- */
+(function () {
+  function go() {
+    if (!localStorage.getItem('still_onboarded')) return; // don't interrupt onboarding
+    refreshSubscription().then(() => {
+      if (shouldShowPaywall()) showPaywall(false);  // trial already over → lock
+      else maybeShowTrialPreview();                 // still in trial → maybe a gentle preview
+    });
+  }
+  let n = 0;
+  const t = setInterval(() => {
+    if (window.currentUser || ++n > 20) { clearInterval(t); setTimeout(go, 1200); }
+  }, 400);
+})();
 const ONBOARDING_DEMOS = {};
  
 // Override obNext to trigger audio on character steps
