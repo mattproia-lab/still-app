@@ -7537,15 +7537,74 @@ const Paths = {
   },
  
   /* ============ open / route / overlay ============ */
-  open() { this._ensure(); this._route(); document.getElementById('pathsOverlay').style.display='flex'; },
+  open() { this._ensure(); this._route(); document.getElementById('pathsOverlay').style.display='block'; },
   close() { const o=document.getElementById('pathsOverlay'); if (o) o.style.display='none'; },
  
   _ensure() {
     if (document.getElementById('pathsOverlay')) return;
+    if (!document.getElementById('pathsCSS')) {
+      const st = document.createElement('style');
+      st.id = 'pathsCSS';
+      st.textContent = `
+        #pathsOverlay{
+          --ink:#2a2521; --ink-soft:#6a5f54; --ink-faint:#776c5e;
+          --parchment:#f4eee1; --parchment-card:#f7f2e8;
+          --ember:#9c4a2f; --ember-soft:#b8674a; --gold:#a8853f;
+          --line:rgba(42,37,33,0.15); --line-soft:rgba(42,37,33,0.08); --shadow:rgba(60,44,28,0.10); --measure:38rem;
+          position:fixed; inset:0; z-index:9997; display:none; overflow-y:auto; -webkit-overflow-scrolling:touch;
+          background-color:var(--parchment);
+          background-image:radial-gradient(120% 80% at 18% 8%, rgba(255,250,238,0.85) 0%, rgba(255,250,238,0) 46%),radial-gradient(120% 90% at 88% 100%, rgba(176,146,93,0.10) 0%, rgba(176,146,93,0) 50%),radial-gradient(90% 70% at 50% 50%, rgba(156,74,47,0.025) 0%, rgba(156,74,47,0) 70%);
+          color:var(--ink); font-family:"EB Garamond", Georgia, serif; font-size:18px; line-height:1.72; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+        }
+        #pathsOverlay *{ box-sizing:border-box; }
+        #pathsOverlay .vessel{ position:relative; z-index:1; max-width:var(--measure); margin:0 auto; min-height:100vh; min-height:100dvh; padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,5vw,2rem) clamp(2.6rem,8vw,4rem); display:flex; flex-direction:column; justify-content:center; }
+        #pathsOverlay .sg-close{ position:fixed; top:1rem; right:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:rgba(244,238,225,0.7); border:1px solid var(--line); border-radius:50%; width:2.6rem; height:2.6rem; cursor:pointer; color:var(--ink-soft); font-size:1.2rem; line-height:1; backdrop-filter:blur(4px); transition:color .3s ease, border-color .3s ease; }
+        #pathsOverlay .sg-close:hover{ color:var(--ember); border-color:var(--ember); }
+        #pathsOverlay .sg-screen-inner{ display:flex; flex-direction:column; }
+        #pathsOverlay .sg-screen-inner > *{ animation:pg-rise .8s cubic-bezier(.2,.7,.25,1) both; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(2){ animation-delay:.08s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(3){ animation-delay:.16s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(4){ animation-delay:.24s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(5){ animation-delay:.32s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(6){ animation-delay:.40s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(7){ animation-delay:.48s; }
+        #pathsOverlay .sg-screen-inner > *:nth-child(8){ animation-delay:.56s; }
+        @keyframes pg-rise{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+        @media (prefers-reduced-motion: reduce){ #pathsOverlay .sg-screen-inner > *{ animation:none; } }
+        #pathsOverlay .overline{ font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 1.1rem; }
+        #pathsOverlay h1.title{ font-family:"Cormorant Garamond", serif; font-weight:500; font-size:clamp(2.4rem,8vw,3.4rem); line-height:1.04; letter-spacing:0.005em; margin:0 0 0.5rem; color:var(--ink); }
+        #pathsOverlay .subtitle{ font-style:italic; font-size:1.08rem; color:var(--ink-soft); margin:0 0 1.6rem; }
+        #pathsOverlay p.body{ margin:0 0 1.15rem; }
+        #pathsOverlay em{ font-style:italic; }
+        #pathsOverlay .section-label{ font-size:0.7rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--ink-faint); margin:1.5rem 0 0.8rem; }
+        #pathsOverlay .scripture{ font-family:"Cormorant Garamond",serif; font-size:1.35rem; font-style:italic; color:var(--ink); line-height:1.4; border-left:2px solid var(--ember); padding:0.2rem 0 0.2rem 1.1rem; margin:0 0 0.4rem; }
+        #pathsOverlay .scripture-ref{ font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin:0 0 1.6rem; padding-left:1.1rem; }
+        #pathsOverlay .panel{ background:var(--parchment-card); border:1px solid var(--line-soft); border-left:2px solid var(--gold); border-radius:2px; padding:1.1rem 1.25rem; margin:0 0 1.4rem; box-shadow:0 1px 0 var(--shadow); }
+        #pathsOverlay .panel p{ margin:0; font-style:italic; color:var(--ink); line-height:1.6; }
+        #pathsOverlay .resonance{ display:flex; flex-direction:column; gap:0.55rem; margin:0 0 1.4rem; }
+        #pathsOverlay .opt{ -webkit-appearance:none; appearance:none; text-align:left; width:100%; font-family:"EB Garamond",serif; font-size:1.05rem; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:2px; padding:0.85rem 1rem 0.85rem 2.7rem; cursor:pointer; position:relative; transition:border-color .4s ease, color .4s ease, background-color .4s ease; }
+        #pathsOverlay .opt::before{ content:""; position:absolute; left:1rem; top:50%; transform:translateY(-50%); width:0.78rem; height:0.78rem; border-radius:50%; border:1px solid var(--ink-faint); transition:all .3s ease; }
+        #pathsOverlay .opt:hover{ border-color:var(--gold); color:var(--ink); }
+        #pathsOverlay .opt[aria-pressed="true"]{ color:var(--ember); border-color:var(--ember); background:rgba(156,74,47,0.05); }
+        #pathsOverlay .opt[aria-pressed="true"]::before{ border-color:var(--ember); background:radial-gradient(circle, var(--ember) 0 45%, transparent 48%); box-shadow:0 0 0 3px rgba(156,74,47,0.10); }
+        #pathsOverlay input.note, #pathsOverlay textarea.note{ width:100%; font-family:"EB Garamond",serif; font-size:1.05rem; font-style:italic; color:var(--ink); line-height:1.6; background:transparent; border:0; border-bottom:1px solid var(--line); padding:0.5rem 0.1rem 0.6rem; outline:none; transition:border-color .4s ease; margin:0 0 1rem; }
+        #pathsOverlay textarea.note{ min-height:3.4rem; resize:vertical; }
+        #pathsOverlay input.note::placeholder, #pathsOverlay textarea.note::placeholder{ color:var(--ink-faint); font-style:italic; }
+        #pathsOverlay input.note:focus, #pathsOverlay textarea.note:focus{ border-bottom-color:var(--ember); }
+        #pathsOverlay .go{ -webkit-appearance:none; appearance:none; display:block; width:100%; margin-top:0.7rem; font-family:"EB Garamond",serif; font-size:0.82rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--parchment); background:var(--ember); border:1px solid var(--ember); border-radius:2px; padding:0.95rem 1.7rem; cursor:pointer; transition:filter .3s ease, box-shadow .4s ease, transform .15s ease; box-shadow:0 2px 10px rgba(156,74,47,0.18); }
+        #pathsOverlay .go:hover{ filter:brightness(0.93); box-shadow:0 4px 16px rgba(156,74,47,0.26); }
+        #pathsOverlay .go:active{ transform:translateY(1px); }
+        #pathsOverlay .go.ghost{ color:var(--ember); background:transparent; box-shadow:none; }
+        #pathsOverlay .go.ghost:hover{ background:rgba(156,74,47,0.06); filter:none; }
+        #pathsOverlay .tender-link{ display:block; width:100%; margin-top:1.4rem; background:none; border:0; color:var(--ember-soft); font-family:"EB Garamond",serif; font-size:0.95rem; font-style:italic; text-decoration:underline; cursor:pointer; text-align:center; }
+        #pathsOverlay .tender-link:hover{ color:var(--ember); }
+        #pathsOverlay .colophon{ margin-top:1.4rem; font-size:0.85rem; font-style:italic; color:var(--ink-faint); text-align:center; line-height:1.55; }
+        @media (max-width:640px){ #pathsOverlay .opt{ min-height:48px; } #pathsOverlay .tender-link{ min-height:44px; } }
+      `;
+      document.head.appendChild(st);
+    }
     const el = document.createElement('div');
     el.id='pathsOverlay';
-    el.style.cssText='display:none;position:fixed;inset:0;z-index:9997;background:rgba(3,3,8,.96);backdrop-filter:blur(6px);align-items:flex-start;justify-content:center;overflow-y:auto;padding:30px 18px 60px;-webkit-overflow-scrolling:touch';
-    el.innerHTML='<div id="pathsPanel" style="max-width:560px;width:100%"></div>';
     document.body.appendChild(el);
   },
  
@@ -7560,28 +7619,30 @@ const Paths = {
  
   /* ============ shared UI bits ============ */
   _frame(inner) {
-    document.getElementById('pathsPanel').innerHTML =
-      `<div style="background:#0a0a12;border:1px solid rgba(200,146,12,.22);border-radius:18px;padding:30px 26px 34px">${inner}</div>
-       <button onclick="Paths.close()" style="margin-top:14px;width:100%;background:none;border:1px solid rgba(255,255,255,.14);border-radius:10px;color:rgba(255,255,255,.55);font-family:'Heebo',sans-serif;font-size:14px;padding:11px;cursor:pointer">Close</button>`;
+    const o = document.getElementById('pathsOverlay');
+    o.innerHTML =
+      `<button class="sg-close" onclick="Paths.close()" aria-label="Close">&times;</button>
+       <div class="vessel"><div class="stage"><div class="sg-screen in"><div class="sg-screen-inner">${inner}</div></div></div></div>`;
+    try { o.scrollTop = 0; } catch(e){}
   },
-  _h(t){ return `<p style="font-family:'Playfair Display',serif;font-size:25px;font-style:italic;color:#fff;margin:0 0 8px;line-height:1.25">${t}</p>`; },
-  _sub(t){ return `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 18px">${t}</p>`; },
-  _gold(label,onclick){ return `<button onclick="${onclick}" style="width:100%;padding:15px;margin-top:8px;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.55);border-radius:11px;color:#f0c040;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">${label}</button>`; },
-  _ghost(label,onclick){ return `<button onclick="${onclick}" style="width:100%;padding:12px;margin-top:8px;background:none;border:1px solid rgba(255,255,255,.16);border-radius:11px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">${label}</button>`; },
-  _scripture(d){ return `<div style="border-left:2px solid rgba(200,146,12,.4);padding:2px 0 2px 14px;margin:0 0 18px"><p style="font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:rgba(244,233,216,.92);line-height:1.5;margin:0">${d.scripture}</p><p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:8px 0 0">${d.ref}</p></div>`; },
-  _body(t){ return `<p style="font-family:'Heebo',sans-serif;font-size:14.5px;color:rgba(255,255,255,.8);line-height:1.65;margin:0 0 14px">${t}</p>`; },
-  _label(t){ return `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.65);margin:18px 0 8px">${t}</p>`; },
-  _textarea(ph){ return `<textarea id="discInput" placeholder="${this._esc(ph)}" style="width:100%;min-height:90px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;line-height:1.55;padding:12px;resize:vertical"></textarea>`; },
-  _struggleLink(){ return `<button onclick="Paths.reportStruggle()" style="display:block;width:100%;margin-top:16px;background:none;border:none;color:rgba(255,140,130,.8);font-family:'Heebo',sans-serif;font-size:12.5px;cursor:pointer;text-decoration:underline">I\u2019m struggling right now</button>`; },
+  _h(t){ return `<h1 class="title">${t}</h1>`; },
+  _sub(t){ return `<p class="subtitle">${t}</p>`; },
+  _gold(label,onclick){ return `<button class="go" onclick="${onclick}">${label}</button>`; },
+  _ghost(label,onclick){ return `<button class="go ghost" onclick="${onclick}">${label}</button>`; },
+  _scripture(d){ return `<p class="scripture">${d.scripture}</p><p class="scripture-ref">${d.ref}</p>`; },
+  _body(t){ return `<p class="body">${t}</p>`; },
+  _label(t){ return `<p class="section-label">${t}</p>`; },
+  _textarea(ph){ return `<textarea id="discInput" class="note" placeholder="${this._esc(ph)}"></textarea>`; },
+  _struggleLink(){ return `<button class="tender-link" onclick="Paths.reportStruggle()">I\u2019m struggling right now</button>`; },
  
   /* ============ HOME ============ */
   _renderHome() {
     const p = this.DISCERNMENT;
     this._frame(
-      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;color:rgba(200,146,12,.65);margin:0 0 14px">Spiritual Paths</p>` +
+      `<p class="overline">Spiritual Paths</p>` +
       this._h(p.title) + this._sub(p.subtitle) +
       this._body('A guided way of bringing a real decision to God \u2014 not to be told the answer, but to grow free enough to recognise it. Walked over about two weeks, a few quiet minutes a day.') +
-      `<p style="font-family:'Heebo',sans-serif;font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.6;margin:14px 0 0">This accompanies your prayer; it never replaces a spiritual director or confessor. For grave matters \u2014 vocation, marriage \u2014 please walk it with one.</p>` +
+      `<p class="colophon">This accompanies your prayer; it never replaces a spiritual director or confessor. For grave matters \u2014 vocation, marriage \u2014 please walk it with one.</p>` +
       this._gold('Begin a Discernment', 'Paths.startSetup()')
     );
   },
@@ -7592,11 +7653,11 @@ const Paths = {
       this._h('Name the decision') +
       this._sub('What are you trying to decide? Write it as a question, then name the two paths before you.') +
       this._label('The decision') +
-      `<input id="discDecision" placeholder="e.g. Should I take the role in Denver?" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px;margin-bottom:6px">` +
+      `<input id="discDecision" class="note" placeholder="e.g. Should I take the role in Denver?">` +
       this._label('Option A') +
-      `<input id="discOptA" placeholder="e.g. Take the role" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px;margin-bottom:6px">` +
+      `<input id="discOptA" class="note" placeholder="e.g. Take the role">` +
       this._label('Option B') +
-      `<input id="discOptB" placeholder="e.g. Stay where I am" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:13px">` +
+      `<input id="discOptB" class="note" placeholder="e.g. Stay where I am">` +
       this._gold('Continue', 'Paths.toGate()') +
       this._ghost('Back', 'Paths._route()')
     );
@@ -7642,7 +7703,7 @@ const Paths = {
     this._pending=null; this._emerging=disc.emergingChoice||null;
  
     let inner =
-      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:0 0 6px">${d.phase} \u00b7 Day ${n} of 14</p>` +
+      `<p class="overline">${d.phase} \u00b7 Day ${n} of 14</p>` +
       this._h(`\u201c${this._esc(disc.decision)}\u201d`) +
       this._scripture(d) +
       this._body(d.teaching) +
@@ -7651,7 +7712,7 @@ const Paths = {
     if (d.type==='reflection') {
       const ref = (disc.reflections && disc.reflections[n]) ? disc.reflections[n] : this._composeReflection(disc);
       inner += this._label('What these days have shown');
-      inner += `<p id="discReflection" style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(244,233,216,.85);line-height:1.65;background:rgba(200,146,12,.06);border-radius:10px;padding:14px;margin:0 0 14px">${this._esc(ref)}</p>`;
+      inner += `<div class="panel"><p id="discReflection">${this._esc(ref)}</p></div>`;
       if (d.emergingChoice) {
         inner += this._label('Which choice is beginning to emerge?');
         inner += this._optionButtons(disc, 'emerging');
@@ -7669,18 +7730,18 @@ const Paths = {
     }
     else if (d.type==='proscons') {
       inner += this._label(`Advantages \u0026 disadvantages \u2014 ${this._esc(disc.options[0].label)}`);
-      inner += `<textarea id="discProsA" style="width:100%;min-height:70px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:12px;resize:vertical"></textarea>`;
+      inner += `<textarea id="discProsA" class="note"></textarea>`;
       inner += this._label(`Advantages \u0026 disadvantages \u2014 ${this._esc(disc.options[1].label)}`);
-      inner += `<textarea id="discProsB" style="width:100%;min-height:70px;box-sizing:border-box;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:14px;padding:12px;resize:vertical"></textarea>`;
+      inner += `<textarea id="discProsB" class="note"></textarea>`;
       inner += this._gold('Complete today', 'Paths.completeDay()');
     }
     else if (d.type==='decision') {
       inner += this._label('The choice you make');
       inner += this._optionButtons(disc, 'final');
       inner += this._label('Does peace hold on this choice?');
-      inner += `<div style="display:flex;gap:8px;margin-bottom:4px">
-        <button id="peaceYes" onclick="Paths._setPeace(true)" style="flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Yes, peace holds</button>
-        <button id="peaceNo" onclick="Paths._setPeace(false)" style="flex:1;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">Some unrest remains</button>
+      inner += `<div class="resonance">
+        <button class="opt" id="peaceYes" aria-pressed="false" onclick="Paths._setPeace(true)">Yes, peace holds</button>
+        <button class="opt" id="peaceNo" aria-pressed="false" onclick="Paths._setPeace(false)">Some unrest remains</button>
       </div>`;
       inner += this._label('Your reflection') + this._textarea(d.prompt);
       inner += this._gold('Make the decision', 'Paths.recordDecision()');
@@ -7697,25 +7758,22 @@ const Paths = {
   },
  
   _movementButtons() {
-    const opts=[['consolation','Toward God \u00b7 peace'],['desolation','Away \u00b7 unrest'],['mixed','Mixed'],['neutral','Quiet']];
-    return '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px">' + opts.map(([v,l])=>
-      `<button id="mv_${v}" onclick="Paths.chooseMovement('${v}')" style="flex:1 1 45%;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.82);font-family:'Heebo',sans-serif;font-size:13px;cursor:pointer">${l}</button>`
+    const opts=[['consolation','Toward God \u2014 peace'],['desolation','Away \u2014 unrest'],['mixed','Mixed'],['neutral','Quiet']];
+    return '<div class="resonance">' + opts.map(([v,l])=>
+      `<button class="opt" id="mv_${v}" aria-pressed="false" onclick="Paths.chooseMovement('${v}')">${l}</button>`
     ).join('') + '</div>';
   },
   chooseMovement(v) {
     this._pending=v;
     ['consolation','desolation','mixed','neutral'].forEach(k=>{
       const b=document.getElementById('mv_'+k); if(!b)return;
-      const on=(k===v);
-      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
-      b.style.color=on?'#f0c040':'rgba(255,255,255,.82)';
-      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+      b.setAttribute('aria-pressed', k===v ? 'true' : 'false');
     });
   },
  
   _optionButtons(disc, kind) {
-    return '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:6px">' + disc.options.map(o=>
-      `<button id="${kind}_${o.id}" onclick="Paths.chooseOption('${kind}','${o.id}')" style="width:100%;text-align:left;padding:13px 15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.18);border-radius:10px;color:rgba(255,255,255,.85);font-family:'Heebo',sans-serif;font-size:14px;cursor:pointer">${this._esc(o.label)}</button>`
+    return '<div class="resonance">' + disc.options.map(o=>
+      `<button class="opt" id="${kind}_${o.id}" aria-pressed="false" onclick="Paths.chooseOption('${kind}','${o.id}')">${this._esc(o.label)}</button>`
     ).join('') + '</div>';
   },
   chooseOption(kind, id) {
@@ -7723,20 +7781,14 @@ const Paths = {
     const disc=this._loadActive();
     (disc?disc.options:[]).forEach(o=>{
       const b=document.getElementById(kind+'_'+o.id); if(!b)return;
-      const on=(o.id===id);
-      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
-      b.style.color=on?'#f0c040':'rgba(255,255,255,.85)';
-      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+      b.setAttribute('aria-pressed', o.id===id ? 'true' : 'false');
     });
   },
   _setPeace(v) {
     this._peace=v;
     [['peaceYes',true],['peaceNo',false]].forEach(([id,val])=>{
       const b=document.getElementById(id); if(!b)return;
-      const on=(val===v);
-      b.style.borderColor=on?'rgba(200,146,12,.8)':'rgba(255,255,255,.18)';
-      b.style.color=on?'#f0c040':'rgba(255,255,255,.85)';
-      b.style.background=on?'rgba(200,146,12,.12)':'rgba(255,255,255,.04)';
+      b.setAttribute('aria-pressed', val===v ? 'true' : 'false');
     });
   },
  
@@ -7793,7 +7845,7 @@ const Paths = {
     this._frame(
       this._h('Rest until tomorrow') +
       this._body('You\u2019ve walked today\u2019s step. Discernment unfolds slowly \u2014 let what you prayed today settle overnight before you take the next. Come back tomorrow.') +
-      `<p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.6);margin:14px 0 0">Day ${Math.min(disc.currentDay,14)} of 14 awaits</p>` +
+      `<p class="colophon">Day ${Math.min(disc.currentDay,14)} of 14 awaits</p>` +
       this._struggleLink()
     );
   },
@@ -7919,6 +7971,7 @@ const Paths = {
   }
   let n=0; const t=setInterval(()=>{ if(add()||++n>20) clearInterval(t); },400);
 })();
+ 
  
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
