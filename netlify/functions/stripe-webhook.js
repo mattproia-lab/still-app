@@ -5,49 +5,38 @@ const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 async function updateProfile(userId, status) {
   await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: 'PATCH',
-    headers: {
-      'apikey': SUPA_SERVICE_KEY,
-      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json'
-    },
+    headers: { 'apikey': SUPA_SERVICE_KEY, 'Authorization': `Bearer ${SUPA_SERVICE_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ subscription_status: status })
   });
 }
 
 async function addReflections(userId, amount) {
-  console.log('addReflections called for:', userId, 'amount:', amount);
   const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}&select=reflection_credits`, {
-    headers: {
-      'apikey': SUPA_SERVICE_KEY,
-      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`
-    }
+    headers: { 'apikey': SUPA_SERVICE_KEY, 'Authorization': `Bearer ${SUPA_SERVICE_KEY}` }
   });
   const data = await res.json();
-  console.log('current profile data:', JSON.stringify(data));
   const current = data?.[0]?.reflection_credits || 0;
-  console.log('current credits:', current, 'adding:', amount);
-  const patchRes = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
+  await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: 'PATCH',
-    headers: {
-      'apikey': SUPA_SERVICE_KEY,
-      'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json'
-    },
+    headers: { 'apikey': SUPA_SERVICE_KEY, 'Authorization': `Bearer ${SUPA_SERVICE_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ reflection_credits: current + amount })
   });
-  console.log('patch status:', patchRes.status);
+}
+
+async function addVoiceCredit(userId, cents) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/rpc/add_voice_credit`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_SERVICE_KEY, 'Authorization': `Bearer ${SUPA_SERVICE_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_user: userId, p_cents: parseInt(cents, 10) || 0 })
+  });
+  console.log('addVoiceCredit status:', res.status);
 }
 
 exports.handler = async function(event) {
   const sig = event.headers['stripe-signature'];
   let stripeEvent;
-
   try {
-    stripeEvent = stripe.webhooks.constructEvent(
-      event.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    stripeEvent = stripe.webhooks.constructEvent(event.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch(err) {
     return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
@@ -59,6 +48,8 @@ exports.handler = async function(event) {
     const type = session.metadata?.type;
     if (userId && type === 'reflection_pack') {
       await addReflections(userId, 10);
+    } else if (userId && type === 'audio_topup') {
+      await addVoiceCredit(userId, session.metadata?.credit_cents || 0);
     } else if (userId) {
       await updateProfile(userId, 'premium');
     }

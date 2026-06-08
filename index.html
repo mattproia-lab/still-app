@@ -1172,47 +1172,29 @@ body.is-mobile #mobileEnterTab { display: block; }
 ═══════════════════════════════════════════ -->
 <div id="paywall" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(2,3,12,.94);overflow-y:auto;-webkit-overflow-scrolling:touch">
   <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px">
-    <div style="width:100%;max-width:500px">
+    <div style="width:100%;max-width:420px">
 
       <!-- Header -->
       <div style="text-align:center;margin-bottom:32px">
         <p id="paywallBadge" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:0 0 10px">Your free trial has ended</p>
         <h1 style="font-family:'Playfair Display',serif;font-size:38px;font-weight:400;font-style:italic;color:#fff;margin:0 0 8px">Still</h1>
-        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0">Choose a plan to continue your practice</p>
+        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0">Continue your practice</p>
       </div>
 
-      <!-- Plans -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px">
-
-        <!-- Personal -->
-        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);padding:24px 18px 20px;text-align:center;position:relative">
-          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 14px">Personal</p>
-          <p style="font-family:'Playfair Display',serif;font-size:32px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
+      <!-- Plan (single) -->
+      <div style="max-width:340px;margin:0 auto 22px">
+        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:28px 24px 22px;text-align:center;position:relative">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 14px">Membership</p>
+          <p style="font-family:'Playfair Display',serif;font-size:36px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
           <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:4px 0 18px">per month</p>
-          <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:14px;margin-bottom:18px">
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">All free features</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">The Companion</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">Amma Sophia</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0">Deeper</p>
+          <div style="border-top:1px solid rgba(200,146,12,.2);padding-top:16px;margin-bottom:20px;text-align:left">
+            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; All practices &amp; the Office</p>
+            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; The Companion, Amma Sophia &amp; Deeper</p>
+            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; Your spiritual autobiography</p>
+            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);margin:0">✦&nbsp; Hear any voice aloud with audio credit — pay only for what you play</p>
           </div>
-          <button onclick="startCheckout('personal')" style="width:100%;background:none;border:1px solid rgba(200,146,12,.55);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.1)'" onmouseout="this.style.background='none'">Subscribe →</button>
+          <button onclick="startCheckout('premium')" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.25)'" onmouseout="this.style.background='rgba(200,146,12,.15)'">Subscribe →</button>
         </div>
-
-        <!-- Contemplative -->
-        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:24px 18px 20px;text-align:center;position:relative">
-          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#c8920c;color:#000;font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;white-space:nowrap">Most popular</div>
-          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.7);margin:0 0 14px">Contemplative</p>
-          <p style="font-family:'Playfair Display',serif;font-size:32px;font-style:italic;color:#fff;margin:0;line-height:1">$39.99</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:4px 0 18px">per month</p>
-          <div style="border-top:1px solid rgba(200,146,12,.2);padding-top:14px;margin-bottom:18px">
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">Everything in Personal</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">Companion in voice</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0 0 6px">Amma Sophia in voice</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.55);margin:0">Deeper in voice</p>
-          </div>
-          <button onclick="startCheckout('contemplative')" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:12px 4px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.25)'" onmouseout="this.style.background='rgba(200,146,12,.15)'">Subscribe →</button>
-        </div>
-
       </div>
 
       <!-- Trial info -->
@@ -3328,33 +3310,47 @@ async function requestVoice(text, character, buttonEl) {
   try {
     const voiceText = _taggedResponses[character] || text.trim();
 
+    // ⚠️ point this at wherever the METERED handler is deployed
     const res = await fetch('https://still-tts.onrender.com/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: voiceText, character })
+      body: JSON.stringify({
+        text: voiceText,
+        character,
+        access_token: localStorage.getItem('still_access_token')   // ← who to charge
+      })
     });
 
     const data = await res.json();
+
+    // Out of credit — invite a top-up, gently. The text reply is still on screen.
+    if (res.status === 402 || data.error === 'insufficient_balance') {
+      buttonEl.innerHTML = '✦ Add audio credit';
+      buttonEl.disabled = false;
+      buttonEl.onclick = () => { if (typeof showVoiceTopUp === 'function') showVoiceTopUp(); };
+      return;
+    }
+    if (res.status === 401 || data.error === 'auth_required') {
+      buttonEl.innerHTML = originalHtml;
+      buttonEl.disabled = false;
+      return;
+    }
     if (!res.ok) throw new Error(data.error || 'Could not generate audio');
 
     let audioUrl;
-
     if (data.cached && data.url) {
-      // Cached — use URL directly
       audioUrl = data.url;
     } else if (data.audio) {
-      // Fresh — convert base64 to blob URL
       const binary = atob(data.audio);
       const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) {
-        bytes[i] = binary.charCodeAt(i);
-      }
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
       const blob = new Blob([bytes], { type: 'audio/mpeg' });
       audioUrl = URL.createObjectURL(blob);
     } else {
       throw new Error('No audio returned');
     }
-   _currentAudioUrl = audioUrl;
+
+    _currentAudioUrl = audioUrl;
     playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
 
   } catch (err) {
@@ -3363,7 +3359,6 @@ async function requestVoice(text, character, buttonEl) {
     buttonEl.disabled = false;
   }
 }
-
 // Play audio with pause/resume/replay
 const CHARACTER_AMBIENCE = {
   companion: 'still-mobile/src/audio/nature_sounds.mp3',
@@ -6528,6 +6523,99 @@ const Crisis = {
     document.body.appendChild(el);
   }
 };
+/* ═══════════════════════════════════════════
+   STILL — VOICE CREDIT (audio top-up + balance)
+
+   The top-up modal that requestVoice() opens when someone is out
+   of audio credit, plus a balance display. Buying credit reuses
+   your existing Stripe checkout function with tier:'audio_credit',
+   and the webhook (type:'audio_topup') adds it to the voice_wallet.
+
+   ─────────── INTEGRATION ───────────
+   1) Paste this whole block into your big file as CODE (no <script>
+      tag), below your other modules.
+   2) Set CHECKOUT_FN below to the SAME Netlify function your app
+      already calls for subscription upgrades.
+   3) Confirm SUPA_ANON is the name of your front-end anon-key
+      constant (used to read the balance). Adjust if it differs.
+   ──────────────────────────────────── */
+
+const VoiceCredit = {
+  CHECKOUT_FN: '/.netlify/functions/stripe-checkout',   // your checkout function
+
+  _fmt(cents) { return '$' + (Math.max(0, cents) / 100).toFixed(2); },
+
+  async balanceCents() {
+    try {
+      const token = localStorage.getItem('still_access_token');
+      const uid = window.currentUser && window.currentUser.id;
+      if (!token || !uid) return 0;
+      const res = await fetch(`${SUPA_URL}/rest/v1/voice_wallet?user_id=eq.${uid}&select=balance_cents`, {
+        headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
+      });
+      if (!res.ok) return 0;
+      const d = await res.json();
+      return (d && d[0] && d[0].balance_cents) || 0;
+    } catch (e) { return 0; }
+  },
+
+  async open() {
+    this._ensure();
+    document.getElementById('vcOverlay').style.display = 'flex';
+    this._render('…');
+    const bal = await this.balanceCents();
+    this._render(this._fmt(bal));
+  },
+
+  close() { const o = document.getElementById('vcOverlay'); if (o) o.style.display = 'none'; },
+
+  _ensure() {
+    if (document.getElementById('vcOverlay')) return;
+    const el = document.createElement('div');
+    el.id = 'vcOverlay';
+    el.style.cssText = 'display:none;position:fixed;inset:0;z-index:9996;background:rgba(3,3,8,.94);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px';
+    el.innerHTML = '<div id="vcPanel" style="max-width:420px;width:100%;background:#0a0a12;border:1px solid rgba(200,146,12,.25);border-radius:16px;padding:28px 24px"></div>';
+    document.body.appendChild(el);
+  },
+
+  _render(balanceStr) {
+    const p = document.getElementById('vcPanel');
+    if (!p) return;
+    p.innerHTML =
+      `<p style="font-family:'Playfair Display',serif;font-size:23px;font-style:italic;color:#fff;margin:0 0 6px">Audio credit</p>` +
+      `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 18px">Reading the voices is always free. Hearing them spoken aloud draws from your audio credit, charged at our cost.</p>` +
+      `<div style="background:rgba(200,146,12,.08);border-radius:10px;padding:14px 16px;margin-bottom:18px">
+         <span style="font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.55)">Balance</span>
+         <div style="font-family:'Playfair Display',serif;font-size:28px;color:#f0c040;margin-top:2px">${balanceStr}</div>
+       </div>` +
+      `<button onclick="VoiceCredit.buy()" style="width:100%;padding:15px;background:rgba(200,146,12,.14);border:1px solid rgba(200,146,12,.55);border-radius:11px;color:#f0c040;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">Add $10 of audio credit</button>` +
+      `<p style="font-family:'Heebo',sans-serif;font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.5;margin:12px 2px 0">Roughly 40–80 spoken replies, depending on length. You only ever pay for audio you choose to hear.</p>` +
+      `<button onclick="VoiceCredit.close()" style="margin-top:16px;width:100%;background:none;border:1px solid rgba(255,255,255,.16);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;padding:11px;cursor:pointer">Close</button>`;
+  },
+
+  async buy() {
+    const uid = window.currentUser && window.currentUser.id;
+    const email = window.currentUser && window.currentUser.email;
+    if (!uid || !email) { alert('Please sign in first.'); return; }
+    try {
+      const res = await fetch(this.CHECKOUT_FN, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: uid, email, tier: 'audio_credit' })
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+      else alert('Could not start checkout. Please try again.');
+    } catch (e) { alert('Could not start checkout. Please try again.'); }
+  }
+};
+
+function showVoiceTopUp() { VoiceCredit.open(); }
+
+// Returning from a successful top-up — reopen showing the new balance
+if (typeof location !== 'undefined' && location.search.indexOf('credit=added') !== -1) {
+  setTimeout(() => { try { VoiceCredit.open(); } catch (e) {} }, 600);
+}
 /* ═══════════════════════════════════════════
    SPIRITUAL AUTOBIOGRAPHY — UI + Compiler
 ═══════════════════════════════════════════ */

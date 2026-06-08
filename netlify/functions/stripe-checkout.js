@@ -1,26 +1,24 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
-  }
+  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
   let body;
-  try {
-    body = JSON.parse(event.body);
-  } catch(e) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
-  }
+  try { body = JSON.parse(event.body); }
+  catch(e) { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
   const { user_id, email, tier } = body;
-  if (!user_id || !email) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
-  }
+  if (!user_id || !email) return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
 
-  let priceId;
-  let mode = 'subscription';
+  let priceId, mode = 'subscription', metadata = { user_id, tier: tier || 'personal' };
+  let successUrl = `${process.env.SITE_URL}?upgraded=true`;
 
-  if (tier === 'contemplative') {
+  if (tier === 'audio_credit') {
+    priceId = process.env.STRIPE_AUDIO_CREDIT_PRICE_ID;
+    mode = 'payment';                                       // one-time, not a subscription
+    metadata = { user_id, type: 'audio_topup', credit_cents: '1000' }; // $10 → 1000¢ granted
+    successUrl = `${process.env.SITE_URL}?credit=added`;
+  } else if (tier === 'contemplative') {
     priceId = process.env.STRIPE_CONTEMPLATIVE_PRICE_ID;
   } else {
     priceId = process.env.STRIPE_PRICE_ID; // personal
@@ -32,21 +30,12 @@ exports.handler = async function(event) {
       mode,
       customer_email: email,
       line_items: [{ price: priceId, quantity: 1 }],
-      metadata: { user_id, tier: tier || 'personal' },
-      success_url: `${process.env.SITE_URL}?upgraded=true`,
+      metadata,
+      success_url: successUrl,
       cancel_url: `${process.env.SITE_URL}?upgraded=false`,
     });
-
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
-      body: JSON.stringify({ url: session.url })
-    };
-
+    return { statusCode: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ url: session.url }) };
   } catch(err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
+    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };
