@@ -2887,6 +2887,47 @@ body.is-mobile #mobileEnterTab { display: block; }
 </div>
 
 <style>
+  @media (max-width: 640px) {
+  /* The Guide + Spiritual Paths share one parchment skin — enlarge the
+     reading text on mobile (safe in light or dark). */
+  #stillGuide,
+  #pathsOverlay { font-size: 19px !important; }
+
+  #stillGuide .lead,
+  #stillGuide .subtitle,
+  #pathsOverlay .subtitle { font-size: 1.2rem !important; }
+
+  #stillGuide p.body,
+  #stillGuide .essence,
+  #stillGuide .gloss,
+  #stillGuide ul.questions li,
+  #stillGuide ol.remedies li,
+  #stillGuide .card-passage,
+  #stillGuide .tender-note,
+  #pathsOverlay p.body,
+  #pathsOverlay .panel p { font-size: 1.12rem !important; }
+
+  #stillGuide .scripture,
+  #pathsOverlay .scripture { font-size: 1.4rem !important; }
+
+  #stillGuide .opt,
+  #stillGuide .choice,
+  #stillGuide .excuse,
+  #pathsOverlay .opt { font-size: 1.08rem !important; }
+
+  #pathsOverlay input.note,
+  #pathsOverlay textarea.note { font-size: 1.08rem !important; }
+  #pathsOverlay .colophon { font-size: 0.95rem !important; }
+
+  /* Darken the muted tones for daylight legibility — only in the
+     light (parchment) mode, which is how both screens open. */
+  #stillGuide:not(.dark),
+  #pathsOverlay:not(.dark) {
+    --ink: #241f1b !important;
+    --ink-soft: #473d32 !important;
+    --ink-faint: #564a3d !important;
+  }
+}
  .letter-mobile { display: none; }
 .letter-desktop { display: block; }
 @media (max-width: 768px) {
