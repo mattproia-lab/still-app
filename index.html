@@ -10455,6 +10455,17 @@ async function initBellSettings() {
   } catch(e) {
     console.warn('[Bells] Could not load preferences:', e);
   }
+  // One-time note: bells are coming with the native app
+  if (!document.getElementById('bellsAppNote')) {
+    const saveBtn = document.getElementById('bellsSaveBtn');
+    const note = document.createElement('p');
+    note.id = 'bellsAppNote';
+    note.textContent = "Scheduled bells arrive with the Still app, which we\u2019re building now \u2014 on iPhone, a browser can\u2019t ring them reliably when Still is closed. For now, keep the Hours in your own rhythm.";
+    note.style.cssText = "font-family:'Heebo',sans-serif;font-size:12px;line-height:1.6;color:rgba(255,255,255,.4);margin:18px 2px 4px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)";
+    if (saveBtn && saveBtn.parentNode) {
+      saveBtn.parentNode.insertBefore(note, saveBtn);
+    }
+  }
 }
 function toggleBell(hour, btn) {
   const isOn = btn.getAttribute('aria-pressed') === 'true';
