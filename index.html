@@ -4490,11 +4490,6 @@ function returnFromCompanion(){
 }
 
 async function askCompanion(){
-  // Check phone verification for free users
-  if (!localStorage.getItem('still_phone_verified')) {
-    showPhoneVerify();
-    return;
-  }
   const input=document.getElementById('companionText').value.trim();
   if(!input){showError('companionErr','Speak first. Then the Fathers will answer.');return;}
   if(companionUses<=0){showUpgrade();return;}
@@ -7975,25 +7970,6 @@ const Paths = {
     } catch (e) { /* keep the built-in reflection */ }
   }
 };
- 
-/* Temporary launcher: a "Spiritual Paths" button next to Sign Out so you can
-   test now. Move Paths.open() into your main nav when ready, then delete this. */
-(function () {
-  function add() {
-    if (document.getElementById('pathsLauncher')) return true;
-    const so = Array.from(document.querySelectorAll('button'))
-      .find(b => (b.getAttribute('onclick')||'').includes('signOut'));
-    if (!so || !so.parentNode) return false;
-    const b=document.createElement('button');
-    b.id='pathsLauncher'; b.textContent='Spiritual Paths';
-    b.onclick=()=>Paths.open();
-    b.style.cssText="width:100%;margin-top:10px;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer";
-    so.parentNode.insertBefore(b, so);
-    return true;
-  }
-  let n=0; const t=setInterval(()=>{ if(add()||++n>20) clearInterval(t); },400);
-})();
- 
  
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
