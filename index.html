@@ -3084,7 +3084,8 @@ body.is-mobile #mobileEnterTab { display: block; }
 html,body{margin:0;padding:0;background:var(--dc-black);}
 .dc-screen{position:fixed;inset:0;background:var(--dc-black);color:var(--dc-text);
   font-family:'Playfair Display',Georgia,serif;overflow:hidden;}
- 
+ #screen-dialogue.dc-hidden{display:none!important;}
+
 /* ENVIRONMENT LAYERS — two stacked layers crossfade */
 .dc-env{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;
   transition:opacity 20s ease;}
@@ -12789,6 +12790,7 @@ function validateAccompaniment(a){
  
 /* ───────────────────────── PHASES ───────────────────────── */
 function init(){
+  $('screen-dialogue').classList.remove('dc-hidden');
   resetSession();
   setEnv('sea');
   // threshold quote
@@ -13122,8 +13124,8 @@ function recordVisit(){
  
 function toSettling(){ recordVisit(); setEnv(S.envCurrent||'sea'); show('dcSettling'); }
  
-function remain(){ config.onRemain(); }
-function leave(){ suffuse(0); resetSession(); config.onLeave(); }
+function remain(){ $('screen-dialogue').classList.add('dc-hidden'); config.onRemain(); }
+function leave(){ suffuse(0); resetSession(); $('screen-dialogue').classList.add('dc-hidden'); config.onLeave(); }
  
 /* CARRY — pick one line; it goes to the Margin (+ Lectio if a passage) */
 function startCarry(){
@@ -13186,7 +13188,7 @@ function eraseMargin(idx, el){
   },1200);
 }
  
-function back(){ suffuse(0); resetSession(); config.onLeave(); }
+function back(){ suffuse(0); resetSession(); $('screen-dialogue').classList.add('dc-hidden'); config.onLeave(); }
  
 /* boot (in Still: called from enterFeature instead) */
  
