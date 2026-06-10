@@ -1,9 +1,11 @@
 const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
 const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+const KNOWN = ['companion', 'deeper', 'sophia', 'chamber', 'paths', 'community', 'lectio', 'autobiography'];
+
 const LIMITS = {
-  free:    { companion: 1, deeper: 0, sophia: 0 },
-  premium: { companion: 3, deeper: 14, sophia: 14 } // per week for companion, per day x7 for deeper/sophia
+  free:    { companion: 1, deeper: 0,  sophia: 0,  chamber: 3,  paths: 2,  community: 30,  lectio: 3,  autobiography: 1 },
+  premium: { companion: 3, deeper: 14, sophia: 14, chamber: 30, paths: 20, community: 30, lectio: 12, autobiography: 1 }
 };
 
 async function supaGet(path) {
@@ -101,15 +103,13 @@ async function useCredit(userId, currentCredits) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
-  const feature = body.feature; // 'companion', 'deeper', 'sophia'
+  const feature = body.feature;
   const token = body.access_token;
 
-  // If feature requires auth, enforce limits
-  if (feature && token) {
-    const user = await getUserFromToken(token);
-    if (!user) {
-      return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
-    }
+  const KNOWN = ['companion', 'deeper', 'sophia', 'chamber'];
+  if (!KNOWN.includes(feature) || !token) {
+    return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
+  }
 
     const profile = await getProfile(user.id);
     const status = profile?.subscription_status || 'free';
