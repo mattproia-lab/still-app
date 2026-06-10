@@ -3682,6 +3682,32 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;
   letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.5);
 }
+
+/* ── READING TOWARD THE CENTER — lamps ── */
+.ctr-map{margin:26px 0 10px;}
+.ctr-row{display:flex;align-items:center;gap:14px;padding:9px 0;cursor:pointer;
+  border:none;background:none;width:100%;text-align:left;-webkit-tap-highlight-color:transparent;}
+.ctr-row[disabled]{cursor:default;opacity:.45;}
+.ctr-lamp{width:9px;height:9px;border-radius:50%;flex:none;background:rgba(255,255,255,.10);
+  transition:all 1.2s ease;}
+.ctr-row .ctr-lamp.lit{background:radial-gradient(circle at 38% 32%, #ffe9a8, #f0c040 60%, #8a6210);
+  box-shadow:0 0 10px 2px rgba(240,192,64,.45);}
+.ctr-row-title{flex:1;font-family:'Playfair Display',Georgia,serif;font-size:16.5px;
+  color:rgba(255,255,255,.78);}
+.ctr-row.ctr-done .ctr-row-title{color:rgba(255,255,255,.5);}
+.ctr-week{margin:22px 0 4px;}
+.ctr-centerrow{justify-content:center;gap:0;padding:18px 0 6px;}
+.ctr-centerlamp{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.08);
+  transition:all 2s ease;}
+.ctr-centerlamp.lit{background:radial-gradient(circle at 38% 32%, #ffffff, #ffe9a8 45%, #f0c040 80%);
+  box-shadow:0 0 26px 8px rgba(240,200,90,.55);}
+.ctr-lamb{display:block;margin:10px auto 0;opacity:0;transition:opacity 3s ease;}
+.ctr-lamb.show{opacity:.85;}
+.ctr-readings{font-family:'Playfair Display',Georgia,serif;font-size:19px;font-style:italic;
+  color:rgba(255,255,255,.88);margin:6px 0;}
+.ctr-rest{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-style:italic;
+  color:rgba(240,200,100,.85);margin-top:26px;text-align:center;line-height:1.7;}
+
 </style>
 
 <script>
@@ -3942,6 +3968,9 @@ const F=[
   {name:'Spiritual Paths',badge:'Guided Journeys',screen:'paths',
    h:'Some things must be walked, not prayed once.',
    b:'Guided journeys through the tradition — beginning with a 14-day Ignatian discernment of a decision.',cta:'Begin'},
+  {name:'Reading Toward the Center',badge:'Revelation',screen:'center',
+   h:'The most feared book, read from its heart.',
+   b:'Twenty-six days through Revelation\u2019s mirror, pair by pair, to the room where the accuser has already lost. Ends each day in silence.',cta:'Descend'},
   {name:'Community',badge:'Anonymous · 9pm',screen:'community',
    h:'Every night at 9pm. One question.',
    b:'Three strangers. No usernames. No likes. Just the knowledge that others are asking the same things.',cta:'Enter'},
@@ -3974,7 +4003,8 @@ const W=[
   {r:156,g:74, b:47, i:.86,base:'#070301'}, // The Guide — ember
   {r:8,  g:5,  b:16, i:.15,base:'#030303'}, // Darkness — near void
   {r:100,g:20, b:200,i:.82,base:'#040007'}, // Breath Prayer — deep violet
-  {r:64, g:52, b:150,i:.74,base:'#030214'}, // Guided Journeys- a twilight indigo;
+  {r:64, g:52, b:150,i:.74,base:'#030214'}, // Guided Journeys- a twilight indigo
+  {r:235,g:215,b:170, i:.62,base:'#070604'}, // Reading Toward the Center — center flame
   {r:192,g:28, b:172,i:.88,base:'#060006'}, // Community — violet
   {r:188,g:110,b:12, i:.90,base:'#070400'}, // Saint — amber
   {r:162,g:10, b:52, i:.88,base:'#060002'}, // Office — rose
@@ -4249,9 +4279,9 @@ function enterFeature(i){
   // Check paywall before entering any feature
   incrementSession();
   if (shouldShowPaywall()) { showPaywall(); return; }
-
-  if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
+if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if (F[i].screen === 'paths') { Paths.open(); return; }
+  if (F[i].screen === 'center') { Paths.open(); Paths.centerHome(); return; }
 
   showScreen(F[i].screen,i);
   if(F[i].screen==='lectio') initLectio();
@@ -8066,7 +8096,8 @@ const Paths = {
       this._h(p.title) + this._sub(p.subtitle) +
       this._body('A guided way of bringing a real decision to God \u2014 not to be told the answer, but to grow free enough to recognise it. Walked over about two weeks, a few quiet minutes a day.') +
       `<p class="colophon">This accompanies your prayer; it never replaces a spiritual director or confessor. For grave matters \u2014 vocation, marriage \u2014 please walk it with one.</p>` +
-      this._gold('Begin a Discernment', 'Paths.startSetup()')
+      this._gold('Begin a Discernment', 'Paths.startSetup()') +
+      this._ghost('Reading Toward the Center \u2014 a descent into Revelation \u2192', 'Paths.centerHome()')
     );
   },
  
@@ -8376,6 +8407,202 @@ const Paths = {
     } catch (e) { /* keep the built-in reflection */ }
   }
 };
+
+/* ═══════════ READING TOWARD THE CENTER — 26-day Revelation path ═══════════ */
+(function(){
+
+const DAYS = [
+{n:1, w:'WEEK ONE \u2014 The Outer Doors', title:'The Blessing on the Reader', readings:['Revelation 1:1\u20133','Revelation 22:18\u201321'],
+ mirror:`The book begins by blessing you \u2014 "blessed is he that readeth" \u2014 before it has shown you a single vision. It ends guarding its own words and saying goodbye with grace: "The grace of our Lord Jesus Christ be with you all." The first and last thing Revelation does is bless the person holding it. Whatever you have heard about this book, it opens its door to you kindly.`,
+ question:`Can you receive a blessing simply for showing up \u2014 before you have understood anything?`},
+{n:2, title:'Alpha and Omega', readings:['Revelation 1:4\u20138','Revelation 22:12\u201317'],
+ mirror:`At the front door: "I am Alpha and Omega, the beginning and the ending... which is, and which was, and which is to come." At the back door, the same voice: "I am Alpha and Omega... I come quickly," and the Spirit and the bride answering, "Come." The whole book \u2014 every beast, every bowl \u2014 is held between two utterances of the same name. You are not entering a maze. You are entering a held thing.`,
+ question:`What in your life right now feels unframed \u2014 open-ended, unheld? Place it between these two declarations tonight.`},
+{n:3, title:'The Falling', readings:['Revelation 1:9\u201320','Revelation 22:8\u20139'],
+ mirror:`Twice John falls down, and the mirror teaches by the difference. Before the risen Christ he falls "as though dead" \u2014 and the hand comes down on him: "Fear not; I am the first and the last... I am alive for evermore." Before the angel at the end he falls again \u2014 and is lifted with a correction: "See thou do it not... worship God." One falling is met with tenderness, the other with redirection. The heart was made to prostrate itself; the whole spiritual life is learning before Whom.`,
+ question:`Where does your awe currently land \u2014 and would it say, if it were honest, "see thou do it not"?`},
+{n:4, title:'The Tree of Life', readings:['Revelation 2:1\u20137','Revelation 22:1\u20135'],
+ mirror:`To the church that "left thy first love," Christ promises: "to him that overcometh will I give to eat of the tree of life." At the book's far end, there it stands \u2014 in the middle of the street of the city, bearing fruit every month, its leaves for healing. The tree lost in Genesis, promised to the loveless, planted in the city's main street. The cure for cold love is not effort; it is being brought back to the tree.`,
+ question:`Where has your first love gone cold \u2014 and can you ask to be fed rather than resolve to try harder?`},
+{n:5, title:'The Second Death', readings:['Revelation 2:8\u201311','Revelation 20:6 and 21:8'],
+ mirror:`To the suffering church, the only letter with no rebuke: "be thou faithful unto death, and I will give thee a crown of life... he that overcometh shall not be hurt of the second death." Far across the book the phrase returns: "on such the second death hath no power." The mirror's arithmetic is strange and merciful \u2014 there is a death that cannot touch you, and the people it cannot touch are the ones who stopped letting the first death frighten them.`,
+ question:`What are you protecting so carefully that it has begun to own you?`},
+{n:6, title:'The Hidden Name', readings:['Revelation 2:12\u201317','Revelation 19:11\u201313'],
+ mirror:`To the church in Satan's neighborhood, a strange intimacy is promised: "a white stone, and in the stone a new name written, which no man knoweth saving he that receiveth it." Then, at the book's climax, the rider on the white horse appears \u2014 and he too "had a name written, that no man knew, but he himself." Christ promises you the very thing he possesses: a name between you and God that no one else can read, pronounce, or take.`,
+ question:`Beneath every name and role you carry, who are you to God alone?`},
+{n:7, title:'The Morning Star', readings:['Revelation 2:18\u201329','Revelation 22:16'],
+ mirror:`To Thyatira, the longest letter and the heaviest, the promise at the end is the gentlest: "I will give him the morning star." Twenty chapters later the giver shows his hand: "I am the root and the offspring of David, and the bright and morning star." He was never offering you a thing. He was offering you himself. Every promise in this book, followed far enough, turns out to be a Person.`,
+ question:`What have you been asking God for, that may really be a way of asking for God?`},
+{n:8, w:'WEEK TWO \u2014 The Promises Kept', title:'The Book of Life', readings:['Revelation 3:1\u20136','Revelation 20:11\u201315'],
+ mirror:`To the church with "a name that thou livest, and art dead," the promise runs: "I will not blot out his name out of the book of life, but I will confess his name before my Father." At the great white throne, the books are opened \u2014 and another book, which is the book of life. The mirror is sober and kind at once: there is a ledger of deeds, and there is a register of the loved, and the second is not earned the way the first is filled.`,
+ question:`Do you live as one whose name is written down \u2014 or as one still auditioning?`},
+{n:9, title:'The Pillar and the City', readings:['Revelation 3:7\u201313','Revelation 21:9\u201327'],
+ mirror:`To the church with "a little strength," he promises: "him that overcometh will I make a pillar in the temple of my God... and I will write upon him the name of the city." Then the city descends \u2014 and the mirror springs its surprise: "I saw no temple therein: for the Lord God Almighty and the Lamb are the temple of it." You were promised a place in the temple, and the temple turns out to be God himself. The weak are not given a position. They are given an embrace.`,
+ question:`Where are you still trying to be strong enough to deserve a place that is already yours?`},
+{n:10, title:'The Door and the Supper', readings:['Revelation 3:14\u201322','Revelation 19:6\u20139'],
+ mirror:`To the church that needs nothing, the famous image: "Behold, I stand at the door, and knock: if any man hear my voice, and open the door, I will come in to him, and will sup with him." Across the book, the supper is named: "Blessed are they which are called unto the marriage supper of the Lamb." The quiet meal behind one opened door was always the wedding feast. No one who opens to that knock is dining casually.`,
+ question:`What knock have you been hearing lately \u2014 and what would opening the door actually cost you?`},
+{n:11, title:'The Creator and the New Creation', readings:['Revelation 4','Revelation 21:1\u20135'],
+ mirror:`Before any conflict, heaven worships the Creator: "thou hast created all things, and for thy pleasure they are and were created." After every conflict, the throne speaks again: "Behold, I make all things new." The God who began is the God who refuses to merely repair. The mirror holds your whole story the same way \u2014 created for his pleasure, and not patched at the end, but made new.`,
+ question:`What in your life have you written off as only repairable \u2014 that God may intend to make new?`},
+{n:12, title:'The Lamb Slain and the Lamb Wed', readings:['Revelation 5:6\u201314','Revelation 19:1\u20139'],
+ mirror:`Before any seal breaks, heaven worships: "a Lamb as it had been slain" \u2014 wounded and upright at once \u2014 and every creature falls down. After every judgment ends, heaven worships again: "the marriage of the Lamb is come, and his wife hath made herself ready." The conflict of the whole book is bracketed by adoration; the Lamb enters it slain and exits it wed. Whatever the middle chapters cost, this story runs from worship to worship, from wound to wedding.`,
+ question:`Your life is somewhere in the middle chapters. Can you worship from there \u2014 not after the resolution, but now, the way heaven does on both sides of the storm?`},
+{n:13, title:'The Two White Horses', readings:['Revelation 6:1\u20138','Revelation 19:11\u201316'],
+ mirror:`The first rider out of the seals comes on a white horse, with a crown, conquering \u2014 and behind him follow war, famine, and death. At the book's climax another white horse: "and he that sat upon him was called Faithful and True." The first was the counterfeit; conquest that costs the world everything. The mirror trains the eye of discernment: not everything riding in white, crowned and winning, is Christ.`,
+ question:`What victory are you pursuing \u2014 and which rider does it follow?`},
+{n:14, title:'How Long, O Lord?', readings:['Revelation 6:9\u201311','Revelation 18:20\u201324 and 19:1\u20133'],
+ mirror:`Under the altar, the souls of the slain cry the oldest prayer of the afflicted: "How long, O Lord, holy and true, dost thou not judge and avenge?" They are given white robes and told to rest "yet for a little season." Far across the book, the answer: "God hath avenged the blood of his servants," and heaven's Alleluia rises. Between the cry and the answer there is a distance \u2014 a little season that does not feel little \u2014 and both the cry and the answer are holy. Complaint, in this book, is prayed from directly under the altar.`,
+ question:`What is your "how long"? Pray it tonight without softening it. The martyrs didn't.`},
+{n:15, w:'WEEK THREE \u2014 Through the Judgments', title:'The Shaking', readings:['Revelation 6:12\u201317','Revelation 16:17\u201321'],
+ mirror:`The sixth seal shakes everything shakeable \u2014 sun black, stars falling, every mountain moved \u2014 and the powerful hide in the rocks asking, "who shall be able to stand?" The seventh bowl answers from the temple: "It is done," and every island flees away. Two shakings, one question between them. The book never pretends the shaking isn't coming; it only insists on who is doing the holding while everything else moves.`,
+ question:`What is currently shaking in your life \u2014 and what, underneath it, has not moved at all?`},
+{n:16, title:'The Sealed and the Singing', readings:['Revelation 7','Revelation 14:1\u20135'],
+ mirror:`Before the trumpets, a pause: the servants of God are "sealed in their foreheads" \u2014 marked as kept before the storm, not from it. Chapters later, there they stand: on mount Zion with the Lamb, "his Father's name written in their foreheads," singing a new song no one else could learn. The seal became a name; the protected became singers. What God writes on a person in the storm turns out, afterward, to be music.`,
+ question:`What season of being merely kept \u2014 not delivered, just kept \u2014 might be writing a song on you now?`},
+{n:17, title:'The Silence and the Smoke', readings:['Revelation 8:1\u20135','Revelation 15:5\u20138'],
+ mirror:`When the seventh seal opens, the loudest book in Scripture falls silent \u2014 "silence in heaven about the space of half an hour" \u2014 while an angel offers the prayers of all the saints, and then casts the censer's fire to the earth. Later the temple fills with smoke, "and no man was able to enter." The mirror reveals the engine room of the whole book: the judgments are not arbitrary thunder. They are the prayers of the saints, come back down. Heaven goes quiet to listen to people like you.`,
+ question:`Do you pray as someone whose prayers are gathered in a golden censer \u2014 or as someone talking to a ceiling?`},
+{n:18, title:'Thirds and Wholes', readings:['Revelation 8:6\u201313','Revelation 16:1\u20139'],
+ mirror:`The trumpets strike the earth, the sea, the rivers, the sun \u2014 but only "the third part" of each. The bowls strike the same four targets \u2014 and strike them whole. The trumpets are the bowls at one-third volume: judgment as warning, restrained on purpose, leaving room to turn. The mirror's mercy is in the arithmetic \u2014 God's first language is always the partial, the wake-up, the not-yet-everything.`,
+ question:`What warning at one-third volume have you been treating as background noise?`},
+{n:19, title:'The Abyss and the River', readings:['Revelation 9','Revelation 16:10\u201316'],
+ mirror:`The fifth trumpet opens the abyss; the sixth looses what was bound "in the great river Euphrates." The fifth bowl darkens the beast's own throne; the sixth dries that same Euphrates. The mirror is geographic on purpose: evil has an address, a kingdom, a river \u2014 and every one of its strongholds appears twice in this book, the second time being dismantled. Nothing dark in these chapters is meeting God for the first time.`,
+ question:`What feels to you like an abyss \u2014 bottomless, unaddressable? It has an address in this book, and a sentence already passed.`},
+{n:20, title:'The Sweet and Bitter Word', readings:['Revelation 10','Revelation 14:6\u201313'],
+ mirror:`John is handed a little scroll and told to eat it: "it shall make thy belly bitter, but it shall be in thy mouth sweet as honey" \u2014 and then, "thou must prophesy again." Later an angel flies with "the everlasting gospel to preach unto them that dwell on the earth," and the bitter word follows close behind: Babylon is fallen. The mirror describes every truthful vocation: the word of God is sweet to receive and costly to carry, and you are not permitted to keep only the honey.`,
+ question:`What truth has God given you that is sweet in your mouth and bitter in your belly \u2014 and to whom are you avoiding carrying it?`},
+{n:21, title:'The Witnesses and the Beasts', readings:['Revelation 11:1\u201314','Revelation 13'],
+ mirror:`God sends two witnesses; the dragon answers with two beasts. The witnesses prophesy in sackcloth, are killed, and are raised in front of their enemies. The beasts perform wonders, demand worship, and one bears "a deadly wound that was healed" \u2014 a counterfeit resurrection. Everything heaven does, the enemy parodies; the mirror teaches that the test of any power is not its wonders but its direction: witnesses point away from themselves, beasts demand the gaze.`,
+ question:`The powers asking for your attention this season \u2014 do they point beyond themselves, or do they want your eyes on them?`},
+{n:22, w:'WEEK FOUR \u2014 The Approach', title:'The Kingdom and the Song', readings:['Revelation 11:15\u201319','Revelation 15:1\u20134'],
+ mirror:`The seventh trumpet sounds and heaven announces past tense: "The kingdoms of this world are become the kingdoms of our Lord, and of his Christ" \u2014 and the temple of God is opened in heaven. Before the final bowls, the temple opens again, and those who came through the beast's reign stand on a sea of glass singing the song of Moses and the Lamb. Two opened temples, one accomplished kingdom, and in between \u2014 the singers are the ones who were being crushed. The kingdom arrives as a fact before it arrives as an experience.`,
+ question:`Can you say "the kingdom has come" about a part of your life where you can't yet feel it?`},
+{n:23, title:'The Two Women', readings:['Revelation 12:1\u20136','Revelation 17:1\u20136'],
+ mirror:`The book sets two women facing each other. One is clothed with the sun, in the pain of labor, hunted, fleeing into the wilderness \u2014 where "she hath a place prepared of God, that they should feed her there." The other is arrayed in purple and scarlet and gold, seated comfortably on the beast itself. The nourished woman has nothing and is kept; the adorned woman has everything and is doomed. The soul is always becoming one of these two. Wilderness with provision, or comfort on the back of the beast.`,
+ question:`Where in your life are you being quietly fed in a wilderness \u2014 and where are you seated comfortably on something that should frighten you?`},
+{n:24, title:'The Wilderness and the Exodus', readings:['Revelation 12:13\u201317','Revelation 18:1\u20138'],
+ mirror:`The dragon pours a flood after the fleeing woman \u2014 "and the earth helped the woman," swallowing the river. Across the mirror, as Babylon totters, a voice from heaven: "Come out of her, my people, that ye be not partakers of her sins." The same God who makes the wilderness safe makes the city unsafe to stay in. Both are rescue. Sometimes grace is the earth opening to swallow what chases you; sometimes it is a voice telling you to pack and leave.`,
+ question:`Is God currently protecting you where you are \u2014 or calling you out of where you are? Be honest about which.`},
+{n:25, title:'The Dragon\u2019s Two Falls', readings:['Revelation 12:7\u20139','Revelation 20:1\u20133 and 20:10'],
+ mirror:`Tomorrow you reach the center, so today, read the dragon's whole arc and let it shrink to its true size: thrown down from heaven by Michael \u2014 then bound, then loosed "a little season," then ended, finally and without sequel. The book gives the dragon many pages and no future. He falls at the center of the story and falls again at its end; everything he does in between is the rage of "but a short time." You stand tomorrow in the room where his fall is announced.`,
+ question:`What accusation, fear, or darkness in your life have you been treating as permanent \u2014 that this book treats as already falling?`},
+{n:26, center:true, title:'THE CENTER', readings:['Revelation 12:10\u201312'],
+ mirror:`Twenty-five days of matched pairs have been folding inward, and this is the room they close upon. The dragon \u2014 "that old serpent, called the Devil, and Satan, which deceiveth the whole world" \u2014 is down. And before anything else can happen, a loud voice: "Now is come salvation, and strength, and the kingdom of our God, and the power of his Christ: for the accuser of our brethren is cast down." The most feared book in the Bible is built, at its exact heart, around an accuser who has already lost his seat. Everything frightening in Revelation orbits this room and cannot enter it. Neither can anything that accuses you.`,
+ aloud:`Read the voice's declaration aloud, once, slowly.`,
+ rest:`Rest here as long as you like. The accuser has no seat in this room.`,
+ question:null}
+];
+
+const LIT_KEY = 'still_center_lit';
+function litDays(){ try{return JSON.parse(localStorage.getItem(LIT_KEY)||'[]');}catch(e){return [];} }
+function saveLit(a){ try{localStorage.setItem(LIT_KEY, JSON.stringify(a));}catch(e){} }
+function nextDay(){ const lit=litDays(); let n=1; while(lit.indexOf(n)>-1) n++; return Math.min(n,26); }
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+/* the intro */
+Paths.centerHome = function(){
+  this._frame(
+    `<p class="overline">Reading Toward the Center</p>` +
+    this._h('A descent into Revelation') +
+    this._sub('Twenty-six days, two readings a day, ending in silence') +
+    this._body('Many people avoid the last book of the Bible because it feels terrifying. This path is different. We are not here to decode the future. We are here to walk slowly toward the center, where the victory has already been won.') +
+    this._body('The early Church wrote in mirrors: a book\u2019s opening answered by its ending, every pair folding inward toward a center \u2014 because the center is where the weight lives. Each day you will read two passages that face each other across the book, sit with what the mirror shows, and end in silence. On the twenty-sixth day, you arrive at the room the whole book is built around.') +
+    `<p class="colophon">Missed days are never counted here. The lamps you have lit stay lit; the next one simply waits.</p>` +
+    this._gold('See the lamps', 'Paths.centerMap()') +
+    this._ghost('\u2190 All paths', 'Paths.open()')
+  );
+};
+
+/* the lamps map — converging pairs, the center distinct */
+Paths.centerMap = function(){
+  const lit = litDays(), next = nextDay(), done = lit.length===26;
+  let rows = '';
+  DAYS.forEach(function(d){
+    if(d.w) rows += `<p class="section-label ctr-week">${d.w}</p>`;
+    const isLit = lit.indexOf(d.n)>-1;
+    const openable = isLit || d.n===next;
+    const indent = Math.min(d.n*4, 96); // columns converge toward the center
+    if(d.center){
+      rows += `<button class="ctr-row ctr-centerrow" ${openable?'':'disabled'} onclick="Paths.centerDay(26)">
+        <span class="ctr-centerlamp ${isLit?'lit':''}"></span></button>
+        <p class="section-label" style="text-align:center">Day 26 \u2014 The Center</p>` +
+        (done ? `<svg class="ctr-lamb show" width="34" height="26" viewBox="0 0 34 26" fill="none" stroke="#c89a3a" stroke-width="1.3">
+          <circle cx="22" cy="9" r="4.5"/><path d="M6 16c0-4 4-7 9-7h5M8 16h16M10 16v7M22 16v7M14 16v5M18 16v5"/>
+          <path d="M22 5v-3M20 3.5l2-1.5 2 1.5"/></svg>` : '');
+    } else {
+      rows += `<button class="ctr-row ${isLit?'ctr-done':''}" ${openable?'':'disabled'}
+        onclick="Paths.centerDay(${d.n})" style="padding-left:${indent}px;padding-right:${indent}px">
+        <span class="ctr-lamp ${isLit?'lit':''}"></span>
+        <span class="ctr-row-title">Day ${d.n} \u00b7 ${d.title}</span>
+        <span class="ctr-lamp ${isLit?'lit':''}"></span></button>`;
+    }
+  });
+  this._frame(
+    `<p class="overline">Reading Toward the Center</p>` +
+    `<div class="ctr-map">${rows}</div>` +
+    this._ghost('\u2190 About this path', 'Paths.centerHome()')
+  );
+  };
+
+/* a day */
+Paths.centerDay = function(n){
+  const d = DAYS[n-1], lit = litDays().indexOf(n)>-1;
+  let inner =
+    `<p class="overline">Day ${d.n} of 26</p>` +
+    this._h(d.title) +
+    this._label('Read, in your own Bible') +
+    `<p class="ctr-readings">${d.readings.join('<br>then ')}</p>` +
+    this._label(d.center ? 'The mirror\u2019s end' : 'The mirror') +
+    this._body(d.mirror);
+  if(d.center){
+    inner += this._body('<em>'+d.aloud+'</em>') +
+             `<p class="ctr-rest">${d.rest}</p>`;
+  } else if(d.question){
+    inner += this._label('One question') + this._body(d.question) +
+             this._textarea('If you wish to answer here\u2026 (optional)');
+  }
+  if(d.n>=14 && d.n<=21){
+    inner += `<p class="colophon">If these chapters stir fear rather than awe, that is worth bringing to the Dialogue Chamber \u2014 or to a confessor.</p>`;
+  }
+  inner += lit
+    ? this._gold('Return to the lamps', 'Paths.centerMap()')
+    : this._gold(d.center ? 'Light the center' : 'Light this day\u2019s lamps', 'Paths.centerComplete('+d.n+')');
+  inner += this._ghost('End in silence \u2192 Contemplative Sitting', 'Paths.centerSilence('+d.n+')') +
+           this._ghost('\u2190 The lamps', 'Paths.centerMap()');
+  this._frame(inner);
+};
+
+Paths.centerComplete = function(n){
+  const lit = litDays();
+  if(lit.indexOf(n)===-1){ lit.push(n); saveLit(lit); }
+  // optional written answer → the journey, never required
+  try{
+    const ta = document.getElementById('discInput');
+    if(ta && ta.value.trim() && typeof DB!=='undefined')
+      DB.save('centerpath',{day:n, text:ta.value.trim().slice(0,1200)});
+    else if(typeof DB!=='undefined') DB.save('centerpath',{day:n});
+  }catch(e){}
+  // carry the day's key line toward Lectio, like a Chamber word
+  try{
+    const d = DAYS[n-1];
+    const m = d.mirror.match(/"([^"]{15,160})"/);
+    if(m) localStorage.setItem('dc_carry', JSON.stringify({text:m[1], src:d.readings.join(' / ')}));
+  }catch(e){}
+  this.centerMap();
+};
+
+Paths.centerSilence = function(n){
+  try{
+    if(typeof F!=='undefined' && typeof enterFeature==='function'){
+      const i = F.findIndex(function(f){ return f.screen==='sitting'; });
+      if(i>-1){ Paths.close(); window.dcSkipSettle = true; enterFeature(i); return; }
+    }
+  }catch(e){}
+  Paths.close();
+};
+
+})();
  
 /* ═══════════════════════════════════════════
    RULE OF LIFE — localStorage persistence
@@ -9623,6 +9850,20 @@ const INFO_CONTENT = {
       <p>The first path is the <strong>Discernment of a Decision</strong>, drawn from the Spiritual Exercises of St. Ignatius. Over about two weeks it moves through four movements. <strong>Freedom</strong> loosens your grip on the outcome you already want, so you can truly hear. <strong>Dwelling</strong> lives imaginatively inside each path in prayer, noticing what each one stirs — the consolation that draws you toward God, or the desolation that pulls away. <strong>Reason</strong> weighs the matter in tranquil prayer, with the old exercises: counsel a stranger facing your choice, stand at the end of your life and look back, lay each option before God. And <strong>Confirmation</strong> brings the choice that has emerged back to God, watching for the peace that settles on it.</p>
       <p>Ignatius taught a rule worth keeping close: <em>in desolation, never make a change, and never reverse a decision.</em> When the way feels dark, hold steady — it will lift. The path will wait gently with you.</p>
       <p>This never tells you what to choose. It is a way of becoming free enough to recognize the answer yourself — and it points you always toward a spiritual director or confessor, never around them. A path can prepare the heart; only the Spirit, and the people God gives you, can confirm it. For grave matters — a vocation, a marriage — walk it with a director. Come without fear, and unhurried.</p>
+    `
+  },
+
+  center: {
+    title: 'Reading Toward the Center',
+    body: `
+      <p>The last book of the Bible is the most avoided book in it — and it was never meant to be. The early Church wrote in mirrors: a book's opening answered by its ending, its second movement by its second-to-last, every pair folding inward toward a center, because the center is where the weight lives. Revelation is built this way. Read it as a mirror and you discover that its exact heart is not the beast, not the bowls, not any of the things people fear — it is a victory, already announced.</p>
+      <div class="info-panel-quote">
+        <p>"Now is come salvation, and strength, and the kingdom of our God... for the accuser of our brethren is cast down."</p>
+        <span>— Revelation 12:10, the book's own center</span>
+      </div>
+      <p>The path runs twenty-six days in four weeks, descending the mirror pair by pair. <strong>The Outer Doors</strong> open the frame — the same voice blessing you at the book's front door and its back. <strong>The Promises Kept</strong> walks the seven letters into the final chapters, where every promise made to a struggling church is found delivered: the tree of life planted in the city's street, the hidden name written, the supper become a wedding feast. <strong>Through the Judgments</strong> takes the hard chapters by their merciful structure — trumpets striking thirds where bowls strike wholes, the judgments revealed as the prayers of the saints come back down. <strong>The Approach</strong> reads the two women, the exodus from Babylon, the dragon's whole arc — and then, on the twenty-sixth day, you stand in the room every mirror was facing.</p>
+      <p>This is not decoding, and there is no timeline. We are not here to predict the future; we are here to read toward a center where the accuser has already lost his seat. Each day asks a few quiet minutes: two short readings in your own Bible, one mirror to sit with, one question, and silence. The lamps you light stay lit. Nothing here is counted against you, and missed days are never mentioned — the next lamp simply waits.</p>
+      <p>If the judgment chapters stir fear rather than awe, bring that to the Dialogue Chamber, or to a confessor — fear is worth carrying to a living voice. And when you reach the center, you will be able to read everything else in this book from the inside out. Perhaps your own life the same way.</p>
     `
   },
 
