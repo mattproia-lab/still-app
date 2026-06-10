@@ -12446,23 +12446,23 @@ RULES: each bargain on its own line, nothing else; no numbering or quotes; each 
    "Life and Doctrine" for Genoa; PD Psalters). VERIFY AND EXPAND against
    your preferred editions before launch. Target: 150–200 passages.       */
 var CORPUS = [
- {id:'si-01', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-01',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'Do you know, daughter, who you are, and who I am? You are she who is not; I am He Who Is.',
   doors:['self'], reg:['consolation','proving'], env:'sea',
   kw:['who','am','identity','worth','nothing','pride','know','myself']},
- {id:'si-02', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-02',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'I have placed you in the midst of your fellows, that you may do for them what you cannot do for me — that is, love them freely, without looking for any return.',
   doors:['world','church'], reg:['proving','consolation'], env:'bridge',
   kw:['neighbor','others','family','friend','help','love','serve','people','enemy','forgive']},
- {id:'si-03', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-03',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'Every virtue is obtained by means of your neighbor, and likewise every defect is proved there.',
   doors:['world','self'], reg:['proving'], env:'bridge',
   kw:['virtue','patience','anger','annoy','irritat','work','difficult','people']},
- {id:'si-04', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-04',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'I made a bridge of my Son as He lived among you; and though that bridge is risen from your sight, the way of it remains, and no one can cross the tempestuous sea of this dark life without it.',
   doors:['providence','church'], reg:['consolation'], env:'bridge',
   kw:['lost','way','cross','storm','drown','overwhelm','direction','path','jesus','christ']},
- {id:'si-05', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-05',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'The soul cannot live without love. She always wants to love something, because she is made of love, for by love I created her.',
   doors:['self'], reg:['consolation','wonder'], env:'sea',
   kw:['love','lonely','alone','want','desire','heart','empty','longing']},
@@ -12478,7 +12478,7 @@ var CORPUS = [
   text:'O mad lover! It was not enough for you to take on our humanity — you would die for us as well.',
   doors:['nothing'], reg:['wonder','consolation'], env:'flame',
   kw:['love','grateful','thank','cross','died','mercy','praise']},
- {id:'si-09', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-09',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'Patience is proved in the bearing of injuries; humility is proved by pride; faith is proved in trial. Virtue is conceived in self-knowledge, but it is proved by its contrary.',
   doors:['self','providence'], reg:['proving'], env:'flame',
   kw:['patience','trial','test','hard','suffer','endure','unfair','wrong','hurt']},
@@ -12486,7 +12486,7 @@ var CORPUS = [
   text:'Build yourself a cell within your own mind, from which you need never come out.',
   doors:['self','nothing'], reg:['consolation'], env:'sea',
   kw:['busy','noise','quiet','peace','still','rest','rush','time']},
- {id:'si-11', src:'St. Catherine of Siena, The Dialogue',
+ {id:'si-11',gv:true, src:'St. Catherine of Siena, The Dialogue',
   text:'I am infinite Good, and I therefore require of you infinite desire.',
   doors:['self'], reg:['proving'], env:'flame',
   kw:['enough','more','lukewarm','comfortable','settle','growth','deeper']},
@@ -12882,17 +12882,12 @@ function renderWord(passage, accomp, userText){
   $('dcEcho').textContent = userText ? userText : '';
   $('dcEcho').style.display = userText ? 'block':'none';
   // line-by-line reveal
-  var P=$('dcPassage'); P.innerHTML='';
-  var sentences = passage.text.match(/[^.;!?]+[.;!?]*/g)||[passage.text];
-  sentences.forEach(function(s,i){
-    var sp=document.createElement('span'); sp.className='dc-line'; sp.textContent=s.trim();
-    P.appendChild(sp);
-    setTimeout(function(){ sp.classList.add('dc-vis'); }, reducedMotion()?100 : 600+i*2200);
-  });
+  var nSent = revealInto($('dcPassage'), passage.text,
+                         passage.gv ? 'To Catherine, the eternal Father said' : null);
   $('dcPassAttr').textContent='— '+passage.src;
   var A=$('dcAccomp'); A.classList.remove('dc-vis');
   if(accomp){ A.textContent=accomp;
-    setTimeout(function(){ A.classList.add('dc-vis'); }, reducedMotion()?200 : 1200+sentences.length*2200);
+    setTimeout(function(){ A.classList.add('dc-vis'); }, reducedMotion()?200 : 1200+nSent*2200);
   } else A.textContent='';
   // respond area — only if stairs remain
   var more = S.stair<3 && S.door!=='nothing';
@@ -12905,7 +12900,7 @@ function renderWord(passage, accomp, userText){
   rest.classList.remove('dc-show');
   rest.style.display = more ? 'none' : 'block';
   if(!more){ setTimeout(function(){ rest.classList.add('dc-show'); },
-                        reducedMotion()?1500 : 2400+sentences.length*2200); }
+                        reducedMotion()?1500 : 2400+nSent*2200); }
 }
  
 function arrivalPulse(){
@@ -13097,14 +13092,22 @@ function suffuse(level){
   var ops=[0,.05,.09,.14,.2];
   d.style.opacity = reducedMotion() ? (level>=4 ? .12 : 0) : ops[level];
 }
-function revealInto(P, text){
+function revealInto(P, text, kicker){
   P.innerHTML='';
+  if(kicker){
+    var k=document.createElement('span'); k.className='dc-line';
+    k.style.cssText="font-size:13px;font-style:normal;letter-spacing:.18em;text-transform:uppercase;font-family:'Heebo',sans-serif;color:rgba(255,255,255,.45);margin-bottom:14px;";
+    k.textContent=kicker;
+    P.appendChild(k);
+    setTimeout(function(){ k.classList.add('dc-vis'); }, 300);
+  }
   var sentences = text.match(/[^.;!?]+[.;!?]*/g)||[text];
   sentences.forEach(function(se,i){
     var sp=document.createElement('span'); sp.className='dc-line'; sp.textContent=se.trim();
     P.appendChild(sp);
     setTimeout(function(){ sp.classList.add('dc-vis'); }, reducedMotion()?100 : 500+i*2000);
   });
+  return sentences.length;
 }
  
 function recordVisit(){
@@ -13193,6 +13196,15 @@ return { init:init, enterCell:enterCell, cellDone:cellDone, chooseDoor:chooseDoo
          startCarry:startCarry, showMargin:showMargin, show:show, back:back,
          config:config, _store:store };
 })();
+DC.config.apiEndpoint = '/.netlify/functions/claude';
+DC.config.bellSrc   = 'bell.mp3';
+DC.config.candleSrc = 'candle.mp4';
+DC.config.onLeave   = function(){ goHome(); };
+DC.config.onRemain  = function(){
+  var i = F.findIndex(function(f){ return f.screen === 'sitting'; });
+  window.dcSkipSettle = true;
+  enterFeature(i);
+};
   </script> 
   </script> 
 // Keepalive to prevent Safari from killing the tab when idle
