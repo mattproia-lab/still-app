@@ -11064,7 +11064,7 @@ function obFinish() {
   // Mark onboarding complete
   localStorage.setItem('still_onboarded', '1');
   localStorage.setItem('still_onboarded_date', new Date().toISOString());
- 
+
   // Hide onboarding screen
   const ob = document.getElementById('screen-onboarding');
   if (ob) {
@@ -11072,15 +11072,15 @@ function obFinish() {
     ob.style.transition = 'opacity .4s ease';
     setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 400);
   }
- 
-// Show home screen
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('home').classList.add('active');
-  currentScreen = 'home';
+
+  // Send them to sign-up / sign-in — NOT straight to the menu.
   setTimeout(() => {
-    if (typeof homeActivate === 'function') homeActivate(0);
-    if (typeof initAuth === 'function') initAuth();
-  }, 500);
+    if (typeof initAuth === 'function') {
+      initAuth();
+    } else {
+      document.getElementById('authOverlay').style.display = 'flex';
+    }
+  }, 450);
 }
  
 // ─── Settings deep link ───────────────────────────────────────────────────
