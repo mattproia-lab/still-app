@@ -1270,7 +1270,7 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      HOME SCREEN
 ═══════════════════════════════════════════ -->
-<div id="home" class="screen active">
+<div id="home" class="screen">
   <header class="home-header">
     <span class="logo" id="stillLogo">Still</span>
     <div class="home-header-mid" id="homeHeaderMid">
@@ -4329,6 +4329,33 @@ function goHome(){
   stopSitting();
   homeReset();
 }
+// ── STARTUP ROUTING: decide what a visitor sees on load ──
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const onboarded = localStorage.getItem('still_onboarded');
+    const token = localStorage.getItem('still_access_token');
+
+    // 1) Brand-new visitor → show onboarding, hide everything else.
+    if (!onboarded) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const ob = document.getElementById('screen-onboarding');
+      if (ob) ob.style.display = 'block';
+      return;
+    }
+
+    // 2) Onboarded but not logged in → show sign-in, hide the app.
+    if (!token) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const a = document.getElementById('authOverlay');
+      if (a) a.style.display = 'flex';
+      if (typeof initAuth === 'function') initAuth();
+      return;
+    }
+
+    // 3) Logged in → let them into the app, and confirm the session.
+    if (typeof initAuth === 'function') initAuth();
+  }, 300);
+});
 
 document.getElementById('homeDescCta').addEventListener('click',()=>{if(homeActive>=0)enterFeature(homeActive);});
 
