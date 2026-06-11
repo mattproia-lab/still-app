@@ -2885,7 +2885,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     onmouseover="this.style.color='rgba(200,146,12,.95)'"
     onmouseout="this.style.color='rgba(255,255,255,.4)'">ⓘ</button>
 </div>
-<div id="screen-dialogue" class="dc-screen">
+<div id="screen-dialogue" class="dc-screen dc-hidden">
  
   <!-- environment layers (A/B for crossfade) -->
   <div id="dcEnvA" class="dc-env"></div>
@@ -3233,6 +3233,8 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .dc-header button{background:none;border:none;color:var(--dc-faint);cursor:pointer;
   font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;padding:10px;}
 .dc-header .dc-title{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--dc-faint);}
+.dc-screen { display: none; }
+.dc-screen.active { display: block; }
  
 /* CRISIS / PASTORAL PANEL */
 .dc-pastoral{font-size:clamp(19px,2.2vw,24px);line-height:1.95;font-style:italic;color:rgba(255,255,255,.86);max-width:480px;}
@@ -3707,7 +3709,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   color:rgba(40,30,18,.88);margin:6px 0;}
 .ctr-rest{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-style:italic;
   color:#8a6210;margin-top:26px;text-align:center;line-height:1.7;}
-  
+
 </style>
 
 <script>
