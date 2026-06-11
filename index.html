@@ -10062,8 +10062,22 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowUp'||e.key==='ArrowLeft'){if(homeActive>0)homeActivate(homeActive-1);else homeReset();}
   if(e.key==='Enter'&&homeActive>=0)enterFeature(homeActive);
   if(e.key==='Escape')homeReset();
+  if(e.key==='Escape')homeReset();
 });
 
+// ── Front-door guard: logged-out visitors see sign-in, not the app ──
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    const onboarded = localStorage.getItem('still_onboarded');
+    const token = localStorage.getItem('still_access_token');
+    if (!onboarded) return;          // new visitor → onboarding handles it
+    if (!token) {                    // onboarded but logged out → force sign-in
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const a = document.getElementById('authOverlay');
+      if (a) a.style.display = 'flex';
+    }
+  }, 800);
+});
 /* ═══════════════════════════════════════════
    OFFICE — detect morning/evening
 ═══════════════════════════════════════════ */
