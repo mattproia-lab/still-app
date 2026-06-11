@@ -10195,11 +10195,18 @@ async function submitAuth() {
     errEl.textContent = 'Check your email to confirm your account, then sign in.';
     return;
   }
- localStorage.setItem('still_access_token', token);
+  localStorage.setItem('still_access_token', token);
   localStorage.setItem('still_refresh_token', data.refresh_token);
   currentUser = user;
   window.currentUser = user;
+
+  // Hide the auth overlay and actually show the app
   document.getElementById('authOverlay').style.display = 'none';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('home').classList.add('active');
+  currentScreen = 'home';
+  if (typeof homeActivate === 'function') homeActivate(0);
+  if (typeof updateLastActive === 'function') updateLastActive();
 }
 async function supaFetch(path, opts={}) {
   const isGet = !opts.method || opts.method === 'GET';
@@ -11073,13 +11080,13 @@ function obFinish() {
     setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 400);
   }
 
-  // Send them to sign-up / sign-in — NOT straight to the menu.
+  // Send them straight to sign-up / sign-in.
   setTimeout(() => {
-    if (typeof initAuth === 'function') {
-      initAuth();
-    } else {
-      document.getElementById('authOverlay').style.display = 'flex';
+    const a = document.getElementById('authOverlay');
+    if (a) {
+      a.style.display = 'flex';
     }
+    if (typeof initAuth === 'function') initAuth();
   }, 450);
 }
  
