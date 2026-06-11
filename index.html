@@ -4329,15 +4329,30 @@ function goHome(){
   stopSitting();
   homeReset();
 }
-// ── STARTUP ROUTING: decide what a visitor sees on load ──
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    const ov = document.getElementById('authOverlay');          // ← add
-    if (ov && ov.parentElement !== document.body) document.body.appendChild(ov);   //
+  setTimeout(async () => {
+    // Always lift the auth overlay out of any hidden parent first.
+    const ov = document.getElementById('authOverlay');
+    if (ov && ov.parentElement !== document.body) document.body.appendChild(ov);
+
     const onboarded = localStorage.getItem('still_onboarded');
     const token = localStorage.getItem('still_access_token');
 
-    // 1) Brand-new visitor → show onboarding, hide everything else.
+    function showSignIn() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const a = document.getElementById('authOverlay');
+      if (a) { document.body.appendChild(a); a.style.display = 'flex'; }
+    }
+    function showHome() {
+      const a = document.getElementById('authOverlay');
+      if (a) a.style.display = 'none';
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('home').classList.add('active');
+      currentScreen = 'home';
+      if (typeof homeActivate === 'function') homeActivate(0);
+    }
+
+    // 1) Brand-new visitor → onboarding only.
     if (!onboarded) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const ob = document.getElementById('screen-onboarding');
@@ -4345,17 +4360,50 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 2) Onboarded but not logged in → show sign-in, hide the app.
-    if (!token) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const a = document.getElementById('authOverlay');
-      if (a) a.style.display = 'flex';
-      if (typeof initAuth === 'function') initAuth();
-      return;
-    }
+    // 2) No token at all → sign-in.
+    if (!token) { showSignIn(); return; }
 
-    // 3) Logged in → let them into the app, and confirm the session.
-    if (typeof initAuth === 'function') initAuth();
+    // 3) Token exists → VERIFY it's actually valid (not expired) before showing the app.
+    try {
+      const res = await fetch(`${SUPA_URL}/auth/v1/user`, {
+        headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        // Valid session → show the app.
+        const u = await res.json();
+        currentUser = u; window.currentUser = u;
+        showHome();
+        if (typeof updateLastActive === 'function') updateLastActive();
+      } else {
+        // Token expired/invalid → try the refresh token once.
+        const refresh = localStorage.getItem('still_refresh_token');
+        let recovered = false;
+        if (refresh) {
+          const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
+            method: 'POST',
+            headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh_token: refresh })
+          });
+          if (r.ok) {
+            const data = await r.json();
+            localStorage.setItem('still_access_token', data.access_token);
+            localStorage.setItem('still_refresh_token', data.refresh_token);
+            currentUser = data.user; window.currentUser = data.user;
+            showHome();
+            recovered = true;
+          }
+        }
+        if (!recovered) {
+          // Truly expired → clear the dead token and show sign-in.
+          localStorage.removeItem('still_access_token');
+          localStorage.removeItem('still_refresh_token');
+          showSignIn();
+        }
+      }
+    } catch (e) {
+      // Network error → safest is to show sign-in.
+      showSignIn();
+    }
   }, 300);
 });
 
