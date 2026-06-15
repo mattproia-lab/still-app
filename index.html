@@ -4292,7 +4292,7 @@ if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if(F[i].screen==='saint') initSaintScreen();
   if(F[i].screen==='examen') initExamen();
   if(F[i].screen==='darkness') initDarknessScreen();
-  if(F[i].screen==='rule') loadRuleItems();
+  if(F[i].screen==='rule') { restoreRuleFromCloud(); loadRuleItems(); }
   if(F[i].screen==='community') initCommunity();
   if(F[i].screen==='dialogue') DC.init();
 }
@@ -8697,6 +8697,18 @@ function saveRuleItems() {
     if (name) items.push({ id: el.id, name, desc, checked: !!checked });
   });
   try { localStorage.setItem(RULE_KEY, JSON.stringify(items)); } catch(e) {}
+
+  // NEW — mirror the rule to the cloud as ONE upserted row
+  try {
+    if (typeof Sync !== 'undefined') {
+      Sync.pushEntry({
+        id: 'rule_of_life_singleton',
+        type: 'rule_of_life',
+        date: new Date().toISOString(),
+        items: items
+      });
+    }
+  } catch(e) {}
 }
 
 function loadRuleItems() {
@@ -8716,6 +8728,19 @@ function loadRuleItems() {
         <button onclick="deleteRuleItem('${id}')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.22);font-size:18px;padding:4px 8px;line-height:1;transition:color .2s" onmouseover="this.style.color='rgba(255,73,64,.7)'" onmouseout="this.style.color='rgba(255,255,255,.22)'">×</button>`;
       container.appendChild(d);
     });
+  } catch(e) {}
+}
+function restoreRuleFromCloud() {
+  try {
+    const all = (typeof DB !== 'undefined') ? DB.all() : [];
+    const ruleEntries = all.filter(e => e.type === 'rule_of_life' && e.items);
+    if (!ruleEntries.length) return;
+    const latest = ruleEntries[ruleEntries.length - 1];
+    const local = JSON.parse(localStorage.getItem(RULE_KEY) || '[]');
+    if (!local.length && latest.items && latest.items.length) {
+      localStorage.setItem(RULE_KEY, JSON.stringify(latest.items));
+      if (typeof loadRuleItems === 'function') loadRuleItems();
+    }
   } catch(e) {}
 }
 const Guide = (function () {
@@ -9906,7 +9931,7 @@ const INFO_CONTENT = {
   },
 
   breath: {
-    title: 'Breath Prayer · Jesus Prayer Counter',
+    title: 'Breath Prayer · Jesus Prayer',
     body: `
       <p>The Jesus Prayer — "Lord Jesus Christ, Son of God, have mercy on me, a sinner" — is the most ancient form of continuous prayer in the Christian tradition. Its roots are in the Desert Fathers of fourth-century Egypt and the hesychast monks of Sinai and Athos, who sought to fulfill Paul's command to "pray without ceasing" by anchoring the prayer to the rhythm of breathing.</p>
       <div class="info-panel-quote">
@@ -12525,7 +12550,7 @@ checkNightWatch();
 setOfficeTime();setRuleDate();setAutobioDate();
 initMobileScroll();
 loadCompanionUses();
-loadRuleItems();
+restoreRuleFromCloud(); loadRuleItems();
 initTrial();
 checkStripeReturn();
 checkOnboarding();
