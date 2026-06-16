@@ -1139,10 +1139,6 @@ body.is-mobile #mobileEnterTab { display: block; }
       Begin for $9.99 / month →
     </button>
 
-    <button onclick="buyReflectionPack()" style="width:100%;padding:14px;background:transparent;border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-bottom:24px">
-      Or buy 10 reflections for $2.99
-    </button>
-
     <p onclick="closeUpgrade()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em">Return to stillness</p>
   </div>
 </div>
@@ -4120,7 +4116,26 @@ document.addEventListener('visibilitychange',()=>{
     animStart=performance.now();
   }
 });
+async function initOneSignal() {
+  if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
+    return;
+  }
+  try {
+    const OneSignal = window.plugins && window.plugins.OneSignal;
+    if (!OneSignal) { console.log('OneSignal plugin not found'); return; }
 
+    OneSignal.initialize("19eccbcf-5a1f-42ba-a23c-54726795a751");
+    OneSignal.Notifications.requestPermission(true);
+
+    // tie the device to your Supabase user so send-notifications.js can target them
+    if (window.currentUser && window.currentUser.id) {
+      OneSignal.login(window.currentUser.id);
+    }
+    console.log('OneSignal configured');
+  } catch (e) {
+    console.log('OneSignal init skipped:', e);
+  }
+}
 
 /* ═══════════════════════════════════════════
    ROUTER
@@ -12555,6 +12570,7 @@ initTrial();
 checkStripeReturn();
 checkOnboarding();
 initAuth();
+initRevenueCat();
 initSacristy();
 
 // Restore bell preference
@@ -12583,42 +12599,111 @@ function closeUpgrade() {
 
 async function startCheckout(tier) {
   if (!currentUser) { showUpgrade(); return; }
-  try {
-    const res = await fetch('/.netlify/functions/stripe-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: currentUser.id,
-        email: currentUser.email,
-        tier: tier || 'personal'
-      })
-    });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-  } catch(err) {
-    console.error('Checkout error:', err);
+
+  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+
+  if (isNative) {
+    // iOS → RevenueCat. Buy the matching subscription; the webhook sets subscription_status='premium'.
+    try {
+      const Purchases = window.Capacitor.Plugins.Purchases;
+      const targetProductId = (tier === 'annual') ? 'still_yearly' : 'still_monthly';
+
+      const offerings = await Purchases.getOfferings();
+      const pkg = offerings.current?.availablePackages?.find(p =>
+        p.product.identifier === targetProductId
+      );
+      if (!pkg) { console.log('Subscription product not found:', targetProductId); return; }
+
+      const result = await Purchases.purchasePackage({ aPackage: pkg });
+
+      // Instant local unlock via entitlement (webhook also writes Supabase as source of truth)
+      const isPro = result.customerInfo?.entitlements?.active?.['pro'];
+      if (isPro) {
+        console.log('Subscription active');
+        // refresh the UI to premium state here — e.g. re-check status / close paywall
+        if (typeof closeUpgrade === 'function') closeUpgrade();
+        window.location.href = `${location.origin}?upgraded=true`;
+      }
+    } catch (e) {
+      if (!e.userCancelled) console.error('IAP subscription error:', e);
+    }
+  } else {
+    // WEB → existing Stripe flow, unchanged
+    try {
+      const res = await fetch('/.netlify/functions/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          email: currentUser.email,
+          tier: tier || 'personal'
+        })
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch(err) {
+      console.error('Checkout error:', err);
+    }
   }
 }
 
-async function buyReflectionPack() {
+async function buyAudioCredits() {
   if (!currentUser) { showUpgrade(); return; }
-  try {
-    const res = await fetch('/.netlify/functions/stripe-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: currentUser.id,
-        email: currentUser.email,
-        type: 'reflection_pack'
-      })
-    });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-  } catch(err) {
-    console.error('Reflection pack error:', err);
+
+  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+
+  if (isNative) {
+    // iOS → RevenueCat consumable. The RevenueCat WEBHOOK credits the wallet server-side.
+    try {
+      const Purchases = window.Capacitor.Plugins.Purchases;
+      const offerings = await Purchases.getOfferings();
+      const pkg = offerings.current?.availablePackages?.find(p =>
+        p.product.identifier === 'still_audio_credit'
+      );
+      if (!pkg) { console.log('Audio credit product not found'); return; }
+      await Purchases.purchasePackage({ aPackage: pkg });
+      console.log('Audio credit purchase complete');
+      // refresh the displayed wallet balance here if you have a function for it
+    } catch (e) {
+      if (!e.userCancelled) console.error('IAP error:', e);
+    }
+  } else {
+    // WEB → existing Stripe flow (verified keys)
+    try {
+      const res = await fetch('/.netlify/functions/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          email: currentUser.email,
+          tier: 'audio_credit'
+        })
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch(err) { console.error('Audio credit error:', err); }
   }
 }
+async function initRevenueCat() {
+  // Only runs inside the native iOS app — skips harmlessly in a web browser
+  if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
+    return;
+  }
+  try {
+    const Purchases = window.Capacitor.Plugins.Purchases;
+    if (!Purchases) { console.log('RevenueCat plugin not found'); return; }
 
+    await Purchases.setLogLevel({ level: 'DEBUG' });
+    await Purchases.configure({ apiKey: "test_hVBPdovvUJHAXXiMYGDgLXPbQbg" });
+
+    if (window.currentUser && window.currentUser.id) {
+      await Purchases.logIn({ appUserID: window.currentUser.id });
+    }
+    console.log('RevenueCat configured');
+  } catch (e) {
+    console.log('RevenueCat init skipped:', e);
+  }
+}
 function showPhoneVerify() {
   document.getElementById('phoneVerifyScreen').style.visibility = 'visible';
   document.getElementById('phoneStep').style.display = 'block';
