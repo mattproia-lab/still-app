@@ -10523,28 +10523,34 @@ async function submitCommunity() {
 
   if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
-  try {
-    await supaFetch('/rest/v1/responses', {
-      method: 'POST',
-      headers: { 'Prefer': 'return=minimal' },
-      body: JSON.stringify({
-        question_id: communityQuestion.id,
-        text: answer,
-        device_id: getDeviceId()
-      })
-    });
+  const resp = await fetch('/.netlify/functions/community-submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      question_id: communityQuestion.id,
+      text: answer,
+      device_id: getDeviceId()
+    })
+  });
 
-    markSubmitted(communityQuestion.id);
-    trackEvent('community');
-    DB.save('community', { question: communityQuestion.text, answer });
-
-    const card = document.getElementById('communityCard');
-    await renderCommunityResponses(card, communityQuestion);
-
-  } catch(err) {
+  if (!resp.ok) {
+    const data = await resp.json().catch(() => ({}));
     if (btn) { btn.textContent = 'Submit & See Others →'; btn.disabled = false; }
-    if (errEl) { errEl.textContent = 'Something went quiet — try once more.'; errEl.style.display = 'block'; }
+    if (errEl) {
+      errEl.textContent = data.error === 'blocked'
+        ? 'Those words don\u2019t belong here. Try saying it another way.'
+        : 'Something went quiet \u2014 try once more.';
+      errEl.style.display = 'block';
+    }
+    return;
   }
+
+  markSubmitted(communityQuestion.id);
+  trackEvent('community');
+  DB.save('community', { question: communityQuestion.text, answer });
+
+  const card = document.getElementById('communityCard');
+  await renderCommunityResponses(card, communityQuestion);
 }
 
 async function renderCommunityResponses(card, q) {
@@ -10600,14 +10606,14 @@ async function renderCommunityResponses(card, q) {
     } else {
       responsesHtml = allResponses.map(text => `
         <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${text}</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${escapeHtml(text)}</p>
         </div>`).join('');
     }
 
     card.innerHTML = `
       <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:14px">Tonight's Question</p>
       <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:16px 20px;margin-bottom:24px">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:rgba(255,255,255,.7);line-height:1.6">${q.text}</p>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:rgba(255,255,255,.7);line-height:1.6">${escapeHtml(q.text)}</p>
       </div>
       <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px">From the Community</p>
       ${responsesHtml}
@@ -11781,7 +11787,14 @@ function renderPracticeCalendar() {
 
   container.innerHTML = html;
 }
-
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 /* ═══════════════════════════════════════════
    Vigils · Lauds · Compline
    Douay-Rheims (public domain)

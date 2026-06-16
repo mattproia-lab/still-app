@@ -1,4 +1,4 @@
-const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
+const SUPA_URL = process.env.SUPABASE_URL;
 const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
 const KNOWN = ['companion', 'deeper', 'sophia', 'chamber', 'paths', 'community', 'lectio', 'autobiography'];
@@ -75,6 +75,7 @@ async function logUsage(userId, feature) {
     feature: feature
   });
 }
+
 async function useCredit(userId, currentCredits) {
   await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${userId}`, {
     method: 'PATCH',
@@ -86,8 +87,9 @@ async function useCredit(userId, currentCredits) {
     body: JSON.stringify({ reflection_credits: currentCredits - 1 })
   });
 }
-  exports.handler = async function(event) {
-    if (event.httpMethod !== 'POST') {
+
+exports.handler = async function(event) {
+  if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
@@ -106,31 +108,35 @@ async function useCredit(userId, currentCredits) {
   const feature = body.feature;
   const token = body.access_token;
 
-  const KNOWN = ['companion', 'deeper', 'sophia', 'chamber'];
   if (!KNOWN.includes(feature) || !token) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
   }
 
-    const profile = await getProfile(user.id);
-    const status = profile?.subscription_status || 'free';
-    const limits = LIMITS[status] || LIMITS.free;
-    const limit = limits[feature] ?? 0;
-    const credits = profile?.reflection_credits || 0;
-
-    // Allow one free onboarding response for Amma Sophia
-   const onboardingFree = body.onboarding_free === true && feature === 'sophia';
-
-   if (!onboardingFree) {
-   if (limit === 0 && credits <= 0) {
-   return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
+  // Resolve the user from their access token
+  const user = await getUserFromToken(token);
+  if (!user || !user.id) {
+    return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
   }
 
-  const count = await getUsageCount(user.id, feature);
+  const profile = await getProfile(user.id);
+  const status = profile?.subscription_status || 'free';
+  const limits = LIMITS[status] || LIMITS.free;
+  const limit = limits[feature] ?? 0;
+  const credits = profile?.reflection_credits || 0;
 
-  if (count >= limit && credits <= 0) {
-    return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
-  }
+  // Allow one free onboarding response for Amma Sophia
+  const onboardingFree = body.onboarding_free === true && feature === 'sophia';
 
+  if (!onboardingFree) {
+    if (limit === 0 && credits <= 0) {
+      return { statusCode: 403, body: JSON.stringify({ error: 'upgrade_required' }) };
+    }
+
+    const count = await getUsageCount(user.id, feature);
+
+    if (count >= limit && credits <= 0) {
+      return { statusCode: 403, body: JSON.stringify({ error: 'limit_reached' }) };
+    }
 
     // Use a credit if over limit, otherwise log usage
     if (count >= limit && credits > 0) {
@@ -139,8 +145,6 @@ async function useCredit(userId, currentCredits) {
       await logUsage(user.id, feature);
     }
   }
-  } // closes if (feature && token)
-  // Forward to Anthropic
 
   // Forward to Anthropic
   try {
