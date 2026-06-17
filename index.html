@@ -3755,16 +3755,16 @@ async function requestVoice(text, character, buttonEl) {
   buttonEl.disabled = true;
 
   try {
-    const voiceText = _taggedResponses[character] || text.trim();
+     const voiceText = _taggedResponses[character] || text.trim();
+    const token = await getValidToken();
 
-    // ⚠️ point this at wherever the METERED handler is deployed
     const res = await fetch('https://still-tts.onrender.com/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         text: voiceText,
         character,
-        access_token: localStorage.getItem('still_access_token')   // ← who to charge
+        access_token: token   // ← fresh, refreshed if needed
       })
     });
 
