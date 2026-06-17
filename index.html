@@ -3938,6 +3938,64 @@ function hashText(text) {
   }
   return Math.abs(hash).toString(36);
 }
+async function playComplineAudio() {
+  const season = getLiturgicalSeason();
+  const today = new Date().toISOString().split('T')[0];
+  const isFull = getOfficeMode() === 'full';
+  const nightPsalm = new Date().getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
+  const sData = OFFICE_SEASONS[season];
+  const mar = MARIAN[sData.marian];
+  const cacheKey = hashText(`compline-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
+
+  let text = `Compline.\n\n`;
+  if (isFull) {
+    text += `Examination of Conscience.\n\nPause briefly. Call to mind the faults of this day.\n\n`;
+    text += `I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.\n\n`;
+  }
+  text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+  text += `${sData.complineAntiphon}\n\n`;
+  text += `${nightPsalm.ref}\n\n${nightPsalm.text}\n\n`;
+  if (isFull) {
+    text += `Psalm 133.\n\n${PSALMS.ps134.text}\n\n`;
+  }
+  text += `${sData.complineAntiphon}\n\n`;
+  text += `Short Reading. ${OFFICE_READINGS.compline[season].ref}\n\n${OFFICE_READINGS.compline[season].text}\n\n`;
+  text += `Into thy hands, O Lord, I commend my spirit. For thou hast redeemed me, O Lord, thou God of truth.\n\n`;
+  text += `The Canticle of Simeon.\n\nLord, now lettest thou thy servant depart in peace, according to thy word. For mine eyes have seen thy salvation, which thou hast prepared before the face of all people; a light to lighten the Gentiles, and the glory of thy people Israel. Glory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+  text += `Collect.\n\n${OFFICE_COLLECTS.compline[season]}\nAmen.\n\n`;
+  text += `${mar.title}.\n\n${mar.text}\n\n`;
+  text += `May the all-powerful Lord grant us a restful night and a peaceful death.\nAmen.`;
+
+  const btn = document.getElementById('complinePlayBtn');
+  if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
+
+  try {
+    const res = await fetch('https://still-tts.onrender.com/office-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, cacheKey })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    let audioUrl;
+    if (data.cached && data.url) {
+      audioUrl = data.url;
+    } else if (data.audio) {
+      const binary = atob(data.audio);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      audioUrl = URL.createObjectURL(blob);
+    }
+
+    playVoiceUrl(audioUrl, btn, '◎ Hear Compline', 'office');
+
+  } catch(err) {
+    console.error('Compline audio error:', err.message);
+    if (btn) { btn.textContent = '◎ Hear Compline'; btn.disabled = false; }
+  }
+}
 /* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
 ═══════════════════════════════════════════ */
@@ -12444,6 +12502,7 @@ function renderOfficeHour(hour) {
     html += divider();
     html += eyebrow('Blessing');
     html += versicle('May the all-powerful Lord grant us a restful night and a peaceful death.\nR. Amen.');
+    html += `<button id="complinePlayBtn" onclick="playComplineAudio()" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">◎ Hear Compline</button>`;
   }
 
   html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
