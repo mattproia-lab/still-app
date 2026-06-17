@@ -5153,6 +5153,7 @@ async function askMystic() {
 
   const system = MYSTIC_SYSTEM + depthNote;
   const userMsg = input || 'Speak a word to me today.';
+  const token = await getValidToken();
 
   try {
     const res = await fetch('/.netlify/functions/claude', {
@@ -5160,7 +5161,7 @@ async function askMystic() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         feature: 'sophia',
-        access_token: localStorage.getItem('still_access_token'),
+        access_token: token,
         onboarding_free: localStorage.getItem('still_sophia_onboarding_free') === '1',
         model: 'claude-sonnet-4-6',
         max_tokens: 250,
@@ -5169,7 +5170,17 @@ async function askMystic() {
       })
     });
     const data = await res.json();
-    if(data.error==='upgrade_required'||data.error==='limit_reached'){showMysticState('mysticInput');showUpgrade();return;}
+    if(data.error==='upgrade_required'||data.error==='limit_reached'){
+      if(isSubscribed()){
+        document.getElementById('mysticResponseText').textContent =
+          'You have received all of Amma\u2019s words for now. They return with the new day.';
+        showMysticState('mysticResponse');
+      } else {
+        showMysticState('mysticInput');
+        showUpgrade();
+      }
+      return;
+    }
     if(data.error) throw new Error(data.error.message);
     const text = data.content?.[0]?.text || '';
     Memory.record('sophia', userMsg, text);   // ← save this exchange into the journey
@@ -5197,19 +5208,32 @@ function resetDeeper(){showDeeperState('deeperInput');document.getElementById('d
 
 async function askDeeper(){
   trackEvent('deeper');
-  
+
   const input=document.getElementById('deeperText').value.trim();
   if(!input){showError('deeperErr','Bring your question first.');return;}
   showDeeperState('deeperLoading');
   document.getElementById('deeperErr').style.display='none';
+  const token = await getValidToken();
   try{
     const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
+      body:JSON.stringify({feature:'deeper',access_token:token,model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
-    if(data.error==='upgrade_required'||data.error==='limit_reached'){showDeeperState('deeperInput');showUpgrade();return;}
+    if(data.error==='upgrade_required'||data.error==='limit_reached'){
+      if(isSubscribed()){
+        document.getElementById('dResponseText').textContent =
+          'You have received all of these words for now. They return with the new day.';
+        document.getElementById('dSource').textContent = '';
+        document.getElementById('dInvitation').textContent = '';
+        showDeeperState('deeperResponse');
+      } else {
+        showDeeperState('deeperInput');
+        showUpgrade();
+      }
+      return;
+    }
     if(data.error)throw new Error(data.error.message);
     const full=data.content?.[0]?.text||'';
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
