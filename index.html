@@ -12764,7 +12764,7 @@ async function startCheckout(tier) {
       const result = await Purchases.purchasePackage({ aPackage: pkg });
 
       // Instant local unlock via entitlement (webhook also writes Supabase as source of truth)
-      const isPro = result.customerInfo?.entitlements?.active?.['pro'];
+      const isPro = result.customerInfo?.entitlements?.active?.['premium'];
       if (isPro) {
         console.log('Subscription active');
         // refresh the UI to premium state here — e.g. re-check status / close paywall
@@ -12841,7 +12841,7 @@ async function initRevenueCat() {
     if (!Purchases) { console.log('RevenueCat plugin not found'); return; }
 
     await Purchases.setLogLevel({ level: 'DEBUG' });
-    await Purchases.configure({ apiKey: "test_hVBPdovvUJHAXXiMYGDgLXPbQbg" });
+    await Purchases.configure({ apiKey: "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP" });
 
     if (window.currentUser && window.currentUser.id) {
       await Purchases.logIn({ appUserID: window.currentUser.id });
