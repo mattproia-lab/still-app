@@ -10581,7 +10581,27 @@ async function submitCommunity() {
   const card = document.getElementById('communityCard');
   await renderCommunityResponses(card, communityQuestion);
 }
-
+async function reportResponse(responseId, btn) {
+  if (!confirm('Report this response as inappropriate?')) return;
+  if (btn) { btn.textContent = 'Reporting…'; btn.disabled = true; }
+  try {
+    const resp = await fetch('/.netlify/functions/community-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ response_id: responseId, device_id: getDeviceId() })
+    });
+    if (resp.ok) {
+      const card = btn.closest('div');
+      if (card) { card.style.opacity = '.4'; }
+      btn.textContent = 'Reported';
+    } else {
+      btn.textContent = 'Report';
+      btn.disabled = false;
+    }
+  } catch (e) {
+    if (btn) { btn.textContent = 'Report'; btn.disabled = false; }
+  }
+}
 async function renderCommunityResponses(card, q) {
   card.innerHTML = `<div style="text-align:center;padding:30px 0 10px">
     <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.4)">Finding others who answered…</p>
@@ -10589,9 +10609,9 @@ async function renderCommunityResponses(card, q) {
 
   try {
     const deviceId = getDeviceId();
-    const all = await supaFetch(
-      `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&limit=50`
-    );
+   const all = await supaFetch(
+  `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&hidden=eq.false&limit=50`
+);
 
     const shuffled = (all || []).sort(() => Math.random() - 0.5).slice(0, 3);
 
@@ -10624,18 +10644,20 @@ async function renderCommunityResponses(card, q) {
       }
     }
 
+    // Real responses keep their id; AI backstop entries are id-less
     const allResponses = [
-      ...shuffled.map(r => r.text),
-      ...aiResponses
+      ...shuffled.map(r => ({ text: r.text, id: r.id })),
+      ...aiResponses.map(t => ({ text: t, id: null }))
     ];
 
     let responsesHtml = '';
     if (allResponses.length === 0) {
       responsesHtml = `<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;padding:20px 0">You are the first to answer today.<br>Others will appear as the community gathers.</p>`;
     } else {
-      responsesHtml = allResponses.map(text => `
+      responsesHtml = allResponses.map(item => `
         <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${escapeHtml(text)}</p>
+          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${escapeHtml(item.text)}</p>
+          ${item.id ? `<button onclick="reportResponse('${item.id}', this)" style="background:none;border:none;color:rgba(255,255,255,.25);font-family:'Heebo',sans-serif;font-size:10px;letter-spacing:.05em;cursor:pointer;margin-top:8px;padding:0">Report</button>` : ''}
         </div>`).join('');
     }
 
