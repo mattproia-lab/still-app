@@ -13250,7 +13250,12 @@ async function callStill(system, userMsg, maxTokens){
       system: system, messages:[{role:'user',content:userMsg}]
     })
   }).then(function(r){ return r.json(); })
-    .then(function(d){ return ((d.content&&d.content[0]&&d.content[0].text)||'').trim(); });
+    .then(function(d){
+      if(d && (d.error==='limit_reached' || d.error==='upgrade_required')){
+        return { __limit: true };
+      }
+      return ((d.content&&d.content[0]&&d.content[0].text)||'').trim();
+    });
 }
 function composeVoiceMsg(ctx){
   var m='MODE: '+(ctx.mode==='colloquy'?'colloquy':'petition')+'\n'+
@@ -13276,7 +13281,10 @@ function fetchAccompaniment(ctx){
   if(!config.apiEndpoint) return Promise.resolve(null);
   ctx.remembrance = buildRemembranceBrief();
   return callStill(DC_VOICE_SYSTEM, composeVoiceMsg(ctx), 220)
-    .then(function(a){ return validateAccompaniment(a) ? a : null; })
+    .then(function(a){
+      if(a && a.__limit) return a;                 // pass limit signal up
+      return validateAccompaniment(a) ? a : null;
+    })
     .catch(function(){ return null; });
 }
 function validateAccompaniment(a){
@@ -13375,13 +13383,27 @@ function offer(isReply){
             register:register, allowProving:(register==='proving') };
   Promise.all([ fetchAccompaniment(ctx),
                 new Promise(function(res){ setTimeout(res, pauseMs); }) ])
-    .then(function(r){ renderWord(passage, r[0], text); });
+    .then(function(r){
+      if(r[0] && r[0].__limit){ showVoiceLimitMessage(passage, text); return; }
+      renderWord(passage, r[0], text);
+    });
 }
  
 function lightStairs(){
   [1,2,3].forEach(function(n){ $('dcStair'+n).classList.toggle('dc-lit', S.stair>=n); });
 }
- 
+ function showVoiceLimitMessage(passage, userText) {
+  var premium = isSubscribed();
+  var msg = premium
+    ? 'You have received all of these words for now. They return with the new day.'
+    : 'You have reached the free limit. Premium opens more of these words.';
+  // force the screen to its "resting" state so RETURN TO STILLNESS shows
+  S.stair = 3;
+  renderWord(passage, msg, userText);
+  if (!premium && typeof showUpgrade === 'function') {
+    setTimeout(function(){ showUpgrade(); }, 1800);
+  }
+}
 function renderWord(passage, accomp, userText){
   S.lines.push({text:passage.text, isPassage:true, id:passage.id, src:passage.src});
   $('dcEcho').textContent = userText ? userText : '';
@@ -13569,6 +13591,20 @@ function colLove(){
   Promise.all([ fetchAccompaniment(ctx),
                 new Promise(function(res){ setTimeout(res, pauseMs); }) ])
     .then(function(r){
+      if(r[0] && r[0].__limit){
+        var premium = isSubscribed();
+        var AL=$('dcColAccomp');
+        AL.textContent = premium
+          ? 'You have received all of these words for now. They return with the new day.'
+          : 'You have reached the free limit. Premium opens more of these words.';
+        AL.classList.add('dc-vis');
+        revealInto($('dcColPassage'), passage.text);
+        $('dcColPassAttr').textContent='\u2014 '+passage.src;
+        var cl=$('dcColContinue'); cl.classList.add('dc-show');
+        show('dcColLove');
+        if(!premium && typeof showUpgrade==='function') setTimeout(showUpgrade,1800);
+        return;
+      }
       S.lines.push({text:passage.text,isPassage:true,id:passage.id,src:passage.src});
       bell(); arrivalPulse();
       revealInto($('dcColPassage'), passage.text);
@@ -13582,6 +13618,7 @@ function colLove(){
       show('dcColLove');
     });
 }
+
 function colSoul(){ colVoice('soul'); }
 function colBless(){
   var pool=CORPUS.filter(function(p){ return p.col==='bless'; });
@@ -13712,8 +13749,8 @@ DC.config.onRemain  = function(){
   window.dcSkipSettle = true;
   enterFeature(i);
 };
-  </script> 
-  </script> 
+ </script> 
+<script>
 // Keepalive to prevent Safari from killing the tab when idle
 setInterval(function() {
   if (document.visibilityState === 'visible') {
