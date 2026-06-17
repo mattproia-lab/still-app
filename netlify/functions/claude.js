@@ -24,11 +24,18 @@ async function supaPost(path, body) {
     headers: {
       'apikey': SUPA_SERVICE_KEY,
       'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal'
     },
     body: JSON.stringify(body)
   });
-  return res.json();
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(`Supabase ${res.status}: ${detail}`);
+  }
+  // 204/empty body on insert — don't parse
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
 }
 
 async function getUserFromToken(token) {

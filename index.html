@@ -5029,7 +5029,7 @@ async function askCompanion(){
     const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:300,system:COMPANION_SYSTEM + Memory.context(input,'companion'),messages:[{role:'user',content:input}]})
+      body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-6',max_tokens:300,system:COMPANION_SYSTEM + Memory.context(input,'companion'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     if(data.error==='upgrade_required'||data.error==='limit_reached'){showCompanionState('companionInput');showUpgrade();return;}
@@ -5162,7 +5162,7 @@ async function askMystic() {
         feature: 'sophia',
         access_token: localStorage.getItem('still_access_token'),
         onboarding_free: localStorage.getItem('still_sophia_onboarding_free') === '1',
-        model: 'claude-sonnet-4-20250514',
+        model: claude-sonnet-4-6
         max_tokens: 250,
         system: system + Memory.context(userMsg,'sophia'),
         messages: [{ role: 'user', content: userMsg }]
@@ -5206,7 +5206,7 @@ async function askDeeper(){
     const res=await fetch('/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-20250514',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
+      body:JSON.stringify({feature:'deeper',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
     if(data.error==='upgrade_required'||data.error==='limit_reached'){showDeeperState('deeperInput');showUpgrade();return;}
@@ -6638,7 +6638,7 @@ Generate ONE single contemplative question. Not therapeutic. Not advice. A quest
     const res = await fetch('/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:120,
+      body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:120,
         system:'You are a contemplative guide in the tradition of the Desert Fathers and Catholic mystics. You generate single, short, inward-opening questions for Lectio Divina. Never advice. Never therapy. Never more than one question. Maximum 40 words.',
         messages:[{role:'user',content:prompt}]})
     });
@@ -6717,7 +6717,7 @@ Write a short closing collect prayer (4–5 sentences). First person singular. I
     const res = await fetch('/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:180,
+      body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:180,
         system:'You write brief closing collect prayers for Lectio Divina sessions. Liturgical, intimate, first person. Gather the interior thread of what happened without quoting. End with Amen. 80 words maximum.',
         messages:[{role:'user',content:prompt}]})
     });
@@ -6960,7 +6960,7 @@ const Memory = {
         body: JSON.stringify({
           feature: 'sophia',
           access_token: localStorage.getItem('still_access_token'),
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-6',
           max_tokens: 220,
           system: "You keep a spiritual director's private notes. From the record below, write ONE warm paragraph (max 120 words) on where this soul is: their movements, what recurs, where they seem tender or growing. No lists. No advice. Third person. Output only the paragraph.",
           messages: [{ role: 'user', content: digest }]
@@ -7398,7 +7398,7 @@ Instructions: 4–8 paragraphs. Begin with an honest sentence about the month ov
       body:JSON.stringify({
   feature:'sophia',
   access_token:localStorage.getItem('still_access_token'),
-  model:'claude-sonnet-4-20250514',
+  model:'claude-sonnet-4-6',
   max_tokens:900,
   system:'You write first-person spiritual autobiography entries. Contemplative, literary, honest. Quote actual words. Never list. Write as private journal. First person past tense.',
   messages:[{role:'user',content:prompt}]
@@ -8482,7 +8482,7 @@ const Paths = {
         body: JSON.stringify({
           feature: 'sophia',
           access_token: localStorage.getItem('still_access_token'),
-          model: 'claude-sonnet-4-20250514',
+          model: 'claude-sonnet-4-6',
           max_tokens: 260,
           system: "You are accompanying a discernment, not conducting one. Reflect the person's interior movements back gently and concretely so they can see the pattern. You may name what the movements seem to show. You must NEVER state which option to choose, imply a right answer, or speak with certainty \u2014 the person discerns. For grave matters (vocation, marriage), urge them to bring it to a spiritual director or confessor. End with a question, not a verdict. Three to five sentences, warm and unhurried.",
           messages: [{ role: 'user', content: this._movementSummaryText(disc) }]
@@ -10604,7 +10604,7 @@ async function renderCommunityResponses(card, q) {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
+            model: 'claude-sonnet-4-6',
             max_tokens: 1000,
             system: `You generate ${needed} anonymous, honest, human-feeling responses to a contemplative question. 
               Each response should feel like a real person wrote it at 9pm — unpolished, genuine, a little vulnerable. 
@@ -12879,7 +12879,7 @@ var config = {
   onRemain: function(){ alert('(demo) → would open Contemplative Sitting with skipSettle'); },
   onLeave:  function(){ DC.show('dcThreshold'); /* in Still: goHome(); */ },
   apiFeature: 'chamber',                  // whitelist this feature name in your /claude function
-  model: 'claude-sonnet-4-20250514'       // same model string the rest of Still uses
+  model: 'claude-sonnet-4-6'       // same model string the rest of Still uses
 };
  
 /* ── The Chamber's two voices (system prompts; validation is client-side) ── */
