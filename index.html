@@ -2715,7 +2715,7 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      PASSWORD RESET MODAL
 ═══════════════════════════════════════════ -->
-<div class="modal-overlay" id="resetPasswordModal" style="display:none">
+<div class="modal-overlay" id="resetPasswordModal" style="display:none;z-index:99999">
   <div class="modal-panel" style="background:#0d0d0f;border-radius:16px;padding:0;overflow:hidden;max-width:380px;width:100%">
     <div style="padding:24px 24px 20px;border-bottom:1px solid rgba(255,255,255,.07)">
       <span style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(200,146,12,.9)">Reset Password</span>
@@ -11168,6 +11168,8 @@ function checkStripeReturn() {
   if (params.get('upgraded') === 'false') {
     window.history.replaceState({}, '', window.location.pathname);
   }
+ 
+
 
   // Legacy support
   if (params.get('payment') === 'success') {
@@ -12736,16 +12738,17 @@ let recoveryAccessToken = null;
 
 function checkPasswordRecovery() {
   const hash = window.location.hash.substring(1);
-  if (!hash) return;
+  if (!hash) return false;
   const params = new URLSearchParams(hash);
   if (params.get('type') === 'recovery') {
     recoveryAccessToken = params.get('access_token');
     if (recoveryAccessToken) {
       document.getElementById('resetPasswordModal').style.display = 'flex';
-      // Clean the URL so the token isn't sitting in the address bar
       history.replaceState(null, '', window.location.pathname);
+      return true;
     }
   }
+  return false;
 }
 
 async function submitPasswordReset() {
@@ -12796,6 +12799,8 @@ async function submitPasswordReset() {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+if (checkPasswordRecovery()) return;
+checkStripeReturn();
 document.getElementById('bgBase').style.transition='background-color .9s ease';
 buildBeads();buildFeatList();buildDots();buildPassageList();
 injectInfoButtons();
@@ -12806,8 +12811,6 @@ initMobileScroll();
 loadCompanionUses();
 restoreRuleFromCloud(); loadRuleItems();
 initTrial();
-checkStripeReturn();
-checkPasswordRecovery();
 checkOnboarding();
 initAuth();
 initRevenueCat();
