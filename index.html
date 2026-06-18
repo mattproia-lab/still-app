@@ -2712,7 +2712,25 @@ body.is-mobile #mobileEnterTab { display: block; }
   <div class="info-panel-divider"></div>
   <div class="info-panel-body" id="infoPanelBody"></div>
 </div>
-
+<!-- ═══════════════════════════════════════════
+     PASSWORD RESET MODAL
+═══════════════════════════════════════════ -->
+<div class="modal-overlay" id="resetPasswordModal" style="display:none">
+  <div class="modal-panel" style="background:#0d0d0f;border-radius:16px;padding:0;overflow:hidden;max-width:380px;width:100%">
+    <div style="padding:24px 24px 20px;border-bottom:1px solid rgba(255,255,255,.07)">
+      <span style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(200,146,12,.9)">Reset Password</span>
+    </div>
+    <div style="padding:24px">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(255,255,255,.5);margin-bottom:18px">Enter your new password below.</div>
+      <input id="resetNewPassword" type="password" placeholder="New password"
+        style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;padding:12px 14px;border-radius:8px;outline:none;margin-bottom:10px" />
+      <input id="resetConfirmPassword" type="password" placeholder="Confirm password"
+        style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Montserrat',sans-serif;font-size:13px;padding:12px 14px;border-radius:8px;outline:none;margin-bottom:16px" />
+      <div id="resetMsg" style="display:none;font-family:'Cormorant Garamond',serif;font-size:14px;margin-bottom:12px"></div>
+      <button onclick="submitPasswordReset()" style="width:100%;padding:14px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:10px">Set New Password</button>
+    </div>
+  </div>
+</div>
 <!-- ═══════════════════════════════════════════
      SETTINGS MODAL — user-facing only
 ═══════════════════════════════════════════ -->
@@ -12712,7 +12730,69 @@ function closeSettings() {
   const m = document.getElementById('settingsModal');
   if (m) m.classList.remove('open');
 }
+/* ---------- return from password reset ---------- */
 
+let recoveryAccessToken = null;
+
+function checkPasswordRecovery() {
+  const hash = window.location.hash.substring(1);
+  if (!hash) return;
+  const params = new URLSearchParams(hash);
+  if (params.get('type') === 'recovery') {
+    recoveryAccessToken = params.get('access_token');
+    if (recoveryAccessToken) {
+      document.getElementById('resetPasswordModal').style.display = 'flex';
+      // Clean the URL so the token isn't sitting in the address bar
+      history.replaceState(null, '', window.location.pathname);
+    }
+  }
+}
+
+async function submitPasswordReset() {
+  const pw = document.getElementById('resetNewPassword').value;
+  const confirm = document.getElementById('resetConfirmPassword').value;
+  const msg = document.getElementById('resetMsg');
+
+  if (!pw || pw.length < 6) {
+    msg.textContent = 'Password must be at least 6 characters.';
+    msg.style.color = 'rgba(255,73,64,.8)';
+    msg.style.display = 'block';
+    return;
+  }
+  if (pw !== confirm) {
+    msg.textContent = 'Passwords do not match.';
+    msg.style.color = 'rgba(255,73,64,.8)';
+    msg.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch('https://zbskapivansfewegllnz.supabase.co/auth/v1/user', {
+      method: 'PUT',
+      headers: {
+        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI',
+        'Authorization': 'Bearer ' + recoveryAccessToken,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ password: pw })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.msg || data.error_description || 'Reset failed');
+
+    msg.textContent = 'Password updated. You can now sign in.';
+    msg.style.color = 'rgba(200,146,12,.8)';
+    msg.style.display = 'block';
+    recoveryAccessToken = null;
+    setTimeout(() => {
+      document.getElementById('resetPasswordModal').style.display = 'none';
+    }, 2500);
+  } catch(e) {
+    console.error('Password reset error:', e);
+    msg.textContent = e.message || 'Something went wrong. Try again.';
+    msg.style.color = 'rgba(255,73,64,.8)';
+    msg.style.display = 'block';
+  }
+}
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
@@ -12727,6 +12807,7 @@ loadCompanionUses();
 restoreRuleFromCloud(); loadRuleItems();
 initTrial();
 checkStripeReturn();
+checkPasswordRecovery();
 checkOnboarding();
 initAuth();
 initRevenueCat();
