@@ -2866,16 +2866,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
         </div>
       </div>
-      <!-- Subscription -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Subscription</div>
-        <div id="subStatusText" style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-bottom:14px">Loading…</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button onclick="showUpgrade()" style="width:100%;padding:10px;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">View Plans</button>
-          <button onclick="restorePurchases()" id="restoreBtn" style="width:100%;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Restore Purchases</button>
-          <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
-        </div>
-      </div>
+     
       <!-- Promo Code -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px">Promo Code</div>
@@ -11547,7 +11538,11 @@ function openSettings(section) {
  function updateSubStatus() {
   const el = document.getElementById('subStatusText');
   if (!el) return;
-  el.textContent = isSubscribed() ? 'Status: Premium' : 'Status: Free';
+  try {
+    el.textContent = isSubscribed() ? 'Status: Premium' : 'Status: Free';
+  } catch(e) {
+    el.textContent = 'Status: Free';
+  }
 }
 
 async function restorePurchases() {
