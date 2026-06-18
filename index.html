@@ -2866,6 +2866,16 @@ body.is-mobile #mobileEnterTab { display: block; }
           <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
         </div>
       </div>
+      <!-- Subscription -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Subscription</div>
+        <div id="subStatusText" style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-bottom:14px">Loading…</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button onclick="showUpgrade()" style="width:100%;padding:10px;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">View Plans</button>
+          <button onclick="restorePurchases()" id="restoreBtn" style="width:100%;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Restore Purchases</button>
+          <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
+        </div>
+      </div>
       <!-- Promo Code -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px">Promo Code</div>
@@ -4020,6 +4030,7 @@ async function playComplineAudio() {
     if (btn) { btn.textContent = '◎ Hear Compline'; btn.disabled = false; }
   }
 }
+
 /* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
 ═══════════════════════════════════════════ */
@@ -11511,6 +11522,7 @@ function saveBellSettings() {
 
 function openSettings(section) {
   showScreen('settings');
+  updateSubStatus();
 
   // Initialize settings content if it hasn't been yet
   if (typeof initSettingsScreen === 'function') initSettingsScreen();
@@ -11532,7 +11544,37 @@ function openSettings(section) {
   
      }
 }   
- 
+ function updateSubStatus() {
+  const el = document.getElementById('subStatusText');
+  if (!el) return;
+  el.textContent = isSubscribed() ? 'Status: Premium' : 'Status: Free';
+}
+
+async function restorePurchases() {
+  const btn = document.getElementById('restoreBtn');
+  const msg = document.getElementById('restoreMsg');
+  if (btn) { btn.textContent = 'Restoring…'; btn.disabled = true; }
+  try {
+    const Purchases = window.Capacitor?.Plugins?.Purchases;
+    if (!Purchases) {
+      if (msg) { msg.textContent = 'Restore is available on iOS.'; msg.style.display = 'block'; }
+      return;
+    }
+    const result = await Purchases.restorePurchases();
+    const isPremium = result.customerInfo?.entitlements?.active?.['premium'];
+    if (isPremium) {
+      if (msg) { msg.textContent = '✓ Purchases restored.'; msg.style.display = 'block'; }
+      updateSubStatus();
+    } else {
+      if (msg) { msg.textContent = 'No active subscription found.'; msg.style.display = 'block'; }
+    }
+  } catch(e) {
+    console.error('Restore error:', e);
+    if (msg) { msg.textContent = 'Could not restore. Try again.'; msg.style.display = 'block'; }
+  } finally {
+    if (btn) { btn.textContent = 'Restore Purchases'; btn.disabled = false; }
+  }
+}
 // ─── Day-30 discount trigger ─────────────────────────────────────────────
 // Call this on app load. If user has been using Still for 30+ days
 // without subscribing, surface the discount offer once.
