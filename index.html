@@ -12799,7 +12799,6 @@ async function submitPasswordReset() {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-if (checkPasswordRecovery()) return;
 checkStripeReturn();
 document.getElementById('bgBase').style.transition='background-color .9s ease';
 buildBeads();buildFeatList();buildDots();buildPassageList();
@@ -12811,9 +12810,11 @@ initMobileScroll();
 loadCompanionUses();
 restoreRuleFromCloud(); loadRuleItems();
 initTrial();
-checkOnboarding();
-initAuth();
-initRevenueCat();
+if (!checkPasswordRecovery()) {
+  checkOnboarding();
+  initAuth();
+  initRevenueCat();
+}
 initSacristy();
 
 // Restore bell preference
