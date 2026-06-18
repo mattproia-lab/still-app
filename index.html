@@ -1114,47 +1114,7 @@ body.is-mobile #mobileEnterTab { display: block; }
   if (params.get('type') !== 'recovery') return;
   var token = params.get('access_token');
   if (!token) return;
-
-  document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reset Password — Still</title></head><body style="margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0d0d0f;padding:24px;box-sizing:border-box">'
-    + '<div style="max-width:380px;width:100%;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:32px">'
-    + '<div style="font-family:Georgia,serif;font-size:24px;font-style:italic;color:rgba(200,146,12,.9);margin-bottom:8px">Reset Password</div>'
-    + '<div style="font-family:Georgia,serif;font-size:14px;color:rgba(255,255,255,.5);margin-bottom:20px">Enter your new password below.</div>'
-    + '<input id="rpw1" type="password" placeholder="New password" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:13px;padding:12px;border-radius:8px;outline:none;margin-bottom:10px" />'
-    + '<input id="rpw2" type="password" placeholder="Confirm password" style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:13px;padding:12px;border-radius:8px;outline:none;margin-bottom:16px" />'
-    + '<div id="rpMsg" style="display:none;font-size:14px;margin-bottom:12px"></div>'
-    + '<button id="rpBtn" style="width:100%;padding:14px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:10px">Set New Password</button>'
-    + '</div>'
-    + '<script>'
-    + 'document.getElementById("rpBtn").onclick=async function(){'
-    + 'var pw=document.getElementById("rpw1").value;'
-    + 'var c=document.getElementById("rpw2").value;'
-    + 'var msg=document.getElementById("rpMsg");'
-    + 'if(!pw||pw.length<6){msg.textContent="Password must be at least 6 characters.";msg.style.color="rgba(255,73,64,.8)";msg.style.display="block";return;}'
-    + 'if(pw!==c){msg.textContent="Passwords do not match.";msg.style.color="rgba(255,73,64,.8)";msg.style.display="block";return;}'
-    + 'document.getElementById("rpBtn").textContent="Updating…";'
-    + 'document.getElementById("rpBtn").disabled=true;'
-    + 'try{'
-    + 'var res=await fetch("https://zbskapivansfewegllnz.supabase.co/auth/v1/user",{'
-    + 'method:"PUT",'
-    + 'headers:{"apikey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI","Authorization":"Bearer ' + token + '","Content-Type":"application/json"},'
-    + 'body:JSON.stringify({password:pw})});'
-    + 'var data=await res.json();'
-    + 'if(!res.ok)throw new Error(data.msg||data.error_description||"Reset failed");'
-    + 'msg.textContent="Password updated successfully.";'
-    + 'msg.style.color="rgba(200,146,12,.8)";'
-    + 'msg.style.display="block";'
-    + 'document.getElementById("rpBtn").textContent="Done";'
-    + 'setTimeout(function(){window.location.href="/";},2500);'
-    + '}catch(e){'
-    + 'msg.textContent=e.message||"Something went wrong.";'
-    + 'msg.style.color="rgba(255,73,64,.8)";'
-    + 'msg.style.display="block";'
-    + 'document.getElementById("rpBtn").textContent="Set New Password";'
-    + 'document.getElementById("rpBtn").disabled=false;'
-    + '}'
-    + '};'
-    + '<\/script></body></html>');
-  document.close();
+  window.location.replace('/reset.html?token=' + encodeURIComponent(token));
 })();
 </script>
 </head>
