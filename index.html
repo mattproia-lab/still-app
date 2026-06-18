@@ -12750,10 +12750,21 @@ function toggleFastingFromSettings(on) {
   const inactiveStyle = 'background:none;color:rgba(255,255,255,.38);';
   if (onBtn)  onBtn.style.cssText  += on  ? activeStyle : inactiveStyle;
   if (offBtn) offBtn.style.cssText += !on ? activeStyle : inactiveStyle;
+
+  // Update settings toggle visual
+  const toggle = document.getElementById('fastingToggle');
+  if (toggle) {
+    toggle.setAttribute('aria-pressed', on);
+    toggle.style.background = on ? 'rgba(200,146,12,.4)' : 'rgba(255,255,255,.1)';
+    const knob = toggle.querySelector('span');
+    if (knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+  }
 }
 
 function openSettings() {
   document.getElementById('settingsModal').classList.add('open');
+  updateSubStatus();
+  toggleFastingFromSettings(fasting);
   const k = getApiKey();
   if (k) document.getElementById('settingsApiKey').value = k;
   const ap = document.getElementById('settingsAnchorPreview');
