@@ -1128,7 +1128,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     <button class="auth-btn" onclick="submitAuth()">Continue →</button>
     <p id="authErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-bottom:8px"></p>
     <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Already have an account? <span>Sign in</span></p>
-    <p id="forgotLink" onclick="forgotPassword()" style="text-align:center;font-size:11px;color:rgba(178,200,245,.4);cursor:pointer;margin-top:4px;display:none">Forgot password?</p>
+    <p id="forgotLink" onclick="forgotPassword()" style="text-align:center;font-size:11px;color:rgba(178,200,245,.4);cursor:pointer;margin-top:4px;display:block">Forgot password?</p>
   </div>
 </div>
 <div id="upgradeScreen" style="display:none;position:fixed;inset:0;background:rgba(4,4,14,.98);z-index:999;overflow-y:auto;padding:40px 24px;box-sizing:border-box;">
@@ -10397,21 +10397,24 @@ async function updateLastActive() {
 
 async function forgotPassword() {
   const email = document.getElementById('authEmail').value.trim();
-  const errEl = document.getElementById('authErr');
-  if (!email) { errEl.textContent = 'Enter your email first.'; errEl.style.color = 'rgba(255,73,64,.7)'; return; }
-  
-  const res = await fetch(`${SUPA_URL}/auth/v1/recover`, {
-    method: 'POST',
-    headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  });
-  
-  if (res.ok) {
-    errEl.textContent = 'Reset link sent — check your email.';
-    errEl.style.color = 'rgba(178,200,245,.7)';
-  } else {
-    errEl.textContent = 'Could not send reset email. Try again.';
-    errEl.style.color = 'rgba(255,73,64,.7)';
+  if (!email) {
+    document.getElementById('authErr').textContent = 'Enter your email address first.';
+    return;
+  }
+  try {
+    const res = await fetch('https://zbskapivansfewegllnz.supabase.co/auth/v1/recover', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPA_ANON,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email })
+    });
+    if (!res.ok) throw new Error('Failed to send reset email');
+    document.getElementById('authErr').style.color = 'rgba(200,146,12,.8)';
+    document.getElementById('authErr').textContent = 'Check your email for a reset link.';
+  } catch(e) {
+    document.getElementById('authErr').textContent = 'Could not send reset email. Try again.';
   }
 }
 function toggleAuthMode() {
