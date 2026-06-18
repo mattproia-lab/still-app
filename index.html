@@ -12743,11 +12743,21 @@ function checkPasswordRecovery() {
   if (params.get('type') === 'recovery') {
     recoveryAccessToken = params.get('access_token');
     if (recoveryAccessToken) {
-      document.getElementById('resetPasswordModal').style.display = 'flex';
       history.replaceState(null, '', window.location.pathname);
-      setTimeout(() => {
-        document.getElementById('resetPasswordModal').style.display = 'flex';
-      }, 500);
+      var keepAlive = setInterval(() => {
+        var m = document.getElementById('resetPasswordModal');
+        if (m) {
+          m.style.display = 'flex';
+          m.style.zIndex = '999999';
+          m.style.position = 'fixed';
+          m.style.top = '0';
+          m.style.left = '0';
+          m.style.width = '100%';
+          m.style.height = '100%';
+          m.style.background = 'rgba(0,0,0,.95)';
+        }
+      }, 200);
+      window._recoveryKeepAlive = keepAlive;
       return true;
     }
   }
@@ -12789,6 +12799,7 @@ async function submitPasswordReset() {
     msg.style.color = 'rgba(200,146,12,.8)';
     msg.style.display = 'block';
     recoveryAccessToken = null;
+    clearInterval(window._recoveryKeepAlive);
     setTimeout(() => {
       document.getElementById('resetPasswordModal').style.display = 'none';
     }, 2500);
