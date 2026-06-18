@@ -12745,6 +12745,9 @@ function checkPasswordRecovery() {
     if (recoveryAccessToken) {
       document.getElementById('resetPasswordModal').style.display = 'flex';
       history.replaceState(null, '', window.location.pathname);
+      setTimeout(() => {
+        document.getElementById('resetPasswordModal').style.display = 'flex';
+      }, 500);
       return true;
     }
   }
@@ -12799,18 +12802,19 @@ async function submitPasswordReset() {
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
+var _recoveryMode = checkPasswordRecovery();
 checkStripeReturn();
 document.getElementById('bgBase').style.transition='background-color .9s ease';
 buildBeads();buildFeatList();buildDots();buildPassageList();
 injectInfoButtons();
-homeReset();
+if (!_recoveryMode) homeReset();
 checkNightWatch();
 setOfficeTime();setRuleDate();setAutobioDate();
 initMobileScroll();
 loadCompanionUses();
 restoreRuleFromCloud(); loadRuleItems();
 initTrial();
-if (!checkPasswordRecovery()) {
+if (!_recoveryMode) {
   checkOnboarding();
   initAuth();
   initRevenueCat();
