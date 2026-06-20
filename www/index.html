@@ -25,14 +25,14 @@
   <div id="sacristyDots" style="position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10"></div>
 
   <!-- Shop button -- under gallery images -->
-  <button onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop  -></button>
+  <button onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
 
   <!-- Info overlay -->
   <div id="sacristyInfoOverlay" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;flex-direction:column;justify-content:flex-end;padding:48px 32px">
     <button onclick="closeSacristyInfo()" style="position:absolute;top:52px;right:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em">Close ×</button>
     <p id="sacristyInfoFeature" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.8);margin-bottom:10px"></p>
     <p id="sacristyInfoText" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.2vw,20px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.75;margin-bottom:24px"></p>
-    <button id="sacristyInfoEnter" onclick="enterFromSacristy()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 24px;cursor:pointer;align-self:flex-start;transition:all .2s">Enter This Practice  -></button>
+    <button id="sacristyInfoEnter" onclick="enterFromSacristy()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 24px;cursor:pointer;align-self:flex-start;transition:all .2s">Enter This Practice -></button>
   </div>
 
 </div>
@@ -55,7 +55,7 @@
           style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
           onmouseover="this.style.boxShadow='0 0 28px rgba(160,32,240,.35)';this.style.borderColor='rgba(200,140,255,.8)'"
           onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
-          Begin  ->
+          Begin ->
         </button>
       </div>
       <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
@@ -84,7 +84,7 @@
 
         <button onclick="obFinish()"
           style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
-          Begin  ->
+          Begin ->
         </button>
 
       </div>
@@ -1128,7 +1128,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     <p id="authTitle" style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(178,200,245,.5);text-transform:uppercase;text-align:center;margin-bottom:28px">Create your account</p>
     <input id="authEmail" class="auth-input" type="email" placeholder="Email address" />
     <input id="authPassword" class="auth-input" type="password" placeholder="Password" />
-    <button class="auth-btn" onclick="submitAuth()">Continue  -></button>
+    <button class="auth-btn" onclick="submitAuth()">Continue -></button>
     <p id="authErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-bottom:8px"></p>
     <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Already have an account? <span>Sign in</span></p>
     <p id="forgotLink" onclick="forgotPassword()" style="text-align:center;font-size:11px;color:rgba(178,200,245,.4);cursor:pointer;margin-top:4px;display:block">Forgot password?</p>
@@ -1151,7 +1151,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     </div>
 
     <button onclick="startCheckout()" style="width:100%;padding:16px;background:rgba(178,200,245,.12);border:1px solid rgba(178,200,245,.3);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-bottom:12px">
-      Begin for $9.99 / month  ->
+      Begin for $9.99 / month ->
     </button>
 
     <p onclick="closeUpgrade()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em">Return to stillness</p>
@@ -1165,14 +1165,14 @@ body.is-mobile #mobileEnterTab { display: block; }
     <div id="phoneStep">
       <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(200,215,255,.6);margin-bottom:20px;line-height:1.6">Enter your phone number to unlock your free session with the Companion.</p>
       <input id="phoneInput" class="auth-input" type="tel" placeholder="+1 555 000 0000" />
-      <button class="auth-btn" onclick="sendPhoneCode()">Send code  -></button>
+      <button class="auth-btn" onclick="sendPhoneCode()">Send code -></button>
       <p id="phoneErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-top:8px"></p>
     </div>
 
     <div id="codeStep" style="display:none">
       <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(200,215,255,.6);margin-bottom:20px;line-height:1.6">Enter the 6-digit code sent to your phone.</p>
       <input id="codeInput" class="auth-input" type="number" placeholder="000000" />
-      <button class="auth-btn" onclick="verifyCode()">Verify  -></button>
+      <button class="auth-btn" onclick="verifyCode()">Verify -></button>
       <p id="codeErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-top:8px"></p>
     </div>
 
@@ -1214,7 +1214,7 @@ body.is-mobile #mobileEnterTab { display: block; }
             <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);margin:0">✦&nbsp; Hear any voice aloud with audio credit -- pay only for what you play</p>
           </div>
 
-          <button onclick="pwSubscribe()" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer">Subscribe  -></button>
+          <button onclick="pwSubscribe()" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer">Subscribe -></button>
         </div>
       </div>
 
@@ -1370,7 +1370,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     <div class="home-desc" id="homeDesc">
       <p class="home-desc-h" id="homeDescH"></p>
       <p class="home-desc-b" id="homeDescB"></p>
-      <button class="home-desc-cta" id="homeDescCta"><span id="homeCtaLabel">Enter</span><span> -></span></button>
+      <button class="home-desc-cta" id="homeDescCta"><span id="homeCtaLabel">Enter</span><span>-></span></button>
     </div>
   </div>
 </div>
@@ -1460,7 +1460,7 @@ body.is-mobile #mobileEnterTab { display: block; }
               "Lord Jesus Christ, Son of God, have mercy on me, a sinner."
             </button>
             <button class="anchor-pill" id="recordAnchorPill" onclick="showAnchorRecorder()">
-              ◎ Record my own voice  ->
+              ◎ Record my own voice ->
             </button>
           </div>
           <div class="rec-card" id="anchorRecCard" style="display:none">
@@ -1480,7 +1480,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="feat-divider"></div>
 
         <button class="btn-primary gold" onclick="startSitting()" style="width:100%;justify-content:center;font-size:11px">
-          Begin · Ring the Bell  ->
+          Begin · Ring the Bell ->
         </button>
         <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;font-style:italic">
           Load monastery bell file in Settings ⚙
@@ -1597,7 +1597,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           </p>
           <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.42);margin-top:8px">-- Psalm 119:18</p>
         </div>
-        <button class="btn-primary gold" onclick="lectioGoTo('choose')" style="width:100%;justify-content:center">I am ready · Choose a passage  -></button>
+        <button class="btn-primary gold" onclick="lectioGoTo('choose')" style="width:100%;justify-content:center">I am ready · Choose a passage -></button>
       </div>
     </div>
 
@@ -1640,7 +1640,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div style="display:flex;gap:10px;justify-content:center;margin-top:26px;flex-wrap:wrap" id="lectioReadNav">
           <button class="btn-ghost" onclick="lectioPhrasePrev()" id="lectioPrevBtn">← Previous</button>
           <button class="btn-primary gold" onclick="lectioPhraseNext()" id="lectioNextBtn">
-            <span id="lectioNextLabel">Next  -></span>
+            <span id="lectioNextLabel">Next -></span>
           </button>
         </div>
 
@@ -1650,8 +1650,8 @@ body.is-mobile #mobileEnterTab { display: block; }
             "The word of God is so precious that we do not want to miss the slightest nuance it might contain." Read it once more, more slowly.
           </p>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn-primary" id="secondReadBtn" onclick="startNextPass()">Read it again  -></button>
-            <button class="btn-primary gold" onclick="lectioGoTo('meditate')">A word has found me  -></button>
+            <button class="btn-primary" id="secondReadBtn" onclick="startNextPass()">Read it again -></button>
+            <button class="btn-primary gold" onclick="lectioGoTo('meditate')">A word has found me -></button>
           </div>
         </div>
 
@@ -1735,7 +1735,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
-          <button class="btn-primary gold" onclick="lectioGoTo('pray')">Move to Prayer  -></button>
+          <button class="btn-primary gold" onclick="lectioGoTo('pray')">Move to Prayer -></button>
           <button class="btn-ghost" onclick="lectioGoTo('read')">← Return to Reading</button>
         </div>
       </div>
@@ -1767,7 +1767,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center">
-          <button class="btn-primary gold" onclick="lectioGoTo('contemplate')" id="oratioFwdBtn">Enter Contemplation  -></button>
+          <button class="btn-primary gold" onclick="lectioGoTo('contemplate')" id="oratioFwdBtn">Enter Contemplation -></button>
           <button class="btn-primary" onclick="generateLectioQ()" id="generateQBtn" style="opacity:.7">Generate a question</button>
           <button class="btn-ghost" onclick="lectioGoTo('meditate')">← Meditation</button>
         </div>
@@ -1801,7 +1801,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="contemplatio-timer" id="contemplatiTimer">5:00</div>
 
         <button class="btn-primary gold" onclick="completeContemplatio()" id="contemplatioDoneBtn" style="display:none;margin-top:6px">
-          Receive your closing prayer  ->
+          Receive your closing prayer ->
         </button>
         <button class="btn-ghost" onclick="skipContemplatio()" style="margin-top:14px;display:block">Skip to closing prayer</button>
       </div>
@@ -1835,7 +1835,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
 
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-primary gold" onclick="saveLectioSession()">Save to Autobiography  -></button>
+          <button class="btn-primary gold" onclick="saveLectioSession()">Save to Autobiography -></button>
           <button class="btn-primary" onclick="goHome()">Return to Still</button>
         </div>
       </div>
@@ -2020,7 +2020,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           style="background:rgba(2,4,18,.72);backdrop-filter:blur(4px)"></textarea>
         <div class="companion-meta">
           <span class="companion-rate" id="companionRate">3 reflections remaining this week</span>
-          <button class="btn-primary gold" onclick="askCompanion()" id="companionAskBtn">Ask the Fathers  -></button>
+          <button class="btn-primary gold" onclick="askCompanion()" id="companionAskBtn">Ask the Fathers -></button>
         </div>
         <div class="companion-error" id="companionErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
@@ -2263,7 +2263,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         placeholder="No prompts. No structure. Just write what the practice is doing to you…"
         rows="6" style="margin-bottom:16px"></textarea>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px">
-        <button class="btn-primary gold" onclick="saveJournalEntry()">Save Entry  -></button>
+        <button class="btn-primary gold" onclick="saveJournalEntry()">Save Entry -></button>
       </div>
 
       <!-- Today's activity log -->
@@ -2279,7 +2279,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff">Your record</p>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn-primary" onclick="compileMonth()" id="compileBtn">Compile  -></button>
+          <button class="btn-primary" onclick="compileMonth()" id="compileBtn">Compile -></button>
           <button class="btn-primary gold" onclick="copyMonthText()" id="copyBtn" style="display:none">Copy</button>
           <button class="btn-primary" onclick="downloadPDF()" id="pdfBtn" style="display:none">Download PDF</button>
         </div>
@@ -2352,7 +2352,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           rows="4"
           style="color:#fff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.3);font-size:15px;margin-bottom:14px"></textarea>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.5);color:#fff;background:rgba(30,50,120,.3)" onclick="askMystic()">Speak to me  -></button>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.5);color:#fff;background:rgba(30,50,120,.3)" onclick="askMystic()">Speak to me -></button>
         </div>
         <div id="mysticErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
@@ -2372,7 +2372,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another  -></button>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another -></button>
         </div>
       </div>
 
@@ -2415,7 +2415,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           style="color:#ffffff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.35);font-size:15px"></textarea>
         <div class="companion-meta" style="margin-top:14px">
           <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,218,255,.75)">Theological reflection · CCC-grounded</span>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper  -></button>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper -></button>
         </div>
         <div class="companion-error" id="deeperErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
       </div>
@@ -2436,7 +2436,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
         <div class="companion-silence">
           <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another  -></button>
+          <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another -></button>
           <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
         </div>
       </div>
@@ -4454,7 +4454,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof homeActivate === 'function') homeActivate(0);
     }
 
-    // 1) Brand-new visitor  -> onboarding only.
+    // 1) Brand-new visitor -> onboarding only.
     if (!onboarded) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const ob = document.getElementById('screen-onboarding');
@@ -4462,22 +4462,22 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 2) No token at all  -> sign-in.
+    // 2) No token at all -> sign-in.
     if (!token) { showSignIn(); return; }
 
-    // 3) Token exists  -> VERIFY it's actually valid (not expired) before showing the app.
+    // 3) Token exists -> VERIFY it's actually valid (not expired) before showing the app.
     try {
       const res = await fetch(`${SUPA_URL}/auth/v1/user`, {
         headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
       });
       if (res.ok) {
-        // Valid session  -> show the app.
+        // Valid session -> show the app.
         const u = await res.json();
         currentUser = u; window.currentUser = u;
         showHome();
         if (typeof updateLastActive === 'function') updateLastActive();
       } else {
-        // Token expired/invalid  -> try the refresh token once.
+        // Token expired/invalid -> try the refresh token once.
         const refresh = localStorage.getItem('still_refresh_token');
         let recovered = false;
         if (refresh) {
@@ -4496,14 +4496,14 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         if (!recovered) {
-          // Truly expired  -> clear the dead token and show sign-in.
+          // Truly expired -> clear the dead token and show sign-in.
           localStorage.removeItem('still_access_token');
           localStorage.removeItem('still_refresh_token');
           showSignIn();
         }
       }
     } catch (e) {
-      // Network error  -> safest is to show sign-in.
+      // Network error -> safest is to show sign-in.
       showSignIn();
     }
   }, 300);
@@ -6652,7 +6652,7 @@ function renderLectioPhrase() {
   const nextLbl = document.getElementById('lectioNextLabel');
   if (nextLbl) {
     if (idx >= phrases.length - 1) nextLbl.textContent = 'Complete ✓';
-    else nextLbl.textContent = 'Next  ->';
+    else nextLbl.textContent = 'Next ->';
   }
 
   // Prev button
@@ -6692,7 +6692,7 @@ function completeLectioPass() {
 
   if (lState.readPass === 1) {
     if (bannerMsg) bannerMsg.textContent = '"We read over the text several times. Perhaps noticing different aspects with each new reading." -- Fr. Casey. Read it once more, more slowly. Notice what is different.';
-    if (secondBtn) secondBtn.textContent = 'Read it again  ->';
+    if (secondBtn) secondBtn.textContent = 'Read it again ->';
     if (secondBtn) secondBtn.style.display = 'block';
   } else {
     if (bannerMsg) bannerMsg.textContent = 'You have read this passage with care. If a word or phrase has found you -- even faintly -- carry it into Meditatio. "What faith inspires us to do is to use our deadness as a springboard." -- Fr. Casey';
@@ -6856,7 +6856,7 @@ function saveLectioSession() {
     passes: lState.readPass
   });
   const btn = document.querySelector('[onclick="saveLectioSession()"]');
-  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Autobiography  ->', 2200); }
+  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Autobiography ->', 2200); }
 }
 
 function saveExamen() {
@@ -6874,7 +6874,7 @@ function saveExamen() {
   if (!answers.length) { return; }
   DB.save('examen', { answers });
   const btn = document.querySelector('[onclick="saveExamen()"]');
-  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Journal  ->', 2200); }
+  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Journal ->', 2200); }
 }
 
 function saveAutobio() { saveJournalEntry(); }
@@ -6966,7 +6966,7 @@ const Memory = {
     const sittings = byType('sitting'), lectios = byType('lectio');
     const parts = [];
  
-    // entries are stored oldest  -> newest (DB.save pushes to the end)
+    // entries are stored oldest -> newest (DB.save pushes to the end)
     const oldest = all[0];
     const days = oldest ? Math.max(1, Math.round((Date.now() - new Date(oldest.date)) / 86400000)) : 0;
     parts.push(`They have walked with Still about ${days} day${days !== 1 ? 's' : ''}, with ${all.length} practice${all.length !== 1 ? 's' : ''} recorded.`);
@@ -6975,7 +6975,7 @@ const Memory = {
       const f = sittings[0]?.totalThoughts;                  // first/oldest
       const l = sittings[sittings.length - 1]?.totalThoughts; // latest
       if (f != null && l != null) parts.push(l < f
-        ? `In sitting the mind has been growing quieter (${f}  -> ${l} thoughts).`
+        ? `In sitting the mind has been growing quieter (${f} -> ${l} thoughts).`
         : `In sitting the mind is still restless.`);
     }
  
@@ -7384,7 +7384,7 @@ function saveJournalEntry() {
   ta.value = '';
   renderTodayLog();
   const btn = document.querySelector('[onclick="saveJournalEntry()"]');
-  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save Entry  ->', 2000); }
+  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save Entry ->', 2000); }
 }
 
 function renderMonthTab() {
@@ -7472,7 +7472,7 @@ async function buildMonthNarrative(entries) {
   examens.forEach(e => {
     const dt = new Date(e.date).toLocaleDateString('en-US',{month:'long',day:'numeric'});
     let s = `Examen on ${dt}:`;
-    e.answers?.forEach(a => { s += ` "${a.q}"  -> "${a.a.slice(0,140)}".`; });
+    e.answers?.forEach(a => { s += ` "${a.q}" -> "${a.a.slice(0,140)}".`; });
     digest.push(s);
   });
   journals.forEach(j => {
@@ -7937,7 +7937,7 @@ const StorageSettings = {
       : (localStorage.getItem('still_storage_mode') || 'cloud') === 'cloud';
   },
 
-  // tapped "keep on device"  -> show the explanation BEFORE switching
+  // tapped "keep on device" -> show the explanation BEFORE switching
   goDevice() { this._view = 'device'; this._render(); },
 
   confirmDevice() {
@@ -7948,7 +7948,7 @@ const StorageSettings = {
     this._render();
   },
 
-  // tapped "back up to cloud"  -> switch and push local entries up now
+  // tapped "back up to cloud" -> switch and push local entries up now
   goCloud() {
     if (typeof Sync !== 'undefined') { Sync.setMode('cloud'); try { Sync.reconcile(); } catch (e) {} }
     else localStorage.setItem('still_storage_mode', 'cloud');
@@ -8600,7 +8600,7 @@ const Paths = {
         })
       });
       const data = await res.json();
-      if (data.error) return;   // limit reached / upgrade required  -> keep the built-in reflection
+      if (data.error) return;   // limit reached / upgrade required -> keep the built-in reflection
       const text = (data.content && data.content[0] && data.content[0].text) || '';
       if (typeof text === 'string' && text.trim().length > 40) {
         disc.reflections = disc.reflections || {};
@@ -8781,7 +8781,7 @@ Paths.centerDay = function(n){
 Paths.centerComplete = function(n){
   const lit = litDays();
   if(lit.indexOf(n)===-1){ lit.push(n); saveLit(lit); }
-  // optional written answer  -> the journey, never required
+  // optional written answer -> the journey, never required
   try{
     const ta = document.getElementById('discInput');
     if(ta && ta.value.trim() && typeof DB!=='undefined')
@@ -9769,8 +9769,8 @@ function renderExamenStep() {
     <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between;align-items:center">
       ${examenStep > 0 ? `<button class="btn-ghost" onclick="examenBack()" style="font-size:13px">← Back</button>` : `<div></div>`}
       ${examenStep < total-1
-        ? `<button class="btn-primary gold" onclick="examenNext()">Continue  -></button>`
-        : `<button class="btn-primary gold" onclick="examenFinish()">Save to Journal  -></button>`}
+        ? `<button class="btn-primary gold" onclick="examenNext()">Continue -></button>`
+        : `<button class="btn-primary gold" onclick="examenFinish()">Save to Journal -></button>`}
     </div>
     ${examenStep === 0 ? `<p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:14px;font-style:italic">Daily Conscience · St. Ignatius of Loyola · Private</p>` : ''}`;
 
@@ -9875,7 +9875,7 @@ let html = '';
   html += '<p style="font-family:\'Heebo\',sans-serif;font-size:13px;color:rgba(255,255,255,.48);line-height:1.7;margin-bottom:24px;font-style:italic">' + t.reflection + '</p>';
   html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost" style="display:block;margin:0 auto 16px;color:rgba(255,255,255,.45)">Hear Reflection</button>';
   html += '<div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">';
-  html += '<button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">' + (darknessIdx < total-1 ? 'Next  ->' : 'Begin Again ↺') + '</button>';
+  html += '<button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">' + (darknessIdx < total-1 ? 'Next ->' : 'Begin Again ↺') + '</button>';
   html += '<button class="btn-ghost" onclick="activateCompanion()">Speak to the Companion</button>';
   html += '</div>';
   html += '<button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>';
@@ -10253,7 +10253,7 @@ function closeInfo() {
 }
 
 // Programmatically inject info buttons into every feature screen header
-// Maps screen-id  -> info key
+// Maps screen-id -> info key
 const SCREEN_INFO_MAP = {
   sitting:'sitting', lectio:'lectio', examen:'examen',
   darkness:'darkness', community:'community', companion:'companion',
@@ -10622,7 +10622,7 @@ function renderCommunityQuestion(card, q) {
       placeholder="Write your answer here. No one will know it's you."
       rows="5" style="margin-bottom:16px"></textarea>
     <div id="communityErr" style="display:none;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center;margin-bottom:10px"></div>
-    <button class="btn-primary gold" onclick="submitCommunity()" id="communitySubmitBtn" style="width:100%;justify-content:center">Submit & See Others  -></button>
+    <button class="btn-primary gold" onclick="submitCommunity()" id="communitySubmitBtn" style="width:100%;justify-content:center">Submit & See Others -></button>
     <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px">New question in ${timeUntilMidnight()}</p>`;
 }
 
@@ -10678,7 +10678,7 @@ async function submitCommunity() {
 
   if (!resp.ok) {
     const data = await resp.json().catch(() => ({}));
-    if (btn) { btn.textContent = 'Submit & See Others  ->'; btn.disabled = false; }
+    if (btn) { btn.textContent = 'Submit & See Others ->'; btn.disabled = false; }
     if (errEl) {
       errEl.textContent = data.error === 'blocked'
         ? 'Those words don\u2019t belong here. Try saying it another way.'
@@ -10980,7 +10980,7 @@ function enterFromSacristy() {
 
 
 /* ═══════════════════════════════════════════
-   STILL -- PAYWALL  (trial  -> lock, keyed to Supabase subscription)
+   STILL -- PAYWALL  (trial -> lock, keyed to Supabase subscription)
 
    Two modes for the same screen:
      • PREVIEW  -- shown gently DURING the trial, dismissible ("Keep
@@ -11077,8 +11077,8 @@ function shouldShowPaywall() {
   return trialIsOver();
 }
 
-// preview === true   -> dismissible, trial-day wording (shown DURING the trial)
-// preview falsy       -> enforced, "ended" wording, no dismiss (the lock)
+// preview === true  -> dismissible, trial-day wording (shown DURING the trial)
+// preview falsy      -> enforced, "ended" wording, no dismiss (the lock)
 function showPaywall(preview) {
   const badge = document.getElementById('paywallBadge');
   if (badge) {
@@ -11191,7 +11191,7 @@ function showWelcomePremium() {
       <p style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:12px">Welcome.</p>
       <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(200,215,255,.7);line-height:1.7;margin-bottom:32px">"If you will, you can become all flame."</p>
       <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(178,200,245,.6);line-height:1.6;margin-bottom:32px">The desert is open to you. The Fathers are waiting. Amma Sophia is here.</p>
-      <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:14px;background:rgba(178,200,245,.1);border:1px solid rgba(178,200,245,.25);color:#fff;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Enter  -></button>
+      <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:14px;background:rgba(178,200,245,.1);border:1px solid rgba(178,200,245,.25);color:#fff;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;">Enter -></button>
     </div>
   `;
   document.body.appendChild(overlay);
@@ -11231,8 +11231,8 @@ function checkOnboarding() {
   function go() {
     if (!localStorage.getItem('still_onboarded')) return; // don't interrupt onboarding
     refreshSubscription().then(() => {
-      if (shouldShowPaywall()) showPaywall(false);  // trial already over  -> lock
-      else maybeShowTrialPreview();                 // still in trial  -> maybe a gentle preview
+      if (shouldShowPaywall()) showPaywall(false);  // trial already over -> lock
+      else maybeShowTrialPreview();                 // still in trial -> maybe a gentle preview
     });
   }
   let n = 0;
@@ -12830,7 +12830,7 @@ async function startCheckout(tier) {
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
 
   if (isNative) {
-    // iOS  -> RevenueCat. Buy the matching subscription; the webhook sets subscription_status='premium'.
+    // iOS -> RevenueCat. Buy the matching subscription; the webhook sets subscription_status='premium'.
     try {
       const Purchases = window.Capacitor.Plugins.Purchases;
       const targetProductId = (tier === 'annual') ? 'still_yearly' : 'still_monthly';
@@ -12855,7 +12855,7 @@ async function startCheckout(tier) {
       if (!e.userCancelled) console.error('IAP subscription error:', e);
     }
   } else {
-    // WEB  -> existing Stripe flow, unchanged
+    // WEB -> existing Stripe flow, unchanged
     try {
       const res = await fetch('/.netlify/functions/stripe-checkout', {
         method: 'POST',
@@ -12880,7 +12880,7 @@ async function buyAudioCredits() {
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
 
   if (isNative) {
-    // iOS  -> RevenueCat consumable. The RevenueCat WEBHOOK credits the wallet server-side.
+    // iOS -> RevenueCat consumable. The RevenueCat WEBHOOK credits the wallet server-side.
     try {
       const Purchases = window.Capacitor.Plugins.Purchases;
       const offerings = await Purchases.getOfferings();
@@ -12895,7 +12895,7 @@ async function buyAudioCredits() {
       if (!e.userCancelled) console.error('IAP error:', e);
     }
   } else {
-    // WEB  -> existing Stripe flow (verified keys)
+    // WEB -> existing Stripe flow (verified keys)
     try {
       const res = await fetch('/.netlify/functions/stripe-checkout', {
         method: 'POST',
@@ -13061,7 +13061,7 @@ var config = {
   seaSrc: null,                          // 'assets/sea_loop.mp4' when produced
   bridgeSrc: null,                       // 'assets/bridge_loop.mp4' when produced
   apiEndpoint: null,                     // set to '/.netlify/functions/claude' -- the Chamber speaks through Still's existing voice function; null = passage-only mode
-  onRemain: function(){ alert('(demo)  -> would open Contemplative Sitting with skipSettle'); },
+  onRemain: function(){ alert('(demo) -> would open Contemplative Sitting with skipSettle'); },
   onLeave:  function(){ DC.show('dcThreshold'); /* in Still: goHome(); */ },
   apiFeature: 'chamber',                  // whitelist this feature name in your /claude function
   model: 'claude-sonnet-4-6'       // same model string the rest of Still uses
@@ -13285,7 +13285,7 @@ function $(id){ return document.getElementById(id); }
 function show(phaseId){
   ['dcThreshold','dcCell','dcDoors','dcWrite','dcListening','dcWord','dcSettling','dcCarry','dcMargin','dcPastoral','dcColIntro','dcColVoice','dcColLove','dcColBless']
     .forEach(function(p){ $(p).classList.remove('dc-on'); });
-  // allow display:none  -> flex before fading in
+  // allow display:none -> flex before fading in
   var el = $(phaseId); el.style.display='flex';
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.classList.add('dc-on'); }); });
   ['dcThreshold','dcCell','dcDoors','dcWrite','dcListening','dcWord','dcSettling','dcCarry','dcMargin','dcPastoral','dcColIntro','dcColVoice','dcColLove','dcColBless']
