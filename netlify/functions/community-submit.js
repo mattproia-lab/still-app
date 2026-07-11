@@ -440,7 +440,8 @@ exports.handler = async (event) => {
   });
 
   if (!res.ok) {
-    return { statusCode: 502, body: JSON.stringify({ error: 'insert_failed' }) };
+    const detail = await res.text();
+    return { statusCode: 502, body: JSON.stringify({ error: 'insert_failed', detail }) };
   }
   return { statusCode: 200, body: JSON.stringify({ ok: true }) };
 };
