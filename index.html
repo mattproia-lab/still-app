@@ -2868,6 +2868,11 @@ body.is-mobile #mobileEnterTab { display: block; }
           <button onclick="restorePurchases()" id="restoreBtn" style="width:100%;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Restore Purchases</button>
           <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
         </div>
+        <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)">
+  <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:10px">Account</p>
+  <button onclick="showDeleteAccount()" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,73,64,.35);color:rgba(255,73,64,.75);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:4px">Delete Account</button>
+  <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.3);line-height:1.6;margin-top:8px">Permanently removes your account and all your practice history.</p>
+</div>
       </div>
      
       <!-- Promo Code -->
@@ -4227,6 +4232,82 @@ async function initOneSignal() {
 /* ═══════════════════════════════════════════
    ROUTER
 ═══════════════════════════════════════════ */
+function showDeleteAccount() {
+  if (document.getElementById('deleteAccountModal')) return;
+
+  const overlay = document.createElement('div');
+  overlay.id = 'deleteAccountModal';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(4,4,14,.96);z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;box-sizing:border-box';
+  overlay.innerHTML = `
+    <div style="max-width:380px;width:100%;background:#0a0812;border:1px solid rgba(255,73,64,.25);padding:32px 26px;border-radius:6px">
+      <p style="font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#fff;margin-bottom:14px">Delete your account?</p>
+      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:18px">
+        This permanently deletes your account, your practice history, your spiritual autobiography, and any remaining audio credit. This cannot be undone.
+      </p>
+      <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.4);margin-bottom:8px">Type <strong style="color:rgba(255,73,64,.8)">DELETE</strong> to confirm:</p>
+      <input id="deleteConfirmInput" type="text" autocomplete="off" style="width:100%;padding:11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'Heebo',sans-serif;font-size:14px;border-radius:4px;margin-bottom:8px;box-sizing:border-box">
+      <p id="deleteAccountErr" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.8);min-height:16px;margin-bottom:14px"></p>
+      <button id="deleteConfirmBtn" onclick="confirmDeleteAccount()" style="width:100%;padding:13px;background:rgba(255,73,64,.12);border:1px solid rgba(255,73,64,.45);color:rgba(255,73,64,.9);font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:4px;margin-bottom:10px">Delete My Account</button>
+      <button onclick="closeDeleteAccount()" style="width:100%;padding:11px;background:none;border:none;color:rgba(255,255,255,.4);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer">Cancel</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  setTimeout(() => { const i = document.getElementById('deleteConfirmInput'); if (i) i.focus(); }, 100);
+}
+
+function closeDeleteAccount() {
+  const m = document.getElementById('deleteAccountModal');
+  if (m) m.remove();
+}
+
+async function confirmDeleteAccount() {
+  const input = document.getElementById('deleteConfirmInput');
+  const err   = document.getElementById('deleteAccountErr');
+  const btn   = document.getElementById('deleteConfirmBtn');
+
+  if (!input || input.value.trim().toUpperCase() !== 'DELETE') {
+    if (err) err.textContent = 'Please type DELETE to confirm.';
+    return;
+  }
+
+  const token = localStorage.getItem('still_access_token');
+  if (!token) {
+    if (err) err.textContent = 'You are not signed in.';
+    return;
+  }
+
+  if (btn) { btn.textContent = 'Deleting…'; btn.disabled = true; }
+  if (err) err.textContent = '';
+
+  try {
+    const res = await fetch('/.netlify/functions/delete-account', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ access_token: token })
+    });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      if (err) err.textContent = data.error || 'Could not delete account. Please try again.';
+      if (btn) { btn.textContent = 'Delete My Account'; btn.disabled = false; }
+      return;
+    }
+
+    // Success — wipe everything local and restart the app
+    localStorage.clear();
+    window._subStatus = null;
+    window.currentUser = null;
+    closeDeleteAccount();
+    alert('Your account has been deleted.');
+    window.location.href = window.location.pathname;
+
+  } catch(e) {
+    console.error('Delete account error:', e);
+    if (err) err.textContent = 'Something went wrong. Please try again.';
+    if (btn) { btn.textContent = 'Delete My Account'; btn.disabled = false; }
+  }
+}
+
 let currentScreen='home';
 
 function showScreen(screenId,worldIdx){
