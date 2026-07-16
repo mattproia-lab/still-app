@@ -72,16 +72,22 @@
         <h1 style="text-align:center;font-family:Georgia,serif;font-size:24px;letter-spacing:1px;color:#f4e9d8;margin:0 0 6px">Cell of the Guest</h1>
         <p style="text-align:center;font-family:Georgia,serif;font-style:italic;font-size:15px;color:rgba(244,233,216,.6);margin:0 0 24px;max-width:480px">A word of welcome from Brother Guestmaster, before you begin.</p>
 
-        <!-- The welcome film -->
-        <div style="position:relative;width:100%;max-width:860px;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.55)">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/ZPLuMv8aKJA?rel=0&modestbranding=1&playsinline=1"
-            title="Welcome to Still"
-            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
+        <!-- The welcome film (web only) -->
+<div id="obWelcomeFilm" style="position:relative;width:100%;max-width:860px;padding-bottom:56.25%;height:0;border-radius:12px;overflow:hidden;box-shadow:0 12px 44px rgba(0,0,0,.55)">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/ZPLuMv8aKJA?rel=0&modestbranding=1&playsinline=1"
+    title="Welcome to Still"
+    style="position:absolute;top:0;left:0;width:100%;height:100%;border:0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen></iframe>
+</div>
 
+<!-- The guestmaster letter (native only) -->
+<div id="obWelcomeLetter" style="display:none;width:100%;max-width:560px">
+  <img src="still-mobile/src/image/guestmaster_letter.jpg"
+       alt="A letter of welcome from Brother Guestmaster"
+       style="width:100%;height:auto;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55)">
+</div>
         <button onclick="obFinish()"
           style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
           Begin ->
@@ -6961,6 +6967,18 @@ function saveExamen() {
 function saveAutobio() { saveJournalEntry(); }
 function toggleEchoes() { autobioTab('echoes'); }
 
+// YouTube embeds fail in the Capacitor shell (error 153).
+// Native gets the Guestmaster letter instead of the film.
+function swapWelcomeForNative() {
+  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  if (!isNative) return;
+  const film   = document.getElementById('obWelcomeFilm');
+  const letter = document.getElementById('obWelcomeLetter');
+  if (film)   film.style.display = 'none';
+  if (letter) letter.style.display = 'block';
+}
+document.addEventListener('DOMContentLoaded', swapWelcomeForNative);
+
 /* ═══════════════════════════════════════════
    DATABASE -- localStorage data layer
    All data stays on device. Private. Always.
@@ -10060,6 +10078,17 @@ window.stillResetTrial = function() {
   localStorage.removeItem('still_trial_start');
   console.log('Trial reset. Refresh the page.');
 };
+
+// The YouTube embed fails inside the Capacitor shell (error 153) — hide it on native.
+(function hideWelcomeFilmOnNative() {
+  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  if (!isNative) return;
+  const film = document.getElementById('obWelcomeFilm');
+  if (film) film.style.display = 'none';
+  const sub = document.getElementById('obWelcomeSubtitle');
+  if (sub) sub.textContent = 'A word of welcome from Brother Guestmaster.';
+})();
+
 /* ═══════════════════════════════════════════
    INFO PANEL -- contextual "why this exists"
    for every feature screen
