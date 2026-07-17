@@ -404,28 +404,33 @@ const BLOCKED = [
 ];
 
 exports.handler = async (event) => {
+  // CORS preflight from the native shell (origin capacitor://localhost)
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS, body: '' };
+  }
+
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method not allowed' };
+    return { statusCode: 405, headers: CORS, body: 'Method not allowed' };
   }
 
   let body;
   try { body = JSON.parse(event.body); }
-  catch { return { statusCode: 400, body: 'Bad request' }; }
+  catch { return { statusCode: 400, headers: CORS, body: 'Bad request' }; }
 
   const { question_id, text, device_id } = body;
 
   if (!text || typeof text !== 'string' || text.trim().length < 10) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'too_short' }) };
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'too_short' }) };
   }
   if (text.length > 1000) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'too_long' }) };
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'too_long' }) };
   }
 
   // normalize: lowercase, strip common separators so "s.l.u.r" / "s l u r" still match
   const normalized = text.toLowerCase().replace(/[\s._\-*]/g, '');
   const hit = BLOCKED.some(w => normalized.includes(w));
   if (hit) {
-    return { statusCode: 422, body: JSON.stringify({ error: 'blocked' }) };
+    return { statusCode: 422, headers: CORS, body: JSON.stringify({ error: 'blocked' }) };
   }
 
   const res = await fetch(process.env.SUPABASE_URL + '/rest/v1/responses', {
@@ -441,8 +446,11 @@ exports.handler = async (event) => {
 
   if (!res.ok) {
     const detail = await res.text();
-    return { statusCode: 502, body: JSON.stringify({ error: 'insert_failed', detail }) };
+    return { statusCode: 502, headers: CORS, body: JSON.stringify({ error: 'insert_failed', detail }) };
   }
-  return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'application/json', ...CORS },
+    body: JSON.stringify({ ok: true })
+  };
 };
-
