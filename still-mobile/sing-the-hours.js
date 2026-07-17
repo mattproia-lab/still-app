@@ -60,7 +60,7 @@ window.SingTheHours = (function () {
       }
     } catch (_) { /* ignore */ }
 
-    const res = await fetch(PROXY_URL);
+    const res = await fetch((window.FN_BASE || '') + PROXY_URL);
     if (!res.ok) throw new Error(`rss-proxy returned ${res.status}`);
     const xml = await res.text();
 
