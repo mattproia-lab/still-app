@@ -3772,7 +3772,7 @@ async function prepareVoiceResponse(text, character) {
   if (!text || !text.trim()) return;
   _taggedResponses[character] = null;
   try {
-    const res = await fetch('/.netlify/functions/tag-response', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/tag-response', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text.trim(), character })
@@ -4113,6 +4113,11 @@ const W=[
 const HOME={r:82,g:20,b:140,i:.28,base:'#030305'};
 const NIGHTWATCH={r:4,g:4,b:30,i:.12,base:'#010108'};
 
+// In the native shell the page is served from capacitor://localhost,
+// so relative function paths don't resolve. Use the live origin.
+window.FN_BASE = (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())
+  ? 'https://stillprayer.app'
+  : '';
 /* ═══════════════════════════════════════════
    COLOR ANIMATION -- smooth rAF interpolation
    Crash-proof: clamped lerp, try/catch, resize recovery
@@ -4286,7 +4291,7 @@ async function confirmDeleteAccount() {
   if (err) err.textContent = '';
 
   try {
-    const res = await fetch('/.netlify/functions/delete-account', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/delete-account', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ access_token: token })
@@ -5200,7 +5205,7 @@ async function askCompanion(){
   showCompanionState('companionLoading');
   document.getElementById('companionErr').style.display='none';
   try{
-    const res=await fetch('/.netlify/functions/claude',{
+    const res=await fetch(window.FN_BASE + '/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({feature:'companion',access_token:localStorage.getItem('still_access_token'),model:'claude-sonnet-4-6',max_tokens:300,system:COMPANION_SYSTEM + Memory.context(input,'companion'),messages:[{role:'user',content:input}]})
@@ -5330,7 +5335,7 @@ async function askMystic() {
   const token = await getValidToken();
 
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -5389,7 +5394,7 @@ async function askDeeper(){
   document.getElementById('deeperErr').style.display='none';
   const token = await getValidToken();
   try{
-    const res=await fetch('/.netlify/functions/claude',{
+    const res=await fetch(window.FN_BASE + '/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({feature:'deeper',access_token:token,model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
@@ -6833,7 +6838,7 @@ Generate ONE single contemplative question. Not therapeutic. Not advice. A quest
   if (genBtn) { genBtn.textContent = 'Listening…'; genBtn.disabled = true; }
 
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:120,
@@ -6912,7 +6917,7 @@ async function generateClosingPrayer() {
 Write a short closing collect prayer (4–5 sentences). First person singular. In the tradition of the Roman liturgy -- liturgical but intimate. Gather the thread of what this person received without quoting it back to them. End with "Amen." Do not use therapy language. No more than 80 words.`;
 
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:180,
@@ -7165,7 +7170,7 @@ const Memory = {
     if (all.length < 5) return;
     const digest = this.digest(all);
     try {
-      const res = await fetch('/.netlify/functions/claude', {
+      const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           feature: 'sophia',
@@ -7602,7 +7607,7 @@ ${digest.join('\n\n')}
 Instructions: 4–8 paragraphs. Begin with an honest sentence about the month overall. Narrate (don't list) the practices in natural order. Quote the person's actual words where they appear. Note if the mind grew quieter in sitting. Let Lectio words appear as received, not chosen. Include Examen answers as honest interior glimpses. End with a quiet, honest sentence -- not resolution, just seeing. First person. Past tense. Max 600 words. Output only the narrative.`;
 
   try {
-    const res = await fetch('/.netlify/functions/claude', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -8686,7 +8691,7 @@ const Paths = {
     try {
       // Matches your askMystic exactly: access_token in the BODY, model + max_tokens sent,
       // reply read from data.content[0].text.
-      const res = await fetch('/.netlify/functions/claude', {
+      const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -10685,7 +10690,7 @@ async function playDarknessReflection(idx) {
   // Tag the reflection text for dark mode delivery
   let taggedText = `${t.text}\n\n${t.reflection}`;
   try {
-    const tagRes = await fetch('/.netlify/functions/tag-darkness', {
+    const tagRes = await fetch(window.FN_BASE + '/.netlify/functions/tag-darkness', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: taggedText, title: t.title })
@@ -10776,7 +10781,7 @@ async function submitCommunity() {
 
   if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
 
-  const resp = await fetch('/.netlify/functions/community-submit', {
+  const resp = await fetch(window.FN_BASE + '/.netlify/functions/community-submit', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -10809,7 +10814,7 @@ async function reportResponse(responseId, btn) {
   if (!confirm('Report this response as inappropriate?')) return;
   if (btn) { btn.textContent = 'Reporting…'; btn.disabled = true; }
   try {
-    const resp = await fetch('/.netlify/functions/community-report', {
+    const resp = await fetch(window.FN_BASE + '/.netlify/functions/community-report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ response_id: responseId, device_id: getDeviceId() })
@@ -11558,7 +11563,7 @@ async function redeemPromoCode() {
   msg.style.display = 'block';
 
   try {
-    const res = await fetch('/.netlify/functions/redeem-code', {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/redeem-code', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code, user_id: window.currentUser.id })
@@ -12971,7 +12976,7 @@ async function startCheckout(tier) {
   } else {
     // WEB -> existing Stripe flow, unchanged
     try {
-      const res = await fetch('/.netlify/functions/stripe-checkout', {
+      const res = await fetch(window.FN_BASE + '/.netlify/functions/stripe-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -13011,7 +13016,7 @@ async function buyAudioCredits() {
   } else {
     // WEB -> existing Stripe flow (verified keys)
     try {
-      const res = await fetch('/.netlify/functions/stripe-checkout', {
+      const res = await fetch(window.FN_BASE + '/.netlify/functions/stripe-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
