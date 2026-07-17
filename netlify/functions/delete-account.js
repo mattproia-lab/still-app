@@ -1,6 +1,12 @@
 const SUPA_URL = process.env.SUPABASE_URL;
 const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type'
+};
+
 async function getUserFromToken(token) {
   const res = await fetch(`${SUPA_URL}/auth/v1/user`, {
     headers: {
@@ -29,26 +35,31 @@ async function supaDelete(path) {
 }
 
 exports.handler = async function(event) {
+  // CORS preflight from the native shell (origin capacitor://localhost)
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS, body: '' };
+  }
+
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return { statusCode: 405, headers: CORS, body: 'Method Not Allowed' };
   }
 
   let body;
   try {
     body = JSON.parse(event.body);
   } catch(e) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) };
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Invalid JSON' }) };
   }
 
   const token = body.access_token;
   if (!token) {
-    return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
+    return { statusCode: 401, headers: CORS, body: JSON.stringify({ error: 'Not authenticated.' }) };
   }
 
   // Resolve the user from their token — never trust a client-sent id
   const user = await getUserFromToken(token);
   if (!user || !user.id) {
-    return { statusCode: 401, body: JSON.stringify({ error: 'Not authenticated.' }) };
+    return { statusCode: 401, headers: CORS, body: JSON.stringify({ error: 'Not authenticated.' }) };
   }
   const uid = user.id;
 
@@ -80,15 +91,12 @@ exports.handler = async function(event) {
   if (!authRes.ok) {
     const detail = await authRes.text();
     console.error('Auth delete failed:', detail);
-    return { statusCode: 500, body: JSON.stringify({ error: 'Could not delete account.' }) };
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: 'Could not delete account.' }) };
   }
 
   return {
     statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    },
+    headers: { 'Content-Type': 'application/json', ...CORS },
     body: JSON.stringify({ success: true })
   };
 };
