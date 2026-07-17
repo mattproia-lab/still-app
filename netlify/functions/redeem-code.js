@@ -1,10 +1,25 @@
 const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type'
+};
+
 exports.handler = async (event) => {
-  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method not allowed' };
+  // CORS preflight from the native shell (origin capacitor://localhost)
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS, body: '' };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers: CORS, body: 'Method not allowed' };
+  }
 
   const { code, user_id } = JSON.parse(event.body || '{}');
-  if (!code || !user_id) return { statusCode: 400, body: JSON.stringify({ error: 'Missing code or user_id' }) };
+  if (!code || !user_id) {
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Missing code or user_id' }) };
+  }
 
   const serviceKey = process.env.SUPABASE_SERVICE_KEY;
   const headers = { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}`, 'Content-Type': 'application/json' };
@@ -15,18 +30,20 @@ exports.handler = async (event) => {
     { headers }
   );
   const codes = await codeRes.json();
-  if (!codes.length) return { statusCode: 404, body: JSON.stringify({ error: 'Invalid code' }) };
+  if (!codes.length) {
+    return { statusCode: 404, headers: CORS, body: JSON.stringify({ error: 'Invalid code' }) };
+  }
 
   const promo = codes[0];
 
   // Check expiry
   if (promo.expires_at && new Date(promo.expires_at) < new Date()) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Code has expired' }) };
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Code has expired' }) };
   }
 
   // Check uses remaining
   if (promo.uses_remaining <= 0) {
-    return { statusCode: 400, body: JSON.stringify({ error: 'Code has no uses remaining' }) };
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Code has no uses remaining' }) };
   }
 
   // Check if user already redeemed this code
@@ -35,7 +52,9 @@ exports.handler = async (event) => {
     { headers }
   );
   const existing = await redemptionRes.json();
-  if (existing.length) return { statusCode: 400, body: JSON.stringify({ error: 'Code already redeemed' }) };
+  if (existing.length) {
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Code already redeemed' }) };
+  }
 
   // Record redemption
   await fetch(`${SUPA_URL}/rest/v1/promo_redemptions`, {
@@ -54,6 +73,7 @@ exports.handler = async (event) => {
   // Return what the user gets
   return {
     statusCode: 200,
+    headers: { 'Content-Type': 'application/json', ...CORS },
     body: JSON.stringify({
       success: true,
       type: promo.type,

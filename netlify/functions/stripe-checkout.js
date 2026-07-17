@@ -1,14 +1,29 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type'
+};
+
 exports.handler = async function(event) {
-  if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
+  // CORS preflight from the native shell (origin capacitor://localhost)
+  if (event.httpMethod === 'OPTIONS') {
+    return { statusCode: 204, headers: CORS, body: '' };
+  }
+
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers: CORS, body: 'Method Not Allowed' };
+  }
 
   let body;
   try { body = JSON.parse(event.body); }
-  catch(e) { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
+  catch(e) { return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
   const { user_id, email, tier } = body;
-  if (!user_id || !email) return { statusCode: 400, body: JSON.stringify({ error: 'Missing user_id or email' }) };
+  if (!user_id || !email) {
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Missing user_id or email' }) };
+  }
 
   let priceId, mode = 'subscription', metadata = { user_id, tier: 'premium' };
   let successUrl = `${process.env.SITE_URL}?upgraded=true`;
@@ -34,8 +49,12 @@ exports.handler = async function(event) {
       success_url: successUrl,
       cancel_url: `${process.env.SITE_URL}?upgraded=false`,
     });
-    return { statusCode: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }, body: JSON.stringify({ url: session.url }) };
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json', ...CORS },
+      body: JSON.stringify({ url: session.url })
+    };
   } catch(err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: err.message }) };
   }
 };
