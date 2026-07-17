@@ -87,6 +87,11 @@
   <img src="still-mobile/src/image/guestmaster_letter.jpg"
        alt="A letter of welcome from Brother Guestmaster"
        style="width:100%;height:auto;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55)">
+  <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
+  <button id="obGuestmasterBtn" onclick="playGuestmasterAudio()"
+          style="margin-top:14px;width:100%;padding:12px;background:rgba(200,146,12,.1);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer">
+    ◎ Hear the letter read aloud
+  </button>
 </div>
         <button onclick="obFinish()"
           style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
@@ -5086,6 +5091,20 @@ function stopSitting() {
   releaseWakeLock();
   if (sTimer) { clearInterval(sTimer); sTimer = null; }
   sPhase = 'idle';
+}
+
+function playGuestmasterAudio() {
+  const a = document.getElementById('obGuestmasterAudio');
+  const b = document.getElementById('obGuestmasterBtn');
+  if (!a) return;
+  if (a.paused) {
+    a.play().catch(e => console.warn('Guestmaster audio failed:', e));
+    if (b) b.textContent = '❚❚ Pause';
+    a.onended = () => { if (b) b.textContent = '◎ Hear the letter read aloud'; };
+  } else {
+    a.pause();
+    if (b) b.textContent = '◎ Hear the letter read aloud';
+  }
 }
 
 /* ═══════════════════════════════════════════
