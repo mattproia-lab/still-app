@@ -1387,7 +1387,7 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-sitting" class="screen">
   <!-- Candle video background -- contemplative sitting -->
   <div style="position:absolute;inset:0;z-index:0;pointer-events:none">
-    <video autoplay muted loop playsinline
+    <video id="sittingCandle" autoplay muted loop playsinline
   style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.95">
       <source src="assets/candle.mp4" type="video/mp4">
     </video>
@@ -2458,9 +2458,9 @@ body.is-mobile #mobileEnterTab { display: block; }
   <div class="night-watch" style="position:relative;z-index:10">
     <!-- Candle video -->
     <video autoplay loop muted playsinline
-      style="width:72px;height:108px;object-fit:cover;margin-bottom:0;display:block;margin-left:auto;margin-right:auto"
-      src="https://still-prayer.netlify.app/assets/candle.mp4"></video>
-
+  id="nightwatchCandle"
+  style="width:72px;height:108px;object-fit:cover;margin-bottom:0;display:block;margin-left:auto;margin-right:auto"
+  src="assets/candle.mp4"></video>
     <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:0;margin-top:24px">Night Watch · 2–4am</p>
 
     <!-- Rotating night quote -->
@@ -4470,7 +4470,7 @@ function enterFeature(i){
   // Check paywall before entering any feature
   incrementSession();
   if (shouldShowPaywall()) { showPaywall(); return; }
-if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
+  if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if (F[i].screen === 'paths') { Paths.open(); return; }
   if (F[i].screen === 'center') { Paths.open(); Paths.centerHome(); return; }
 
@@ -4484,6 +4484,10 @@ if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if(F[i].screen==='rule') { restoreRuleFromCloud(); loadRuleItems(); }
   if(F[i].screen==='community') initCommunity();
   if(F[i].screen==='dialogue') DC.init();
+  if(F[i].screen==='sitting') {
+    const sc = document.getElementById('sittingCandle');
+    if (sc) { sc.currentTime = 0; sc.play().catch(()=>{}); }
+  }
 }
 function homeReset(){
   homeActive=-1;
@@ -10083,6 +10087,9 @@ function showNightWatch(){
   document.getElementById('bgBase').style.backgroundColor='#010108';
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-nightwatch').classList.add('active');
+  // Kick the candle video (autoplay may not fire on a hidden screen in native)
+  const nc = document.getElementById('nightwatchCandle');
+  if (nc) { nc.currentTime = 0; nc.play().catch(()=>{}); }
 }
 // Console access for testing: window.previewNightWatch = showNightWatch
 window.previewNightWatch = showNightWatch;
