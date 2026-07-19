@@ -14090,7 +14090,7 @@ DC.config.onRemain  = function(){
   window.dcSkipSettle = true;
   enterFeature(i);
 };
- </script> 
+</script> 
 <script>
 // Keepalive to prevent Safari from killing the tab when idle
 setInterval(function() {
@@ -14100,5 +14100,117 @@ setInterval(function() {
 }, 30000);
 </script>
 <script src="bell-native.js"></script>
+<script>
+// ═══════════════════════════════════════════
+// Desert Fathers weekly series — native local notifications
+// IDs 9001–9036. Bells own IDs 1–4.
+// ═══════════════════════════════════════════
+(function () {
+  if (!window.Capacitor || !Capacitor.isNativePlatform()) return;
+
+  var QUOTES = [
+    "Like the fish that dies on dry land, the soul perishes when it strays from its cell. Return to StillPrayer now and watch within.",
+    "Flee from the noise of men, be silent, pray always\u2014these are the roots of sinlessness. Open StillPrayer and begin.",
+    "Go and sit in your cell, and your cell will teach you everything. Let StillPrayer be that cell for you today.",
+    "He who sits alone and keeps quiet has escaped the wars of ear, tongue, and eye. Only the heart remains. Sit in StillPrayer now.",
+    "Cut the desire for many things from your heart, lest your mind scatter and your stillness be lost. Return to StillPrayer and gather yourself.",
+    "The arrows of the enemy cannot reach one who loves quiet. Come back to StillPrayer and be still.",
+    "Love silence more than speaking, for silence gathers what words scatter. Anchor yourself in StillPrayer today.",
+    "If silence does not edify, words never will. Let StillPrayer teach you the power of quiet presence.",
+    "Many are lost even in solitude because they carry the world inside. Empty yourself in StillPrayer.",
+    "The beginning of evil is to let the mind wander in many directions. Fix it here, in this moment of stillness.",
+    "Love to be silent rather than to speak; silence saves, speaking spends. Practice it now in StillPrayer.",
+    "Flee, brothers\u2014and shut the door of your cell. Flee now to StillPrayer and close the door.",
+    "Always have God before your eyes. In StillPrayer, fix your gaze on Him alone.",
+    "Unless you say in your heart, \u201CI and God alone in the world,\u201D you will find no repose. Enter that solitude in StillPrayer.",
+    "Guard the fruit of interior vigilance more than outward labors. Your cell in StillPrayer is for this watching.",
+    "Be as one dead to the opinions of others. In the quiet before God, let StillPrayer humble you.",
+    "The nearer one draws to God, the more one sees oneself a sinner. Come and see in the silence of StillPrayer.",
+    "Watch and pray, lest you enter into temptation. StillPrayer is your watchtower\u2014open it now.",
+    "There is no need for long discourses in prayer. Stretch out your hands and say, \u201CLord, as You will, have mercy.\u201D Let this be your anchor in StillPrayer.",
+    "Pray without ceasing\u2014not with many words, but with the heart\u2019s continual turning to God. Practice the Jesus Prayer in StillPrayer.",
+    "The fruit of silence is prayer. Begin with silence in StillPrayer, and prayer will rise of itself.",
+    "If the conflict grows fierce, simply say, \u201CLord, help!\u201D He knows and shows mercy. Call upon Him now in StillPrayer.",
+    "Unceasing prayer is the work of the monk. Make StillPrayer your daily offering of the heart.",
+    "Be joyful at all times, pray without ceasing, give thanks for all things. Let StillPrayer help you live this.",
+    "Do not trust in your own righteousness. In StillPrayer, lay the blame for your sins before God.",
+    "Expect temptation to your last breath. Persevere in the cell of StillPrayer.",
+    "Say in every situation, \u201CWho am I?\u201D and judge no one. Practice this humility in StillPrayer.",
+    "Without temptations no one is saved. When acedia comes, stay in StillPrayer and endure.",
+    "The crown of the monk is humility. Let StillPrayer strip away all pride.",
+    "If you overcome bodily ease and vainglory, you are free. StillPrayer teaches this freedom.",
+    "He who has tasted the sweetness of quiet in his cell does not flee others out of contempt, but for the fruits of silence. Taste them again in StillPrayer.",
+    "Silence unites you to God. In StillPrayer, draw near through stillness.",
+    "From silence something is born that leads deeper into silence. Follow it in StillPrayer today.",
+    "In stillness the soul hears God. Listen in StillPrayer now.",
+    "Peace comes when the heart is quiet before God. Return to StillPrayer and receive it.",
+    "Return always to your cell, for there God waits. Make StillPrayer your faithful and daily return."
+  ];
+
+  var FLAG = 'df_series_scheduled_v1';
+  var BASE_ID = 9000;
+  var HOUR = 9; // 9:00 AM local
+
+  async function scheduleDesertFathers() {
+    try {
+      if (localStorage.getItem(FLAG)) return;
+
+      var LN = Capacitor.Plugins.LocalNotifications;
+      if (!LN) return;
+
+      // Only proceed if permission already granted (bells flow handles asking)
+      var perm = await LN.checkPermissions();
+      if (perm.display !== 'granted') return;
+
+      // First notification: one week from now at HOUR, then weekly
+      var first = new Date();
+      first.setDate(first.getDate() + 7);
+      first.setHours(HOUR, 0, 0, 0);
+
+      var notifications = QUOTES.map(function (q, i) {
+        var at = new Date(first.getTime());
+        at.setDate(at.getDate() + i * 7);
+        return {
+          id: BASE_ID + 1 + i,
+          title: "From the Desert",
+          body: q,
+          schedule: { at: at, allowWhileIdle: true },
+          sound: 'bell.wav'
+        };
+      });
+
+      await LN.schedule({ notifications: notifications });
+      localStorage.setItem(FLAG, '1');
+      console.log('[DF] scheduled', notifications.length, 'weekly quotes');
+    } catch (e) {
+      console.warn('[DF] scheduling failed', e);
+    }
+  }
+
+  // Run on launch and again shortly after (in case permission was just granted via bells)
+  document.addEventListener('DOMContentLoaded', function () {
+    scheduleDesertFathers();
+    setTimeout(scheduleDesertFathers, 15000);
+  });
+  // If DOM is already loaded by the time this runs, fire immediately
+  if (document.readyState !== 'loading') {
+    scheduleDesertFathers();
+    setTimeout(scheduleDesertFathers, 15000);
+  }
+
+  // Expose for testing: run window.testDesertFathers() in console, lock phone, wait 60s
+  window.testDesertFathers = async function () {
+    var LN = Capacitor.Plugins.LocalNotifications;
+    await LN.schedule({ notifications: [{
+      id: 8999,
+      title: "From the Desert (test)",
+      body: QUOTES[0],
+      schedule: { at: new Date(Date.now() + 60000) },
+      sound: 'bell.wav'
+    }]});
+    console.log('[DF] test notification in 60s \u2014 lock the phone');
+  };
+})();
+</script>
 </body>
 </html>
