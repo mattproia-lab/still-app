@@ -14103,88 +14103,142 @@ setInterval(function() {
 <script>
 // ═══════════════════════════════════════════
 // Desert Fathers weekly series — native local notifications
-// IDs 9001–9036. Bells own IDs 1–4.
+// Rolling scheduler: keeps ~30 weeks queued, cycles through all 36 forever.
+// IDs 9001–9899 (rotating). Bells own IDs 1–4. Test uses 8999.
 // ═══════════════════════════════════════════
 (function () {
   if (!window.Capacitor || !Capacitor.isNativePlatform()) return;
 
   var QUOTES = [
-    "Like the fish that dies on dry land, the soul perishes when it strays from its cell. Return to StillPrayer now and watch within.",
-    "Flee from the noise of men, be silent, pray always\u2014these are the roots of sinlessness. Open StillPrayer and begin.",
-    "Go and sit in your cell, and your cell will teach you everything. Let StillPrayer be that cell for you today.",
-    "He who sits alone and keeps quiet has escaped the wars of ear, tongue, and eye. Only the heart remains. Sit in StillPrayer now.",
-    "Cut the desire for many things from your heart, lest your mind scatter and your stillness be lost. Return to StillPrayer and gather yourself.",
-    "The arrows of the enemy cannot reach one who loves quiet. Come back to StillPrayer and be still.",
-    "Love silence more than speaking, for silence gathers what words scatter. Anchor yourself in StillPrayer today.",
-    "If silence does not edify, words never will. Let StillPrayer teach you the power of quiet presence.",
-    "Many are lost even in solitude because they carry the world inside. Empty yourself in StillPrayer.",
-    "The beginning of evil is to let the mind wander in many directions. Fix it here, in this moment of stillness.",
-    "Love to be silent rather than to speak; silence saves, speaking spends. Practice it now in StillPrayer.",
-    "Flee, brothers\u2014and shut the door of your cell. Flee now to StillPrayer and close the door.",
-    "Always have God before your eyes. In StillPrayer, fix your gaze on Him alone.",
-    "Unless you say in your heart, \u201CI and God alone in the world,\u201D you will find no repose. Enter that solitude in StillPrayer.",
-    "Guard the fruit of interior vigilance more than outward labors. Your cell in StillPrayer is for this watching.",
-    "Be as one dead to the opinions of others. In the quiet before God, let StillPrayer humble you.",
-    "The nearer one draws to God, the more one sees oneself a sinner. Come and see in the silence of StillPrayer.",
-    "Watch and pray, lest you enter into temptation. StillPrayer is your watchtower\u2014open it now.",
-    "There is no need for long discourses in prayer. Stretch out your hands and say, \u201CLord, as You will, have mercy.\u201D Let this be your anchor in StillPrayer.",
-    "Pray without ceasing\u2014not with many words, but with the heart\u2019s continual turning to God. Practice the Jesus Prayer in StillPrayer.",
-    "The fruit of silence is prayer. Begin with silence in StillPrayer, and prayer will rise of itself.",
-    "If the conflict grows fierce, simply say, \u201CLord, help!\u201D He knows and shows mercy. Call upon Him now in StillPrayer.",
-    "Unceasing prayer is the work of the monk. Make StillPrayer your daily offering of the heart.",
-    "Be joyful at all times, pray without ceasing, give thanks for all things. Let StillPrayer help you live this.",
-    "Do not trust in your own righteousness. In StillPrayer, lay the blame for your sins before God.",
-    "Expect temptation to your last breath. Persevere in the cell of StillPrayer.",
-    "Say in every situation, \u201CWho am I?\u201D and judge no one. Practice this humility in StillPrayer.",
-    "Without temptations no one is saved. When acedia comes, stay in StillPrayer and endure.",
-    "The crown of the monk is humility. Let StillPrayer strip away all pride.",
-    "If you overcome bodily ease and vainglory, you are free. StillPrayer teaches this freedom.",
-    "He who has tasted the sweetness of quiet in his cell does not flee others out of contempt, but for the fruits of silence. Taste them again in StillPrayer.",
-    "Silence unites you to God. In StillPrayer, draw near through stillness.",
-    "From silence something is born that leads deeper into silence. Follow it in StillPrayer today.",
-    "In stillness the soul hears God. Listen in StillPrayer now.",
-    "Peace comes when the heart is quiet before God. Return to StillPrayer and receive it.",
-    "Return always to your cell, for there God waits. Make StillPrayer your faithful and daily return."
+    // Weeks 1–6: The Call to Return to Your Cell
+    { source: "Abba Antony", q: "\u201CFish die if they stay on dry land, and in the same way monks who stay outside their cell fall away from quiet. As a fish must return to the sea, so must we to our cell.\u201D Return now to StillPrayer and watch within." },
+    { source: "Voice to Abba Arsenius", q: "\u201CArsenius, flee from men and you will be saved\u2026 flee, be silent, pray always, for these are the roots of sinlessness.\u201D Open StillPrayer and begin." },
+    { source: "Abba Moses", q: "\u201CGo and sit in your cell, and your cell will teach you everything.\u201D Let StillPrayer be that cell for you today." },
+    { source: "Abba Antony", q: "\u201CHe who sits alone and is quiet has escaped from three wars: hearing, speaking, seeing; but there is one thing against which he must continually fight: his own heart.\u201D Sit in StillPrayer now." },
+    { source: "Abba Evagrius", q: "\u201CCut the desire for many things out of your heart and so prevent your mind being dispersed and your stillness lost.\u201D Return to StillPrayer and gather yourself." },
+    { source: "Abba Nilus", q: "\u201CThe arrows of the enemy cannot touch someone who loves quiet. But those who wander about among crowds will often be wounded by them.\u201D Come back to StillPrayer and be still." },
+    // Weeks 7–12: Silence and the Inner Life
+    { source: "Abba Agathon", q: "\u201CFor three years I lived with a stone in my mouth until I had learnt to keep silence.\u201D Begin your practice of quiet in StillPrayer today." },
+    { source: "Abba Isaac of Nineveh", q: "\u201CLove silence above all things. It brings you near the fruit which the tongue is too weak to interpret.\u201D Anchor yourself in StillPrayer." },
+    { source: "Abba Theophilus", q: "\u201CIf he is not edified by my silence, he will not be edified by my speech.\u201D Let StillPrayer teach you the power of quiet presence." },
+    { source: "Abba Poemen", q: "\u201CThe beginning of evil is to diversify the mind.\u201D Fix it here, in this moment of stillness in StillPrayer." },
+    { source: "Abba Isaiah", q: "\u201CLove to be silent rather than to speak; for silence saves up, but speaking fritters away.\u201D Practice it now in StillPrayer." },
+    { source: "Abba Macarius", q: "\u201CFlee, brothers!\u201D \u2026and he went into his own cell, shut the door, and stayed there. Flee now to StillPrayer." },
+    // Weeks 13–18: Vigilance and Guarding the Heart
+    { source: "Abba Antony", q: "\u201CAlways have God before your eyes; whatever you do, do it according to the testimony of the holy Scriptures; in whatever place you live, do not easily leave it.\u201D Fix your gaze in StillPrayer." },
+    { source: "Abba Alonius", q: "\u201CIf a man does not say in his heart, \u2018In the world there is only myself and God,\u2019 he will not gain peace.\u201D Enter that solitude in StillPrayer." },
+    { source: "Abba Arsenius", q: "\u201CStrive with all your might to bring your interior activity into accord with God, and you will overcome exterior passions.\u201D Guard this in StillPrayer." },
+    { source: "Abba Macarius", q: "\u201CBe as though dead and pay no attention to the scorn or the admiration of people.\u201D In the quiet before God, let StillPrayer humble you." },
+    { source: "Abba Mathois", q: "\u201CThe nearer a man comes to God, the more he sees himself a sinner.\u201D Come and see in the silence of StillPrayer." },
+    { source: "The Fathers", q: "\u201CWatch and pray.\u201D StillPrayer is your watchtower\u2014open it now." },
+    // Weeks 19–24: Prayer Without Ceasing
+    { source: "Abba Macarius", q: "\u201CThere is no need at all to make long discourses; it is enough to stretch out one\u2019s hands and say, \u2018Lord, as you will, and as you know, have mercy.\u2019\u201D Let this be your anchor in StillPrayer." },
+    { source: "The Fathers", q: "\u201CPray without ceasing.\u201D Practice the turning of the heart in StillPrayer." },
+    { source: "Desert wisdom", q: "\u201CThe fruit of silence is prayer, the fruit of prayer is faith\u2026\u201D Begin with silence in StillPrayer." },
+    { source: "Abba Macarius", q: "\u201CIf the conflict grows fiercer say, \u2018Lord, help!\u2019 He knows very well what we need.\u201D Call upon Him now in StillPrayer." },
+    { source: "The Fathers", q: "\u201CUnceasing prayer is the monk\u2019s work.\u201D Make StillPrayer your daily offering." },
+    { source: "Abba Benjamin", q: "\u201CBe joyful at all times, pray without ceasing and give thanks for all things.\u201D Let StillPrayer help you live this." },
+    // Weeks 25–30: Humility and Perseverance
+    { source: "Abba Antony", q: "\u201COur great work is to lay the blame for our sins upon ourselves before God and to expect temptation to our last breath.\u201D Do this in StillPrayer." },
+    { source: "Abba Antony", q: "\u201CWithout temptations no one can be saved.\u201D When acedia comes, stay in StillPrayer and endure." },
+    { source: "Abba Joseph & Poemen", q: "\u201CSay in every situation, \u2018I \u2014 who am I?\u2019 and do not pass judgment on anybody.\u201D Practice this humility in StillPrayer." },
+    { source: "Abba Poemen", q: "\u201CTeach your mouth to say what is in your heart.\u201D Let StillPrayer make your prayer honest and whole." },
+    { source: "The Desert Fathers", q: "\u201CThe crown of the monk is humility.\u201D Let StillPrayer crown you with it." },
+    { source: "Abba Poemen", q: "\u201CIf a monk overcomes two things he can be free from the world: bodily ease and vainglory.\u201D StillPrayer teaches this freedom." },
+    // Weeks 31–36: The Sweet Fruits of Stillness
+    { source: "The Desert Fathers", q: "\u201COne who has learned by experience the sweetness of the quietness which is in his cell does not flee from meeting his neighbour because he is as one who despises him, but because of the fruits which he plucks from silence.\u201D Taste them again in StillPrayer." },
+    { source: "The Desert Fathers", q: "\u201CSilence unites you to God Himself.\u201D In StillPrayer, draw near." },
+    { source: "The Desert Fathers", q: "\u201CFrom our silence something is born which draws us towards silence.\u201D Follow it in StillPrayer today." },
+    { source: "The Desert Fathers", q: "\u201CIn every place, if you are able to maintain silence, you will possess rest.\u201D Possess it now in StillPrayer." },
+    { source: "The Desert Fathers", q: "\u201CThe monk ought not to enquire how this one is or how that one is doing\u2026 nothing is better than keeping quiet.\u201D Keep quiet in StillPrayer." },
+    { source: "Spirit of the Fathers", q: "\u201CReturn always to your cell, for there God waits.\u201D Make StillPrayer your faithful and daily return." }
   ];
 
-  var FLAG = 'df_series_scheduled_v1';
-  var BASE_ID = 9000;
-  var HOUR = 9; // 9:00 AM local
+  var ASK_FLAG = 'df_series_offered_v1';
+  var SEQ_KEY = 'df_seq_v2';        // next quote index in the endless cycle
+  var ANCHOR_KEY = 'df_anchor_v2';  // ms timestamp of week-0 slot
+  var ID_MIN = 9001, ID_SPAN = 899; // rotating ids 9001–9899
+  var TARGET = 30;                  // weeks kept queued (bells 1–4 + 30 = well under iOS's 64)
+  var HOUR = 9;                     // 9:00 AM local
+  var WEEK = 7 * 24 * 60 * 60 * 1000;
+
+  function isDFId(id) { return id >= ID_MIN && id <= ID_MIN + ID_SPAN; }
+
+  async function topUp() {
+    var LN = Capacitor.Plugins.LocalNotifications;
+
+    // Anchor: the first fire slot, one week out at HOUR, set once
+    var anchor = parseInt(localStorage.getItem(ANCHOR_KEY) || '0', 10);
+    if (!anchor) {
+      var a = new Date();
+      a.setDate(a.getDate() + 7);
+      a.setHours(HOUR, 0, 0, 0);
+      anchor = a.getTime();
+      localStorage.setItem(ANCHOR_KEY, String(anchor));
+    }
+
+    var seq = parseInt(localStorage.getItem(SEQ_KEY) || '0', 10);
+
+    // How many are already queued?
+    var pending = await LN.getPending();
+    var queued = (pending.notifications || []).filter(function (n) { return isDFId(n.id); }).length;
+    var need = TARGET - queued;
+    if (need <= 0) return;
+
+    var now = Date.now();
+    var batch = [];
+    while (batch.length < need) {
+      var at = anchor + seq * WEEK;
+      if (at <= now + 60000) { seq++; continue; } // slot already passed — skip forward
+      var item = QUOTES[seq % QUOTES.length];
+      batch.push({
+        id: ID_MIN + (seq % ID_SPAN),
+        title: "From the Desert \u00B7 " + item.source,
+        body: item.q,
+        schedule: { at: new Date(at), allowWhileIdle: true },
+        sound: 'bell.wav'
+      });
+      seq++;
+    }
+
+    await LN.schedule({ notifications: batch });
+    localStorage.setItem(SEQ_KEY, String(seq));
+    console.log('[DF] topped up', batch.length, 'weekly quotes (queued now ~' + (queued + batch.length) + ')');
+  }
 
   async function scheduleDesertFathers() {
     try {
-      if (localStorage.getItem(FLAG)) return;
-
       var LN = Capacitor.Plugins.LocalNotifications;
       if (!LN) return;
-
-      // Only proceed if permission already granted (bells flow handles asking)
       var perm = await LN.checkPermissions();
-      if (perm.display !== 'granted') return;
+      if (perm.display === 'granted') { await topUp(); return; }
+      // Permission not yet granted — offer once, in our own voice
+      if (!localStorage.getItem(ASK_FLAG)) offerDesertFathers();
+    } catch (e) { console.warn('[DF] failed', e); }
+  }
 
-      // First notification: one week from now at HOUR, then weekly
-      var first = new Date();
-      first.setDate(first.getDate() + 7);
-      first.setHours(HOUR, 0, 0, 0);
-
-      var notifications = QUOTES.map(function (q, i) {
-        var at = new Date(first.getTime());
-        at.setDate(at.getDate() + i * 7);
-        return {
-          id: BASE_ID + 1 + i,
-          title: "From the Desert",
-          body: q,
-          schedule: { at: at, allowWhileIdle: true },
-          sound: 'bell.wav'
-        };
-      });
-
-      await LN.schedule({ notifications: notifications });
-      localStorage.setItem(FLAG, '1');
-      console.log('[DF] scheduled', notifications.length, 'weekly quotes');
-    } catch (e) {
-      console.warn('[DF] scheduling failed', e);
-    }
+  function offerDesertFathers() {
+    localStorage.setItem(ASK_FLAG, '1');
+    var wrap = document.createElement('div');
+    wrap.id = 'dfOffer';
+    wrap.style.cssText = 'position:fixed;inset:0;z-index:100000;display:flex;align-items:center;justify-content:center;background:rgba(4,4,14,.92);padding-top:env(safe-area-inset-top,0px)';
+    wrap.innerHTML =
+      '<div style="max-width:320px;padding:36px 28px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);text-align:center;font-family:\'Heebo\',sans-serif">' +
+        '<div style="font-family:\'Playfair Display\',serif;font-style:italic;font-size:20px;color:rgba(220,230,255,.92);margin-bottom:14px">A word from the desert</div>' +
+        '<div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,.75);margin-bottom:26px">Once each week, the Desert Fathers can send you a single word \u2014 a call back to your cell. No noise. Just one line, once a week.</div>' +
+        '<button id="dfYes" style="display:block;width:100%;padding:13px;margin-bottom:10px;background:none;border:1px solid rgba(212,175,55,.6);color:#d4af37;letter-spacing:.15em;font-size:12px;text-transform:uppercase;cursor:pointer">Receive the word</button>' +
+        '<button id="dfNo" style="display:block;width:100%;padding:11px;background:none;border:none;color:rgba(255,255,255,.4);font-size:12px;letter-spacing:.1em;cursor:pointer">Not now</button>' +
+      '</div>';
+    document.body.appendChild(wrap);
+    document.getElementById('dfNo').onclick = function () { wrap.remove(); };
+    document.getElementById('dfYes').onclick = async function () {
+      wrap.remove();
+      try {
+        var LN = Capacitor.Plugins.LocalNotifications;
+        var res = await LN.requestPermissions();
+        if (res.display === 'granted') await topUp();
+      } catch (e) { console.warn('[DF] permission failed', e); }
+    };
   }
 
   // Run on launch and again shortly after (in case permission was just granted via bells)
@@ -14192,19 +14246,18 @@ setInterval(function() {
     scheduleDesertFathers();
     setTimeout(scheduleDesertFathers, 15000);
   });
-  // If DOM is already loaded by the time this runs, fire immediately
   if (document.readyState !== 'loading') {
     scheduleDesertFathers();
     setTimeout(scheduleDesertFathers, 15000);
   }
 
-  // Expose for testing: run window.testDesertFathers() in console, lock phone, wait 60s
+  // Expose for testing: window.testDesertFathers() in console, lock phone, wait 60s
   window.testDesertFathers = async function () {
     var LN = Capacitor.Plugins.LocalNotifications;
     await LN.schedule({ notifications: [{
       id: 8999,
-      title: "From the Desert (test)",
-      body: QUOTES[0],
+      title: "From the Desert \u00B7 " + QUOTES[0].source,
+      body: QUOTES[0].q,
       schedule: { at: new Date(Date.now() + 60000) },
       sound: 'bell.wav'
     }]});
