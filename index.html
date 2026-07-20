@@ -11283,14 +11283,26 @@ function showPaywall(preview) {
   }
   if (dismiss) dismiss.style.display = preview ? 'block' : 'none';
 
+  // Escape hatch: expired-trial users must always be able to sign out or delete their account
+  let escape = document.getElementById('pwEscape');
+  if (!escape && pw) {
+    escape = document.createElement('div');
+    escape.id = 'pwEscape';
+    escape.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;right:0;z-index:9600;text-align:center";
+    escape.innerHTML =
+      '<button onclick="signOut()" style="background:none;border:none;color:rgba(255,255,255,.45);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Sign out</button>' +
+      '<button onclick="paywallOpenSettings()" style="background:none;border:none;color:rgba(255,120,110,.6);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Delete my account</button>';
+    pw.appendChild(escape);
+  }
+  if (escape) escape.style.display = preview ? 'none' : 'block';
+
   if (pw) pw.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
-
-function hidePaywall() {
-  const pw = document.getElementById('paywall');
-  if (pw) pw.style.display = 'none';
-  document.body.style.overflow = '';
+function paywallOpenSettings() {
+  openSettings();
+  const m = document.getElementById('settingsModal');
+  if (m) m.style.zIndex = '9700'; // lift Settings above the paywall
 }
 
 // Gently show the PREVIEW a few times across the trial -- never on launch one,
