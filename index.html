@@ -873,6 +873,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 #settingsModal .modal-panel > div:first-child{ flex-wrap:wrap; row-gap:8px; }
 /* Settings: keep the header below the notch when the sheet reaches full height */
 #settingsModal .modal-panel{
+  padding-top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
   margin-top: calc(env(safe-area-inset-top, 0px) + 8px);
   max-height: calc(90vh - env(safe-area-inset-top, 0px));
 }
@@ -8222,7 +8223,7 @@ const StorageSettings = {
 (function () {
   function addTrigger() {
     if (document.getElementById('storageTrigger')) return true;
-    const signout = Array.from(document.querySelectorAll('button'))
+    const signout = Array.from(document.querySelectorAll('#settingsModal button'))
       .find(b => (b.getAttribute('onclick') || '').includes('signOut'));
     if (!signout || !signout.parentNode) return false;
     const b = document.createElement('button');
@@ -8232,9 +8233,16 @@ const StorageSettings = {
     b.style.cssText = "flex:0 0 auto;padding:8px 10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer;white-space:normal;max-width:110px;line-height:1.5";
     return true;
   }
-  // try a few times as the page settles
-  let n = 0;
-  const t = setInterval(() => { if (addTrigger() || ++n > 20) clearInterval(t); }, 400);
+  // Insert whenever Settings opens (robust: no polling window to miss)
+  if (typeof openSettings === 'function' && !openSettings._withStorage) {
+    const _open = openSettings;
+    window.openSettings = function () { _open.apply(this, arguments); setTimeout(addTrigger, 50); };
+    window.openSettings._withStorage = true;
+  } else {
+    // fallback: longer poll in case openSettings is defined later
+    let n = 0;
+    const t = setInterval(() => { if (addTrigger() || ++n > 40) clearInterval(t); }, 500);
+  }
 })();
 if (typeof DB!=='undefined' && !DB._syncWrapped){const _o=DB.save.bind(DB);DB.save=(t,d)=>{const r=_o(t,d);try{Sync.pushLatest&&Sync.pushLatest();}catch(e){}return r;};DB._syncWrapped=true;}
 
