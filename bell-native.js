@@ -37,7 +37,7 @@
   var BODY = 'The monastery bell tolls. Come to the Office.';
 
   // The bell file bundled into the iOS app (added to the Xcode project).
-  var BELL_SOUND = 'bell.wav';
+  var BELL_SOUND = 'bell-call.wav';
 
   function isNative() {
     return !!(window.Capacitor &&
