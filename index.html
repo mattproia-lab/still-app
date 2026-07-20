@@ -869,6 +869,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 /* ═══════════════════════════════════════════
    SETTINGS MODAL
 ═══════════════════════════════════════════ */
+/* Settings header: never let the row push CLOSE off-screen */
+#settingsModal .modal-panel > div:first-child{ flex-wrap:wrap; row-gap:8px; }
+/* Settings: keep the header below the notch when the sheet reaches full height */
+#settingsModal .modal-panel{
+  margin-top: calc(env(safe-area-inset-top, 0px) + 8px);
+  max-height: calc(90vh - env(safe-area-inset-top, 0px));
+}
 .modal-overlay{
   position:fixed;inset:0;z-index:200;background:rgba(0,0,4,.82);
   display:none;align-items:flex-end;
@@ -8222,8 +8229,7 @@ const StorageSettings = {
     b.id = 'storageTrigger';
     b.textContent = 'Storage & Privacy';
     b.onclick = () => StorageSettings.open();
-    b.style.cssText = "width:100%;margin-top:10px;margin-bottom:60px;padding:14px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer";
-    signout.parentNode.insertBefore(b, signout);
+    b.style.cssText = "flex:0 0 auto;padding:8px 10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;background:rgba(200,146,12,.10);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer;white-space:normal;max-width:110px;line-height:1.5";
     return true;
   }
   // try a few times as the page settles
