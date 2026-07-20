@@ -11283,12 +11283,27 @@ function showPaywall(preview) {
   }
   if (dismiss) dismiss.style.display = preview ? 'block' : 'none';
 
+  // Legal links: Apple 3.1.2 requires functional Privacy Policy + Terms links
+  // wherever the subscription is offered. Shown in BOTH preview and lock modes.
+  let legal = document.getElementById('pwLegal');
+  if (!legal && pw) {
+    legal = document.createElement('div');
+    legal.id = 'pwLegal';
+    legal.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 48px);left:0;right:0;z-index:9600;text-align:center;font-family:'Heebo',sans-serif;font-size:11px";
+    legal.innerHTML =
+      '<a href="https://stillprayer.app/privacy" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:underline;padding:6px 8px">Privacy Policy</a>' +
+      '<span style="color:rgba(255,255,255,.25)">\u00B7</span>' +
+      '<a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:underline;padding:6px 8px">Terms of Use</a>';
+    pw.appendChild(legal);
+  }
+  if (legal) legal.style.display = 'block';
+
   // Escape hatch: expired-trial users must always be able to sign out or delete their account
   let escape = document.getElementById('pwEscape');
   if (!escape && pw) {
     escape = document.createElement('div');
     escape.id = 'pwEscape';
-    escape.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);left:0;right:0;z-index:9600;text-align:center";
+    escape.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);left:0;right:0;z-index:9600;text-align:center";
     escape.innerHTML =
       '<button onclick="signOut()" style="background:none;border:none;color:rgba(255,255,255,.45);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Sign out</button>' +
       '<button onclick="paywallOpenSettings()" style="background:none;border:none;color:rgba(255,120,110,.6);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Delete my account</button>';
@@ -11331,7 +11346,29 @@ function contactParish() {
   window.location.href = 'mailto:' + PARISH_EMAIL + '?subject=Still Parish License Inquiry';
 }
 
-function restorePurchase() {
+async function restorePurchase() {
+  // Native (iOS): restore App Store purchases through RevenueCat
+  if (window.Capacitor && Capacitor.isNativePlatform()) {
+    try {
+      const { customerInfo } = await Capacitor.Plugins.Purchases.restorePurchases();
+      const active = customerInfo
+        && customerInfo.entitlements
+        && Object.keys(customerInfo.entitlements.active || {}).length > 0;
+      if (active) {
+        localStorage.setItem(PW_SUB_KEY, 'active');
+        window._subStatus = 'active';
+        alert('Your subscription has been restored.');
+        hidePaywall();
+      } else {
+        alert('No previous purchases were found for this Apple ID.');
+      }
+    } catch (e) {
+      alert('Could not restore purchases right now. Please try again.');
+    }
+    return;
+  }
+
+  // Web (Stripe) fallback
   const email = prompt('Enter the email address used when you subscribed:');
   if (!email) return;
   alert('Please check your email for a restore link, or contact ' + PARISH_EMAIL + ' for help.');
@@ -13035,7 +13072,7 @@ async function startCheckout(tier) {
       const pkg = offerings.current?.availablePackages?.find(p =>
         p.product.identifier === targetProductId
       );
-      if (!pkg) { console.log('Subscription product not found:', targetProductId); return; }
+      if (!pkg) { console.log('Subscription product not found:', targetProductId); alert('Unable to load subscription options. Please check your connection and try again.'); return; }
 
       const result = await Purchases.purchasePackage({ aPackage: pkg });
 
@@ -13083,7 +13120,7 @@ async function buyAudioCredits() {
       const pkg = offerings.current?.availablePackages?.find(p =>
         p.product.identifier === 'still_audio_credit'
       );
-      if (!pkg) { console.log('Audio credit product not found'); return; }
+      if (!pkg) { console.log('Audio credit product not found'); alert('Unable to load audio credit options. Please check your connection and try again.'); return; }
       await Purchases.purchasePackage({ aPackage: pkg });
       console.log('Audio credit purchase complete');
       // refresh the displayed wallet balance here if you have a function for it
