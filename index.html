@@ -8376,8 +8376,8 @@ const Paths = {
         }
         #pathsOverlay *{ box-sizing:border-box; }
         #pathsOverlay .vessel{ position:relative; z-index:1; max-width:var(--measure); margin:0 auto; min-height:100vh; min-height:100dvh; padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,5vw,2rem) clamp(2.6rem,8vw,4rem); display:flex; flex-direction:column; justify-content:center; }
-        #pathsOverlay .sg-close{ position:fixed; top:1rem; right:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:rgba(244,238,225,0.7); border:1px solid var(--line); border-radius:50%; width:2.6rem; height:2.6rem; cursor:pointer; color:var(--ink-soft); font-size:1.2rem; line-height:1; backdrop-filter:blur(4px); transition:color .3s ease, border-color .3s ease; }
-        #pathsOverlay .sg-close:hover{ color:var(--ember); border-color:var(--ember); }
+        #pathsOverlay .sg-back{ position:fixed; top:calc(env(safe-area-inset-top,0px) + .75rem); left:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:none; border:none; width:2.75rem; height:2.75rem; cursor:pointer; color:var(--ink-soft); font-size:1.5rem; line-height:1; transition:color .3s ease; }
+        #pathsOverlay .sg-back:hover{ color:var(--ember); }
         #pathsOverlay .sg-screen-inner{ display:flex; flex-direction:column; }
         #pathsOverlay .sg-screen-inner > *{ animation:pg-rise .8s cubic-bezier(.2,.7,.25,1) both; }
         #pathsOverlay .sg-screen-inner > *:nth-child(2){ animation-delay:.08s; }
@@ -8439,7 +8439,7 @@ const Paths = {
   _frame(inner) {
     const o = document.getElementById('pathsOverlay');
     o.innerHTML =
-      `<button class="sg-close" onclick="Paths.close()" aria-label="Close">&times;</button>
+      `<button class="sg-back" onclick="Paths.close()" aria-label="Back">&#8592;</button>
        <div class="vessel"><div class="stage"><div class="sg-screen in"><div class="sg-screen-inner">${inner}</div></div></div></div>`;
     try { o.scrollTop = 0; } catch(e){}
   },
@@ -9232,7 +9232,7 @@ const Guide = (function () {
   #stillGuide *{ box-sizing:border-box; }
   #stillGuide button:focus-visible, #stillGuide textarea:focus-visible{ outline:2px solid var(--ember); outline-offset:2px; border-radius:2px; }
   #stillGuide .vessel{ position:relative; z-index:1; max-width:var(--measure); margin:0 auto; min-height:100vh; min-height:100dvh; padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,5vw,2rem) clamp(2.6rem,8vw,4rem); display:flex; flex-direction:column; }
-  #stillGuide .sg-close{ position:fixed; top:1rem; right:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:rgba(244,238,225,0.7); border:1px solid var(--line); border-radius:50%; width:2.6rem; height:2.6rem; cursor:pointer; color:var(--ink-soft); font-size:1.1rem; line-height:1; backdrop-filter:blur(4px); transition:color .3s ease, border-color .3s ease; }
+  #stillGuide .sg-close{ position:fixed; top:calc(env(safe-area-inset-top,0px) + 1rem); right:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:rgba(244,238,225,0.7); border:1px solid var(--line); border-radius:50%; width:2.6rem; height:2.6rem; cursor:pointer; color:var(--ink-soft); font-size:1.1rem; line-height:1; backdrop-filter:blur(4px); transition:color .3s ease, border-color .3s ease; }
   #stillGuide.dark .sg-close{ background:rgba(24,20,16,0.75); }
   #stillGuide .sg-close:hover{ color:var(--ember); border-color:var(--ember); }
   #stillGuide .rail{ display:flex; align-items:center; justify-content:center; gap:clamp(0.55rem,3.2vw,0.95rem); min-height:1.4rem; margin-bottom:clamp(1.5rem,5vw,2.4rem); flex-wrap:wrap; }
