@@ -14259,7 +14259,7 @@ setInterval(function() {
         title: "From the Desert \u00B7 " + item.source,
         body: item.q,
         schedule: { at: new Date(at), allowWhileIdle: true },
-        sound: 'bell.wav'
+        sound: 'bell-call.wav'
       });
       seq++;
     }
@@ -14322,7 +14322,7 @@ setInterval(function() {
       title: "From the Desert \u00B7 " + QUOTES[0].source,
       body: QUOTES[0].q,
       schedule: { at: new Date(Date.now() + 60000) },
-      sound: 'bell.wav'
+      sound: 'bell-call.wav'
     }]});
     console.log('[DF] test notification in 60s \u2014 lock the phone');
   };
