@@ -2864,6 +2864,12 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Bell Schedule</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:16px">Ring the monastery bell at the Hours.</div>
 
+        <!-- Bell Voice -->
+        <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)">
+          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">Bell Voice</div>
+          <div id="bellVoiceList"></div>
+        </div>
+
         <!-- Vigils -->
         <div class="bell-row" data-hour="vigils" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
           <div style="display:flex;align-items:center;gap:16px">
@@ -2908,6 +2914,13 @@ body.is-mobile #mobileEnterTab { display: block; }
           </button>
         </div>
 
+        <!-- Your Own Bells -->
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
+          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px">Your Own Bells</div>
+          <div style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:10px">Name them, set their time, choose their voice.</div>
+          <div id="customBellList"></div>
+        </div>
+
         <button id="bellsSaveBtn" onclick="saveBellSettings()" style="display:none;width:100%;margin-top:16px;padding:12px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Save Bell Schedule</button>
         <div id="bellsSavedMsg" style="display:none;text-align:center;padding:8px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.7);margin-top:8px">✓ Bell schedule saved</div>
       <p style="font-family:'Heebo',sans-serif;font-size:11.5px;line-height:1.65;color:rgba(255,255,255,.45);margin-top:14px">
@@ -2916,6 +2929,150 @@ body.is-mobile #mobileEnterTab { display: block; }
   (Settings → Focus → Sleep → Apps).
 </p>
       </div>
+
+      <script>
+      /* ═══════════ Bell voice picker + custom bells (device-local) ═══════════ */
+      (function () {
+        var VOICES = [
+          { file: 'bell-call.wav',    name: 'The Call' },
+          { file: 'bell-abbey.wav',   name: 'The Abbey' },
+          { file: 'bell-tower.wav',   name: 'The Tower' },
+          { file: 'bell-village.wav', name: 'The Village' }
+        ];
+        var DEFAULT_SLOTS = [
+          { slot: 1, label: 'Rosary',       time: '15:00', on: false, voice: 'bell-call.wav' },
+          { slot: 2, label: 'Angelus',      time: '12:00', on: false, voice: 'bell-call.wav' },
+          { slot: 3, label: 'Divine Mercy', time: '15:00', on: false, voice: 'bell-call.wav' }
+        ];
+        var LS_CUSTOM = 'still_custom_bells';
+        var LS_VOICE  = 'still_bell_voice';
+        var previewAudio = null;
+
+        function loadCustom() {
+          try {
+            var raw = localStorage.getItem(LS_CUSTOM);
+            if (raw) {
+              var arr = JSON.parse(raw);
+              if (Array.isArray(arr) && arr.length === 3) return arr;
+            }
+          } catch (e) {}
+          return JSON.parse(JSON.stringify(DEFAULT_SLOTS));
+        }
+
+        function readRows() {
+          return Array.prototype.map.call(document.querySelectorAll('.custom-bell-row'), function (row) {
+            return {
+              slot:  parseInt(row.getAttribute('data-slot'), 10),
+              label: (row.querySelector('.custom-bell-label').value || '').trim(),
+              time:  row.querySelector('.custom-bell-time').value || '12:00',
+              on:    row.querySelector('.custom-bell-toggle').getAttribute('aria-pressed') === 'true',
+              voice: row.querySelector('.custom-bell-voice').value
+            };
+          });
+        }
+
+        function saveCustom() {
+          try { localStorage.setItem(LS_CUSTOM, JSON.stringify(readRows())); } catch (e) {}
+        }
+
+        function showSaveBtn() {
+          var b = document.getElementById('bellsSaveBtn');
+          if (b) b.style.display = 'block';
+        }
+
+        window.stillPreviewBell = function (file) {
+          try {
+            if (previewAudio) { previewAudio.pause(); previewAudio = null; }
+            previewAudio = new Audio('assets/' + file);
+            previewAudio.play().catch(function () {});
+          } catch (e) {}
+        };
+
+        window.stillToggleCustomBell = function (btn) {
+          var on = btn.getAttribute('aria-pressed') === 'true';
+          setToggle(btn, !on);
+          showSaveBtn();
+        };
+
+        function setToggle(btn, on) {
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+          btn.style.background = on ? 'rgba(200,146,12,.85)' : 'rgba(255,255,255,.15)';
+          var knob = btn.querySelector('span');
+          if (knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+        }
+
+        function voiceOptions(selected) {
+          return VOICES.map(function (v) {
+            return '<option value="' + v.file + '"' + (v.file === selected ? ' selected' : '') + '>' + v.name + '</option>';
+          }).join('');
+        }
+
+        function renderVoicePicker() {
+          var host = document.getElementById('bellVoiceList');
+          if (!host) return;
+          var current = localStorage.getItem(LS_VOICE) || 'bell-call.wav';
+          host.innerHTML = VOICES.map(function (v) {
+            var sel = v.file === current;
+            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0">' +
+              '<label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-family:\'Cormorant Garamond\',serif;font-size:14px;color:rgba(255,255,255,' + (sel ? '.9' : '.55') + ')">' +
+                '<input type="radio" name="stillBellVoice" value="' + v.file + '"' + (sel ? ' checked' : '') + ' style="accent-color:#c8920c">' + v.name +
+              '</label>' +
+              '<button type="button" onclick="stillPreviewBell(\'' + v.file + '\')" aria-label="Preview ' + v.name + '" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:50%;width:26px;height:26px;color:rgba(255,255,255,.6);cursor:pointer;font-size:10px;line-height:1">\u25B6</button>' +
+            '</div>';
+          }).join('');
+          host.querySelectorAll('input[name="stillBellVoice"]').forEach(function (r) {
+            r.addEventListener('change', function () {
+              try { localStorage.setItem(LS_VOICE, r.value); } catch (e) {}
+              renderVoicePicker();
+              showSaveBtn();
+            });
+          });
+        }
+
+        function renderCustomRows() {
+          var host = document.getElementById('customBellList');
+          if (!host) return;
+          var slots = loadCustom();
+          host.innerHTML = slots.map(function (s) {
+            return '<div class="custom-bell-row" data-slot="' + s.slot + '" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)">' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">' +
+                '<input class="custom-bell-label" type="text" value="' + s.label.replace(/"/g, '&quot;') + '" maxlength="20" placeholder="Name this bell" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:\'Montserrat\',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 10px;outline:none;border-radius:6px">' +
+                '<button type="button" class="custom-bell-toggle" aria-pressed="' + (s.on ? 'true' : 'false') + '" onclick="stillToggleCustomBell(this)" style="position:relative;flex:0 0 auto;width:46px;height:26px;border-radius:13px;border:none;background:' + (s.on ? 'rgba(200,146,12,.85)' : 'rgba(255,255,255,.15)') + ';cursor:pointer">' +
+                  '<span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block;transform:' + (s.on ? 'translateX(20px)' : 'translateX(0)') + '"></span>' +
+                '</button>' +
+              '</div>' +
+              '<div style="display:flex;align-items:center;gap:10px">' +
+                '<input class="custom-bell-time" type="time" value="' + s.time + '" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:\'Cormorant Garamond\',serif;font-size:13px;padding:6px 8px;outline:none;border-radius:6px">' +
+                '<select class="custom-bell-voice" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-family:\'Cormorant Garamond\',serif;font-size:13px;padding:6px 8px;outline:none;border-radius:6px">' + voiceOptions(s.voice) + '</select>' +
+                '<button type="button" onclick="stillPreviewBell(this.parentNode.querySelector(\'.custom-bell-voice\').value)" aria-label="Preview" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:50%;width:26px;height:26px;color:rgba(255,255,255,.6);cursor:pointer;font-size:10px;flex:0 0 auto;line-height:1">\u25B6</button>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+          host.querySelectorAll('input,select').forEach(function (el) {
+            el.addEventListener('change', showSaveBtn);
+            el.addEventListener('input', showSaveBtn);
+          });
+        }
+
+        function hookSavePersist() {
+          var btn = document.getElementById('bellsSaveBtn');
+          if (!btn || btn._customHooked) return;
+          btn._customHooked = true;
+          // Persist custom rows the moment Save is tapped (before bell-native's 400ms sync)
+          btn.addEventListener('click', saveCustom);
+        }
+
+        function init() {
+          renderVoicePicker();
+          renderCustomRows();
+          hookSavePersist();
+          setInterval(hookSavePersist, 2000);
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+      })();
+      </script>
       
       <!-- Subscription -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
@@ -2956,7 +3113,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         })();
       }
       </script>
-      
+
       <!-- Done -->
       <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px;border-radius:10px;padding:14px">Done</button>
 
