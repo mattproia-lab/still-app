@@ -2933,8 +2933,8 @@ body.is-mobile #mobileEnterTab { display: block; }
 </div>
       </div>
      
-      <!-- Promo Code -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+      <!-- Promo Code (web only — hidden on iOS per App Store guideline 3.1.1) -->
+      <div id="promoCard" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px">Promo Code</div>
         <div style="display:flex;gap:8px">
           <input id="promoCodeInput" type="text" placeholder="Enter code"
@@ -2943,7 +2943,20 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
         <div id="promoMsg" style="display:none;margin-top:10px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8)"></div>
       </div>
-
+      <script>
+      // Apple 3.1.1: promo redemption is web-only; iOS unlocks go through IAP alone
+      if (window.Capacitor && window.Capacitor.isNativePlatform && Capacitor.isNativePlatform()) {
+        (function () {
+          var hideNativeUnlocks = function () {
+            var pc = document.getElementById('promoCard');
+            if (pc) pc.style.display = 'none';
+          };
+          hideNativeUnlocks();
+          document.addEventListener('DOMContentLoaded', hideNativeUnlocks);
+        })();
+      }
+      </script>
+      
       <!-- Done -->
       <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px;border-radius:10px;padding:14px">Done</button>
 
