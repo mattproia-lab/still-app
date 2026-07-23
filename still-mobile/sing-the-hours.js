@@ -130,6 +130,22 @@ window.SingTheHours = (function () {
   }
 
   /**
+   * Episodes are published ahead of their liturgical day (e.g. Thursday's
+   * Lauds appears Wednesday evening), so pubDate alone misreads them as
+   * stale. The title carries the liturgical date ("... | July 23, 2026 | ...")
+   * — trust that first, pubDate as fallback.
+   */
+  function isForToday(ep) {
+    if (!ep) return false;
+    const now = new Date();
+    const todayStr = now.toLocaleDateString("en-US", {
+      month: "long", day: "numeric", year: "numeric"
+    }); // e.g. "July 23, 2026"
+    if ((ep.title || "").includes(todayStr)) return true;
+    return isToday(ep.pubDate);
+  }
+
+  /**
    * Returns the most recent episode for a given hour that is either:
    * 1. Published today, OR
    * 2. The most recent one in the feed (as a graceful fallback)
@@ -138,7 +154,7 @@ window.SingTheHours = (function () {
     const forHour = episodes.filter(ep => ep.hour === hour);
     if (!forHour.length) return null;
 
-    const todaysEp = forHour.find(ep => isToday(ep.pubDate));
+    const todaysEp = forHour.find(isForToday);
     if (todaysEp) return todaysEp;
 
     // Fallback: most recent
@@ -172,7 +188,7 @@ window.SingTheHours = (function () {
     try {
       const xml = await fetchFeed();
       const episodes = parseFeed(xml);
-      const today = episodes.filter(ep => isToday(ep.pubDate));
+      const today = episodes.filter(isForToday);
       // If no today episodes at all, return the most recent of each hour
       if (!today.length) {
         return Object.keys(HOUR_KEYWORDS)
@@ -207,7 +223,7 @@ window.SingTheHours = (function () {
     unmountPlayer(container);
 
     const { label, icon } = HOUR_LABELS[episode.hour] || { label: "Prayer", icon: "🎵" };
-    const isTodays = isToday(episode.pubDate);
+    const isTodays = isForToday(episode);
     const dateLabel = episode.pubDate
       ? episode.pubDate.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
       : "";
