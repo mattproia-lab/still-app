@@ -24,9 +24,9 @@
   <!-- Dot indicators -->
   <div id="sacristyDots" style="position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10"></div>
 
-  <!-- Shop button -- under gallery images -->
-  <button onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
-
+ <!-- Shop button -- under gallery images (web only; hidden on iOS) -->
+  <button id="shopBtn" onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
+ 
   <!-- Info overlay -->
   <div id="sacristyInfoOverlay" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;flex-direction:column;justify-content:flex-end;padding:48px 32px">
     <button onclick="closeSacristyInfo()" style="position:absolute;top:52px;right:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em">Close ×</button>
@@ -3101,17 +3101,20 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div id="promoMsg" style="display:none;margin-top:10px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8)"></div>
       </div>
       <script>
-      // Apple 3.1.1: promo redemption is web-only; iOS unlocks go through IAP alone
+      // Apple 3.1.1 / 2.1: web-only surfaces hidden on iOS
       if (window.Capacitor && window.Capacitor.isNativePlatform && Capacitor.isNativePlatform()) {
         (function () {
           var hideNativeUnlocks = function () {
             var pc = document.getElementById('promoCard');
             if (pc) pc.style.display = 'none';
+            var sb = document.getElementById('shopBtn');
+            if (sb) sb.style.display = 'none';
           };
           hideNativeUnlocks();
           document.addEventListener('DOMContentLoaded', hideNativeUnlocks);
         })();
       }
+      
       </script>
 
       <!-- Done -->
@@ -11565,7 +11568,11 @@ function shouldShowPaywall() {
   if (isSubscribed()) return false;
   return trialIsOver();
 }
-
+function hidePaywall() {
+  const pw = document.getElementById('paywall');
+  if (pw) pw.style.display = 'none';
+  document.body.style.overflow = '';
+}
 // preview === true  -> dismissible, trial-day wording (shown DURING the trial)
 // preview falsy      -> enforced, "ended" wording, no dismiss (the lock)
 function showPaywall(preview) {
@@ -13357,7 +13364,18 @@ document.getElementById('screen-companion').addEventListener('transitionend',() 
   checkApiKey();
 });
 function showUpgrade() {
-  document.getElementById('upgradeScreen').style.display = 'block';
+  // Retired the legacy upgradeScreen: the paywall is the single plans surface
+  var m = document.getElementById('settingsModal');
+  if (m) { m.classList.remove('open'); m.style.display = 'none'; }
+  showPaywall(true);
+  var badge = document.getElementById('paywallBadge');
+  if (badge && typeof isSubscribed === 'function' && isSubscribed()) {
+    badge.textContent = 'Your plan \u2014 Premium';
+  }
+}
+
+function restorePurchases() {
+  return restorePurchase();
 }
 
 function closeUpgrade() {
