@@ -4137,7 +4137,7 @@ async function playVigilsAudio() {
   const season = getLiturgicalSeason();
   const psalmWeek = getPsalmWeek();
   const today = new Date().toISOString().split('T')[0];
-  const cacheKey = hashText(`vigils-${today}-${season}-${psalmWeek}`);
+  const cacheKey = hashText(`vigils-paced1-${today}-${season}-${psalmWeek}`);
   const mode = getOfficeMode();
 
   const vigils = OFFICE_SEASONS[season];
@@ -4199,6 +4199,127 @@ function hashText(text) {
   }
   return Math.abs(hash).toString(36);
 }
+/* ═══════════════════════════════════════════
+   Hear Lauds · Hear Vespers — prayerfully read
+   (paste near playVigilsAudio / playComplineAudio)
+═══════════════════════════════════════════ */
+
+/**
+ * Prepare office text for prayerful TTS delivery:
+ * breath at half-verses, longer silence between sections,
+ * a settling rest after each Amen.
+ * If ElevenLabs speaks the <break> tags aloud instead of pausing,
+ * tell Claude — there is an ellipsis-dialect fallback.
+ */
+function paceOfficeText(text) {
+  const BR_HALF = ' <break time="0.8s"/> ';
+  const BR_SECTION = '\n<break time="1.8s"/>\n';
+  const BR_AMEN = ' <break time="2.2s"/>';
+  return text
+    .replace(/;\s+/g, ';' + BR_HALF)
+    .replace(/:\s+(?=[A-Z])/g, ':' + BR_HALF)
+    .replace(/\n\n/g, BR_SECTION)
+    .replace(/Amen\./g, 'Amen.' + BR_AMEN);
+}
+
+/* Shared fetch/play — same contract as the Vigils/Compline pattern */
+async function requestOfficeAudio(text, cacheKey, btnId, btnLabel) {
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.textContent = '\u25CC Preparing\u2026'; btn.disabled = true; }
+  try {
+    const res = await fetch('https://still-tts.onrender.com/office-tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: paceOfficeText(text), cacheKey })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    let audioUrl;
+    if (data.cached && data.url) {
+      audioUrl = data.url;
+    } else if (data.audio) {
+      const binary = atob(data.audio);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: 'audio/mpeg' });
+      audioUrl = URL.createObjectURL(blob);
+    }
+    playVoiceUrl(audioUrl, btn, btnLabel, 'office');
+  } catch (err) {
+    console.error('Office audio error:', err.message);
+    if (btn) { btn.textContent = btnLabel; btn.disabled = false; }
+  }
+}
+
+async function playLaudsAudio() {
+  const season = getLiturgicalSeason();
+  const psalmWeek = getPsalmWeek();
+  const today = new Date().toISOString().split('T')[0];
+  const isFull = getOfficeMode() === 'full';
+  const sData = OFFICE_SEASONS[season];
+
+  // Mirrors the screen: ONE morning psalm, rotating by week
+  const laudsPsalms = [PSALMS.ps63, PSALMS.ps5, PSALMS.ps100, PSALMS.ps63];
+  const mainPs = laudsPsalms[(psalmWeek - 1) % 4];
+
+  const cacheKey = hashText(`lauds-paced1-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+
+  let text = `Lauds. Morning Prayer.\n\n`;
+  text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+  text += `${sData.laudsAntiphon}\n\n`;
+  text += `${mainPs.ref}\n\n${mainPs.text}\n\n`;
+  if (isFull) {
+    text += `The Benedictus. The Canticle of Zechariah.\n\n`;
+    text += `Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+    text += `${sData.laudsAntiphon}\n\n`;
+  }
+  text += `Short Reading. ${OFFICE_READINGS.lauds[season].ref}.\n\n${OFFICE_READINGS.lauds[season].text}\n\n`;
+  if (isFull) {
+    text += `The Lord hath prepared his throne in heaven.\nAnd his kingdom shall rule over all.\n\n`;
+  }
+  text += `Collect.\n\n${OFFICE_COLLECTS.lauds[season]}\nAmen.\n\n`;
+  text += `Let us bless the Lord.\nThanks be to God.`;
+
+  await requestOfficeAudio(text, cacheKey, 'laudsPlayBtn', '\u25CE Hear Lauds');
+}
+
+async function playVespersAudio() {
+  const season = getLiturgicalSeason();
+  const psalmWeek = getPsalmWeek();
+  const today = new Date().toISOString().split('T')[0];
+  const isFull = getOfficeMode() === 'full';
+  const sData = OFFICE_SEASONS[season];
+  const mar = MARIAN[sData.marian];
+
+  // Mirrors the screen: VESPERS_PSALMS by week; full = 3 psalms, concise = 1
+  const vPsalms = VESPERS_PSALMS[(psalmWeek - 1) % 4 + 1] || VESPERS_PSALMS[1];
+  const todayVPsalms = isFull ? vPsalms : [vPsalms[0]];
+
+  const cacheKey = hashText(`vespers-paced1-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+
+  let text = `Vespers. Evening Prayer.\n\n`;
+  text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+  if (isFull) {
+    text += `Evening Hymn.\n\nO blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.\n\n`;
+  }
+  text += `${sData.laudsAntiphon}\n\n`;
+  todayVPsalms.forEach(ps => { text += `${ps.ref}\n\n${ps.text}\n\n`; });
+  text += `${sData.laudsAntiphon}\n\n`;
+  text += `Short Reading. ${VESPERS_READINGS[season].ref}.\n\n${VESPERS_READINGS[season].text}\n\n`;
+  if (isFull) {
+    text += `Our heart hath rejoiced in him, because we have hoped in his holy name.\nLet thy mercy, O Lord, be upon us, as we have hoped in thee.\n\n`;
+  }
+  text += `The Magnificat. The Canticle of Our Lady.\n\n${MAGNIFICAT}\n\n`;
+  if (isFull) {
+    text += `Intercessions.\n\nLord, as evening falls, we bring before thee the prayers of thy people.\nFor those who labour in darkness, grant them light.\nFor those who suffer alone, send them consolation.\nFor those who have died this day, receive them into thy peace.\nFor the Church throughout the world, preserve her in truth.\nLord, have mercy.\n\n`;
+  }
+  text += `Collect.\n\n${VESPERS_COLLECTS[season]}\nAmen.\n\n`;
+  text += `${mar.title}.\n\n${mar.text}\n\n`;
+  text += `Let us bless the Lord.\nThanks be to God.`;
+
+  await requestOfficeAudio(text, cacheKey, 'vespersPlayBtn', '\u25CE Hear Vespers');
+}
 async function playComplineAudio() {
   const season = getLiturgicalSeason();
   const today = new Date().toISOString().split('T')[0];
@@ -4206,7 +4327,7 @@ async function playComplineAudio() {
   const nightPsalm = new Date().getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
   const sData = OFFICE_SEASONS[season];
   const mar = MARIAN[sData.marian];
-  const cacheKey = hashText(`compline-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
+  const cacheKey = hashText(`compline-paced1-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
 
   let text = `Compline.\n\n`;
   if (isFull) {
@@ -4234,7 +4355,7 @@ async function playComplineAudio() {
     const res = await fetch('https://still-tts.onrender.com/office-tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, cacheKey })
+      body: JSON.stringify({ text: paceOfficeText(text), cacheKey })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
@@ -12869,6 +12990,7 @@ function renderOfficeHour(hour) {
     html += versicle(' Amen.');
     html += divider();
     html += versicle(' Let us bless the Lord.\n Thanks be to God.');
+    html += `<button id="laudsPlayBtn" onclick="playLaudsAudio()" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">◎ Hear Lauds</button>`;
 
   } else if (hour === 'vespers') {
     html += seasonBadge();
@@ -12930,6 +13052,7 @@ function renderOfficeHour(hour) {
 
     html += divider();
     html += versicle('Let us bless the Lord.\n Thanks be to God.');
+    html += `<button id="vespersPlayBtn" onclick="playVespersAudio()" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">◎ Hear Vespers</button>`;
 
   } else if (hour === 'compline') {
     html += seasonBadge();
