@@ -11636,11 +11636,7 @@ function showPaywall(preview) {
   if (pw) pw.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
-function paywallOpenSettings() {
-  openSettings();
-  const m = document.getElementById('settingsModal');
-  if (m) m.style.zIndex = '9700'; // lift Settings above the paywall
-}
+
 
 // Gently show the PREVIEW a few times across the trial -- never on launch one,
 // never twice for the same milestone, never once subscribed or once locked.
@@ -13376,7 +13372,12 @@ document.getElementById('screen-companion').addEventListener('transitionend',() 
 function showUpgrade() {
   // Retired the legacy upgradeScreen: the paywall is the single plans surface
   var m = document.getElementById('settingsModal');
-  if (m) { m.classList.remove('open'); m.style.display = 'none'; }
+  if (m) {
+    if (typeof closeSettings === 'function') closeSettings();
+    m.classList.remove('open');
+    m.style.display = '';   // clear any inline state so openSettings works again
+    m.style.zIndex = '';
+  }
   showPaywall(true);
   var badge = document.getElementById('paywallBadge');
   if (badge && typeof isSubscribed === 'function' && isSubscribed()) {
@@ -13384,6 +13385,13 @@ function showUpgrade() {
   }
 }
 
+function paywallOpenSettings() {
+  // Open Settings above the paywall so Delete Account is reachable
+  var m = document.getElementById('settingsModal');
+  if (typeof openSettings === 'function') openSettings();
+  else if (m) m.classList.add('open');
+  if (m) m.style.zIndex = '9700';
+}
 function restorePurchases() {
   return restorePurchase();
 }
