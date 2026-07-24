@@ -4140,7 +4140,7 @@ async function playVigilsAudio() {
   const season = getLiturgicalSeason();
   const psalmWeek = getPsalmWeek();
   const today = new Date().toISOString().split('T')[0];
-  const cacheKey = hashText(`vigils-paced1-${today}-${season}-${psalmWeek}`);
+  const cacheKey = hashText(`vigils-paced2-${today}-${season}-${psalmWeek}`);
   const mode = getOfficeMode();
 
   const vigils = OFFICE_SEASONS[season];
@@ -4216,13 +4216,23 @@ function hashText(text) {
  */
 function paceOfficeText(text) {
   const BR_HALF = ' <break time="0.8s"/> ';
-  const BR_SECTION = '\n<break time="1.8s"/>\n';
-  const BR_AMEN = ' <break time="2.2s"/>';
-  return text
+  const BR_SECTION = '\n<break time="2.5s"/>\n';    // between sections (was 1.8)
+  const BR_MAJOR = '\n<break time="4.0s"/>\n';      // before the great elements
+  const BR_AMEN = ' <break time="2.5s"/>';
+
+  let t = text
     .replace(/;\s+/g, ';' + BR_HALF)
     .replace(/:\s+(?=[A-Z])/g, ':' + BR_HALF)
     .replace(/\n\n/g, BR_SECTION)
     .replace(/Amen\./g, 'Amen.' + BR_AMEN);
+
+  // Deepen the silence before the major elements
+  ['Short Reading', 'The Benedictus', 'The Magnificat', 'Collect', 'Intercessions', 'Evening Hymn']
+    .forEach(function (kw) {
+      t = t.split('<break time="2.5s"/>\n' + kw).join('<break time="4.0s"/>\n' + kw);
+    });
+
+  return t;
 }
 
 /* Shared fetch/play — same contract as the Vigils/Compline pattern */
@@ -4266,7 +4276,7 @@ async function playLaudsAudio() {
   const laudsPsalms = [PSALMS.ps63, PSALMS.ps5, PSALMS.ps100, PSALMS.ps63];
   const mainPs = laudsPsalms[(psalmWeek - 1) % 4];
 
-  const cacheKey = hashText(`lauds-paced1-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+  const cacheKey = hashText(`lauds-paced2-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
 
   let text = `Lauds. Morning Prayer.\n\n`;
   text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
@@ -4299,7 +4309,7 @@ async function playVespersAudio() {
   const vPsalms = VESPERS_PSALMS[(psalmWeek - 1) % 4 + 1] || VESPERS_PSALMS[1];
   const todayVPsalms = isFull ? vPsalms : [vPsalms[0]];
 
-  const cacheKey = hashText(`vespers-paced1-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+  const cacheKey = hashText(`vespers-paced2-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
 
   let text = `Vespers. Evening Prayer.\n\n`;
   text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
@@ -4330,7 +4340,7 @@ async function playComplineAudio() {
   const nightPsalm = new Date().getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
   const sData = OFFICE_SEASONS[season];
   const mar = MARIAN[sData.marian];
-  const cacheKey = hashText(`compline-paced1-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
+  const cacheKey = hashText(`compline-paced2-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
 
   let text = `Compline.\n\n`;
   if (isFull) {
