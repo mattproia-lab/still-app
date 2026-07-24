@@ -13387,6 +13387,13 @@ async function startCheckout(tier) {
 
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
 
+  // Web guard: never let an already-subscribed account start a second Stripe subscription.
+  // (Native stays open so the App Review demo account can exercise the Apple purchase sheet.)
+  if (!isNative && typeof isSubscribed === 'function' && isSubscribed()) {
+    alert('You already have an active plan.');
+    return;
+  }
+
   if (isNative) {
     // iOS -> RevenueCat. Buy the matching subscription; the webhook sets subscription_status='premium'.
     try {
@@ -13405,7 +13412,6 @@ async function startCheckout(tier) {
       const isPro = result.customerInfo?.entitlements?.active?.['premium'];
       if (isPro) {
         console.log('Subscription active');
-        // refresh the UI to premium state here -- e.g. re-check status / close paywall
         if (typeof closeUpgrade === 'function') closeUpgrade();
         window.location.href = `${location.origin}?upgraded=true`;
       }
