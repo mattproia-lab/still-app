@@ -10805,6 +10805,20 @@ const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIs
 let currentUser = null;
 let authMode = 'signup';
 
+// Called from every path that establishes an authenticated user.
+// Links any anonymous RevenueCat purchases to this account (cross-device sync)
+// and is the future hook for guest-mode account upgrades.
+function onAuthed(user) {
+  currentUser = user;
+  window.currentUser = user;
+  try {
+    if (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()
+        && Capacitor.Plugins.Purchases && user && user.id) {
+      Capacitor.Plugins.Purchases.logIn({ appUserID: user.id }).catch(function(){});
+    }
+  } catch (e) {}
+}
+
 async function signOut() {
   const token = localStorage.getItem('still_access_token');
   await fetch(`${SUPA_URL}/auth/v1/logout`, {
@@ -10819,6 +10833,7 @@ async function signOut() {
   closeSettings();
   document.getElementById('authOverlay').style.display = 'flex';
 }
+
 async function initAuth() {
   if (!localStorage.getItem('still_onboarded')) return;
   const token = localStorage.getItem('still_access_token');
@@ -10831,8 +10846,7 @@ async function initAuth() {
   });
 
   if (res.ok) {
-    currentUser = await res.json();
-    window.currentUser = currentUser;
+    onAuthed(await res.json());
     updateLastActive();
   } else if (refresh) {
     const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
@@ -10844,8 +10858,7 @@ async function initAuth() {
       const data = await r.json();
       localStorage.setItem('still_access_token', data.access_token);
       localStorage.setItem('still_refresh_token', data.refresh_token);
-      currentUser = data.user;
-      window.currentUser = currentUser;
+      onAuthed(data.user);
       updateLastActive();
     } else {
       document.getElementById('authOverlay').style.display = 'flex';
@@ -10854,6 +10867,7 @@ async function initAuth() {
     document.getElementById('authOverlay').style.display = 'flex';
   }
 }
+
 async function getValidToken() {
   let token = localStorage.getItem('still_access_token');
   // Decode exp from the JWT; refresh if missing, unreadable, or expiring within 60s
@@ -10877,13 +10891,14 @@ async function getValidToken() {
         const d = await r.json();
         localStorage.setItem('still_access_token', d.access_token);
         localStorage.setItem('still_refresh_token', d.refresh_token);
-        if (d.user) { currentUser = d.user; window.currentUser = d.user; }
+        if (d.user) onAuthed(d.user);
         token = d.access_token;
       }
     } catch (e) { /* fall through with existing token */ }
   }
   return token;
 }
+
 async function updateLastActive() {
   if (!currentUser) return;
   try {
@@ -10920,6 +10935,7 @@ async function forgotPassword() {
     document.getElementById('authErr').textContent = 'Could not send reset email. Try again.';
   }
 }
+
 function toggleAuthMode() {
   authMode = authMode === 'signup' ? 'signin' : 'signup';
   document.getElementById('authTitle').textContent = authMode === 'signup' ? 'Create your account' : 'Welcome back';
@@ -10956,8 +10972,7 @@ async function submitAuth() {
   }
   localStorage.setItem('still_access_token', token);
   localStorage.setItem('still_refresh_token', data.refresh_token);
-  currentUser = user;
-  window.currentUser = user;
+  onAuthed(user);
 
   // Hide the auth overlay and actually show the app
   document.getElementById('authOverlay').style.display = 'none';
@@ -13401,58 +13416,64 @@ function closeUpgrade() {
 }
 
 async function startCheckout(tier) {
-  if (!currentUser) { showUpgrade(); return; }
-
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
 
-  // Web guard: never let an already-subscribed account start a second Stripe subscription.
-  // (Native stays open so the App Review demo account can exercise the Apple purchase sheet.)
+  // Web (Stripe) still needs an account for billing email
+  if (!isNative && !currentUser) { showUpgrade(); return; }
+
+  // Web guard: never double-subscribe
   if (!isNative && typeof isSubscribed === 'function' && isSubscribed()) {
     alert('You already have an active plan.');
     return;
   }
 
   if (isNative) {
-    // iOS -> RevenueCat. Buy the matching subscription; the webhook sets subscription_status='premium'.
+    // iOS: purchase works with or without an account (Apple 5.1.1(v)).
+    // Anonymous purchases unlock via RevenueCat entitlement; signing in later syncs.
     try {
       const Purchases = window.Capacitor.Plugins.Purchases;
       const targetProductId = (tier === 'annual') ? 'still_yearly' : 'still_monthly';
-
       const offerings = await Purchases.getOfferings();
       const pkg = offerings.current?.availablePackages?.find(p =>
         p.product.identifier === targetProductId
       );
-      if (!pkg) { console.log('Subscription product not found:', targetProductId); alert('Unable to load subscription options. Please check your connection and try again.'); return; }
+      if (!pkg) { alert('Unable to load subscription options. Please check your connection and try again.'); return; }
 
       const result = await Purchases.purchasePackage({ aPackage: pkg });
-
-      // Instant local unlock via entitlement (webhook also writes Supabase as source of truth)
       const isPro = result.customerInfo?.entitlements?.active?.['premium'];
       if (isPro) {
-        console.log('Subscription active');
+        localStorage.setItem(PW_SUB_KEY, 'active');
+        window._subStatus = 'active';
         if (typeof closeUpgrade === 'function') closeUpgrade();
-        window.location.href = `${location.origin}?upgraded=true`;
+        hidePaywall();
+        if (!currentUser) {
+          alert('Your subscription is active on this device. Create a free account any time in Settings to use it on all your devices.');
+        } else {
+          window.location.href = `${location.origin}?upgraded=true`;
+        }
       }
     } catch (e) {
       if (!e.userCancelled) console.error('IAP subscription error:', e);
     }
-  } else {
-    // WEB -> existing Stripe flow, unchanged
-    try {
-      const res = await fetch(window.FN_BASE + '/.netlify/functions/stripe-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: currentUser.id,
-          email: currentUser.email,
-          tier: tier || 'personal'
-        })
-      });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-    } catch(err) {
-      console.error('Checkout error:', err);
-    }
+    return;
+  }
+
+  
+ // WEB -> Stripe, unchanged
+  try {
+    const res = await fetch(window.FN_BASE + '/.netlify/functions/stripe-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_id: currentUser.id,
+        email: currentUser.email,
+        tier: tier || 'personal'
+      })
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  } catch(err) {
+    console.error('Checkout error:', err);
   }
 }
 
@@ -13493,6 +13514,7 @@ async function buyAudioCredits() {
     } catch(err) { console.error('Audio credit error:', err); }
   }
 }
+
 async function initRevenueCat() {
   // Only runs inside the native iOS app -- skips harmlessly in a web browser
   if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) {
@@ -13505,9 +13527,20 @@ async function initRevenueCat() {
     await Purchases.setLogLevel({ level: 'DEBUG' });
     await Purchases.configure({ apiKey: "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP" });
 
+    // Link account if already signed in at launch
     if (window.currentUser && window.currentUser.id) {
-      await Purchases.logIn({ appUserID: window.currentUser.id });
+      await Purchases.logIn({ appUserID: window.currentUser.id }).catch(() => {});
     }
+
+    // Honor any anonymous premium entitlement (e.g. bought before creating an account)
+    try {
+      const info = await Purchases.getCustomerInfo();
+      if (info.customerInfo?.entitlements?.active?.['premium']) {
+        localStorage.setItem(PW_SUB_KEY, 'active');
+        window._subStatus = 'active';
+      }
+    } catch (e) {}
+
     console.log('RevenueCat configured');
   } catch (e) {
     console.log('RevenueCat init skipped:', e);
