@@ -14547,49 +14547,43 @@ setInterval(function() {
   if (!window.Capacitor || !Capacitor.isNativePlatform()) return;
 
   var QUOTES = [
-    // Weeks 1–6: The Call to Return to Your Cell
-    { source: "Abba Antony", q: "\u201CFish die if they stay on dry land, and in the same way monks who stay outside their cell fall away from quiet. As a fish must return to the sea, so must we to our cell.\u201D Return now to StillPrayer and watch within." },
-    { source: "Voice to Abba Arsenius", q: "\u201CArsenius, flee from men and you will be saved\u2026 flee, be silent, pray always, for these are the roots of sinlessness.\u201D Open StillPrayer and begin." },
-    { source: "Abba Moses", q: "\u201CGo and sit in your cell, and your cell will teach you everything.\u201D Let StillPrayer be that cell for you today." },
-    { source: "Abba Antony", q: "\u201CHe who sits alone and is quiet has escaped from three wars: hearing, speaking, seeing; but there is one thing against which he must continually fight: his own heart.\u201D Sit in StillPrayer now." },
-    { source: "Abba Evagrius", q: "\u201CCut the desire for many things out of your heart and so prevent your mind being dispersed and your stillness lost.\u201D Return to StillPrayer and gather yourself." },
-    { source: "Abba Nilus", q: "\u201CThe arrows of the enemy cannot touch someone who loves quiet. But those who wander about among crowds will often be wounded by them.\u201D Come back to StillPrayer and be still." },
-    // Weeks 7–12: Silence and the Inner Life
-    { source: "Abba Agathon", q: "\u201CFor three years I lived with a stone in my mouth until I had learnt to keep silence.\u201D Begin your practice of quiet in StillPrayer today." },
-    { source: "Abba Isaac of Nineveh", q: "\u201CLove silence above all things. It brings you near the fruit which the tongue is too weak to interpret.\u201D Anchor yourself in StillPrayer." },
-    { source: "Abba Theophilus", q: "\u201CIf he is not edified by my silence, he will not be edified by my speech.\u201D Let StillPrayer teach you the power of quiet presence." },
-    { source: "Abba Poemen", q: "\u201CThe beginning of evil is to diversify the mind.\u201D Fix it here, in this moment of stillness in StillPrayer." },
-    { source: "Abba Isaiah", q: "\u201CLove to be silent rather than to speak; for silence saves up, but speaking fritters away.\u201D Practice it now in StillPrayer." },
-    { source: "Abba Macarius", q: "\u201CFlee, brothers!\u201D \u2026and he went into his own cell, shut the door, and stayed there. Flee now to StillPrayer." },
-    // Weeks 13–18: Vigilance and Guarding the Heart
-    { source: "Abba Antony", q: "\u201CAlways have God before your eyes; whatever you do, do it according to the testimony of the holy Scriptures; in whatever place you live, do not easily leave it.\u201D Fix your gaze in StillPrayer." },
-    { source: "Abba Alonius", q: "\u201CIf a man does not say in his heart, \u2018In the world there is only myself and God,\u2019 he will not gain peace.\u201D Enter that solitude in StillPrayer." },
-    { source: "Abba Arsenius", q: "\u201CStrive with all your might to bring your interior activity into accord with God, and you will overcome exterior passions.\u201D Guard this in StillPrayer." },
-    { source: "Abba Macarius", q: "\u201CBe as though dead and pay no attention to the scorn or the admiration of people.\u201D In the quiet before God, let StillPrayer humble you." },
-    { source: "Abba Mathois", q: "\u201CThe nearer a man comes to God, the more he sees himself a sinner.\u201D Come and see in the silence of StillPrayer." },
-    { source: "The Fathers", q: "\u201CWatch and pray.\u201D StillPrayer is your watchtower\u2014open it now." },
-    // Weeks 19–24: Prayer Without Ceasing
-    { source: "Abba Macarius", q: "\u201CThere is no need at all to make long discourses; it is enough to stretch out one\u2019s hands and say, \u2018Lord, as you will, and as you know, have mercy.\u2019\u201D Let this be your anchor in StillPrayer." },
-    { source: "The Fathers", q: "\u201CPray without ceasing.\u201D Practice the turning of the heart in StillPrayer." },
-    { source: "Desert wisdom", q: "\u201CThe fruit of silence is prayer, the fruit of prayer is faith\u2026\u201D Begin with silence in StillPrayer." },
-    { source: "Abba Macarius", q: "\u201CIf the conflict grows fiercer say, \u2018Lord, help!\u2019 He knows very well what we need.\u201D Call upon Him now in StillPrayer." },
-    { source: "The Fathers", q: "\u201CUnceasing prayer is the monk\u2019s work.\u201D Make StillPrayer your daily offering." },
-    { source: "Abba Benjamin", q: "\u201CBe joyful at all times, pray without ceasing and give thanks for all things.\u201D Let StillPrayer help you live this." },
-    // Weeks 25–30: Humility and Perseverance
-    { source: "Abba Antony", q: "\u201COur great work is to lay the blame for our sins upon ourselves before God and to expect temptation to our last breath.\u201D Do this in StillPrayer." },
-    { source: "Abba Antony", q: "\u201CWithout temptations no one can be saved.\u201D When acedia comes, stay in StillPrayer and endure." },
-    { source: "Abba Joseph & Poemen", q: "\u201CSay in every situation, \u2018I \u2014 who am I?\u2019 and do not pass judgment on anybody.\u201D Practice this humility in StillPrayer." },
-    { source: "Abba Poemen", q: "\u201CTeach your mouth to say what is in your heart.\u201D Let StillPrayer make your prayer honest and whole." },
-    { source: "The Desert Fathers", q: "\u201CThe crown of the monk is humility.\u201D Let StillPrayer crown you with it." },
-    { source: "Abba Poemen", q: "\u201CIf a monk overcomes two things he can be free from the world: bodily ease and vainglory.\u201D StillPrayer teaches this freedom." },
-    // Weeks 31–36: The Sweet Fruits of Stillness
-    { source: "The Desert Fathers", q: "\u201COne who has learned by experience the sweetness of the quietness which is in his cell does not flee from meeting his neighbour because he is as one who despises him, but because of the fruits which he plucks from silence.\u201D Taste them again in StillPrayer." },
-    { source: "The Desert Fathers", q: "\u201CSilence unites you to God Himself.\u201D In StillPrayer, draw near." },
-    { source: "The Desert Fathers", q: "\u201CFrom our silence something is born which draws us towards silence.\u201D Follow it in StillPrayer today." },
-    { source: "The Desert Fathers", q: "\u201CIn every place, if you are able to maintain silence, you will possess rest.\u201D Possess it now in StillPrayer." },
-    { source: "The Desert Fathers", q: "\u201CThe monk ought not to enquire how this one is or how that one is doing\u2026 nothing is better than keeping quiet.\u201D Keep quiet in StillPrayer." },
-    { source: "Spirit of the Fathers", q: "\u201CReturn always to your cell, for there God waits.\u201D Make StillPrayer your faithful and daily return." }
-  ];
+     { source: "Abba Antony", q: "\u201CAs a fish must return to the sea, so must we to our cell.\u201D Return now to Still and watch within." },
+  { source: "Voice to Abba Arsenius", q: "\u201CFlee, be silent, pray always \u2014 the roots of sinlessness.\u201D Open Still and begin." },
+  { source: "Abba Moses", q: "\u201CSit in your cell, and your cell will teach you everything.\u201D Let Still be that cell today." },
+  { source: "Abba Antony", q: "\u201CHe who sits alone and is quiet has escaped three wars.\u201D One remains: the heart. Sit in Still." },
+  { source: "Abba Evagrius", q: "\u201CCut the desire for many things, lest your stillness be lost.\u201D Gather yourself in Still." },
+  { source: "Abba Nilus", q: "\u201CThe arrows of the enemy cannot touch one who loves quiet.\u201D Come back to Still and be still." },
+  { source: "Abba Agathon", q: "\u201CThree years with a stone in my mouth, until I learnt silence.\u201D Begin your practice in Still." },
+  { source: "Abba Isaac of Nineveh", q: "\u201CLove silence above all things.\u201D It bears fruit the tongue cannot name. Anchor in Still." },
+  { source: "Abba Theophilus", q: "\u201CIf he is not edified by my silence, my speech will not edify him.\u201D Practice quiet in Still." },
+  { source: "Abba Poemen", q: "\u201CThe beginning of evil is to diversify the mind.\u201D Fix it here, in stillness, in Still." },
+  { source: "Abba Isaiah", q: "\u201CSilence saves up; speaking fritters away.\u201D Practice it now in Still." },
+  { source: "Abba Macarius", q: "\u201CFlee, brothers \u2014 into your cell; shut the door and stay.\u201D Flee now to Still." },
+  { source: "Abba Antony", q: "\u201CAlways have God before your eyes.\u201D Fix your gaze in Still." },
+  { source: "Abba Alonius", q: "\u201CIn the world there is only myself and God.\u201D Enter that solitude in Still." },
+  { source: "Abba Arsenius", q: "\u201CBring your interior into accord with God.\u201D Guard this in Still." },
+  { source: "Abba Macarius", q: "\u201CBe as though dead to scorn and to admiration alike.\u201D Let Still humble you before God." },
+  { source: "Abba Mathois", q: "\u201CThe nearer to God, the more he sees himself a sinner.\u201D Come and see in Still." },
+  { source: "The Fathers", q: "\u201CWatch and pray.\u201D Still is your watchtower \u2014 open it now." },
+  { source: "Abba Macarius", q: "\u201CStretch out your hands and say: Lord, as you will, have mercy.\u201D Let this anchor you in Still." },
+  { source: "The Fathers", q: "\u201CPray without ceasing.\u201D Practice the turning of the heart in Still." },
+  { source: "Desert wisdom", q: "\u201CThe fruit of silence is prayer.\u201D Begin with silence in Still." },
+  { source: "Abba Macarius", q: "\u201CIf the conflict grows fiercer, say: Lord, help!\u201D He knows what we need. Call on Him in Still." },
+  { source: "The Fathers", q: "\u201CUnceasing prayer is the monk's work.\u201D Make Still your daily offering." },
+  { source: "Abba Benjamin", q: "\u201CBe joyful always; pray without ceasing; give thanks.\u201D Live this with Still." },
+  { source: "Abba Antony", q: "\u201CExpect temptation to your last breath.\u201D Lay all before God, in Still." },
+  { source: "Abba Antony", q: "\u201CWithout temptations no one can be saved.\u201D When acedia comes, stay in Still and endure." },
+  { source: "Abba Joseph & Poemen", q: "\u201CSay in every situation: I \u2014 who am I? And judge no one.\u201D Practice this humility in Still." },
+  { source: "Abba Poemen", q: "\u201CTeach your mouth to say what is in your heart.\u201D Let Still make your prayer honest." },
+  { source: "The Desert Fathers", q: "\u201CThe crown of the monk is humility.\u201D Let Still crown you with it." },
+  { source: "Abba Poemen", q: "\u201COvercome bodily ease and vainglory, and you are free.\u201D Still teaches this freedom." },
+  { source: "The Desert Fathers", q: "\u201CTaste the sweetness of the quiet cell \u2014 fruits plucked from silence.\u201D Return to Still." },
+  { source: "The Desert Fathers", q: "\u201CSilence unites you to God Himself.\u201D Draw near in Still." },
+  { source: "The Desert Fathers", q: "\u201CFrom our silence something is born which draws us toward silence.\u201D Follow it in Still today." },
+  { source: "The Desert Fathers", q: "\u201CIn every place, keep silence and you will possess rest.\u201D Possess it now in Still." },
+  { source: "The Desert Fathers", q: "\u201CNothing is better than keeping quiet.\u201D Keep quiet in Still." },
+  { source: "Spirit of the Fathers", q: "\u201CReturn always to your cell, for there God waits.\u201D Make Still your daily return." }
+];
 
   var ASK_FLAG = 'df_series_offered_v1';
   var SEQ_KEY = 'df_seq_v2';        // next quote index in the endless cycle
