@@ -13503,9 +13503,25 @@ async function startCheckout(tier) {
     // iOS: purchase works with or without an account (Apple 5.1.1(v)).
     // Anonymous purchases unlock via RevenueCat entitlement; signing in later syncs.
     try {
-      const Purchases = window.Capacitor.Plugins.Purchases;
+      const Purchases = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Purchases;
+      if (!Purchases) { alert('Purchases are not available right now. Please restart the app and try again.'); return; }
+
       const targetProductId = (tier === 'annual') ? 'still_yearly' : 'still_monthly';
-      const offerings = await Purchases.getOfferings();
+
+      // Self-heal: if RevenueCat was never configured on this launch, configure now.
+      let offerings;
+      try {
+        offerings = await Purchases.getOfferings();
+      } catch (cfgErr) {
+        try {
+          await initRevenueCat();
+          offerings = await Purchases.getOfferings();
+        } catch (cfgErr2) {
+          alert('Could not load subscription options: ' + (cfgErr2 && cfgErr2.message || 'unknown error') + '. Please try again.');
+          return;
+        }
+      }
+
       const pkg = offerings.current?.availablePackages?.find(p =>
         p.product.identifier === targetProductId
       );
@@ -13525,7 +13541,10 @@ async function startCheckout(tier) {
         }
       }
     } catch (e) {
-      if (!e.userCancelled) console.error('IAP subscription error:', e);
+      if (!e.userCancelled) {
+        console.error('IAP subscription error:', e);
+        alert('The purchase could not start: ' + (e && e.message || JSON.stringify(e) || 'unknown error') + '. Please try again.');
+      }
     }
     return;
   }
