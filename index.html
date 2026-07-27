@@ -10993,6 +10993,7 @@ function continueAsGuest() {
 function requireAccount(reason) {
   if (currentUser) return true;
   var m = document.getElementById('requireAccountModal');
+  if (m && m.parentElement !== document.body) document.body.appendChild(m);
   var r = document.getElementById('requireAccountReason');
   if (r) r.textContent = reason || 'This feature saves to your account so it can follow you across devices.';
   if (m) m.style.display = 'flex';
