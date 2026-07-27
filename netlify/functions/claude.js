@@ -14,6 +14,10 @@ const LIMITS = {
   premium: { companion: 3, deeper: 14, sophia: 14, chamber: 30, paths: 20, community: 30, lectio: 12, autobiography: 1 }
 };
 
+// Family pooling: these features share ONE pool across all accounts in a
+// sub_group. Values REPLACE the premium limit when the user is in a group.
+const FAMILY_POOLED = { companion: 6, sophia: 4, deeper: 3 };
+
 async function supaGet(path) {
   const res = await fetch(`${SUPA_URL}${path}`, {
     headers: {
@@ -59,22 +63,35 @@ async function getProfile(userId) {
   return data?.[0] || null;
 }
 
-async function getUsageCount(userId, feature) {
+// All user ids sharing this family group (includes the caller).
+async function getGroupUserIds(groupId) {
+  const data = await supaGet(`/rest/v1/profiles?sub_group_id=eq.${encodeURIComponent(groupId)}&select=id`);
+  return Array.isArray(data) ? data.map(r => r.id) : [];
+}
+
+function sinceFor(feature) {
   const now = new Date();
-  let since;
   if (feature === 'companion') {
     const day = now.getDay() || 7;
     const monday = new Date(now);
     monday.setDate(now.getDate() - day + 1);
     monday.setHours(0,0,0,0);
-    since = monday.toISOString();
-  } else {
-    const today = new Date(now);
-    today.setHours(0,0,0,0);
-    since = today.toISOString();
+    return monday.toISOString();
   }
+  const today = new Date(now);
+  today.setHours(0,0,0,0);
+  return today.toISOString();
+}
+
+// Count usage for one user OR a whole family group.
+async function getUsageCount(userIds, feature) {
+  const since = sinceFor(feature);
+  const ids = Array.isArray(userIds) ? userIds : [userIds];
+  const filter = ids.length === 1
+    ? `user_id=eq.${ids[0]}`
+    : `user_id=in.(${ids.join(',')})`;
   const data = await supaGet(
-    `/rest/v1/usage_tracking?user_id=eq.${userId}&feature=eq.${feature}&used_at=gte.${since}&select=id`
+    `/rest/v1/usage_tracking?${filter}&feature=eq.${feature}&used_at=gte.${since}&select=id`
   );
   return Array.isArray(data) ? data.length : 0;
 }
@@ -135,8 +152,13 @@ exports.handler = async function(event) {
   const profile = await getProfile(user.id);
   const status = profile?.subscription_status || 'free';
   const limits = LIMITS[status] || LIMITS.free;
-  const limit = limits[feature] ?? 0;
   const credits = profile?.reflection_credits || 0;
+
+  // Family pooling: premium users in a sub_group share one pool for
+  // pooled features; everything else behaves exactly as before.
+  const groupId = (status === 'premium' && profile?.sub_group_id) ? profile.sub_group_id : null;
+  const pooled = groupId && (feature in FAMILY_POOLED);
+  const limit = pooled ? FAMILY_POOLED[feature] : (limits[feature] ?? 0);
 
   const onboardingFree = body.onboarding_free === true && feature === 'sophia';
 
@@ -145,7 +167,8 @@ exports.handler = async function(event) {
       return { statusCode: 403, headers: CORS, body: JSON.stringify({ error: 'upgrade_required' }) };
     }
 
-    const count = await getUsageCount(user.id, feature);
+    const countIds = pooled ? await getGroupUserIds(groupId) : [user.id];
+    const count = await getUsageCount(countIds.length ? countIds : [user.id], feature);
 
     if (count >= limit && credits <= 0) {
       return { statusCode: 403, headers: CORS, body: JSON.stringify({ error: 'limit_reached' }) };
