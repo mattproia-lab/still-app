@@ -10766,17 +10766,23 @@ function openHomeInfo() {
 function openInfo(key) {
   const content = INFO_CONTENT[key];
   if (!content) return;
+  // Lift out of any hidden parent (same fix as requireAccountModal / authOverlay):
+  // on native these can sit inside a display-managed container, making the
+  // panel "open" invisibly.
+  const ov = document.getElementById('infoOverlay');
+  const pn = document.getElementById('infoPanel');
+  if (ov && ov.parentElement !== document.body) document.body.appendChild(ov);
+  if (pn && pn.parentElement !== document.body) document.body.appendChild(pn);
   document.getElementById('infoPanelTitle').textContent = content.title;
   document.getElementById('infoPanelBody').innerHTML   = content.body;
-  document.getElementById('infoOverlay').classList.add('open');
-  document.getElementById('infoPanel').classList.add('open');
+  ov.classList.add('open');
+  pn.classList.add('open');
 }
 
 function closeInfo() {
   document.getElementById('infoOverlay').classList.remove('open');
   document.getElementById('infoPanel').classList.remove('open');
 }
-
 // Programmatically inject info buttons into every feature screen header
 // Maps screen-id -> info key
 const SCREEN_INFO_MAP = {
