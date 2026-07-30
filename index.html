@@ -3548,7 +3548,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   /* Darken the muted tones for daylight legibility -- only in the
      light (parchment) mode, which is how both screens open. */
   #stillGuide:not(.dark),
-  #pathsOverlay:not(.dark) {
+  #pathsOverlay:not(.dark):not(.threshold):not(.threshold-center) {
     --ink: #241f1b !important;
     --ink-soft: #473d32 !important;
     --ink-faint: #564a3d !important;
@@ -9724,8 +9724,8 @@ Paths.centerHome = function(){
   const ov = document.getElementById('pathsOverlay');
   if (ov) {
     const t = Math.min(litDays().length / 26, 1);
-    ov.style.setProperty('--veil-a', (0.62 - 0.34 * t).toFixed(2));
-    ov.style.setProperty('--veil-b', (0.80 - 0.38 * t).toFixed(2));
+    ov.style.setProperty('--veil-a', (0.48 - 0.20 * t).toFixed(2));
+    ov.style.setProperty('--veil-b', (0.66 - 0.24 * t).toFixed(2));
     ov.classList.add('threshold-center');
   }
 };
