@@ -11624,35 +11624,35 @@ let communityQuestion = null;
 async function initCommunity() {
   const card = document.getElementById('communityCard');
   if (!card) return;
-
   // Loading state
   card.innerHTML = `<div style="text-align:center;padding:40px 0">
     <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">Loading tonight's question…</p>
   </div>`;
-
   try {
-    // Get today's question
-   // Local calendar date (not UTC) -- "tonight's question" means the user's tonight.
+    // Local calendar date (not UTC) -- "tonight's question" means the user's tonight.
     const d = new Date();
     const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
     const data = await supaFetch(
       `/rest/v1/questions?active_date=eq.${today}&approved=eq.true&limit=1`
     );
-
-    if (!data || !data.length) {
-      renderCommunityEmpty(card);
-      return;
+    if (data && data.length) {
+      communityQuestion = data[0];
+    } else {
+      // Fallback: nothing seeded for today -- rotate through the whole library
+      // by day-of-year so the community never goes dark. Everyone sees the
+      // same question on the same local date.
+      const all = await supaFetch('/rest/v1/questions?approved=eq.true&order=active_date.asc&select=*');
+      if (!all || !all.length) { renderCommunityEmpty(card); return; }
+      const start = new Date(d.getFullYear(), 0, 0);
+      const doy = Math.floor((d - start) / 86400000);
+      communityQuestion = all[doy % all.length];
     }
-
-    communityQuestion = data[0];
-
     if (hasSubmittedToday(communityQuestion.id)) {
       // Already answered -- show others' responses
       await renderCommunityResponses(card, communityQuestion);
     } else {
       renderCommunityQuestion(card, communityQuestion);
     }
-
   } catch(err) {
     console.error('Community fetch error:', err.message);
     card.innerHTML = `
