@@ -106,6 +106,15 @@
   if (hv) {
     hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
     if (hv.readyState >= 3) hv.style.opacity = '1';
+    // iOS declines autoplay in Low Power Mode and similar states.
+    // Kick playback explicitly; if refused, retry on the first touch anywhere.
+    hv.play().catch(() => {
+      document.addEventListener('touchstart', () => { hv.play().catch(()=>{}); }, { once: true });
+    });
+    // Re-arm after backgrounding: iOS pauses webview media on suspend
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && hv.paused) hv.play().catch(()=>{});
+    });
   }
 </script>
 
