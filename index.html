@@ -14138,69 +14138,45 @@ async function initRevenueCat() {
     if (!Purchases) { console.log('RevenueCat plugin not found'); return; }
 
     await Purchases.setLogLevel({ level: 'DEBUG' });
-    await Purchases.configure({ apiKey: "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP" });
+    const isAndroid = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'android';
+    const rcKey = isAndroid ? "goog_YOUR_ANDROID_KEY_HERE" : "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP";
+    await Purchases.configure({ apiKey: rcKey });
 
     // Link account if already signed in at launch
     if (window.currentUser && window.currentUser.id) {
       await Purchases.logIn({ appUserID: window.currentUser.id }).catch(() => {});
     }
 
-    // Honor any anonymous premium entitlement (e.g. bought before creating an account)
+    // Honor any premium entitlement -- including Family Sharing.
+    // If RC confirms premium, sync it to the server profile so the
+    // Netlify functions see the correct status without waiting for a webhook.
     try {
       const info = await Purchases.getCustomerInfo();
       if (info.customerInfo?.entitlements?.active?.['premium']) {
         localStorage.setItem(PW_SUB_KEY, 'active');
         window._subStatus = 'active';
+        // Push to Supabase if signed in -- fixes Family Sharing gap where
+        // the webhook never fires with a Supabase user ID for shared members.
+        if (window.currentUser && window.currentUser.id) {
+          const token = localStorage.getItem('still_access_token');
+          if (token) {
+            fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${window.currentUser.id}`, {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPA_ANON,
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ subscription_status: 'premium' })
+            }).catch(() => {});
+          }
+        }
       }
     } catch (e) {}
 
     console.log('RevenueCat configured');
   } catch (e) {
     console.log('RevenueCat init skipped:', e);
-  }
-}
-function showPhoneVerify() {
-  document.getElementById('phoneVerifyScreen').style.visibility = 'visible';
-  document.getElementById('phoneStep').style.display = 'block';
-  document.getElementById('codeStep').style.display = 'none';
-}
-
-function closePhoneVerify() {
-  document.getElementById('phoneVerifyScreen').style.visibility = 'hidden';
-}
-
-async function sendPhoneCode() {
-  let phone = document.getElementById('phoneInput').value.trim().replace(/\D/g, '');
-  if (phone.length === 10) phone = '+1' + phone;
-  else if (phone.length === 11) phone = '+' + phone;
-  
-  const errEl = document.getElementById('phoneErr');
-  if (!phone) { errEl.textContent = 'Enter your phone number.'; return; }
-  errEl.textContent = 'Sending...';
-
-  const token = localStorage.getItem('still_access_token');
-  const res = await fetch(`${SUPA_URL}/auth/v1/otp`, {
-  method: 'POST',
-  headers: {
-    'apikey': SUPA_ANON,
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ phone, channel: 'sms' })
-});
-
-  const text = await res.text();
-  console.log('phone response:', text);
-  
-  if (res.ok) {
-    document.getElementById('phoneStep').style.display = 'none';
-    document.getElementById('codeStep').style.display = 'block';
-  } else {
-    try {
-      const data = JSON.parse(text);
-      errEl.textContent = data.error_description || data.msg || 'Could not send code. Try again.';
-    } catch(e) {
-      errEl.textContent = text || 'Could not send code. Try again.';
-    }
   }
 }
 
