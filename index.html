@@ -14139,7 +14139,7 @@ async function initRevenueCat() {
 
     await Purchases.setLogLevel({ level: 'DEBUG' });
     const isAndroid = window.Capacitor && window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'android';
-    const rcKey = isAndroid ? "goog_YOUR_ANDROID_KEY_HERE" : "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP";
+    const rcKey = isAndroid ? "goog_ixGSTxuPzQiSerGAegGYNQUPaUt" : "appl_WcTVIihNgjrrDYmnBuwgvIsMRxP";
     await Purchases.configure({ apiKey: rcKey });
 
     // Link account if already signed in at launch
