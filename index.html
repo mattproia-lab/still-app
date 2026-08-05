@@ -14044,8 +14044,8 @@ async function startCheckout(tier) {
         }
       }
 
-      const pkg = offerings.current?.availablePackages?.find(p =>
-        p.product.identifier === targetProductId
+     const pkg = offerings.current?.availablePackages?.find(p =>
+        p.product.identifier.split(':')[0] === targetProductId
       );
       if (!pkg) { alert('Unable to load subscription options. Please check your connection and try again.'); return; }
 
@@ -14100,8 +14100,8 @@ async function buyAudioCredits() {
     try {
       const Purchases = window.Capacitor.Plugins.Purchases;
       const offerings = await Purchases.getOfferings();
-      const pkg = offerings.current?.availablePackages?.find(p =>
-        p.product.identifier === 'still_audio_credit'
+     const pkg = offerings.current?.availablePackages?.find(p =>
+        p.product.identifier.split(':')[0] === 'still_audio_credit'
       );
       if (!pkg) { console.log('Audio credit product not found'); alert('Unable to load audio credit options. Please check your connection and try again.'); return; }
       await Purchases.purchasePackage({ aPackage: pkg });
