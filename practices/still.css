@@ -1,0 +1,308 @@
+/* Still — practice pages
+   Set as a breviary: black text for what is said, red rubrics for what is done. */
+
+:root {
+  --vellum:      #EAE4D6;
+  --vellum-deep: #E1D9C6;
+  --ink:         #23201B;
+  --rubric:      #9C2B18;
+  --gloss:       #6B6355;
+  --rule:        #C9BFA9;
+
+  --measure: 34rem;
+  --margin-col: 11rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--vellum);
+  color: var(--ink);
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+  font-size: 1.19rem;
+  line-height: 1.72;
+  font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- utility face ---------- */
+.u {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  border-bottom: 1px solid var(--rule);
+  padding: 1.1rem 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.masthead a { color: var(--ink); text-decoration: none; }
+.masthead .wordmark {
+  font-size: 1.35rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.masthead nav { display: flex; gap: 1.4rem; }
+.masthead nav a { color: var(--gloss); }
+.masthead nav a:hover { color: var(--rubric); }
+
+/* ---------- page frame ---------- */
+.page {
+  max-width: 58rem;
+  margin: 0 auto;
+  padding: 0 1.5rem 5rem;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  padding: 4.5rem 0 2.5rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 3rem;
+}
+.eyebrow {
+  color: var(--rubric);
+  display: block;
+  margin-bottom: 1.4rem;
+}
+h1 {
+  font-size: clamp(2.6rem, 7vw, 4.15rem);
+  line-height: 1.02;
+  font-weight: 400;
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.015em;
+  max-width: 17ch;
+}
+.standfirst {
+  font-size: 1.32rem;
+  line-height: 1.6;
+  color: var(--gloss);
+  max-width: var(--measure);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ---------- the rubric grid: signature element ---------- */
+.movement {
+  display: grid;
+  grid-template-columns: var(--margin-col) minmax(0, var(--measure));
+  gap: 0 2.75rem;
+  margin-bottom: 3.4rem;
+  align-items: start;
+}
+.movement > .body { grid-column: 2; }
+.rubric {
+  grid-column: 1;
+  color: var(--rubric);
+  text-align: right;
+  line-height: 1.55;
+  padding-top: 0.55rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.rubric + .rubric { margin-top: 0.9rem; }
+
+h2 {
+  font-size: 1.95rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 1.1rem;
+  letter-spacing: -0.01em;
+}
+h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 2.2rem 0 0.6rem;
+}
+.body > :first-child { margin-top: 0; }
+p { margin: 0 0 1.15rem; max-width: var(--measure); }
+
+a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 0.18em; }
+a:hover { color: var(--rubric); text-decoration-color: var(--rubric); }
+
+strong { font-weight: 600; }
+
+/* opening capital */
+.lede::first-letter {
+  float: left;
+  font-size: 4.1rem;
+  line-height: 0.79;
+  padding: 0.09em 0.09em 0 0;
+  color: var(--rubric);
+  font-weight: 400;
+}
+
+/* ---------- the words themselves ---------- */
+.said {
+  border-left: 2px solid var(--rubric);
+  padding: 0.15rem 0 0.15rem 1.5rem;
+  margin: 1.8rem 0;
+  font-size: 1.3rem;
+  line-height: 1.55;
+  max-width: var(--measure);
+}
+.said p { margin-bottom: 0.5rem; }
+.said p:last-child { margin-bottom: 0; }
+
+blockquote {
+  margin: 1.8rem 0;
+  padding: 0;
+  font-style: italic;
+  color: var(--gloss);
+  max-width: var(--measure);
+}
+blockquote cite {
+  display: block;
+  font-style: normal;
+  margin-top: 0.5rem;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--gloss);
+}
+
+ul, ol { max-width: var(--measure); padding-left: 1.2rem; margin: 0 0 1.15rem; }
+li { margin-bottom: 0.5rem; }
+
+/* ---------- horarium ---------- */
+.horarium {
+  width: 100%;
+  max-width: var(--measure);
+  border-collapse: collapse;
+  margin: 1.8rem 0;
+  font-size: 1.05rem;
+}
+.horarium th {
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+  padding: 0 0.9rem 0.5rem 0;
+  color: var(--gloss);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.horarium td {
+  padding: 0.72rem 0.9rem 0.72rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+.horarium td:first-child { white-space: nowrap; }
+.horarium .hour-name { font-size: 1.15rem; }
+.horarium .clock { color: var(--rubric); font-variant-numeric: oldstyle-nums; }
+
+/* ---------- cards (retreats, index) ---------- */
+.entries { max-width: var(--measure); margin: 0; padding: 0; list-style: none; }
+.entries li {
+  border-top: 1px solid var(--rule);
+  padding: 1.5rem 0;
+  margin: 0;
+}
+.entries li:last-child { border-bottom: 1px solid var(--rule); }
+.entries h2 { font-size: 1.55rem; margin-bottom: 0.4rem; }
+.entries h2 a { text-decoration: none; }
+.entries p { color: var(--gloss); margin-bottom: 0; font-size: 1.08rem; }
+
+/* ---------- next step ---------- */
+.next-step {
+  border-top: 1px solid var(--rule);
+  margin-top: 4.5rem;
+  padding-top: 2.5rem;
+  max-width: var(--measure);
+}
+.next-step p { color: var(--gloss); }
+.next-step .go {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: var(--rubric);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rubric);
+  padding-bottom: 2px;
+}
+.next-step .go:hover { color: var(--ink); border-color: var(--ink); }
+
+.related {
+  margin-top: 3rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--rule);
+  max-width: var(--measure);
+}
+.related h2 {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gloss);
+  font-weight: 500;
+  margin-bottom: 0.9rem;
+}
+.related ul { list-style: none; padding: 0; }
+.related li { margin-bottom: 0.35rem; }
+
+footer.site {
+  border-top: 1px solid var(--rule);
+  margin-top: 4rem;
+  padding: 2rem 1.5rem 3rem;
+  color: var(--gloss);
+  text-align: center;
+}
+footer.site a { color: var(--gloss); }
+
+/* ---------- focus ---------- */
+a:focus-visible {
+  outline: 2px solid var(--rubric);
+  outline-offset: 3px;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .movement {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .movement > .body { grid-column: 1; }
+  .rubric {
+    grid-column: 1;
+    text-align: left;
+    padding-top: 0;
+    margin-bottom: 0.9rem;
+    order: -1;
+  }
+  .rubric + .rubric { margin-top: 0; }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 1.12rem; }
+  .page { padding: 0 1.2rem 3.5rem; }
+  .hero { padding-top: 3rem; }
+  .standfirst { font-size: 1.18rem; }
+}
+
+/* ---------- motion ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero > * {
+    animation: rise 0.85s cubic-bezier(0.2, 0.7, 0.3, 1) backwards;
+  }
+  .hero .eyebrow    { animation-delay: 0.05s; }
+  .hero h1          { animation-delay: 0.14s; }
+  .hero .standfirst { animation-delay: 0.26s; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(0.7rem); }
+    to   { opacity: 1; transform: none; }
+  }
+}
