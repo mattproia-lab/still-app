@@ -1,3 +1,8 @@
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
 const BLOCKED = [
 '2g1c',
 '2 girls 1 cup',
