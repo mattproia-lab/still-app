@@ -41,6 +41,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://stillprayer.app/practices/compline/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://stillprayer.app/practices/rule-of-life/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://stillprayer.app/practices/spiritual-dryness/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://stillprayer.app/practices/desert-fathers/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://stillprayer.app/delete-account.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
