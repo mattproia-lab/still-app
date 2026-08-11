@@ -27,7 +27,10 @@ async function supaGet(path) {
   });
   return res.json();
 }
-
+// Free users get a one-time allowance of Amma and Deeper across the whole
+// trial so they can experience both voices before deciding. Unlike LIMITS,
+// these are counted for the lifetime of the account, not reset daily.
+const TRIAL_TOTAL = { sophia: 4, deeper: 4 };
 async function supaPost(path, body) {
   const res = await fetch(`${SUPA_URL}${path}`, {
     method: 'POST',
@@ -84,14 +87,15 @@ function sinceFor(feature) {
 }
 
 // Count usage for one user OR a whole family group.
-async function getUsageCount(userIds, feature) {
-  const since = sinceFor(feature);
+// lifetime = true ignores the daily/weekly window and counts every row.
+async function getUsageCount(userIds, feature, lifetime) {
   const ids = Array.isArray(userIds) ? userIds : [userIds];
   const filter = ids.length === 1
     ? `user_id=eq.${ids[0]}`
     : `user_id=in.(${ids.join(',')})`;
+  const window = lifetime ? '' : `&used_at=gte.${sinceFor(feature)}`;
   const data = await supaGet(
-    `/rest/v1/usage_tracking?${filter}&feature=eq.${feature}&used_at=gte.${since}&select=id`
+    `/rest/v1/usage_tracking?${filter}&feature=eq.${feature}${window}&select=id`
   );
   return Array.isArray(data) ? data.length : 0;
 }
@@ -154,11 +158,18 @@ exports.handler = async function(event) {
   const limits = LIMITS[status] || LIMITS.free;
   const credits = profile?.reflection_credits || 0;
 
-  // Family pooling: premium users in a sub_group share one pool for
+// Family pooling: premium users in a sub_group share one pool for
   // pooled features; everything else behaves exactly as before.
   const groupId = (status === 'premium' && profile?.sub_group_id) ? profile.sub_group_id : null;
   const pooled = groupId && (feature in FAMILY_POOLED);
-  const limit = pooled ? FAMILY_POOLED[feature] : (limits[feature] ?? 0);
+
+  // Free users draw on a lifetime trial allowance for Amma and Deeper,
+  // which overrides the daily zero in LIMITS.free.
+  const trialAllowance = (status !== 'premium' && feature in TRIAL_TOTAL);
+
+  const limit = pooled         ? FAMILY_POOLED[feature]
+              : trialAllowance ? TRIAL_TOTAL[feature]
+              : (limits[feature] ?? 0);
 
   const onboardingFree = body.onboarding_free === true && feature === 'sophia';
 
@@ -168,7 +179,7 @@ exports.handler = async function(event) {
     }
 
     const countIds = pooled ? await getGroupUserIds(groupId) : [user.id];
-    const count = await getUsageCount(countIds.length ? countIds : [user.id], feature);
+    const count = await getUsageCount(countIds.length ? countIds : [user.id], feature, trialAllowance);
 
     if (count >= limit && credits <= 0) {
       return { statusCode: 403, headers: CORS, body: JSON.stringify({ error: 'limit_reached' }) };
