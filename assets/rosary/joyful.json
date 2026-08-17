@@ -1,0 +1,1018 @@
+{
+  "set": "joyful",
+  "title": "The Joyful Mysteries",
+  "schema": 1,
+  "sources": {
+    "original": null,
+    "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
+    "faber": "Fr Frederick William Faber, The Foot of the Cross (1858)",
+    "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)"
+  },
+  "mysteries": [
+    {
+      "id": "joyful-1",
+      "title": "The Annunciation",
+      "meditations": [
+        {
+          "id": "joyful-1-01",
+          "mystery": "joyful-1",
+          "position": "opener",
+          "image": "annunciation-simone-martini",
+          "scripture": {
+            "ref": "Luke 1:26-27",
+            "text": "And in the sixth month, the angel Gabriel was sent from God into a city of Galilee, called Nazareth, To a virgin espoused to a man whose name was Joseph, of the house of David: and the virgin’s name was Mary."
+          },
+          "body": "Nazareth was a town of no consequence. There was no temple there, no school of prophets, nothing that would draw the notice of Jerusalem. A girl is at prayer in a poor house on an ordinary afternoon, and the hinge of the world's history turns inside that room without anyone in the street outside knowing it. Begin here, where the whole thing begins: in a small place, unobserved.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-1-02",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-fra-angelico",
+          "scripture": {
+            "ref": "Canticle of Canticles 1:11",
+            "text": "While the king was at his repose, my spikenard sent forth the odour thereof."
+          },
+          "body": "Liguori builds his whole discourse on this verse, following St Antoninus, who read the spikenard as a figure of Mary's humility. The point of the image is the smallness of the plant. Spikenard is a low herb, easily overlooked, and its scent rises anyway — rises so far that it reaches heaven and draws the Word down out of the bosom of the Father. What ascended was not her greatness. It was her lowness.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-1-03",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 1:28",
+            "text": "And the angel being come in, said unto her: Hail, full of grace, the Lord is with thee: blessed art thou among women."
+          },
+          "body": "The first word spoken to her is a greeting, not a command.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-1-04",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 1:28",
+            "text": "And the angel being come in, said unto her: Hail, full of grace, the Lord is with thee: blessed art thou among women."
+          },
+          "body": "Marmion is careful about the difference between her fulness and her Son's. Christ is full of grace by right, possessing the divine plenitude itself; Mary receives all of hers in participation, as a gift, in a measure no one can calculate but which is still a measure. It matters that she is a creature. Everything she has, she has been given — which is precisely what makes her the pattern for us rather than the exception to us.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-1-05",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-duccio",
+          "scripture": {
+            "ref": "Luke 1:29",
+            "text": "Who having heard, was troubled at his saying and thought with herself what manner of salutation this should be."
+          },
+          "body": "Liguori will not let this be misread. She was not frightened by the sight of the angel. Eusebius Emissenus, whom he cites, puts it in four words: not by his face, but by his speech. The text itself says she was troubled at his saying. It was the words that unsettled her, and only the words.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-1-06",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-duccio",
+          "scripture": {
+            "ref": "Luke 1:29",
+            "text": "Who having heard, was troubled at his saying and thought with herself what manner of salutation this should be."
+          },
+          "body": "St Bernardine, as Liguori reports him, made the sharpest observation anyone has made about this moment. If the angel had told Mary she was the worst sinner in the world, she would not have been surprised at all. It was praise that disturbed her. She had a settled account of herself, and the trouble began when heaven contradicted it upward.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-1-07",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-duccio",
+          "scripture": {
+            "ref": "Luke 1:29",
+            "text": "Who having heard, was troubled at his saying and thought with herself what manner of salutation this should be."
+          },
+          "body": "Liguori records her telling St Bridget that she disliked being praised, and wanted only to hear the praise of the Giver. Set your own reaction beside hers for a moment. When someone praises you, where does the pleasure go?",
+          "source": "liguori",
+          "form": "question"
+        },
+        {
+          "id": "joyful-1-08",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-botticelli",
+          "scripture": {
+            "ref": "Luke 1:30",
+            "text": "And the angel said to her: Fear not, Mary, for thou hast found grace with God."
+          },
+          "body": "He calls her by name before he explains anything.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-1-09",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-botticelli",
+          "scripture": {
+            "ref": "Luke 1:36",
+            "text": "And behold thy cousin Elizabeth, she also hath conceived a son in her old age: and this is the sixth month with her that is called barren."
+          },
+          "body": "Gabriel offers no argument. He offers a piece of news about a relative. Somewhere in the hill country an old woman who had been called barren for a lifetime is six months along, and Mary is invited to reason from the smaller wonder to the greater one. God often works this way with us — not by settling the question, but by pointing to something He has already done nearby.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-1-10",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-botticelli",
+          "scripture": {
+            "ref": "Luke 1:30",
+            "text": "And the angel said to her: Fear not, Mary, for thou hast found grace with God."
+          },
+          "body": "St Peter Chrysologus, quoted by Liguori, sets this beside Gethsemane. As Christ willed to be strengthened by an angel, so the Virgin had to be encouraged by an angel. The parallel is startling and it is meant to be. Twice heaven sends the same kind of help, once to a young girl at the beginning and once to her Son at the end, because on both occasions a human will was being asked for something enormous.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-1-11",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-ohrid-icon",
+          "scripture": {
+            "ref": "Luke 1:34",
+            "text": "And Mary said to the angel: How shall this be done, because I know not man?"
+          },
+          "body": "Compare her question with Zachary's a few verses earlier, and notice that one of them is struck dumb and the other is answered. The difference is not the words but the ground they stand on. Zachary asked how he could be sure. She asks how it will be accomplished. One is looking for a guarantee before consenting; the other has consented already and wants to know the manner of it.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-1-12",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-ohrid-icon",
+          "scripture": {
+            "ref": "Luke 1:35",
+            "text": "And the angel answering, said to her: The Holy Ghost shall come upon thee and the power of the Most High shall overshadow thee. And therefore also the Holy which shall be born of thee shall be called the Son of God."
+          },
+          "body": "Here Liguori stops the narration and turns to her directly, borrowing his nerve from St Bernard. Why the delay? The angel is waiting for your answer. And then the line that ought to stop anyone praying this decade: we are waiting for it even more than he is, we who are under sentence of death. The whole condemned race stands in that pause, listening.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-1-13",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-ohrid-icon",
+          "scripture": {
+            "ref": "Luke 1:38",
+            "text": "And Mary said: Behold the handmaid of the Lord: be it done to me according to thy word. And the angel departed from her."
+          },
+          "body": "Fifteen words. Everything after them is consequence. And Luke closes the scene in the same verse, without ceremony: the angel departed from her. Consent given, message delivered — and she is alone again in the room, with no proof of any of it but what she carries.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-1-14",
+          "mystery": "joyful-1",
+          "position": "any",
+          "image": "annunciation-fra-angelico",
+          "scripture": {
+            "ref": "John 1:14",
+            "text": "And the Word was made flesh and dwelt among us (and we saw his glory, the glory as it were of the only begotten of the Father), full of grace and truth."
+          },
+          "body": "Marmion calls this the moment the exchange is concluded: God asks a human nature of us, and in return gives us a share in His own. When Mary says her fiat, all humanity is answering through her mouth, and she becomes the Ark of the New Covenant. He also passes on Augustine's compressed formula — she conceived in her mind before she conceived in her body. The consent came first. The flesh followed.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-1-15",
+          "mystery": "joyful-1",
+          "position": "closer",
+          "image": "annunciation-simone-martini",
+          "scripture": {
+            "ref": "Luke 1:45",
+            "text": "And blessed art thou that hast believed, because those things shall be accomplished that were spoken to thee by the Lord."
+          },
+          "body": "Then Gabriel leaves, and the room is a poor room in Nazareth again. No one has seen anything. She is carrying the Word of God and will tell no one for three months, and when she does tell someone it will be an old cousin in the hills who works it out for herself. The greatest thing that has ever happened continues in silence and in ordinary work. So, usually, does the greatest thing happening in you.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "joyful-2",
+      "title": "The Visitation",
+      "meditations": [
+        {
+          "id": "joyful-2-01",
+          "mystery": "joyful-2",
+          "position": "opener",
+          "image": "visitation-giotto",
+          "scripture": {
+            "ref": "Luke 1:39",
+            "text": "And Mary rising up in those days, went into the hill country with haste into a city of Juda."
+          },
+          "body": "She has just been told she is carrying the Son of God, and Luke's next sentence has her on the road. The hill country is days away over broken ground; she is newly pregnant; none of this appears in the account. Only that she rose up and went, and went in haste. Walk the first mile of it with her before the decade begins, and notice that her first act as Mother of God was to go and be useful to an old woman.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-02",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-giotto",
+          "scripture": {
+            "ref": "Luke 1:39",
+            "text": "And Mary rising up in those days, went into the hill country with haste into a city of Juda."
+          },
+          "body": "Liguori dwells on the haste, and hands the explanation to St Ambrose in five Latin words: the grace of the Holy Spirit knows no slow movements. She rose out of the quiet of her contemplation, he says, and left her solitude at once. This is worth noticing about her. Prayer did not make her still. It got her onto the road.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-2-03",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-ghirlandaio",
+          "scripture": {
+            "ref": "Luke 1:40",
+            "text": "And she entered into the house of Zachary and saluted Elizabeth."
+          },
+          "body": "God enters a house in Judea and the householders never see Him arrive.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-2-04",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-ghirlandaio",
+          "scripture": {
+            "ref": "Luke 1:40",
+            "text": "And she entered into the house of Zachary and saluted Elizabeth."
+          },
+          "body": "Two words from St Ambrose, which Liguori will not pass over: prior salutavit. She greeted first. The younger woman, carrying more than anyone in the house could guess, does not wait on the threshold to be recognised or welcomed or thanked. Liguori adds that this was not a visit of the worldly sort, which runs on ceremony and display. She came in and spoke first and the room filled with grace.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-2-05",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-eastern-icon",
+          "scripture": {
+            "ref": "1 Paralipomenon 13:14",
+            "text": "And the ark of God remained in the house of Obededom three months: and the Lord blessed his house, and all that he had."
+          },
+          "body": "Liguori sets the two houses side by side. Obededom sheltered the ark of the Lord and his whole household was blessed for it; Mary is the living ark, and the house of Zachary receives the same blessing on better terms. The detail he leaves you to find is in the verse itself. The ark stayed three months. So did she.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-2-06",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-pontormo",
+          "scripture": {
+            "ref": "Luke 1:41",
+            "text": "And it came to pass that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost."
+          },
+          "body": "The Precursor's whole vocation is to point and say: there He is. He begins six months before he is born, and the only instrument available to him is a kick. Nobody in the room needs it explained. An old woman feels her child move and understands, immediately and correctly, who has just walked through her door.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-07",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-pontormo",
+          "scripture": {
+            "ref": "Luke 1:44",
+            "text": "For behold as soon as the voice of thy salutation sounded in my ears, the infant in my womb leaped for joy."
+          },
+          "body": "Bernardine de Bustis, whom Liguori quotes here, traces the route precisely: the voice of the greeting entered through Elizabeth's ears and went down to the child, and by that voice he received the Holy Spirit. Follow the mechanism for a moment. Grace travelled by sound, through one body, into another. An ordinary spoken greeting between cousins did the work.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-2-08",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-pontormo",
+          "scripture": {
+            "ref": "Luke 1:43",
+            "text": "And whence is this to me that the mother of my Lord should come to me?"
+          },
+          "body": "She is the first person on earth to call Mary that.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-2-09",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-van-der-weyden",
+          "scripture": {
+            "ref": "Luke 1:42",
+            "text": "And she cried out with a loud voice and said: Blessed art thou among women and blessed is the fruit of thy womb."
+          },
+          "body": "Marmion insists on the order of the verse. Elizabeth was filled with the Holy Ghost, and then she spoke. So the words are not a cousin's warmth or a shrewd guess; they are the Holy Spirit saluting the Virgin by her mouth, on the morrow of the Incarnation. You have been repeating the second half of that sentence all your life. It was said first by God, through an old woman, in a doorway.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-10",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-van-der-weyden",
+          "scripture": {
+            "ref": "Luke 1:45",
+            "text": "And blessed art thou that hast believed, because those things shall be accomplished that were spoken to thee by the Lord."
+          },
+          "body": "Marmion stops at this verse to make a point about what exactly is being praised. Not her womb. Her faith. It was believing God's word that made her the Mother of Christ, and it is for believing that heaven calls her blessed. Then he asks a question worth sitting with: what mere creature has ever received praise like this from the Infinite Being?",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-11",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-eastern-icon",
+          "scripture": {
+            "ref": "Luke 11:27-28",
+            "text": "And it came to pass, as he spoke these things, a certain woman from the crowd, lifting up her voice, said to him: Blessed is the womb that bore thee and the paps that gave thee suck. But he said: Yea rather, blessed are they who hear the word of God and keep it."
+          },
+          "body": "Marmion reads Christ's answer here not as a correction of the woman but as an opening for the rest of us. Mary's privilege is hers alone; the blessedness of hearing the word and keeping it is on offer to anyone. Which puts a question inside this decade. Whom did you carry Christ to this week, and did they know it had happened?",
+          "source": "marmion",
+          "form": "question"
+        },
+        {
+          "id": "joyful-2-12",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-ghirlandaio",
+          "scripture": {
+            "ref": "Luke 1:46-47",
+            "text": "And Mary said: My soul doth magnify the Lord. And my spirit hath rejoiced in God my Saviour."
+          },
+          "body": "This is the longest speech of hers that Scripture preserves, and it is not about her. She has just been called blessed among women to her face, and her reply turns every word of it upward and hands it back to God. Watch what she does with praise. It goes straight through her without stopping.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-13",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-ghirlandaio",
+          "scripture": {
+            "ref": "Luke 1:48",
+            "text": "Because he hath regarded the humility of his handmaid: for behold from henceforth all generations shall call me blessed."
+          },
+          "body": "She names the reason herself, and it is not her merit. It is that He looked.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-2-14",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-eastern-icon",
+          "scripture": {
+            "ref": "Luke 1:41",
+            "text": "And it came to pass that when Elizabeth heard the salutation of Mary, the infant leaped in her womb. And Elizabeth was filled with the Holy Ghost."
+          },
+          "body": "Liguori counts what was given in that house: sanctification to the child, the Holy Spirit to Elizabeth, prophecy to Zachary. These are the first graces we know the incarnate Word to have given on earth, and every one of them arrived through his mother's voice. From this he draws his whole argument about her place in the giving of grace. You need not follow him the entire distance to notice the pattern he is pointing at.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-2-15",
+          "mystery": "joyful-2",
+          "position": "closer",
+          "image": "visitation-giotto",
+          "scripture": {
+            "ref": "Luke 1:56",
+            "text": "And Mary abode with her about three months. And she returned to her own house."
+          },
+          "body": "Then the visit ends the way visits end. She stays until the baby is nearly due, and goes home. Three months of drawing water and grinding grain and helping a woman in her sixties through the last of a hard pregnancy, and Luke spends half a verse on it. The mystery is not only the leaping and the prophecy. It is also the twelve unremarkable weeks that followed, which is the part of it you are actually being asked to imitate.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "joyful-3",
+      "title": "The Nativity",
+      "meditations": [
+        {
+          "id": "joyful-3-01",
+          "mystery": "joyful-3",
+          "position": "opener",
+          "image": "nativity-giotto",
+          "scripture": {
+            "ref": "Luke 2:4-5",
+            "text": "And Joseph also went up from Galilee, out of the city of Nazareth, into Judea, to the city of David, which is called Bethlehem: because he was of the house and family of David. To be enrolled with Mary his espoused wife, who was with child."
+          },
+          "body": "Nazareth to Bethlehem is some ninety miles, and she walks it in her ninth month because an emperor wants everyone counted. Micheas had named the town centuries before. Caesar has never heard of her and is not thinking about prophecy; he is thinking about revenue. Both purposes are served by the same journey. Set out with them on that road tonight — the pace slow, the reason for the trip mundane, and the Word of God carried the whole way.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-3-02",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-giotto",
+          "scripture": {
+            "ref": "Luke 2:7",
+            "text": "And she brought forth her first born son and wrapped him up in swaddling clothes and laid him in a manger: because there was no room for them in the inn."
+          },
+          "body": "The reason given is not cruelty. It is that the town was full.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-3-03",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-byzantine-icon",
+          "scripture": {
+            "ref": "John 1:14",
+            "text": "And the Word was made flesh and dwelt among us (and we saw his glory, the glory as it were of the only begotten of the Father), full of grace and truth."
+          },
+          "body": "Marmion builds his whole Christmas conference on one antiphon the Church sings through the Octave, and it opens with an exclamation: O admirabile commercium. O wonderful exchange. The Creator of the human race takes a body and a soul and consents to be born of a virgin, and appearing among us as a man, has given us a share in His own divinity. Read the two halves of that sentence again. He takes what is ours. He hands back what is His.",
+          "source": "marmion",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-3-04",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-byzantine-icon",
+          "scripture": {
+            "ref": "Isaias 9:6",
+            "text": "For a CHILD IS BORN to us, and a son is given to us, and the government is upon his shoulder: and his name shall be called Wonderful, Counsellor, God the Mighty, the Father of the world to come, the Prince of Peace."
+          },
+          "body": "Another antiphon of the Octave, which Marmion quotes for its precision: today a wonderful mystery is declared, the natures are made new, God is made man. What He was, He remained; what He was not, He took up. There is no blending here and no confusion. Two whole natures, one Person, and nothing of the Godhead surrendered to make room for the manhood. The child in the straw did not become smaller than God in order to fit.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-3-05",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-la-tour",
+          "scripture": {
+            "ref": "Luke 2:7",
+            "text": "And she brought forth her first born son and wrapped him up in swaddling clothes and laid him in a manger: because there was no room for them in the inn."
+          },
+          "body": "The Church puts the whole paradox into two lines at Lauds on Christmas morning, and Marmion prints them: He was fed with a little milk, by whom the very birds are never hungry. And from Matins, in six words: He lies in the manger and reigns in heaven. Both sentences are true at the same moment. Neither is a figure of speech.",
+          "source": "marmion",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-3-06",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-correggio",
+          "scripture": {
+            "ref": "Luke 2:8",
+            "text": "And there were in the same country shepherds watching and keeping the night watches over their flock."
+          },
+          "body": "Consider who was told. Not the priests in Jerusalem, two hours' walk up the road, and not Herod in his palace. Men on the night shift, whose work kept them ritually unclean and whose standing was low. To these the glory of the Lord shone round about, and they were the first outside that stable to know. Stay with them in the field a while before the angel comes — cold, unremarkable, halfway through an ordinary watch.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-3-07",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-correggio",
+          "scripture": {
+            "ref": "Luke 2:11",
+            "text": "For, this day is born to you a Saviour, who is Christ the Lord, in the city of David."
+          },
+          "body": "The hymn at Lauds catches the joke that heaven is making, and Marmion keeps its word order: He is made manifest to shepherds — the Shepherd, the Creator of all. The men keeping animals through the night are the first to be shown the one who keeps them. God chose His audience by resemblance rather than rank.",
+          "source": "marmion",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-3-08",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-correggio",
+          "scripture": {
+            "ref": "Luke 2:14",
+            "text": "Glory to God in the highest: and on earth peace to men of good will."
+          },
+          "body": "You have sung this at Mass all your life. It was first sung over a field.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-3-09",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-byzantine-icon",
+          "scripture": {
+            "ref": "Isaias 1:3",
+            "text": "The ox knoweth his owner, and the ass his master’s crib: but Israel hath not known me, and my people hath not understood."
+          },
+          "body": "Marmion notes that the two animals of the stable come into Christian art out of this verse, and that Isaias put them there as a rebuke. The beasts recognise the crib they are fed from. What they registered was shape and warmth and movement, nothing more — the very bottom of the ladder of knowing. And it was still more than the city outside managed that night.",
+          "source": "marmion",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-3-10",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-byzantine-icon",
+          "scripture": {
+            "ref": "Luke 2:12",
+            "text": "And this shall be a sign unto you. You shall find the infant wrapped in swaddling clothes and laid in a manger."
+          },
+          "body": "Marmion sets out everyone who looked into that manger, in order. The animals, who saw an object. The passers-by, who saw a poor family and perhaps felt a moment's pity that did not last. The shepherds, who saw the promised one and went away full of joy. The angels, who saw their God and were astonished at the descent. His Mother, whose gaze no one can describe. And the Father, who saw what none of them could. Every one of them was looking at the same child. Where on that list does your looking fall tonight?",
+          "source": "marmion",
+          "form": "question"
+        },
+        {
+          "id": "joyful-3-11",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-la-tour",
+          "scripture": {
+            "ref": "Luke 2:7",
+            "text": "And she brought forth her first born son and wrapped him up in swaddling clothes and laid him in a manger: because there was no room for them in the inn."
+          },
+          "body": "Faber wrote this looking at the tomb, not the crib. As Mary arranged the winding-sheet, he says, she remembered the manger where she had laid Him at Bethlehem — and between the two there lay the whole distance between Christmas and Passiontide. Then he counts the likenesses that made it unbearable. Wrapped both times. Silent both times, but by a different kind of will. Helpless then, and more helpless now. Read it from this end and the swaddling bands are already the linen of the grave.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-3-12",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-la-tour",
+          "scripture": {
+            "ref": "Luke 2:16",
+            "text": "And they came with haste: and they found Mary and Joseph, and the infant lying in the manger."
+          },
+          "body": "Faber, describing Calvary, calls the wood they stretched Him on a harder bed than the crib of Bethlehem where He first was laid. He notices too that Christ gave Himself into the executioners' hands as docilely as a tired child being put down for the night by his mother. The first bed and the last are set in the same sentence, and He was laid on both by someone else's hands.",
+          "source": "faber",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-3-13",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-botticelli",
+          "scripture": {
+            "ref": "2 Corinthians 8:9",
+            "text": "For you know the grace of our Lord Jesus Christ, that being rich he became poor for your sakes: that through his poverty you might be rich."
+          },
+          "body": "Every word in that verse is doing work. Being rich — not poor to begin with, and not made poor by circumstance. Became poor — a decision, taken by someone who had the alternative. For your sakes — not for the beauty of the gesture. That you might be rich — the poverty was a transfer, not a demonstration. He did not come down to show us that poverty is noble. He came down carrying something, and He set it down here.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-3-14",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-botticelli",
+          "scripture": {
+            "ref": "John 1:11",
+            "text": "He came unto his own: and his own received him not."
+          },
+          "body": "The innkeeper was the first, and he was only the first.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-3-15",
+          "mystery": "joyful-3",
+          "position": "closer",
+          "image": "nativity-giotto",
+          "scripture": {
+            "ref": "Luke 2:19",
+            "text": "But Mary kept all these words, pondering them in her heart."
+          },
+          "body": "The shepherds go back to their flock and tell everyone, and Luke says the people who heard them wondered — and then nothing further comes of it. The one person who does not go and tell is His mother. She keeps it and turns it over, and thirty years of turning it over is what stands behind the few sentences of hers that anyone wrote down. She is the first person to meditate on this mystery. You are doing tonight what she did then.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "joyful-4",
+      "title": "The Presentation",
+      "meditations": [
+        {
+          "id": "joyful-4-01",
+          "mystery": "joyful-4",
+          "position": "opener",
+          "image": "presentation-lorenzetti",
+          "scripture": {
+            "ref": "Luke 2:22",
+            "text": "And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord:"
+          },
+          "body": "They are carrying God up the steps of God's own house. Hold that before anything else in this decade: a young woman and a carpenter climbing the temple mount, a forty-day-old child in her arms, going to give Him back to the One who gave Him. He will return to this building many times — to be found among the doctors, to teach in the porticoes, to weep over it, to drive the traders out of it. This is the first of those times, and the only one in which He is carried.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-02",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-lorenzetti",
+          "scripture": {
+            "ref": "Luke 2:23",
+            "text": "As it is written in the law of the Lord: Every male opening the womb shall be called holy to the Lord:"
+          },
+          "body": "Liguori opens by separating the two laws that met that morning. One required the mother to keep apart forty days and then purify herself in the temple. The other required the parents of a firstborn son to bring him and offer him to God. Mary was bound by neither — she was always a virgin and always pure, and the child was already holy to the Lord in a sense the statute never imagined. She obeyed both anyway, out of humility and obedience, like any other mother in the queue.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-4-03",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-lorenzetti",
+          "scripture": {
+            "ref": "Luke 2:39",
+            "text": "And after they had performed all things according to the law of the Lord, they returned into Galilee, to their city Nazareth."
+          },
+          "body": "Faber notices something about her willingness that is easy to miss. She submitted to the rite of purification the more readily precisely because it concealed her graces. A law written for sinners, applied to the sinless, made her look like everyone else — and that was the attraction, not the difficulty. Consider how much of your own resistance to ordinary obligations is really a reluctance to be taken for ordinary.",
+          "source": "faber",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-4-04",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-mantegna",
+          "scripture": {
+            "ref": "Luke 2:24",
+            "text": "And to offer a sacrifice, according as it is written in the law of the Lord, a pair of turtledoves or two young pigeons:"
+          },
+          "body": "The law named a lamb, and named the birds as what you brought if you could not afford the lamb.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-4-05",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-mantegna",
+          "scripture": {
+            "ref": "Luke 2:24",
+            "text": "And to offer a sacrifice, according as it is written in the law of the Lord, a pair of turtledoves or two young pigeons:"
+          },
+          "body": "Faber puts the two offerings in one sentence and lets them collide. She brought the birds the poor were permitted to bring — and she also bore in her arms her true turtle-dove, to be presented likewise according to the custom of the law. The temple accountant recorded a transaction of the smallest possible value. What was actually carried through the gate that morning was the Lamb.",
+          "source": "faber",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-4-06",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-mantegna",
+          "scripture": {
+            "ref": "Isaias 45:15",
+            "text": "Verily thou art a hidden God, the God of Israel the saviour."
+          },
+          "body": "Marmion asks you to look at the crowd. Merchants, levites, priests, doctors of the Law, the whole apparatus of the temple in full operation. Through it walks a small group nobody looks at twice, poor enough that they are carrying pigeons. Malachias had promised that the Lord would come to His own temple. He came that morning, through the front entrance, and the only two people who recognised Him had to be told by the Holy Ghost.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-07",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-byzantine-icon",
+          "scripture": {
+            "ref": "Luke 2:22",
+            "text": "And after the days of her purification, according to the law of Moses, were accomplished, they carried him to Jerusalem, to present him to the Lord:"
+          },
+          "body": "Marmion makes a claim about that morning worth weighing slowly. For centuries the temple had run on blood — lambs, bulls, goats, the smoke going up daily according to a ritual God Himself had specified. And on this day, he says, God received more glory in that building than all of it had ever given Him, because for the first time the offering was His own Son. Nothing looked different. It was the offertory of Calvary, thirty-three years early.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-08",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-byzantine-icon",
+          "scripture": {
+            "ref": "Romans 8:32",
+            "text": "He that spared not even his own Son, but delivered him up for us all, how hath he not also, with him, given us all things?"
+          },
+          "body": "Here Liguori draws the distinction the whole mystery turns on. Every other mother in that queue offered her firstborn knowing it was a ceremony — she paid the redemption price, took the child home, and never feared being asked for him again. Mary offered her Son to death. She knew with certainty that the sacrifice she was making in that room would one day be carried out on the altar of the cross. The other mothers were buying their sons back. She was not.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-4-09",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-byzantine-icon",
+          "scripture": {
+            "ref": "Luke 1:38",
+            "text": "And Mary said: Behold the handmaid of the Lord: be it done to me according to thy word. And the angel departed from her."
+          },
+          "body": "Liguori reasons from a principle he takes from St Thomas — that motherhood gives a real right over a child. God would not let the Word become her Son without her spoken consent. So it was fitting, he argues, that He would not destine that Son to the cross without her consent either. Which makes this morning her second fiat, and the harder of the two. At Nazareth she was asked to receive Him. Here she is asked to hand Him over.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-4-10",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-rembrandt",
+          "scripture": {
+            "ref": "Luke 2:28",
+            "text": "He also took him into his arms and blessed God and said"
+          },
+          "body": "Faber's image of this is unforgettable and physical. Weak with age, Simeon threw his arms around his God. He bore the whole weight of his Creator, and yet stood upright. An old man's arms held up the one who holds up everything, and did not buckle — which Faber suspects took a quiet miracle of its own, since no one could survive that much gladness unassisted.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-11",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-rembrandt",
+          "scripture": {
+            "ref": "Luke 2:29-30",
+            "text": "Now thou dost dismiss thy servant, O Lord, according to thy word in peace: Because my eyes have seen thy salvation,"
+          },
+          "body": "Faber sets Simeon's song beside the other two — Zachary's Benedictus, Mary's Magnificat — and then says what became of it. All the poetry of Christian weariness is in it. It is the heart's evening light after the working hours of the day, and the Church will still be singing it at the last Compline before the end of the world. You have prayed these words yourself at the close of a day. An old man said them first, holding the child, with nothing left that he wanted.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-12",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-rembrandt",
+          "scripture": {
+            "ref": "Luke 2:34",
+            "text": "And Simeon blessed them and said to Mary his mother: Behold this child is set for the fall and for the resurrection of many in Israel and for a sign which shall be contradicted."
+          },
+          "body": "Faber stops on a detail the text leaves open, and would rather wonder than settle it. When Mary knelt for the old priest's blessing, was Jesus still in his arms — so that he traced the sign of the cross with the Child Himself over her head? Or had she taken Him back, and knelt holding God at the feet of God's creature to receive a blessing? Which do you think it was, and does either one make the mystery smaller?",
+          "source": "faber",
+          "form": "question"
+        },
+        {
+          "id": "joyful-4-13",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 2:35",
+            "text": "And thy own soul a sword shall pierce, that, out of many hearts thoughts may be revealed."
+          },
+          "body": "He has just called the child a light to the Gentiles. Now he turns to the mother and does not soften anything.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-4-14",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 2:35",
+            "text": "And thy own soul a sword shall pierce, that, out of many hearts thoughts may be revealed."
+          },
+          "body": "Faber ventures a guess about what happened in her when Simeon fell silent, and he is careful to mark it as a guess — perhaps she learned then what she had not known, but more probably it reached her in a new way. Either way, he thinks, the whole Passion was laid open to her in that moment, down to its smallest circumstances, and the vision came out of the face of her own child, as though His eyes looked it into her. She walked into the temple a mother. She walked out one too, knowing the rest.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-4-15",
+          "mystery": "joyful-4",
+          "position": "closer",
+          "image": "presentation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 2:37-38",
+            "text": "And she was a widow until fourscore and four years: who departed not from the temple, by fastings and prayers serving night and day. Now she, at the same hour, coming in, confessed to the Lord: and spoke of him to all that looked for the redemption of Israel."
+          },
+          "body": "There was a second witness, and Luke gives her a name and an age. Eighty-four, widowed most of her life, in the temple day and night for decades, praying for something she had no evidence was coming. She got one hour of it. Then Joseph and Mary finished the paperwork and went home to Nazareth, and the child grew up, and nothing else is recorded of Anna at all. Some vocations are like that. She would not have traded.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "joyful-5",
+      "title": "The Finding in the Temple",
+      "meditations": [
+        {
+          "id": "joyful-5-01",
+          "mystery": "joyful-5",
+          "position": "opener",
+          "image": "finding-duccio",
+          "scripture": {
+            "ref": "Luke 2:42",
+            "text": "And when he was twelve years old, they going up into Jerusalem, according to the custom of the feast,"
+          },
+          "body": "This is the only story anyone recorded from the thirty years between the temple steps and the Jordan. One episode out of three decades, and it is a story about losing Him. Whatever else you bring to this decade, bring that: of all that could have been preserved from His childhood, what we were given is three days when His mother did not know where He was.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-02",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-duccio",
+          "scripture": {
+            "ref": "Luke 2:41",
+            "text": "And his parents went every year to Jerusalem, at the solemn day of the pasch."
+          },
+          "body": "At twelve a Jewish boy came under the precepts of the Law, and Marmion notes that this was likely His first Passover as one bound to keep it. Picture Him in the crowd, taking part in the ceremonies, singing the psalms with everyone else, indistinguishable. And understanding, as no one in that building could, what every rite was for — seeing in each of them something that would be accomplished in Himself.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-03",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-duccio",
+          "scripture": {
+            "ref": "Luke 2:44",
+            "text": "And thinking that he was in the company, they came a day’s journey and sought him among their kinsfolks and acquaintance."
+          },
+          "body": "The pilgrim caravans were large and loosely formed, and the young moved freely between family groups along the road. She thought He was with Joseph. Nothing here is negligence, and it is worth refusing the instinct to find fault — with her, or with yourself when something precious has gone missing and you cannot name the hour it went.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-04",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-byzantine-icon",
+          "scripture": {
+            "ref": "Luke 2:45",
+            "text": "And not finding him, they returned into Jerusalem, seeking him."
+          },
+          "body": "A whole day's walk out, and now the same road back, and He has been gone longer than they knew.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-5-05",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-byzantine-icon",
+          "scripture": {
+            "ref": "Canticle of Canticles 3:3",
+            "text": "The watchmen who keep the city, found me: Have you seen him, whom my soul loveth?"
+          },
+          "body": "Liguori hears this verse in her mouth for three days. She is asking strangers in the street the question the bride asks the watchmen — have you seen him whom my soul loveth — and getting nothing back. Everyone she stops is a person who has not seen Him. The city is full of pilgrims and not one of them can help her.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-5-06",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-byzantine-icon",
+          "scripture": {
+            "ref": "Genesis 37:30",
+            "text": "And rending his garments he went to his brethren, and said: The boy doth not appear, and whither shall I go?"
+          },
+          "body": "Liguori puts Ruben's cry over his lost brother into her mouth, and it fits so exactly it is hard to hear afterward as anyone else's.",
+          "source": "liguori",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "joyful-5-07",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-simone-martini",
+          "scripture": {
+            "ref": "Psalm 41:4",
+            "text": "My tears have been my bread day and night, whilst it is said to me daily: Where is thy God?"
+          },
+          "body": "Liguori gathers what she prayed in those nights from the psalms and the prophets, because Scripture has no record of it and this is how the Church has always filled such silences. Pelbart says she did not sleep, but wept and prayed through the dark asking God to let her find her Son. St Bernard puts the bride's line on her lips — show me where thou liest at midday, lest I begin to wander.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-5-08",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-durer",
+          "scripture": {
+            "ref": "Luke 2:46",
+            "text": "And it came to pass, that, after three days, they found him in the temple, sitting in the midst of the doctors, hearing them and asking them questions."
+          },
+          "body": "Faber makes a claim that stops you: of all seven of her sorrows, this was the greatest — greater than Calvary. His reasoning is exact. Only the Burial comes near it, and the Burial was easier, because standing at that tomb she knew He could suffer no more, she understood what had been accomplished, and she could count the hours until Sunday. Here she knew none of that. She had lost Him, and did not know why, or where, or whether He was suffering.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-09",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-durer",
+          "scripture": {
+            "ref": "Psalm 37:11",
+            "text": "My heart is troubled, my strength hath left me, and the light of my eyes itself is not with me."
+          },
+          "body": "Liguori arrives at the same verdict by the same road, and the agreement of two such different writers is worth weighing. In every other sorrow, he says, she had Jesus with her — at Simeon's prophecy, in the flight to Egypt, at the cross itself. Here she suffered at a distance from Him. And in every other sorrow she understood what it was for: the redemption of the world, the will of God. In this one she did not know the cause at all.",
+          "source": "liguori",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-5-10",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-durer",
+          "scripture": {
+            "ref": "Lamentations 1:16",
+            "text": "Ain. Therefore do I weep, and my eyes run down with water: because the comforter, the relief of my soul, is far from me: my children are desolate because the enemy hath prevailed."
+          },
+          "body": "Faber describes what the three days were actually like inside her, and it is not what you would expect of her. She who had been all light was now all darkness. She did not know what God was doing with her. She had to act, and could not understand the circumstances she was acting in. And one sentence that ought to be read twice: she had always leaned on Jesus, and never knew until now how much she had leaned on Him.",
+          "source": "faber",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-11",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-durer",
+          "scripture": {
+            "ref": "Tobias 5:12",
+            "text": "And Tobias said: What manner of joy shall be to me, who sit in darkness and see not the light of heaven?"
+          },
+          "body": "Faber says plainly that this darkness was God's own doing, and that its parallels are the interior trials the great saints were put through — with one difference. In them the darkness was a cleansing, and in her there was nothing to cleanse; what took the saints long years was done in her in three days. Which means the Mother of God has been where you are when prayer goes dark and you cannot tell whether you have done something wrong. If she could be led there, what exactly are you concluding about yourself from the fact that you have been?",
+          "source": "faber",
+          "form": "question"
+        },
+        {
+          "id": "joyful-5-12",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-durer",
+          "scripture": {
+            "ref": "Luke 2:48",
+            "text": "And seeing him, they wondered. And his mother said to him: Son, why hast thou done so to us? Behold thy father and I have sought thee sorrowing."
+          },
+          "body": "Faber relays a story from the life of Blessed Benvenuta of Bojano, who asked to be allowed to feel Our Lady's grief in the Three Days' Loss. It was granted. A child appeared to her and then withdrew, and for three days she could not be consoled and thought she would come apart. At the end of them Our Lady appeared and said: you asked for a taste of that sorrow, and a taste is what you had — do not ask such a thing again, for your weakness could not live under that grief.",
+          "source": "faber",
+          "form": "patristic"
+        },
+        {
+          "id": "joyful-5-13",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-simone-martini",
+          "scripture": {
+            "ref": "Luke 2:47",
+            "text": "And all that heard him were astonished at his wisdom and his answers."
+          },
+          "body": "He is not lecturing them. Luke says He was listening and asking questions, which is what a boy did in that setting. Marmion reads a purpose in it — that by His questions and His answers He was drawing the doctors of the Law toward the subject of the Messias, turning their attention to the circumstances of His coming. For a few days the hidden life was interrupted so that this could be done, and then it closed over again for eighteen years.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-14",
+          "mystery": "joyful-5",
+          "position": "any",
+          "image": "finding-simone-martini",
+          "scripture": {
+            "ref": "Luke 2:49-50",
+            "text": "And he said to them: How is it that you sought me? Did you not know that I must be about my father’s business? And they understood not the word that he spoke unto them."
+          },
+          "body": "These are the first words of His that anyone wrote down. Marmion points out that her question was not a reproach — she was far too wise to blame Him, knowing who He was — but simply a mother's heart giving itself away. And then the answer, which does not explain, and which they did not understand. Luke almost certainly had that admission from her own mouth. She did not understand her Son, and she said so, and she stayed.",
+          "source": "marmion",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-5-15",
+          "mystery": "joyful-5",
+          "position": "closer",
+          "image": "finding-hunt",
+          "scripture": {
+            "ref": "Luke 2:51",
+            "text": "And he went down with them and came to Nazareth and was subject to them. And his mother kept all these words in her heart."
+          },
+          "body": "Then it resolves, and Faber's image for the resolution is the best thing in his chapter. The eighteen years at Nazareth that followed were, to Mary, like coming out onto the open ocean after climbing over dark mountains. And the hard saying resolves with them: by His work in the shop it turned out that His heavenly Father's business and His earthly father's business were the same business all along. She had three days of darkness and eighteen years of Him. That is roughly the exchange rate.",
+          "source": "faber",
+          "form": "expository"
+        }
+      ]
+    }
+  ]
+}
