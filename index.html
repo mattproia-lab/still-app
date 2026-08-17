@@ -5768,6 +5768,12 @@ async function askMystic() {
       })
     });
     const data = await res.json();
+    if(res.status === 401 || data.error === 'Not authenticated.'){
+      document.getElementById('mysticResponseText').textContent =
+        'Your session has expired. Please sign out and back in, and Amma will be here.';
+      showMysticState('mysticResponse');
+      return;
+    }
     if(data.error==='upgrade_required'||data.error==='limit_reached'){
       if(isSubscribed()){
         document.getElementById('mysticResponseText').textContent =
@@ -5824,6 +5830,14 @@ async function askDeeper(){
       body:JSON.stringify({feature:'deeper',access_token:token,model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
+    if(res.status === 401 || data.error === 'Not authenticated.'){
+      document.getElementById('dResponseText').textContent =
+        'Your session has expired. Sign out and back in, and we will continue.';
+      document.getElementById('dSource').textContent = '';
+      document.getElementById('dInvitation').textContent = '';
+      showDeeperState('deeperResponse');
+      return;
+    }
     if(data.error==='upgrade_required'||data.error==='limit_reached'){
       if(isSubscribed()){
         document.getElementById('dResponseText').textContent =
@@ -5868,7 +5882,6 @@ prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deep
     showError('deeperErr','Something stirred -- try once more.');
   }
 }
-
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}
 /* ═══════════════════════════════════════════
    OTHER FEATURE HELPERS
