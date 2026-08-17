@@ -6,7 +6,9 @@
     "original": null,
     "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
     "faber": "Fr Frederick William Faber, The Foot of the Cross (1858)",
-    "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)"
+    "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)",
+    "denis": "Denis the Carthusian, Enarratio in Canticum Canticorum (Opera omnia t. VII, 1898), trans. from the Latin for Still",
+    "marmion+denis": "Bl Columba Marmion OSB, Christ in His Mysteries (1924); Denis the Carthusian, Enarratio in Canticum Canticorum, trans. from the Latin for Still"
   },
   "mysteries": [
     {
@@ -191,8 +193,8 @@
             "ref": "John 1:14",
             "text": "And the Word was made flesh and dwelt among us (and we saw his glory, the glory as it were of the only begotten of the Father), full of grace and truth."
           },
-          "body": "Marmion calls this the moment the exchange is concluded: God asks a human nature of us, and in return gives us a share in His own. When Mary says her fiat, all humanity is answering through her mouth, and she becomes the Ark of the New Covenant. He also passes on Augustine's compressed formula — she conceived in her mind before she conceived in her body. The consent came first. The flesh followed.",
-          "source": "marmion",
+          "body": "Marmion calls this the moment the exchange is concluded: when Mary pronounces her fiat, all humanity says to God by her mouth — yes, O God, I consent, so be it. And immediately the Word is made flesh, and the Blessed Virgin becomes the Ark of the New Covenant between God and man. Denis the Carthusian adds the order of it: He came first into the Virgin's mind, and then into her womb — and coming into her womb, He came again into her mind, increasing grace upon grace. The consent came first. The flesh followed.",
+          "source": "marmion+denis",
           "form": "expository"
         },
         {
@@ -340,7 +342,7 @@
             "ref": "Luke 1:45",
             "text": "And blessed art thou that hast believed, because those things shall be accomplished that were spoken to thee by the Lord."
           },
-          "body": "Marmion stops at this verse to make a point about what exactly is being praised. Not her womb. Her faith. It was believing God's word that made her the Mother of Christ, and it is for believing that heaven calls her blessed. Then he asks a question worth sitting with: what mere creature has ever received praise like this from the Infinite Being?",
+          "body": "Marmion stops at this verse to make a point about what exactly is being praised. Not her womb. Her faith — blessed, he says, for this faith in God's word made the Virgin the Mother of Christ. And then he asks a question worth sitting with: what simple creature has ever received like praises from the infinite Being?",
           "source": "marmion",
           "form": "expository"
         },
@@ -353,8 +355,8 @@
             "ref": "Luke 11:27-28",
             "text": "And it came to pass, as he spoke these things, a certain woman from the crowd, lifting up her voice, said to him: Blessed is the womb that bore thee and the paps that gave thee suck. But he said: Yea rather, blessed are they who hear the word of God and keep it."
           },
-          "body": "Marmion reads Christ's answer here not as a correction of the woman but as an opening for the rest of us. Mary's privilege is hers alone; the blessedness of hearing the word and keeping it is on offer to anyone. Which puts a question inside this decade. Whom did you carry Christ to this week, and did they know it had happened?",
-          "source": "marmion",
+          "body": "Christ's answer is not a correction of the woman but an enlargement of her blessing. Mary's privilege is hers alone; the blessedness of hearing the word of God and keeping it is on offer to anyone — and the Church has always read her as first in that blessedness too, having believed before she conceived. Which puts a question inside this decade. Whom did you carry Christ to this week, and did they know it had happened?",
+          "source": "original",
           "form": "question"
         },
         {
@@ -476,7 +478,7 @@
             "ref": "Luke 2:7",
             "text": "And she brought forth her first born son and wrapped him up in swaddling clothes and laid him in a manger: because there was no room for them in the inn."
           },
-          "body": "The Church puts the whole paradox into two lines at Lauds on Christmas morning, and Marmion prints them: He was fed with a little milk, by whom the very birds are never hungry. And from Matins, in six words: He lies in the manger and reigns in heaven. Both sentences are true at the same moment. Neither is a figure of speech.",
+          "body": "Marmion sets the paradox out in the hymns of the feast, and his gloss on the first is exact: if He needs a little milk to nourish Him, it is by His hand that the birds of heaven are fed. And the second, in one line: He lies upon straw, and as God, He sustains the universe and reigns in heaven. Both sentences are true at the same moment. Neither is a figure of speech.",
           "source": "marmion",
           "form": "patristic"
         },
@@ -528,8 +530,8 @@
             "ref": "Isaias 1:3",
             "text": "The ox knoweth his owner, and the ass his master’s crib: but Israel hath not known me, and my people hath not understood."
           },
-          "body": "Marmion notes that the two animals of the stable come into Christian art out of this verse, and that Isaias put them there as a rebuke. The beasts recognise the crib they are fed from. What they registered was shape and warmth and movement, nothing more — the very bottom of the ladder of knowing. And it was still more than the city outside managed that night.",
-          "source": "marmion",
+          "body": "The two animals of the stable come into Christian art out of this verse, and Isaias put them there as a rebuke. The beasts recognise the crib they are fed from. What they registered was shape and warmth and movement, nothing more — the very bottom of the ladder of knowing. And it was still more than the city outside managed that night.",
+          "source": "original",
           "form": "patristic"
         },
         {
