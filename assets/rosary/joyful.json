@@ -7,7 +7,7 @@
     "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
     "faber": "Fr Frederick William Faber, The Foot of the Cross (1858)",
     "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)",
-    "denis": "Denis the Carthusian, Enarratio in Canticum Canticorum (Opera omnia t. VII, 1898), trans. from the Latin for Still",
+    "denis": "Denis the Carthusian, Enarratio in Canticum Canticorum (1898), trans. from the Latin for Still",
     "marmion+denis": "Bl Columba Marmion OSB, Christ in His Mysteries (1924); Denis the Carthusian, Enarratio in Canticum Canticorum, trans. from the Latin for Still"
   },
   "mysteries": [
@@ -39,7 +39,7 @@
           },
           "body": "Liguori builds his whole discourse on this verse, following St Antoninus, who read the spikenard as a figure of Mary's humility. The point of the image is the smallness of the plant. Spikenard is a low herb, easily overlooked, and its scent rises anyway — rises so far that it reaches heaven and draws the Word down out of the bosom of the Father. What ascended was not her greatness. It was her lowness.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-1-03",
@@ -78,7 +78,7 @@
           },
           "body": "Liguori will not let this be misread. She was not frightened by the sight of the angel. Eusebius Emissenus, whom he cites, puts it in four words: not by his face, but by his speech. The text itself says she was troubled at his saying. It was the words that unsettled her, and only the words.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-1-06",
@@ -91,7 +91,7 @@
           },
           "body": "St Bernardine, as Liguori reports him, made the sharpest observation anyone has made about this moment. If the angel had told Mary she was the worst sinner in the world, she would not have been surprised at all. It was praise that disturbed her. She had a settled account of herself, and the trouble began when heaven contradicted it upward.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-1-07",
@@ -143,7 +143,7 @@
           },
           "body": "St Peter Chrysologus, quoted by Liguori, sets this beside Gethsemane. As Christ willed to be strengthened by an angel, so the Virgin had to be encouraged by an angel. The parallel is startling and it is meant to be. Twice heaven sends the same kind of help, once to a young girl at the beginning and once to her Son at the end, because on both occasions a human will was being asked for something enormous.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-1-11",
@@ -169,7 +169,7 @@
           },
           "body": "Here Liguori stops the narration and turns to her directly, borrowing his nerve from St Bernard. Why the delay? The angel is waiting for your answer. And then the line that ought to stop anyone praying this decade: we are waiting for it even more than he is, we who are under sentence of death. The whole condemned race stands in that pause, listening.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-1-13",
@@ -240,7 +240,7 @@
           },
           "body": "Liguori dwells on the haste, and hands the explanation to St Ambrose in five Latin words: the grace of the Holy Spirit knows no slow movements. She rose out of the quiet of her contemplation, he says, and left her solitude at once. This is worth noticing about her. Prayer did not make her still. It got her onto the road.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-2-03",
@@ -266,7 +266,7 @@
           },
           "body": "Two words from St Ambrose, which Liguori will not pass over: prior salutavit. She greeted first. The younger woman, carrying more than anyone in the house could guess, does not wait on the threshold to be recognised or welcomed or thanked. Liguori adds that this was not a visit of the worldly sort, which runs on ceremony and display. She came in and spoke first and the room filled with grace.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-2-05",
@@ -279,7 +279,7 @@
           },
           "body": "Liguori sets the two houses side by side. Obededom sheltered the ark of the Lord and his whole household was blessed for it; Mary is the living ark, and the house of Zachary receives the same blessing on better terms. The detail he leaves you to find is in the verse itself. The ark stayed three months. So did she.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-2-06",
@@ -305,7 +305,7 @@
           },
           "body": "Bernardine de Bustis, whom Liguori quotes here, traces the route precisely: the voice of the greeting entered through Elizabeth's ears and went down to the child, and by that voice he received the Holy Spirit. Follow the mechanism for a moment. Grace travelled by sound, through one body, into another. An ordinary spoken greeting between cousins did the work.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-2-08",
@@ -396,7 +396,7 @@
           },
           "body": "Liguori counts what was given in that house: sanctification to the child, the Holy Spirit to Elizabeth, prophecy to Zachary. These are the first graces we know the incarnate Word to have given on earth, and every one of them arrived through his mother's voice. From this he draws his whole argument about her place in the giving of grace. You need not follow him the entire distance to notice the pattern he is pointing at.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-2-15",
@@ -409,6 +409,19 @@
           },
           "body": "Then the visit ends the way visits end. She stays until the baby is nearly due, and goes home. Three months of drawing water and grinding grain and helping a woman in her sixties through the last of a hard pregnancy, and Luke spends half a verse on it. The mystery is not only the leaping and the prophecy. It is also the twelve unremarkable weeks that followed, which is the part of it you are actually being asked to imitate.",
           "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "joyful-2-16",
+          "mystery": "joyful-2",
+          "position": "any",
+          "image": "visitation-giotto",
+          "scripture": {
+            "ref": "Canticle of Canticles 2:8",
+            "text": "The voice of my beloved, behold he cometh leaping upon the mountains, skipping over the hills."
+          },
+          "body": "Faber, writing years later of the sorrowful roads, could not keep this first road out of his mind: she bore Him over the hill country, he says, with swiftest exultation, while each thought was a Magnificat within her soul. Before the canticle she sang at Elizabeth's door, there were days of it unwritten — mile after mile of inward singing that no evangelist heard. The Church catches the sound in the Canticle: behold he cometh leaping upon the mountains, skipping over the hills — He came over those hills within her. The next errand love sends you on, run it as she ran hers: carrying Him, singing inwardly, glad the whole way.",
+          "source": "faber",
           "form": "expository"
         }
       ]
@@ -454,7 +467,7 @@
           },
           "body": "Marmion builds his whole Christmas conference on one antiphon the Church sings through the Octave, and it opens with an exclamation: O admirabile commercium. O wonderful exchange. The Creator of the human race takes a body and a soul and consents to be born of a virgin, and appearing among us as a man, has given us a share in His own divinity. Read the two halves of that sentence again. He takes what is ours. He hands back what is His.",
           "source": "marmion",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-3-04",
@@ -480,7 +493,7 @@
           },
           "body": "Marmion sets the paradox out in the hymns of the feast, and his gloss on the first is exact: if He needs a little milk to nourish Him, it is by His hand that the birds of heaven are fed. And the second, in one line: He lies upon straw, and as God, He sustains the universe and reigns in heaven. Both sentences are true at the same moment. Neither is a figure of speech.",
           "source": "marmion",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-3-06",
@@ -506,7 +519,7 @@
           },
           "body": "The hymn at Lauds catches the joke that heaven is making, and Marmion keeps its word order: He is made manifest to shepherds — the Shepherd, the Creator of all. The men keeping animals through the night are the first to be shown the one who keeps them. God chose His audience by resemblance rather than rank.",
           "source": "marmion",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-3-08",
@@ -532,7 +545,7 @@
           },
           "body": "The two animals of the stable come into Christian art out of this verse, and Isaias put them there as a rebuke. The beasts recognise the crib they are fed from. What they registered was shape and warmth and movement, nothing more — the very bottom of the ladder of knowing. And it was still more than the city outside managed that night.",
           "source": "original",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-3-10",
@@ -571,7 +584,7 @@
           },
           "body": "Faber, describing Calvary, calls the wood they stretched Him on a harder bed than the crib of Bethlehem where He first was laid. He notices too that Christ gave Himself into the executioners' hands as docilely as a tired child being put down for the night by his mother. The first bed and the last are set in the same sentence, and He was laid on both by someone else's hands.",
           "source": "faber",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-3-13",
@@ -611,6 +624,19 @@
           "body": "The shepherds go back to their flock and tell everyone, and Luke says the people who heard them wondered — and then nothing further comes of it. The one person who does not go and tell is His mother. She keeps it and turns it over, and thirty years of turning it over is what stands behind the few sentences of hers that anyone wrote down. She is the first person to meditate on this mystery. You are doing tonight what she did then.",
           "source": "original",
           "form": "expository"
+        },
+        {
+          "id": "joyful-3-16",
+          "mystery": "joyful-3",
+          "position": "any",
+          "image": "nativity-la-tour",
+          "scripture": {
+            "ref": "Luke 2:16",
+            "text": "And they came with haste: and they found Mary and Joseph, and the infant lying in the manger."
+          },
+          "body": "Marmion, naming everyone who looked into the manger, reached His Mother and stopped: her gaze, he said, no one can describe. So do not describe it. Join it. For one decade, want nothing, fix nothing, understand nothing further — she is looking at God asleep, and He is breathing, and that is the entire content of the hour. The shepherds have gone; Joseph is quiet; the light is low. Let the mystery be, for ten Hail Marys, exactly this simple: the Mother looking at the Child, and you beside her, looking too.",
+          "source": "original",
+          "form": "expository"
         }
       ]
     },
@@ -642,7 +668,7 @@
           },
           "body": "Liguori opens by separating the two laws that met that morning. One required the mother to keep apart forty days and then purify herself in the temple. The other required the parents of a firstborn son to bring him and offer him to God. Mary was bound by neither — she was always a virgin and always pure, and the child was already holy to the Lord in a sense the statute never imagined. She obeyed both anyway, out of humility and obedience, like any other mother in the queue.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-4-03",
@@ -655,7 +681,7 @@
           },
           "body": "Faber notices something about her willingness that is easy to miss. She submitted to the rite of purification the more readily precisely because it concealed her graces. A law written for sinners, applied to the sinless, made her look like everyone else — and that was the attraction, not the difficulty. Consider how much of your own resistance to ordinary obligations is really a reluctance to be taken for ordinary.",
           "source": "faber",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-4-04",
@@ -681,7 +707,7 @@
           },
           "body": "Faber puts the two offerings in one sentence and lets them collide. She brought the birds the poor were permitted to bring — and she also bore in her arms her true turtle-dove, to be presented likewise according to the custom of the law. The temple accountant recorded a transaction of the smallest possible value. What was actually carried through the gate that morning was the Lamb.",
           "source": "faber",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-4-06",
@@ -720,7 +746,7 @@
           },
           "body": "Here Liguori draws the distinction the whole mystery turns on. Every other mother in that queue offered her firstborn knowing it was a ceremony — she paid the redemption price, took the child home, and never feared being asked for him again. Mary offered her Son to death. She knew with certainty that the sacrifice she was making in that room would one day be carried out on the altar of the cross. The other mothers were buying their sons back. She was not.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-4-09",
@@ -733,7 +759,7 @@
           },
           "body": "Liguori reasons from a principle he takes from St Thomas — that motherhood gives a real right over a child. God would not let the Word become her Son without her spoken consent. So it was fitting, he argues, that He would not destine that Son to the cross without her consent either. Which makes this morning her second fiat, and the harder of the two. At Nazareth she was asked to receive Him. Here she is asked to hand Him over.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-4-10",
@@ -812,6 +838,19 @@
           "body": "There was a second witness, and Luke gives her a name and an age. Eighty-four, widowed most of her life, in the temple day and night for decades, praying for something she had no evidence was coming. She got one hour of it. Then Joseph and Mary finished the paperwork and went home to Nazareth, and the child grew up, and nothing else is recorded of Anna at all. Some vocations are like that. She would not have traded.",
           "source": "original",
           "form": "expository"
+        },
+        {
+          "id": "joyful-4-16",
+          "mystery": "joyful-4",
+          "position": "any",
+          "image": "presentation-lorenzetti",
+          "scripture": {
+            "ref": "Psalm 115:12",
+            "text": "What shall I render to the Lord, for all the things that he hath rendered to me?"
+          },
+          "body": "You began this rosary by naming intentions — the people and burdens you brought tonight. This is the mystery where they belong. Carry them up the temple steps the way she carried Him: deliberately, to hand over, not to display. The psalm asks the only question the Presentation leaves open: what shall I render to the Lord, for all the things that he hath rendered to me? She rendered back the very Gift she had been given, and — Liguori has already told you — she did not buy Him back. What is yours to carry up and leave on the altar tonight?",
+          "source": "original",
+          "form": "question"
         }
       ]
     },
@@ -882,7 +921,7 @@
           },
           "body": "Liguori hears this verse in her mouth for three days. She is asking strangers in the street the question the bride asks the watchmen — have you seen him whom my soul loveth — and getting nothing back. Everyone she stops is a person who has not seen Him. The city is full of pilgrims and not one of them can help her.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-5-06",
@@ -906,9 +945,9 @@
             "ref": "Psalm 41:4",
             "text": "My tears have been my bread day and night, whilst it is said to me daily: Where is thy God?"
           },
-          "body": "Liguori gathers what she prayed in those nights from the psalms and the prophets, because Scripture has no record of it and this is how the Church has always filled such silences. Pelbart says she did not sleep, but wept and prayed through the dark asking God to let her find her Son. St Bernard puts the bride's line on her lips — show me where thou liest at midday, lest I begin to wander.",
+          "body": "Liguori gathers what she prayed in those nights from the psalms, because Scripture is silent and this is how the Church has always filled such silences. Pelbart says she did not sleep, but wept and prayed through the dark, asking God to let her find her Son. St Bernard puts the bride's line on her lips — show me where thou liest at midday, lest I begin to wander.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-5-08",
@@ -919,7 +958,7 @@
             "ref": "Luke 2:46",
             "text": "And it came to pass, that, after three days, they found him in the temple, sitting in the midst of the doctors, hearing them and asking them questions."
           },
-          "body": "Faber makes a claim that stops you: of all seven of her sorrows, this was the greatest — greater than Calvary. His reasoning is exact. Only the Burial comes near it, and the Burial was easier, because standing at that tomb she knew He could suffer no more, she understood what had been accomplished, and she could count the hours until Sunday. Here she knew none of that. She had lost Him, and did not know why, or where, or whether He was suffering.",
+          "body": "Faber makes a claim that stops you: of all seven of her sorrows, this was the greatest — greater than Calvary. His reasoning is exact. Only the Burial comes near it, and the Burial was easier: at the tomb she knew He could suffer no more, understood what had been accomplished, and could count the hours until Sunday. Here she knew none of that. She had lost Him, and did not know why, or where, or whether He was suffering.",
           "source": "faber",
           "form": "expository"
         },
@@ -934,7 +973,7 @@
           },
           "body": "Liguori arrives at the same verdict by the same road, and the agreement of two such different writers is worth weighing. In every other sorrow, he says, she had Jesus with her — at Simeon's prophecy, in the flight to Egypt, at the cross itself. Here she suffered at a distance from Him. And in every other sorrow she understood what it was for: the redemption of the world, the will of God. In this one she did not know the cause at all.",
           "source": "liguori",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-5-10",
@@ -958,7 +997,7 @@
             "ref": "Tobias 5:12",
             "text": "And Tobias said: What manner of joy shall be to me, who sit in darkness and see not the light of heaven?"
           },
-          "body": "Faber says plainly that this darkness was God's own doing, and that its parallels are the interior trials the great saints were put through — with one difference. In them the darkness was a cleansing, and in her there was nothing to cleanse; what took the saints long years was done in her in three days. Which means the Mother of God has been where you are when prayer goes dark and you cannot tell whether you have done something wrong. If she could be led there, what exactly are you concluding about yourself from the fact that you have been?",
+          "body": "Faber says plainly that this darkness was God's own doing — parallel to the interior trials of the great saints, with one difference: in them the darkness was a cleansing, and in her there was nothing to cleanse. What took the saints long years was done in her in three days. So the Mother of God has been where you are when prayer goes dark and you cannot tell whether you have done something wrong. If she could be led there, what exactly are you concluding about yourself from the fact that you have been?",
           "source": "faber",
           "form": "question"
         },
@@ -971,9 +1010,9 @@
             "ref": "Luke 2:48",
             "text": "And seeing him, they wondered. And his mother said to him: Son, why hast thou done so to us? Behold thy father and I have sought thee sorrowing."
           },
-          "body": "Faber relays a story from the life of Blessed Benvenuta of Bojano, who asked to be allowed to feel Our Lady's grief in the Three Days' Loss. It was granted. A child appeared to her and then withdrew, and for three days she could not be consoled and thought she would come apart. At the end of them Our Lady appeared and said: you asked for a taste of that sorrow, and a taste is what you had — do not ask such a thing again, for your weakness could not live under that grief.",
+          "body": "Faber relays a story from the life of Blessed Benvenuta of Bojano, who asked to be allowed to feel Our Lady's grief in the Three Days' Loss. It was granted: a child appeared to her and then withdrew, and for three days she could not be consoled. At the end of them Our Lady came and said — you asked for a taste of that sorrow, and a taste is what you had; do not ask such a thing again, for your weakness could not live under that grief.",
           "source": "faber",
-          "form": "patristic"
+          "form": "tradition"
         },
         {
           "id": "joyful-5-13",
