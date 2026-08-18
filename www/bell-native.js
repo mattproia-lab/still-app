@@ -2,28 +2,23 @@
  * bell-native.js — Still
  * ----------------------------------------------------------------------------
  * Schedules on-device local notifications (the monastery bell) for the
- * Liturgy of the Hours when Still runs as a NATIVE iOS/Android build.
+ * Liturgy of the Hours — and the user's own custom bells — when Still runs
+ * as a NATIVE iOS/Android build.
  *
- * In a normal browser or PWA this script does nothing on purpose — the
- * existing OneSignal web-push functions handle those visitors. It only
- * activates inside the Capacitor native shell, where iOS can play a
- * bundled bell sound even while the app is closed.
- *
- * How it stays in sync with the user's choices:
- *   - It reads the four .bell-row switches by their data-hour + aria-pressed.
- *   - It re-runs whenever the user taps "Save Bell Schedule".
- *   - On launch it waits for the saved preferences to populate the toggles,
- *     then schedules — so a user who set their Hours before installing the
- *     native app still gets bells without opening Settings.
+ * IDs: 1-4 the four Hours (vigils/lauds/vespers/compline), 5-7 custom slots.
+ * The Hours ring with the user's chosen Bell Voice (still_bell_voice);
+ * each custom slot carries its own voice. Launch path only ever ARMS
+ * (never cancels); cancelling belongs to the explicit Save action, which
+ * verifies against iOS's pending list and confirms with a toast.
  * ----------------------------------------------------------------------------
  */
 (function () {
   'use strict';
 
-  // One fixed notification ID per Hour, so we can cancel/reschedule cleanly.
   var HOUR_IDS = { vigils: 1, lauds: 2, vespers: 3, compline: 4 };
+  var CUSTOM_BASE_ID = 4; // slot N -> id 4+N (5,6,7)
+  var ALL_IDS = [1, 2, 3, 4, 5, 6, 7];
 
-  // Used only if the on-screen time text can't be parsed for some reason.
   var FALLBACK_TIMES = {
     vigils:   { hour: 4,  minute: 0 },
     lauds:    { hour: 6,  minute: 0 },
@@ -35,9 +30,12 @@
     vigils: 'Vigils', lauds: 'Lauds', vespers: 'Vespers', compline: 'Compline'
   };
   var BODY = 'The monastery bell tolls. Come to the Office.';
+  var CUSTOM_BODY = 'The monastery bell tolls.';
 
-  // The bell file bundled into the iOS app (added to the Xcode project).
-  var BELL_SOUND = 'bell.wav';
+  function hourVoice() {
+    try { return localStorage.getItem('still_bell_voice') || 'bell-call.wav'; }
+    catch (e) { return 'bell-call.wav'; }
+  }
 
   function isNative() {
     return !!(window.Capacitor &&
@@ -51,7 +49,6 @@
     return Capacitor.Plugins.LocalNotifications;
   }
 
-  // "4:00 AM" / "6:00 PM" / "12:00 AM" -> { hour, minute } in 24-hour time.
   function parseTime(text) {
     if (!text) return null;
     var m = text.match(/(\d{1,2}):(\d{2})\s*([AaPp][Mm])/);
@@ -59,13 +56,12 @@
     var hour = parseInt(m[1], 10);
     var minute = parseInt(m[2], 10);
     var pm = /[Pp][Mm]/.test(m[3]);
-    if (hour === 12) hour = 0;   // 12 AM -> 0
-    if (pm) hour += 12;          // ...and 12 PM -> 12
+    if (hour === 12) hour = 0;
+    if (pm) hour += 12;
     return { hour: hour, minute: minute };
   }
 
-  // Read each .bell-row: which Hour, its time, and whether it's switched on.
-  function readSchedule() {
+  function readHourSchedule() {
     var rows = document.querySelectorAll('.bell-row');
     var schedule = [];
     rows.forEach(function (row) {
@@ -75,7 +71,6 @@
       var toggle = row.querySelector('.bell-toggle');
       var on = !!toggle && toggle.getAttribute('aria-pressed') === 'true';
 
-      // Find the div whose text looks like a clock time.
       var time = null;
       var divs = row.querySelectorAll('div');
       for (var i = 0; i < divs.length; i++) {
@@ -89,63 +84,166 @@
     return schedule;
   }
 
-  async function syncBells() {
+  function readCustomSchedule() {
+    var rows = document.querySelectorAll('.custom-bell-row');
+    var out = [];
+    rows.forEach(function (row) {
+      var slot = parseInt(row.getAttribute('data-slot'), 10);
+      if (!slot || slot < 1 || slot > 3) return;
+      var toggle = row.querySelector('.custom-bell-toggle');
+      var on = !!toggle && toggle.getAttribute('aria-pressed') === 'true';
+      var timeVal = (row.querySelector('.custom-bell-time') || {}).value || '';
+      var tm = timeVal.match(/^(\d{1,2}):(\d{2})/);
+      var label = ((row.querySelector('.custom-bell-label') || {}).value || '').trim() || 'Prayer';
+      var voice = (row.querySelector('.custom-bell-voice') || {}).value || 'bell-call.wav';
+      if (!tm) return;
+      out.push({
+        slot: slot,
+        on: on,
+        time: { hour: parseInt(tm[1], 10), minute: parseInt(tm[2], 10) },
+        label: label,
+        voice: voice
+      });
+    });
+    return out;
+  }
+
+  function buildNotifications() {
+    var voice = hourVoice();
+    var list = readHourSchedule()
+      .filter(function (s) { return s.on; })
+      .map(function (s) {
+        return {
+          id: HOUR_IDS[s.hour],
+          title: TITLES[s.hour],
+          body: BODY,
+          sound: voice,
+          schedule: {
+            on: { hour: s.time.hour, minute: s.time.minute },
+            allowWhileIdle: true
+          }
+        };
+      });
+
+    readCustomSchedule()
+      .filter(function (c) { return c.on; })
+      .forEach(function (c) {
+        list.push({
+          id: CUSTOM_BASE_ID + c.slot,
+          title: c.label,
+          body: CUSTOM_BODY,
+          sound: c.voice,
+          schedule: {
+            on: { hour: c.time.hour, minute: c.time.minute },
+            allowWhileIdle: true
+          }
+        });
+      });
+
+    return list;
+  }
+
+  function showBellToast(msg) {
+    try {
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);left:50%;transform:translateX(-50%);z-index:99999;background:rgba(20,18,10,.95);border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:Heebo,sans-serif;font-size:13px;padding:10px 18px;border-radius:20px;max-width:80vw;text-align:center';
+      document.body.appendChild(t);
+      setTimeout(function () { t.remove(); }, 3500);
+    } catch (e) {}
+  }
+
+  async function verifyPending(showToast) {
+    try {
+      var LN = plugin();
+      var pending = await LN.getPending();
+      var bells = (pending.notifications || []).filter(function (n) {
+        return ALL_IDS.indexOf(n.id) !== -1;
+      });
+      console.log('[bell-native] pending bells: ' + bells.length);
+      if (showToast) {
+        showBellToast(bells.length > 0
+          ? 'The bells are set \u2014 ' + bells.length + ' scheduled.'
+          : 'No bells scheduled \u2014 check your toggles and try again.');
+      }
+      return bells.length;
+    } catch (e) {
+      console.warn('[bell-native] verify failed', e);
+      if (showToast) showBellToast('Could not confirm the bell schedule.');
+      return -1;
+    }
+  }
+
+  async function ensurePermission() {
+    var LN = plugin();
+    var perm = await LN.checkPermissions();
+    if (perm.display !== 'granted') {
+      perm = await LN.requestPermissions();
+    }
+    return perm.display === 'granted';
+  }
+
+  // SAVE path: authoritative. Cancels ids 1-7, re-schedules what's on,
+  // verifies with a visible toast.
+  async function saveBells() {
     if (!isNative()) return;
     var LN = plugin();
     try {
-      // Make sure we're allowed to post notifications.
-      var perm = await LN.checkPermissions();
-      if (perm.display !== 'granted') {
-        perm = await LN.requestPermissions();
-        if (perm.display !== 'granted') return; // declined — nothing to do
+      if (!(await ensurePermission())) {
+        showBellToast('Notifications are off for Still \u2014 enable them in iPhone Settings to hear the bells.');
+        return;
       }
 
-      var schedule = readSchedule();
+      var toSchedule = buildNotifications();
 
-      // Clear the four Hour notifications, then re-add the ones switched on.
       await LN.cancel({
-        notifications: Object.keys(HOUR_IDS).map(function (h) {
-          return { id: HOUR_IDS[h] };
-        })
+        notifications: ALL_IDS.map(function (id) { return { id: id }; })
       });
-
-      var toSchedule = schedule
-        .filter(function (s) { return s.on; })
-        .map(function (s) {
-          return {
-            id: HOUR_IDS[s.hour],
-            title: TITLES[s.hour],
-            body: BODY,
-            sound: BELL_SOUND,
-            schedule: {
-              on: { hour: s.time.hour, minute: s.time.minute },
-              allowWhileIdle: true
-            }
-          };
-        });
 
       if (toSchedule.length) {
         await LN.schedule({ notifications: toSchedule });
         try { localStorage.setItem('bellsScheduled', '1'); } catch (e) {}
+      } else {
+        try { localStorage.removeItem('bellsScheduled'); } catch (e) {}
       }
-      console.log('[bell-native] scheduled ' + toSchedule.length + ' bell(s)');
+
+      await verifyPending(true);
     } catch (e) {
-      console.warn('[bell-native] sync failed', e);
+      console.warn('[bell-native] save failed', e);
+      showBellToast('Could not set the bells \u2014 please try again.');
     }
   }
 
-  // Re-sync whenever the user saves their bell schedule.
+  // LAUNCH path: protective. NEVER cancels. Arms only when at least one
+  // toggle is visibly ON and iOS holds fewer than expected.
+  async function launchArm() {
+    if (!isNative()) return;
+    var LN = plugin();
+    try {
+      var perm = await LN.checkPermissions();
+      if (perm.display !== 'granted') return;
+
+      var toSchedule = buildNotifications();
+      if (!toSchedule.length) return;
+
+      var pendingCount = await verifyPending(false);
+      if (pendingCount >= toSchedule.length) return;
+
+      await LN.schedule({ notifications: toSchedule });
+      try { localStorage.setItem('bellsScheduled', '1'); } catch (e) {}
+      console.log('[bell-native] launch re-armed ' + toSchedule.length + ' bell(s)');
+    } catch (e) {
+      console.warn('[bell-native] launch arm failed', e);
+    }
+  }
+
   function hookSaveButton() {
     var btn = document.getElementById('bellsSaveBtn');
     if (!btn || btn._bellHooked) return;
     btn._bellHooked = true;
-    // Run shortly after the app's own saveBellSettings() persists to Supabase.
-    btn.addEventListener('click', function () { setTimeout(syncBells, 400); });
+    btn.addEventListener('click', function () { setTimeout(saveBells, 400); });
   }
 
-  // Catch-up at launch: wait for saved prefs to populate the toggles, then sync.
-  // We only sync once prefs look loaded (any toggle on) or once we've scheduled
-  // before — so we never wrongly cancel a real schedule on a slow load.
   function launchCatchUp() {
     if (!isNative()) return;
     var tries = 0;
@@ -153,17 +251,13 @@
       tries++;
       hookSaveButton();
 
-      var anyOn = !!document.querySelector('.bell-toggle[aria-pressed="true"]');
-      var scheduledBefore = false;
-      try { scheduledBefore = localStorage.getItem('bellsScheduled') === '1'; }
-      catch (e) {}
-
-      if (anyOn || scheduledBefore) {
+      var anyOn = !!document.querySelector('.bell-toggle[aria-pressed="true"], .custom-bell-toggle[aria-pressed="true"]');
+      if (anyOn) {
         clearInterval(timer);
-        syncBells();
-      } else if (tries >= 20) { // ~10 seconds
+        launchArm();
+      } else if (tries >= 60) { // ~30 seconds
         clearInterval(timer);
-        hookSaveButton(); // still wire up Save for later
+        hookSaveButton();
       }
     }, 500);
   }
