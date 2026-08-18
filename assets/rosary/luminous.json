@@ -1,0 +1,1198 @@
+{
+  "set": "luminous",
+  "title": "The Luminous Mysteries",
+  "schema": 1,
+  "sources": {
+    "original": null,
+    "catena": "St Thomas Aquinas, Catena Aurea on St Matthew and St John (Oxford trans., 1841)",
+    "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)",
+    "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
+    "denis": "Denis the Carthusian, Enarratio in Canticum Canticorum (1898), trans. from the Latin for Still"
+  },
+  "mysteries": [
+    {
+      "id": "luminous-1",
+      "title": "The Baptism in the Jordan",
+      "meditations": [
+        {
+          "id": "luminous-1-01",
+          "mystery": "luminous-1",
+          "position": "opener",
+          "image": "baptism-piero",
+          "scripture": {
+            "ref": "Matthew 3:13",
+            "text": "Then cometh Jesus from Galilee to the Jordan, unto John, to be baptized by him."
+          },
+          "body": "Picture the riverbank before anything happens:\na line of people waiting their turn,\neach one there because of something they have done.\nTax collectors, soldiers, the ashamed of three provinces —\na queue defined by its confessions.\nAnd into that line, unannounced,\nafter eighteen years of sawdust and silence,\nsteps a carpenter from Nazareth.\nHe mingled with the multitude of sinners.\nNo herald, no distance, no exception made.\nThe public life of the Son of God begins\nwith Him taking a place in the sinners' line —\nwhich is to say, in yours.\nStand in the queue with Him for this decade.",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "expository"
+        },
+        {
+          "id": "luminous-1-02",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-piero",
+          "scripture": {
+            "ref": "Matthew 3:14",
+            "text": "But John stayed him, saying: I ought to be baptized by thee, and comest thou to me?"
+          },
+          "body": "The Baptist's protest speaks for every one of us.\nHe is overruled.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-1-03",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-piero",
+          "scripture": {
+            "ref": "Matthew 3:15",
+            "text": "And Jesus answering, said to him: Suffer it to be so now. For so it becometh us to fulfil all justice. Then he suffered him."
+          },
+          "body": "What is this justice that must be fulfilled?\nName the double office Christ fills in every mystery.\nHe is Son of God, before whom the angels veil their faces —\nand He is Head of a fallen race whose flesh He has taken.\nAs Son, He could claim the right hand of the Father this instant.\nAs Head, He will enter heaven only at the front of His people,\nhaving passed through everything owed by them.\nSo the just one stands in for the unjust — justus pro injustis —\nand His humiliation here renders to Infinite Holiness\nthe supreme homage that pays our whole debt.\nThe baptism of penance, received by the sinless,\nis the down payment on Calvary.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-1-04",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "theophany-byzantine-icon",
+          "scripture": {
+            "ref": "Psalm 113:3",
+            "text": "But our God is in heaven: he hath done all things whatsoever he would."
+          },
+          "body": "Here is the mystery's great reversal, and it has never wavered:\nHe did not go down into the water to be washed by it.\nHe went down to wash it.\nThe East sings it every Theophany —\ntoday the nature of the waters is sanctified —\nand the icon paints the psalm literally:\nthe Jordan turning back at His feet, the sea seeing and fleeing.\nSay it plainly:\nsanctified by contact with the Humanity of Jesus,\nthe water received the virtue of washing away sins.\nEvery font in every parish church draws its power from this moment.\nHe stepped into the river,\nand every baptism that would ever be performed\nbecame possible on the spot.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-1-05",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "theophany-byzantine-icon",
+          "scripture": {
+            "ref": "Genesis 1:2",
+            "text": "And the earth was void and empty, and darkness was upon the face of the deep; and the spirit of God moved over the waters."
+          },
+          "body": "The Bible's first sentence about the Spirit\nhas Him moving over the face of the waters,\non the eve of the first creation.\nNow, over the waters of the Jordan, He appears again —\nand the rhyme has always been read:\nthis is day one of the new creation,\nbegun the way the first one was,\nSpirit over water, about to speak light.\nEven the dove carries a memory.\nThe last time Scripture showed one over the waters,\nit was searching a drowned world for somewhere to rest,\nand finding nowhere.\nThis dove descends and remains.\nThe long flight over the flood is finished.\nThere is finally a place on earth for the Spirit to land.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-1-06",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "theophany-byzantine-icon",
+          "scripture": {
+            "ref": "Matthew 3:16-17",
+            "text": "And Jesus being baptized, forthwith came out of the water: and lo, the heavens were opened to him: and he saw the Spirit of God descending as a dove, and coming upon him. And behold a voice from heaven saying: This is my beloved Son, in whom I am well pleased."
+          },
+          "body": "Watch the divine law written across this scene in three strokes.\nChrist stoops to mingle with sinners —\nand forthwith the heavens open to magnify Him.\nHe asks for the baptism of penance —\nand the Spirit descends to testify He possesses grace in plenitude.\nHe presents Himself as one deserving the strokes of justice —\nand the Father declares He takes all His delight in Him.\nEvery humiliation answered instantly by a glorification:\nhumiliavit semetipsum, propter quod exaltavit.\nYou have met that arc at the crowning with thorns and at the Ascension.\nThis riverbank is where it is first performed in public,\nas the signature of how God works.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-1-07",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-verrocchio",
+          "scripture": {
+            "ref": "Matthew 3:17",
+            "text": "And behold a voice from heaven saying: This is my beloved Son, in whom I am well pleased."
+          },
+          "body": "Attend to the timing of the Voice.\nThis is my beloved Son, in whom I am well pleased —\nspoken before a single miracle, a single sermon, a single disciple.\nThirty years of hidden life,\nof sawdust and obedience and nothing the world would call achievement,\nand the Father's delight is already total.\nThe belovedness does not follow the performance; it precedes everything.\nThe same sentence will sound on Thabor at the summit of glory,\nand it holds even at the Ecce Homo, over the disfigured face.\nIt was never earned and it never wavers.\nRest inside that sentence for the length of this decade.\nIt is the ground the whole Gospel stands on.",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "expository"
+        },
+        {
+          "id": "luminous-1-08",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-verrocchio",
+          "scripture": {
+            "ref": "John 1:29",
+            "text": "The next day, John saw Jesus coming to him; and he saith: Behold the Lamb of God. Behold him who taketh away the sin of the world."
+          },
+          "body": "The first public title of His ministry\nis the name of a sacrifice.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-1-09",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-verrocchio",
+          "scripture": {
+            "ref": "4 Kings 5:14",
+            "text": "Then he went down, and washed in the Jordan seven times, according to the word of the man of God; and his flesh was restored, like the flesh of a little child: and he was made clean."
+          },
+          "body": "The Jordan had a résumé before that morning.\nCenturies earlier, Naaman the Syrian — a great man, and a leper —\nwas told by the prophet to go wash seven times in this same river.\nHe nearly refused; the rivers of Damascus were better water.\nBut he went down,\nand came up with his flesh restored like the flesh of a little child.\nRead it as the rehearsal it was:\na proud man, a humbling instruction, an unimpressive river,\nand skin like a child's — which is to say, a man born again.\nThe Jordan had been practicing for the Baptism of Christ,\nand every baptism since gives what Naaman got:\nthe flesh of a little child,\nfit for a kingdom that only children enter.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-1-10",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-perugino",
+          "scripture": {
+            "ref": "Galatians 3:27",
+            "text": "For as many of you as have been baptized in Christ have put on Christ."
+          },
+          "body": "This mystery is not a scene you watch but an inheritance you hold.\nYour baptism was conferred in the Name of the Trinity —\nthe Trinity revealed to the world on this riverbank:\nFather's voice, Son in the water, Spirit descending.\nAnd what the sacrament did is the whole Gospel in one sentence:\nfrom children of wrath it made us children of God,\nso that we are henceforward, with Jesus, though in lesser measure,\nthe objects of the heavenly Father's delight.\nAs His baptism was the summary of His mission,\nso yours contains in germ your whole Christian life.\nAs many as have been baptized in Christ have put on Christ —\nand no one has ever taken Him off you.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-1-11",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-perugino",
+          "scripture": {
+            "ref": "Isaias 53:12",
+            "text": "Therefore will I distribute to him very many, and he shall divide the spoils of the strong, because he hath delivered his soul unto death, and was reputed with the wicked: and he hath borne the sins of many, and hath prayed for the transgressors."
+          },
+          "body": "Isaias had prophesied that the Servant would be reputed with the wicked —\ncounted among the transgressors.\nMost readers place that on Calvary, between the two thieves,\nand it belongs there.\nBut look where the counting begins:\nin the water queue at the Jordan,\nwhere anyone taking a census of sinners that morning\nwould have written His name in the ledger with the rest.\nThe solidarity that ends between two crosses\nstarts in a river line, chosen freely, decades early.\nHe was never caught among sinners. He enrolled.\nAnd He has never asked to be taken off the list,\nbecause the list is where you are.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-1-12",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-perugino",
+          "scripture": {
+            "ref": "Ezechiel 36:25-26",
+            "text": "And I will pour upon you clean water, and you shall be cleansed from all your filthiness, and I will cleanse you from all your idols. And I will give you a new heart, and put a new spirit within you: and I will take away the stony heart out of your flesh, and will give you a heart of flesh."
+          },
+          "body": "Everything this mystery holds happened to you personally,\non a specific day, at a specific font,\nwhen clean water was poured upon you and a heart of flesh was given.\nSo here is the decade's question, and it is disarmingly practical:\ndo you know the date?\nMost Catholics can name their birthday to the hour\nand have never once asked when they were baptized.\nYet that was the day the Voice said beloved over you.\nFind the date this week —\na parish record, a family Bible, a phone call to your mother.\nWrite it down.\nKeep it the way you keep the birthday it outranks.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "luminous-1-13",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-el-greco",
+          "scripture": {
+            "ref": "Mark 1:12-13",
+            "text": "And immediately the Spirit drove him out into the desert. And he was in the desert forty days and forty nights, and was tempted by Satan. And he was with beasts: and the angels ministered to him."
+          },
+          "body": "Mark gives the sequel one shocking adverb:\nimmediately — statim —\nthe Spirit drove him out into the desert, to be tempted.\nDo not soften it:\nthe same Spirit who descended as a dove now drives;\nthe Father's beloved is sent straight from the affirmation into the combat.\nAnd the lesson holds for every baptized soul:\ntemptation is not the evidence that grace has failed\nbut the field where constancy is proven —\neternal life is the recompense of those who,\nhaving had to choose, resisted and remained faithful.\nIf your consolations keep being followed by battles,\nthe pattern is not broken.\nIt is the pattern.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-1-14",
+          "mystery": "luminous-1",
+          "position": "any",
+          "image": "baptism-el-greco",
+          "scripture": {
+            "ref": "1 John 3:1",
+            "text": "Behold what manner of charity the Father hath bestowed upon us, that we should be called and should be the sons of God. Therefore the world knoweth not us, because it knew not him."
+          },
+          "body": "Behold what manner of charity:\nthat we should be called, and should be, the sons of God.\nNot called only — should be.\nThe Voice at the Jordan spoke over you at your font,\nand it has not retracted.\nYet most of us live the day in the opposite order:\nperform first, and maybe feel approved by nightfall.\nSo take the mystery's harder question into the week ahead:\nwhat would you attempt — what would you finally rest from —\nif the approval were already settled?\nBecause it is.\nBeloved is not the wage at the end of your day.\nIt is the ground you woke up standing on.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "luminous-1-15",
+          "mystery": "luminous-1",
+          "position": "closer",
+          "image": "baptism-el-greco",
+          "scripture": {
+            "ref": "Luke 3:21",
+            "text": "Now it came to pass, when all the people were baptized, that Jesus also being baptized and praying, heaven was opened."
+          },
+          "body": "Luke alone preserves the detail\nthat makes this a closer for people who pray:\nJesus being baptized and praying, heaven was opened.\nNot at the water's touch — at the prayer.\nThe sky opens over a man praying,\nwhich is precisely what you are at this moment.\nSo end the decade there:\nunder an opened heaven, in the posture that opened it.\nTomorrow the public life begins —\nthe roads, the crowds, the desert first of all —\nand it begins from prayer,\nthe way everything He did began from prayer.\nRise from this decade the way He came up from the river:\nbeloved, anointed, and headed somewhere.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "luminous-2",
+      "title": "The Wedding at Cana",
+      "meditations": [
+        {
+          "id": "luminous-2-01",
+          "mystery": "luminous-2",
+          "position": "opener",
+          "image": "cana-giotto",
+          "scripture": {
+            "ref": "John 2:1-2",
+            "text": "And the third day, there was a marriage in Cana of Galilee: and the mother of Jesus was there. And Jesus also was invited, and his disciples, to the marriage."
+          },
+          "body": "Notice how the Evangelist orders the guest list:\nthe mother of Jesus was there — and Jesus also was invited.\nDraw the human inference:\nthey invited Him not as a great person but as one they knew,\none of the many; as they invited the mother, so they invited the Son.\nIn Cana He is still somebody's relative —\nMary's boy, welcome because she is.\nAnd He came.\nThe public life that will end on a Roman cross\nbegins at a village wedding, among ordinary joy,\nbecause He cared more for our good than for His own dignity.\nTake your seat at the feast for this decade.\nYou were invited the same way — through His mother.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-02",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-giotto",
+          "scripture": {
+            "ref": "John 2:3",
+            "text": "And the wine failing, the mother of Jesus saith to him: They have no wine."
+          },
+          "body": "The shortest intercessory prayer in Scripture:\na fact, laid at His feet.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-2-03",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-giotto",
+          "scripture": {
+            "ref": "John 2:2",
+            "text": "And Jesus also was invited, and his disciples, to the marriage."
+          },
+          "body": "Do not let the scene pass without its scandal:\nlet the proud man blush to see the humility of God —\nthe Son of the Virgin comes to a marriage,\nHe who, when He was with the Father, instituted marriage.\nAnd press the consequence:\nif the marriage bed honestly kept partook at all of sin,\nour Lord would never have come to one.\nSo the three states of life each receive their honor in His story —\nborn of a virgin, blessed in infancy by the widow Anna,\nand now attending a wedding as a guest.\nWhatever your state — married, widowed, single, consecrated —\nHe has stood inside its blessing personally.",
+          "source": "catena",
+          "fathers": [
+            "Augustine",
+            "Bede"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-04",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-veronese",
+          "scripture": {
+            "ref": "Psalm 18:6",
+            "text": "He hath set his tabernacle in the sun: and he as a bridegroom coming out of his bridechamber, Hath rejoiced as a giant to run the way:"
+          },
+          "body": "Now lift the whole feast into the heavens:\nwhat marvel that He went to that house for a marriage,\nwho came into this world for a marriage?\nFor here He has His spouse, whom He redeemed with His own blood —\nthe Word is the Bridegroom and human flesh the bride,\nand the womb of the Virgin Mary was His bridal chamber,\nfrom which He came forth as a bridegroom, as the psalm had sung.\nRest inside that for the decade:\nthe Incarnation itself was a wedding, your nature the bride,\nand Cana is the Bridegroom attending a small copy of His own mystery —\nsmiling, perhaps, at how much the guests don't know about weddings.",
+          "source": "catena",
+          "fathers": [
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-05",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-veronese",
+          "scripture": {
+            "ref": "John 2:3",
+            "text": "And the wine failing, the mother of Jesus saith to him: They have no wine."
+          },
+          "body": "Fix on the detail that defines her forever:\nnobody asked her to intervene.\nShe saw the trouble of that young couple —\nthe small, mortifying, utterly unspiritual disaster\nof wine running out at your own wedding —\nand moved only by her compassionate heart,\nwhich cannot look upon the afflictions of others without pity,\nshe went to her Son unrequested.\nThen hand the inference on:\nif she is so ready to help when no one asks,\nwhat will she do when someone does?\nWho has ever invoked this sweet Lady, and not been heard?\nHer résumé begins with an unsolicited kindness about wine.\nIt has never changed character since.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Novarino",
+            "Innocent III"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-06",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-veronese",
+          "scripture": {
+            "ref": "Psalm 37:10",
+            "text": "Lord, all my desire is before thee, and my groaning is not hidden from thee."
+          },
+          "body": "Study the shape of her prayer,\nbecause it is a whole school of petition in four words:\nthey have no wine.\nNo instructions.\nNo proposed solution, no timetable, no 'therefore you should.'\nShe states the need and stands back —\nLord, all my desire is before thee —\ntrusting the Person more than any plan she could attach.\nMost of our prayers are the opposite:\nfully engineered requests with the outcome pre-drawn,\ndisappointed in advance by any other answer.\nHers leaves the whole solution space to Him,\nand receives more than anyone at that feast could have specified.\nTonight, take your heaviest intention and try her grammar:\nthe fact, laid at His feet, and nothing else.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-2-07",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-byzantine-icon",
+          "scripture": {
+            "ref": "John 2:4",
+            "text": "And Jesus saith to her: Woman, what is that to me and to thee? My hour is not yet come."
+          },
+          "body": "Woman, what is that to me and to thee?\nThe words sound cold until you walk around them.\nSome argue from this verse that she was not His mother —\nbut the same Evangelist wrote the mother of Jesus was there;\nboth stand or neither.\nRemember Nazareth:\nHe was subject to His parents; no one honored her more.\nThen take the key:\nthe answer marks the line between His manhood, which she bore,\nand His Godhead, which she did not —\nyou did not beget that in Me which works the miracle.\nHe speaks here as God about to act as God.\nThe mother is not being dismissed.\nThe Divinity is being disclosed.",
+          "source": "catena",
+          "fathers": [
+            "Augustine",
+            "Chrysostom"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-08",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-byzantine-icon",
+          "scripture": {
+            "ref": "John 12:23",
+            "text": "But Jesus answered them, saying: The hour is come that the Son of man should be glorified."
+          },
+          "body": "My hour is not yet come.\nHear in that sentence a promise with a date on it:\nI will acknowledge thee, He says to her in effect,\nwhen the infirmity of which thou art the mother shall hang upon the cross.\nThe hour is Calvary — and when it came, He did exactly that:\nfrom the cross, the same address, Woman, behold thy son.\nWhat was deferred at the feast was paid in full at the execution.\nAnd a thunderclap follows,\nagainst the astrologers who seized on the verse:\nthe hour was not of destiny but of will —\nthe Maker of the stars is not under the dominion of the stars.\nNeither are you.\nHis hour, and yours, belong to Providence, not the horoscope.",
+          "source": "catena",
+          "fathers": [
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-09",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-byzantine-icon",
+          "scripture": {
+            "ref": "John 2:5",
+            "text": "His mother saith to the waiters: Whatsoever he shall say to you, do ye."
+          },
+          "body": "Now watch what she does with an answer that sounds like no.\nShe does not argue, repeat herself, or retreat hurt.\nShe turns to the servants with complete serenity:\nwhatsoever he shall say to you, do ye —\nas if the yes were already in motion,\nbecause she knows the Person well enough\nto hear it inside the apparent refusal.\nIt is the boldest act of faith in the chapter, and it worked.\nThese are also the last words of hers that Scripture records —\nher final sentence in the Gospels is an instruction to obey Him —\nand they are the sentence this whole Rosary ends on.\nShe spent her one remaining line pointing at Him.\nShe has never needed another.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-2-10",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-gerard-david",
+          "scripture": {
+            "ref": "John 2:1",
+            "text": "And the third day, there was a marriage in Cana of Galilee: and the mother of Jesus was there."
+          },
+          "body": "Read the setting like a map of salvation.\nThe third day:\nthe world's first age was lit by the Patriarchs,\nthe second by the Prophets,\nand the third — under grace — by the Gospel;\nthe marriage happens on the third day\nbecause the Bridegroom has now appeared in the flesh.\nEven the village name preaches:\nCana means desire of migrating,\nand those most worthy of Christ are those who burn to pass over —\nfrom vice to virtue, from earthly things to eternal.\nAnd the wine was made to fail\nto give our Lord the opportunity of making better.\nRead your own failures by that light once, and see what they were for.",
+          "source": "catena",
+          "fathers": [
+            "Bede"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-11",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-gerard-david",
+          "scripture": {
+            "ref": "John 2:7",
+            "text": "Jesus saith to them: Fill the waterpots with water. And they filled them up to the brim."
+          },
+          "body": "Look at what the miracle asked of the humans in the room:\nfill the waterpots with water.\nSix stone jars that stood there for the purifying of the Jews —\nthe old covenant's washing equipment —\nand the task is plain manual labor,\ntwenty or thirty gallons apiece, hauled from the well.\nThey filled them up to the brim, John notes, and the brim matters:\nthey did the ordinary thing completely.\nWater was their whole contribution; wine was entirely His.\nThat is the standing ratio of grace:\nHe asks for what you have, done to the brim —\nthe full jar, the honest day, the whole rosary —\nand the transformation is none of your business.\nYour business is the well and the brim.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-2-12",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-gerard-david",
+          "scripture": {
+            "ref": "John 2:9",
+            "text": "And when the chief steward had tasted the water made wine and knew not whence it was, but the waiters knew who had drawn the water: the chief steward calleth the bridegroom,"
+          },
+          "body": "John plants one clause in parentheses\nand it may be the most quietly thrilling in the chapter:\nthe chief steward knew not whence it was —\nbut the servants which had drawn the water knew.\nThe head table tasted excellence\nand drew a wrong conclusion about the bridegroom's cellar.\nThe staff, wet to the elbows from obedience,\nwere the only people in Cana who knew what God had just done.\nIt is the standing economy of the kingdom:\nthe secret goes to whoever carried the water.\nSo the decade's question:\nwhere in your life has humble obedience already let you in\non something the important people at the head table cannot see?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "luminous-2-13",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-tintoretto",
+          "scripture": {
+            "ref": "Canticle of Canticles 2:4",
+            "text": "He brought me into the cellar of wine, he set in order charity in me."
+          },
+          "body": "Why did she, alone in that room, expect wine from Him?\nThere is a reason deeper than confidence.\nThe Canticle's wine-cellar was read as her own soul,\nthe King saying:\nnot only did I bring thee into the cellar of wine, O most blessed Lady,\nbut into the Wine itself —\nimmersed wholly in the abyss of His riches and delights,\nat the Annunciation, at the conception, at His birth.\nThe gloss is not about Cana; the application is ours —\nbut it fits like a key:\nthe woman who says they have no wine\nis the one person present\nwho has been steeped in the Wine for thirty years.\nShe asks for wine from inside it.\nSo does everyone who prays from communion rather than toward it.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-2-14",
+          "mystery": "luminous-2",
+          "position": "any",
+          "image": "cana-tintoretto",
+          "scripture": {
+            "ref": "John 2:10",
+            "text": "And saith to him: Every man at first setteth forth good wine, and when men have well drunk, then that which is worse. But thou hast kept the good wine until now."
+          },
+          "body": "The steward states the world's economics\nwithout knowing he is prophesying:\nevery man sets forth the good wine first,\nand when men have well drunk, then that which is worse.\nThat is the shape of every merely earthly pleasure —\nbest at the start, diminishing forever after.\nThen his astonishment: but thou hast kept the good wine until now.\nThat is the shape of grace, and it runs the other way:\nthe best is later, always later,\nkept deliberately for the far end of fidelity.\nSo the question, especially if your life feels past its best vintage:\nwhat would change this week if you actually believed\nthe Bridegroom's cellar works in that direction —\nthat for you, too, the good wine is kept until now?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "luminous-2-15",
+          "mystery": "luminous-2",
+          "position": "closer",
+          "image": "cana-tintoretto",
+          "scripture": {
+            "ref": "John 2:11",
+            "text": "This beginning of miracles did Jesus in Cana of Galilee and manifested his glory. And his disciples believed in him."
+          },
+          "body": "This beginning of miracles:\nof all the signs He could have opened with —\na healing, an exorcism, something urgent —\nthe first is a hundred and more gallons of superb wine\nfor a party already well underway.\nThe glory of God is first manifested in joy multiplied past all need.\nAnd the frame holds to the end of the Bible:\nthe ministry that opens at a wedding closes at a supper\nwhere He takes wine and gives it a new name,\nand history itself ends, John will write,\nat the marriage supper of the Lamb.\nCana is the first course of that feast.\nHis disciples believed in him, the verse finishes —\nover wine, at a wedding.\nEnd the decade believing the same way: glad.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "luminous-3",
+      "title": "The Proclamation of the Kingdom",
+      "meditations": [
+        {
+          "id": "luminous-3-01",
+          "mystery": "luminous-3",
+          "position": "opener",
+          "image": "christ-preaching-hundred-guilder",
+          "scripture": {
+            "ref": "Mark 1:14-15",
+            "text": "And after that John was delivered up, Jesus came into Galilee, preaching the gospel of the kingdom of God, And saying: The time is accomplished and the kingdom of God is at hand. Repent and believe the gospel:"
+          },
+          "body": "Mark gives the public preaching its first sentence, and every clause lands.\nThe time is accomplished — all the waiting of Israel,\nprophets and psalms and four silent centuries, arrives at one Galilean afternoon.\nThe kingdom of God is at hand — not a program to be built but a proximity to be met,\nnear because the King is near, standing in sandals on the lake road.\nRepent, and believe the gospel — turn, and treat this as news.\nNotice what the ministry's first imperative is not:\nit is not achieve, or organize, or even love. It is turn around.\nBegin the decade by doing only that:\nturn the face of your attention toward the One announcing,\nand let the announcement be news to you again.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-3-02",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "christ-preaching-hundred-guilder",
+          "scripture": {
+            "ref": "Matthew 4:19-20",
+            "text": "And he saith to them: Come ye after me, and I will make you to be fishers of men. And they immediately leaving their nets, followed him."
+          },
+          "body": "He explains nothing; He invites everything.\nAnd the nets drop immediately — the kingdom's first act of worship is an interrupted workday.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-3-03",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "christ-preaching-hundred-guilder",
+          "scripture": {
+            "ref": "Matthew 4:17",
+            "text": "From that time Jesus began to preach, and to say: Do penance, for the kingdom of heaven is at hand."
+          },
+          "body": "The Douay keeps the old rendering: do penance, for the kingdom of heaven is at hand.\nNotice what the first sermon is not.\nHe does not straightway preach righteousness, which all knew,\nbut repentance, which all needed — for repentance corrects the will,\nand no one is left to plead: I desire to be good, but am not able.\nAnd in this first address there is nothing severe, nothing burdensome —\nno axe laid to the root, as John had preached —\nbut first things merciful, the glad tidings of the kingdom.\nSmile at the geography too:\nHe does not say the kingdom of the Canaanite or the Jebusite is at hand.\nThe Law promised worldly goods. The Lord opens with heaven.",
+          "source": "catena",
+          "fathers": [
+            "Pseudo-Chrysostom",
+            "Chrysostom",
+            "Remigius"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-04",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "calling-peter-andrew-duccio",
+          "scripture": {
+            "ref": "Matthew 4:18",
+            "text": "And Jesus walking by the sea of Galilee, saw two brethren, Simon who is called Peter, and Andrew his brother, casting a net into the sea (for they were fishers)."
+          },
+          "body": "Do not let the guest list of the apostolate be prettified.\nHe chose not kings, senators, philosophers, or orators,\nbut common, poor, and untaught fishermen —\nand so bowed the necks of the proud, gaining an Emperor by a fisherman:\ngreat was Cyprian the pleader, but Peter the fisherman came before him.\nNow weigh the price of admission.\nPeter and Andrew had seen no miracle and heard no promise of reward,\nyet at a single bidding left all — and he leaves much who keeps nothing for himself.\nGod does not weigh the sacrifice by how much is offered, but out of how much:\nthe kingdom is not valued at a certain price;\nwhatever a man has, much or little, is equally available.\nYour much-or-little qualifies.",
+          "source": "catena",
+          "fathers": [
+            "Augustine",
+            "Gregory the Great"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-05",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "calling-peter-andrew-duccio",
+          "scripture": {
+            "ref": "Isaias 52:7",
+            "text": "How beautiful upon the mountains are the feet of him that bringeth good tidings, and that preacheth peace: of him that sheweth forth good, that preacheth salvation, that saith to Sion: Thy God shall reign!"
+          },
+          "body": "Gospel is a genre before it is a book:\nevangelium, the herald's word,\nthe runner cresting the ridge with a report from the field —\nnot advice about how the war might yet be won, but news that it has been.\nIsaias saw the messenger's feet on the mountains and called them beautiful\nbecause of what the mouth above them carries:\npeace, salvation, thy God shall reign.\nCenturies later, Galilee heard the report delivered in person.\nThis is the difference the mystery turns on:\ngood advice asks something of you first;\ngood news announces something done for you first, and asks only to be believed.\nMost of us quietly file the gospel under advice.\nFor one decade, file it where the herald filed it — under headlines.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-3-06",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "calling-peter-andrew-duccio",
+          "scripture": {
+            "ref": "Matthew 5:3",
+            "text": "Blessed are the poor in spirit: for theirs is the kingdom of heaven."
+          },
+          "body": "The kingdom's constitution opens with its door price, and the price is emptiness.\nThe first beatitude strikes at the root:\npride is the source of all evil, and humility the firm foundation —\nif this be well laid, other virtues may be built on it;\nif it be sapped, whatever good you gather perishes.\nThe Greek is blunter still: the poor here are literally they who beg —\nblessed are those who stand at God's almshouse and know it.\nAnd the ledger closes in one line:\nthe proud seek an earthly kingdom; of the humble only is the kingdom of Heaven.\nEvery other realm on earth is entered by what you have.\nThis one is entered by what you finally admit you lack.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Pseudo-Chrysostom",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-07",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "sermon-on-the-mount-fra-angelico",
+          "scripture": {
+            "ref": "Luke 17:20-21",
+            "text": "And being asked by the Pharisees when the kingdom of God should come, he answered them and said: The kingdom of God cometh not with observation. Neither shall they say: Behold here, or behold there. For lo, the kingdom of God is within you."
+          },
+          "body": "Asked when the kingdom would arrive, He answered where instead:\nnot with observation, not behold here or behold there —\nthe kingdom of God is within you.\nThe first meaning of the kingdom is a Person, and the Person has moved in.\nThat is the resting place of this decade.\nYou are not scanning the horizon for something delayed;\nthe King has made an address of you.\nAll the searching energy you spend on elsewhere and later —\nHe is asking for it back,\nredirected a very short distance inward,\nwhere grace has already taken up residence.\nSo stop traveling for the length of these ten beads.\nThe kingdom you are praying for is nearer than the beads in your hand.",
+          "source": "original",
+          "fathers": [
+            "Remigius"
+          ],
+          "form": "expository"
+        },
+        {
+          "id": "luminous-3-08",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "sermon-on-the-mount-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 9:2",
+            "text": "And behold they brought to him one sick of the palsy lying in a bed. And Jesus, seeing their faith, said to the man sick of the palsy: Be of good heart, son, thy sins are forgiven thee."
+          },
+          "body": "Watch whose faith moves the miracle.\nJesus, seeing their faith — not the sick man's, but theirs that bore him.\nIf borrowed faith availed to heal a man within and without,\nof how great power with God must a man's own faith be?\nThen the address. O wonderful humility:\nthis man feeble and despised, crippled in every limb, He calls son.\nAnd pardon comes before cure for a reason:\nby as much as the soul is better than the body,\nby so much is forgiving greater than healing —\nthe visible lesser miracle is worked to prove the invisible greater one.\nYou have carried people to Him on these beads before.\nThe stretcher works.",
+          "source": "catena",
+          "fathers": [
+            "Jerome",
+            "Chrysologus",
+            "Chrysostom"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-09",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "sermon-on-the-mount-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 9:13",
+            "text": "Go then and learn what this meaneth, I will have mercy and not sacrifice. For I am not come to call the just, but sinners."
+          },
+          "body": "Here the riverbank policy of the Baptism\nbecomes the kingdom's published mission statement.\nAccused of dining with the wrong ledger entries,\nHe sends the accusers back to their own Scriptures:\nI will have mercy, and not sacrifice.\nMind the grammar: God does not contemn sacrifice, but sacrifice without mercy.\nThen the sentence that defines the ministry:\nI am not come to call the just, but sinners.\nHear the consolation inside it, for everyone the call ever reached:\nso far am I from abhorring sinners, that for their sakes only did I come.\nSinners are called as the sick are — by a physician, to be cured.\nHe enrolled in the sinners' queue at the Jordan.\nNow He announces He came for the queue.",
+          "source": "catena",
+          "fathers": [
+            "Gloss",
+            "Chrysostom",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-10",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "healing-paralytic-van-dyck",
+          "scripture": {
+            "ref": "Matthew 13:44",
+            "text": "The kingdom of heaven is like unto a treasure hidden in a field. Which a man having found, hid it, and for joy thereof goeth, and selleth all that he hath, and buyeth that field."
+          },
+          "body": "The parable's economics are strange until you audit them.\nThe treasure is found without cost —\nthe preaching of the Gospel is open to all —\nbut to possess it with its field is not without price,\nfor heavenly riches are not obtained without the loss of this world.\nFree to find; everything to keep.\nAnd the currency of the purchase is not grim resolve:\nif you do not sell your all you will not obtain it —\nand this you ought to do with joy.\nThe man in the parable is not tightening his belt;\nhe is trying not to laugh at the terms.\nHide the find, too — guard it even from human praise, for robbers work the road.\nWhoever sells everything grinning has understood this mystery.",
+          "source": "catena",
+          "fathers": [
+            "Hilary",
+            "Chrysostom",
+            "Gregory the Great"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-11",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "healing-paralytic-van-dyck",
+          "scripture": {
+            "ref": "Matthew 13:45-46",
+            "text": "Again the kingdom of heaven is like to a merchant seeking good pearls. Who when he had found one pearl of great price, went his way, and sold all that he had, and bought it."
+          },
+          "body": "Why does the merchant's liquidation look effortless?\nBecause whoever has once known the sweetness of the heavenly life\nreadily leaves all he loved on earth —\neverything that pleased him before appears to have lost its beauty,\nfor the splendour of that one pearl alone fills his mind.\nDesire is not suppressed; it is outbid.\nThen the parable turns inside out:\nthe pearl's preciousness is the possession of ourselves —\nfor while we were involved in the things we owned, we were not our own —\nand so, having sold all, we give ourselves for the pearl,\nnot because we are of equal value, but because we cannot give anything more.\nRead that twice.\nThe final price of the kingdom is you;\nand the first thing the kingdom hands back is you.",
+          "source": "catena",
+          "fathers": [
+            "Gregory the Great",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-3-12",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "healing-paralytic-van-dyck",
+          "scripture": {
+            "ref": "Luke 15:20",
+            "text": "And rising up, he came to his father. And when he was yet a great way off, his father saw him and was moved with compassion and running to him fell upon his neck and kissed him."
+          },
+          "body": "His most famous portrait of repentance has almost no repenting in it.\nThe son's speech is barely begun; the plot belongs to the father —\nwho saw him while he was yet a great way off,\nwhich means the old man had been watching the road,\nand who runs, which patriarchs in that world did not do,\nand falls on his neck before the rehearsed confession is out.\nLuke gives the parable its setting:\nit is Jesus' answer to the murmur\nthis man receiveth sinners, and eateth with them —\nthe father's portrait doubles as the Son's self-defense,\nfor our Elder Brother sought sinners out and sat at their feasts.\nSo the decade's question is the practical one:\nwhen did you last let the Father run — when were you last in a confessional?\nIf the answer embarrasses you, name a day this week.\nHe watches the road.",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "question"
+        },
+        {
+          "id": "luminous-3-13",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "sower-millet",
+          "scripture": {
+            "ref": "Matthew 6:10",
+            "text": "Thy kingdom come. Thy will be done on earth as it is in heaven."
+          },
+          "body": "He did not leave the proclamation to heralds;\nHe planted it inside the prayer He taught,\nsecond petition from the top: thy kingdom come.\nThe kingdom's arrival is the thing His people ask for\nbefore they ask for bread —\nbefore food, forgiveness, or rescue, the reign.\nIt also means you have been proclaiming this mystery all evening without noticing:\nevery decade of this Rosary opens with an Our Father,\nso ten beads from now you will say thy kingdom come again.\nSay it that time as what it is —\nnot filler before the Hail Marys but a citizen's daily oath,\nthe shortest act of allegiance in the language.\nThe kingdom comes, among other routes, through people who keep asking it to.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-3-14",
+          "mystery": "luminous-3",
+          "position": "any",
+          "image": "sower-millet",
+          "scripture": {
+            "ref": "Matthew 13:33",
+            "text": "Another parable he spoke to them: The kingdom of heaven is like to leaven, which a woman took and hid in three measures of meal, until the whole was leavened."
+          },
+          "body": "Of all the kingdom's portraits, the least dramatic:\nleaven, which a woman took and hid in three measures of meal,\nuntil the whole was leavened.\nThe method is hiddenness; the ambition is totality.\nNothing about the lump looks different at first —\nbut nothing in it is finally exempt.\nNotice too that the leaven does not lecture the dough.\nIt is simply present, and presence does the work.\nSo the decade's question:\nname your three measures of meal —\nthe household, the desk, the street you actually live on —\nand then name honestly the one measure you have been keeping unleavened,\nthe corner where the kingdom is welcome to be believed but not to spread.\nWhat would it mean, this week, to be kneaded in there rather than merely announced?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "luminous-3-15",
+          "mystery": "luminous-3",
+          "position": "closer",
+          "image": "sower-millet",
+          "scripture": {
+            "ref": "Luke 12:32",
+            "text": "Fear not, little flock, for it hath pleased your Father to give you a kingdom."
+          },
+          "body": "After the selling and the buying,\nthe treasure and the pearl and the price of everything,\nthe last word on the kingdom's transfer is none of these.\nIt hath pleased your Father to give you a kingdom —\ngive, to a flock, and a little one.\nAll the leaving of nets turns out to be the unclenching of hands\nso that something could be placed in them.\nAnd fear not stands at the front of the sentence\nbecause fear is what little flocks feel, and the Father legislates against it.\nHe kept a promise about this:\nsome standing here, He said, would see the Son of Man in His kingdom\nbefore tasting death —\nand six days later, three of the little flock were climbing a mountain.\nThat is the next decade.\nEnd this one small, gifted, and unafraid.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "luminous-4",
+      "title": "The Transfiguration",
+      "meditations": [
+        {
+          "id": "luminous-4-01",
+          "mystery": "luminous-4",
+          "position": "opener",
+          "image": "transfiguration-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 17:1",
+            "text": "And after six days Jesus taketh unto him Peter and James, and John his brother, and bringeth them up into a high mountain apart:"
+          },
+          "body": "The words \"after six days\" count from a promise.\nOnly days earlier He had said:\nsome of you standing here will not taste death\nuntil you see the Son of Man coming in His kingdom.\nSix days later, three of them are climbing.\nThabor is the promise kept early.\nThe short delay was long enough\nto kindle the desire of the chosen three into full flame,\nand short enough that the others felt no sting of jealousy.\nThere is something deeper in the number itself.\nIn six days the whole visible world was made.\nWhoever would see the glory of the Word\nmust climb above the world it took six days to create.\nClimb with the three for this decade.\nThe promise includes sight.",
+          "source": "catena",
+          "fathers": [
+            "Remigius",
+            "Chrysostom",
+            "Origen"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-02",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 17:2",
+            "text": "And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow."
+          },
+          "body": "The sun shines by no borrowed light.\nUnveiled for an hour, neither does He.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-4-03",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 17:2",
+            "text": "And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow."
+          },
+          "body": "Where did the radiance come from?\nNot from without. This was not a borrowed light\nbut an overflowing of the Divinity upon the holy Humanity —\nan irradiation from the furnace of eternal life ordinarily hidden in Christ.\nThen the sentence that reframes the whole hidden life:\nfor love of us, Jesus habitually hid the divine life\nunder the veil of mortal flesh,\npreventing it from overflowing in a continuous light\nthat would have blinded our feeble eyes.\nAt the Transfiguration, the Word gave full liberty to His eternal glory.\nRead that again slowly.\nThirty years of Nazareth ordinariness were not the absence of glory\nbut mercy about its wattage.\nThe veil was for you.\nOn Thabor, for one hour, He trusts three men with the furnace door open.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-04",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-theophanes-icon",
+          "scripture": {
+            "ref": "Matthew 17:3",
+            "text": "And behold there appeared to them Moses and Elias talking with him."
+          },
+          "body": "Why these two visitors? Count the reasons.\nThe crowds had guessed Elias or one of the prophets —\nso let the chief of the prophets stand there,\nthat the difference between servants and Lord be seen.\nThe standing charges were breaking the Law and usurping God's glory —\nso He summons the Lawgiver himself\nand the prophet most jealous for God's glory as character witnesses.\nMoses is dead and Elias never died —\nso His writ evidently runs on both sides of death.\nAnd, tenderest of all: they spoke of His decease at Jerusalem —\nglory convened to talk about the cross,\ntwo men who had stood before Pharao and Achab\nkeeping Him company on the road toward a Roman governor.\nBe meek as Moses. Be zealous as Elias.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-05",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-theophanes-icon",
+          "scripture": {
+            "ref": "Matthew 17:4",
+            "text": "And Peter answering, said to Jesus: Lord, it is good for us to be here: if thou wilt, let us make here three tabernacles, one for thee, and one for Moses, and one for Elias."
+          },
+          "body": "Read Peter's real estate proposal as a loving scheme.\nRebuked once for saying be it far from thee,\nhe dares not repeat it openly, so he suggests the same covertly:\nthree tents, permanent residence —\nfor if they stay on the mountain, He does not go up to Jerusalem,\nand if He does not go up, He does not die.\nIt is the Passion, filibustered with camping equipment.\nThe theology needs one gentle correction:\ndo not set the servants level with their Lord —\nand if you must build, build one tabernacle,\nfor Father, Son, and Holy Spirit, in thy bosom.\nYet defend the impulse underneath:\nif Peter was so ravished by this glimpse,\nwhat will it be to behold the King in His proper beauty?\nThe desire was right. Only the address was wrong.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Jerome",
+            "Remigius"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-06",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-theophanes-icon",
+          "scripture": {
+            "ref": "Matthew 17:5",
+            "text": "And as he was yet speaking, behold a bright cloud overshadowed them. And lo a voice out of the cloud, saying: This is my beloved Son, in whom I am well pleased: hear ye him."
+          },
+          "body": "On Sinai the cloud was dark, for the Lord came threatening;\nhere it is bright, for He sought not to terrify but to teach.\nNow watch the weld this Rosary has been waiting for.\nAt the baptism of Christ the whole Trinity appeared:\nthe Son in the flesh, the Spirit as a dove, the Father in the voice.\nAt the transfiguration, sacrament of the second regeneration,\nthe whole Trinity again:\nthe Father in the voice, the Son in the man, the Spirit in the bright cloud.\nThe dove marked baptism's gift, innocence;\nthe cloud marks resurrection's —\nthe refreshment and brightness of the rising bodies.\nJordan and Thabor are one mystery at two altitudes,\nand your font, whatever its zip code, was the lower slope of this mountain.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Gloss (ap. Anselm)"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-07",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-raphael",
+          "scripture": {
+            "ref": "Matthew 17:5",
+            "text": "And as he was yet speaking, behold a bright cloud overshadowed them. And lo a voice out of the cloud, saying: This is my beloved Son, in whom I am well pleased: hear ye him."
+          },
+          "body": "The Voice says what it said at the river — with one addition,\nand the addition contains all the secret of our life:\nIpsum audite. Hear ye Him.\nIt is as if, to make us attain to Him, God simply referred us to Jesus.\nSo keep this testimony of the Father\never present before the eyes of the heart —\nreading the Gospel, visiting Him, receiving Him —\nthe words habitually before you: this is my beloved Son.\nThe sentence that opened over the Jordan's hiddenness\nholds over Thabor's glory,\nand it will hold over the Ecce Homo.\nRest inside the repeated sentence for the decade.\nIt has not changed; it will not.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-08",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-raphael",
+          "scripture": {
+            "ref": "Matthew 17:6-7",
+            "text": "And the disciples hearing fell upon their face, and were very much afraid. And Jesus came and touched them: and said to them: Arise, and fear not."
+          },
+          "body": "Glory floors them.\nHuman frailty cannot endure to look upon so great glory;\ntrembling through soul and body they fall — and cannot get up.\nNote the quiet detail:\nthe saints in Scripture fall upon their faces; the wicked fall backwards.\nEven collapse has a direction.\nThen comes what may be the mystery's most human moment.\nHe approaches them, touches them gently,\nthat by His touch their fear might be banished\nand their unnerved limbs regain strength;\nHe first banishes their fear, that He may afterward impart teaching.\nThe order is heaven's fixed etiquette:\nno instruction until the fear is gone, and the fear goes by hand.\nArise, and fear not.\nWhatever has flattened you lately, expect the touch before the lesson.",
+          "source": "catena",
+          "fathers": [
+            "Jerome",
+            "Remigius"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-09",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-raphael",
+          "scripture": {
+            "ref": "Matthew 17:8",
+            "text": "And they lifting up their eyes, saw no one, but only Jesus."
+          },
+          "body": "Cloud gone, prophets gone, glory sheathed.\nWhat remains, and it is everything: only Jesus.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-4-10",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-bellini",
+          "scripture": {
+            "ref": "Exodus 34:29",
+            "text": "And when Moses came down from the Mount Sinai, he held the two tables of the testimony, and he knew not that his face was horned from the conversation of the Lord."
+          },
+          "body": "The mountain had a precedent.\nMoses came down from Sinai not knowing that his face was horned\nfrom the conversation of the Lord —\nthe Douay keeps Jerome's strange Latin, cornuta,\nrays braided into horns of light,\nthe verse that put horns on Michelangelo's Moses.\nBut mark the difference.\nMoses' face catches light like a moon:\nborrowed from the conversation, fading afterward, soon needing a veil.\nOn Thabor the light is not caught but disclosed —\nHe is not shining from the conversation; He is the conversation.\nYet the precedent still preaches:\nwhat a man beholds, he begins to resemble.\nAnd Luke supplies the engine:\nit was whilst He prayed that He was transfigured —\nand it is in the soul that prays that He still does His transfiguring.\nThat is this Rosary's entire method, stated in two mountains.",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "expository"
+        },
+        {
+          "id": "luminous-4-11",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-bellini",
+          "scripture": {
+            "ref": "Matthew 17:9",
+            "text": "And as they came down from the mountain, Jesus charged them, saying: Tell the vision to no man, till the Son of man be risen from the dead."
+          },
+          "body": "Down the slope He imposes a gag order with an expiration date:\ntell the vision to no man,\ntill the Son of Man be risen from the dead.\nThe pastoral logic is plain.\nPublished now, the marvel would seem incredible,\nand the cross following after so great glory would cause offence.\nDeeper still: had the people learned of this majesty,\nlove itself might have obstructed the Passion and so impeded redemption —\ndevotion as the last obstacle to salvation.\nAnd the release date has a meaning:\nkeep silence until, filled with the Holy Ghost,\nyou can bear witness to spiritual deeds.\nSome graces are issued sealed: provision, not publicity.\nEven Thabor kept the Cross's schedule.\nIf God has shown you something, ask whether it came with a date.",
+          "source": "catena",
+          "fathers": [
+            "Jerome",
+            "Remigius",
+            "Hilary"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-12",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-bellini",
+          "scripture": {
+            "ref": "2 Peter 1:16-18",
+            "text": "For we have not by following artificial fables made known to you the power and presence of our Lord Jesus Christ: but we were eyewitnesses of his greatness. For he received from God the Father honour and glory, this voice coming down to him from the excellent glory: This is my beloved Son, in whom I am well pleased. Hear ye him. And this voice, we heard brought from heaven, when we were with him in the holy mount."
+          },
+          "body": "Decades later, an old man writes to churches he will not see again\nand reaches for his best evidence:\nwe were eyewitnesses of his greatness...\nthis voice we heard brought from heaven,\nwhen we were with him in the holy mount.\nThis is the letter the Church reads on the Feast —\nPeter, once ordered silent, finally spending Thabor,\nand spending it as the Voice, not the light.\nNotice his vocabulary a few lines earlier:\nhe calls his own dying body this tabernacle, soon to be laid away.\nThe man who offered to build three tabernacles learned he was one —\ntemporary, foldable, and full of glory anyway.\nSo the decade's question:\nyour mountain moments were issued as capital, not souvenirs.\nWhich one have you never once drawn on in a valley —\nand who could you spend it on this week?",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "question"
+        },
+        {
+          "id": "luminous-4-13",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-duccio",
+          "scripture": {
+            "ref": "Matthew 17:2",
+            "text": "And he was transfigured before them. And his face did shine as the sun: and his garments became white as snow."
+          },
+          "body": "Two words everyone skips: transfigured before them.\nThe Word of God has various forms,\nappearing to each according as it is expedient for him,\nand shows Himself to none beyond his capacity —\nthose who do not climb know only the carpenter's son;\nthose who ascend no longer know Him according to the flesh.\nThen the garments.\nHis raiment is the words and sayings of the Gospels\nwith which Jesus is clothed —\nor the saints themselves, white as snow with virtues.\nTake the first reading literally tonight:\nthe Gospel page is His clothing.\nEvery time you read it slowly,\nyou are the woman in the crowd reaching for the hem —\nand the hem, on Thabor's testimony, is made of light.",
+          "source": "catena",
+          "fathers": [
+            "Origen",
+            "Gloss (e Bede)"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-4-14",
+          "mystery": "luminous-4",
+          "position": "any",
+          "image": "transfiguration-duccio",
+          "scripture": {
+            "ref": "1 John 3:2",
+            "text": "Dearly beloved, we are now the sons of God: and it hath not yet appeared what we shall be. We know that when he shall appear we shall be like to him: because we shall see him as he is."
+          },
+          "body": "At the Jordan this arc opened with the verse before this one:\nbehold what manner of charity,\nthat we should be called the sons of God.\nThe next sentence looks up the family's future:\nit hath not yet appeared what we shall be —\nbut when he shall appear, we shall be like to him,\nbecause we shall see him as he is.\nThabor, then, is not only His preview;\nit is the family photograph from ahead.\nIn this mystery Providence laid a solid foundation for the Church's hope:\nthat the whole body might know what transformation will be granted to it,\nthe members assured of sharing the glory that shone forth in their Head.\nSo the question, and answer it slowly:\ndo you actually believe that face is your future?\nAnd if you did —\nwhat are you gripping this week that you could afford to put down?",
+          "source": "original",
+          "fathers": [
+            "Leo the Great",
+            "Marmion"
+          ],
+          "form": "question"
+        },
+        {
+          "id": "luminous-4-15",
+          "mystery": "luminous-4",
+          "position": "closer",
+          "image": "transfiguration-duccio",
+          "scripture": {
+            "ref": "Psalm 88:13",
+            "text": "The north and the sea thou hast created. Thabor and Hermon shall rejoice in thy name:"
+          },
+          "body": "The mountain was on the psalter's map centuries early:\nThabor and Hermon shall rejoice in thy name —\na Galilean hill listed among creation's glad witnesses,\nwaiting all that time for its reason.\nOne afternoon the reason climbed it.\nNow the descent.\nLuke says the mountaintop conversation was of His decease,\nwhich He should accomplish at Jerusalem —\nso the road down from Thabor bends toward an upper room,\nand the next decade is the last night.\nCome down with Him the way the three did:\nforbidden to chatter, carrying a Voice, walking toward a supper.\nThe luminous mysteries have one more light to show,\nand it will be lamplight on bread.\nRejoice in His name on the way down.\nThe mountain, says the psalm, already does.",
+          "source": "original",
+          "fathers": [
+            "Chrysostom"
+          ],
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "luminous-5",
+      "title": "The Institution of the Eucharist",
+      "meditations": [
+        {
+          "id": "luminous-5-01",
+          "mystery": "luminous-5",
+          "position": "opener",
+          "image": "last-supper-leonardo",
+          "scripture": {
+            "ref": "Matthew 26:26",
+            "text": "And whilst they were at supper, Jesus took bread and blessed and broke and gave to his disciples and said: Take ye and eat. This is my body."
+          },
+          "body": "Set the clock before anything else:\nthis is the night before He dies,\nand He knows the schedule better than the men arranging it.\nIn a few hours His body will be taken — seized, bound, handled by soldiers.\nSo watch what He does with the last free evening of that body:\nwhilst they were at supper, He took bread, and blessed, and broke,\nand said take ye and eat: this is my body.\nGiven, before it can be grabbed.\nThe arrest will only ever collect what the supper has already surrendered;\nJudas hands over a man who has just handed Himself over first —\nto His friends, as food.\nEvery Mass since is that same maneuver, still standing.\nTake your seat at the table for this decade.\nThe seating was never capped at twelve.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-5-02",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-leonardo",
+          "scripture": {
+            "ref": "John 13:1",
+            "text": "Before the festival day of the pasch, Jesus knowing that his hour was come, that he should pass out of this world to the Father: having loved his own who were in the world, he loved them unto the end."
+          },
+          "body": "In finem dilexit: unto the end.\nAnd the first shape the end took was supper.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "luminous-5-03",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-leonardo",
+          "scripture": {
+            "ref": "Matthew 26:26",
+            "text": "And whilst they were at supper, Jesus took bread and blessed and broke and gave to his disciples and said: Take ye and eat. This is my body."
+          },
+          "body": "Barely can the paradoxes stay in single file.\nThe Lord invites His servants to set before them Himself for food —\nbut who would dare to eat his Lord?\nThis food, when eaten, refreshes and does not fail:\nHe lives after being eaten, who rose after being put to death.\nNor is He diminished by distribution:\ndivided into parts in the Sacrament, He remains whole —\nHe is all in heaven, He is all in thy heart.\nOne line compresses the whole supper:\nthe Lord Jesus was at once guest and feast,\nthe eater and the things eaten.\nHost, in both senses of the word.\nHold the great clause through the decade: whole in heaven, whole in you.\nThe arithmetic of love does not divide.",
+          "source": "catena",
+          "fathers": [
+            "Augustine",
+            "Jerome"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-04",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "communion-of-the-apostles-fra-angelico",
+          "scripture": {
+            "ref": "John 6:52",
+            "text": "If any man eat of this bread, he shall live for ever: and the bread that I will give is my flesh, for the life of the world."
+          },
+          "body": "Refuse every softening.\nThe bread taken by us in the mysteries\nis not only the sign of Christ's flesh but is itself the very flesh —\nfor He does not say the bread I will give is the sign of my flesh,\nbut is my flesh.\nThen answer the obvious shudder with unexpected tenderness:\nwhy do we not see the flesh?\nBecause if it were seen, it would revolt us and we could not partake;\nin condescension to our infirmity,\nthe mystical food is given under an appearance suited to our minds.\nThe veil is not evasion but mercy.\nAnd the image for the union has never been bettered:\nheated iron remains iron, with the fire's action in it —\nso this flesh quickens, being the flesh of the Word.",
+          "source": "catena",
+          "fathers": [
+            "Theophylact"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-05",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "communion-of-the-apostles-fra-angelico",
+          "scripture": {
+            "ref": "Matthew 26:27-28",
+            "text": "And taking the chalice, he gave thanks and gave to them, saying: Drink ye all of this. For this is my blood of the new testament, which shall be shed for many unto remission of sins."
+          },
+          "body": "With the chalice, notice the manners of the host:\ndrink ye all of it — and He first drank His own blood,\nto lead them without fear into the communion of these mysteries.\nNo one is asked to go first but Him.\nThen the ancient ledger:\nthe Old Testament had the blood of sheep and goats;\nthe New has the Lord's own.\nThe lamb's blood in Egypt bought the firstborn's lives for one night;\nthis Blood is shed unto remission of sins.\nAnd weigh the famous word:\nnot for a few, nor for all, but for many —\nbecause He came to redeem not a single nation\nbut many out of all nations.\nCount the nations represented in your parish some Sunday morning.\nThe chalice predicted every one of them.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Remigius"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-06",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "communion-of-the-apostles-fra-angelico",
+          "scripture": {
+            "ref": "Psalm 110:4-5",
+            "text": "He hath made a remembrance of his wonderful works, being a merciful and gracious Lord: He hath given food to them that fear him. He will be mindful for ever of his covenant:"
+          },
+          "body": "Two words carry the mystery: in mei memoriam.\nBesides renewing His immolation,\nChrist desired to make of the Eucharist, in addition, a memorial —\nthe altar is another Calvary,\nwhere the Cross is commemorated, represented and reproduced;\nthe testament of His love.\nAnd the psalter sang the mystery in prophecy a thousand years early:\nhe hath made a remembrance of his wonderful works...\nhe hath given food to them that fear him.\nMemorial and meal, fused in one verse.\nNow the memorial's reach:\nin Communion, Christ gives Himself\nin the substantial totality of His works and mysteries.\nEvery decade you have prayed tonight —\nriver, wedding, kingdom, mountain — is contained in the Host.\nThe Rosary in your hand is, on the altar, a single small white circle.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-07",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "mystical-supper-icon",
+          "scripture": {
+            "ref": "1 Corinthians 5:7-8",
+            "text": "Purge out the old leaven, that you may be a new paste, as you are unleavened. For Christ our pasch is sacrificed. Therefore, let us feast, not with the old leaven, nor with the leaven of malice and wickedness: but with the unleavened bread of sincerity and truth."
+          },
+          "body": "The old law never let a sacrifice end at the altar.\nThe Passover lamb was not only slain;\nit had to be eaten, that night, by the household —\na sacrifice completed by a supper, or not completed at all.\nNow hear Paul: Christ our pasch is sacrificed — therefore let us feast.\nThe therefore is the whole theology.\nAt the Jordan, the first public title of His ministry\nwas the name of a sacrifice: behold the Lamb of God.\nAt this table the title comes due in full,\nbecause a lamb, in Israel, is not only offered but served.\nCommunion, then, is not a devotion appended to the sacrifice;\nit is the sacrifice arriving at its table.\nThe Lamb was always meant to be supper.\nLeaving the plate untouched leaves the Pasch unfinished.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "luminous-5-08",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "mystical-supper-icon",
+          "scripture": {
+            "ref": "John 6:57",
+            "text": "He that eateth my flesh and drinketh my blood abideth in me: and I in him."
+          },
+          "body": "Rank the mysteries by what they give the eye.\nAt Bethlehem a star helped; at the Jordan the heavens opened;\non Thabor the Divinity shone through the veil.\nOn the Cross the Godhead alone lay hid —\nbut here the Manhood hides as well.\nThe Eucharist is the mysterium fidei in its purest state,\nresting solely on the words this is my body.\nAnd exactly there is the consolation:\nChrist, ever living, acts in silence, but sovereignly,\nin the innermost depths of the soul, to transform it into Himself —\nand if fervent souls feel only dryness after receiving,\nlet them be reassured and remain in peace.\nHe that eateth my flesh abideth in me, and I in him.\nAbide is not visit.\nRest there for this decade: felt or unfelt, you are where He lives.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-09",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "mystical-supper-icon",
+          "scripture": {
+            "ref": "John 6:61",
+            "text": "Many therefore of his disciples, hearing it, said: This saying is hard; and who can hear it?"
+          },
+          "body": "His Eucharistic catechesis was the least popular sermon He ever preached.\nThis saying is hard, who can hear it —\nthey answered for themselves: they could not.\nYet the fault lay in their fatuity, not in the difficulty of the truths.\nHold the principle every teacher since has clung to:\nGod's mysteries should draw men's attention, not enmity.\nAnd take the scene's strange consolation:\nHe spoke the truth, and many were destroyed by it —\nand He is not disturbed,\nfor He knew from the beginning who would believe.\nHe watched a congregation walk out rather than soften one sentence.\nWhatever else the Real Presence is,\nit is not a doctrine anyone invented to fill pews.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-10",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-juan-de-juanes",
+          "scripture": {
+            "ref": "John 6:69-70",
+            "text": "And Simon Peter answered him: Lord, to whom shall we go? Thou hast the words of eternal life. And we have believed and have known that thou art the Christ, the Son of God."
+          },
+          "body": "Then said Jesus to the twelve: will you also go away?\nThe question was the right way to retain them.\nHe does not say go, which would cast them off,\nbut asks — freeing their staying from all shame and necessity,\nfor to stay from necessity would be the same as going away.\nLove will not keep anyone by the sleeve.\nPeter answers for the house in a speech of the greatest love:\nLord, to whom shall we go?\nAs if he said: Thou castest us from Thee —\nthen give us another to whom we shall go, if we leave Thee...\nin Thy flesh and blood Thou givest what Thou art Thyself.\nThere is no other counter where the words of eternal life are sold.\nWhen the teaching is hard,\nthe question is never really whether, but where else.",
+          "source": "catena",
+          "fathers": [
+            "Chrysostom",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-11",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-juan-de-juanes",
+          "scripture": {
+            "ref": "Genesis 14:18",
+            "text": "But Melchisedech, the king of Salem, bringing forth bread and wine, for he was the priest of the most high God,"
+          },
+          "body": "The oldest priest in Scripture appears from nowhere,\nblesses Abram, and offers — of all things — bread and wine.\nHear the rhyme across two thousand years:\nthe typical Passover concluded,\nthe Lord comes to the true paschal sacrament,\nthat as Melchisedech, priest of the most high God,\nhad done in foreshadowing Him, offering bread and wine,\nHe also should offer the present verity of His Body and Blood.\nPress the astonishing corollary:\nthe Christian mysteries are older than the Jewish —\nMelchisedech's table predates Sinai.\nAnd over it all stands the psalm's oath:\nthou art a priest for ever according to the order of Melchisedech,\nan order whose one recorded liturgy is bread and wine.\nTonight the order's founder is outranked by its Fulfiller.",
+          "source": "catena",
+          "fathers": [
+            "Jerome",
+            "Ambrose"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-12",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-juan-de-juanes",
+          "scripture": {
+            "ref": "1 Corinthians 11:28-29",
+            "text": "But let a man prove himself: and so let him eat of that bread and drink of the chalice. For he that eateth and drinketh unworthily eateth and drinketh judgment to himself, not discerning the body of the Lord."
+          },
+          "body": "The severest mercy in this mystery is one sentence:\nPeter and Judas received of the same bread —\nbut Peter to life, Judas to death.\nSame table, same hands, same gift;\nthe difference was entirely in the guest.\nWhich is why Paul legislates a checkpoint:\nlet a man prove himself, and so eat —\nfor the undiscerning eater eats judgment.\nNot a velvet rope to keep you out; a mirror by the door.\nSo the decade's question is the practical one: how do you arrive?\nNext Mass, arrive as Peter —\nexamined, honest about the one thing you already know needs confessing,\nand hungry anyway.\nIf it has been a while since you stood at the mirror,\nname the day this week you will.\nThen come to the table free.",
+          "source": "original",
+          "fathers": [
+            "Augustine"
+          ],
+          "form": "question"
+        },
+        {
+          "id": "luminous-5-13",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-duccio",
+          "scripture": {
+            "ref": "1 Corinthians 10:17",
+            "text": "For we, being many, are one bread, one body: all that partake of one bread."
+          },
+          "body": "What the elements are made of preaches.\nBread is made of many grains, wine is pressed from many berries —\nand in choosing them, the Lord hallowed at His own table\nthe mystery of our peace and unity.\nThe Sacrament of the Body builds the Body:\nwe being many are one bread, one body.\nThen the acclamation that has rung for sixteen centuries:\nO sacrament of mercy, O sign of unity, O bond of love!\nWhoso wishes to live, let him draw nigh, believe, be incorporated,\nthat he may be quickened.\nYou do not merely receive the Body of Christ;\nyou consent to be milled into it —\nand the difficult person three pews over is your co-grain.\nCommunion has never once been private.",
+          "source": "catena",
+          "fathers": [
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "luminous-5-14",
+          "mystery": "luminous-5",
+          "position": "any",
+          "image": "last-supper-duccio",
+          "scripture": {
+            "ref": "Matthew 26:29",
+            "text": "And I say to you, I will not drink from henceforth of this fruit of the vine until that day when I shall drink it with you new in the kingdom of my Father."
+          },
+          "body": "He ends the first Mass with a toast postponed:\nI will not drink of this fruit of the vine\nuntil that day when I shall drink it with you new\nin the kingdom of my Father.\nA vow with a reunion date —\nHe rises having appointed a cup, and a company: with you.\nThe vow is already partly honored at the resurrection meals:\nwe ate and drank with him after he rose.\nAnd the Canticle's wine cellar adds the room itself to the rhyme:\nthe Church entered that cellar most of all at Pentecost —\nin the very cenacle where Christ kept His last supper —\nso filled that mockers said, these men are full of new wine.\nThe vintage has begun.\nAt Cana the steward learned His cellar keeps the good wine until now.\nSo, plainly: if the Bridegroom is saving a cup for you,\nwhat are you doing about Sunday?",
+          "source": "original",
+          "fathers": [
+            "Chrysostom",
+            "Denis the Carthusian"
+          ],
+          "form": "question"
+        },
+        {
+          "id": "luminous-5-15",
+          "mystery": "luminous-5",
+          "position": "closer",
+          "image": "last-supper-duccio",
+          "scripture": {
+            "ref": "Apocalypse 19:9",
+            "text": "And he said to me: Write: Blessed are they that are called to the marriage supper of the Lamb. And he saith to me: These words of God are true."
+          },
+          "body": "Cana's promise comes home to close the luminous mysteries:\na ministry that opened with wine at a wedding\nends history at a wedding —\nblessed are they that are called to the marriage supper of the Lamb.\nThe whole Song of Songs was read as this wedding's libretto,\nand its table-line — eat, O friends, and drink, and be inebriated —\nis the Bridegroom's own invitation,\nhonored above all in the sacred mysteries of the Eucharist.\nBetween the first course and the last stands this supper,\nrepeated on every altar until he come.\nThen mark how the night continues:\na hymn being said, they went out unto mount Olivet.\nThe seam between the Rosary's light and its sorrow\nis a few hundred meters of hymn, the Cedron below.\nEnd the decade at table, called and blessed;\nand when you rise, rise as they did: singing, and going with Him.",
+          "source": "original",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "expository"
+        }
+      ]
+    }
+  ]
+}
