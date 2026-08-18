@@ -1,0 +1,1132 @@
+{
+  "set": "glorious",
+  "title": "The Glorious Mysteries",
+  "schema": 1,
+  "sources": {
+    "original": null,
+    "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
+    "faber": "Fr Frederick William Faber, The Foot of the Cross (1858)",
+    "marmion": "Bl Columba Marmion OSB, Christ in His Mysteries (1924)",
+    "denis": "Denis the Carthusian, Enarratio in Canticum Canticorum (1898), trans. from the Latin for Still"
+  },
+  "mysteries": [
+    {
+      "id": "glorious-1",
+      "title": "The Resurrection",
+      "meditations": [
+        {
+          "id": "glorious-1-01",
+          "mystery": "glorious-1",
+          "position": "opener",
+          "image": "resurrection-piero",
+          "scripture": {
+            "ref": "Mark 16:3",
+            "text": "And they said one to another: Who shall roll us back the stone from the door of the sepulchre?"
+          },
+          "body": "Three women walking in the dark, carrying spices for a body,\nasking each other the practical question: who shall roll us back the stone?\nIt is the last worry of the old world.\nThe problem has been solved since before dawn,\nand they will carry it all the way to the garden anyway.\nBegin the decade honestly there — with whatever stone you have been\nrehearsing the weight of.\nYou may find the discussion is already obsolete.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-02",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "resurrection-piero",
+          "scripture": {
+            "ref": "Luke 24:5-6",
+            "text": "And as they were afraid and bowed down their countenance towards the ground, they said unto them: Why seek you the living with the dead? He is not here, but is risen. Remember how he spoke unto you, when he was yet in Galilee,"
+          },
+          "body": "Heaven's first Easter word is a question,\nand it gently corrects where we look.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-1-03",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "resurrection-piero",
+          "scripture": {
+            "ref": "Romans 6:10",
+            "text": "For in that he died to sin, he died once: but in that he liveth, he liveth unto God."
+          },
+          "body": "Notice something in the litanies: of all the mysteries,\nthe Church calls this one holy — per sanctam resurrectionem tuam.\nWhy this one, when His birth, His life, His Passion are all holy?\nBecause holiness has two elements — separation from all that is sin\nand weakness, and total belonging to God —\nand the Resurrection displays both as nothing before it did.\nIf the Passion is summed in he humbled himself,\nthe Resurrection is summed in two words of Paul: vivit Deo.\nHe liveth unto God. Entirely.\nThat is what holiness is, and this morning is its portrait.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-1-04",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "noli-me-tangere-fra-angelico",
+          "scripture": {
+            "ref": "Luke 24:39",
+            "text": "See my hands and feet, that it is I myself. Handle, and see: for a spirit hath not flesh and bones, as you see me to have."
+          },
+          "body": "List what the mortal years had held:\nan infant needing His Mother's milk, a man wearied at the well,\nasleep in the storm, hungry, thirsty, afraid in the garden.\nAfter this morning all of it is gone — no fatigue, no need, no infirmity —\nand yet it is truly the same body, the Body He received from the Virgin Mary,\nthe Body that suffered death.\nHandle and see.\nHe eats with them not from hunger but out of merciful condescension.\nGlory did not replace the body you know from the Gospels.\nIt set it free.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-1-05",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "noli-me-tangere-fra-angelico",
+          "scripture": {
+            "ref": "Canticle of Canticles 3:4",
+            "text": "When I had a little passed by them, I found him whom my soul loveth: I held him: and I will not let him go, till I bring him into my mother’s house, and into the chamber of her that bore me."
+          },
+          "body": "Scripture never shows the Risen Christ meeting His Mother —\nand never shows her at the tomb with the spice-bearers either.\nShe is the one person in Jerusalem not looking for a body.\nThe saints have held, by an old and widespread conviction,\nthat He came to her first, before the garden, before anyone;\nand the Church's Easter song to her assumes the meeting:\nQueen of heaven, rejoice — for He whom thou wast worthy to bear has risen\nas He said.\nAs He said. She is greeted with her own faith kept.\nRest in that room for a while: no words recorded, none needed —\nthe bride's line says it all.\nI held him, and I will not let him go.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-06",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "noli-me-tangere-fra-angelico",
+          "scripture": {
+            "ref": "John 20:16",
+            "text": "Jesus saith to her: Mary. She turning, saith to him: Rabboni (which is to say, Master)."
+          },
+          "body": "She is looking straight at Him and cannot see Him —\ngrief has decided already what is possible, and He does not fit inside it.\nThen one word: Mary.\nRecognition arrives not through her eyes but through her name,\nspoken the way only one voice had ever said it.\nThe Church has always smiled at her mistake,\nbecause she was wrong and exactly right: He is the gardener —\nthe new Adam, in a garden, at dawn, undoing what the first gardener let die.\nHe still tends to be recognized this way:\nnot when we finally see clearly, but when we hear ourselves named.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-07",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "noli-me-tangere-fra-angelico",
+          "scripture": {
+            "ref": "John 20:6-7",
+            "text": "Then cometh Simon Peter, following him, and went into the sepulchre: and saw the linen cloths lying, And the napkin that had been about his head, not lying with the linen cloths, but apart, wrapped up into one place."
+          },
+          "body": "No thief wraps the napkin and sets it apart.\nWhatever left this tomb left it in order.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-1-08",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "emmaus-caravaggio",
+          "scripture": {
+            "ref": "Luke 24:38",
+            "text": "And he said to them: Why are you troubled, and why do thoughts arise in your hearts?"
+          },
+          "body": "His first words to the assembled Church are not a commission but a question:\nwhy are you troubled, and why do thoughts arise in your hearts?\nHe has walked through a locked door to ask it,\nand He has been asking it through locked doors ever since.\nThe troubles were real — they had watched Him die.\nThe Resurrection did not scold the fear;\nit stood in the middle of the fear and outweighed it.\nSo take His question as addressed, tonight, to the room you have locked:\nwhich of your standing troubles has this morning already answered —\nif you let it?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-1-09",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "emmaus-caravaggio",
+          "scripture": {
+            "ref": "John 20:29",
+            "text": "Jesus saith to him: Because thou hast seen me, Thomas, thou hast believed: blessed are they that have not seen and have believed."
+          },
+          "body": "He kept the wounds.\nA glorified body could have been unmarked, and His is not —\nhere is why: He shows them to His Father in all their beauty,\nas titles to the communication of His grace,\never living to make intercession for us.\nThe scars are not evidence of damage survived;\nthey are credentials, presented in heaven on your behalf at this hour.\nAnd to Thomas, with a hand in those credentials,\nHe speaks the Gospel's last beatitude —\nblessed are they that have not seen, and have believed —\naimed straight past Thomas at everyone who would ever pray this decade.\nYou are the person that sentence was for.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-1-10",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "emmaus-caravaggio",
+          "scripture": {
+            "ref": "Luke 24:26",
+            "text": "Ought not Christ to have suffered these things and so, to enter into his glory?"
+          },
+          "body": "On the Emmaus road He asks the question that joins the Sorrowful mysteries\nto the Glorious: ought not Christ to have suffered these things,\nand so to enter into his glory?\nOught not — the cross was never the plan failing.\nThen He does for two discouraged walkers what this whole devotion does:\nbeginning at Moses, He reads His own story through all the Scriptures,\nand their hearts burn without their knowing why.\nThey recognize Him at last in the breaking of bread —\nand He vanishes, because from now on that is where He will be held.\nWhoever has left Mass unable to say what happened, only that something did,\nhas walked this road.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-11",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "anastasis-byzantine-icon",
+          "scripture": {
+            "ref": "Colossians 3:1",
+            "text": "Therefore if you be risen with Christ, seek the things that are above, where Christ is sitting at the right hand of God."
+          },
+          "body": "Do not let the mystery stay in the past tense.\nHe left the linen cloths in the tomb as the symbol of our infirmities\nand imperfections — and the font of baptism, Paul teaches,\nis the figure of that sepulchre: buried with Him there,\nwe came up out of the water to walk in newness of life.\nThe Resurrection is not only something that happened to Him;\nsacramentally, it has already happened to you.\nThe verse draws the consequence: if you be risen with Christ,\nseek the things that are above.\nLive like someone whose grave is behind him.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-1-12",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "anastasis-byzantine-icon",
+          "scripture": {
+            "ref": "Romans 6:9",
+            "text": "Knowing that Christ, rising again from the dead, dieth now no more. Death shall no more have dominion over him."
+          },
+          "body": "Others had come back from death before this morning —\nthe widow's son, Jairus's daughter, Lazarus still wearing his grave clothes.\nEvery one of them came back on loan, through the same door twice,\nand the door closed behind them again in the end.\nPaul marks what makes this morning categorically different:\nChrist rising again from the dead, dieth now no more;\ndeath shall no more have dominion over him.\nNot a reprieve — a release.\nNot the door reopened, but the door taken off its hinges.\nEveryone raised before Him returned to mortal life.\nHe rose out the far side of death itself, and He holds the exit open.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-13",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "anastasis-byzantine-icon",
+          "scripture": {
+            "ref": "Apocalypse 1:17-18",
+            "text": "And when I had seen him, I fell at his feet as dead. And he laid his right hand upon me, saying: Fear not. I am the First and the Last, And alive, and was dead. And behold I am living for ever and ever and have the keys of death and of hell."
+          },
+          "body": "When John sees Him in glory and falls at His feet as dead,\nthe Risen One identifies Himself by His history: I was dead —\nand behold I am living for ever and ever,\nand have the keys of death and of hell.\nThe icon paints the claim: gates broken flat, locks scattered,\nAdam and Eve pulled up by the wrist.\nHe does not pick death's lock; He owns the keys.\nSo one question to carry out of the decade:\nwhat door are you still guarding as if the keys were yours?\nHe has them. Hand Him yours.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-1-14",
+          "mystery": "glorious-1",
+          "position": "any",
+          "image": "resurrection-grunewald",
+          "scripture": {
+            "ref": "Canticle of Canticles 2:10-12",
+            "text": "Behold my beloved speaketh to me: Arise, make haste, my love, my dove, my beautiful one, and come. For winter is now past, the rain is over and gone. The flowers have appeared in our land, the time of pruning is come: the voice of the turtle is heard in our land:"
+          },
+          "body": "Read the Bridegroom's spring-call to the soul, and name the winter:\nthe torpor of acedia, the cold of envy,\nthe rain the din of clamoring thoughts.\nThen the thaw — flowers in the land —\nthe virtues breaking out in the field of the heart,\na field that is mine and thine at once.\nAs the rising sun scatters fog, so the Sun of wisdom entering a soul drives\nout the torpor, stills the anger, gladdens everything.\nAnd one warning, gentle and serious:\nthe golden hour of His visitation is not to be neglected.\nEaster is knocking on the interior life too.\nRise, make haste.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-1-15",
+          "mystery": "glorious-1",
+          "position": "closer",
+          "image": "resurrection-grunewald",
+          "scripture": {
+            "ref": "Psalm 117:24",
+            "text": "This is the day which the Lord hath made: let us be glad and rejoice therein."
+          },
+          "body": "For a full octave the Church sings one verse as if time had stopped:\nthis is the day which the Lord hath made —\none day, eight days long, because Easter would not fit inside a single\nsunrise.\nAnd then she kept going: every Sunday since has been this day again,\na little Easter, week upon week until the end of the world.\nWhich means the decade does not end by leaving the mystery;\nit ends inside it.\nToday — whatever the calendar says, whatever kind of day it has been —\nis still the day the Lord hath made.\nShe rejoiced in it first, greeted by her risen Son.\nLet us be glad and rejoice therein.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-1-16",
+          "mystery": "glorious-1",
+          "position": "closer",
+          "image": "resurrection-grunewald",
+          "scripture": {
+            "ref": "Apocalypse 1:16",
+            "text": "And he had in his right hand seven stars. And from his mouth came out a sharp two-edged sword. And his face was as the sun shineth in his power."
+          },
+          "body": "End, this time, without an idea.\nJohn saw the risen Face and wrote down what he could:\nhis face was as the sun shineth in his power.\nYou have gazed at this Face twice before in these mysteries —\ncrowned and bandaged in the praetorium, pierced and still on Calvary.\nNow finish the gazing where it was always going:\nthe same Face, unbound, alight, looking back at you with nothing in between.\nDo not analyse the decade. Do not summarize it.\nFor the last ten Hail Marys, only look —\nand let yourself be someone the risen Christ is glad to see.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "glorious-2",
+      "title": "The Ascension",
+      "meditations": [
+        {
+          "id": "glorious-2-01",
+          "mystery": "glorious-2",
+          "position": "opener",
+          "image": "ascension-giotto",
+          "scripture": {
+            "ref": "Luke 24:50",
+            "text": "And he led them out as far as Bethania: and lifting up his hands, he blessed them."
+          },
+          "body": "The last thing His feet do on earth is walk.\nHe leads them out as far as Bethany —\nthe same road past Gethsemani, up the same Mount of Olives where He sweat\nblood — and this time the climb ends not in arrest but in blessing.\nForty days He has been appearing and vanishing;\nnow He walks somewhere with them one more time, at walking pace,\nthe way the whole thing began by the lakeshore.\nClimb the hill with the eleven for this decade.\nHe is in no hurry, and the view from the top is about to change forever.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-2-02",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-giotto",
+          "scripture": {
+            "ref": "Psalm 46:6",
+            "text": "God is ascended with jubilee, and the Lord with the sound of trumpet."
+          },
+          "body": "The psalter had the trumpet ready a thousand years in advance.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-2-03",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-giotto",
+          "scripture": {
+            "ref": "Mark 16:19",
+            "text": "And the Lord Jesus, after he had spoken to them, was taken up into heaven and sitteth on the right hand of God."
+          },
+          "body": "Venture the claim: of all the feasts of Our Lord,\nthe Ascension is in a certain sense the greatest —\nthe supreme glorification of Christ.\nThe Resurrection was the dawn of that glory;\nthe Ascension is its full noontide.\nAnd the visible ascent the apostles watched is itself only the symbol\nof an ascension they could not see: above all the heavens,\npast every choir of angels, stopping nowhere short of the right hand of God.\nWhat the eye followed for a few seconds, faith follows all the way up.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion",
+            "Augustine"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-04",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-rembrandt",
+          "scripture": {
+            "ref": "Ephesians 1:20-21",
+            "text": "Which he wrought in Christ, raising him up from the dead and setting him on his right hand in the heavenly places. Above all principality and power and virtue and dominion and every name that is named, not only in this world, but also in that which is to come."
+          },
+          "body": "Seated at the right hand: be careful about both words.\nThe right hand is a figure — God is spirit, and has no right or left —\nbut Scripture keeps the phrase to say what nothing else could:\nthe sublimity of the triumph granted to Christ in the sanctuary\nof the divinity.\nAnd seated does not mean idle.\nIt means He has entered forever into the repose His combats merited —\na rest that does not exclude the continual exercise of the omnipotence\nby which He rules, sanctifies, and judges.\nHe is not resting from the work. He is reigning in it.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-05",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-rembrandt",
+          "scripture": {
+            "ref": "Luke 24:51",
+            "text": "And it came to pass, whilst he blessed them, he departed from them and was carried up to heaven."
+          },
+          "body": "Watch the grammar of the verse: whilst he blessed them, he departed.\nNot after.\nThe blessing was still in motion when the ground let Him go —\nhands raised over them, the words perhaps still coming —\nand Luke never says the blessing ended.\nThe last sight anyone on earth had of the mortal-born Christ is His hands\nlifted in benediction over the people He loved.\nThe Church has lived ever since inside that unfinished gesture.\nSo do you.\nWhatever else this decade holds, hold this:\nthe posture He left in is the posture He holds still.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-2-06",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-rembrandt",
+          "scripture": {
+            "ref": "Acts 1:11",
+            "text": "Who also said: Ye men of Galilee, why stand you looking up to heaven? This Jesus who is taken up from you into heaven, shall so come as you have seen him going into heaven."
+          },
+          "body": "Two men in white with a gentle question: why stand you looking up to heaven?\nThe gazing was right — for a moment.\nBut the angels interrupt it because standing and looking was about to become\na way of life, and there was a world to be told.\nContemplation that never turns and walks back down the hill curdles into\nnostalgia.\nSo take their question personally, since it was preserved for you:\nwhere in your life has looking up become standing still —\na devotion, a grief, a waiting that was holy once and is now the reason you\nhave not moved?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-2-07",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-mantegna",
+          "scripture": {
+            "ref": "John 20:17",
+            "text": "Jesus saith to her: Do not touch me: for I am not yet ascended to my Father. But go to my brethren and say to them: I ascend to my Father and to your Father, to my God and to your God."
+          },
+          "body": "Four possessives in one sentence, and two of them are yours.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-2-08",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-mantegna",
+          "scripture": {
+            "ref": "Philippians 2:8-9",
+            "text": "He humbled himself, becoming obedient unto death, even to the death of the cross. For which cause, God also hath exalted him and hath given him a name which is above all names:"
+          },
+          "body": "Why this incommensurable glory? Two reasons.\nFirst, He is God's own Son: the Humanity seated on high is the Humanity\nof a God, and divine glory is its birthright —\nveiled through the mortal years, glimpsed once on Thabor;\nthe risen body needed an abode that answered its condition,\nand only heaven would do.\nSecond, it is recompense: He had said behold, I come to do thy will,\nand drank the abasement to the dregs — for which cause God hath exalted him.\nYou met that arc at the crowning with thorns.\nThis is where it lands.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-09",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-mantegna",
+          "scripture": {
+            "ref": "Ephesians 4:8",
+            "text": "Wherefore he saith: Ascending on high, he led captivity captive: he gave gifts to men."
+          },
+          "body": "He did not go up alone.\nOn the day of espousals Christ ascended carrying His spoils with Him —\nthe souls of the Saints He had led out of limbo, brought up in His train.\nAdam and Eve, the patriarchs, the prophets,\nthe good thief a few weeks into paradise:\nthe procession the Anastasis icon began, the Ascension completes.\nPaul had found it in the psalm: ascending on high, he led captivity captive.\nThe first human beings to enter heaven entered it that day, behind Him,\nbecause of Him — and the road they took has never been closed since.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-10",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-byzantine-icon",
+          "scripture": {
+            "ref": "Hebrews 6:19-20",
+            "text": "Which we have as an anchor of the soul, sure and firm, and which entereth in even within the veil: Where the forerunner Jesus is entered for us, made a high priest for ever according to the order of Melchisedech."
+          },
+          "body": "Hebrews reaches for a sailor's image: hope as an anchor of the soul —\nbut thrown upward, entering in even within the veil,\nwhere the forerunner Jesus is entered for us.\nAn anchor holds from where it lands, not from where it was thrown.\nIf yours is fastened inside the veil,\nthen the line between you and heaven is already taut,\nand the storms here can toss the boat without moving the mooring.\nHe is called forerunner: the one who goes ahead specifically so that others\ncan follow.\nNobody runs ahead on a road no one else will travel.\nThe word itself is a promise.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-2-11",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-byzantine-icon",
+          "scripture": {
+            "ref": "Philippians 3:20",
+            "text": "But our conversation is in heaven: from whence also we look for the Saviour, our Lord Jesus Christ,"
+          },
+          "body": "Find the grace of the feast where the Church always hides it, in the collect:\ngrant that we who believe Thy Son this day ascended into heaven may\nourselves also dwell there in spirit — mente in caelestibus habitemus.\nNot visit. Dwell.\nThe Ascension is not only His change of address; it is meant to be yours:\na life lived here, at this desk, in this kitchen,\nwith the heart already keeping house above.\nPaul says it flatly: our conversation is in heaven.\nCitizenship, the word means.\nYou are praying this decade abroad.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-12",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-byzantine-icon",
+          "scripture": {
+            "ref": "John 16:7",
+            "text": "But I tell you the truth: it is expedient to you that I go. For if I go not, the Paraclete will not come to you: but if I go, I will send him to you."
+          },
+          "body": "It is expedient to you that I go.\nIt cannot have sounded true on the night He said it,\nand the Ascension is where it becomes arithmetic.\nWhile He walked in Galilee, to be with Him you had to be in Galilee —\none province, one crowd, one conversation at a time.\nSeated in glory, He is bound to no road and no hour:\npresent to every soul at once, nearer to you now than He was to the crowds\nwho touched His cloak.\nAnd a footnote worth a lifetime adds:\nHe dwells also by the Real Presence in the Sacrament.\nHe did not leave the earth when He left the hill.",
+          "source": "original",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "expository"
+        },
+        {
+          "id": "glorious-2-13",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-byzantine-icon",
+          "scripture": {
+            "ref": "Acts 1:14",
+            "text": "All these were persevering with one mind in prayer with the women, and Mary the mother of Jesus, and with his brethren."
+          },
+          "body": "Her last appearance in Scripture is one clause:\npersevering with one mind in prayer, with Mary the mother of Jesus.\nFill in what the clause holds: after the Ascension she willingly remained,\nunderstanding it to be God's will for the good of the Church —\nresolving the disciples' doubts, comforting them under persecution,\nspurring them on.\nWillingly — though where your treasure is, there is your heart,\nand hers was wholly above.\nThe paradox lives in four Latin words: Mariae cella fuit coelum.\nThe cell of Mary was heaven.\nShe stayed below for decades and never once lived anywhere else.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Tauler"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-2-14",
+          "mystery": "glorious-2",
+          "position": "any",
+          "image": "ascension-garofalo",
+          "scripture": {
+            "ref": "Matthew 28:20",
+            "text": "Teaching them to observe all things whatsoever I have commanded you. And behold I am with you all days, even to the consummation of the world."
+          },
+          "body": "He tied the promise to the leaving:\nbehold I am with you all days, even to the consummation of the world —\nspoken on the mountain of departure, in the same breath as goodbye.\nThe apostles learned to hold both: gone from sight, with them always,\nand the second truer than the first.\nMost of us have an absence we are still grieving as pure loss.\nSo let the mystery ask its question plainly:\nwhere in your life might an absence be a mode of His presence you have\nnot yet recognized — the door He went through not to leave you,\nbut to be with you differently?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-2-15",
+          "mystery": "glorious-2",
+          "position": "closer",
+          "image": "ascension-garofalo",
+          "scripture": {
+            "ref": "Luke 24:52-53",
+            "text": "And they adoring went back into Jerusalem with great joy. And they were always in the temple, praising and blessing God. Amen."
+          },
+          "body": "The strangest joy in the Gospels: He leaves,\nand they adoring went back into Jerusalem with great joy.\nNo tears on the road down.\nThey had finally understood who had been with them and where He now sits —\nand understood that His going up was not subtraction but coronation,\ntheirs as much as His.\nLuke ends his whole Gospel on the next clause:\nthey were always in the temple, praising and blessing God.\nThat is the way down from every mountain of prayer,\nand it is the way out of this decade:\nback into the city, glad, with the blessing still unfinished overhead.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "glorious-3",
+      "title": "The Descent of the Holy Spirit",
+      "meditations": [
+        {
+          "id": "glorious-3-01",
+          "mystery": "glorious-3",
+          "position": "opener",
+          "image": "pentecost-duccio",
+          "scripture": {
+            "ref": "Acts 2:1",
+            "text": "And when the days of the Pentecost were accomplished, they were all together in one place:"
+          },
+          "body": "Between the hill of the Ascension and this morning lie ten days about which\nScripture records almost nothing except the one thing that matters:\nthey waited.\nHe had told them not to depart from Jerusalem but to wait for the promise\nof the Father — and the Church has always counted those ten days as her first\nnovena: the original nine-days'-prayer, made before the word existed,\nby the people who invented Christian waiting.\nWhatever you have been asking God for through this rosary,\nyou are standing in their room.\nThe instruction has not changed. Wait for the promise.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-3-02",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-duccio",
+          "scripture": {
+            "ref": "Psalm 103:30",
+            "text": "Thou shalt send forth thy spirit, and they shall be created: and thou shalt renew the face of the earth."
+          },
+          "body": "The Church still asks this in the present tense, every Pentecost,\nas if the face of the earth were not yet finished being renewed.\nIt is not.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-3-03",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-duccio",
+          "scripture": {
+            "ref": "Matthew 28:19",
+            "text": "Going therefore, teach ye all nations: baptizing them in the name of the Father and of the Son and of the Holy Ghost."
+          },
+          "body": "Who is it that came?\nEnter the sanctuary of the Trinity to answer:\nthe Father, principle without principle; the Son, His perfect Word and image;\nand from their mutual gift of self proceeds the Holy Spirit —\nthe final term of the divine communications.\nLove between the first two Persons, in Person.\nConcerning these things we can but lisp —\nand yet Jesus revealed them on the eve of His death, to His friends,\nthat our joy may be filled.\nWhat descended on the cenacle is the love God is.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-3-04",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-el-greco",
+          "scripture": {
+            "ref": "John 7:39",
+            "text": "Now this he said of the Spirit which they should receive who believed in him: for as yet the Spirit was not given, because Jesus was not yet glorified."
+          },
+          "body": "John says something easy to read past:\nthe Spirit was not yet given, because Jesus was not yet glorified.\nThe order could not be otherwise: the gift of the Spirit, like every grace,\nwas merited by Jesus — it is the fruit of His Passion;\nHe purchased it by the sufferings He endured.\nDivine Love in Person, bought at the price you spent five decades\ncontemplating in the Sorrowful mysteries.\nPentecost is not a new project of God's;\nit is Calvary's harvest, ten days after the Sower went home.\nThe fire over each head was paid for.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-3-05",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-el-greco",
+          "scripture": {
+            "ref": "Luke 1:35",
+            "text": "And the angel answering, said to her: The Holy Ghost shall come upon thee and the power of the Most High shall overshadow thee. And therefore also the Holy which shall be born of thee shall be called the Son of God."
+          },
+          "body": "One person in that upper room had felt this before.\nThe Holy Ghost shall come upon thee, Gabriel had said in Nazareth,\nand the power of the most High shall overshadow thee —\nand now, thirty-three years later, the same Spirit descends on the same\nwoman, in a room full of frightened men she has been mothering for ten days.\nThe first overshadowing formed the body of Christ within her.\nThis one forms the mystical body of Christ around her.\nShe is the hinge between the two — the only soul present at both comings,\npraying at the center of the room the way the icons have always painted her.\nRest there beside her while the fire falls.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-3-06",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-el-greco",
+          "scripture": {
+            "ref": "Acts 1:14",
+            "text": "All these were persevering with one mind in prayer with the women, and Mary the mother of Jesus, and with his brethren."
+          },
+          "body": "Notice the word order of the verse and do not let it go:\nLuke names the apostles, then the women, and Mary the mother of Jesus last.\nNot because Luke forgot who she was —\nbut because she had taken the lowest place in the room, after everyone,\nand Luke simply recorded where people sat.\nThen the verdict: justly has the last become first, who,\nwhen she was first of all, became last.\nThe same woman was absent from Palm Sunday's applause and present\non Calvary's hill of disgrace.\nShe had a lifelong policy about crowds and honor.\nIt held in the cenacle too.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Bernard"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-3-07",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-giotto",
+          "scripture": {
+            "ref": "Acts 2:3",
+            "text": "And there appeared to them parted tongues, as it were of fire: and it sat upon every one of them."
+          },
+          "body": "The flame parted so that everyone in the room could have some.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-3-08",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-giotto",
+          "scripture": {
+            "ref": "Acts 2:2",
+            "text": "And suddenly there came a sound from heaven, as of a mighty wind coming: and it filled the whole house where they were sitting."
+          },
+          "body": "Notice where the wind goes: it filled the whole house where they were\nsitting.\nThey were indoors — the same kind of room they had locked for fear since\nEaster, the hiding place of a movement that had not yet moved.\nThe Spirit does not stand outside the door waiting for them to find courage\nand come out.\nHe fills the hiding place itself, floor to ceiling,\nuntil the building cannot hold what is in it and the door opens from\nthe inside.\nIf your own faith currently lives behind a locked door somewhere,\ntake the verse literally.\nHe is willing to start in there.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-3-09",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-giotto",
+          "scripture": {
+            "ref": "Acts 2:6",
+            "text": "And when this was noised abroad, the multitude came together, and were confounded in mind, because that every man heard them speak in his own tongue."
+          },
+          "body": "The Church has always read this morning against Babel.\nThere, one proud tongue was shattered into many and the peoples scattered;\nhere the many tongues remain — and every man hears the wonders of God\nin his own.\nThe Spirit does not repeal Babel by restoring a single language;\nHe does something better: unity without uniformity,\none Gospel wearing every mother tongue on earth.\nThe miracle was not that the crowd learned Galilean.\nIt was that no one had to stop being who they were to hear God speak\nto them.\nThe Church was catholic — universal — from her first sentence.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-3-10",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-restout",
+          "scripture": {
+            "ref": "John 14:26",
+            "text": "But the Paraclete, the Holy Ghost, whom the Father will send in my name, he will teach you all things and bring all things to your mind, whatsoever I shall have said to you."
+          },
+          "body": "Another Paraclete, Jesus had promised —\nand the apostles were to find in Him another Himself.\nNot a substitute teacher with different lessons:\nthe same Teacher, moved inside.\nHe will teach you all things, and bring all things to your mind,\nwhatsoever I shall have said to you —\nthe Spirit as the memory of the Church,\nthe one who makes three years of half-understood words suddenly cohere.\nEvery time a Gospel line you have heard a hundred times abruptly opens\nand reads you instead, that promise is being kept.\nThe Teacher did not leave the classroom.\nHe entered the students.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-3-11",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-restout",
+          "scripture": {
+            "ref": "Acts 2:14",
+            "text": "But Peter standing up with the eleven, lifted up his voice, and spoke to them: Ye men of Judea, and all you that dwell in Jerusalem, be this known to you and with your ears receive my words."
+          },
+          "body": "But Peter standing up.\nThree words, and a resurrection inside them.\nThe last time Peter faced a hostile audience it was one servant girl\nby a fire, and he broke three times before the rooster finished.\nNow he stands before thousands in the city that executed his Lord seven\nweeks ago, raises his voice, and preaches the first homily of the Church —\nand three thousand souls are baptized by nightfall.\nSame man. Same weakness, presumably, somewhere underneath.\nNew wind.\nCourage is the Spirit's signature gift, and He gives it, as at Pentecost,\nprecisely to people with a documented history of collapse.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-3-12",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-restout",
+          "scripture": {
+            "ref": "Wisdom 1:7",
+            "text": "For the Spirit of the Lord hath filled the whole world: and that which containeth all things, hath knowledge of the voice."
+          },
+          "body": "The mystery's largest claim fits in three words: Pentecost ever continues.\nThe assembly in the cenacle represents the entire Church —\nand the Spirit's action in her is wonderful and unceasing.\nThe fire of Acts is the permanent weather of the Church:\nevery sacrament on every altar this morning.\nThe Spirit of the Lord hath filled the whole world —\npresent tense in the verse, present tense still.\nYou did not miss Pentecost by twenty centuries.\nYou are inside it.",
+          "source": "marmion",
+          "fathers": [
+            "Marmion"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-3-13",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-byzantine-icon",
+          "scripture": {
+            "ref": "Romans 8:26",
+            "text": "Likewise, the Spirit also helpeth our infirmity. For, we know not what we should pray for as we ought: but the Spirit himself asketh for us with unspeakable groanings,"
+          },
+          "body": "Paul reveals what may be the Spirit's most hidden work:\nwhen we do not know what to pray, the Spirit himself asketh for us\nwith unspeakable groanings — prayer happening in you, beneath you,\nwhen you have no words at all.\nWhich reframes every prayer you have ever abandoned for lack of language.\nSo let the question of this decade be gentle:\nwhat have you stopped praying about because you could not find the words —\nand what if the wordlessness itself, the ache that has no sentence,\nwas the Spirit already praying it better than your words ever did?",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-3-14",
+          "mystery": "glorious-3",
+          "position": "any",
+          "image": "pentecost-byzantine-icon",
+          "scripture": {
+            "ref": "Galatians 5:22-23",
+            "text": "But the fruit of the Spirit is, charity, joy, peace, patience, benignity, goodness, longanimity, Mildness, faith, modesty, continency, chastity. Against such there is no law."
+          },
+          "body": "Wind, fire, and tongues were the launch; the cargo is quieter.\nPaul inventories what the Spirit actually produces where He dwells:\ncharity, joy, peace, patience, benignity, goodness, longanimity, mildness,\nfaith, modesty, continency, chastity.\nFruit — which grows slowly, in season, and mostly without the tree noticing.\nSo read the list once more, unhurried, as the decade's question:\nwhich of these has quietly grown in you this past year that you never\nplanted and cannot take credit for?\nFind it, name it, and know that you have located the Holy Ghost at work\nin your own life.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-3-15",
+          "mystery": "glorious-3",
+          "position": "closer",
+          "image": "pentecost-byzantine-icon",
+          "scripture": {
+            "ref": "Acts 2:42",
+            "text": "And they were persevering in the doctrine of the apostles and in the communication of the breaking of bread and in prayers."
+          },
+          "body": "Luke tells us how the first day of the Church ended:\nthree thousand new souls, persevering in the doctrine of the apostles,\nand in the communication of the breaking of bread, and in prayers.\nTeaching, Eucharist, prayer — the whole shape of Catholic life,\nassembled before sunset on day one, and never since disassembled.\nThe fire became a community; the wind became a way of living.\nAnd notice where the sentence lands: in prayers.\nThe Church's first day ended the way your decade is ending now.\nFrom their upper room to yours — same Spirit, same fire,\nstill parting so that everyone can have some.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "glorious-4",
+      "title": "The Assumption",
+      "meditations": [
+        {
+          "id": "glorious-4-01",
+          "mystery": "glorious-4",
+          "position": "opener",
+          "image": "assumption-titian",
+          "scripture": {
+            "ref": "Psalm 131:8",
+            "text": "Arise, O Lord, into thy resting place: thou and the ark, which thou hast sanctified."
+          },
+          "body": "From here to the end of the Rosary, Scripture falls silent:\nno evangelist recorded this mystery.\nBut history left a silence of its own that speaks almost as loudly.\nThe early Church collected the bones of her martyrs and built altars over\nthem — yet no city on earth has ever claimed the body of the Mother of God.\nNot Jerusalem, not Ephesus, no one.\nThe one relic all Christendom would have fought over does not exist,\nand the Church has always known why.\nThe psalm had asked for it: arise, O Lord, into thy resting place —\nthou, and the ark which thou hast sanctified.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-4-02",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-titian",
+          "scripture": {
+            "ref": "Luke 2:19",
+            "text": "But Mary kept all these words, pondering them in her heart."
+          },
+          "body": "How did she spend the years of waiting?\nThe old tradition relates it: she went on pilgrimage through her own\nmemories — the stable at Bethlehem, the workshop at Nazareth,\nthe garden of Gethsemani, the hall of the scourging,\nthe place of the crowning, and most often Calvary and the holy sepulchre.\nStation by station, she walked what you are praying.\nThe woman who kept all these words in her heart spent her last years\nvisiting them.\nYou are not performing a devotion she would find foreign.\nYou are keeping her habit.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-03",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-titian",
+          "scripture": {
+            "ref": "Psalm 54:7",
+            "text": "And I said: Who will give me wings like a dove, and I will fly and be at rest?"
+          },
+          "body": "But the holy places could not satisfy\nher, because her heart could not find its rest on this earth at all.\nPut David's sighs on her lips, with more ardent love than David's:\nwho will give me wings like a dove, and I will fly and be at rest —\nand the hart panting for the fountains of water.\nHers was the purest homesickness that ever existed:\nnot weariness of earth, but love of Someone in particular who was elsewhere.\nShe had a treasure, and where the treasure is, the heart is also.\nFor thirty-some years, her heart lived at an address her feet could\nnot reach.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-04",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "dormition-byzantine-icon",
+          "scripture": {
+            "ref": "Luke 1:38",
+            "text": "And Mary said: Behold the handmaid of the Lord: be it done to me according to thy word. And the angel departed from her."
+          },
+          "body": "Then, as the old historians gather it, Gabriel came back —\nthe same angel, with a second annunciation:\nprepare to leave the earth; come take possession of thy kingdom,\nfor all its citizens await thee.\nAnd what did she answer?\nThe same four words as the first time, at Nazareth, when she was fifteen:\nbehold the handmaid of the Lord.\nEcce ancilla Domini.\nShe received the summons to glory in exactly the posture in which she had\nreceived the summons to motherhood.\nFirst fiat: the Incarnation.\nSecond, at the Presentation: the offering.\nThis is the third, and the word has not changed.\nIt never needed to.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-05",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "dormition-byzantine-icon",
+          "scripture": {
+            "ref": "John 19:27",
+            "text": "After that, he saith to the disciple: Behold thy mother. And from that hour, the disciple took her to his own."
+          },
+          "body": "Her tenderest farewell was for John —\nthe son given her from the cross, who had kept her for thirty years.\nHear what the tradition remembers her saying to him:\nMy John, I thank thee for all thy care of me.\nIf I leave thee now, I am going to pray for thee.\nDo not forget me; in all thy necessities call me to thy aid,\nfor I never will forget thee, my beloved son.\nRead that again slowly, because from that hour the disciple took\nher to his own — and the disciple is you.\nHer deathbed promise to John is her standing promise to everyone he stands\nfor: call me, in all of them.\nI never will forget thee.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-06",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "dormition-byzantine-icon",
+          "scripture": {
+            "ref": "Canticle of Canticles 8:6",
+            "text": "Put me as a seal upon thy heart, as a seal upon thy arm, for love is strong as death, jealousy as hard as hell, the lamps thereof are fire and flames."
+          },
+          "body": "What did she die of?\nThe Fathers and Doctors generally affirm that she died of no infirmity\nat all: she died of pure love.\nA rule was laid down\nfor her: Mary either ought not to die, or die only of love.\nThe divine fire that had burned in her since Nazareth simply finished\nits work — the celestial phoenix, losing her life in the midst of that flame.\nYou have met the verse before, at the foot of the cross, as a wound:\nlove is strong as death.\nHere it is again as a victory.\nIn her, love and death met a final time — and it was death that gave way.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Ildephonsus of Toledo"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-07",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "dormition-byzantine-icon",
+          "scripture": {
+            "ref": "Canticle of Canticles 5:8",
+            "text": "I adjure you, O daughters of Jerusalem, if you find my beloved, that you tell him that I languish with love."
+          },
+          "body": "The angels filled the room, and she sent them back for her Son.\nEven heaven's court is not heaven.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori"
+          ],
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-4-08",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "dormition-byzantine-icon",
+          "scripture": {
+            "ref": "Canticle of Canticles 2:10",
+            "text": "Behold my beloved speaketh to me: Arise, make haste, my love, my dove, my beautiful one, and come."
+          },
+          "body": "Then Jesus Himself came for her — with the cross in His hand.\nWhy the cross, at a joyful deathbed?\nTo show the glory He had won by it:\nhaving by His death made the acquisition of this great creature.\nThe cross at her bedside is the receipt —\neverything this hour holds was purchased there.\nAnd the icon of the mystery answers with its own reversal:\nChrist standing over her bed, holding her soul in His arms like a swaddled\nchild.\nThe Madonna and Child, at last, the other way around.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Elizabeth of Schonau"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-09",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-el-greco",
+          "scripture": {
+            "ref": "Psalm 44:10",
+            "text": "The daughters of kings have delighted thee in thy glory. The queen stood on thy right hand, in gilded clothing; surrounded with variety."
+          },
+          "body": "Hear what heaven said as she arrived.\nThe Canticle asks it: who is this that cometh up from the desert,\nflowing with delights, leaning upon her beloved? —\nand this all the citizens of the heavenly Jerusalem could have cried\nat the Assumption of the glorious Virgin, astonished beyond measure:\nfor then she leaned most fully upon her Beloved,\nwho led her out of this valley of tears to such surpassing glory,\nplacing her above the whole army of heaven.\nEvery previous arrival had been a rescued soul.\nThis one came up the road leaning on the King's own arm —\nand heaven, which is not easily surprised, asked who is this.\nThe queen stood at His right hand.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-4-10",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-el-greco",
+          "scripture": {
+            "ref": "1 Corinthians 15:20",
+            "text": "But now Christ is risen from the dead, the firstfruits of them that sleep:"
+          },
+          "body": "Be precise about what the Church actually teaches here,\nbecause the precision is the glory: Mary was assumed body and soul.\nNot her spirit released from flesh —\nthe whole woman, the body that carried God, taken entire into glory.\nChrist rose as the firstfruits of them that sleep;\nshe is the first fruit of the firstfruits:\nthe first of the merely redeemed to arrive complete,\nthe proof that His Resurrection was not a private privilege but a door held\nopen.\nWhat He is by right, she is by gift —\nand what she is by gift, you are promised.\nThe exit He tore in death, somebody has now walked through.\nYour body's future exists, and it is standing in heaven.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-4-11",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-el-greco",
+          "scripture": {
+            "ref": "Canticle of Canticles 4:7",
+            "text": "Thou art all fair, O my love, and there is not a spot in thee."
+          },
+          "body": "Death searched her and found nothing it could keep.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-4-12",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-poussin",
+          "scripture": {
+            "ref": "Psalm 41:2",
+            "text": "As the hart panteth after the fountains of water; so my soul panteth after thee, O God."
+          },
+          "body": "Her whole last season on earth was homesickness —\nnot for a place but for a Person; she missed Someone.\nWhich puts a quiet question to the way most of us hold heaven:\nas a comfort filed away for later, a destination assumed rather than\ndesired.\nShe ached for it the way the hart pants for water,\nbecause she knew exactly whom it contained.\nSo ask yourself, gently, inside this decade:\nis your heaven a place you expect, or a Person you already miss?\nAnd if the longing is faint — she is proof it can be prayed into flame,\none mystery at a time, the way she fed hers at Bethlehem and Calvary.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-4-13",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-poussin",
+          "scripture": {
+            "ref": "Apocalypse 11:19",
+            "text": "And the temple of God was opened in heaven: and the ark of his testament was seen in his temple. And there were lightnings and voices and an earthquake and great hail."
+          },
+          "body": "The decade opened with a psalm's petition: arise, O Lord, into thy rest —\nthou and the ark.\nHere is the petition answered, in the last book of the Bible:\nthe temple of God was opened in heaven,\nand the ark of his testament was seen in his temple.\nJohn looks through the opened door and sees the ark —\nnot lost, not captured, not crumbled in some cave, but home.\nThe Church has always recognized her in that verse:\nthe living ark, gold within and without, who carried the Word, the Manna,\nand the true High Priest.\nWhat Israel lost and mourned, heaven displays.\nThe Assumption is the ark procession arriving,\nand the whole temple open to show it.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-4-14",
+          "mystery": "glorious-4",
+          "position": "any",
+          "image": "assumption-murillo",
+          "scripture": {
+            "ref": "John 2:3",
+            "text": "And the wine failing, the mother of Jesus saith to him: They have no wine."
+          },
+          "body": "In all thy necessities call me to thy aid.\nThat was her deathbed instruction to John — and through him, to you.\nHer style of intercession has been on record since Cana:\nshe does not lecture her Son or negotiate; she states the need —\nthey have no wine — and lets Him be Himself about it.\nSo the mystery's question is the most practical one in this whole Rosary:\nwhen did you last actually do it?\nNot admire her, not think warmly of her —\ncall her, by name, about a specific necessity.\nYou began tonight with intentions.\nChoose the heaviest one and hand it to the woman who said I never will\nforget thee, and see what she does with the wine.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-4-15",
+          "mystery": "glorious-4",
+          "position": "closer",
+          "image": "assumption-murillo",
+          "scripture": {
+            "ref": "Psalm 15:11",
+            "text": "Thou hast made known to me the ways of life, thou shalt fill me with joy with thy countenance: at thy right hand are delights even to the end."
+          },
+          "body": "At the empty tomb she had held Him and said I will not let him go —\nand then let Him go, for thirty more years of exile.\nThis hour ends the letting.\nThe face she searched Jerusalem for as a girl, the face they bandaged,\nthe face she watched go grey on the cross, the face as the sun in his power:\nhers now, forever, at arm's length that never lengthens again.\nThou shalt fill me with joy with thy countenance.\nAnd every night since, the Church has ended the Hail Mary with the hour she\nnow knows from the inside: pray for us sinners,\nnow and at the hour of our death.\nSay tonight's last one slowly.\nShe has been through that door, body and soul — and she is holding it.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    },
+    {
+      "id": "glorious-5",
+      "title": "The Coronation of Mary",
+      "meditations": [
+        {
+          "id": "glorious-5-01",
+          "mystery": "glorious-5",
+          "position": "opener",
+          "image": "coronation-fra-angelico",
+          "scripture": {
+            "ref": "Apocalypse 12:1",
+            "text": "And a great sign appeared in heaven: A woman clothed with the sun, and the moon under her feet, and on her head a crown of twelve stars."
+          },
+          "body": "The Bible's last portrait of her is its most tremendous:\na woman clothed with the sun, the moon under her feet,\nand on her head a crown of twelve stars.\nThe girl nobody in Nazareth looked at twice is now a great sign appearing\nin heaven.\nNothing about her changed — that is the point of the whole Rosary you have\nprayed: the handmaid was always this; glory has only made it visible.\nBegin the final mystery by holding the two pictures at once:\nthe small room where an angel found her, and the sky she now wears.\nThe distance between them is what God does with a yes.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-5-02",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-fra-angelico",
+          "scripture": {
+            "ref": "Luke 1:52",
+            "text": "He hath put down the mighty from their seat and hath exalted the humble."
+          },
+          "body": "She announced the mechanism of this day herself, at Elizabeth's door,\nthirty years before Calvary and an eternity before the crown.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-5-03",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-fra-angelico",
+          "scripture": {
+            "ref": "3 Kings 2:19-20",
+            "text": "Then Bethsabee came to king Solomon, to speak to him for Adonias: and the king arose to meet her, and bowed to her, and sat down upon his throne: and a throne was set for the king’s mother, and she sat on his right hand. And she said to him: I desire one small petition of thee; do not put me to confusion. And the king said to her: My mother ask, for I must not turn away thy face."
+          },
+          "body": "Her queenship is not the Church's sentiment;\nit is the constitution of David's kingdom.\nIn Israel the queen was never the king's wife — kings had many —\nbut always his mother, the Gebirah.\nWatch Solomon receive Bathsheba: the king rises to meet her, bows,\nand has a throne set for the king's mother at his right hand.\nThen the words every Hail Mary relies\non: ask, my mother, for I must not turn away thy face.\nGabriel said her Son would receive the throne of David his father.\nHe did — and David's throne comes with a second seat,\nand a standing rule about the mother's requests.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-5-04",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-gentile-da-fabriano",
+          "scripture": {
+            "ref": "Psalm 61:12-13",
+            "text": "God hath spoken once, these two things have I heard, that power belongeth to God, And mercy to thee, O Lord; for thou wilt render to every man according to his works."
+          },
+          "body": "A daring piece of arithmetic opens this mystery.\nDavid had heard two things: that power belongeth to God, and mercy to thee,\nO Lord.\nThe kingdom of God consists of justice and mercy —\nand the Lord has divided it: the kingdom of justice He reserved for Himself,\nand the kingdom of mercy He granted to Mary,\nordaining that the mercies dispensed to men should pass through her hands.\nTake the claim slowly.\nNot that she has mercy of her own apart from God —\nbut that He chose to give His through a mother,\nbecause He knows how His children take medicine.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Gerson"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-5-05",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-gentile-da-fabriano",
+          "scripture": {
+            "ref": "Psalm 71:2",
+            "text": "Give to the king thy judgment, O God, and to the king’s son thy justice: To judge thy people with justice, and thy poor with judgment."
+          },
+          "body": "Stack the witnesses.\nWhen she conceived and bore the Word,\nshe obtained the half of the kingdom of God —\nqueen of mercy, Christ remaining king of justice.\nTo the Son the office of judging; to the mother the office\nof compassionating the wretched.\nAnd a saint dared to improve a psalm: give to the king thy judgment, O God —\nand to his mother thy mercy.\nIf the audacity makes you flinch, remember who arranged it.\nThe Son crowned her; the saints are only reading the coronation's terms\naloud.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Thomas Aquinas",
+            "Ernest of Prague",
+            "Bonaventure"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-5-06",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-gentile-da-fabriano",
+          "scripture": {
+            "ref": "Esther 5:3",
+            "text": "And the king said to her: What wilt thou, queen Esther? what is thy request? if thou shouldst even ask one half of the kingdom, it shall be given to thee."
+          },
+          "body": "A type from Scripture seals the divided kingdom: Queen Esther.\nA decree of death stood against her whole people;\nshe entered the throne room unbidden, at the risk of her life —\nand the king held out the sceptre and said the words exactly:\nthough thou ask the half of my kingdom.\nA condemned people, a queen who is one of them,\na king who cannot refuse her face: the Book of Esther is the Coronation\ndrawn in advance.\nThe decree against us still stands written somewhere.\nSo does she, at the throne, unbidden by anyone but love.",
+          "source": "liguori",
+          "fathers": [
+            "Liguori",
+            "Albertus Magnus"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-5-07",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-el-greco",
+          "scripture": {
+            "ref": "Canticle of Canticles 4:9",
+            "text": "Thou hast wounded my heart, my sister, my spouse, thou hast wounded my heart with one of thy eyes, and with one hair of thy neck."
+          },
+          "body": "The strangest line in the Canticle — turn away thy eyes from me —\nis the speech of a lover overcome.\nChrist says it to His own Mother as amorous hyperbole:\nHe has already told her thou hast wounded my heart with one of thy eyes —\nhow much more with both?\nHe cannot bear her gaze for the wound of love it deals Him.\nAnd then the clause that stops the breath:\nthose dove-like, contemplative eyes of hers drew me from the bosom\nof the Father into thy womb.\nIn the order of love, her gaze caused the Incarnation.\nHeaven's King is, by His own account, a conquered man.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-5-08",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-el-greco",
+          "scripture": {
+            "ref": "Canticle of Canticles 6:4",
+            "text": "Turn away thy eyes from me, for they have made me flee away. Thy hair is as a flock of goats, that appear from Galaad."
+          },
+          "body": "Then the verse yields its second meaning,\nand it is the charter of her reign.\nTurn thy eyes from me, Christ tells His crowned Mother, means this:\nthose eyes of maternal compassion and loving care which thou hadst on me\non earth — passible, mortal, above all in the time of the Passion —\nturn them now wholly from me, fully glorified,\nand turn them to the wretched exiles crying out to thee:\nEia ergo, Advocata nostra — turn then, our Advocate,\nthose thy merciful eyes toward us.\nRead that again: the Salve Regina's petition, in the mouth of Christ,\nas her coronation assignment.\nThe Church has spent centuries begging her to do what her Son commissioned\nin the same words.\nI no longer need those eyes, He says. They do.",
+          "source": "denis",
+          "fathers": [
+            "Denis the Carthusian"
+          ],
+          "form": "tradition"
+        },
+        {
+          "id": "glorious-5-09",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-velazquez",
+          "scripture": {
+            "ref": "Psalm 44:14",
+            "text": "All the glory of the king’s daughter is within in golden borders,"
+          },
+          "body": "Now stop, and only watch.\nThe hands that were nailed lift a crown;\nthe head that wore thorns bends toward hers;\nthe same two faces that met on the Via Dolorosa meet over a diadem.\nShe receives it the way she has received everything since Nazareth —\nasking nothing, adding nothing, all the glory of the king's daughter within.\nDo not draw a lesson from this decade.\nThere is no assignment.\nThe Son is crowning His Mother, and you were brought here to see it —\na child at a coronation, allowed in because you are family.\nFor ten Hail Marys, be nothing but glad.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-5-10",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-velazquez",
+          "scripture": {
+            "ref": "Isaias 62:3",
+            "text": "And thou shalt be a crown of glory in the hand of the Lord, and a royal diadem in the hand of thy God."
+          },
+          "body": "Isaias supplies the mystery's secret:\nthou shalt be a crown of glory in the hand of the Lord.\nShe is crowned — and she is herself a crown, held in His hand,\nmade of the redemption's first and perfect fruit.\nAnd her own crown, the twelve stars:\nthe tribes, the apostles, the whole gathered People —\nwhich is to say, the jewels in her diadem are the redeemed.\nA queen's glory is her people.\nHer coronation is not a promotion away from us;\nit is her being fastened to us forever,\nthe way a crown is fastened to what it honors.\nYou are somewhere in the setting, and she does not intend to lose a stone.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-5-11",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-velazquez",
+          "scripture": {
+            "ref": "Genesis 3:15",
+            "text": "I will put enmities between thee and the woman, and thy seed and her seed: she shall crush thy head, and thou shalt lie in wait for her heel."
+          },
+          "body": "The first promise in Scripture and its last portrait are the same woman.\nThe serpent waited the whole Bible to lose.",
+          "source": "original",
+          "form": "verse-and-line"
+        },
+        {
+          "id": "glorious-5-12",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-martorana-mosaic",
+          "scripture": {
+            "ref": "Psalm 122:2",
+            "text": "Behold as the eyes of servants are on the hands of their masters, As the eyes of the handmaid are on the hands of her mistress: so are our eyes unto the Lord our God, until he have mercy on us."
+          },
+          "body": "If mercy truly passes through her hands,\nthe psalm has already taught the posture:\nas the eyes of the handmaid are on the hands of her mistress,\nso are our eyes on the Lord.\nEyes on the hands — watching for what is given, and through whom.\nWhich raises a question worth an honest answer:\nare you willing to receive grace secondhand?\nSome souls will take from God only what arrives direct,\nno mother in the middle, no mediation they didn't choose.\nBut He built the kingdom with her hands in it.\nThis week, ask for one specific grace explicitly through her —\nand watch the hands.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-5-13",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-martorana-mosaic",
+          "scripture": {
+            "ref": "Psalm 83:7",
+            "text": "In the vale of tears, in the place which he hath set."
+          },
+          "body": "You have known the Coronation's theology by heart for years,\nbecause it is the Salve Regina.\nHail, holy Queen — the crown.\nMother of mercy — the handed-over half of the kingdom.\nMourning and weeping in this valley of tears —\nthe psalm's own phrase for the exile she watches.\nTurn then, most gracious Advocate, thine eyes of mercy toward us —\nthe commission her Son gave her, word for word.\nAnd the last petition tells you what kind of queen she\nis: after this our exile, show unto us the blessed fruit of thy womb, Jesus.\nHer final act, every time, is to point away from herself.\nThe prayer ends on His name because she insists on it.",
+          "source": "original",
+          "form": "expository"
+        },
+        {
+          "id": "glorious-5-14",
+          "mystery": "glorious-5",
+          "position": "any",
+          "image": "coronation-martorana-mosaic",
+          "scripture": {
+            "ref": "Apocalypse 4:10",
+            "text": "The four and twenty ancients fell down before him that sitteth on the throne and adored him that liveth for ever and ever and cast their crowns before the throne, saying:"
+          },
+          "body": "The word Rosary means a garland — a crown of roses woven for the Queen,\none Ave per rose.\nWhich means you have not merely been meditating tonight;\nyou have been making something, and it is finished, and it is in your hands.\nIn heaven the elders cast their crowns before the throne;\nshe lays hers there too, first and gladdest of all.\nSo the last question of the Glorious mysteries is simply this:\nwhat did you weave this crown for?\nTake the intentions you named at the beginning — the people, the burdens —\nset them among the roses, and lay the whole thing at her feet,\nto be carried where she carries everything.",
+          "source": "original",
+          "form": "question"
+        },
+        {
+          "id": "glorious-5-15",
+          "mystery": "glorious-5",
+          "position": "closer",
+          "image": "coronation-martorana-mosaic",
+          "scripture": {
+            "ref": "John 2:5",
+            "text": "His mother saith to the waiters: Whatsoever he shall say to you, do ye."
+          },
+          "body": "The Rosary's twenty mysteries end here, at her coronation —\nso let her have the last word, and notice which one she chose.\nScripture records her final sentence at a wedding feast,\nspoken to servants who did not know what was coming:\nwhatsoever he shall say to you, do ye.\nThat is the only instruction she ever gave,\nand she has never issued another.\nCrowned above the angels, holding half the kingdom,\nwith the King unable to turn away her face —\neverything she has, she spends on pointing at Him.\nSo go the way she sends everyone: back down from the vision,\ninto the kitchen and the water jars, doing whatsoever He says.\nThe Queen's whole reign is in that sentence.\nThe rest is roses.",
+          "source": "original",
+          "form": "expository"
+        }
+      ]
+    }
+  ]
+}
