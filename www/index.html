@@ -5534,7 +5534,213 @@ function playGuestmasterAudio() {
     if (b) b.textContent = '◎ Hear the letter read aloud';
   }
 }
-
+/* ═══════════════════════════════════════════
+   Cloud of Witnesses
+═══════════════════════════════════════════ */
+const CoW = (() => {
+ 
+  const SETS = ['joyful','sorrowful','glorious','luminous'];
+  const SET_LABEL = {joyful:'Joyful', sorrowful:'Sorrowful', glorious:'Glorious', luminous:'Luminous'};
+  // Sun:Glorious Mon:Joyful Tue:Sorrowful Wed:Glorious Thu:Luminous Fri:Sorrowful Sat:Joyful
+  const DAY_SET = ['glorious','joyful','sorrowful','glorious','luminous','sorrowful','joyful'];
+  const setForToday = () => DAY_SET[new Date().getDay()];
+ 
+  const PRAYERS = {
+    creed: "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; the third day He rose again from the dead; He ascended into heaven, and sitteth at the right hand of God, the Father Almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Ghost, the Holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
+    our:   "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.",
+    hail:  "Hail Mary, full of grace, the Lord is with thee; blessed art thou amongst women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.",
+    glory: "Glory be to the Father, and to the Son, and to the Holy Ghost. As it was in the beginning, is now, and ever shall be, world without end. Amen.",
+    fatima:"O my Jesus, forgive us our sins, save us from the fires of hell; lead all souls to heaven, especially those in most need of Thy mercy.",
+    salve: "Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn, then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary. Pray for us, O holy Mother of God, that we may be made worthy of the promises of Christ."
+  };
+ 
+  let data = {};      // set -> parsed json
+  let S = null;       // active session
+  let audioEl = null;
+  const LS = 'cow_prefs';
+  const todayKey = () => new Date().toISOString().slice(0,10);
+ 
+  async function loadSet(set){
+    if (data[set]) return data[set];
+    const res = await fetch(`assets/rosary/${set}.json`);
+    data[set] = await res.json();
+    return data[set];
+  }
+ 
+  /* Decade draw: opener first, closer last, shuffled `any` between.
+     Two-closer pools alternate closers by rosary count today. */
+  function drawPool(mystery, countToday){
+    const meds = mystery.meditations;
+    const opener  = meds.filter(m=>m.position==='opener');
+    const closers = meds.filter(m=>m.position==='closer');
+    const any     = meds.filter(m=>m.position==='any').slice();
+    for (let i=any.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [any[i],any[j]]=[any[j],any[i]]; }
+    const closer = closers.length>1 ? closers[countToday % closers.length] : closers[0];
+    return [...opener, ...any, closer].filter(Boolean);
+  }
+ 
+  const prefs = () => { try { return JSON.parse(localStorage.getItem(LS))||{}; } catch { return {}; } };
+ 
+  /* ═══════ SETUP ═══════ */
+  async function init(){
+    const todaySet = setForToday();
+    const p = prefs();
+    stopAudio();
+    document.getElementById('cowPray').style.display='none';
+    const host = document.getElementById('cowSetup');
+    host.style.display='block';
+    host.innerHTML = `
+      <div class="cow-wrap">
+        <p class="cow-sub">Seeing we also are compassed about with so great a cloud of witnesses&hellip; &mdash; Heb. 12:1</p>
+ 
+        <label class="cow-label">Your intentions</label>
+        <textarea id="cowIntentions" rows="3" placeholder="For whom, for what, do you pray this rosary?"></textarea>
+ 
+        <label class="cow-label">Your roster &mdash; who prays with you</label>
+        <div class="cow-chips">
+          ${['Our Lady','St. Joseph','My guardian angel','The holy souls'].map(n=>
+            `<button type="button" class="cow-chip" data-n="${n}">${n}</button>`).join('')}
+        </div>
+        <input id="cowRosterAdd" placeholder="Add a saint, an angel, a soul&hellip; then press Enter">
+        <div class="cow-roster" id="cowRoster"></div>
+ 
+        <label class="cow-toggle"><input type="checkbox" id="cowShowPrayers" ${p.showPrayers?'checked':''}> Show the fixed prayers</label>
+        <label class="cow-toggle"><input type="checkbox" id="cowAudio" ${p.audio?'checked':''}> Read meditations aloud</label>
+ 
+        <label class="cow-label">Mysteries</label>
+        <div class="cow-sets">
+          ${SETS.map(s=>`<button type="button" class="cow-set ${s===todaySet?'sel':''}" data-s="${s}">${SET_LABEL[s]}${s===todaySet?' &middot; today':''}</button>`).join('')}
+        </div>
+ 
+        <button type="button" class="cow-begin" id="cowBegin">Begin</button>
+      </div>`;
+ 
+    const roster = new Set();
+    const renderRoster = () => {
+      document.getElementById('cowRoster').innerHTML =
+        [...roster].map(n=>`<button type="button" class="cow-r" data-n="${n}">${n} &times;</button>`).join('');
+    };
+    host.querySelectorAll('.cow-chip').forEach(b=>b.onclick=()=>{ roster.add(b.dataset.n); renderRoster(); });
+    document.getElementById('cowRoster').onclick = e => {
+      const n = e.target.closest('[data-n]')?.dataset.n;
+      if (n){ roster.delete(n); renderRoster(); }
+    };
+    document.getElementById('cowRosterAdd').onkeydown = e => {
+      if (e.key==='Enter' && e.target.value.trim()){ roster.add(e.target.value.trim()); e.target.value=''; renderRoster(); }
+    };
+    let chosen = todaySet;
+    host.querySelectorAll('.cow-set').forEach(b=>b.onclick=()=>{
+      chosen = b.dataset.s;
+      host.querySelectorAll('.cow-set').forEach(x=>x.classList.toggle('sel', x===b));
+    });
+ 
+    document.getElementById('cowBegin').onclick = async () => {
+      const showPrayers = document.getElementById('cowShowPrayers').checked;
+      const audio = document.getElementById('cowAudio').checked;
+      localStorage.setItem(LS, JSON.stringify({showPrayers, audio}));
+      const json = await loadSet(chosen);
+      const countToday = Number(localStorage.getItem('cow_count_'+todayKey()))||0;
+      S = {
+        set: chosen, setTitle: json.title, sources: json.sources,
+        intentions: document.getElementById('cowIntentions').value.trim(),
+        roster: [...roster], showPrayers, audio,
+        mIdx: 0, medIdx: 0, started: Date.now(),
+        mysteries: json.mysteries,
+        pools: json.mysteries.map(m => drawPool(m, countToday))
+      };
+      host.style.display='none';
+      document.getElementById('cowPray').style.display='block';
+      renderMed();
+    };
+  }
+ 
+  /* ═══════ PRAYER ═══════ */
+  function renderMed(){
+    const mystery = S.mysteries[S.mIdx];
+    const pool = S.pools[S.mIdx];
+    const med = pool[S.medIdx % pool.length];
+    const host = document.getElementById('cowPray');
+    host.innerHTML = `
+      <div class="cow-wrap">
+        <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
+        <div class="cow-img" id="cowImg" style="background-image:url('assets/rosary/${med.image}.jpg')"></div>
+        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
+        <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
+        ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
+        ${S.showPrayers ? prayersHTML() : ''}
+        <div class="cow-hint">tap the image for another meditation</div>
+        <button type="button" class="cow-begin" id="cowNext">${S.mIdx<4 ? 'Next mystery &rarr;' : 'Finish the rosary'}</button>
+      </div>`;
+    host.scrollTop = 0; window.scrollTo(0,0);
+ 
+    document.getElementById('cowImg').onclick = () => { S.medIdx++; renderMed(); };
+    const cr = document.getElementById('cowCredit');
+    if (cr) cr.onclick = () => {
+      cr.outerHTML = `<div class="cow-credit-full">${med.fathers.map(f=>S.sources[f]||f).join('<br>')}</div>`;
+    };
+    document.getElementById('cowNext').onclick = () => {
+      if (S.mIdx<4){ S.mIdx++; S.medIdx=0; renderMed(); } else finish();
+    };
+    if (S.audio) speak(med);
+  }
+ 
+  function prayersHTML(){
+    return `<details class="cow-prayers"><summary>The prayers</summary>
+      ${S.mIdx===0 ? `<p><strong>Apostles' Creed</strong><br>${PRAYERS.creed}</p>` : ''}
+      <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
+      <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
+      <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
+      <p><strong>Fatima Prayer</strong><br>${PRAYERS.fatima}</p>
+      ${S.mIdx===4 ? `<p><strong>Salve Regina</strong><br>${PRAYERS.salve}</p>` : ''}
+    </details>`;
+  }
+ 
+  /* ── audio: still-tts, cached by meditation id ── */
+  async function speak(med){
+    try {
+      stopAudio();
+      const cache = await caches.open('cow-tts-v1');
+      const key = new Request(`https://still-tts.onrender.com/rosary-tts?id=${med.id}`);
+      let res = await cache.match(key);
+      if (!res){
+        res = await fetch('https://still-tts.onrender.com/rosary-tts', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ id: med.id, scripture: med.scripture.text, body: med.body })
+        });
+        if (!res.ok) return;
+        await cache.put(key, res.clone());
+      }
+      audioEl = new Audio(URL.createObjectURL(await res.blob()));
+      audioEl.play().catch(()=>{});
+    } catch {}
+  }
+  function stopAudio(){ if (audioEl){ audioEl.pause(); audioEl = null; } }
+ 
+  /* ═══════ FINISH → JOURNAL ═══════ */
+  function finish(){
+    stopAudio();
+    const k = 'cow_count_'+todayKey();
+    localStorage.setItem(k, (Number(localStorage.getItem(k))||0)+1);
+    DB.save('witnesses', {
+      set: S.set, setTitle: S.setTitle, decades: 5,
+      minutes: Math.max(1, Math.round((Date.now()-S.started)/60000)),
+      intentions: S.intentions, roster: S.roster
+    });
+    document.getElementById('cowPray').innerHTML = `
+      <div class="cow-wrap cow-done">
+        <p>The rosary is complete.</p>
+        ${S.roster.length ? `<p class="cow-done-soft">You prayed with ${S.roster.join(', ')}.</p>` : ''}
+        ${S.intentions ? `<p class="cow-done-soft">Held before God: ${S.intentions}</p>` : ''}
+        <button type="button" class="cow-begin" onclick="CoW.exit()">Return</button>
+      </div>`;
+  }
+ 
+  function exit(){ stopAudio(); S = null; goHome(); }
+ 
+  return { init, exit };
+})();
+ 
+function initWitnesses(){ CoW.init(); }
 /* ═══════════════════════════════════════════
    THE COMPANION -- API
 ═══════════════════════════════════════════ */
@@ -7887,7 +8093,7 @@ function renderTodayLog() {
 
 function activityChip(e) {
   const icons = { sitting:'◌', lectio:'✎', examen:'◻', office:'✦',
-    companion:'✝', fast:'◦', journal:'·', deeper:'☩' };
+    companion:'✝', fast:'◦', journal:'·', deeper:'☩', witnesses:'☁' };
   const icon = icons[e.type] || '·';
   let title = '', meta = '';
   if (e.type === 'sitting') {
@@ -7914,6 +8120,11 @@ function activityChip(e) {
   } else if (e.type === 'sophia') {
     title = 'Amma Sophia';
     meta = e.source || '';
+    } else if (e.type === 'witnesses') {
+    title = `Rosary · ${e.setTitle}`;
+    meta = e.roster?.length
+      ? `${e.decades} decades · with ${e.roster.slice(0,3).join(', ')}${e.roster.length>3?'…':''}`
+      : `${e.decades} decades`;
   }
   return `<div class="activity-chip">
     <div class="activity-chip-icon">${icon}</div>
