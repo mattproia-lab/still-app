@@ -57,6 +57,16 @@
           onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
           CLICK HERE
         </button>
+        <!-- Store badges (web only) -->
+        <div id="storeBadges" style="display:none;margin-top:34px;text-align:center">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(190,140,255,.4);margin-bottom:12px">Or take Still with you</p>
+          <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
+            <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
+          </a>
+          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:none">
+            <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
+          </a>
+        </div>
       </div>
       <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
         <div style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(190,140,255,.5),transparent)"></div>
@@ -102,6 +112,10 @@
     </div>
 
 <script>
+  if (!window.Capacitor?.isNativePlatform?.()) {
+  const badges = document.getElementById('storeBadges');
+  if (badges) badges.style.display = 'block';
+}
   const hv = document.getElementById('heroVideo');
   if (hv) {
     hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
@@ -875,30 +889,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 }
 .nw-choices{display:flex;flex-direction:column;gap:10px;margin-top:28px;width:100%;max-width:280px;}
 
-#screen-witnesses { overflow-y:auto; }
-.cow-wrap { max-width:520px; margin:0 auto; padding:24px 20px 60px; }
-.cow-title { text-align:center; }
-.cow-sub { opacity:.55; font-style:italic; font-size:.85rem; text-align:center; margin-bottom:22px; }
-.cow-label { display:block; margin:18px 0 6px; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(226,204,164,.75); }
-.cow-wrap textarea, .cow-wrap input[type=text], #cowRosterAdd { width:100%; background:rgba(226,204,164,.06); border:1px solid rgba(226,204,164,.18); border-radius:8px; color:inherit; padding:10px 12px; font:inherit; }
-.cow-chips, .cow-roster, .cow-sets { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
-.cow-chip, .cow-set, .cow-r { background:none; border:1px solid rgba(226,204,164,.25); border-radius:999px; color:inherit; padding:6px 14px; font-size:.85rem; cursor:pointer; }
-.cow-set.sel { background:rgba(226,204,164,.16); border-color:rgba(226,204,164,.6); }
-.cow-r { background:rgba(226,204,164,.12); border-color:transparent; }
-.cow-toggle { display:block; margin:13px 0; font-size:.9rem; }
-.cow-begin { display:block; width:100%; margin-top:22px; padding:14px; border-radius:10px; border:none; background:rgba(226,204,164,.85); color:#060503; font-weight:600; font-size:1rem; cursor:pointer; }
-.cow-mystery { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.8); margin-bottom:14px; }
-.cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; background-size:cover; background-position:center 22%; border-radius:12px; cursor:pointer; }
-.cow-scripture { margin:18px 0 12px; font-style:italic; opacity:.85; line-height:1.55; }
-.cow-ref { display:block; text-align:right; font-style:normal; font-size:.72rem; opacity:.5; margin-top:4px; }
-.cow-body { line-height:1.85; margin-bottom:12px; }
-.cow-credit { background:none; border:none; padding:0; color:rgba(226,204,164,.5); font-size:.75rem; font-style:italic; cursor:pointer; }
-.cow-credit-full { font-size:.75rem; opacity:.55; line-height:1.6; }
-.cow-prayers { margin:16px 0; font-size:.85rem; opacity:.85; }
-.cow-prayers summary { color:rgba(226,204,164,.7); cursor:pointer; margin-bottom:6px; }
-.cow-hint { text-align:center; font-size:.72rem; opacity:.4; margin:16px 0 4px; }
-.cow-done { text-align:center; padding-top:80px; line-height:2; }
-.cow-done-soft { opacity:.65; }
 /* ═══════════════════════════════════════════
    SETTINGS MODAL
 ═══════════════════════════════════════════ */
@@ -1661,6 +1651,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     <img src="assets/rosary/cloud-of-witnesses.jpg"
       style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.88"/>
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,5,3,.88) 0%,rgba(6,5,3,.72) 22%,rgba(6,5,3,.55) 50%,rgba(6,5,3,.72) 100%)"></div>
+    <div id="cowFlames"></div>
   </div>
   <header class="app-header" style="position:relative;z-index:10;background:transparent">
     <button class="back-btn" onclick="CoW.exit()"><span class="back-arrow">←</span><span>Still</span></button>
@@ -4035,6 +4026,51 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .ctr-rest{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-style:italic;
   color:#8a6210;margin-top:26px;text-align:center;line-height:1.7;}
 
+#screen-witnesses { overflow-y:auto; }
+.cow-wrap { max-width:520px; margin:0 auto; padding:24px 20px 60px; }
+.cow-title { text-align:center; }
+.cow-sub { opacity:.55; font-style:italic; font-size:.85rem; text-align:center; margin-bottom:22px; }
+.cow-label { display:block; margin:18px 0 6px; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(226,204,164,.75); }
+.cow-wrap textarea, .cow-wrap input[type=text], #cowRosterAdd { width:100%; background:rgba(226,204,164,.06); border:1px solid rgba(226,204,164,.18); border-radius:8px; color:inherit; padding:10px 12px; font:inherit; }
+.cow-chips, .cow-roster, .cow-sets { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
+.cow-chip, .cow-set, .cow-r { background:none; border:1px solid rgba(226,204,164,.25); border-radius:999px; color:inherit; padding:6px 14px; font-size:.85rem; cursor:pointer; }
+.cow-set.sel { background:rgba(226,204,164,.16); border-color:rgba(226,204,164,.6); }
+.cow-r { background:rgba(226,204,164,.12); border-color:transparent; }
+.cow-toggle { display:block; margin:13px 0; font-size:.9rem; }
+.cow-begin { display:block; width:100%; margin-top:22px; padding:14px; border-radius:10px; border:none; background:rgba(226,204,164,.85); color:#060503; font-weight:600; font-size:1rem; cursor:pointer; }
+.cow-mystery { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.8); margin-bottom:14px; }
+.cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; background-size:cover; background-position:center 22%; border-radius:12px; cursor:pointer; }
+.cow-scripture { margin:18px 0 12px; font-style:italic; opacity:.85; line-height:1.55; }
+.cow-ref { display:block; text-align:right; font-style:normal; font-size:.72rem; opacity:.5; margin-top:4px; }
+.cow-body { line-height:1.85; margin-bottom:12px; }
+.cow-credit { background:none; border:none; padding:0; color:rgba(226,204,164,.5); font-size:.75rem; font-style:italic; cursor:pointer; }
+.cow-credit-full { font-size:.75rem; opacity:.55; line-height:1.6; }
+.cow-prayers { margin:16px 0; font-size:.85rem; opacity:.85; }
+.cow-prayers summary { color:rgba(226,204,164,.7); cursor:pointer; margin-bottom:6px; }
+.cow-hint { text-align:center; font-size:.72rem; opacity:.4; margin:16px 0 4px; }
+.cow-done { text-align:center; padding-top:80px; line-height:2; }
+.cow-done-soft { opacity:.65; }
+.cow-addrow { display:flex; gap:8px; }
+.cow-addrow input { flex:1; }
+.cow-addbtn { flex-shrink:0; background:rgba(226,204,164,.16); border:1px solid rgba(226,204,164,.4); border-radius:8px; color:inherit; padding:0 16px; font:inherit; cursor:pointer; }
+.cow-listen { display:block; margin:2px 0 10px; background:none; border:1px solid rgba(226,204,164,.35); border-radius:999px; color:rgba(226,204,164,.85); padding:6px 16px; font-size:.8rem; cursor:pointer; }
+.cow-opening { text-align:center; padding-top:60px; cursor:pointer; min-height:70vh; }
+.cow-open-line { font-size:1.05rem; line-height:1.8; margin:26px 0 14px; }
+.cow-open-soft { opacity:.6; line-height:1.8; margin:12px 0; }
+.cow-open-int { font-style:italic; color:rgba(226,204,164,.85); margin:22px 0; line-height:1.7; }
+.cow-int-echo { text-align:center; font-style:italic; font-size:.8rem; color:rgba(226,204,164,.55); margin:-6px 0 12px; }
+.cow-img { overflow:hidden; }
+.cow-img-inner { width:100%; height:100%; background-size:cover; background-position:center 22%; animation:cowDrift 45s ease-in-out infinite alternate; }
+@keyframes cowDrift { from { transform:scale(1); } to { transform:scale(1.07) translateY(-2%); } }
+.cow-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:rgba(226,204,164,.25); margin:0 3px; }
+.cow-dot.on { background:rgba(226,204,164,.85); }
+.cow-open-prayers { text-align:left; font-size:.85rem; opacity:.75; line-height:1.7; margin:20px auto; max-width:440px; }
+.cow-open-prayers p { margin:12px 0; }
+#cowFlames { position:absolute; inset:0; }
+.cow-flame { position:absolute; width:60px; height:200px; object-fit:cover;
+  mix-blend-mode:screen; opacity:0; filter:brightness(1.1);
+  animation:cowFlameIn 4s ease forwards; pointer-events:none; }
+@keyframes cowFlameIn { to { opacity:.55; } }
 </style>
 
 <script>
@@ -5534,17 +5570,15 @@ function playGuestmasterAudio() {
     if (b) b.textContent = '◎ Hear the letter read aloud';
   }
 }
-/* ═══════════════════════════════════════════
-   Cloud of Witnesses
-═══════════════════════════════════════════ */
+
 const CoW = (() => {
- 
+
   const SETS = ['joyful','sorrowful','glorious','luminous'];
   const SET_LABEL = {joyful:'Joyful', sorrowful:'Sorrowful', glorious:'Glorious', luminous:'Luminous'};
   // Sun:Glorious Mon:Joyful Tue:Sorrowful Wed:Glorious Thu:Luminous Fri:Sorrowful Sat:Joyful
   const DAY_SET = ['glorious','joyful','sorrowful','glorious','luminous','sorrowful','joyful'];
   const setForToday = () => DAY_SET[new Date().getDay()];
- 
+
   const PRAYERS = {
     creed: "I believe in God, the Father Almighty, Creator of heaven and earth; and in Jesus Christ, His only Son, our Lord; who was conceived by the Holy Ghost, born of the Virgin Mary, suffered under Pontius Pilate, was crucified, died, and was buried. He descended into hell; the third day He rose again from the dead; He ascended into heaven, and sitteth at the right hand of God, the Father Almighty; from thence He shall come to judge the living and the dead. I believe in the Holy Ghost, the Holy Catholic Church, the communion of saints, the forgiveness of sins, the resurrection of the body, and life everlasting. Amen.",
     our:   "Our Father, who art in heaven, hallowed be Thy name; Thy kingdom come; Thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.",
@@ -5553,20 +5587,21 @@ const CoW = (() => {
     fatima:"O my Jesus, forgive us our sins, save us from the fires of hell; lead all souls to heaven, especially those in most need of Thy mercy.",
     salve: "Hail, holy Queen, Mother of mercy, our life, our sweetness, and our hope. To thee do we cry, poor banished children of Eve. To thee do we send up our sighs, mourning and weeping in this valley of tears. Turn, then, most gracious advocate, thine eyes of mercy toward us; and after this our exile, show unto us the blessed fruit of thy womb, Jesus. O clement, O loving, O sweet Virgin Mary. Pray for us, O holy Mother of God, that we may be made worthy of the promises of Christ."
   };
- 
+
   let data = {};      // set -> parsed json
   let S = null;       // active session
   let audioEl = null;
+  let speakSeq = 0;   // cancels in-flight speak() fetches
   const LS = 'cow_prefs';
   const todayKey = () => new Date().toISOString().slice(0,10);
- 
+
   async function loadSet(set){
     if (data[set]) return data[set];
     const res = await fetch(`assets/rosary/${set}.json`);
     data[set] = await res.json();
     return data[set];
   }
- 
+
   /* Decade draw: opener first, closer last, shuffled `any` between.
      Two-closer pools alternate closers by rosary count today. */
   function drawPool(mystery, countToday){
@@ -5578,9 +5613,9 @@ const CoW = (() => {
     const closer = closers.length>1 ? closers[countToday % closers.length] : closers[0];
     return [...opener, ...any, closer].filter(Boolean);
   }
- 
+
   const prefs = () => { try { return JSON.parse(localStorage.getItem(LS))||{}; } catch { return {}; } };
- 
+
   /* ═══════ SETUP ═══════ */
   async function init(){
     const todaySet = setForToday();
@@ -5592,29 +5627,32 @@ const CoW = (() => {
     host.innerHTML = `
       <div class="cow-wrap">
         <p class="cow-sub">Seeing we also are compassed about with so great a cloud of witnesses&hellip; &mdash; Heb. 12:1</p>
- 
+
         <label class="cow-label">Your intentions</label>
         <textarea id="cowIntentions" rows="3" placeholder="For whom, for what, do you pray this rosary?"></textarea>
- 
+
         <label class="cow-label">Your roster &mdash; who prays with you</label>
         <div class="cow-chips">
-          ${['Our Lady','St. Joseph','My guardian angel','The holy souls'].map(n=>
+          ${(JSON.parse(localStorage.getItem('cow_roster_history')||'[]')).map(n=>
             `<button type="button" class="cow-chip" data-n="${n}">${n}</button>`).join('')}
         </div>
-        <input id="cowRosterAdd" placeholder="Add a saint, an angel, a soul&hellip; then press Enter">
+        <div class="cow-addrow">
+          <input id="cowRosterAdd" placeholder="Add a saint, someone's guardian angel, a soul in purgatory&hellip;">
+          <button type="button" class="cow-addbtn" id="cowAddBtn">+ Add</button>
+        </div>
         <div class="cow-roster" id="cowRoster"></div>
- 
+
         <label class="cow-toggle"><input type="checkbox" id="cowShowPrayers" ${p.showPrayers?'checked':''}> Show the fixed prayers</label>
         <label class="cow-toggle"><input type="checkbox" id="cowAudio" ${p.audio?'checked':''}> Read meditations aloud</label>
- 
+
         <label class="cow-label">Mysteries</label>
         <div class="cow-sets">
           ${SETS.map(s=>`<button type="button" class="cow-set ${s===todaySet?'sel':''}" data-s="${s}">${SET_LABEL[s]}${s===todaySet?' &middot; today':''}</button>`).join('')}
         </div>
- 
+
         <button type="button" class="cow-begin" id="cowBegin">Begin</button>
       </div>`;
- 
+
     const roster = new Set();
     const renderRoster = () => {
       document.getElementById('cowRoster').innerHTML =
@@ -5625,19 +5663,24 @@ const CoW = (() => {
       const n = e.target.closest('[data-n]')?.dataset.n;
       if (n){ roster.delete(n); renderRoster(); }
     };
-    document.getElementById('cowRosterAdd').onkeydown = e => {
-      if (e.key==='Enter' && e.target.value.trim()){ roster.add(e.target.value.trim()); e.target.value=''; renderRoster(); }
+    const addName = () => {
+      const inp = document.getElementById('cowRosterAdd');
+      if (inp.value.trim()){ roster.add(inp.value.trim()); inp.value=''; renderRoster(); inp.focus(); }
     };
+    document.getElementById('cowRosterAdd').onkeydown = e => { if (e.key==='Enter') addName(); };
+    document.getElementById('cowAddBtn').onclick = addName;
     let chosen = todaySet;
     host.querySelectorAll('.cow-set').forEach(b=>b.onclick=()=>{
       chosen = b.dataset.s;
       host.querySelectorAll('.cow-set').forEach(x=>x.classList.toggle('sel', x===b));
     });
- 
     document.getElementById('cowBegin').onclick = async () => {
       const showPrayers = document.getElementById('cowShowPrayers').checked;
       const audio = document.getElementById('cowAudio').checked;
       localStorage.setItem(LS, JSON.stringify({showPrayers, audio}));
+      const hist = new Set(JSON.parse(localStorage.getItem('cow_roster_history')||'[]'));
+      roster.forEach(n=>hist.add(n));
+      localStorage.setItem('cow_roster_history', JSON.stringify([...hist].slice(0,24)));
       const json = await loadSet(chosen);
       const countToday = Number(localStorage.getItem('cow_count_'+todayKey()))||0;
       S = {
@@ -5650,11 +5693,55 @@ const CoW = (() => {
       };
       host.style.display='none';
       document.getElementById('cowPray').style.display='block';
-      renderMed();
+      renderOpening();
     };
   }
- 
+
+  /* ═══════ FLAMES — one candle per witness, plus one for you ═══════ */
+  function renderFlames(){
+    const box = document.getElementById('cowFlames');
+    if (!box) return;
+    box.innerHTML = '';
+    const count = Math.min(1 + S.roster.length, 9);   // you + witnesses, capped
+    const names = ['You', ...S.roster];
+    for (let i = 0; i < count; i++){
+      const side = i % 2 === 0 ? 'left' : 'right';
+      const v = document.createElement('video');
+      v.src = 'assets/incense.mp4';
+      v.muted = true; v.loop = true; v.autoplay = true;
+      v.setAttribute('playsinline','');
+      v.className = 'cow-flame';
+      v.style[side] = (1 + Math.random()*6) + '%';
+      v.style.top = (12 + (i/count)*70 + Math.random()*6) + '%';
+      v.style.animationDelay = (Math.random()*4) + 's';
+      v.title = names[i] || '';
+      v.addEventListener('loadedmetadata', () => { v.currentTime = Math.random() * (v.duration || 3); });
+      box.appendChild(v);
+    }
+  }
+
   /* ═══════ PRAYER ═══════ */
+    function renderOpening(){
+    const host = document.getElementById('cowPray');
+    host.innerHTML = `
+      <div class="cow-wrap cow-opening" id="cowOpening">
+        <div class="cow-mystery">${S.setTitle}</div>
+        <p class="cow-open-line">In the name of the Father, and of the Son, and of the Holy Ghost.</p>
+        <p class="cow-open-soft">Begin as you always do &mdash; the Creed on the crucifix, an Our Father, three Hail Marys, a Glory Be.</p>
+                ${S.showPrayers ? `<div class="cow-open-prayers">
+          <p><strong>Apostles' Creed</strong><br>${PRAYERS.creed}</p>
+          <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
+          <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
+          <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
+        </div>` : ''}
+        ${S.roster.length ? `<p class="cow-open-soft">Praying with you: ${S.roster.join(', ')}.</p>` : ''}
+        ${S.intentions ? `<p class="cow-open-int">${S.intentions}</p>` : ''}
+        <div class="cow-hint">tap anywhere when you reach the first bead</div>
+      </div>`;
+    host.scrollTop = 0; window.scrollTo(0,0);
+    renderFlames();
+    document.getElementById('cowOpening').onclick = () => renderMed();
+  }
   function renderMed(){
     const mystery = S.mysteries[S.mIdx];
     const pool = S.pools[S.mIdx];
@@ -5662,17 +5749,19 @@ const CoW = (() => {
     const host = document.getElementById('cowPray');
     host.innerHTML = `
       <div class="cow-wrap">
+        ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
         <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
-        <div class="cow-img" id="cowImg" style="background-image:url('assets/rosary/${med.image}.jpg')"></div>
-        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
+        <div class="cow-img" id="cowImg"><div class="cow-img-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
         <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
+        <button type="button" class="cow-listen" id="cowListen">&#9654; Listen</button>
         ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
         ${S.showPrayers ? prayersHTML() : ''}
-        <div class="cow-hint">tap the image for another meditation</div>
+        <div class="cow-hint">${S.medIdx===0 && S.mIdx===0 ? 'tap the image for another meditation' :
+          pool.map((_,i)=>`<span class="cow-dot ${i===S.medIdx%pool.length?'on':''}"></span>`).join('')}</div>
         <button type="button" class="cow-begin" id="cowNext">${S.mIdx<4 ? 'Next mystery &rarr;' : 'Finish the rosary'}</button>
       </div>`;
     host.scrollTop = 0; window.scrollTo(0,0);
- 
+
     document.getElementById('cowImg').onclick = () => { S.medIdx++; renderMed(); };
     const cr = document.getElementById('cowCredit');
     if (cr) cr.onclick = () => {
@@ -5681,12 +5770,15 @@ const CoW = (() => {
     document.getElementById('cowNext').onclick = () => {
       if (S.mIdx<4){ S.mIdx++; S.medIdx=0; renderMed(); } else finish();
     };
+    document.getElementById('cowListen').onclick = () => {
+      if (audioEl && !audioEl.paused){ stopAudio(); document.getElementById('cowListen').innerHTML = '&#9654; Listen'; }
+      else speak(med);
+    };
     if (S.audio) speak(med);
   }
- 
+
   function prayersHTML(){
     return `<details class="cow-prayers"><summary>The prayers</summary>
-      ${S.mIdx===0 ? `<p><strong>Apostles' Creed</strong><br>${PRAYERS.creed}</p>` : ''}
       <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
       <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
       <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
@@ -5694,28 +5786,35 @@ const CoW = (() => {
       ${S.mIdx===4 ? `<p><strong>Salve Regina</strong><br>${PRAYERS.salve}</p>` : ''}
     </details>`;
   }
- 
-  /* ── audio: still-tts, cached by meditation id ── */
+
+  /* ── audio: still-tts /rosary-tts, cached in Supabase by meditation id ── */
   async function speak(med){
+    stopAudio();
+    const seq = ++speakSeq;
+    const btn = document.getElementById('cowListen');
+    if (btn) btn.innerHTML = '&#8230; Preparing';
     try {
-      stopAudio();
-      const cache = await caches.open('cow-tts-v1');
-      const key = new Request(`https://still-tts.onrender.com/rosary-tts?id=${med.id}`);
-      let res = await cache.match(key);
-      if (!res){
-        res = await fetch('https://still-tts.onrender.com/rosary-tts', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ id: med.id, scripture: med.scripture.text, body: med.body })
-        });
-        if (!res.ok) return;
-        await cache.put(key, res.clone());
-      }
-      audioEl = new Audio(URL.createObjectURL(await res.blob()));
+      const res = await fetch('https://still-tts.onrender.com/rosary-tts', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ id: med.id, scripture: med.scripture.text, body: med.body })
+      });
+      if (seq !== speakSeq) return;                       // user moved on — discard
+      if (!res.ok){ if (btn) btn.innerHTML = '&#9654; Listen'; return; }
+      const data = await res.json();
+      if (seq !== speakSeq) return;
+      audioEl = new Audio(data.url ? data.url : 'data:audio/mpeg;base64,' + data.audio);
+      audioEl.onended = () => { const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; };
       audioEl.play().catch(()=>{});
-    } catch {}
+      const b2 = document.getElementById('cowListen');
+      if (b2) b2.innerHTML = '&#9632; Stop';
+    } catch { const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; }
   }
-  function stopAudio(){ if (audioEl){ audioEl.pause(); audioEl = null; } }
- 
+
+  function stopAudio(){
+    ++speakSeq;                                            // cancels any in-flight fetch
+    if (audioEl){ audioEl.pause(); audioEl = null; }
+  }
+
   /* ═══════ FINISH → JOURNAL ═══════ */
   function finish(){
     stopAudio();
@@ -5734,12 +5833,12 @@ const CoW = (() => {
         <button type="button" class="cow-begin" onclick="CoW.exit()">Return</button>
       </div>`;
   }
- 
+
   function exit(){ stopAudio(); S = null; goHome(); }
- 
+
   return { init, exit };
 })();
- 
+
 function initWitnesses(){ CoW.init(); }
 /* ═══════════════════════════════════════════
    THE COMPANION -- API
@@ -6012,6 +6111,12 @@ async function askMystic() {
       })
     });
     const data = await res.json();
+    if(res.status === 401 || data.error === 'Not authenticated.'){
+      document.getElementById('mysticResponseText').textContent =
+        'Your session has expired. Please sign out and back in, and Amma will be here.';
+      showMysticState('mysticResponse');
+      return;
+    }
     if(data.error==='upgrade_required'||data.error==='limit_reached'){
       if(isSubscribed()){
         document.getElementById('mysticResponseText').textContent =
@@ -6068,6 +6173,14 @@ async function askDeeper(){
       body:JSON.stringify({feature:'deeper',access_token:token,model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
+    if(res.status === 401 || data.error === 'Not authenticated.'){
+      document.getElementById('dResponseText').textContent =
+        'Your session has expired. Sign out and back in, and we will continue.';
+      document.getElementById('dSource').textContent = '';
+      document.getElementById('dInvitation').textContent = '';
+      showDeeperState('deeperResponse');
+      return;
+    }
     if(data.error==='upgrade_required'||data.error==='limit_reached'){
       if(isSubscribed()){
         document.getElementById('dResponseText').textContent =
@@ -6112,7 +6225,6 @@ prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deep
     showError('deeperErr','Something stirred -- try once more.');
   }
 }
-
 function showError(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',4000);}
 /* ═══════════════════════════════════════════
    OTHER FEATURE HELPERS
@@ -8120,7 +8232,7 @@ function activityChip(e) {
   } else if (e.type === 'sophia') {
     title = 'Amma Sophia';
     meta = e.source || '';
-    } else if (e.type === 'witnesses') {
+  } else if (e.type === 'witnesses') {
     title = `Rosary · ${e.setTitle}`;
     meta = e.roster?.length
       ? `${e.decades} decades · with ${e.roster.slice(0,3).join(', ')}${e.roster.length>3?'…':''}`
@@ -11301,7 +11413,7 @@ const INFO_CONTENT = {
       <p>This is the feature that changes everything else. When the mind learns to be still for twenty minutes, every other practice in the app deepens. Lectio becomes more receptive. The Examen becomes more honest. The Companion becomes less about getting an answer and more about sitting with a question.</p>
     `
   },
-   witnesses: {
+  witnesses: {
     title: 'Cloud of Witnesses',
     body: `
       <p>The rosary is the most communal of solitary prayers. From its Dominican origins in the thirteenth century it was understood not as a private devotion but as a psalter of the poor -- 150 Hail Marys standing in for the 150 psalms the monks chanted in choir. When you pray it, you join a choir you cannot see.</p>
@@ -11314,36 +11426,7 @@ const INFO_CONTENT = {
            <p>There are no beads on the screen, and that is deliberate. Hold your rosary. The app carries the meditations; your hands carry the count. The oldest interface is still the best one.</p>
     `
   },
-
-      lectio: {
-    title: 'Lectio Divina',
-    body: `
-      <p>Lectio Divina -- sacred reading -- is how Christians have engaged Scripture for fifteen hundred years. It is not a Bible study technique. It is not devotional reading. It is something older and stranger: an encounter with a living text that speaks differently each time, to whoever is reading, wherever they are.</p>
-      <div class="info-panel-quote">
-        <p>"In Lectio we read the Bible as a means of making contact with God. The inspired word is God's chosen channel of self-communication."</p>
-        <span>-- Fr. Michael Casey, O.C.S.O.</span>
-      </div>
-      <p>Guigo II, a Carthusian monk writing in the twelfth century, identified four movements: Reading, Meditation, Prayer, Contemplation. These are not steps in a method. They are stages in an encounter. Reading presents the food. Meditation chews it. Prayer asks for what meditation has shown is desirable. Contemplation tastes it.</p>
-      <p>The word that finds you is not the most theologically interesting word in the passage. It is the one that catches -- like the physician's palpation. The text flows over you until something yelps. That yelp is the beginning of prayer.</p>
-      <p>The slowness is the entire point. Fr. Casey compares it to a bottle of fine wine worth several hundred dollars: you do not drink it in mindless gulps. You hold it up to the light. You let it rest on your palate. You savor the aftertaste. This is how we are meant to read the word of God.</p>
-    `
-  },
-
-  examen: {
-    title: 'The Examen',
-    body: `
-      <p>St. Ignatius of Loyola considered the Examen the single most important spiritual practice in his entire Exercises -- more important than extended prayer, more important than retreat, more important than anything else he taught. He insisted that even when everything else had to be dropped, the twice-daily Examen must remain.</p>
-      <div class="info-panel-quote">
-        <p>"Ignatius was convinced that God can be found in all things -- and the Examen is how you learn to see that."</p>
-        <span>-- The Spiritual Exercises, 16th century</span>
-      </div>
-      <p>Four minutes. Five questions. At the end of each day. Where did you feel most alive? Where did you feel most drained or resistant? What was the emotional undertone? Where did you notice grace? What do you want to say to God right now?</p>
-      <p>These are not guilt questions. They are discernment questions. The Examen does not ask what you did wrong. It asks where God was in your day, and where you missed Him. Over time this changes the way you move through ordinary experience -- you begin to pay attention differently, because you know you will be asked to account for it at evening.</p>
-      <p>Most people have never asked themselves these five questions. They are not difficult. They are simply honest. And the private journal they build over months becomes something irreplaceable: a written record of an interior life, assembled not through performance but through daily reckoning.</p>
-    `
-  },
-
-      lectio: {
+  lectio: {
     title: 'Lectio Divina',
     body: `
       <p>Lectio Divina -- sacred reading -- is how Christians have engaged Scripture for fifteen hundred years. It is not a Bible study technique. It is not devotional reading. It is something older and stranger: an encounter with a living text that speaks differently each time, to whoever is reading, wherever they are.</p>
@@ -12234,9 +12317,7 @@ function buildSacristyImages() {
   return [
     { src: SPLASH_IMG_SRC, label: 'Splash', featureIdx: -1, isSplash: true,
       info: 'The image that greets you when Still opens -- a monk in silhouette at first light, reading the Word. The whole tradition compressed into one figure: alone, attentive, before dawn.' },
-    { src: 'assets/rosary/cloud-of-witnesses.jpg', label: 'Cloud of Witnesses', featureIdx: /* F idx */ 0,
-      info: 'A wooden rosary laid on stone, and above it the company it summons -- saints and angels gathered in cloud-light. Nobody prays the rosary alone; the image shows the room as it actually is.' },
-      { src:'still-mobile/src/image/night_bg.jpg', label:'Night Watch', featureIdx:-1,
+    { src:'still-mobile/src/image/night_bg.jpg', label:'Night Watch', featureIdx:-1,
       info:'The desert where the Fathers prayed. Above it, the Milky Way and a comet of golden light cross in the shape of the cross -- written not in stone but in stars, not made by hands. The tradition holds that the night sky over the desert is one of the oldest scriptures.' },
     { src:'still-mobile/src/image/still_bg.jpg', label:'Still', featureIdx:-1,
       info:'Still\'s own emblem: a gold teardrop suspended in perfect darkness, a single thread of light descending from above and continuing below into its own reflection. The hesychast tradition calls the quieted mind a mirror -- still enough to reflect the divine presence. St. Seraphim of Sarov called this acquisition the goal of the entire Christian life.' },
