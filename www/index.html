@@ -63,7 +63,7 @@
           <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
             <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
           </a>
-          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:none">
+          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:inline-block">
             <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
           </a>
         </div>
@@ -1648,7 +1648,7 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-witnesses" class="screen">
   <!-- Rosary in cloud-light background -->
   <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="assets/rosary/cloud-of-witnesses.jpg"
+    <img id="cowBgImg" src="assets/rosary/cloud-of-witnesses.jpg"
       style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.88"/>
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,5,3,.88) 0%,rgba(6,5,3,.72) 22%,rgba(6,5,3,.55) 50%,rgba(6,5,3,.72) 100%)"></div>
     <div id="cowFlames"></div>
@@ -4071,6 +4071,14 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   mix-blend-mode:screen; opacity:0; filter:brightness(1.1);
   animation:cowFlameIn 4s ease forwards; pointer-events:none; }
 @keyframes cowFlameIn { to { opacity:.55; } }
+.cow-final-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.cow-prayer-blk { margin:16px 0; }
+.cow-prayer-blk h3 { font-style:italic; font-weight:400; font-size:.95rem; color:rgba(226,204,164,.9); margin-bottom:6px; }
+.cow-prayer-blk p { font-size:.85rem; line-height:1.6; opacity:.8; margin-bottom:8px; }
+.cow-vers { color:rgba(226,204,164,.9); font-style:italic; }
+.cow-complete { text-align:center; font-style:italic; font-size:.85rem; opacity:.65; margin:14px 0 10px; }
+.cow-min { background:none; border:1px solid rgba(226,204,164,.35); border-radius:7px; color:rgba(226,204,164,.85); cursor:pointer; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; padding:5px 9px; }
+.cow-pill { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:rgba(12,11,10,.7); border:1px solid rgba(226,204,164,.35); border-radius:999px; color:rgba(226,204,164,.9); cursor:pointer; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; padding:9px 18px; z-index:20; }
 </style>
 
 <script>
@@ -5783,7 +5791,6 @@ const CoW = (() => {
       <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
       <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
       <p><strong>Fatima Prayer</strong><br>${PRAYERS.fatima}</p>
-      ${S.mIdx===4 ? `<p><strong>Salve Regina</strong><br>${PRAYERS.salve}</p>` : ''}
     </details>`;
   }
 
@@ -5816,7 +5823,7 @@ const CoW = (() => {
   }
 
   /* ═══════ FINISH → JOURNAL ═══════ */
-  function finish(){
+    function finish(){
     stopAudio();
     const k = 'cow_count_'+todayKey();
     localStorage.setItem(k, (Number(localStorage.getItem(k))||0)+1);
@@ -5825,16 +5832,47 @@ const CoW = (() => {
       minutes: Math.max(1, Math.round((Date.now()-S.started)/60000)),
       intentions: S.intentions, roster: S.roster
     });
+    const bg = document.getElementById('cowBgImg');
+    if (bg) bg.src = 'assets/rosary/madonna.jpg';
     document.getElementById('cowPray').innerHTML = `
-      <div class="cow-wrap cow-done">
-        <p>The rosary is complete.</p>
+      <div class="cow-wrap cow-final" id="cowFinal">
+        <div class="cow-final-head">
+          <div class="cow-mystery">Concluding Prayers</div>
+          <button type="button" class="cow-min" id="cowMin">Minimize</button>
+        </div>
+        <div class="cow-prayer-blk">
+          <h3>Hail, Holy Queen</h3>
+          <p>${PRAYERS.salve.split('. Pray for us')[0]}.</p>
+          <p><span class="cow-vers">V.</span> Pray for us, O holy Mother of God.<br>
+          <span class="cow-vers">R.</span> That we may be made worthy of the promises of Christ.</p>
+        </div>
+        <div class="cow-prayer-blk">
+          <h3>Rosary Prayer</h3>
+          <p><span class="cow-vers">V.</span> Let us pray,</p>
+          <p><span class="cow-vers">R.</span> O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal salvation. Grant, we beseech Thee, that while meditating on these mysteries of the most holy Rosary of the Blessed Virgin Mary, that we may both imitate what they contain and obtain what they promise, through Christ our Lord. Amen.</p>
+          <p>Most Sacred Heart of Jesus, <span class="cow-vers">have mercy on us.</span><br>
+          Immaculate Heart of Mary, <span class="cow-vers">pray for us.</span></p>
+        </div>
+        <div class="cow-prayer-blk">
+          <h3>Prayer to St. Michael</h3>
+          <p>St. Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, O Prince of the heavenly host, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen.</p>
+        </div>
         ${S.roster.length ? `<p class="cow-done-soft">You prayed with ${S.roster.join(', ')}.</p>` : ''}
-        ${S.intentions ? `<p class="cow-done-soft">Held before God: ${S.intentions}</p>` : ''}
+        <p class="cow-complete">The rosary is complete.</p>
         <button type="button" class="cow-begin" onclick="CoW.exit()">Return</button>
-      </div>`;
+      </div>
+      <button type="button" class="cow-pill" id="cowPill" style="display:none">Show prayers</button>`;
+    document.getElementById('cowMin').onclick = () => {
+      document.getElementById('cowFinal').style.display='none';
+      document.getElementById('cowPill').style.display='inline-block';
+    };
+    document.getElementById('cowPill').onclick = () => {
+      document.getElementById('cowFinal').style.display='';
+      document.getElementById('cowPill').style.display='none';
+    };
   }
-
-  function exit(){ stopAudio(); S = null; goHome(); }
+  function exit(){ stopAudio();    const bg = document.getElementById('cowBgImg');
+    if (bg) bg.src = 'assets/rosary/cloud-of-witnesses.jpg'; S = null; goHome(); }
 
   return { init, exit };
 })();
