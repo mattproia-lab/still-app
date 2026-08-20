@@ -1651,7 +1651,6 @@ body.is-mobile #mobileEnterTab { display: block; }
     <img id="cowBgImg" src="assets/rosary/cloud-of-witnesses.jpg"
       style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.88"/>
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,5,3,.88) 0%,rgba(6,5,3,.72) 22%,rgba(6,5,3,.55) 50%,rgba(6,5,3,.72) 100%)"></div>
-    <div id="cowFlames"></div>
   </div>
   <header class="app-header" style="position:relative;z-index:10;background:transparent">
     <button class="back-btn" onclick="CoW.exit()"><span class="back-arrow">←</span><span>Still</span></button>
@@ -4039,7 +4038,9 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .cow-toggle { display:block; margin:13px 0; font-size:.9rem; }
 .cow-begin { display:block; width:100%; margin-top:22px; padding:14px; border-radius:10px; border:none; background:rgba(226,204,164,.85); color:#060503; font-weight:600; font-size:1rem; cursor:pointer; }
 .cow-mystery { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.8); margin-bottom:14px; }
-.cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; background-size:cover; background-position:center 22%; border-radius:12px; cursor:pointer; }
+.cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; border-radius:12px; cursor:pointer; overflow:hidden; }
+.cow-img-inner { width:100%; height:100%; background-size:cover; background-position:center 22%; animation:cowDrift 45s ease-in-out infinite alternate; }
+@keyframes cowDrift { from { transform:scale(1); } to { transform:scale(1.07) translateY(-2%); } }
 .cow-scripture { margin:18px 0 12px; font-style:italic; opacity:.85; line-height:1.55; }
 .cow-ref { display:block; text-align:right; font-style:normal; font-size:.72rem; opacity:.5; margin-top:4px; }
 .cow-body { line-height:1.85; margin-bottom:12px; }
@@ -4059,18 +4060,10 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .cow-open-soft { opacity:.6; line-height:1.8; margin:12px 0; }
 .cow-open-int { font-style:italic; color:rgba(226,204,164,.85); margin:22px 0; line-height:1.7; }
 .cow-int-echo { text-align:center; font-style:italic; font-size:.8rem; color:rgba(226,204,164,.55); margin:-6px 0 12px; }
-.cow-img { overflow:hidden; }
-.cow-img-inner { width:100%; height:100%; background-size:cover; background-position:center 22%; animation:cowDrift 45s ease-in-out infinite alternate; }
-@keyframes cowDrift { from { transform:scale(1); } to { transform:scale(1.07) translateY(-2%); } }
 .cow-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:rgba(226,204,164,.25); margin:0 3px; }
 .cow-dot.on { background:rgba(226,204,164,.85); }
 .cow-open-prayers { text-align:left; font-size:.85rem; opacity:.75; line-height:1.7; margin:20px auto; max-width:440px; }
 .cow-open-prayers p { margin:12px 0; }
-#cowFlames { position:absolute; inset:0; }
-.cow-flame { position:absolute; width:60px; height:200px; object-fit:cover;
-  mix-blend-mode:screen; opacity:0; filter:brightness(1.1);
-  animation:cowFlameIn 4s ease forwards; pointer-events:none; }
-@keyframes cowFlameIn { to { opacity:.55; } }
 .cow-final-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
 .cow-prayer-blk { margin:16px 0; }
 .cow-prayer-blk h3 { font-style:italic; font-weight:400; font-size:.95rem; color:rgba(226,204,164,.9); margin-bottom:6px; }
@@ -4079,6 +4072,10 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .cow-complete { text-align:center; font-style:italic; font-size:.85rem; opacity:.65; margin:14px 0 10px; }
 .cow-min { background:none; border:1px solid rgba(226,204,164,.35); border-radius:7px; color:rgba(226,204,164,.85); cursor:pointer; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; padding:5px 9px; }
 .cow-pill { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:rgba(12,11,10,.7); border:1px solid rgba(226,204,164,.35); border-radius:999px; color:rgba(226,204,164,.9); cursor:pointer; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; padding:9px 18px; z-index:20; }
+#screen-witnesses.cow-finale img#cowBgImg { opacity:1; }
+#screen-witnesses.cow-finale #cowBgImg + div { background:linear-gradient(to bottom,rgba(6,5,3,.45) 0%,rgba(6,5,3,.15) 30%,rgba(6,5,3,.15) 75%,rgba(6,5,3,.45) 100%) !important; }
+#screen-witnesses.cow-finale .content-card { margin-right:5vw; margin-left:auto; max-width:420px; }
+@media (max-width:640px){ #screen-witnesses.cow-finale .content-card { margin:0 auto; max-width:420px; } }
 </style>
 
 <script>
@@ -5705,38 +5702,15 @@ const CoW = (() => {
     };
   }
 
-  /* ═══════ FLAMES — one candle per witness, plus one for you ═══════ */
-  function renderFlames(){
-    const box = document.getElementById('cowFlames');
-    if (!box) return;
-    box.innerHTML = '';
-    const count = Math.min(1 + S.roster.length, 9);   // you + witnesses, capped
-    const names = ['You', ...S.roster];
-    for (let i = 0; i < count; i++){
-      const side = i % 2 === 0 ? 'left' : 'right';
-      const v = document.createElement('video');
-      v.src = 'assets/incense.mp4';
-      v.muted = true; v.loop = true; v.autoplay = true;
-      v.setAttribute('playsinline','');
-      v.className = 'cow-flame';
-      v.style[side] = (1 + Math.random()*6) + '%';
-      v.style.top = (12 + (i/count)*70 + Math.random()*6) + '%';
-      v.style.animationDelay = (Math.random()*4) + 's';
-      v.title = names[i] || '';
-      v.addEventListener('loadedmetadata', () => { v.currentTime = Math.random() * (v.duration || 3); });
-      box.appendChild(v);
-    }
-  }
-
-  /* ═══════ PRAYER ═══════ */
-    function renderOpening(){
+    /* ═══════ PRAYER ═══════ */
+  function renderOpening(){
     const host = document.getElementById('cowPray');
     host.innerHTML = `
       <div class="cow-wrap cow-opening" id="cowOpening">
         <div class="cow-mystery">${S.setTitle}</div>
         <p class="cow-open-line">In the name of the Father, and of the Son, and of the Holy Ghost.</p>
         <p class="cow-open-soft">Begin as you always do &mdash; the Creed on the crucifix, an Our Father, three Hail Marys, a Glory Be.</p>
-                ${S.showPrayers ? `<div class="cow-open-prayers">
+        ${S.showPrayers ? `<div class="cow-open-prayers">
           <p><strong>Apostles' Creed</strong><br>${PRAYERS.creed}</p>
           <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
           <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
@@ -5747,9 +5721,9 @@ const CoW = (() => {
         <div class="cow-hint">tap anywhere when you reach the first bead</div>
       </div>`;
     host.scrollTop = 0; window.scrollTo(0,0);
-    renderFlames();
     document.getElementById('cowOpening').onclick = () => renderMed();
   }
+
   function renderMed(){
     const mystery = S.mysteries[S.mIdx];
     const pool = S.pools[S.mIdx];
@@ -5759,7 +5733,8 @@ const CoW = (() => {
       <div class="cow-wrap">
         ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
         <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
-        <div class="cow-img" id="cowImg"><div class="cow-img-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
+        <div class="cow-img" id="cowImg"><div class="cow-img-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>
+        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
         <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
         <button type="button" class="cow-listen" id="cowListen">&#9654; Listen</button>
         ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
@@ -5823,7 +5798,7 @@ const CoW = (() => {
   }
 
   /* ═══════ FINISH → JOURNAL ═══════ */
-    function finish(){
+  function finish(){
     stopAudio();
     const k = 'cow_count_'+todayKey();
     localStorage.setItem(k, (Number(localStorage.getItem(k))||0)+1);
@@ -5833,7 +5808,8 @@ const CoW = (() => {
       intentions: S.intentions, roster: S.roster
     });
     const bg = document.getElementById('cowBgImg');
-    if (bg) bg.src = 'assets/rosary/madonna.jpg';
+    if (bg){ bg.src = 'assets/rosary/madonna.jpg'; bg.style.objectFit='contain'; bg.style.objectPosition='center'; }
+    document.getElementById('screen-witnesses').classList.add('cow-finale');
     document.getElementById('cowPray').innerHTML = `
       <div class="cow-wrap cow-final" id="cowFinal">
         <div class="cow-final-head">
@@ -5871,8 +5847,15 @@ const CoW = (() => {
       document.getElementById('cowPill').style.display='none';
     };
   }
-  function exit(){ stopAudio();    const bg = document.getElementById('cowBgImg');
-    if (bg) bg.src = 'assets/rosary/cloud-of-witnesses.jpg'; S = null; goHome(); }
+
+  function exit(){
+    stopAudio();
+    const bg = document.getElementById('cowBgImg');
+    if (bg){ bg.src = 'assets/rosary/cloud-of-witnesses.jpg'; bg.style.objectFit='cover'; bg.style.objectPosition='center top'; }
+    document.getElementById('screen-witnesses').classList.remove('cow-finale');
+    S = null;
+    goHome();
+  }
 
   return { init, exit };
 })();
