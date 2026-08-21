@@ -57,11 +57,14 @@
           onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
           CLICK HERE
         </button>
-                <!-- Store badges (web only) -->
+                       <!-- Store badges (web only) -->
         <div id="storeBadges" style="display:none;margin-top:34px;text-align:center">
           <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(190,140,255,.4);margin-bottom:12px">Or take Still with you</p>
           <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
             <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
+          </a>
+          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:inline-block">
+            <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
           </a>
         </div>
       </div>
@@ -12643,24 +12646,12 @@ function showPaywall(preview) {
 }
 
 
+
 // Gently show the PREVIEW a few times across the trial -- never on launch one,
 // never twice for the same milestone, never once subscribed or once locked.
+// DISABLED: trial reminders removed -- status shown passively in Settings instead.
 function maybeShowTrialPreview() {
-  if (isSubscribed() || trialIsOver()) return;
-  const days = getTrialDaysLeft();
-  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
-
-  let milestone = null;
-  if (days <= 3) milestone = 'd3';
-  else if (days <= 7) milestone = 'd7';
-  else if (used >= 2) milestone = 's2';
-  if (!milestone) return;
-
-  const shown = (localStorage.getItem(PW_PREVIEW_KEY) || '').split(',').filter(Boolean);
-  if (shown.indexOf(milestone) !== -1) return;
-  shown.push(milestone);
-  localStorage.setItem(PW_PREVIEW_KEY, shown.join(','));
-  showPaywall(true);
+  return;
 }
 
 /* ---------- restore / parish ---------- */
