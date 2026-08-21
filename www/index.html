@@ -11390,8 +11390,10 @@ window.stillResetTrial = function() {
   localStorage.removeItem('still_trial_count');
   localStorage.removeItem('still_subscribed');
   localStorage.removeItem('still_trial_start');
+  localStorage.removeItem('still_trial_sessions');
   console.log('Trial reset. Refresh the page.');
 };
+if (location.search.indexOf('resetTrial') !== -1) { stillResetTrial(); location.href = location.pathname; }
 
 // The YouTube embed fails inside the Capacitor shell (error 153) — hide it on native.
 (function hideWelcomeFilmOnNative() {
