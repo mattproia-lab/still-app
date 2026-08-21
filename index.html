@@ -12528,16 +12528,19 @@ function initTrial() {
 
 // Reads the cached status synchronously. refreshSubscription() keeps it fresh.
 function isSubscribed() {
-  // Reviewer / parish demo account is always premium
+  // Reviewer / parish / clergy accounts are always premium
   const email = (window.currentUser && currentUser.email || '').toLowerCase();
-  if (email === PARISH_EMAIL) return true;
+  const COMP_EMAILS = [
+    PARISH_EMAIL,
+    'guerricheckel@gmail.com'   // <-- replace with his actual signup email
+  ];
+  if (COMP_EMAILS.indexOf(email) !== -1) return true;
 
   const s = window._subStatus || localStorage.getItem(PW_SUB_KEY);
   if (s === 'premium' || s === 'active') return true;
   if (localStorage.getItem(PW_PAID_KEY) === '1') return true; // legacy / admin bypass
   return false;
 }
-
 // Fetches profiles.subscription_status for the signed-in user and caches it.
 async function refreshSubscription() {
   try {
