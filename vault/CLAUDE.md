@@ -96,6 +96,25 @@ This vault lives at `vault/` inside the Still app repo. Code is never copied int
 - When asked to "audit the vault": check for wiki claims without citations, dead links, and pages not in the index.
 - Monthly (or on request): produce a `wiki/changelog.md` entry summarizing what entered the vault.
 
+## Approval rules for Matt
+
+Four questions to run before approving anything:
+
+1. **Does it only read?** (`Get-Content`, `Get-ChildItem`, `git diff`, `git status`, `Test-Path`, `Select-String`) → always safe, approve freely.
+2. **Does it write — and where?** Writes inside `vault/` → low stakes. Writes to app code or configs → read the diff first.
+3. **Does it touch git history or the remote?** (`commit`, `push`, `reset`, `checkout`) → approve one at a time, never "don't ask again."
+4. **Does the "don't ask again" pattern match more than intended?** `git diff *` is fine; `git *` is not.
+
+### Proposing commands
+
+Any proposed command that writes to disk or touches git — `git add`, `commit`, `push`, `reset`, `checkout`, `rm`, `cp`, a `www/` sync — gets **one plain-English line** stating what it does and why it is safe to run. Cover what it touches, what it leaves alone, and what is recoverable if it is wrong.
+
+Examples:
+- `git add index.html` — stages only that one file; nothing else in the working tree is affected, and staging is undone with `git restore --staged`.
+- `cp index.html www/index.html` — overwrites the build copy with the source of truth; `www/index.html` currently matches HEAD, so nothing unique is lost.
+
+If a command is *not* safe in some case, say so in the same line rather than omitting it.
+
 ## Voice
 
 Answers are for Matt: direct, technical, no filler. Flag problems proactively.
