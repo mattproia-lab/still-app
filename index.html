@@ -2608,6 +2608,7 @@ body.is-mobile #mobileEnterTab { display: block; }
       <p style="font-family:'Heebo',sans-serif;font-size:14px;font-weight:300;color:#c8cad6;line-height:1.7;letter-spacing:-.02em;margin-bottom:16px">Help others find Still. Print and post in your parish bulletin board, narthex, or chapel.</p>
       <img src="still-mobile/src/image/churchposter.png" style="width:100%;display:block;margin-bottom:16px;border:1px solid #454856"/>
       <a href="still-mobile/src/image/churchposter.png" download="still-church-poster.png"
+         onclick="return downloadPoster(event, 'still-mobile/src/image/churchposter.png', 'still-church-poster.png')"
         style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#f0c040;border:1px solid rgba(200,146,12,.4);padding:10px 20px;text-decoration:none">
         ↓ Download Poster
       </a>
@@ -8205,7 +8206,7 @@ function autobioTab(tab) {
       pane.classList.toggle('active', t === tab);
     }
   });
-  if (tab === 'month') renderMonthTab();
+  if (tab === 'month') renderMonthTab();S
   if (tab === 'echoes') renderEchoesTab();
   if (tab === 'journal') renderTodayLog();
   if (tab === 'calendar') renderPracticeCalendar();
@@ -8628,7 +8629,24 @@ async function downloadPDF() {
     alert('PDF generation failed. Use your browser\'s Print function and choose Save as PDF.');
   }
 }
-
+async function downloadPoster(ev, url, filename) {
+  // Desktop: let the normal download attribute do its job
+  if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) return true;
+  ev.preventDefault();
+  try {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const file = new File([blob], filename, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Still — Church Poster' });
+    } else {
+      window.open(url, '_blank'); // fallback: press-and-hold to save
+    }
+  } catch (e) {
+    window.open(url, '_blank');
+  }
+  return false;
+}
 function loadScript(src){
   return new Promise((resolve,reject)=>{
     if(document.querySelector(`script[src="${src}"]`)){resolve();return;}
