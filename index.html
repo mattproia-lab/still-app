@@ -11844,6 +11844,7 @@ let authMode = 'signup';
 function onAuthed(user) {
   currentUser = user;
   window.currentUser = user;
+  refreshSubscription().then(() => { if (isSubscribed()) hidePaywall(); });
   try {
     if (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()
         && Capacitor.Plugins.Purchases && user && user.id) {
@@ -12620,6 +12621,7 @@ function isSubscribed() {
   const COMP_EMAILS = [
     PARISH_EMAIL,
     'guerricheckel@gmail.com',
+    'matt@proiadigitalllc.com',
     'frjoetedesco@gmail.com',
     'frpatrick@subi.org'  ,
     'monsignorrichardson@gmail.com' // <-- replace with his actual signup email
@@ -12634,13 +12636,14 @@ function isSubscribed() {
 // Fetches profiles.subscription_status for the signed-in user and caches it.
 async function refreshSubscription() {
   try {
-    const token = localStorage.getItem('still_access_token');
     const uid = (window.currentUser && currentUser.id);
-    if (!token || !uid) return;
+    if (!uid) return;
+    const token = await getValidToken();
+    if (!token) return;
     const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=subscription_status`, {
       headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
     });
-    if (!res.ok) return;
+    if (!res.ok) { console.warn('refreshSubscription failed:', res.status); return; }
     const data = await res.json();
     const status = (data && data[0] && data[0].subscription_status) || 'free';
     window._subStatus = status;
