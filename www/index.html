@@ -4816,7 +4816,7 @@ function activateCompanion(){
 ═══════════════════════════════════════════ */
 const BY=[50,100,150,200,250,300,350,400,450,500,550,600];
 const BR=19;
-let homeActive=-1,fasting=false;
+let homeActive=-1,fasting=localStorage.getItem('still_fasting')==='1';
 
 function buildBeads(){
   const g=document.getElementById('beadsG');
@@ -5305,6 +5305,21 @@ function startSitting() {
   sThoughts = []; sPhase = 'settle';
   watchThoughtCount = 0; sitThoughtCount = 0;
   document.getElementById('anchorDisplay').textContent = anchorText;
+  // Fasting Mode: open the sitting with a fasting intention
+  let fi = document.getElementById('sittingFastIntention');
+  if (!fi) {
+    const anchor = document.getElementById('anchorDisplay');
+    fi = document.createElement('p');
+    fi.id = 'sittingFastIntention';
+    fi.style.cssText = 'text-align:center;font-family:"Playfair Display",serif;font-style:italic;font-size:13px;color:rgba(240,192,64,.7);margin:10px auto 0;max-width:340px;line-height:1.6;display:none';
+    anchor.parentNode.insertBefore(fi, anchor.nextSibling);
+  }
+  if (fasting) {
+    fi.textContent = 'You are fasting today. Offer this sitting with it \u2014 prayer and fasting are one act, one hunger, turned toward God.';
+    fi.style.display = 'block';
+  } else {
+    fi.style.display = 'none';
+  }
   setSittingPhase('idle');
 
   // 1. Play monastery bell
@@ -7392,6 +7407,9 @@ const LP8 = [
 {ref:'Exodus 16:13-15',ctx:'The Manna',source:'OT Narrative',phrases:['And in the morning a dew lay round about the camp.','And when it had covered the face of the earth,','it appeared in the wilderness small,','and as it were beaten with a pestle, like unto hoarfrost on the ground.','And when the children of Israel saw it,','they said one to another: Manhu! which signifieth:','What is this! for they knew not what it was.','And Moses said to them:','This is the bread, which the Lord hath given you to eat.']},
 {ref:'Numbers 6:24-26',ctx:'The Aaronic Blessing',source:'OT Narrative',phrases:['The Lord bless thee, and keep thee.','The Lord shew his face to thee, and have mercy on thee.','The Lord turn his countenance to thee,','and give thee peace.']},
 {ref:'2 Chronicles 7:13-16',ctx:'My Eyes and Heart Will Always Be There',source:'OT Narrative',phrases:['If I shut up heaven, and there fall no rain,','or if I give orders, and command the locusts to devour the land,','or if I send pestilence among my people:','And my people, upon whom my name is called,','being converted, shall make supplication to me,','and seek my face,','and do penance for their most wicked ways,','then will I hear from heaven,','and will forgive their sins and will heal their land.']},
+{ref:'Psalm 50 (51):3-4, 12, 18-19',ctx:'The Miserere',source:'Psalms',phrases:['Have mercy on me, O God, according to thy great mercy.','And according to the multitude of thy tender mercies blot out my iniquity.','Wash me yet more from my iniquity, and cleanse me from my sin.','Create a clean heart in me, O God: and renew a right spirit within my bowels.','For if thou hadst desired sacrifice, I would indeed have given it:','with burnt offerings thou wilt not be delighted.','A sacrifice to God is an afflicted spirit:','a contrite and humbled heart, O God, thou wilt not despise.']},
+{ref:'Jonah 3:4-10',ctx:'Nineveh Repents',source:'Prophets',phrases:['Yet forty days, and Ninive shall be destroyed.','And the men of Ninive believed in God: and they proclaimed a fast,','and put on sackcloth from the greatest to the least.','And the king rose up out of his throne, and was clothed with sackcloth, and sat in ashes.','Who can tell if God will turn, and forgive:','and will turn away from his fierce anger, and we shall not perish?','And God saw their works, that they were turned from their evil way:','and God had mercy with regard to the evil which he had said that he would do to them.']},
+{ref:'Matthew 6:16-18',ctx:'When Thou Fastest',source:'Gospels',phrases:['And when you fast, be not as the hypocrites, sad.','For they disfigure their faces, that they may appear unto men to fast.','Amen I say to you, they have received their reward.','But thou, when thou fastest anoint thy head, and wash thy face;','That thou appear not to men to fast, but to thy Father who is in secret:','and thy Father who seeth in secret, will repay thee.']},
 ];
 
 
@@ -7407,7 +7425,12 @@ function buildPassageList() {
   const list = document.getElementById('passageList');
   if (!list) return;
 
-  const today = getTodaysPassage();
+    const FASTING_REFS = ['Joel 2:12-13','Isaiah 58:6-7','Matthew 4:1-11','Matthew 6:16-18','Psalm 50 (51):3-4, 12, 18-19','Jonah 3:4-10'];
+  const fastingPassages = PASSAGES.filter(p => FASTING_REFS.indexOf(p.ref) !== -1);
+  let today = getTodaysPassage();
+  if (fasting && fastingPassages.length) {
+    today = fastingPassages[new Date().getDate() % fastingPassages.length];
+  }
   const todayIdx = PASSAGES.indexOf(today);
   const sources = ['Psalms','Gospels','Paul','Prophets','Wisdom','Other NT','OT Narrative'];
 
@@ -7417,7 +7440,7 @@ function buildPassageList() {
 
   // Today's passage
   html += `<div style="margin-bottom:18px">
-    <p class="lectio-section-label" style="${sectionLabel}color:rgba(220,165,30,.85);margin-bottom:10px">Today's Passage</p>
+    <p class="lectio-section-label" style="${sectionLabel}color:rgba(220,165,30,.85);margin-bottom:10px">${fasting ? 'Fast Day Passage' : "Today's Passage"}</p>
     <button class="passage-choice" onclick="chooseLectioPassage(${todayIdx})" style="border-color:rgba(200,146,12,.4);background:rgba(200,146,12,.06)">
       <span class="passage-choice-ref">${today.ref} · ${today.ctx}</span>
       <span class="passage-choice-preview">${today.phrases[0]}…</span>
@@ -7781,6 +7804,7 @@ const DB = {
   KEY: 'still_entries',
 
   save(type, data) {
+        if (typeof fasting !== 'undefined' && fasting) data.fastDay = true;
     const entries = this.all();
     entries.push({ id: Date.now(), type, date: new Date().toISOString(), ...data });
     try { localStorage.setItem(this.KEY, JSON.stringify(entries)); } catch(e) {}
@@ -11144,17 +11168,26 @@ const EXAMEN_QUESTIONS = [
   { q:'Forward',    prompt:'What do you want to say to God right now?',      sub:'Speak simply. Nothing is too small or too large to bring.' },
 ];
 let examenStep = 0;
+let examenActiveQuestions = [];
 let examenAnswers = [];
 
 function initExamen() {
   examenStep = 0;
-  examenAnswers = new Array(EXAMEN_QUESTIONS.length).fill('');
+  // Fasting Mode: append the fasting question for this session
+  examenActiveQuestions = fasting
+    ? EXAMEN_QUESTIONS.concat([{
+        q: 'The Fast',
+        prompt: 'Where did the fast pinch today \u2014 and what did you do with the pinch?',
+        sub: 'Hunger is not the point; what you turn it into is. A prayer offered, a mercy shown, an appetite obeyed \u2014 name it honestly.'
+      }])
+    : EXAMEN_QUESTIONS.slice();
+  examenAnswers = new Array(examenActiveQuestions.length).fill('');
   renderExamenStep();
 }
 
 function renderExamenStep() {
-  const q = EXAMEN_QUESTIONS[examenStep];
-  const total = EXAMEN_QUESTIONS.length;
+    const q = examenActiveQuestions[examenStep];
+  const total = examenActiveQuestions.length;
   const pct = (examenStep / total * 100).toFixed(0);
   const card = document.querySelector('#screen-examen .content-card');
   if (!card) return;
@@ -11207,7 +11240,7 @@ function examenFinish() {
   if (!answered.length) { goHome(); return; }
   trackEvent('examen');
   DB.save('examen', {
-    answers: EXAMEN_QUESTIONS.map((q,i) => ({q:q.prompt, a:examenAnswers[i]||''})).filter(e => e.a)
+    answers: examenActiveQuestions.map((q,i) => ({q:q.prompt, a:examenAnswers[i]||''})).filter(e => e.a)
   });
   const card = document.querySelector('#screen-examen .content-card');
   if (!card) return;
@@ -11661,8 +11694,7 @@ const INFO_CONTENT = {
         <p>"He who fasts is light of foot and runs toward God; but he who does not fast is heavy and falls to the earth."</p>
         <span>-- St. John Chrysostom</span>
       </div>
-      <p>When Fasting Mode is on, it runs quietly through the whole app. Contemplative Sitting opens with a fasting intention. Lectio draws from fasting-related texts. The Examen adds one question at evening. The Office includes the traditional fasting collects at midday. The Spiritual Autobiography marks fast days with a gold thread through the day's entries.</p>
-      <p>Isaiah 58 is the great fasting text of Scripture. God speaks directly to people who are fasting correctly by external standards -- and tells them their fast means nothing. Then He describes the fast He actually wants: to loose the chains of injustice, to share food with the hungry, to set the oppressed free. The tradition has always taught that the money saved from a meal you didn't eat belongs to the poor. Fasting and almsgiving are the same movement. This app holds that quietly, without ever making it transactional.</p>
+      <p>When Fasting Mode is on, it runs quietly through the app. Contemplative Sitting opens with a fasting intention. Lectio draws from the great fasting texts -- Joel's rending of hearts, Isaiah 58, the desert temptation, the Sermon's secret fast, the Miserere, Nineveh in sackcloth. The Examen adds one question at evening: where did the fast pinch, and what did you do with it?</p>      <p>Isaiah 58 is the great fasting text of Scripture. God speaks directly to people who are fasting correctly by external standards -- and tells them their fast means nothing. Then He describes the fast He actually wants: to loose the chains of injustice, to share food with the hungry, to set the oppressed free. The tradition has always taught that the money saved from a meal you didn't eat belongs to the poor. Fasting and almsgiving are the same movement. This app holds that quietly, without ever making it transactional.</p>
       <p>Wednesday and Friday -- in memory of the betrayal and the Passion -- are the universal fast days of the Church. The four great fasting seasons mark the liturgical year. The toggle is here, visible on the home screen, because the fast is not a private secret. It is a public act of the will, made in cooperation with the whole Church.</p>
     `
   }
@@ -14302,6 +14334,7 @@ function getDepth() {
 ═══════════════════════════════════════════ */
 function toggleFastingFromSettings(on) {
   fasting = on;
+  localStorage.setItem('still_fasting', on ? '1' : '0');
   const btn = document.getElementById('fastingBtn');
   if (btn) btn.classList.toggle('on', on);
   const onBtn  = document.getElementById('fastOnBtn');
