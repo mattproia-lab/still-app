@@ -11911,6 +11911,13 @@ async function initAuth() {
   }
 }
 
+// Single-flight guard for the refresh below. onAuthed() calls
+// refreshSubscription(), which calls back into getValidToken() -- without this
+// a refresh could re-enter itself. It also stops concurrent callers from each
+// firing their own refresh: Supabase rotates refresh tokens, so parallel
+// refreshes invalidate one another.
+let _tokenRefresh = null;
+
 async function getValidToken() {
   let token = localStorage.getItem('still_access_token');
   // Decode exp from the JWT; refresh if missing, unreadable, or expiring within 60s
@@ -11921,9 +11928,15 @@ async function getValidToken() {
       needsRefresh = !payload.exp || (payload.exp - 60) < Math.floor(Date.now() / 1000);
     } catch (e) { needsRefresh = true; }
   }
-  if (needsRefresh) {
-    const refresh = localStorage.getItem('still_refresh_token');
-    if (!refresh) return token; // nothing to refresh with; return what we have
+  if (!needsRefresh) return token;
+
+  // A refresh is already running -- wait for it instead of starting another.
+  if (_tokenRefresh) return _tokenRefresh;
+
+  const refresh = localStorage.getItem('still_refresh_token');
+  if (!refresh) return token; // nothing to refresh with; return what we have
+
+  _tokenRefresh = (async () => {
     try {
       const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=refresh_token`, {
         method: 'POST',
@@ -11932,14 +11945,24 @@ async function getValidToken() {
       });
       if (r.ok) {
         const d = await r.json();
-        localStorage.setItem('still_access_token', d.access_token);
-        localStorage.setItem('still_refresh_token', d.refresh_token);
-        if (d.user) onAuthed(d.user);
-        token = d.access_token;
+        // Only adopt a token we actually got back. Storing an undefined one
+        // would keep needsRefresh true forever and loop on every call.
+        if (d.access_token) {
+          localStorage.setItem('still_access_token', d.access_token);
+          if (d.refresh_token) localStorage.setItem('still_refresh_token', d.refresh_token);
+          token = d.access_token;
+          if (d.user) onAuthed(d.user);
+        }
       }
     } catch (e) { /* fall through with existing token */ }
+    return token;
+  })();
+
+  try {
+    return await _tokenRefresh;
+  } finally {
+    _tokenRefresh = null;
   }
-  return token;
 }
 
 async function updateLastActive() {
