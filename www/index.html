@@ -2881,7 +2881,17 @@ body.is-mobile #mobileEnterTab { display: block; }
           </button>
         </div>
       </div>
-
+      <!-- Readability -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)">Larger, Brighter Text</div>
+          <button id="readableToggle" onclick="toggleReadable(document.getElementById('readableToggle').getAttribute('aria-pressed') !== 'true')"
+            aria-pressed="false"
+            style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0">
+            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
+          </button>
+        </div>
+      </div>
       <!-- Office Mode -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px" id="settingsOfficeModeLabel">Office Mode</div>
@@ -3671,7 +3681,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   .auth-btn { font-size: 13px !important; }
   #officeCard p, #officeCard div { font-size: 20px !important; line-height: 1.9 !important; }
   #screen-darkness .content-card p { font-size: 20px !important; line-height: 1.9 !important; }
-  #cResponseText, #mysticResponseText, #dResponseText { font-size: 18px !important; line-height: 1.8 !important; }
+  #cResponseText, #mysticResponseText, #dResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
 }
 #autobio-mystic {
   position: relative;
@@ -4065,6 +4075,18 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-witnesses.cow-finale #cowBgImg + div { background:linear-gradient(to bottom,rgba(6,5,3,.45) 0%,rgba(6,5,3,.15) 30%,rgba(6,5,3,.15) 75%,rgba(6,5,3,.45) 100%) !important; }
 #screen-witnesses.cow-finale .content-card { margin-right:5vw; margin-left:auto; max-width:420px; }
 @media (max-width:640px){ #screen-witnesses.cow-finale .content-card { margin:0 auto; max-width:420px; } }
+/* ── Readability mode ── */
+body.readable #cResponseText,
+body.readable #mysticResponseText,
+body.readable #dResponseText,
+body.readable .cow-body,
+body.readable .cow-scripture,
+body.readable .companion-response-text,
+body.readable .content-card p {
+  font-size: 1.15em !important;
+  line-height: 1.75 !important;
+  color: rgba(255,255,255,.96) !important;
+}
 </style>
 
 <script>
@@ -4818,6 +4840,7 @@ function activateCompanion(){
 const BY=[50,100,150,200,250,300,350,400,450,500,550,600];
 const BR=19;
 let homeActive=-1,fasting=localStorage.getItem('still_fasting')==='1';
+if (localStorage.getItem('still_readable') === '1') document.body.classList.add('readable');
 
 function buildBeads(){
   const g=document.getElementById('beadsG');
@@ -11364,7 +11387,17 @@ function toggleFasting(){
   const b=document.getElementById('fastingBtn');
   if (b) b.classList.toggle('on',fasting);
 }
-
+function toggleReadable(on) {
+  document.body.classList.toggle('readable', on);
+  localStorage.setItem('still_readable', on ? '1' : '0');
+  const t = document.getElementById('readableToggle');
+  if (t) {
+    t.setAttribute('aria-pressed', on);
+    t.style.background = on ? 'rgba(200,146,12,.4)' : 'rgba(255,255,255,.1)';
+    const knob = t.querySelector('span');
+    if (knob) knob.style.transform = on ? 'translateX(20px)' : 'translateX(0)';
+  }
+}
 /* ═══════════════════════════════════════════
    NIGHT WATCH -- time-locked 2–4am
 ═══════════════════════════════════════════ */
@@ -13258,8 +13291,6 @@ function handleDiscount(tier) {
   }
 }
  
-// Call on every app load
-document.addEventListener('DOMContentLoaded', checkDay30Discount);
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- dynamic rendering
@@ -14375,7 +14406,7 @@ function toggleFastingFromSettings(on) {
 function openSettings() {
   document.getElementById('settingsModal').classList.add('open');
   updateSubStatus();
-  toggleFastingFromSettings(fasting);
+  toggleFastingFromSettings(fasting); toggleReadable(localStorage.getItem('still_readable') === '1');
   const k = getApiKey();
   if (k) document.getElementById('settingsApiKey').value = k;
   const ap = document.getElementById('settingsAnchorPreview');
