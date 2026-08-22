@@ -1,10 +1,10 @@
 # Stack & Platform Facts
 
-_Ingested 2026-08-22 from the Standing project facts in [CLAUDE.md](../../CLAUDE.md), each claim re-verified against the live repo. Code is ground truth; where the two disagreed, the code wins and the conflict is logged under [Flagged contradictions](#flagged-contradictions)._
+_Ingested 2026-08-22 from the Standing project facts in [CLAUDE.md](../../CLAUDE.md), each claim re-verified against the live repo. Code is ground truth; where the two disagreed, the code wins — see [Platform identifiers](#platform-identifiers) and [Stale in the standing facts](#stale-in-the-standing-facts)._
 
 ## Shape of the app
 
-- One monolithic [`index.html`](../../../index.html) holds the entire web app — **15,773 lines** as of 2026-08-22 (working tree). It is the app; there is no bundler or framework build step.
+- One monolithic [`index.html`](../../../index.html) holds the entire web app — **15,796 lines** as of 2026-08-22 (commit `1e63e0d`). It is the app; there is no bundler or framework build step.
 - [`bell-native.js`](../../../bell-native.js) (275 lines) is the only other first-party script at the repo root.
 - Capacitor 8 wraps the same HTML for native: [`@capacitor/ios`, `@capacitor/android`, `@capacitor/local-notifications`](../../../package.json). Web dir is `www` ([capacitor.config.json](../../../capacitor.config.json)).
 - Native shells live in [`ios/`](../../../ios) and [`android/`](../../../android).
@@ -25,17 +25,21 @@ _Ingested 2026-08-22 from the Standing project facts in [CLAUDE.md](../../CLAUDE
 
 In the native shell the page is served from `capacitor://localhost`, so relative function paths don't resolve. `window.FN_BASE` switches to `https://stillprayer.app` on native and `''` on web — every Netlify function call goes through it ([index.html:4595](../../../index.html)).
 
-## Flagged contradictions
+## Platform identifiers
 
-**App ID.** [CLAUDE.md](../../CLAUDE.md) states the app ID is `app.stillprayer.still`. The repo has two different ones:
+**The two platforms ship under different bundle IDs. This is correct, not drift — confirmed by Matt 2026-08-22.** Do not "harmonize" them; changing a shipping bundle ID breaks the store record and orphans existing installs.
 
-- Android — `app.stillprayer.still` ([android/app/build.gradle](../../../android/app/build.gradle), both `namespace` and `applicationId`) ✅ matches
-- iOS — `app.stillprayer.www` ([ios/App/App.xcodeproj/project.pbxproj](../../../ios/App/App.xcodeproj/project.pbxproj), `PRODUCT_BUNDLE_IDENTIFIER`)
-- Capacitor — `app.stillprayer.www` ([capacitor.config.json](../../../capacitor.config.json), `appId`)
+| Platform | Identifier | Source |
+|---|---|---|
+| iOS | `app.stillprayer.www` | [ios/App/App.xcodeproj/project.pbxproj](../../../ios/App/App.xcodeproj/project.pbxproj), `PRODUCT_BUNDLE_IDENTIFIER` — **this is the App Store record** |
+| Capacitor | `app.stillprayer.www` | [capacitor.config.json](../../../capacitor.config.json), `appId` — matches iOS |
+| Android | `app.stillprayer.still` | [android/app/build.gradle](../../../android/app/build.gradle), both `namespace` and `applicationId` |
 
-The platforms genuinely ship under different identifiers. **Matt: which is the App Store record — is `app.stillprayer.www` the shipping iOS bundle ID, or drift from a Capacitor scaffold?** Not resolved in the vault; do not "fix" either side until confirmed.
+Note `capacitor.config.json` carries the iOS ID, so anything reading `appId` at build time gets `app.stillprayer.www` on both platforms. Android's real identifier comes from `build.gradle`, not from Capacitor config.
 
-**Line count.** CLAUDE.md says "~14,000-line index.html"; actual is 15,773. Treat the standing figure as stale, not wrong-in-kind.
+## Stale in the standing facts
+
+**Line count.** [CLAUDE.md](../../CLAUDE.md) says "~14,000-line index.html"; actual is **15,796** as of 2026-08-22 (post-`1e63e0d`). Stale, not wrong-in-kind. Expect this to drift again — verify before quoting.
 
 ## Anomalies worth a look
 

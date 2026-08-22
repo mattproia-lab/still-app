@@ -1,6 +1,6 @@
 # Still — Project Knowledge Vault
 
-This vault is the living memory of **Still — Contemplative Prayer** (stillprayer.app, `app.stillprayer.still`), built and run by Matt Proia (Proia Digital LLC). You are the librarian and researcher for this vault. Your job: ingest sources faithfully, maintain an accurate cross-linked wiki, and answer questions with citations back to raw sources.
+This vault is the living memory of **Still — Contemplative Prayer** (stillprayer.app; iOS `app.stillprayer.www`, Android `app.stillprayer.still` — the platforms genuinely ship under different bundle IDs), built and run by Matt Proia (Proia Digital LLC). You are the librarian and researcher for this vault. Your job: ingest sources faithfully, maintain an accurate cross-linked wiki, and answer questions with citations back to raw sources.
 
 ## Directory structure
 
