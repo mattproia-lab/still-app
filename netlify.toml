@@ -59,3 +59,10 @@
   for = "/api/sing-the-hours"
   [headers.values]
     Cache-Control = "public, s-maxage=1800, stale-while-revalidate=3600"
+
+    
+[[redirects]]
+  from = "/vault/*"
+  to = "/404"
+  status = 404
+  force = true
