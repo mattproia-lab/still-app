@@ -5808,9 +5808,26 @@ const CoW = (() => {
         body: JSON.stringify({ id: med.id, scripture: med.scripture.text, body: med.body })
       });
       if (seq !== speakSeq) return;                       // user moved on — discard
-      if (!res.ok){ if (btn) btn.innerHTML = '&#9654; Listen'; return; }
-      const data = await res.json();
+      // Read the body before branching on status: a 402 carries the reason.
+      // A non-JSON error body (Render 502s with HTML) falls back to {} so the
+      // !res.ok path below still handles it exactly as it did before.
+      const data = await res.json().catch(() => ({}));
       if (seq !== speakSeq) return;
+
+      // Out of credit on the TTS server. That cost is ours, not the user's --
+      // say nothing about payment. Fail gently and leave the retry in place:
+      // onclick is untouched, so tapping Listen tries again.
+      if (res.status === 402 || data.error === 'insufficient_balance') {
+        const bc = document.getElementById('cowListen');
+        if (bc) bc.innerHTML = 'Audio unavailable right now &mdash; try again in a moment';
+        setTimeout(() => {
+          if (seq !== speakSeq) return;                    // user moved on
+          const b3 = document.getElementById('cowListen');
+          if (b3) b3.innerHTML = '&#9654; Listen';
+        }, 4000);
+        return;
+      }
+      if (!res.ok){ if (btn) btn.innerHTML = '&#9654; Listen'; return; }
       audioEl = new Audio(data.url ? data.url : 'data:audio/mpeg;base64,' + data.audio);
       audioEl.onended = () => { const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; };
       audioEl.play().catch(()=>{});
