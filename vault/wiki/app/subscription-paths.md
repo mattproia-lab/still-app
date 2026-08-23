@@ -95,6 +95,19 @@ The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called fr
 
 **Step 2 alone breaks native purchase and restore:** the user pays, the cache says `'active'`, the read no longer accepts it, and the paywall stays up. The cheaper fix in the other direction is unchanged and still one line — accept `'active'` as a `premium` alias in the server's `LIMITS` and touch nothing on the client.
 
+## `profiles.subscription_end` — exists in Supabase, written by nothing
+
+_Traced 2026-08-23._ The column is real — `subscription_end timestamptz NULL` on `public.profiles`, confirmed from `information_schema`. **No code has ever touched it.**
+
+- **Stripe does not write it.** [stripe-webhook.js](../../../netlify/functions/stripe-webhook.js) writes exactly three things: `subscription_status` via `updateProfile` (5–11), `reflection_credits` via `addReflections` (13–24), and the `add_voice_credit` RPC (26–33). A subscription *ending* is handled at 58–61 by setting `subscription_status: 'free'` — a status flip, never a date.
+- **RevenueCat does not write it.** [revenuecat-webhook.js:49,51](../../../netlify/functions/revenuecat-webhook.js) writes `subscription_status` and `sub_group_id` only.
+- **Nothing reads it.** `git grep subscription_end` outside `vault/` returns zero hits in `index.html` and every function.
+- **It has never existed in the code.** `git log -S "subscription_end"` outside `vault/` returns **zero commits** — the string has never appeared in any revision in the repo's history.
+
+Same shape as [`'active'`](#flagged-active-is-a-client-only-value-the-server-would-not-honor): a column created in the database and never wired to anything. Expiry is expressed entirely as `subscription_status` flipping to `'free'`, so **there is no date-based subscription expiry anywhere in the system.** Do not assume this column carries a real end date — it is null for every profile that has never been hand-edited.
+
+Relevant to the promo/trial work: `trial_extended_until` is being added as its own column rather than overloading this one, since the two mean different things (paid subscription ends vs trial relief ends).
+
 ## Resolved 2026-08-22: `elevenlabs-tts.js` deleted
 
 **Confirmed gone from production 2026-08-23.** `GET` and `POST` to `https://stillprayer.app/.netlify/functions/elevenlabs-tts` both return **404** with an empty body, served straight from the Netlify edge (`Cache-Status: "Netlify Edge"; fwd=miss; fwd-status=404`) — the function is not deployed, not merely erroring ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md#3-elevenlabs-ttsjs--deleted-not-gated)).
