@@ -6,7 +6,8 @@ _Ingested 2026-08-22 from the Standing project facts in [CLAUDE.md](../../CLAUDE
 
 - Publish directory is the repo root: `publish = "."` ([netlify.toml:2](../../../netlify.toml)). Everything not explicitly blocked is publicly served.
 - Functions directory: `netlify/functions` ([netlify.toml:19](../../../netlify.toml)).
-- `vault/` is blocked from public access by a forced 404 redirect (`from = "/vault/*"`, `status = 404`, `force = true`) — added in commit `afae167`, 2026-08-22. `force = true` is what makes it win over the real files on disk, which matters given `publish = "."`. There is no `/404` page in the repo, so Netlify serves its default 404 body.
+- `vault/` is blocked from public access by a forced 404 redirect (`from = "/vault/*"`, `status = 404`, `force = true`) — added in commit `afae167`, 2026-08-22. `force = true` is what makes it win over the real files on disk, which matters given `publish = "."`. There is no `/404` page in the repo, so Netlify serves its default 404 body. **Verified live 2026-08-23:** `/vault/`, `/vault/CLAUDE.md`, and `/vault/wiki/index.md` all return 404 ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md#2-netlify-exposure--blocked)).
+- **Anything not explicitly blocked is public the moment it is committed.** No admin dashboard exists in the repo or on the site — `git ls-files` matches nothing for admin/dashboard, and `/admin`, `/admin.html`, `/admin/index.html` all 404 (checked 2026-08-23). If one is ever built, the forced-404 rule has to land *before* the commit, the same treatment `vault/` got.
 - Headers set MIME types for `still-mobile` audio and cache `/api/sing-the-hours` ([netlify.toml](../../../netlify.toml)).
 
 ## www/ is a manual build output

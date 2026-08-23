@@ -1,6 +1,6 @@
 # Subscription Check Paths
 
-_Traced 2026-08-22 against the live [`index.html`](../../../index.html) working tree (uncommitted subscription fix present — subtract ~2 from line numbers above 12600 for HEAD) and [`netlify/functions/`](../../../netlify/functions). A pointer map, not a copy; re-verify against the code before relying on it._
+_Traced 2026-08-22 against [`index.html`](../../../index.html) and [`netlify/functions/`](../../../netlify/functions). Line numbers refreshed at commit `21fed35`; the `getValidToken` guard shifted everything below 11914 down by 23. A pointer map, not a copy; re-verify against the code before relying on it._
 
 See also: [architecture.md](architecture.md#subscription-flow) for the region map · [stack.md](stack.md) for the service split.
 
@@ -16,19 +16,19 @@ RC entitlement PATCH ─┘                                  └──► claude
 
 ## Client check — `isSubscribed()`
 
-[index.html:12618](../../../index.html). Synchronous, reads a cache, consults exactly three sources:
+[index.html:12641](../../../index.html). Synchronous, reads a cache, consults exactly three sources:
 
 | # | Source | Line |
 |---|---|---|
-| 1 | `COMP_EMAILS` — reviewer / parish / clergy comp list | 12620–12629 |
-| 2 | `window._subStatus \|\| localStorage[PW_SUB_KEY]`, true on `'premium'` **or** `'active'` | 12631–12632 |
-| 3 | `still_paid === '1'` — legacy / admin bypass | 12633 |
+| 1 | `COMP_EMAILS` — reviewer / parish / clergy comp list | 12644–12652 |
+| 2 | `window._subStatus \|\| localStorage[PW_SUB_KEY]`, true on `'premium'` **or** `'active'` | 12654–12655 |
+| 3 | `still_paid === '1'` — legacy / admin bypass | 12656 |
 
-The cache is filled by `refreshSubscription()` ([12637](../../../index.html)) from `profiles.subscription_status` (fetch at 12643, cached at 12649–12650). `PW_SUB_KEY` persists in localStorage, so a returning user is granted access at cold launch before any network call completes.
+The cache is filled by `refreshSubscription()` ([12660](../../../index.html)) from `profiles.subscription_status`. `PW_SUB_KEY` persists in localStorage, so a returning user is granted access at cold launch before any network call completes.
 
-Cleared only by: a free row from the server (12648), sign-out (12863), account deletion (4786).
+Cleared only by: a free row from the server, sign-out, account deletion.
 
-The hard gate is `shouldShowPaywall()` ([12683](../../../index.html)), called from `enterFeature`.
+The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called from `enterFeature`.
 
 ## Server check — `claude.js`
 
@@ -45,20 +45,59 @@ The hard gate is `shouldShowPaywall()` ([12683](../../../index.html)), called fr
 **Access is granted in both paths.** RevenueCat is never consulted by either.
 
 - Stripe's webhook wrote `'premium'` ([stripe-webhook.js:54](../../../netlify/functions/stripe-webhook.js)).
-- Client: `refreshSubscription()` caches `'premium'` → `isSubscribed()` true at 12632 → no paywall.
+- Client: `refreshSubscription()` caches `'premium'` → `isSubscribed()` true at 12655 → no paywall.
 - Server: `claude.js` reads `'premium'` from the profile → `LIMITS.premium`.
-- **RevenueCat cannot revoke it.** `initRevenueCat()` ([14615](../../../index.html)) only writes on the positive branch — `if (…entitlements.active['premium'])` at 14639 sets the cache to `'active'` (14640–14641) and PATCHes the server to `'premium'` (14654). With no entitlement that branch is skipped: nothing written, nothing cleared. No RC-driven downgrade exists anywhere in the file.
+- **RevenueCat cannot revoke it.** `initRevenueCat()` ([14638](../../../index.html)) only writes on the positive branch — `if (…entitlements.active['premium'])` at 14662 sets the cache to `'active'` (14663–14664) and PATCHes the server to `'premium'` (14677). With no entitlement that branch is skipped: nothing written, nothing cleared. No RC-driven downgrade exists anywhere in the file.
 
 ## Flagged: `'active'` is a client-only value the server would not honor
 
-- Client accepts `'premium'` **or** `'active'` — [index.html:12632](../../../index.html).
+- Client accepts `'premium'` **or** `'active'` — [index.html:12655](../../../index.html).
 - Server `LIMITS` has only `free` and `premium` keys — [claude.js:13–14](../../../netlify/functions/claude.js). `LIMITS['active']` is `undefined`, so 158 falls back to **`LIMITS.free`**. Family pooling additionally requires `status === 'premium'` exactly (163).
 
-**Latent, not live.** Nothing currently writes `'active'` to Supabase: [stripe-webhook.js:54,60](../../../netlify/functions/stripe-webhook.js) and [revenuecat-webhook.js:49,51](../../../netlify/functions/revenuecat-webhook.js) both write `'premium'`/`'free'`, and the client PATCH at 14654 writes `'premium'`. `'active'` lives only in the local cache (12771, 14540, 14641).
+**Latent, not live.** Nothing currently writes `'active'` to Supabase: [stripe-webhook.js:54,60](../../../netlify/functions/stripe-webhook.js) and [revenuecat-webhook.js:49,51](../../../netlify/functions/revenuecat-webhook.js) both write `'premium'`/`'free'`, and the client PATCH at 14677 writes `'premium'`. `'active'` lives only in the local cache (12793–12794, 14562–14563, 14663–14664).
 
-If anything ever does write it to the profile, client and server disagree silently: the app shows premium while Deeper and Amma Sophia return `upgrade_required`. Cheapest fix is accepting `'active'` as a `premium` alias in `LIMITS`, or dropping `'active'` from 12632.
+### Where `'active'` came from — history, traced 2026-08-22
+
+**The read predates every writer by six weeks, and it has never had a server-side source.**
+
+| When | Commit | What happened |
+|---|---|---|
+| 2026-05-08 | `3ab531e` | `stripe-webhook.js` created. Writes `'premium'` / `'free'` — and has written **only** those two values in all four of its revisions (`3ab531e`, `b7999eb`, `ae14e86`, `ea1327e`). |
+| **2026-06-08** | **`7bc9b53`** | **`isSubscribed()` is born**, in the commit that made Supabase the source of truth ("Trial preview during, hard lock after"). The very first version of the function already reads `if (s === 'premium' \|\| s === 'active')`. At that moment the only writer in existence was the Stripe webhook, writing `'premium'`. **`'active'` was a dead branch from the day it was written.** |
+| 2026-06-16 | `e821c32` | `revenuecat-webhook.js` created. Also writes only `'premium'` / `'free'`. |
+| 2026-07-20 | `3555da1` | First code to ever *write* `'active'` — the native RevenueCat restore path, caching to localStorage only. |
+| 2026-07-26 | `c2c1882` | Anonymous IAP does the same on the entitlement-on-launch path. |
+| 2026-08-01 | `10f585d` | Family Sharing fix PATCHes the server — with **`'premium'`**, not `'active'`. Still the only client→server write ([index.html:14677](../../../index.html)). |
+
+**Was there ever a webhook that wrote `'active'`?** No. `git log -S "'active'" -- netlify/functions` returns **zero commits** — the string has never existed anywhere in the functions directory in the repo's history. Every historical revision of both webhooks was inspected directly; all write `'premium'` / `'free'`.
+
+**Where the word actually comes from — RevenueCat, not Stripe.** The commit that first wrote it, `3555da1`, reads:
+
+```js
+&& Object.keys(customerInfo.entitlements.active || {}).length > 0;
+   localStorage.setItem(PW_SUB_KEY, 'active');
+```
+
+`entitlements.active` is RevenueCat's SDK shape — the map of currently-active entitlements. The literal string `'active'` was lifted from that property name into the cache. It is an artifact of the SDK's object naming, not a status value from any provider.
+
+**Does Stripe's vocabulary explain it?** Only as a plausible *motive* for the original defensive read, never as an actual source. Stripe subscriptions do carry `active` / `canceled` / `past_due` / `trialing` / `incomplete` / `unpaid` / `paused`, so accepting `'active'` in June 2026 looks like anticipating a future where the webhook forwarded Stripe's raw status. That never happened — `stripe-webhook.js` mapped to the app's own `'premium'` / `'free'` from its first commit onward, a month before `isSubscribed()` existed.
+
+**Conclusion.** `'active'` is vestigial on the read side and RevenueCat-derived on the write side, and the two are unrelated in origin. No provider vocabulary was ever stored in `subscription_status`.
+
+**Risk if it ever changes.** If anything writes `'active'` to the profile, client and server disagree silently: the app shows premium while Deeper and Amma Sophia return `upgrade_required`. The client PATCH at 14677 is one careless edit away from being the thing that does it — it sits four lines below a block that sets the local cache to `'active'`. **No code changed 2026-08-22 — investigation only** ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md)).
+
+### Removing `'active'` is a two-step fix
+
+`initRevenueCat()` **caches `'active'` locally while PATCHing `'premium'` to Supabase** ([14663–14664](../../../index.html) vs [14677](../../../index.html)) — the local cache and the server column disagree by design today, and the read at [12655](../../../index.html) is the only thing making the local half work. Order matters:
+
+1. **First** change every site that caches `'active'` to cache `'premium'`. There are **three**, all native RevenueCat paths — `restorePurchases` ([12793–12794](../../../index.html)), `purchasePackage` success ([14562–14563](../../../index.html)), `initRevenueCat` entitlement-on-launch ([14663–14664](../../../index.html)).
+2. **Then** drop `|| s === 'active'` from [12655](../../../index.html).
+
+**Step 2 alone breaks native purchase and restore:** the user pays, the cache says `'active'`, the read no longer accepts it, and the paywall stays up. The cheaper fix in the other direction is unchanged and still one line — accept `'active'` as a `premium` alias in the server's `LIMITS` and touch nothing on the client.
 
 ## Resolved 2026-08-22: `elevenlabs-tts.js` deleted
+
+**Confirmed gone from production 2026-08-23.** `GET` and `POST` to `https://stillprayer.app/.netlify/functions/elevenlabs-tts` both return **404** with an empty body, served straight from the Netlify edge (`Cache-Status: "Netlify Edge"; fwd=miss; fwd-status=404`) — the function is not deployed, not merely erroring ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md#3-elevenlabs-ttsjs--deleted-not-gated)).
 
 The function had no auth and no subscription check — it parsed `{text, character}`, validated the character name, and generated, spending `ELEVEN_LABS_API_KEY` for any caller who could reach the URL.
 

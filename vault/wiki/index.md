@@ -8,6 +8,9 @@ Master map of the vault. Every new wiki page gets a line here (step 4 of the ing
 - [subscription-paths.md](app/subscription-paths.md) — how `isSubscribed()` and `claude.js` decide access. Flags the `'active'` vs `'premium'` mismatch and the unauthenticated TTS function. _(2026-08-22)_
 - [architecture.md](app/architecture.md) — line-region map of `index.html`'s major systems: shell, practices, data layer, subscription flow, bells, Rosary, Netlify functions. _(2026-08-22)_
 
+## raw/decisions/
+- [2026-08-22-vault-setup-and-tts-endpoint.md](../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md) — vault creation and the no-code-copies rule, Netlify `publish = "."` exposure blocked, `elevenlabs-tts.js` deleted (404 confirmed live), subscription trace, the `'active'` origin solved, token-refresh guard and the concurrent-refresh logout bug, bundle ID split confirmed intentional, admin dashboard never deployed. _(2026-08-23)_
+
 ## features/
 _(one page per feature — no pages yet)_
 
