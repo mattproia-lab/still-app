@@ -86,12 +86,8 @@ revoke all on function public.redeem_promo_code(text, text) from public;
 revoke all on function public.redeem_promo_code(text, text) from anon;
 revoke all on function public.redeem_promo_code(text, text) from authenticated;
 
--- Omitted from the original file and run manually afterwards, 2026-08-23.
---
--- Postgres grants EXECUTE on new functions to PUBLIC by default, and the
--- revokes above strip that. redeem-code.js calls this with the service key,
--- which authenticates as service_role, so without an explicit grant the only
--- caller is left without permission. Granting it by name rather than relying
--- on Supabase's default privileges keeps the permission visible in this file
--- instead of depending on how the project was provisioned.
+-- GRANT added after initial migration. The REVOKE statements above correctly
+-- block public/anon/authenticated, but also blocked service_role, which is
+-- the role redeem-code.js uses via SUPABASE_SERVICE_KEY. This grant was run
+-- manually on 2026-08-23 after a 403 permission denied error in production.
 grant execute on function public.redeem_promo_code(text, text) to service_role;
