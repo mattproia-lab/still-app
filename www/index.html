@@ -12643,6 +12643,7 @@ const PW_SESSIONS_KEY = 'still_trial_sessions';
 const PW_PAID_KEY     = 'still_paid';
 const PW_PLAN_KEY     = 'still_plan';
 const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_status
+const PW_TRIAL_EXT_KEY = 'still_trial_ext';    // cached profiles.trial_extended_until
 const PW_PREVIEW_KEY  = 'still_preview_shown';  // which preview milestones have fired
 
 function initTrial() {
@@ -12680,14 +12681,35 @@ async function refreshSubscription() {
     if (!uid) return;
     const token = await getValidToken();
     if (!token) return;
-    const res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=subscription_status`, {
-      headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
-    });
+    const headers = { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token };
+    const profileUrl = sel => `${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=${sel}`;
+
+    // If trial_extended_until is unreadable -- column-scoped grants, or the
+    // migration not yet run against this environment -- the whole select
+    // fails. Fall back to the status alone: a promo column must never be able
+    // to stop a paying user's subscription from refreshing.
+    let res = await fetch(profileUrl('subscription_status,trial_extended_until'), { headers });
+    let hasExt = true;
+    if (!res.ok) {
+      console.warn('refreshSubscription full select failed:', res.status, '- retrying without trial_extended_until');
+      hasExt = false;
+      res = await fetch(profileUrl('subscription_status'), { headers });
+    }
     if (!res.ok) { console.warn('refreshSubscription failed:', res.status); return; }
     const data = await res.json();
     const status = (data && data[0] && data[0].subscription_status) || 'free';
     window._subStatus = status;
     localStorage.setItem(PW_SUB_KEY, status);
+    // Trial extension granted by a redeemed promo code. Cached the same way as
+    // the status above so the gate can read it synchronously at cold launch.
+    // Only touched when the column was actually readable -- on the fallback
+    // path leave the cache alone rather than clearing a real extension.
+    if (hasExt) {
+      const ext = (data && data[0] && data[0].trial_extended_until) || '';
+      window._trialExt = ext;
+      if (ext) localStorage.setItem(PW_TRIAL_EXT_KEY, ext);
+      else localStorage.removeItem(PW_TRIAL_EXT_KEY);
+    }
   } catch (e) { /* keep last-known status */ }
 }
 
@@ -12713,7 +12735,19 @@ function incrementSession() {
   localStorage.setItem(PW_SESSIONS_KEY, (used + 1).toString());
 }
 
+// A redeemed promo code sets profiles.trial_extended_until. While that instant
+// is in the future it lifts BOTH halves of the trial at once -- the 14-day
+// clock and the 20-session cap -- and because it rides on the profile it
+// follows the user across devices, which a local session reset cannot do.
+function trialExtensionActive() {
+  const ext = window._trialExt || localStorage.getItem(PW_TRIAL_EXT_KEY);
+  if (!ext) return false;
+  const until = Date.parse(ext);
+  return !isNaN(until) && until > Date.now();
+}
+
 function trialIsOver() {
+  if (trialExtensionActive()) return false;
   return getTrialDaysLeft() <= 0 || getTrialSessionsLeft() <= 0;
 }
 
@@ -13129,10 +13163,16 @@ async function redeemPromoCode() {
   msg.style.display = 'block';
 
   try {
+    const token = await getValidToken();
+    if (!token) {
+      msg.textContent = 'Sign in first to redeem a code.';
+      msg.style.color = 'rgba(255,73,64,.8)';
+      return;
+    }
     const res = await fetch(window.FN_BASE + '/.netlify/functions/redeem-code', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code, user_id: window.currentUser.id })
+      body: JSON.stringify({ code, access_token: token })
     });
     const data = await res.json();
 
@@ -13142,17 +13182,16 @@ async function redeemPromoCode() {
       return;
     }
 
-    // Grant benefits
-    if (data.ai_sessions) {
-      const current = parseInt(localStorage.getItem('still_promo_ai_sessions') || '0');
-      localStorage.setItem('still_promo_ai_sessions', current + data.ai_sessions);
+    // Grant: 14 days of paywall relief, and the session counter back to zero.
+    // trial_extended_until lives on the profile and is the authority; the
+    // session reset is local and only matters on this device inside the window.
+    if (data.trial_extended_until) {
+      window._trialExt = data.trial_extended_until;
+      localStorage.setItem(PW_TRIAL_EXT_KEY, data.trial_extended_until);
+      localStorage.setItem(PW_SESSIONS_KEY, '0');
+      hidePaywall();
     }
-    if (data.stories_days) {
-      const expires = new Date();
-      expires.setDate(expires.getDate() + data.stories_days);
-      localStorage.setItem('still_stories_expires', expires.toISOString());
-      localStorage.setItem('still_premium', 'true');
-    }
+    refreshSubscription();
 
     msg.textContent = '✦ Code redeemed. Welcome.';
     msg.style.color = 'rgba(200,146,12,.8)';
