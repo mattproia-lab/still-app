@@ -4,7 +4,7 @@ type: design-proposal
 status: ACCEPTED 2026-08-24 — six questions answered, schema approved; still no code written
 session: Divinum Officium clone, corpus data-shape proposal
 participants: Matt Proia, Claude Opus 5
-updated: 2026-08-24 — §4 questions answered, §3 schema approved; second pass corrected psalmody, reworded decision 3, adopted render-as-oracle; third pass records what the parser work taught us (Matt Proia)
+updated: 2026-08-24 — §4 questions answered, §3 schema approved; second pass corrected psalmody and adopted render-as-oracle; third pass records what the parser taught us; fourth pass has the generated corpus, final sizes, and the 08-25 correction (Matt Proia)
 ---
 
 # 2026-08-24 — Traditional Office corpus: proposed JSON shape
@@ -834,3 +834,86 @@ the pattern matters: expected text transcribed from a **truncated** terminal
 dump with the ending invented; and a shape assumption (`psalmody[0]`) that was
 wrong about how nocturns nest. Verify expected values against the source file,
 never against a dump that may have been cut.
+
+## §3 amended 2026-08-24 (fourth pass) — corpus generated; final sizes
+
+The corpus for **2026-08-24 → 2028-12-31** is generated and committed to
+[`corpus/traditional/`](../../../corpus/traditional/). Tooling in
+[`tools/office-corpus/`](../../../tools/office-corpus/). Still not wired into
+the app.
+
+### Correction: 2026-08-25 is not a feria
+
+Earlier amendments repeatedly call 2026-08-25 "the feria", including in the
+one-nocturn assertion work. **It is St. Ludovici, Regis Franciæ Confessoris,
+III. classis** — confirmed against DO's Kalendarium. Every structural finding
+that rested on it stands unchanged: one nocturn, three lessons, the
+`Ad Nocturnum` label, and the psalm verse ranges. Only the label was wrong.
+Three-lesson offices are a property of rank, and III class offices have three
+lessons just as ferias do, which is why the mistake was invisible.
+
+### Final sizes
+
+Single-stream gzip, which is what a bundle actually costs:
+
+| bundle | gzip |
+|---|---|
+| **Lauds + Vespers + shared store + calendar** | **810 KB** |
+| Vigils alone (lazy-load candidate) | 2,268 KB |
+| Everything in one bundle | 3,420 KB |
+
+Raw: 17,579 KB across 2,092 proper documents, a 710 KB shared store
+(`psalms.json` 435 KB — 150 psalms and canticles, 2,148 verses, both
+languages; `hymns.json` 275 KB — 182 distinct hymns), and a 151 KB calendar.
+
+**Vigils is 71% of the raw corpus** — 17.4 KB per document against 3.2 KB for
+Vespers — because nine lessons of scripture and patristic prose are largely
+unique text where psalmody repeats heavily. Splitting it into a lazy-loaded
+bundle takes the install payload down **76%**, to under a megabyte for the
+office most people actually pray daily.
+
+### Dedup came to 29.4%, not the ~60% §3 implied
+
+Honest accounting, because the earlier estimate was optimistic:
+
+- Over 2.4 years **each liturgical day is mostly distinct.** Fixed feasts do
+  collapse across all three years (Christmas, St. Bartholomew and the Nativity
+  of the BVM each resolve to one shared document), but Vigils lessons follow a
+  scriptural cycle that differs by year, and offices such as All Saints
+  commemorate a different Sunday annually.
+- Attaching office metadata to each document **reduced** dedup slightly, from
+  2,004 to 2,092 unique documents. That is correct behaviour: a document now
+  records which office it is, so two offices sharing text are no longer merged.
+
+Where normalisation does pay is the shared store: **2,463 rendered hymn blocks
+collapse to 182 distinct texts**, and the psalter is stored once rather than
+inlined per day. That is 710 KB carrying what would otherwise be many MB.
+
+### Office keys are title slugs, not Divinum Officium paths
+
+`propers/s-bartholomaei-apostoli/vespers.json`, never `Sancti/08-24`.
+
+**DO does not emit its internal office file keys in any output.** They exist
+only inside the Perl — not in the office render, not in the Kalendarium, not in
+the Ordo. Recovering them would mean reimplementing the resolution engine,
+which §2 deliberately declined to do. So the office identity available to us is
+the **title plus rank**, and keys are slugs of the title: stable, readable, and
+derived from DO output, but not DO's own paths. Where one office has genuine
+content variants across years, a numeric suffix separates them (201 offices do).
+
+If a future need arises for DO's real keys, the honest options are to patch DO
+to emit them or to maintain a mapping by hand — not to infer them.
+
+### Two bugs found while harvesting the psalter
+
+**English canticle citations disagree with Latin** — `1 Chron. 29:10-13`
+against `1 Par. 29:10-13`. Keying both languages off the Latin citation map
+left five canticles with Latin verses and `en: null`. The harvester now walks
+Latin/English cell pairs and lets the **Latin side number both**, matching
+segments positionally.
+
+**A segment whose citation did not resolve dropped all its verses** rather than
+yielding an unnumbered segment, which is what made the above silent.
+
+Psalm 94 needed lifting from the Invitatory block: it renders with interleaved
+refrains and no verse numbers, so it is not harvestable as numbered verses.
