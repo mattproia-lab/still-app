@@ -2901,6 +2901,16 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
       </div>
 
+      <!-- Office Calendar -->
+      <div id="rite-settings" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Office Calendar</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:12px">Traditional follows the 1960 Roman Breviary. Modern uses Ordinary Time.</div>
+        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
+          <button id="riteTraditionalBtn" onclick="setLiturgicalRite('traditional')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Traditional</button>
+          <button id="riteModernBtn" onclick="setLiturgicalRite('modern')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Modern</button>
+        </div>
+      </div>
+
       <!-- Anchor Prayer -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between">
@@ -11862,6 +11872,7 @@ function onAuthed(user) {
   currentUser = user;
   window.currentUser = user;
   refreshSubscription().then(() => { if (isSubscribed()) hidePaywall(); });
+  syncLiturgicalRite();   // profile wins on sign-in; see section 3
   try {
     if (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()
         && Capacitor.Plugins.Purchases && user && user.id) {
@@ -13238,30 +13249,6 @@ function saveBellSettings() {
   });
 }
 
-function openSettings(section) {
-  showScreen('settings');
-  updateSubStatus();
-
-  // Initialize settings content if it hasn't been yet
-  if (typeof initSettingsScreen === 'function') initSettingsScreen();
-  if (typeof initBellSettings === 'function') setTimeout(() => initBellSettings(), 800);
-
-  if (section === 'bells') {
-    // Increase delay to give settings screen time to fully render
-    setTimeout(() => {
-      const bellsEl = document.getElementById('bells-settings');
-      if (bellsEl) {
-        bellsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        bellsEl.style.transition = 'outline .2s';
-        bellsEl.style.outline = '1px solid rgba(200,146,12,.5)';
-        setTimeout(() => { bellsEl.style.outline = 'none'; }, 1800);
-      } else {
-        console.warn('bells-settings element not found');
-      }
-    }, 600); // increased from 320 to 600
-  
-     }
-}   
  function updateSubStatus() {
   const el = document.getElementById('subStatusText');
   if (!el) return;
@@ -14494,6 +14481,118 @@ function getDepth() {
 }
 
 /* ═══════════════════════════════════════════
+   OFFICE CALENDAR -- liturgical rite
+   Stage 3. See section 3 of
+   vault/raw/decisions/2026-08-23-office-rebuild-plan.md
+═══════════════════════════════════════════ */
+
+// localStorage is the synchronous source of truth: the Office renders at cold
+// launch with no await point to fetch anything, and guests have no profile at
+// all. profiles.liturgical_rite is the cross-device mirror, never the path a
+// render reads from.
+const RITE_KEY = 'still_liturgical_rite';
+const RITES    = ['modern', 'traditional'];
+
+function getLiturgicalRite() {
+  const v = localStorage.getItem(RITE_KEY);
+  return RITES.includes(v) ? v : 'modern';   // modern is the default for everyone
+}
+
+// Paint only. Split out from setLiturgicalRite so that opening Settings, or
+// booting, can restore the buttons without it looking like a user choice and
+// firing a PATCH at the profile.
+function renderRiteButtons(rite) {
+  const activeStyle   = 'background:rgba(200,146,12,.14);color:#f0c040;';
+  const inactiveStyle = 'background:none;color:rgba(255,255,255,.38);';
+  const tradBtn = document.getElementById('riteTraditionalBtn');
+  const modBtn  = document.getElementById('riteModernBtn');
+  if (tradBtn) tradBtn.style.cssText += rite === 'traditional' ? activeStyle : inactiveStyle;
+  if (modBtn)  modBtn.style.cssText  += rite === 'modern'      ? activeStyle : inactiveStyle;
+}
+
+// An explicit choice. Local wins, and is mirrored up.
+function setLiturgicalRite(rite) {
+  if (!RITES.includes(rite)) return;
+  localStorage.setItem(RITE_KEY, rite);
+  renderRiteButtons(rite);
+  pushLiturgicalRite(rite);
+}
+
+// Mirror to the profile. Silent no-op for guests -- their choice stays local
+// and is pushed by syncLiturgicalRite() on first sign-in.
+function pushLiturgicalRite(rite) {
+  const uid = window.currentUser && window.currentUser.id;
+  if (!uid) return;
+  const token = localStorage.getItem('still_access_token');
+  if (!token) return;
+  fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}`, {
+    method: 'PATCH',
+    headers: {
+      'apikey': SUPA_ANON,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ liturgical_rite: rite })
+  }).then(res => {
+    // Deliberately NOT swallowed the way the subscription_status PATCH above
+    // is: that silent .catch(() => {}) is the reason nobody could tell whether
+    // client writes to profiles were permitted at all. 404/400 here means the
+    // migration has not been run against this project; 401/403 means the RLS
+    // UPDATE policy is missing.
+    if (!res.ok) console.warn('liturgical_rite PATCH failed:', res.status);
+  }).catch(err => console.warn('liturgical_rite PATCH failed:', err));
+}
+
+// Profile wins on sign-in. Called from onAuthed().
+//
+// Its own request rather than another column on refreshSubscription's select:
+// that select already carries a scar comment about one unreadable column
+// taking the whole row down with it, and a subscription must never fail to
+// refresh because of a preference column.
+async function syncLiturgicalRite() {
+  const uid = window.currentUser && window.currentUser.id;
+  if (!uid) return;
+  let res;
+  try {
+    const token = await getValidToken();
+    if (!token) return;
+    res = await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=liturgical_rite`,
+      { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token } });
+  } catch (e) { return; }
+  if (!res.ok) { console.warn('liturgical_rite read failed:', res.status); return; }
+  const data = await res.json();
+  const remote = data && data[0] && data[0].liturgical_rite;
+  if (RITES.includes(remote)) {
+    localStorage.setItem(RITE_KEY, remote);   // profile wins on sign-in
+    renderRiteButtons(remote);
+  } else {
+    // NULL -- this account has never expressed a preference. Adopt whatever
+    // the device already has, which is how a guest's choice survives signing
+    // in rather than being overwritten by a value they never set.
+    pushLiturgicalRite(getLiturgicalRite());
+  }
+}
+
+// Deep-link into a settings card: openSettings('bells') / openSettings('rite').
+// The section argument was written for a settings *screen* that never existed
+// -- the surviving openSettings opens the modal, so the scroll happens inside
+// the modal's own scroll container.
+const SETTINGS_SECTIONS = { bells: 'bells-settings', rite: 'rite-settings' };
+function revealSettingsSection(section) {
+  const id = SETTINGS_SECTIONS[section];
+  if (!id) { console.warn('unknown settings section:', section); return; }
+  // Lands after initBellSettings() at 500ms, which rebuilds the bells card.
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (!el) { console.warn('settings section not found:', id); return; }
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.style.transition = 'outline .2s';
+    el.style.outline = '1px solid rgba(200,146,12,.5)';
+    setTimeout(() => { el.style.outline = 'none'; }, 1800);
+  }, 560);
+}
+
+/* ═══════════════════════════════════════════
    SETTINGS HELPERS
 ═══════════════════════════════════════════ */
 function toggleFastingFromSettings(on) {
@@ -14518,7 +14617,7 @@ function toggleFastingFromSettings(on) {
   }
 }
 
-function openSettings() {
+function openSettings(section) {
   document.getElementById('settingsModal').classList.add('open');
   updateSubStatus();
   toggleFastingFromSettings(fasting); toggleReadable(localStorage.getItem('still_readable') === '1');
@@ -14527,7 +14626,9 @@ function openSettings() {
   const ap = document.getElementById('settingsAnchorPreview');
   if (ap) ap.style.display = anchorRecUrl ? 'block' : 'none';
   setDepth(getDepth());
+  renderRiteButtons(getLiturgicalRite());
   if (typeof initBellSettings === 'function') setTimeout(() => initBellSettings(), 500);
+  if (section) revealSettingsSection(section);
 }
 
 function closeSettings() {
@@ -14559,6 +14660,7 @@ setBell(bellEnabled);
 
 // Restore office mode preference
 setOfficeMode(getOfficeMode());
+renderRiteButtons(getLiturgicalRite());
 
 // On mobile -- activate first feature by default so names aren't all tiny
 if(IS_MOBILE && localStorage.getItem('still_onboarded')) {

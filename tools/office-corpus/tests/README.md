@@ -1,20 +1,27 @@
-# Modern-rite date function tests
+# Office regression tests
 
-Regression tests for the three Stage 2 modern-rite bugs (plus the Ash
-Wednesday fix) recorded in
+Regression tests for the Stage 2 modern-rite date bugs (plus the Ash Wednesday
+fix) and the Stage 3 Office Calendar toggle, recorded in
 [`vault/raw/decisions/2026-08-23-office-rebuild-plan.md`](../../../vault/raw/decisions/2026-08-23-office-rebuild-plan.md).
 
-These test the **modern** rite's date functions in `index.html`. They have
-nothing to do with the traditional corpus generator alongside them; they live
-here because this is where Office tooling lives.
+These test Office behaviour in `index.html`. They have nothing to do with the
+traditional corpus generator alongside them; they live here because this is
+where Office tooling lives.
 
 ```
 node tools/office-corpus/tests/test-season.js      # getLiturgicalSeason + getAshWednesday
 node tools/office-corpus/tests/test-psalmweek.js   # getPsalmWeek rollover + anchor
 node tools/office-corpus/tests/test-antiphon.js    # OFFICE_SEASONS antiphon wiring
+node tools/office-corpus/tests/test-rite.js        # Office Calendar toggle + profile sync
 ```
 
 Each exits non-zero on failure. No dependencies, no test runner.
+
+`test-rite.js` carries its own sandbox (stub `localStorage`, `fetch`, and
+auth) rather than using `harness.js`, since it exercises network and storage
+rather than a clock. It asserts the sign-in conflict rule directly: profile
+wins on sign-in, local wins on explicit change, and a NULL profile adopts the
+local value instead of resetting it.
 
 `harness.js` extracts the real functions out of `index.html` by source anchor
 and runs them under a frozen clock — it does **not** keep a copy of them, so
