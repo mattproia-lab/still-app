@@ -1,6 +1,6 @@
 # Subscription Check Paths
 
-_Traced 2026-08-22 against [`index.html`](../../../index.html) and [`netlify/functions/`](../../../netlify/functions). Line numbers refreshed at commit `21fed35`; the `getValidToken` guard shifted everything below 11914 down by 23. A pointer map, not a copy; re-verify against the code before relying on it._
+_Traced 2026-08-22 against [`index.html`](../../../index.html) and [`netlify/functions/`](../../../netlify/functions). Line numbers refreshed 2026-08-23 at commit `418f576`, after the promo/trial-extension work ([decision record](../../raw/decisions/2026-08-23-promo-attribution-system.md)). A pointer map, not a copy; re-verify against the code before relying on it._
 
 See also: [architecture.md](architecture.md#subscription-flow) for the region map · [stack.md](stack.md) for the service split.
 
@@ -16,19 +16,43 @@ RC entitlement PATCH ─┘                                  └──► claude
 
 ## Client check — `isSubscribed()`
 
-[index.html:12641](../../../index.html). Synchronous, reads a cache, consults exactly three sources:
+[index.html:12659](../../../index.html). Synchronous, reads a cache, consults exactly three sources:
 
 | # | Source | Line |
 |---|---|---|
-| 1 | `COMP_EMAILS` — reviewer / parish / clergy comp list | 12644–12652 |
-| 2 | `window._subStatus \|\| localStorage[PW_SUB_KEY]`, true on `'premium'` **or** `'active'` | 12654–12655 |
-| 3 | `still_paid === '1'` — legacy / admin bypass | 12656 |
+| 1 | `COMP_EMAILS` — reviewer / parish / clergy comp list | 12662–12671 |
+| 2 | `window._subStatus \|\| localStorage[PW_SUB_KEY]`, true on `'premium'` **or** `'active'` | 12672–12673 |
+| 3 | `still_paid === '1'` — legacy / admin bypass | 12674 |
 
-The cache is filled by `refreshSubscription()` ([12660](../../../index.html)) from `profiles.subscription_status`. `PW_SUB_KEY` persists in localStorage, so a returning user is granted access at cold launch before any network call completes.
+The cache is filled by `refreshSubscription()` ([12678](../../../index.html)) from `profiles.subscription_status`. `PW_SUB_KEY` persists in localStorage, so a returning user is granted access at cold launch before any network call completes.
 
 Cleared only by: a free row from the server, sign-out, account deletion.
 
-The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called from `enterFeature`.
+## The gate — `shouldShowPaywall()`
+
+[12757](../../../index.html), called from `enterFeature`. Two ways past it:
+
+```
+shouldShowPaywall()
+  ├─ isSubscribed()          → subscribed, no paywall ever
+  └─ trialIsOver()  (12749)
+       ├─ trialExtensionActive()  (12742)  → promo extension live, no paywall
+       └─ getTrialDaysLeft() <= 0 || getTrialSessionsLeft() <= 0
+```
+
+**A subscription and a trial extension are different things.** `isSubscribed()` reads `subscription_status`; the extension reads `trial_extended_until` and never touches the subscription status. Someone on an extended trial is still `free`.
+
+## Trial extension — `trial_extended_until`
+
+Added 2026-08-23 ([decision record](../../raw/decisions/2026-08-23-promo-attribution-system.md)). A redeemed promo code writes `profiles.trial_extended_until`; `trialExtensionActive()` ([12742](../../../index.html)) returns true while that instant is in the future.
+
+It short-circuits **ahead of both trial tests**, so one check lifts both halves at once — the 14-day clock *and* the 20-session cap. And because it lives on the profile rather than in localStorage, it follows the user across devices, which a local session reset cannot do.
+
+Cached in `PW_TRIAL_EXT_KEY` ([12646](../../../index.html)) beside `PW_SUB_KEY`, so the gate reads it synchronously at cold launch — same pattern as the subscription cache, same cold-launch grant.
+
+`refreshSubscription()` selects it alongside `subscription_status`, **with a fallback**: if the two-column select fails, it retries with the status alone, because an unreadable promo column must never stop a paying user's subscription from refreshing. On that degraded path the extension cache is left alone rather than cleared — the real value is unknown, and clearing would revoke a live extension.
+
+**Client relief only.** `claude.js` knows nothing about `trial_extended_until`. An extended-trial user gets the paywall lifted but still hits `upgrade_required` on Deeper and Amma Sophia after 4 lifetime uses each ([claude.js:33](../../../netlify/functions/claude.js), `TRIAL_TOTAL`). That is intended, not drift.
 
 ## Server check — `claude.js`
 
@@ -45,16 +69,16 @@ The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called fr
 **Access is granted in both paths.** RevenueCat is never consulted by either.
 
 - Stripe's webhook wrote `'premium'` ([stripe-webhook.js:54](../../../netlify/functions/stripe-webhook.js)).
-- Client: `refreshSubscription()` caches `'premium'` → `isSubscribed()` true at 12655 → no paywall.
+- Client: `refreshSubscription()` caches `'premium'` → `isSubscribed()` true at 12673 → no paywall.
 - Server: `claude.js` reads `'premium'` from the profile → `LIMITS.premium`.
-- **RevenueCat cannot revoke it.** `initRevenueCat()` ([14638](../../../index.html)) only writes on the positive branch — `if (…entitlements.active['premium'])` at 14662 sets the cache to `'active'` (14663–14664) and PATCHes the server to `'premium'` (14677). With no entitlement that branch is skipped: nothing written, nothing cleared. No RC-driven downgrade exists anywhere in the file.
+- **RevenueCat cannot revoke it.** `initRevenueCat()` ([14694](../../../index.html)) only writes on the positive branch — `if (…entitlements.active['premium'])` at 14718 sets the cache to `'active'` (14719–14720) and PATCHes the server to `'premium'` (14733). With no entitlement that branch is skipped: nothing written, nothing cleared. No RC-driven downgrade exists anywhere in the file.
 
 ## Flagged: `'active'` is a client-only value the server would not honor
 
-- Client accepts `'premium'` **or** `'active'` — [index.html:12655](../../../index.html).
+- Client accepts `'premium'` **or** `'active'` — [index.html:12673](../../../index.html).
 - Server `LIMITS` has only `free` and `premium` keys — [claude.js:13–14](../../../netlify/functions/claude.js). `LIMITS['active']` is `undefined`, so 158 falls back to **`LIMITS.free`**. Family pooling additionally requires `status === 'premium'` exactly (163).
 
-**Latent, not live.** Nothing currently writes `'active'` to Supabase: [stripe-webhook.js:54,60](../../../netlify/functions/stripe-webhook.js) and [revenuecat-webhook.js:49,51](../../../netlify/functions/revenuecat-webhook.js) both write `'premium'`/`'free'`, and the client PATCH at 14677 writes `'premium'`. `'active'` lives only in the local cache (12793–12794, 14562–14563, 14663–14664).
+**Latent, not live.** Nothing currently writes `'active'` to Supabase: [stripe-webhook.js:54,60](../../../netlify/functions/stripe-webhook.js) and [revenuecat-webhook.js:49,51](../../../netlify/functions/revenuecat-webhook.js) both write `'premium'`/`'free'`, and the client PATCH at 14733 writes `'premium'`. `'active'` lives only in the local cache (12844–12845, 14618–14619, 14719–14720).
 
 ### Where `'active'` came from — history, traced 2026-08-22
 
@@ -67,7 +91,7 @@ The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called fr
 | 2026-06-16 | `e821c32` | `revenuecat-webhook.js` created. Also writes only `'premium'` / `'free'`. |
 | 2026-07-20 | `3555da1` | First code to ever *write* `'active'` — the native RevenueCat restore path, caching to localStorage only. |
 | 2026-07-26 | `c2c1882` | Anonymous IAP does the same on the entitlement-on-launch path. |
-| 2026-08-01 | `10f585d` | Family Sharing fix PATCHes the server — with **`'premium'`**, not `'active'`. Still the only client→server write ([index.html:14677](../../../index.html)). |
+| 2026-08-01 | `10f585d` | Family Sharing fix PATCHes the server — with **`'premium'`**, not `'active'`. Still the only client→server write ([index.html:14733](../../../index.html)). |
 
 **Was there ever a webhook that wrote `'active'`?** No. `git log -S "'active'" -- netlify/functions` returns **zero commits** — the string has never existed anywhere in the functions directory in the repo's history. Every historical revision of both webhooks was inspected directly; all write `'premium'` / `'free'`.
 
@@ -84,14 +108,14 @@ The hard gate is `shouldShowPaywall()` ([12706](../../../index.html)), called fr
 
 **Conclusion.** `'active'` is vestigial on the read side and RevenueCat-derived on the write side, and the two are unrelated in origin. No provider vocabulary was ever stored in `subscription_status`.
 
-**Risk if it ever changes.** If anything writes `'active'` to the profile, client and server disagree silently: the app shows premium while Deeper and Amma Sophia return `upgrade_required`. The client PATCH at 14677 is one careless edit away from being the thing that does it — it sits four lines below a block that sets the local cache to `'active'`. **No code changed 2026-08-22 — investigation only** ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md)).
+**Risk if it ever changes.** If anything writes `'active'` to the profile, client and server disagree silently: the app shows premium while Deeper and Amma Sophia return `upgrade_required`. The client PATCH at 14733 is one careless edit away from being the thing that does it — it sits four lines below a block that sets the local cache to `'active'`. **No code changed 2026-08-22 — investigation only** ([decision record](../../raw/decisions/2026-08-22-vault-setup-and-tts-endpoint.md)).
 
 ### Removing `'active'` is a two-step fix
 
-`initRevenueCat()` **caches `'active'` locally while PATCHing `'premium'` to Supabase** ([14663–14664](../../../index.html) vs [14677](../../../index.html)) — the local cache and the server column disagree by design today, and the read at [12655](../../../index.html) is the only thing making the local half work. Order matters:
+`initRevenueCat()` **caches `'active'` locally while PATCHing `'premium'` to Supabase** ([14719–14720](../../../index.html) vs [14733](../../../index.html)) — the local cache and the server column disagree by design today, and the read at [12673](../../../index.html) is the only thing making the local half work. Order matters:
 
-1. **First** change every site that caches `'active'` to cache `'premium'`. There are **three**, all native RevenueCat paths — `restorePurchases` ([12793–12794](../../../index.html)), `purchasePackage` success ([14562–14563](../../../index.html)), `initRevenueCat` entitlement-on-launch ([14663–14664](../../../index.html)).
-2. **Then** drop `|| s === 'active'` from [12655](../../../index.html).
+1. **First** change every site that caches `'active'` to cache `'premium'`. There are **three**, all native RevenueCat paths — `restorePurchases` ([12844–12845](../../../index.html)), `purchasePackage` success ([14618–14619](../../../index.html)), `initRevenueCat` entitlement-on-launch ([14719–14720](../../../index.html)).
+2. **Then** drop `|| s === 'active'` from [12673](../../../index.html).
 
 **Step 2 alone breaks native purchase and restore:** the user pays, the cache says `'active'`, the read no longer accepts it, and the paywall stays up. The cheaper fix in the other direction is unchanged and still one line — accept `'active'` as a `premium` alias in the server's `LIMITS` and touch nothing on the client.
 
