@@ -13,7 +13,7 @@ vault/
 │   │   ├── saints/      ← other saints' writings & lives (Faber, Marmion, Denis the Carthusian…)
 │   │   ├── catechism/   ← Catechism of the Catholic Church, Roman Catechism (Trent)
 │   │   └── scripture/   ← Douay-Rheims texts, Catena Aurea commentary
-│   ├── decisions/       ← architecture/design decision records
+│   ├── decisions/       ← architecture/design decision records — amendable, see below
 │   ├── sessions/        ← exported Claude conversation transcripts
 │   ├── marketing/       ← copy, listings, X threads, n8n workflow notes
 │   └── external/        ← articles, docs, App Store correspondence, PDFs
@@ -90,6 +90,26 @@ This vault lives at `vault/` inside the Still app repo. Code is never copied int
 - For "what does the code do" → read the actual source files.
 - For "why is it this way" → search `wiki/` and `raw/decisions/`.
 - `wiki/app/architecture.md` is a map of `index.html`'s major systems with line-region pointers — a table of contents, not a copy. Refresh it when architecture changes, and trust the live code over it if they disagree.
+
+### Decision records are the exception to no-edit-after-ingestion
+
+`raw/` is verbatim and never edited after ingestion — **except `raw/decisions/`**. Decision records are living documents: decisions get superseded, licences get clarified, targets move.
+
+**Amendments are appended as dated blocks, never rewrites.** The point is to preserve how a decision evolved, not just where it landed. A reader must be able to see what was believed on the original date, what changed, when, and on what evidence.
+
+```markdown
+## §1 amended 2026-08-24 — licence question resolved
+
+<what changed, who confirmed it, what it supersedes>
+```
+
+Rules for an amendment:
+
+- **Append, do not rewrite.** Leave the superseded text in place. If a section is fully overtaken, add a pointer at the top of it (`> Superseded — see "§N amended <date>" below`) rather than deleting the prose.
+- **Date every block** and name the source of the change.
+- **Say what it supersedes**, by section number.
+- Record the amendment in the frontmatter (`updated: <date> — <one line>`).
+- Wiki pages citing an amended record get updated to match, per the contradiction rule.
 
 ## Maintenance
 
