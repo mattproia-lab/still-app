@@ -38,6 +38,8 @@ Contrast with the Sing the Hours player on the same screen, which stacks four ca
 
 **All four are recorded, none is fixed. No code changed 2026-08-23 — investigation only.**
 
+**Status 2026-08-24:** all four now have a plan — see the [Office rebuild decision record](../../raw/decisions/2026-08-23-office-rebuild-plan.md). Issue 1 is addressed by rebuilding the Office with real daily propers; issues 2–4 are stage 2 of that build. Nothing is fixed yet.
+
 ## 1. No daily proper — the reported symptom
 
 **Vespers is identical every day for weeks at a time, by construction.** Within a season the only thing that changes is the three psalms, once a week. There is no day-of-week psalter, no calendar of saints, no Magnificat antiphon of the day.
@@ -101,6 +103,10 @@ Anyone praying both offices hears the same antiphon morning and evening.
 
 ---
 
-## Open question for Matt
+## Resolved 2026-08-24 — it was issue 1
 
-Whether the original report meant the **psalms** looked unchanged (issue 3 — the rollover weekday) or the **whole office** looked identical (issue 1 — expected, there is no daily proper). That decides whether the fix is a few lines in `getPsalmWeek()` or a real liturgical-calendar feature.
+The open question here was whether the report meant the **psalms** looked unchanged (issue 3) or the **whole office** did (issue 1). It was issue 1: there is no daily proper, so yesterday's Office and today's genuinely are the same text.
+
+Decision: **rebuild the Office with real daily propers** for Vespers, Lauds and Vigils, sourced from [Divinum Officium](https://github.com/DivinumOfficium/divinum-officium) (MIT, stated in the README — attribution required), behind a **liturgical rite toggle** — `traditional` (1960 Roman Breviary) and `modern` (Ordinary Time, the default for existing users). Target is traditional Ordinary Time running before Advent, 2026-11-29.
+
+Full reasoning, the build sequence, and the psalter-structure mismatch that forced a toggle rather than a merge: [2026-08-23-office-rebuild-plan.md](../../raw/decisions/2026-08-23-office-rebuild-plan.md).
