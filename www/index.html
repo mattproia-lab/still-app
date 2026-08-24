@@ -4433,9 +4433,9 @@ async function playVespersAudio() {
   if (isFull) {
     text += `Evening Hymn.\n\nO blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.\n\n`;
   }
-  text += `${sData.laudsAntiphon}\n\n`;
+  text += `${sData.vespersAntiphon}\n\n`;
   todayVPsalms.forEach(ps => { text += `${ps.ref}\n\n${ps.text}\n\n`; });
-  text += `${sData.laudsAntiphon}\n\n`;
+  text += `${sData.vespersAntiphon}\n\n`;
   text += `Short Reading. ${VESPERS_READINGS[season].ref}.\n\n${VESPERS_READINGS[season].text}\n\n`;
   if (isFull) {
     text += `Our heart hath rejoiced in him, because we have hoped in his holy name.\nLet thy mercy, O Lord, be upon us, as we have hoped in thee.\n\n`;
@@ -13729,26 +13729,27 @@ function escapeHtml(s) {
 function getLiturgicalSeason() {
   const now = new Date();
   const y = now.getFullYear();
-  const md = now.getMonth() * 100 + now.getDate(); // MMMDD
+  // MMDD with a 1-based month. getMonth() is 0-based, so every date compared
+  // against the boundaries below has to go through this helper -- comparing a
+  // raw getMonth()*100 against a literal like 1225 was the off-by-one that
+  // made Christmas Day return 'advent'.
+  const mmdd = d => (d.getMonth() + 1) * 100 + d.getDate();
+  const md = mmdd(now);
 
   // Approximate season boundaries (varies by year but close enough)
-  const advent   = new Date(y, 10, 27).getMonth() * 100 + new Date(y, 10, 27).getDate();
-  const christmas = 1225;
-  const epiphany  = 112;
+  const ADVENT_START    = 1127;
+  const CHRISTMAS_START = 1225;
+  const CHRISTMAS_END    = 112;  // Christmas season runs through Jan 12
   // Lent / Easter vary -- use approximations
-  const ashWed = getAshWednesday(y);
   const easterSunday = getEaster(y);
-  const pentecost = easterSunday + 49;
+  const ashMD    = mmdd(getAshWednesday(y));
+  const easterMD = mmdd(easterSunday);
+  const pentMD   = mmdd(new Date(easterSunday.getFullYear(), easterSunday.getMonth(), easterSunday.getDate() + 49));
 
-  const easterMD = (easterSunday.getMonth()) * 100 + easterSunday.getDate();
-  const ashMD    = (ashWed.getMonth()) * 100 + ashWed.getDate();
-  const pentMD   = (new Date(easterSunday.getTime() + 49*86400000).getMonth()) * 100
-                 + new Date(easterSunday.getTime() + 49*86400000).getDate();
-
-  if (md >= 1225 || md <= 112) return 'christmas';
+  if (md >= CHRISTMAS_START || md <= CHRISTMAS_END) return 'christmas';
   if (md >= ashMD && md < easterMD) return 'lent';
   if (md >= easterMD && md <= pentMD) return 'easter';
-  if (md >= (new Date(y, 10, 27).getMonth() * 100 + 27) && md < 1225) return 'advent';
+  if (md >= ADVENT_START && md < CHRISTMAS_START) return 'advent';
   return 'ordinary';
 }
 
@@ -13766,15 +13767,38 @@ function getEaster(y) {
 }
 
 function getAshWednesday(y) {
+  // 46 days before Easter, counted in calendar days rather than fixed
+  // milliseconds. `easter.getTime() - 46*86400000` crosses the March DST
+  // change and lands at 23:00 the day before, which started Lent a day early
+  // in every year 2024-2030. Same fault as the old getPsalmWeek() grid.
   const easter = getEaster(y);
-  return new Date(easter.getTime() - 46*86400000);
+  return new Date(easter.getFullYear(), easter.getMonth(), easter.getDate() - 46);
 }
 
-// Get psalm week (1-4) from date
+// Get psalm week (1-4). The psalter turns at First Vespers of Sunday -- that
+// is, Saturday evening -- not on a fixed 7-day grid measured from Jan 1.
+// Week counting is done on UTC midnights so that a DST change cannot move the
+// boundary; the old `7*86400000` arithmetic drifted an hour at every change
+// and slid the rollover from Thursday to Friday over the course of a year.
+// The four-week cycle restarts on the First Sunday of Advent, the opening of
+// the liturgical year, so week 1 lands where the year actually begins.
+const PSALTER_ROLL_HOUR = 17;              // First Vespers -- matches setOfficeTime()
+const PSALTER_ANCHOR_MS = Date.UTC(2026, 10, 29);  // First Sunday of Advent 2026 -- psalter week 1
+
 function getPsalmWeek() {
   const now = new Date();
-  const weekOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 1)) / (7*86400000));
-  return (weekOfYear % 4) + 1;
+
+  // Midnight today, local. Saturday from Vespers onward already belongs to
+  // Sunday's liturgical week, so roll it forward before finding the Sunday.
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (now.getDay() === 6 && now.getHours() >= PSALTER_ROLL_HOUR) {
+    d.setDate(d.getDate() + 1);
+  }
+  d.setDate(d.getDate() - d.getDay());     // back up to that week's Sunday
+
+  const sunday = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const weeks  = Math.round((sunday - PSALTER_ANCHOR_MS) / (7*86400000));
+  return (((weeks % 4) + 4) % 4) + 1;      // 1-4, and correct before the anchor
 }
 
 // Seasonal antiphon data
@@ -13782,6 +13806,7 @@ const OFFICE_SEASONS = {
   ordinary: {
     label: 'Ordinary Time',
     laudsAntiphon: 'The Lord is my light and my salvation.',
+    vespersAntiphon: 'Let my prayer be directed as incense in thy sight, O Lord.',
     vigils: 'In the night my soul watcheth for Thee, O God.',
     complineAntiphon: 'He who dwells in the shelter of the Most High.',
     marian: 'salve',
@@ -13789,6 +13814,7 @@ const OFFICE_SEASONS = {
   advent: {
     label: 'Advent',
     laudsAntiphon: 'Come, Lord Jesus. Do not delay.',
+    vespersAntiphon: 'Behold, the Lord shall come, and all his saints with him.',
     vigils: 'Lift up your heads, for your redemption draws near.',
     complineAntiphon: 'The Lord will come and will not delay.',
     marian: 'alma',
@@ -13796,6 +13822,7 @@ const OFFICE_SEASONS = {
   christmas: {
     label: 'Christmas',
     laudsAntiphon: 'Today Christ is born; today the Saviour has appeared.',
+    vespersAntiphon: 'Glory to God in the highest, and on earth peace to men of good will.',
     vigils: 'The Word was made flesh and dwelt among us.',
     complineAntiphon: 'God sent his Son into the world to save the world.',
     marian: 'alma',
@@ -13803,6 +13830,7 @@ const OFFICE_SEASONS = {
   lent: {
     label: 'Lent',
     laudsAntiphon: 'Create in me a clean heart, O God.',
+    vespersAntiphon: 'Behold, now is the acceptable time; now is the day of salvation.',
     vigils: 'Out of the depths I cry to you, O Lord.',
     complineAntiphon: 'Have mercy on me, O God, according to your steadfast love.',
     marian: 'ave',
@@ -13810,6 +13838,7 @@ const OFFICE_SEASONS = {
   easter: {
     label: 'Easter',
     laudsAntiphon: 'Alleluia, alleluia, alleluia.',
+    vespersAntiphon: 'I am risen, and am still with thee, alleluia.',
     vigils: 'This is the day the Lord has made; let us rejoice and be glad. Alleluia.',
     complineAntiphon: 'The Lord is risen from the tomb. Alleluia.',
     marian: 'regina',
@@ -14194,14 +14223,14 @@ function renderOfficeHour(hour) {
     const todayVPsalms = isFull ? vPsalms : [vPsalms[0]];
 
     html += eyebrow('Antiphon');
-    html += versicle(sData.laudsAntiphon);
+    html += versicle(sData.vespersAntiphon);
 
     todayVPsalms.forEach((ps, i) => {
       html += eyebrow((isFull ? `Psalm ${i+1} · ` : '') + ps.ref);
       html += p(ps.text);
     });
 
-    html += versicle(sData.laudsAntiphon);
+    html += versicle(sData.vespersAntiphon);
     html += divider();
 
     html += eyebrow('Short Reading · ' + VESPERS_READINGS[season].ref);
@@ -14214,9 +14243,9 @@ function renderOfficeHour(hour) {
 
     html += divider();
     html += eyebrow('Magnificat · Canticle of Our Lady · Luke 1:46-55');
-    html += versicle(sData.laudsAntiphon);
+    html += versicle(sData.vespersAntiphon);
     html += p(MAGNIFICAT, 'font-size:clamp(16px,2vw,20px)');
-    html += versicle(sData.laudsAntiphon);
+    html += versicle(sData.vespersAntiphon);
 
     if (isFull) {
       html += divider();

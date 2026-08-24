@@ -1,6 +1,6 @@
 # Vespers — the Office text
 
-_Traced 2026-08-23 against [`index.html`](../../../index.html) at commit `1a1b30e`, prompted by a report that Vespers was "showing yesterday's content". A pointer map, not a copy; re-verify against the code before relying on it._
+_Traced 2026-08-23 against [`index.html`](../../../index.html) at commit `1a1b30e`; line numbers re-verified and updated 2026-08-24 after the Stage 2 fixes, prompted by a report that Vespers was "showing yesterday's content". A pointer map, not a copy; re-verify against the code before relying on it._
 
 See also: [subscription-paths.md](../app/subscription-paths.md) for the gate · [architecture.md](../app/architecture.md) for the region map.
 
@@ -13,7 +13,7 @@ Two functions supply every variable, and both read `new Date()` off the device:
 | Function | Line | Returns |
 |---|---|---|
 | `getLiturgicalSeason()` | [13729](../../../index.html) | `ordinary` / `advent` / `christmas` / `lent` / `easter` |
-| `getPsalmWeek()` | [13774](../../../index.html) | `1`–`4` |
+| `getPsalmWeek()` | [13788](../../../index.html) | `1`–`4` |
 
 **Neither is a date.** Nothing in the Vespers render takes a day-level input.
 
@@ -21,14 +21,14 @@ Two functions supply every variable, and both read `new Date()` off the device:
 |---|---|---|
 | Opening versicle | literal in the render | never |
 | Evening Hymn (full only) | literal | never |
-| Antiphon (×4) | `OFFICE_SEASONS[season].laudsAntiphon` ([13781](../../../index.html)) | season |
-| Psalms (3, or 1 concise) | `VESPERS_PSALMS[(psalmWeek-1)%4+1]` ([13917](../../../index.html)) | 4-week cycle |
-| Short Reading | `VESPERS_READINGS[season]` ([13941](../../../index.html)) | season |
+| Antiphon (×4) | `OFFICE_SEASONS[season].vespersAntiphon` ([13805](../../../index.html)) — was `laudsAntiphon`, see issue 4 | season |
+| Psalms (3, or 1 concise) | `VESPERS_PSALMS[(psalmWeek-1)%4+1]` ([14222](../../../index.html)) | 4-week cycle, anchored to Advent |
+| Short Reading | `VESPERS_READINGS[season]` ([13970](../../../index.html)) | season |
 | Responsorium (full only) | literal | never |
-| Magnificat | `MAGNIFICAT` ([13959](../../../index.html)) | never |
+| Magnificat | `MAGNIFICAT` ([13988](../../../index.html)) | never |
 | Intercessions (full only) | literal | never |
-| Collect | `VESPERS_COLLECTS[season]` ([13950](../../../index.html)) | season |
-| Marian antiphon | `MARIAN[OFFICE_SEASONS[season].marian]` ([13981](../../../index.html)) | season |
+| Collect | `VESPERS_COLLECTS[season]` ([13979](../../../index.html)) | season |
+| Marian antiphon | `MARIAN[OFFICE_SEASONS[season].marian]` ([14010](../../../index.html)) | season |
 
 Contrast with the Sing the Hours player on the same screen, which stacks four cache layers. **The Office text has none.** Nothing here can serve stale content — if it looks unchanged, it is unchanged.
 
@@ -36,9 +36,9 @@ Contrast with the Sing the Hours player on the same screen, which stacks four ca
 
 # Known issues
 
-**All four are recorded, none is fixed. No code changed 2026-08-23 — investigation only.**
+**Five issues. Issues 2–5 were fixed 2026-08-24; issue 1 is a content-model gap that only the corpus rebuild closes.**
 
-**Status 2026-08-24:** all four now have a plan — see the [Office rebuild decision record](../../raw/decisions/2026-08-23-office-rebuild-plan.md). Issue 1 is addressed by rebuilding the Office with real daily propers; issues 2–4 are stage 2 of that build. Nothing is fixed yet.
+**Status 2026-08-24:** **Stage 2 is done.** Issues 2, 3 and 4 are fixed in `index.html`, along with **issue 5**, a fourth date bug found while testing them and not part of the original four. Issue 1 stays open by design — it needs the traditional corpus and the rite toggle (stage 3), not a date fix. Regression tests are versioned at [`tools/office-corpus/tests/`](../../../tools/office-corpus/tests/). Full write-up: [§6 amended](../../raw/decisions/2026-08-23-office-rebuild-plan.md).
 
 ## 1. No daily proper — the reported symptom
 
@@ -48,7 +48,7 @@ Ordinary Time runs from Pentecost to Advent, so through the summer the *entire* 
 
 This is the likely explanation for "showing yesterday's content" — yesterday's Vespers and today's genuinely are the same text. **A content-model gap, not a caching bug.** No amount of cache-busting addresses it; it needs a liturgical calendar.
 
-## 2. `getLiturgicalSeason()` — month off-by-one
+## 2. `getLiturgicalSeason()` — month off-by-one · **FIXED 2026-08-24**
 
 [13729](../../../index.html). `md = now.getMonth()*100 + now.getDate()` uses a **0-based** month against **1-based** comparison constants (`1225`, `112`, `1027`).
 
@@ -70,7 +70,11 @@ Everything keyed on `season` is wrong for those spans — antiphon, reading, col
 
 The `lent` / `easter` branches use `getAshWednesday()` / `getEaster()` and build their bounds the same 0-based way, so they compare consistently with `md` — those two appear unaffected by this particular fault.
 
-## 3. `getPsalmWeek()` — mid-week rollover, and it drifts
+**Fixed 2026-08-24.** A single `mmdd()` helper now does the 1-based conversion for every date, and the boundaries are named constants instead of inlined literals. Four dead declarations went with it, including `pentecost = easterSunday + 49` — a `Date` plus a number, which is string concatenation.
+
+One correction to the note above: **the Advent bound was never part of this bug.** It was built `new Date(y,10,27).getMonth()*100+27`, which is 0-based like `md`, so the two agreed. Only the hardcoded `1225` and `112` disagreed. Advent behaviour is unchanged.
+
+## 3. `getPsalmWeek()` — mid-week rollover, and it drifts · **FIXED 2026-08-24**
 
 [13774](../../../index.html):
 
@@ -93,13 +97,33 @@ Already Friday, not the original Thursday, and it will shift again at the Novemb
 
 If someone prays Vespers on a Sunday expecting the new week's psalms and gets the previous set, this is why.
 
-## 4. Vespers uses the Lauds antiphon
+**Fixed 2026-08-24.** The week is now found by walking back to the Sunday that opens it — rolling Saturday forward from 17:00, the app's own Vespers hour in `setOfficeTime()` — and counting whole weeks on `Date.UTC` midnights, which no DST change can move. Verified hour-by-hour across 14 months spanning both DST changes and a year boundary: all 61 rollovers land on Saturday 17:00, where previously all 61 landed on Thursday and drifted to Friday.
+
+**The cycle was also re-anchored to the First Sunday of Advent** (2026-11-29), so week 1 begins with the liturgical year. This deliberately changed which psalms show: 2026-08-24 moved from week 2 to week 3.
+
+## 4. Vespers uses the Lauds antiphon · **FIXED 2026-08-24**
 
 All four antiphon slots in the Vespers render read `sData.laudsAntiphon` — around the psalms ([14197](../../../index.html), [14204](../../../index.html)) and around the Magnificat ([14217](../../../index.html), [14219](../../../index.html)).
 
 **There is no `vespersAntiphon` key in `OFFICE_SEASONS`** ([13781](../../../index.html)); the object carries `laudsAntiphon`, `vigils`, `complineAntiphon`, and `marian` only. Vigils and Compline each have their own; Vespers borrows Lauds'.
 
 Anyone praying both offices hears the same antiphon morning and evening.
+
+**Fixed 2026-08-24.** `vespersAntiphon` was added to all five seasons and **six** call sites were rewired — four in the screen render ([14226](../../../index.html), [14233](../../../index.html), [14246](../../../index.html), [14248](../../../index.html)) and **two more this page missed**, in `playVespersAudio()` ([4436](../../../index.html), [4438](../../../index.html)). The audio path matters: its cache key is keyed on season, so the wrong antiphon was being cached and replayed, not merely rendered.
+
+**The five antiphon texts are Claude's composition and Matt's liturgical review is outstanding.** Checked against the generated corpus: advent and christmas are attested as real Vespers antiphons; lent is thin; **ordinary is the Vespers _versicle_, not an antiphon** (162 corpus Vespers files carry it, none as an antiphon); **easter is unattested entirely** — "Resurrexi" is the Introit of Easter Sunday _Mass_. Deeper still, traditional Vespers has five psalm antiphons plus a distinct Magnificat antiphon, all proper to the day and usually drawn from its Gospel — never one seasonal text repeated four times. See the [decision record](../../raw/decisions/2026-08-23-office-rebuild-plan.md) for the full table.
+
+## 5. `getAshWednesday()` — Lent starts a day early · **FIXED 2026-08-24**
+
+**Not one of the original four.** Found 2026-08-24 by the regression test written for issue 2.
+
+```js
+return new Date(easter.getTime() - 46*86400000);   // the fault
+```
+
+Easter always falls after the March DST change and Ash Wednesday almost always before it, so the fixed-millisecond subtraction landed at **23:00 the previous day** and `getDate()` read the wrong date. Wrong in **every year 2024–2030** — it never once landed on a Wednesday. 2026 gave Tue 17 Feb where Ash Wednesday is Wed 18 Feb, so `getLiturgicalSeason()` returned `'lent'` on Shrove Tuesday.
+
+Same root cause as issue 3: fixed-millisecond arithmetic across a DST boundary. Fixed with calendar arithmetic ([13769](../../../index.html)), which cannot drift. The same shape was hardened in `pentMD` at the same time — safe in US timezones, argued wrong in southern-hemisphere ones, but **that argument was never executed**: Node on Windows ignores `TZ`, so cross-timezone runs silently test the local zone and prove nothing.
 
 ---
 

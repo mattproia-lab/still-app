@@ -236,3 +236,120 @@ Two wiki pages carried the superseded "verbally confirmed by the maintainer —
 no `LICENSE` file in the repo" wording and were updated to match on 2026-08-24:
 [office-vespers.md](../../wiki/features/office-vespers.md) and
 [index.md](../../wiki/index.md).
+
+## §6 amended 2026-08-24 — Stage 2 shipped, and a fourth bug found
+
+**All three §6 bugs are fixed, plus a fourth discovered while testing them.**
+Stage 2 of the §4 build sequence is complete. No corpus integration touched;
+the toggle (stage 3) is still unbuilt.
+
+**Supersedes:** §6, on status only — the three faults it describes are
+accurate, and are now fixed rather than open.
+
+### The fourth bug — `getAshWednesday()` starts Lent a day early
+
+Not in §6, not in [office-vespers.md](../../wiki/features/office-vespers.md);
+found by the test written for the §6 season bug.
+
+```js
+return new Date(easter.getTime() - 46*86400000);   // the fault
+```
+
+Easter is always after the March DST change and Ash Wednesday is almost always
+before it, so the fixed-millisecond subtraction lands at **23:00 on the
+previous day**. `getDate()` then reads the wrong day. Verified wrong in **every
+year 2024–2030**: 2026 returned Tue 17 Feb where Ash Wednesday is Wed 18 Feb.
+It never even landed on a Wednesday.
+
+Consequence: `getLiturgicalSeason()` returned `'lent'` one day early each year
+— Shrove Tuesday read as Lent. Same root cause as the §6 `getPsalmWeek()`
+drift: fixed-millisecond arithmetic across a DST boundary. Fixed with calendar
+arithmetic (`new Date(y, m, d - 46)`), which cannot drift.
+
+**A fifth instance of the same fault was hardened at the same time**:
+`pentMD` computed Pentecost as `easter.getTime() + 49*86400000`. In US
+timezones this is safe — no DST transition falls between Easter and Pentecost
+— and it was **not** observed failing. It is wrong in southern-hemisphere
+zones, where DST ends in April (Sydney 2024: Easter 31 Mar, transition 7 Apr,
+inside the window). **That reasoning was not executed** — Node on Windows
+ignores `TZ`, so it silently resolves back to the local zone and any
+cross-timezone run is vacuous. Changed on the argument, not on a test.
+
+### What changed in `index.html`
+
+| Bug | Fix |
+|---|---|
+| `getLiturgicalSeason()` off-by-one | one `mmdd()` helper, 1-based; boundaries promoted to named constants; four dead declarations removed (incl. `pentecost = easterSunday + 49`, a string concatenation) |
+| `getPsalmWeek()` drift | rolls at Saturday 17:00; weeks counted on `Date.UTC` midnights |
+| missing `vespersAntiphon` | key added to all five seasons; **six** call sites rewired |
+| `getAshWednesday()` | calendar arithmetic |
+
+Two details worth keeping:
+
+- **The Advent boundary was never part of the off-by-one.** Its bound was
+  built `new Date(y,10,27).getMonth()*100+27` — 0-based, matching the 0-based
+  `md`. Only the hardcoded `1225`/`112` literals disagreed. Advent behaviour is
+  unchanged by the fix.
+- **The antiphon bug reached the audio path too.** §6 and the wiki record four
+  slots in the screen render; `playVespersAudio()` had two more. Its cache key
+  is keyed on season, so wrong-antiphon audio was being **cached and replayed**.
+
+### `getPsalmWeek()` is anchored to Advent
+
+The four-week cycle now restarts at First Vespers of the **First Sunday of
+Advent** (2026-11-29, verified a Sunday — §5), so week 1 lands where the
+liturgical year begins.
+
+This **changes which psalms show today**: 2026-08-24 moved from week 2 to
+week 3. That is a deliberate content change, decided by Matt on 2026-08-24, not
+a side effect of the rollover fix. Per §3 the existing four-week cycle
+"does not correspond to any real psalter scheme" anyway.
+
+### `vespersAntiphon` — added, and flagged for liturgical review
+
+The bug could not be fixed without content: no Vespers antiphon existed
+anywhere in the codebase. Five were written to match the register of the
+existing seasonal antiphons. **They are Claude's composition, not an ingested
+source**, which the [CLAUDE.md](../../CLAUDE.md) no-fabrication rule makes a
+thing to mark rather than assume. Each was then checked against the generated
+traditional corpus. **Matt's review is outstanding on all five.**
+
+| Season | Text | Attested in corpus as | Verdict |
+|---|---|---|---|
+| advent | Behold, the Lord shall come, and all his saints with him. | Vespers psalm antiphon (`vespers \| 2.antiphon`, ×3) | **sound** |
+| christmas | Glory to God in the highest, and on earth peace to men of good will. | Vespers Magnificat antiphon (`vespers \| canticle.antiphon`, ×3) | **sound** |
+| lent | Behold, now is the acceptable time; now is the day of salvation. | Vespers Magnificat antiphon ×1; mostly a Vigils lesson/responsory | thin but attested |
+| ordinary | Let my prayer be directed as incense in thy sight, O Lord. | **the Vespers versicle** (`vespers \| versicle.v`, ×162) — never an antiphon | **wrong genre** |
+| easter | I am risen, and am still with thee, alleluia. | **nothing** — appears only as Ps 138:16 in `store/psalms.json` | **unattested** |
+
+- **ordinary** — Ps 140:2. Strongly Vespers-proper (162 of 493 Vespers files
+  carry it) but as the *versicle*, never as an antiphon.
+- **easter** — "Resurrexi, et adhuc tecum sum" is the **Introit of Easter
+  Sunday Mass**. It is a Missal text, not a Breviary one, and the corpus has no
+  antiphon anywhere matching it. Weakest of the five. Attested Paschal
+  alternatives exist, e.g. *"Behold My Hands and my Feet, that it is I myself,
+  alleluia, alleluia"* (`die-iii-infra-octavam-paschae`, `Ant 3`).
+
+**The structural deviation is larger than any single text, and no wording fixes
+it.** Traditional Vespers carries **five psalm antiphons, one per psalm, plus a
+distinct Magnificat antiphon** — 384 of 493 corpus Vespers files have exactly
+five. They are **proper to the day and usually drawn from that day's Gospel**
+("The wine failing, Jesus commanded the water pots to be filled",
+`dominica-ii-post-epiphaniam`), never seasonal. The modern rite here repeats
+**one seasonal antiphon four times** across three psalms.
+
+So a seasonal `vespersAntiphon` cannot be traditional Vespers psalmody in
+principle. It is a correct fix *within the modern rite's existing seasonal
+model*, and it is exactly the §2 "no daily proper" gap that the traditional
+corpus is being built to close. Judge the five as modern-rite stopgaps, not as
+breviary texts.
+
+### Tests
+
+Versioned at
+[`tools/office-corpus/tests/`](../../../tools/office-corpus/tests/) —
+`test-season.js`, `test-psalmweek.js`, `test-antiphon.js`, and `harness.js`.
+The harness **extracts the functions out of `index.html` by source anchor**
+rather than copying them, and throws if an anchor moves, so the tests cannot
+drift from shipped code. They cover only the machine's local timezone; see the
+`TZ` caveat above.
