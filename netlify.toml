@@ -72,3 +72,19 @@
   to = "/404"
   status = 404
   force = true
+
+# Build-time only. publish = "." means everything in the repo root is served,
+# so the generated Office corpus and its generator are blocked the same way
+# vault/ and supabase/ are. The corpus is ~23 MB of JSON and is not consumed
+# by the app over HTTP.
+[[redirects]]
+  from = "/corpus/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/tools/*"
+  to = "/404"
+  status = 404
+  force = true
