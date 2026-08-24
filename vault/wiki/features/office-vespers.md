@@ -107,6 +107,6 @@ Anyone praying both offices hears the same antiphon morning and evening.
 
 The open question here was whether the report meant the **psalms** looked unchanged (issue 3) or the **whole office** did (issue 1). It was issue 1: there is no daily proper, so yesterday's Office and today's genuinely are the same text.
 
-Decision: **rebuild the Office with real daily propers** for Vespers, Lauds and Vigils, sourced from [Divinum Officium](https://github.com/DivinumOfficium/divinum-officium) (MIT, stated in the README — attribution required), behind a **liturgical rite toggle** — `traditional` (1960 Roman Breviary) and `modern` (Ordinary Time, the default for existing users). Target is traditional Ordinary Time running before Advent, 2026-11-29.
+Decision: **rebuild the Office with real daily propers** for Vespers, Lauds and Vigils, sourced from [Divinum Officium](https://github.com/DivinumOfficium/divinum-officium) (MIT, verbally confirmed by the maintainer 2026-08-23 — no `LICENSE` file in the repo; attribution required), behind a **liturgical rite toggle** — `traditional` (1960 Roman Breviary) and `modern` (Ordinary Time, the default for existing users). Target is traditional Ordinary Time running before Advent, 2026-11-29.
 
 Full reasoning, the build sequence, and the psalter-structure mismatch that forced a toggle rather than a merge: [2026-08-23-office-rebuild-plan.md](../../raw/decisions/2026-08-23-office-rebuild-plan.md).

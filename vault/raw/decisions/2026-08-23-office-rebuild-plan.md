@@ -18,30 +18,44 @@ led here.
 
 ## 1. Divinum Officium — MIT, cleared for use
 
-**Confirmed MIT. Commercial use permitted, attribution required, no further
-permission needed.**
+**MIT, verbally confirmed by the maintainer on 2026-08-23. Commercial use is
+cleared on the strength of that statement. Attribution required.**
 
 Source: [DivinumOfficium/divinum-officium](https://github.com/DivinumOfficium/divinum-officium).
 
-Worth recording *how* this was confirmed, because the obvious check gives the
-wrong answer. The repo has **no `LICENSE` file** — none at the root, and a
-recursive search of the whole tree for any path matching `licen[sc]e`,
-`copying`, or `copyright` returns nothing. GitHub only auto-detects a licence
-from a `LICENSE` file, so the API reports `"license": null` and the
-`/license` endpoint 404s. **The MIT grant is stated in prose in `README.md`,
-around line 83**, as a full `#### MIT License` section with the standard text.
+**No `LICENSE` file exists in the repository.** Verified 2026-08-23: the
+GitHub `/license` endpoint returns **404**, the API reports
+`"license": null`, and a recursive search of the entire tree for any path
+matching `licen[sc]e`, `copying`, or `copyright` returns **nothing**. GitHub
+only auto-detects a licence from a `LICENSE` file, which is why every
+automated check reports the project as unlicensed.
 
-An earlier note in this vault said the project was unlicensed. That was wrong
-and is superseded by this record.
+Two things support the grant, and neither is a licence file:
 
-**One nuance, noted and accepted rather than resolved.** The MIT text uses the
-standard "this software and associated documentation files (the 'Software')"
-wording. Whether that covers the *liturgical text data* under
-`web/www/horas/` as distinct from the Perl application is an open question in
-the project itself — there are open issues titled "Separate licenses for
-software and liturgical texts in the project", "Reusing data in a different
-project", and "License?". Matt's decision is to proceed on the README grant.
-Recorded here so the reasoning is visible if it ever needs revisiting.
+- **The maintainer's verbal confirmation, 2026-08-23** — the basis on which
+  commercial use is cleared.
+- A `#### MIT License` section in prose in `README.md`, around line 83,
+  carrying the standard MIT text. Written, but scoped by its own wording to
+  "this software and associated documentation files (the 'Software')".
+
+That scoping is why the verbal confirmation matters: what Still needs is the
+**liturgical text data** under `web/www/horas/`, and whether the README's
+"Software" reaches it is an open question inside the project — there are open
+issues titled "Separate licenses for software and liturgical texts in the
+project", "Reusing data in a different project", and "License?". The verbal
+statement covers what the README arguably does not.
+
+**Follow-up requested: ask the maintainers to add a `LICENSE` file to the
+repository.** A verbal confirmation is not durable — it does not survive a
+maintainer change, it cannot be cited by a reviewer, and it leaves every
+automated licence scan reporting Still as depending on unlicensed content. A
+committed `LICENSE` file, ideally one that says explicitly whether the
+liturgical texts are included, would make this permanent. Until then this
+record **is** the evidence, so do not delete it.
+
+An earlier note in this vault said the project was unlicensed. That reflected
+the automated checks, which are still accurate as far as they go; it is
+superseded on the question of permission by the maintainer's confirmation.
 
 Attribution is required and will be given.
 
