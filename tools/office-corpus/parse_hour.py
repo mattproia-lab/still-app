@@ -27,9 +27,34 @@ _TAG = re.compile(r"<[^>]+>")
 # navigation furniture the renderer injects into every cell
 _NOISE = re.compile(r"^(?:\d+|Top|Next|Start|Top\s+Next)$")
 
+# DO marks rubric prose with the smallfont style -- the SAME style it uses for
+# psalm verse numbers. A small-red span whose content is not a verse reference
+# is therefore a rubric:
+#   <FONT SIZE='1' COLOR="red">Prima stropha sequentis hymni dicitur ...</FONT>
+#   <FONT SIZE='1' COLOR="red">109:1</FONT>          <- verse number, not a rubric
+# A sentinel is injected before tags are stripped so the distinction survives.
+RUBRIC_MARK = ""
+_SMALL_RED = re.compile(
+    r'<FONT\s+SIZE=.1.\s+COLOR=.red.\s*>(.*?)</FONT>', re.S | re.I)
+_VERSE_REF = re.compile(r"^\s*\d+:\d+\w?\s*$")
+
+
+def _mark_small_red_rubrics(fragment):
+    def sub(m):
+        inner = m.group(1)
+        plain = re.sub(r"<[^>]+>", "", inner)
+        if _VERSE_REF.match(plain):
+            return m.group(0)
+        return RUBRIC_MARK + inner + "</FONT>"
+    return _SMALL_RED.sub(sub, fragment)
+
 
 def cell_lines(fragment):
-    """HTML fragment -> list of clean text lines."""
+    """HTML fragment -> list of clean text lines.
+
+    Rubric-prose lines come back prefixed with RUBRIC_MARK.
+    """
+    fragment = _mark_small_red_rubrics(fragment)
     s = _BR.sub("\n", fragment)
     s = _BLOCK.sub("\n", s)
     s = _TAG.sub("", s)              # empty string, never a space
@@ -81,28 +106,57 @@ _CANTICLE_BY_CITATION = {}
 _HYMN_BY_FIRST_LINE = {}
 
 
+# scope brace -> namespace, matching build_hymn_map_rendered.py
+_HYMN_NS = [
+    ("ex Commune aut Festo", "commune"),
+    ("ex Proprio Sanctorum", "proper"),
+    ("ex Proprio de Tempore", "tempora"),
+    ("ex Psalterio", "psalter"),
+]
+
+
+def hymn_namespace(scope):
+    if scope:
+        for needle, ns in _HYMN_NS:
+            if needle in scope:
+                return ns
+    return "unscoped"
+
+
 def load_hymn_map(path="hymn-map.json"):
-    """first Latin line -> hymn ref. See build_hymn_map.py."""
+    """first Latin line -> {namespace: ref}. See build_hymn_map_rendered.py."""
     global _HYMN_BY_FIRST_LINE
     try:
         with open(path, encoding="utf-8") as fh:
-            _HYMN_BY_FIRST_LINE = {k: v["ref"] for k, v in json.load(fh)["index"].items()}
+            raw = json.load(fh)["index"]
     except OSError:
         _HYMN_BY_FIRST_LINE = {}
+        return _HYMN_BY_FIRST_LINE
+    out = {}
+    for first, by_ns in raw.items():
+        if isinstance(by_ns, dict) and "ref" in by_ns:      # legacy flat form
+            out[first] = {"unscoped": by_ns["ref"]}
+        else:
+            out[first] = {ns: e["ref"] for ns, e in by_ns.items()}
+    _HYMN_BY_FIRST_LINE = out
     return _HYMN_BY_FIRST_LINE
 
 
-def resolve_hymn(lines, probe=5):
-    """Resolve a hymn ref from its opening lines.
+def resolve_hymn(lines, scope=None, probe=5):
+    """Resolve a hymn ref from its opening lines, disambiguated by scope.
 
-    Tries successive lines rather than assuming line 0: the render sometimes
-    opens a hymn with a rubric ('Prima stropha sequentis hymni dicitur...'),
-    so the first line is not always the hymn's first line.
+    Probes successive lines rather than assuming line 0 -- belt and braces now
+    that rubric lines are split out upstream.
     """
+    ns = hymn_namespace(scope)
     for l in lines[:probe]:
-        ref = _HYMN_BY_FIRST_LINE.get(l.strip())
-        if ref:
-            return ref
+        entry = _HYMN_BY_FIRST_LINE.get(l.strip())
+        if not entry:
+            continue
+        if ns in entry:
+            return entry[ns]
+        if len(entry) == 1:                 # only one namespace ever seen
+            return next(iter(entry.values()))
     return None
 
 
@@ -166,6 +220,24 @@ def pair_text(la, en):
     return {"la": la, "en": en}
 
 
+def is_rubric_line(line):
+    return isinstance(line, str) and line.startswith(RUBRIC_MARK)
+
+
+def split_marked_rubrics(la_lines, en_lines):
+    """Pull RUBRIC_MARK lines out; return (la, en, rubric_blocks)."""
+    la_r = [l[len(RUBRIC_MARK):].strip() for l in la_lines if is_rubric_line(l)]
+    en_r = [l[len(RUBRIC_MARK):].strip() for l in en_lines if is_rubric_line(l)]
+    la_c = [l for l in la_lines if not is_rubric_line(l)]
+    en_c = [l for l in en_lines if not is_rubric_line(l)]
+    blocks = [{
+        "type": "rubric", "audio": "skip", "inline": True,
+        "text": pair_text(la_r[i] if i < len(la_r) else None,
+                          en_r[i] if i < len(en_r) else None),
+    } for i in range(max(len(la_r), len(en_r)))]
+    return la_c, en_c, blocks
+
+
 # --------------------------------------------------------------------------
 # liturgical marker stripping
 # --------------------------------------------------------------------------
@@ -227,6 +299,7 @@ def clean(s, strip_mediant=None):
         return s
     if strip_mediant is None:
         strip_mediant = STRIP_MEDIANT
+    s = s.replace(RUBRIC_MARK, "")
     s = _LEAD_LABEL.sub("", s)
     s = _CUES.sub("", s)
     s = _GLYPHS.sub("", s)
@@ -285,11 +358,26 @@ def parse_psalmody(sections):
                     continue
                 citation = la[i + 1].strip() if i + 1 < len(la) else None
                 resolved = _CANTICLE_BY_CITATION.get(citation)
+                verses = None
+                if resolved is None and citation:
+                    # The psalter splits some canticles into verse ranges
+                    # (226(1-27), 226(33-65)), and the render applies the range
+                    # to the citation: 'Deut 32:1-27' where the canticle file
+                    # header says 'Deut 32:1-65'. Fall back to book+chapter.
+                    bm = re.match(r"^(.*?\s\d+):(\S+)$", citation)
+                    if bm:
+                        base, verses = bm.group(1), bm.group(2)
+                        for cit, num in _CANTICLE_BY_CITATION.items():
+                            if cit.startswith(base + ":"):
+                                resolved = num
+                                break
                 psalm = {
                     "ref": f"psalm:{resolved}" if resolved else None,
                     "citation": citation,
                     "canticle": m.group(1).strip(),
                 }
+                if verses and resolved is not None:
+                    psalm["verses"] = verses
                 if resolved is None:
                     psalm["unresolved"] = True
                 break
@@ -302,7 +390,7 @@ def parse_psalmody(sections):
     return items
 
 
-def parse_chapter_hymn_versicle(la, en):
+def parse_chapter_hymn_versicle(la, en, scope=None):
     """Vespera7: capitulum, hymn, versicle -- three blocks from one cell."""
     parts = []
 
@@ -348,12 +436,15 @@ def parse_chapter_hymn_versicle(la, en):
             out.append(l)
         return out
 
-    la_lines = hymn_body(la, la_hymn)
+    la_lines, en_lines, hymn_rubrics = split_marked_rubrics(
+        hymn_body(la, la_hymn), hymn_body(en, en_hymn))
+    parts.extend(hymn_rubrics)          # immediately precede the block they interrupt
     hymn_block = {
         "type": "hymn",
-        "ref": resolve_hymn(la_lines),
+        "ref": resolve_hymn(la_lines, scope),
+        "scope": scope or None,
         "forms": ["full"],
-        "lines": pair_text(la_lines, hymn_body(en, en_hymn)),
+        "lines": pair_text(la_lines, en_lines),
     }
     if not hymn_block["ref"]:
         hymn_block["unresolved"] = True
@@ -566,7 +657,7 @@ def parse_hour(doc, meta):
             continue
 
         elif head.startswith("Capitulum"):
-            parts.extend(parse_chapter_hymn_versicle(la, en))
+            parts.extend(parse_chapter_hymn_versicle(la, en, scope))
 
         elif head.startswith("Canticum:") or head.startswith("Canticle:"):
             parts.append(parse_gospel_canticle(la, en, hour, meta.get("kind", "second")))
@@ -831,7 +922,9 @@ def parse_vigils(sections, meta):
         if head in ("Hymnus", "Hymn"):
             la_c, en_c, inline = inline_rubric_blocks(la[1:], en[1:])
             parts.extend(inline)
-            hb = {"type": "hymn", "ref": resolve_hymn(la_c),
+            la_c, en_c, hymn_rubrics = split_marked_rubrics(la_c, en_c)
+            parts.extend(hymn_rubrics)
+            hb = {"type": "hymn", "ref": resolve_hymn(la_c, scope),
                   "scope": scope or None,
                   "lines": pair_text(la_c, en_c), "forms": ["full"]}
             if not hb["ref"]:

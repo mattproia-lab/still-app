@@ -32,12 +32,12 @@
       "citation": "Tob. 13:1-11"
     },
     "213": {
-      "name": "Canticum Judith",
-      "citation": "Judith 16:15-22"
+      "name": "Canticum Iudith",
+      "citation": "Iudith 16:15-22"
     },
     "214": {
-      "name": "Canticum Jeremiæ",
-      "citation": "Jer 31:10-18"
+      "name": "Canticum Ieremiæ",
+      "citation": "Ier 31:10-18"
     },
     "215": {
       "name": "Canticum Isaiæ",
@@ -96,11 +96,11 @@
       "citation": "Isa 40:10-17"
     },
     "241": {
-      "name": "Canticum ejusdem",
+      "name": "Canticum eiusdem",
       "citation": "Isa 42:10-16"
     },
     "242": {
-      "name": "Canticum ejusdem",
+      "name": "Canticum eiusdem",
       "citation": "Isa 49:7-13"
     },
     "243": {
@@ -156,8 +156,8 @@
       "citation": "Eccli 14:22;15:3-4;15:6"
     },
     "257": {
-      "name": "Canticum Jeremiæ",
-      "citation": "Jer 17:7-8"
+      "name": "Canticum Ieremiæ",
+      "citation": "Ier 17:7-8"
     },
     "258": {
       "name": "Canticum Ecclesiasticæ",
@@ -176,8 +176,8 @@
       "citation": "Isa 2:2-3"
     },
     "262": {
-      "name": "Canticum Jeremiæ",
-      "citation": "Jer 7:2-7"
+      "name": "Canticum Ieremiæ",
+      "citation": "Ier 7:2-7"
     },
     "263": {
       "name": "Canticum Isaiæ",
@@ -196,7 +196,7 @@
       "citation": "Isa 33:2-10"
     },
     "267": {
-      "name": "Canticum ejusdem",
+      "name": "Canticum eiusdem",
       "citation": "Isa 33:13-18"
     },
     "268": {
@@ -204,8 +204,8 @@
       "citation": "Eccli 36:14-19"
     },
     "269": {
-      "name": "Canticum Jeremiæ",
-      "citation": "Jer 14:17-21"
+      "name": "Canticum Ieremiæ",
+      "citation": "Ier 14:17-21"
     },
     "270": {
       "name": "Canticum",
@@ -242,6 +242,12 @@
       225,
       246
     ],
+    "Canticum Ieremiæ": [
+      214,
+      257,
+      262,
+      269
+    ],
     "Canticum Isaiæ": [
       215,
       221,
@@ -255,12 +261,6 @@
       264,
       265,
       266
-    ],
-    "Canticum Jeremiæ": [
-      214,
-      257,
-      262,
-      269
     ],
     "Canticum Moysis": [
       224,
@@ -278,7 +278,7 @@
       210,
       220
     ],
-    "Canticum ejusdem": [
+    "Canticum eiusdem": [
       241,
       242,
       267

@@ -19,14 +19,17 @@ def part(d, t):
     return next(p for p in d["parts"] if p["type"] == t)
 
 print("=== 1. hymn ref resolution across all three namespaces ===")
+# Refs are render-derived: hymn:<namespace>/<slug-of-first-line>. The namespace
+# comes from the scope brace; the specific key (c1, day2) and the hour cannot
+# survive render-derivation -- the scope names WHERE a hymn came from, not WHICH.
 cases = [
-    ("hy-12-25-2026-prayVespera.html", "vespers", "hymn:proper/sancti/12-25/vespera", "PROPER"),
-    ("hy-6-24-2026-prayVespera.html",  "vespers", "hymn:proper/sancti/06-24/vespera", "PROPER"),
-    ("vespers-default.html",           "vespers", "hymn:commune/c1/vespera",          "COMMUNE"),
-    ("lauds-8-10-2026.html",           "lauds",   "hymn:commune/c2/laudes",           "COMMUNE"),
-    ("hy-9-1-2026-prayVespera.html",   "vespers", "hymn:psalter/day2-vespera",        "PSALTER"),
-    ("hy-9-1-2026-prayLaudes.html",    "lauds",   "hymn:psalter/day2-laudes",         "PSALTER"),
-    ("matutinum-default.html",         "vigils",  "hymn:commune/c1/matutinum",        "COMMUNE/vigils"),
+    ("hy-12-25-2026-prayVespera.html", "vespers", "hymn:proper/iesu-redemptor-omnium", "PROPER"),
+    ("hy-6-24-2026-prayVespera.html",  "vespers", "hymn:proper/ut-queant-laxis-resonare-fibris", "PROPER"),
+    ("vespers-default.html",           "vespers", "hymn:commune/exsultet-orbis-gaudiis",          "COMMUNE"),
+    ("lauds-8-10-2026.html",           "lauds",   "hymn:proper/invicte-martyr-unicum",           "PROPER"),
+    ("hy-9-1-2026-prayVespera.html",   "vespers", "hymn:psalter/telluris-alme-conditor",        "PSALTER"),
+    ("hy-9-1-2026-prayLaudes.html",    "lauds",   "hymn:psalter/ales-diei-nuntius",         "PSALTER"),
+    ("matutinum-default.html",         "vigils",  "hymn:commune/aeterna-christi-munera",        "COMMUNE/vigils"),
 ]
 seen_ns = set()
 for html, hour, want, tag in cases:
@@ -40,9 +43,16 @@ chk("all three namespaces exercised", sorted(seen_ns),
 print("=== 2. hymn resolution survives a leading rubric line ===")
 d, _ = run("hy-3-25-2026-prayVespera.html", {"office": "x", "hour": "vespers", "sources": []})
 h = part(d, "hymn")
-chk("3-25 Vespers opens with a rubric, hymn still resolves",
-    bool(h["ref"]), True)
-print(f"      resolved to {h['ref']!r}")
+chk("3-25 Vespers rubric split out; hymn resolves to its real first line",
+    h["ref"], "hymn:proper/ave-maris-stella")
+rubs = [p for p in d["parts"] if p["type"] == "rubric" and (p.get("text") or {}).get("la")]
+chk("3-25 the rubric is emitted as its own block",
+    any("Prima stropha" in r["text"]["la"] for r in rubs), True)
+chk("3-25 that rubric is audio:skip",
+    all(r.get("audio") == "skip" for r in rubs
+        if "Prima stropha" in (r["text"]["la"] or "")), True)
+chk("3-25 rubric text is NOT inside the hymn lines",
+    any("Prima stropha" in l for l in h["lines"]["la"]), False)
 
 print("=== 3. psalmody source DERIVED from the render, not passed in ===")
 # deliberately pass a WRONG psalmody_source; output must ignore it
