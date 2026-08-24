@@ -683,3 +683,16 @@ correct for all 24.
 **byte-identical** to `English/Sancti/08-24.txt` `[Oratio]`. The Latin
 differs by exactly one word — `huius` for `hujus` — which is `spell_var()`
 working as intended, and is precisely why the render is the oracle.
+
+### Two consequences, both approved 2026-08-24
+
+**`resolvedBy: "engine"` is dropped from the schema.** It existed to mark
+fields the `.txt` files did not state outright. Under render-as-oracle every
+field comes from the engine, so the marker distinguishes nothing.
+
+**`psalms.json` is generated per rite-version, not shared.** `spell_var()`
+makes Latin psalm text version-dependent, so one shared psalter would be wrong
+for every version but the one it was generated from. Cost: the ~800 KB Latin
+psalter is duplicated per version shipped. Still ships Rubrics 1960 only, so
+this is currently one copy — but the generator must key the output by version
+rather than assuming a single psalter.
