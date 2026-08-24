@@ -1,0 +1,606 @@
+{
+  "note": "hymn first line (Latin) -> ref; monastic blocks excluded",
+  "count": 145,
+  "by_namespace": {
+    "hymn:psalter": 23,
+    "hymn:commune": 22,
+    "hymn:proper": 100
+  },
+  "collisions": {
+    "Christe, sanctórum decus Angelórum,": [
+      "hymn:proper/sancti/03-24/vespera",
+      "hymn:proper/sancti/05-08/laudes",
+      "hymn:proper/sancti/10-24/vespera"
+    ],
+    "Beáte Pastor, Petre, clemens áccipe": [
+      "hymn:proper/sancti/02-22/laudes",
+      "hymn:proper/sancti/06-29/laudes"
+    ],
+    "Placáre, Christe, sérvulis,": [
+      "hymn:proper/sancti/03-24/laudes",
+      "hymn:proper/sancti/11-01/vespera"
+    ]
+  },
+  "index": {
+    "Ecce, iam noctis tenuátur umbra,": {
+      "ref": "hymn:psalter/day0-laudes",
+      "origin": "Major Special.txt:[Hymnus Day0 Laudes]"
+    },
+    "Ætérne rerum Cónditor,": {
+      "ref": "hymn:psalter/day0-laudes-hiemalis",
+      "origin": "Major Special.txt:[Hymnus Day0 Laudes hiemalis]"
+    },
+    "Lucis Creátor óptime,": {
+      "ref": "hymn:psalter/day0-vespera",
+      "origin": "Major Special.txt:[Hymnus Day0 Vespera]"
+    },
+    "Splendor Patérnæ glóriæ,": {
+      "ref": "hymn:psalter/day1-laudes",
+      "origin": "Major Special.txt:[Hymnus Day1 Laudes]"
+    },
+    "Ales diéi núntius": {
+      "ref": "hymn:psalter/day2-laudes",
+      "origin": "Major Special.txt:[Hymnus Day2 Laudes]"
+    },
+    "Nox, et tenébræ, et núbila,": {
+      "ref": "hymn:psalter/day3-laudes",
+      "origin": "Major Special.txt:[Hymnus Day3 Laudes]"
+    },
+    "Lux ecce surgit áurea,": {
+      "ref": "hymn:psalter/day4-laudes",
+      "origin": "Major Special.txt:[Hymnus Day4 Laudes]"
+    },
+    "Ætérna cæli glória,": {
+      "ref": "hymn:psalter/day5-laudes",
+      "origin": "Major Special.txt:[Hymnus Day5 Laudes]"
+    },
+    "Auróra iam spargit polum:": {
+      "ref": "hymn:psalter/day6-laudes",
+      "origin": "Major Special.txt:[Hymnus Day6 Laudes]"
+    },
+    "Imménse cæli Cónditor,": {
+      "ref": "hymn:psalter/day1-vespera",
+      "origin": "Major Special.txt:[Hymnus Day1 Vespera]"
+    },
+    "Tellúris alme Cónditor,": {
+      "ref": "hymn:psalter/day2-vespera",
+      "origin": "Major Special.txt:[Hymnus Day2 Vespera]"
+    },
+    "Cæli Deus sanctíssime,": {
+      "ref": "hymn:psalter/day3-vespera",
+      "origin": "Major Special.txt:[Hymnus Day3 Vespera]"
+    },
+    "Magnæ Deus poténtiæ,": {
+      "ref": "hymn:psalter/day4-vespera",
+      "origin": "Major Special.txt:[Hymnus Day4 Vespera]"
+    },
+    "Hóminis superne Cónditor,": {
+      "ref": "hymn:psalter/day5-vespera",
+      "origin": "Major Special.txt:[Hymnus Day5 Vespera]"
+    },
+    "En clara vox redárguit": {
+      "ref": "hymn:psalter/adv-laudes",
+      "origin": "Major Special.txt:[Hymnus Adv Laudes]"
+    },
+    "Creátor alme síderum,": {
+      "ref": "hymn:psalter/adv-vespera",
+      "origin": "Major Special.txt:[Hymnus Adv Vespera]"
+    },
+    "O sol salútis, íntimis,": {
+      "ref": "hymn:psalter/quad-laudes",
+      "origin": "Major Special.txt:[Hymnus Quad Laudes]"
+    },
+    "Audi, benígne Cónditor,": {
+      "ref": "hymn:psalter/quad-vespera",
+      "origin": "Major Special.txt:[Hymnus Quad Vespera]"
+    },
+    "Lustra sex qui iam perégit,": {
+      "ref": "hymn:psalter/quad5-laudes",
+      "origin": "Major Special.txt:[Hymnus Quad5 Laudes]"
+    },
+    "Vexílla Regis pródeunt;": {
+      "ref": "hymn:psalter/quad5-vespera",
+      "origin": "Major Special.txt:[Hymnus Quad5 Vespera]"
+    },
+    "Auróra cælum púrpurat,": {
+      "ref": "hymn:psalter/pasch-laudes",
+      "origin": "Major Special.txt:[Hymnus Pasch Laudes]"
+    },
+    "Ad régias Agni dapes,": {
+      "ref": "hymn:psalter/pasch-vespera",
+      "origin": "Major Special.txt:[Hymnus Pasch Vespera]"
+    },
+    "Christe, qui lux es et dies,": {
+      "ref": "hymn:psalter/quad-completorium",
+      "origin": "Minor Special.txt:[Hymnus Completorium Quad]"
+    },
+    "Exsúltet orbis gáudiis:": {
+      "ref": "hymn:commune/c1/vespera",
+      "origin": "Commune/C1:[Hymnus Vespera]"
+    },
+    "Ætérna Christi múnera,": {
+      "ref": "hymn:commune/c1/matutinum",
+      "origin": "Commune/C1:[Hymnus Matutinum]"
+    },
+    "Ave maris stella,": {
+      "ref": "hymn:commune/c11/vespera",
+      "origin": "Commune/C11:[Hymnus Vespera]"
+    },
+    "Quem terra, pontus, sídera": {
+      "ref": "hymn:commune/c11/matutinum",
+      "origin": "Commune/C11:[Hymnus Matutinum]"
+    },
+    "O gloriósa vírginum,": {
+      "ref": "hymn:commune/c11/laudes",
+      "origin": "Commune/C11:[Hymnus Laudes]"
+    },
+    "Tristes erant Apóstoli": {
+      "ref": "hymn:commune/c1p/vespera",
+      "origin": "Commune/C1p:[Hymnus Vespera]"
+    },
+    "Paschále mundo gáudium": {
+      "ref": "hymn:commune/c1p/laudes",
+      "origin": "Commune/C1p:[Hymnus Laudes]"
+    },
+    "Deus tuórum mílitum": {
+      "ref": "hymn:commune/c2/vespera",
+      "origin": "Commune/C2:[Hymnus Vespera]"
+    },
+    "Invícte Martyr, únicum": {
+      "ref": "hymn:commune/c2/laudes",
+      "origin": "Commune/C2:[Hymnus Laudes]"
+    },
+    "Sanctórum méritis ínclita gáudia": {
+      "ref": "hymn:commune/c3/vespera",
+      "origin": "Commune/C3:[Hymnus Vespera]"
+    },
+    "Christo profúsum sánguinem,": {
+      "ref": "hymn:commune/c3/matutinum",
+      "origin": "Commune/C3:[Hymnus Matutinum]"
+    },
+    "Rex glorióse Mártyrum,": {
+      "ref": "hymn:commune/c3/laudes",
+      "origin": "Commune/C3:[Hymnus Laudes]"
+    },
+    "Iste Conféssor Dómini, coléntes": {
+      "ref": "hymn:commune/c4/vespera",
+      "origin": "Commune/C4:[Hymnus Vespera]"
+    },
+    "Iesu Redémptor ómnium,": {
+      "ref": "hymn:commune/c4/laudes",
+      "origin": "Commune/C4:[Hymnus Laudes]"
+    },
+    "Iesu, coróna célsior,": {
+      "ref": "hymn:commune/c5/laudes",
+      "origin": "Commune/C5:[Hymnus Laudes]"
+    },
+    "Iesu, coróna Vírginum,": {
+      "ref": "hymn:commune/c6/vespera",
+      "origin": "Commune/C6:[Hymnus Vespera]"
+    },
+    "Vírginis Proles Opiféxque Matris,": {
+      "ref": "hymn:commune/c6/matutinum",
+      "origin": "Commune/C6:[Hymnus Matutinum]"
+    },
+    "Vírginis Proles, Opiféxque Matris,": {
+      "ref": "hymn:commune/c6a/matutinum",
+      "origin": "Commune/C6a:[Hymnus Matutinum Virgo tantum]"
+    },
+    "_": {
+      "ref": "hymn:commune/c6a/matutinum",
+      "origin": "Commune/C6a:[Hymnus Matutinum]"
+    },
+    "Fortem viríli péctore": {
+      "ref": "hymn:commune/c7/vespera",
+      "origin": "Commune/C7:[Hymnus Vespera]"
+    },
+    "Cæléstis urbs Ierúsalem,": {
+      "ref": "hymn:commune/c8/vespera",
+      "origin": "Commune/C8:[Hymnus Vespera]"
+    },
+    "Alto ex Olýmpi vértice": {
+      "ref": "hymn:commune/c8/laudes",
+      "origin": "Commune/C8:[Hymnus Laudes]"
+    },
+    "Crudélis Heródes, Deum": {
+      "ref": "hymn:proper/sancti/01-06/vespera",
+      "origin": "Sancti/01-06:[Hymnus Vespera]"
+    },
+    "O sola magnárum úrbium": {
+      "ref": "hymn:proper/sancti/01-06/laudes",
+      "origin": "Sancti/01-06:[Hymnus Laudes]"
+    },
+    "Martínæ célebri pláudite nómini,": {
+      "ref": "hymn:proper/sancti/01-30/matutinum",
+      "origin": "Sancti/01-30:[Hymnus Matutinum]"
+    },
+    "Tu natále solum prótege, tu bonæ": {
+      "ref": "hymn:proper/sancti/01-30/laudes",
+      "origin": "Sancti/01-30:[Hymnus Laudes]"
+    },
+    "Te dícimus præcónio,": {
+      "ref": "hymn:proper/sancti/02-11/matutinum",
+      "origin": "Sancti/02-11:[Hymnus Matutinum]"
+    },
+    "Auróra soli prǽvia,": {
+      "ref": "hymn:proper/sancti/02-11/laudes",
+      "origin": "Sancti/02-11:[Hymnus Laudes]"
+    },
+    "Omnis expértem máculæ Maríam": {
+      "ref": "hymn:proper/sancti/02-11/vespera",
+      "origin": "Sancti/02-11:[Hymnus Vespera 3]"
+    },
+    "Bella dum late fúrerent, et urbes": {
+      "ref": "hymn:proper/sancti/02-12/matutinum",
+      "origin": "Sancti/02-12:[Hymnus Matutinum]"
+    },
+    "Sic patres vitam péragunt in umbra,": {
+      "ref": "hymn:proper/sancti/02-12/laudes",
+      "origin": "Sancti/02-12:[Hymnus Laudes]"
+    },
+    "Matris sub almæ númine": {
+      "ref": "hymn:proper/sancti/02-12/vespera",
+      "origin": "Sancti/02-12:[Hymnus Vespera 3]"
+    },
+    "Quodcúmque in orbe néxibus revínxeris,": {
+      "ref": "hymn:proper/sancti/02-22/vespera",
+      "origin": "Sancti/02-22:[Hymnus Vespera]"
+    },
+    "Beáte Pastor, Petre, clemens áccipe": {
+      "ref": "hymn:proper/sancti/02-22/laudes",
+      "origin": "Sancti/02-22:[Hymnus Laudes]"
+    },
+    "Te, Ioseph, célebrent ágmina cǽlitum,": {
+      "ref": "hymn:proper/sancti/03-19/vespera",
+      "origin": "Sancti/03-19:[Hymnus Vespera]"
+    },
+    "Cǽlitum Ioseph, decus atque nostræ": {
+      "ref": "hymn:proper/sancti/03-19/matutinum",
+      "origin": "Sancti/03-19:[Hymnus Matutinum]"
+    },
+    "Iste, quem læti cólimus, fidéles,": {
+      "ref": "hymn:proper/sancti/03-19/laudes",
+      "origin": "Sancti/03-19:[Hymnus Laudes]"
+    },
+    "Christe, sanctórum decus Angelórum,": {
+      "ref": "hymn:proper/sancti/03-24/vespera",
+      "origin": "Sancti/03-24:[Hymnus Vespera]"
+    },
+    "Placáre, Christe, sérvulis,": {
+      "ref": "hymn:proper/sancti/03-24/laudes",
+      "origin": "Sancti/03-24:[Hymnus Laudes]"
+    },
+    "Regáli sólio fortis Ibériæ,": {
+      "ref": "hymn:proper/sancti/04-13/vespera",
+      "origin": "Sancti/04-13:[Hymnus Vespera]"
+    },
+    "Te, pater Ioseph, ópifex colénde,": {
+      "ref": "hymn:proper/sancti/05-01r/matutinum",
+      "origin": "Sancti/05-01r:[Hymnus Matutinum]"
+    },
+    "Auróra, solis núntia": {
+      "ref": "hymn:proper/sancti/05-01r/laudes",
+      "origin": "Sancti/05-01r:[Hymnus Laudes]"
+    },
+    "Te, splendor et virtus Patris,": {
+      "ref": "hymn:proper/sancti/05-08/vespera",
+      "origin": "Sancti/05-08:[Hymnus Vespera]"
+    },
+    "Martyr Dei Venántius,": {
+      "ref": "hymn:proper/sancti/05-18/vespera",
+      "origin": "Sancti/05-18:[Hymnus Vespera]"
+    },
+    "Athléta Christi nóbilis": {
+      "ref": "hymn:proper/sancti/05-18/matutinum",
+      "origin": "Sancti/05-18:[Hymnus Matutinum]"
+    },
+    "Dum, nocte pulsa, lúcifer": {
+      "ref": "hymn:proper/sancti/05-18/laudes",
+      "origin": "Sancti/05-18:[Hymnus Laudes]"
+    },
+    "Rerum suprémo in vértice": {
+      "ref": "hymn:proper/sancti/05-31/matutinum",
+      "origin": "Sancti/05-31:[Hymnus Matutinum]"
+    },
+    "Cæléstis Agni núptias,": {
+      "ref": "hymn:proper/sancti/06-19/vespera",
+      "origin": "Sancti/06-19:[Hymnus Vespera]"
+    },
+    "Ut queant laxis resonáre fibris": {
+      "ref": "hymn:proper/sancti/06-24/vespera",
+      "origin": "Sancti/06-24:[Hymnus Vespera]"
+    },
+    "Antra desérti téneris sub annis,": {
+      "ref": "hymn:proper/sancti/06-24/matutinum",
+      "origin": "Sancti/06-24:[Hymnus Matutinum]"
+    },
+    "O nimis felix, meritíque celsi,": {
+      "ref": "hymn:proper/sancti/06-24/laudes",
+      "origin": "Sancti/06-24:[Hymnus Laudes]"
+    },
+    "Decóra lux æternitátis, áuream": {
+      "ref": "hymn:proper/sancti/06-29/vespera",
+      "origin": "Sancti/06-29:[Hymnus Vespera]"
+    },
+    "Egrégie Doctor, Paule, mores ínstrue,": {
+      "ref": "hymn:proper/sancti/06-30/matutinum",
+      "origin": "Sancti/06-30:[Hymnus Matutinum]"
+    },
+    "Festívis résonent cómpita vócibus,": {
+      "ref": "hymn:proper/sancti/07-01/vespera",
+      "origin": "Sancti/07-01:[Hymnus Vespera]"
+    },
+    "Ira iusta Conditóris,": {
+      "ref": "hymn:proper/sancti/07-01/matutinum",
+      "origin": "Sancti/07-01:[Hymnus Matutinum]"
+    },
+    "Salvéte, Christi vúlnera,": {
+      "ref": "hymn:proper/sancti/07-01/laudes",
+      "origin": "Sancti/07-01:[Hymnus Laudes]"
+    },
+    "Sédibus cæli nítidis recéptos": {
+      "ref": "hymn:proper/sancti/07-07/vespera",
+      "origin": "Sancti/07-07:[Hymnus Vespera]"
+    },
+    "Lux o decóra pátriæ": {
+      "ref": "hymn:proper/sancti/07-07/laudes",
+      "origin": "Sancti/07-07:[Hymnus Laudes]"
+    },
+    "Domáre cordis ímpetus Elísabeth": {
+      "ref": "hymn:proper/sancti/07-08/vespera",
+      "origin": "Sancti/07-08:[Hymnus Vespera]"
+    },
+    "Opes decúsque régium relíqueras,": {
+      "ref": "hymn:proper/sancti/07-08/laudes",
+      "origin": "Sancti/07-08:[Hymnus Laudes]"
+    },
+    "Pater supérni lúminis,": {
+      "ref": "hymn:proper/sancti/07-22/vespera",
+      "origin": "Sancti/07-22:[Hymnus Vespera]"
+    },
+    "María castis ósculis": {
+      "ref": "hymn:proper/sancti/07-22/matutinum",
+      "origin": "Sancti/07-22:[Hymnus Matutinum]"
+    },
+    "Summi Paréntis Unice,": {
+      "ref": "hymn:proper/sancti/07-22/laudes",
+      "origin": "Sancti/07-22:[Hymnus Laudes]"
+    },
+    "Miris modis repénte liber, férrea,": {
+      "ref": "hymn:proper/sancti/08-01/vespera",
+      "origin": "Sancti/08-01:[Hymnus Vespera]"
+    },
+    "Quicúmque Christum quǽritis,": {
+      "ref": "hymn:proper/sancti/08-06/vespera",
+      "origin": "Sancti/08-06:[Hymnus Vespera]"
+    },
+    "Lux alma, Iesu, méntium,": {
+      "ref": "hymn:proper/sancti/08-06/laudes",
+      "origin": "Sancti/08-06:[Hymnus Laudes]"
+    },
+    "O prima, Virgo, pródita": {
+      "ref": "hymn:proper/sancti/08-15/vespera",
+      "origin": "Sancti/08-15:[Hymnus Vespera]"
+    },
+    "O quam glorífica luce corúscas,": {
+      "ref": "hymn:proper/sancti/08-15/vespera",
+      "origin": "Sancti/08-15:[Hymnus Vespera]"
+    },
+    "Surge! Iam terris fera bruma cessit,": {
+      "ref": "hymn:proper/sancti/08-15/matutinum",
+      "origin": "Sancti/08-15:[Hymnus Matutinum]"
+    },
+    "Solis, o Virgo, rádiis amícta,": {
+      "ref": "hymn:proper/sancti/08-15/laudes",
+      "origin": "Sancti/08-15:[Hymnus Laudes]"
+    },
+    "Iam toto súbitus vesper eat polo,": {
+      "ref": "hymn:proper/sancti/09-15/vespera",
+      "origin": "Sancti/09-15:[Hymnus Vespera]"
+    },
+    "O quot undis lacrimárum,": {
+      "ref": "hymn:proper/sancti/09-15/matutinum",
+      "origin": "Sancti/09-15:[Hymnus Matutinum]"
+    },
+    "Summæ Deus cleméntiæ,": {
+      "ref": "hymn:proper/sancti/09-15/laudes",
+      "origin": "Sancti/09-15:[Hymnus Laudes]"
+    },
+    "Custódes hóminum psállimus Angelos,": {
+      "ref": "hymn:proper/sancti/10-02/vespera",
+      "origin": "Sancti/10-02:[Hymnus Vespera]"
+    },
+    "Ætérne Rector síderum": {
+      "ref": "hymn:proper/sancti/10-02/laudes",
+      "origin": "Sancti/10-02:[Hymnus Laudes]"
+    },
+    "Cæléstis aulæ Núntius,": {
+      "ref": "hymn:proper/sancti/10-07/vespera",
+      "origin": "Sancti/10-07:[Hymnus Vespera]"
+    },
+    "Iam morte, victor, óbruta,": {
+      "ref": "hymn:proper/sancti/10-07/laudes",
+      "origin": "Sancti/10-07:[Hymnus Laudes]"
+    },
+    "Te gestiéntem gáudiis,": {
+      "ref": "hymn:proper/sancti/10-07/vespera",
+      "origin": "Sancti/10-07:[Hymnus Vespera 3]"
+    },
+    "Cælo Redémptor prǽtulit": {
+      "ref": "hymn:proper/sancti/10-11/matutinum",
+      "origin": "Sancti/10-11:[Hymnus Matutinum]"
+    },
+    "Te, Mater alma Núminis,": {
+      "ref": "hymn:proper/sancti/10-11/laudes",
+      "origin": "Sancti/10-11:[Hymnus Laudes]"
+    },
+    "Regis supérni núntia,": {
+      "ref": "hymn:proper/sancti/10-15/vespera",
+      "origin": "Sancti/10-15:[Hymnus Vespera]"
+    },
+    "Hæc est dies, qua cándidæ": {
+      "ref": "hymn:proper/sancti/10-15/laudes",
+      "origin": "Sancti/10-15:[Hymnus Laudes]"
+    },
+    "Gentis Polónæ glória,": {
+      "ref": "hymn:proper/sancti/10-20/vespera",
+      "origin": "Sancti/10-20:[Hymnus Vespera]"
+    },
+    "Corpus domas ieiúniis,": {
+      "ref": "hymn:proper/sancti/10-20/matutinum",
+      "origin": "Sancti/10-20:[Hymnus Matutinum]"
+    },
+    "Te deprecánte, córporum": {
+      "ref": "hymn:proper/sancti/10-20/laudes",
+      "origin": "Sancti/10-20:[Hymnus Laudes]"
+    },
+    "Te sæculórum Príncipem,": {
+      "ref": "hymn:proper/sancti/10-du/vespera",
+      "origin": "Sancti/10-DU:[Hymnus Vespera]"
+    },
+    "Ætérna Imago Altíssimi,": {
+      "ref": "hymn:proper/sancti/10-du/matutinum",
+      "origin": "Sancti/10-DU:[Hymnus Matutinum]"
+    },
+    "Vexílla Christus ínclita": {
+      "ref": "hymn:proper/sancti/10-du/laudes",
+      "origin": "Sancti/10-DU:[Hymnus Laudes]"
+    },
+    "Salútis ætérnæ dator,": {
+      "ref": "hymn:proper/sancti/11-01/laudes",
+      "origin": "Sancti/11-01:[Hymnus Laudes]"
+    },
+    "Beáta cæli régia": {
+      "ref": "hymn:proper/sancti/11-13n/vespera",
+      "origin": "Sancti/11-13n:[Hymnus Vespera]"
+    },
+    "Ex Corde Iesu cóncipit": {
+      "ref": "hymn:proper/sancti/11-13n/matutinum",
+      "origin": "Sancti/11-13n:[Hymnus Matutinum]"
+    },
+    "Divína Iesu cáritas,": {
+      "ref": "hymn:proper/sancti/11-13n/laudes",
+      "origin": "Sancti/11-13n:[Hymnus Laudes]"
+    },
+    "Præclára custos Vírginum,": {
+      "ref": "hymn:proper/sancti/12-08/matutinum",
+      "origin": "Sancti/12-08:[Hymnus Matutinum]"
+    },
+    "Alma Parens, omni carens": {
+      "ref": "hymn:proper/sancti/12-12n/laudes",
+      "origin": "Sancti/12-12n:[Hymnus Laudes]"
+    },
+    "Iesu, Redémptor ómnium,": {
+      "ref": "hymn:proper/sancti/12-25/vespera",
+      "origin": "Sancti/12-25:[Hymnus Vespera]"
+    },
+    "A solis ortus cárdine": {
+      "ref": "hymn:proper/sancti/12-25/laudes",
+      "origin": "Sancti/12-25:[Hymnus Laudes]"
+    },
+    "Audit tyránnus ánxius": {
+      "ref": "hymn:proper/sancti/12-28/matutinum",
+      "origin": "Sancti/12-28:[Hymnus Matutinum]"
+    },
+    "Salvéte, flores Mártyrum,": {
+      "ref": "hymn:proper/sancti/12-28/laudes",
+      "origin": "Sancti/12-28:[Hymnus Laudes]"
+    },
+    "O lux beáta cǽlitum": {
+      "ref": "hymn:proper/tempora/epi1-0/vespera",
+      "origin": "Tempora/Epi1-0:[Hymnus Vespera]"
+    },
+    "Sacra iam splendent decoráta lychnis": {
+      "ref": "hymn:proper/tempora/epi1-0/matutinum",
+      "origin": "Tempora/Epi1-0:[Hymnus Matutinum]"
+    },
+    "O gente felix hóspita,": {
+      "ref": "hymn:proper/tempora/epi1-0/laudes",
+      "origin": "Tempora/Epi1-0:[Hymnus Laudes]"
+    },
+    "Iesu, dulcis memória,": {
+      "ref": "hymn:proper/tempora/nat2-0/vespera",
+      "origin": "Tempora/Nat2-0:[Hymnus Vespera]"
+    },
+    "Iesu, Rex admirábilis,": {
+      "ref": "hymn:proper/tempora/nat2-0/matutinum",
+      "origin": "Tempora/Nat2-0:[Hymnus Matutinum]"
+    },
+    "Iesu decus angélicum,": {
+      "ref": "hymn:proper/tempora/nat2-0/laudes",
+      "origin": "Tempora/Nat2-0:[Hymnus Laudes]"
+    },
+    "Salútis humánæ Sator,": {
+      "ref": "hymn:proper/tempora/pasc5-4/vespera",
+      "origin": "Tempora/Pasc5-4:[Hymnus Vespera]"
+    },
+    "Ætérne Rex altíssime,": {
+      "ref": "hymn:proper/tempora/pasc5-4/matutinum",
+      "origin": "Tempora/Pasc5-4:[Hymnus Matutinum]"
+    },
+    "Iam Christus astra ascénderat,": {
+      "ref": "hymn:proper/tempora/pasc7-0/matutinum",
+      "origin": "Tempora/Pasc7-0:[Hymnus Matutinum]"
+    },
+    "Beáta nobis gáudia": {
+      "ref": "hymn:proper/tempora/pasc7-0/laudes",
+      "origin": "Tempora/Pasc7-0:[Hymnus Laudes]"
+    },
+    "Iam sol recédit ígneus:": {
+      "ref": "hymn:proper/tempora/pent01-0/vespera",
+      "origin": "Tempora/Pent01-0:[Hymnus Vespera]"
+    },
+    "Summæ Parens cleméntiæ,": {
+      "ref": "hymn:proper/tempora/pent01-0/matutinum",
+      "origin": "Tempora/Pent01-0:[Hymnus Matutinum]"
+    },
+    "Tu, Trinitátis Unitas,": {
+      "ref": "hymn:proper/tempora/pent01-0/laudes",
+      "origin": "Tempora/Pent01-0:[Hymnus Laudes]"
+    },
+    "Pange, lingua, gloriósi": {
+      "ref": "hymn:proper/tempora/pent01-4/vespera",
+      "origin": "Tempora/Pent01-4:[Hymnus Vespera]"
+    },
+    "Sacris solémniis iuncta sint gáudia,": {
+      "ref": "hymn:proper/tempora/pent01-4/matutinum",
+      "origin": "Tempora/Pent01-4:[Hymnus Matutinum]"
+    },
+    "Verbum supérnum pródiens,": {
+      "ref": "hymn:proper/tempora/pent01-4/laudes",
+      "origin": "Tempora/Pent01-4:[Hymnus Laudes]"
+    },
+    "En, ut supérba críminum": {
+      "ref": "hymn:proper/tempora/pent02-5/vespera",
+      "origin": "Tempora/Pent02-5:[Hymnus Vespera]"
+    },
+    "Auctor beáte sǽculi,": {
+      "ref": "hymn:proper/tempora/pent02-5/matutinum",
+      "origin": "Tempora/Pent02-5:[Hymnus Matutinum]"
+    },
+    "Cor, arca legem cóntinens": {
+      "ref": "hymn:proper/tempora/pent02-5/laudes",
+      "origin": "Tempora/Pent02-5:[Hymnus Laudes]"
+    },
+    "Hoc Christe nobis, hoc Pater,": {
+      "ref": "hymn:proper/tempora/pent02-5o/matutinum",
+      "origin": "Tempora/Pent02-5o:[Hymnus Matutinum]"
+    },
+    "Ad preces nostras Deitátis aures,": {
+      "ref": "hymn:proper/tempora/quad1-0/vespera",
+      "origin": "Tempora/Quad1-0:[Hymnus Vespera 3]"
+    },
+    "Stabat Mater dolorósa": {
+      "ref": "hymn:proper/tempora/quad5-5/vespera",
+      "origin": "Tempora/Quad5-5:[Hymnus Vespera]"
+    },
+    "Sancta Mater, istud agas,": {
+      "ref": "hymn:proper/tempora/quad5-5/matutinum",
+      "origin": "Tempora/Quad5-5:[Hymnus Matutinum]"
+    },
+    "Virgo vírginum præclára,": {
+      "ref": "hymn:proper/tempora/quad5-5/laudes",
+      "origin": "Tempora/Quad5-5:[Hymnus Laudes]"
+    }
+  }
+}

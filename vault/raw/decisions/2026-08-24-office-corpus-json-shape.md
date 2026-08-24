@@ -4,7 +4,7 @@ type: design-proposal
 status: ACCEPTED 2026-08-24 — six questions answered, schema approved; still no code written
 session: Divinum Officium clone, corpus data-shape proposal
 participants: Matt Proia, Claude Opus 5
-updated: 2026-08-24 — §4 questions answered, §3 schema approved; second pass corrected §3 psalmody, reworded decision 3, adopted render-as-oracle (Matt Proia)
+updated: 2026-08-24 — §4 questions answered, §3 schema approved; second pass corrected psalmody, reworded decision 3, adopted render-as-oracle; third pass records what the parser work taught us (Matt Proia)
 ---
 
 # 2026-08-24 — Traditional Office corpus: proposed JSON shape
@@ -696,3 +696,141 @@ for every version but the one it was generated from. Cost: the ~800 KB Latin
 psalter is duplicated per version shipped. Still ships Rubrics 1960 only, so
 this is currently one copy — but the generator must key the output by version
 rather than assuming a single psalter.
+
+## §3 amended 2026-08-24 (third pass) — what building the parser taught us
+
+Written after the parser reached **135 passing assertions** across Vespers,
+Lauds and Vigils (57 Vigils, 48 Lauds, 22 gap-closure, 8 Vespers) on
+2026-08-24. Every item below was found by an assertion failing or by a survey
+of the corpus — none was anticipated when the schema was approved.
+
+### Six findings that change the schema
+
+**1. Psalms carry verse ranges, and dropping them is silent.** The ferial
+office renders `Psalmus 34(1-10) [1]`. A pattern requiring `Psalmus N [i]`
+matched only 1 of 2026-08-25's 9 psalms — **eight would have vanished with no
+error**. The psalm object gains an optional `verses` field:
+
+```json
+{ "ref": "psalm:34", "verses": "1-10" }
+```
+
+Ps 34, 36 and 37 are each split across three positions in one nocturn, so this
+is the ferial norm, not an edge case. The same form appears in the psalter
+itself (`226(1-27)`).
+
+**2. Canticles are keyed by citation, never by name — ambiguity is proven.**
+The render names a canticle rather than numbering it:
+
+```
+Canticum Trium Puerorum [4]
+Dan 3:57-88,56
+```
+
+**Ten Latin names are ambiguous**, and two collide *within the fourteen Lauds
+positions themselves*: `Canticum Trium Puerorum` is both **210** and **220**,
+`Canticum Moysis` is both **224** and **226**. `Canticum Isaiæ` maps to twelve
+numbers. **The citation is unique across all 51 canticles** (asserted, zero
+collisions), and the render supplies it on the following line. Keyed off the
+**Latin** files: English headers disagree (`Psalm222` is `Isa 38:10-24` in
+Latin, `Isa 38:10-23` in English) and carry quirks such as `Canticle of_Tobias`.
+
+The psalm object therefore records what it keyed on:
+
+```json
+{ "ref": "psalm:210", "citation": "Dan 3:57-88,56",
+  "canticle": "Canticum Trium Puerorum" }
+```
+
+**3. `Ad Nocturnum` is a distinct label from `Nocturnus I`.** The ferial office
+has **one** nocturn, labelled `Ad Nocturnum`; the nine-lesson office has three,
+labelled `Psalmi cum lectionibus`, `Nocturnus II`, `Nocturnus III`. A parser
+keyed on the roman-numeral form fails the ferial case outright. Nocturn count
+is **read from the render, never assumed** — asserted in both directions.
+
+Psalms and lessons **interleave**, so there is one `psalmody` block *per
+nocturn*, not one per office; collapsing them would destroy the order. Every
+psalm and every lesson carries a `nocturn` field.
+
+**4. Inline rubrics are extracted as sibling blocks.** Stage directions sit
+*inside* prayer text — `(genuflectitur)` mid-verse in the invitatory psalm,
+`(Fit reverentia)` and `(Sequens versus dicitur flexis genibus)` inside the
+Te Deum, and `(fit reverentia)` / `(Bow head)` in the Vespers and Lauds gospel
+canticles. They are stripped from every text field and re-emitted as sibling
+blocks immediately preceding the block they interrupted:
+
+```json
+{ "type": "rubric", "inline": true, "audio": "skip",
+  "text": { "la": "Fit reverentia", "en": "bow head" } }
+```
+
+Asserted both ways: no raw parenthesised rubric survives in **any** text field,
+and a corresponding block exists. Bare verse references such as `(1-10)` are
+not rubrics and are left alone. **The text field is speakable with no
+conditional logic** — which was the point.
+
+**Standalone rubric prose also exists, and is not parenthesised.** Vigils emits
+`Pater Noster dicitur secreto usque ad Et ne nos indúcas in tentatiónem:` and
+`Reliqua omittuntur, nisi Laudes separandæ sint.` The parenthesis-only test
+written for Vespers does not find them; detection is now "bare prose in the
+heading position". This supersedes the note in the §2 amendment that the 1960
+rite emits no rubric prose — **it does, in Vigils.** Vespers, Lauds, Prime and
+Compline genuinely emit none.
+
+**5. Hymn refs resolve from the first line — 145 hymns indexed.** Namespaces
+as the earlier survey predicted: **100 proper, 22 commune, 23 psalter**. The
+index is keyed on the Latin first line, which is the hymn's identity throughout
+the tradition. Three things had to be handled: source lines carry
+`{:H-AeternaChristi:}v. ` markup; `@` lines are cross-references or
+sed-substitution derivations rather than text; and the 1960 `j`→`i`
+normalisation must be applied so render and source compare equal.
+
+Resolution **probes successive lines rather than assuming line 0** — the render
+sometimes opens a hymn with a rubric (`Prima stropha sequentis hymni
+dicitur…` on 2026-03-25). Asserted across all three namespaces on real dates:
+`hymn:proper/sancti/12-25/vespera`, `hymn:commune/c2/laudes`,
+`hymn:psalter/day2-laudes`.
+
+**6. The psalmody source is only half-derivable — a real limit on the schema.**
+The scope brace names the **namespace** but never the **specific key**:
+
+| scope brace | namespace |
+|---|---|
+| `ex Commune aut Festo` | `commune` |
+| `ex Proprio Sanctorum` | `proprium:sanctorum` |
+| `ex Proprio de Tempore` | `proprium:temporis` |
+| `ex Psalterio secundum diem` | `psalterium:diem` |
+| `ex Psalterio secundum tempora` | `psalterium:tempora` |
+
+A `Laudes:N` prefix also appears, selecting the Lauds psalm scheme — both
+schemes observed (`Laudes:1` on 2026-02-02, `Laudes:2` on 2026-03-29).
+
+**`ex Commune aut Festo` does not say *which* common; `ex Psalterio secundum
+diem` does not say *which* day.** So the forms proposed earlier —
+`commune:C1 Ant Vespera 3`, `psalter:Day0 Vespera` — **cannot be produced from
+the hour render alone**. The `C1` comes from the calendar's `[Rule] ex C1`, the
+`Day0` from `psalterDay`. The hour file therefore emits:
+
+```json
+{ "namespace": "commune", "scheme": null,
+  "scope": "Psalmi & antiphonæ ex Commune aut Festo", "derived": true }
+```
+
+and the specific key stays in the calendar index, where it actually lives.
+Joining the two is the client's job, or a later build step's — it is not
+something the parser can infer. Guarded by an assertion that passes a
+deliberately wrong `psalmody_source` as metadata and confirms it appears
+nowhere in the output.
+
+### Method note worth keeping
+
+Assertions were written **before** each parser extension, and twice they caught
+real silent-drop bugs on the first run — the Lauds canticle (items 4 and 5
+dropped) and the ferial verse ranges (8 of 9 psalms dropped). Both would have
+produced plausible-looking output over a three-year range.
+
+Three assertion errors were mine, not the parser's, and are recorded because
+the pattern matters: expected text transcribed from a **truncated** terminal
+dump with the ending invented; and a shape assumption (`psalmody[0]`) that was
+wrong about how nocturns nest. Verify expected values against the source file,
+never against a dump that may have been cut.

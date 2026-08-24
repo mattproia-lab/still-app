@@ -1,0 +1,288 @@
+{
+  "note": "DO canticle numbering; key on (name, citation) from the Latin files",
+  "laudes1": {
+    "Day0": 210,
+    "Day1": 211,
+    "Day2": 212,
+    "Day3": 213,
+    "Day4": 214,
+    "Day5": 215,
+    "Day6": 216
+  },
+  "laudes2": {
+    "Day0": 220,
+    "Day1": 221,
+    "Day2": 222,
+    "Day3": 223,
+    "Day4": 224,
+    "Day5": 225,
+    "Day6": 226
+  },
+  "canticles": {
+    "210": {
+      "name": "Canticum Trium Puerorum",
+      "citation": "Dan 3:57-88,56"
+    },
+    "211": {
+      "name": "Canticum David",
+      "citation": "1 Par. 29:10-13"
+    },
+    "212": {
+      "name": "Canticum Tobiæ",
+      "citation": "Tob. 13:1-11"
+    },
+    "213": {
+      "name": "Canticum Judith",
+      "citation": "Judith 16:15-22"
+    },
+    "214": {
+      "name": "Canticum Jeremiæ",
+      "citation": "Jer 31:10-18"
+    },
+    "215": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 45:15-30"
+    },
+    "216": {
+      "name": "Canticum Ecclesiastici",
+      "citation": "Sir 36:1-16"
+    },
+    "220": {
+      "name": "Canticum Trium Puerorum",
+      "citation": "Dan 3:52-57"
+    },
+    "221": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 12:1-7"
+    },
+    "222": {
+      "name": "Canticum Ezechiæ",
+      "citation": "Isa 38:10-24"
+    },
+    "223": {
+      "name": "Canticum Annæ",
+      "citation": "3 Reg 2:1-16"
+    },
+    "224": {
+      "name": "Canticum Moysis",
+      "citation": "Exod. 15:1-22"
+    },
+    "225": {
+      "name": "Canticum Habacuc",
+      "citation": "Hab 3:2-19"
+    },
+    "226": {
+      "name": "Canticum Moysis",
+      "citation": "Deut 32:1-65"
+    },
+    "231": {
+      "name": "Canticum Zachariæ",
+      "citation": "Luc. 1:68-79"
+    },
+    "232": {
+      "name": "Canticum B. Mariæ Virginis",
+      "citation": "Luc. 1:46-55"
+    },
+    "233": {
+      "name": "Canticum Simeonis",
+      "citation": "Luc. 2:29-32"
+    },
+    "234": {
+      "name": "Canticum Quicumque",
+      "citation": "Symbolum Athanasium"
+    },
+    "240": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 40:10-17"
+    },
+    "241": {
+      "name": "Canticum ejusdem",
+      "citation": "Isa 42:10-16"
+    },
+    "242": {
+      "name": "Canticum ejusdem",
+      "citation": "Isa 49:7-13"
+    },
+    "243": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 63:1-5"
+    },
+    "244": {
+      "name": "Canticum Oseæ",
+      "citation": "Osea 6:1-6"
+    },
+    "245": {
+      "name": "Canticum Sophoniæ",
+      "citation": "Soph 3:8-13"
+    },
+    "246": {
+      "name": "Canticum Habacuc",
+      "citation": "Hab 3:1-6"
+    },
+    "247": {
+      "name": "Canticum",
+      "citation": "Ibid. v. 7-12"
+    },
+    "248": {
+      "name": "Canticum",
+      "citation": "Ibid. v. 13-19"
+    },
+    "249": {
+      "name": "Canticum Ecclesiasticæ",
+      "citation": "Eccli 39:17-21"
+    },
+    "250": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 61:10-11; 62:1-3"
+    },
+    "251": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 62:4-7"
+    },
+    "253": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 61:6-9"
+    },
+    "254": {
+      "name": "Canticum",
+      "citation": "Sap 3:7-9"
+    },
+    "255": {
+      "name": "Canticum",
+      "citation": "Ibid. 10:17-21"
+    },
+    "256": {
+      "name": "Canticum Ecclesiasticæ",
+      "citation": "Eccli 14:22;15:3-4;15:6"
+    },
+    "257": {
+      "name": "Canticum Jeremiæ",
+      "citation": "Jer 17:7-8"
+    },
+    "258": {
+      "name": "Canticum Ecclesiasticæ",
+      "citation": "Eccli 31:8-11"
+    },
+    "259": {
+      "name": "Canticum Sapientiæ",
+      "citation": "Sap 3:1-6"
+    },
+    "260": {
+      "name": "Canticum Tobiæ",
+      "citation": "Tob 13:10-17"
+    },
+    "261": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 2:2-3"
+    },
+    "262": {
+      "name": "Canticum Jeremiæ",
+      "citation": "Jer 7:2-7"
+    },
+    "263": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 9:2-7"
+    },
+    "264": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 26:1-12"
+    },
+    "265": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 66:10-16"
+    },
+    "266": {
+      "name": "Canticum Isaiæ",
+      "citation": "Isa 33:2-10"
+    },
+    "267": {
+      "name": "Canticum ejusdem",
+      "citation": "Isa 33:13-18"
+    },
+    "268": {
+      "name": "Canticum",
+      "citation": "Eccli 36:14-19"
+    },
+    "269": {
+      "name": "Canticum Jeremiæ",
+      "citation": "Jer 14:17-21"
+    },
+    "270": {
+      "name": "Canticum",
+      "citation": "Thren. 5:1-7,15-17,19-21"
+    },
+    "271": {
+      "name": "Canticum Ezechielis",
+      "citation": "Ez 36:24-28"
+    },
+    "272": {
+      "name": "Canticum Proverb",
+      "citation": "Prov. 9:1-6, 10-12"
+    },
+    "273": {
+      "name": "Canticum Sapientiæ",
+      "citation": "Sap 16:20-21, 26, 29; 17:1"
+    }
+  },
+  "ambiguous_names": {
+    "Canticum": [
+      247,
+      248,
+      254,
+      255,
+      268,
+      270
+    ],
+    "Canticum Ecclesiasticæ": [
+      249,
+      256,
+      258
+    ],
+    "Canticum Habacuc": [
+      225,
+      246
+    ],
+    "Canticum Isaiæ": [
+      215,
+      221,
+      240,
+      243,
+      250,
+      251,
+      253,
+      261,
+      263,
+      264,
+      265,
+      266
+    ],
+    "Canticum Jeremiæ": [
+      214,
+      257,
+      262,
+      269
+    ],
+    "Canticum Moysis": [
+      224,
+      226
+    ],
+    "Canticum Sapientiæ": [
+      259,
+      273
+    ],
+    "Canticum Tobiæ": [
+      212,
+      260
+    ],
+    "Canticum Trium Puerorum": [
+      210,
+      220
+    ],
+    "Canticum ejusdem": [
+      241,
+      242,
+      267
+    ]
+  },
+  "ambiguous_citations": {}
+}
