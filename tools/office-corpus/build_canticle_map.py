@@ -39,7 +39,12 @@ def build():
         m = HEADER.match(first.strip())
         if not m:
             continue
-        name, citation = m.group(1).strip(), m.group(2).strip()
+        # The render applies spell_var (tr/Jj/Ii/ for /196/), so 'Judith
+        # 16:15-22' in the source arrives as 'Iudith 16:15-22'. Key on the
+        # rendered form -- the render is the oracle.
+        JI = str.maketrans("Jj", "Ii")
+        name = m.group(1).strip().translate(JI)
+        citation = m.group(2).strip().translate(JI)
         by_number[num] = {"name": name, "citation": citation}
         by_citation.setdefault(citation, []).append(num)
         by_name.setdefault(name, []).append(num)
