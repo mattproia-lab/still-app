@@ -4,6 +4,7 @@ type: decision-record
 session: Divinum Officium evaluation, Office rebuild plan, rite toggle
 participants: Matt Proia, Claude Opus 5
 ingested: 2026-08-24
+updated: 2026-08-24 — §1 licence question resolved (Fr. Albert Marcello)
 ---
 
 # 2026-08-23 — Office rebuild: Divinum Officium as source, and a liturgical rite toggle
@@ -16,46 +17,50 @@ led here.
 
 ---
 
-## 1. Divinum Officium — MIT, cleared for use
+## 1. Divinum Officium — MIT, cleared for use — **RESOLVED 2026-08-24**
 
-**MIT, verbally confirmed by the maintainer on 2026-08-23. Commercial use is
-cleared on the strength of that statement. Attribution required.**
+**Fr. Albert Marcello, Divinum Officium project lead, confirmed on 2026-08-24
+that the MIT licence covers the entirety of the site — the software and the
+liturgical text data alike.** Commercial use is cleared. Attribution required.
+**The licence question is closed; no further clarification is needed.**
 
 Source: [DivinumOfficium/divinum-officium](https://github.com/DivinumOfficium/divinum-officium).
+
+This supersedes everything below it in this section. What remains is kept as
+the evidence trail, not as open questions.
+
+### What the question had been
+
+The scope of the grant, not its existence. Still needs the **liturgical text
+data** under `web/www/horas/`, and the `#### MIT License` section in prose in
+`README.md` (around line 83) scopes itself by its own wording to "this
+software and associated documentation files (the 'Software')". Whether
+"Software" reached the texts was an open question inside the project — there
+are open issues titled "Separate licenses for software and liturgical texts in
+the project", "Reusing data in a different project", and "License?".
+
+Fr. Marcello's confirmation answers exactly that: the licence covers the whole
+site, texts included. The earlier record of this (a maintainer's verbal
+confirmation on 2026-08-23, covering commercial use but leaving the
+software/data boundary implicit) is superseded by it.
+
+### Standing factual note — not a blocker
 
 **No `LICENSE` file exists in the repository.** Verified 2026-08-23: the
 GitHub `/license` endpoint returns **404**, the API reports
 `"license": null`, and a recursive search of the entire tree for any path
 matching `licen[sc]e`, `copying`, or `copyright` returns **nothing**. GitHub
-only auto-detects a licence from a `LICENSE` file, which is why every
-automated check reports the project as unlicensed.
+only auto-detects a licence from a `LICENSE` file, which is why automated
+scanners report the project as unlicensed.
 
-Two things support the grant, and neither is a licence file:
-
-- **The maintainer's verbal confirmation, 2026-08-23** — the basis on which
-  commercial use is cleared.
-- A `#### MIT License` section in prose in `README.md`, around line 83,
-  carrying the standard MIT text. Written, but scoped by its own wording to
-  "this software and associated documentation files (the 'Software')".
-
-That scoping is why the verbal confirmation matters: what Still needs is the
-**liturgical text data** under `web/www/horas/`, and whether the README's
-"Software" reaches it is an open question inside the project — there are open
-issues titled "Separate licenses for software and liturgical texts in the
-project", "Reusing data in a different project", and "License?". The verbal
-statement covers what the README arguably does not.
-
-**Follow-up requested: ask the maintainers to add a `LICENSE` file to the
-repository.** A verbal confirmation is not durable — it does not survive a
-maintainer change, it cannot be cited by a reviewer, and it leaves every
-automated licence scan reporting Still as depending on unlicensed content. A
-committed `LICENSE` file, ideally one that says explicitly whether the
-liturgical texts are included, would make this permanent. Until then this
-record **is** the evidence, so do not delete it.
+That remains true and will keep showing up in any dependency audit of Still.
+It is a reporting artefact, not a permissions problem — permission is settled
+by Fr. Marcello's confirmation, and this record is the citation for it. **Do
+not delete this record.**
 
 An earlier note in this vault said the project was unlicensed. That reflected
 the automated checks, which are still accurate as far as they go; it is
-superseded on the question of permission by the maintainer's confirmation.
+superseded on the question of permission.
 
 Attribution is required and will be given.
 
