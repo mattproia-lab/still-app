@@ -1,13 +1,15 @@
 ---
 date: 2026-08-24
 type: design-proposal
-status: ACCEPTED 2026-08-24 — all six open questions answered; still no code written
+status: ACCEPTED 2026-08-24 — six questions answered, schema approved; still no code written
 session: Divinum Officium clone, corpus data-shape proposal
 participants: Matt Proia, Claude Opus 5
-updated: 2026-08-24 — §4 open questions answered (Matt Proia)
+updated: 2026-08-24 — §4 open questions answered, §3 schema approved (Matt Proia)
 ---
 
 # 2026-08-24 — Traditional Office corpus: proposed JSON shape
+
+> **Superseded on status and schema — see the Amendments at the end of this record.** §4's six questions were answered and §3's schema was approved, both on 2026-08-24. The text below is what was proposed before those answers and is kept verbatim. Still no code written.
 
 **Status: proposal only.** Nothing built, no schema committed, no app code
 touched. This is stage 1 of the build sequence in
@@ -77,6 +79,8 @@ This also keeps the attribution question clean: we redistribute the liturgical
 text, not the software.
 
 ## 3. Proposed shape — three layers
+
+> **Superseded — see [§3 amended 2026-08-24](#3-amended-2026-08-24--schema-approved).** The per-date file layout below does not survive decisions 5 and 6; propers are keyed by office key instead. The three-layer split and the block vocabulary do survive.
 
 The corpus is heavily repetitive: psalms recur weekly, the ordinary never
 changes, and commons (`C1` = one Apostle, etc.) are shared across dozens of
@@ -234,6 +238,8 @@ Two format facts to preserve, both verified in the source:
 
 ## 4. Open questions — these change the shape, so decide before building
 
+> **Superseded — all six answered. See [§4 amended 2026-08-24](#4-amended-2026-08-24--all-six-open-questions-answered).**
+
 1. **First vs Second Vespers.** Traditional Vespers on the evening of day N is
    frequently *First* Vespers of day N+1. "Today's Vespers" is therefore
    ambiguous at 6pm. This is not in the rebuild plan and it is a genuine
@@ -322,3 +328,229 @@ Vespers to a single psalm ([office-vespers.md](../../wiki/features/office-vesper
 Traditional Vespers is five psalms and concise may not reduce that. Whether the
 modern rite's concise mode is brought into line with the same rule is a stage-2
 question and is **not decided here**.
+
+## §3 amended 2026-08-24 — schema approved
+
+Matt Proia, 2026-08-24. **Supersedes:** §3, whose three-layer sketch was written
+before the six questions were answered. The schema below is **approved**. Still
+no code written.
+
+### Provenance of the examples
+
+Every Latin and English string in this amendment is **copied verbatim from the
+clone at `d298ce9`**, not composed. Sources: `English|Latin/Sancti/08-24.txt`,
+`English|Latin/Commune/C1.txt`, `English/Psalterium/Psalmi/Psalmi major.txt`.
+The St. Bartholomew collect was diffed byte-for-byte against
+`English/Sancti/08-24.txt` `[Oratio]` and matches exactly, with the trailing
+`$Per Dominum` lifted into the `conclusion` field. Elisions are marked `…`.
+
+### Two findings from the source that shaped the schema
+
+**`[Rule]` blocks.** `Latin/Sancti/08-24.txt` carries a machine-readable
+resolution directive not noted in §3:
+
+```
+[Rule]
+ex C1;
+9 lectiones
+Psalmi Dominica
+Antiphonas horas
+```
+
+Where the common comes from, how many lessons, which psalter. Carrying it into
+the day entry makes the generator's output auditable against the source rather
+than something to be taken on trust.
+
+**Hymn resolution — settled, and no season component is needed.** Surveyed
+`Major Special.txt` (22 `Hymnus` blocks), Tempora (9 of 589 files define one),
+Commune, and Sancti (39 of 454), against `horas/specials/hymni.pl:104–118`.
+Two distinct naming regimes:
+
+- **Proper and common files** name blocks `Hymnus <hora>` with **no scope** —
+  the file *is* the scope.
+- **The psalter** names them `Hymnus <scope> <hora>`, where `scope` is either a
+  psalter day (`Day0`–`Day6`) **or** a season (`Adv`, `Quad`, `Quad5`,
+  `Pasch`). `gettempora` returns one or the other into the **same slot** — they
+  are alternatives, not orthogonal dimensions.
+
+So a hymn ref needs a namespace, not a season field:
+
+| Ref | When |
+|---|---|
+| `hymn:proper/<office-key>/<hora>` | the winner's own file defines one |
+| `hymn:commune/<C-key>/<hora>` | the common defines one |
+| `hymn:psalter/<scope>-<hora>[-hiemalis]` | fallback |
+
+`hiemalis` (the winter form) is the one genuinely date-dependent variant —
+`hymni.pl` appends it only for `Day0` at Laudes within Epiphany 2–6,
+Quadragesima prep, or the October/November rank ranges. **The generator
+resolves it and emits the final key.** No season logic ships to the client,
+which is the point of precomputing.
+
+**Two generator traps found in the same survey.** `HymnusM…` /
+`HymnusMMatutinumUS` blocks are **monastic** and must not be picked up by
+prefix-matching `Hymnus` — Still ships the Roman 1960 rite. And
+`Hymnus Vespera 3` exists in three Sancti files, selected when `$vespera == 3`,
+which is DO's marker for **Second** Vespers — independent confirmation that the
+`vespers1` / `vespers2` split below is required and not a convenience.
+
+### Schema A — a single day entry
+
+In `office/traditional/calendar/<year>.json` under `days`. Identity and routing
+only, no liturgical text.
+
+```json
+"2026-08-24": {
+  "psalterDay": 1,
+  "season": "pentecost",
+  "week": "Pent12",
+
+  "office": {
+    "key": "Sancti/08-24",
+    "title": { "la": "S. Bartholomæi Apostoli",
+               "en": "St. Bartholomew the Apostle" },
+    "rank": { "name": "Duplex II classis", "value": 5.5, "class": 2 },
+    "commune": "C1",
+    "colour": "red",
+    "rule": { "ex": "C1", "lectiones": 9,
+              "psalmi": "Dominica", "antiphonas": "horas" }
+  },
+
+  "morning": {
+    "vigils": { "proper": "Sancti/08-24", "forms": ["concise", "full"] },
+    "lauds":  { "proper": "Sancti/08-24" },
+    "commemorations": []
+  },
+
+  "evening": {
+    "vespers": {
+      "kind": "second",
+      "of":   { "date": "2026-08-24", "key": "Sancti/08-24" },
+      "proper": "Sancti/08-24",
+      "commune": "C1",
+      "colour": "red",
+      "commemorations": [
+        { "key": "Tempora/Pent12-1", "reason": "occurrence",
+          "title": { "la": "…", "en": "Monday of the Twelfth Week after Pentecost" } }
+      ]
+    }
+  }
+}
+```
+
+- **`evening` is a sibling of `morning`**, not a third hour inside it — decision
+  1. `evening.vespers.of.date` disambiguates: equal to the entry's own date it
+  is Second Vespers; equal to the *next* date the evening belongs to tomorrow's
+  feast and it is First Vespers. The client reads this, never computes it.
+- **`psalterDay: 1` and `rule.psalmi: "Dominica"` disagree deliberately.** Aug 24
+  2026 is a Monday, so the ferial psalter day is 1, but a II class feast
+  overrides to Sunday psalms. Both are kept so the calendar fact and the
+  liturgical override stay separately visible.
+- **`forms` on `vigils` records what exists**, not what was chosen. A feria with
+  only ever three lessons carries `["concise"]` alone, so the UI does not offer
+  a full form with no content behind it.
+
+The occurrence/concurrence resolution shown is structurally illustrative. Under
+the 1960 rubrics First Vespers is heavily restricted, and which office wins any
+given evening is the generator's output — never hand-authored.
+
+### Schema B — a single hour block
+
+`propers/traditional/Sancti_08-24.json` → `.hours.vespers2`. **Keyed by office
+key, not by date** — the normalization decisions 5 and 6 forced.
+
+```json
+{
+  "office": "Sancti/08-24",
+  "hour": "vespers",
+  "kind": "second",
+  "sources": ["Sancti/08-24", "Commune/C1", "Ordinarium/Vespera"],
+
+  "parts": [
+    { "type": "rubric", "forms": ["full"],
+      "text": { "la": "Secreto", "en": "Said silently." } },
+    { "type": "prayer", "ref": "prayer:pater-noster", "forms": ["full"] },
+    { "type": "prayer", "ref": "prayer:ave-maria",   "forms": ["full"] },
+    { "type": "versicle", "ref": "prayer:deus-in-adjutorium" },
+
+    { "type": "psalmody",
+      "source": "psalter:Day0 Vespera",
+      "antiphons": "commune:C1 Ant Vespera",
+      "items": [
+        { "antiphon": { "text": {
+            "la": "Hoc est præcéptum meum, * ut diligátis ínvicem, sicut diléxi vos.",
+            "en": "This is my commandment * that you love one another, as I have loved you." } },
+          "psalm": { "ref": "psalm:109" } },
+        { "antiphon": { "text": {
+            "la": "Majórem caritátem * nemo habet, ut ánimam suam ponat quis pro amícis suis.",
+            "en": "Greater love than this no man hath, * that a man lay down his life for his friends." } },
+          "psalm": { "ref": "psalm:110" } },
+        { "antiphon": { "text": {
+            "la": "Vos amíci mei estis, * si fecéritis quæ præcípio vobis, dicit Dóminus.",
+            "en": "You are my friends * if you do the things that I command you, said the Lord." } },
+          "psalm": { "ref": "psalm:111" } },
+        { "antiphon": { "text": {
+            "la": "Beáti pacífici, * beáti mundo corde: quóniam ipsi Deum vidébunt.",
+            "en": "Blessed are the peacemakers * the clean of heart, they shall see God." } },
+          "psalm": { "ref": "psalm:112" } },
+        { "antiphon": { "text": {
+            "la": "In patiéntia vestra * possidébitis ánimas vestras.",
+            "en": "In your patience * you shall possess your souls." } },
+          "psalm": { "ref": "psalm:113" } }
+      ] },
+
+    { "type": "chapter", "citation": "Eph 2:19-20", "resolvedBy": "engine",
+      "text": {
+        "la": "Fratres: Jam non estis hóspites et ádvenæ: sed estis cives Sanctórum et doméstici Dei: superædificáti super fundaméntum Apostolórum, et Prophetárum, ipso summo angulári lápide Christo Jesu.",
+        "en": "Brothers: Now therefore you are no more strangers and foreigners; but you are fellow citizens with the saints, and the domestics of God, built upon the foundation of the apostles and prophets, Jesus Christ himself being the chief corner stone." },
+      "response": { "ref": "prayer:deo-gratias" } },
+
+    { "type": "hymn", "ref": "hymn:commune/C1/vespera", "forms": ["full"] },
+
+    { "type": "versicle",
+      "v": { "la": "Annuntiavérunt ópera Dei.", "en": "They declared the works of God." },
+      "r": { "la": "Et facta ejus intellexérunt.", "en": "And understood his doings." } },
+
+    { "type": "canticle", "name": "magnificat", "ref": "canticle:magnificat",
+      "antiphon": { "slot": "Ant 3", "text": {
+        "la": "Estóte fortes * in bello, et pugnáte cum antíquo serpénte: et accipiétis regnum ætérnum, allelúja.",
+        "en": "Be valiant * in battle, fight the ancient serpent and accept the eternal kingdom. Alleluia." } } },
+
+    { "type": "collect", "conclusion": "per-dominum",
+      "text": {
+        "la": "Omnípotens sempitérne Deus, qui hujus diéi venerándam sanctámque lætítiam in beáti Apóstoli tui Bartholomǽi festivitáte tribuísti: da Ecclésiæ tuæ, quǽsumus; et amáre quod crédidit, et prædicáre quod dócuit.",
+        "en": "O Almighty and everlasting God, Who hast given unto us this day to be a day worshipful, and holy, and joyful, because of the Feast of thy blessed Apostle Bartholomew, grant, we beseech thee, unto thy Church both to love that which he believed, and to preach that which he taught." } },
+
+    { "type": "commemoration", "reason": "occurrence", "of": "Tempora/Pent12-1",
+      "forms": ["full"], "antiphon": "…", "versicle": "…", "collect": "…" },
+
+    { "type": "conclusion", "ref": "ordinary:vespers-conclusion" },
+    { "type": "marian", "ref": "marian:salve-regina" }
+  ]
+}
+```
+
+- **`forms` semantics.** Absent means both forms. `["full"]` means full only.
+  Decision 4 is enforced *structurally*: `psalmody` may never carry a `forms`
+  key, so concise physically cannot drop psalms — the schema forbids what the
+  current app does.
+- **Every human-readable string is a `{la, en}` pair** — decision 2. Refs are
+  not, because the shared store carries both languages.
+- **`antiphon.slot`** preserves the provenance established in the 2026-08-23
+  trace: `Ant 1` is the Magnificat antiphon at First Vespers, `Ant 3` at Second.
+  First Vespers lives at `.hours.vespers1` in the same file and differs chiefly
+  in that slot.
+- **`resolvedBy: "engine"`** flags a value the source files do not state
+  outright. `Commune/C1.txt` has no `[Capitulum Vespera]`; the Vespers chapter
+  is resolved in `capitulis.pl`. Marking these makes it visible which fields
+  came from a readable file and which came from Perl, which matters when
+  spot-checking (the register warning in the §Reference section of the
+  [rebuild plan](2026-08-23-office-rebuild-plan.md) still applies).
+
+### Vigils uses the same shape, with one addition
+
+Concise is **not** a slice of full. Both lesson sets live in one `parts` array,
+tagged — nine blocks `"forms": ["full"]`, three blocks `"forms": ["concise"]`,
+each generated by asking Divinum Officium for that form. A renderer filtering on
+`forms` gets a rubrically correct office either way; a renderer taking the first
+three of nine gets something that looks right and is not.
