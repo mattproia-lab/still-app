@@ -23,8 +23,11 @@ from pathlib import Path
 
 HORAS = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
 
-BLOCK = re.compile(r"^\[(Hymnus[^\]]*)\]")
-MONASTIC = re.compile(r"^HymnusM")
+# Block naming is NOT consistent: Major/Minor Special use "[Hymnus Day0 Laudes]"
+# but Matutinum Special reverses it to "[Day3 Hymnus]". Match either.
+BLOCK = re.compile(r"^\[([^\]]*Hymnus[^\]]*)\]")
+# Monastic variants: HymnusM, Hymnus1M, and "[Day0 HymnusM]" -- not just a prefix.
+MONASTIC = re.compile(r"Hymnus\d*M")
 HORA = re.compile(r"\b(Laudes|Vespera|Matutinum|Completorium|Prima|Tertia|Sexta|Nona)\b")
 PSALTER_SCOPE = re.compile(r"\b(Day[0-6]|Adv|Quad5|Quad|Pasch)\b")
 
@@ -82,25 +85,31 @@ def build():
         index[first] = {"ref": ref, "origin": origin}
 
     # 1. psalter (Major Special / Minor Special)
-    for special in ("Major Special.txt", "Minor Special.txt"):
+    for special in ("Major Special.txt", "Minor Special.txt",
+                    "Matutinum Special.txt", "Prima Special.txt"):
         p = HORAS / "Latin/Psalterium/Special" / special
         if not p.exists():
             continue
         for name, lines in blocks(p):
-            if MONASTIC.match(name):
+            if MONASTIC.search(name):
                 continue
             scope = PSALTER_SCOPE.search(name)
-            hora = HORA.search(name)
-            if not (scope and hora):
+            hora_m = HORA.search(name)
+            # If the block name carries no hour, the FILE is the hour
+            # (Matutinum Special.txt -> Matutinum, Prima Special.txt -> Prima).
+            hora = hora_m.group(1) if hora_m else special.split(" ")[0]
+            if not scope or hora not in (
+                    "Laudes", "Vespera", "Matutinum", "Completorium", "Prima",
+                    "Tertia", "Sexta", "Nona"):
                 continue
             suffix = "-hiemalis" if "hiemalis" in name else ""
-            ref = f"hymn:psalter/{scope.group(1)}-{hora.group(1)}{suffix}".lower()
+            ref = f"hymn:psalter/{scope.group(1)}-{hora}{suffix}".lower()
             add(first_line(lines), ref, f"{special}:[{name}]")
 
     # 2. commune
     for p in sorted((HORAS / "Latin/Commune").glob("*.txt")):
         for name, lines in blocks(p):
-            if MONASTIC.match(name):
+            if MONASTIC.search(name):
                 continue
             hora = HORA.search(name)
             if not hora:
@@ -112,7 +121,7 @@ def build():
     for sub in ("Sancti", "Tempora"):
         for p in sorted((HORAS / "Latin" / sub).glob("*.txt")):
             for name, lines in blocks(p):
-                if MONASTIC.match(name):
+                if MONASTIC.search(name):
                     continue
                 hora = HORA.search(name)
                 if not hora:

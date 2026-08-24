@@ -1,0 +1,40 @@
+# Traditional Office corpus (Rubrics 1960)
+
+Generated output — **do not hand-edit.** Regenerate with the tools in
+[`tools/office-corpus/`](../../tools/office-corpus/). Design decisions:
+[`vault/raw/decisions/2026-08-24-office-corpus-json-shape.md`](../../vault/raw/decisions/2026-08-24-office-corpus-json-shape.md).
+
+Covers **2026-08-24 → 2028-12-31**, three hours, Latin and English.
+
+```
+calendar/<year>.json     date -> the three proper keys for that day
+calendar-index.json      title, rank, commemorations, Vespers concurrence
+propers/<office>/<hour>.json
+store/psalms.json        150 psalms + canticles, 2,148 verses, both languages
+store/hymns.json         182 distinct hymns
+```
+
+## Sizes (single-stream gzip — what a bundle actually costs)
+
+| bundle | size |
+|---|---|
+| Lauds + Vespers + store + calendar | **810 KB** |
+| Vigils (lazy-load candidate) | 2,268 KB |
+| everything | 3,420 KB |
+
+Vigils is 71% of the raw corpus: 17.4 KB per document against 3.2 KB for
+Vespers, because nine lessons of scripture and patristic prose are mostly
+unique text where psalmody repeats heavily.
+
+## Two things to know before using it
+
+**Office keys are slugs of the office TITLE, not Divinum Officium's internal
+paths.** `s-bartholomaei-apostoli`, never `Sancti/08-24`. DO does not emit its
+internal keys in any output — they exist only inside the Perl, and recovering
+them would mean reimplementing the resolution engine we deliberately did not
+port. Where one office has genuine content variants across years (Vigils
+lessons follow a scriptural cycle), a numeric suffix separates them.
+
+**Psalm verse ranges are applied at render time.** An hour document may say
+`{"ref": "psalm:9", "verses": "2-11"}`; `store/psalms.json` holds Ps 9 once,
+in full, with per-verse refs. Filter, don't expect pre-split text.
