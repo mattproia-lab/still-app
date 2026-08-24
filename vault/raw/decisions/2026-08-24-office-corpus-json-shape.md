@@ -1,9 +1,10 @@
 ---
 date: 2026-08-24
 type: design-proposal
-status: PROPOSED — not approved, no code written
+status: ACCEPTED 2026-08-24 — all six open questions answered; still no code written
 session: Divinum Officium clone, corpus data-shape proposal
 participants: Matt Proia, Claude Opus 5
+updated: 2026-08-24 — §4 open questions answered (Matt Proia)
 ---
 
 # 2026-08-24 — Traditional Office corpus: proposed JSON shape
@@ -266,3 +267,58 @@ Stage 2 of the plan — the three known `modern`-rite bugs
 `vespersAntiphon`) — is untouched here and still unfixed. Precomputing the
 traditional calendar means those bugs cannot affect the traditional rite, but
 they remain live for `modern`, which is the default for existing users.
+
+---
+
+# Amendments
+
+Appended blocks, newest last. Per the vault convention in
+[CLAUDE.md](../../CLAUDE.md), decision records are amended by appending, never
+by rewriting.
+
+## §4 amended 2026-08-24 — all six open questions answered
+
+Matt Proia, 2026-08-24. **Supersedes:** §4, which posed these as open. The
+proposal moves from PROPOSED to ACCEPTED. Still no code written.
+
+| # | Question | Decision |
+|---|---|---|
+| 1 | First vs Second Vespers | **Resolve at build time** — a separate evening entry in the calendar index |
+| 2 | Latin alongside English | **Include it now** |
+| 3 | Vigils length | **Both forms** — full (9 lessons) and concise (3); **concise is the default** |
+| 4 | What concise means | **Fewer lessons, never fewer psalms** |
+| 5 | Delivery | **Bundle everything. Offline is a feature.** |
+| 6 | Coverage window | **Pregenerate 2026–2028**, regenerate annually |
+
+### Two consequences that change the shape proposed in §3
+
+**Decisions 5 and 6 together break the per-date file layout.** §3 proposed
+`office/traditional/2026-08-24/vespers.json` — one file per date per hour. With
+Latin included and three years pregenerated, that is roughly 30 KB/day of
+propers per language, ×2 languages ×365 ×3 ≈ **55–65 MB**. Not bundleable.
+
+The fix is that propers do not vary by year. `Sancti/08-24` is the same text
+every year; only *which* office wins on a given date changes. So **propers are
+keyed by their Divinum Officium office key, not by date**, and the calendar
+index resolves date → office key. Three years then costs three calendar
+indices (~165 KB each), not three copies of the corpus.
+
+Revised bundle estimate: propers both languages ≈ 7 MB, shared store (psalms,
+hymns, ordinary, commons, prayers) ≈ 2.3 MB, calendar indices ≈ 0.5 MB —
+**≈ 10 MB raw, ≈ 3 MB gzipped**. Bundleable, and it is what makes decision 5
+affordable.
+
+**Concise Vigils is not "the first three of nine."** The three-lesson form is
+a distinct rubrical form, not a truncation of the nine-lesson one. The
+generator must emit it by asking Divinum Officium to render the three-lesson
+office, and must not slice `[Lectio1]`–`[Lectio3]` out of a nine-lesson file.
+Getting this wrong produces a plausible-looking office that is liturgically
+incorrect, and it will not be obvious from inspection.
+
+### Consequence for the existing modern rite
+
+Decision 4 contradicts how Still's current concise mode behaves — it drops
+Vespers to a single psalm ([office-vespers.md](../../wiki/features/office-vespers.md)).
+Traditional Vespers is five psalms and concise may not reduce that. Whether the
+modern rite's concise mode is brought into line with the same rule is a stage-2
+question and is **not decided here**.
