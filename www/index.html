@@ -4062,10 +4062,36 @@ body.readable #dResponseText,
 body.readable .cow-body,
 body.readable .cow-scripture,
 body.readable .companion-response-text,
-body.readable .content-card p {
+body.readable .content-card:not(#officeCard) p {
   font-size: 1.15em !important;
   line-height: 1.75 !important;
   color: rgba(255,255,255,.96) !important;
+}
+
+/* ── Readability mode, in the Office: size only ──
+   The Office is the one screen that carries its own two-tier colour -- Latin in
+   muted gold, the English beneath it in near-white -- and that contrast is how
+   the pairing reads. Brightening both to .96 collapses it, so the Office is cut
+   out of the rule above and scaled here instead, with no colour touched.
+
+   Each tier keeps its own step: English leads, Latin sits under it a size down,
+   versicles between. The section labels (9px eyebrows, 7px badges) are not
+   scaled at all -- they are signposts, not reading matter, and blowing them up
+   flattens the page.
+
+   These carry more specificity than the `#officeCard p` rule in the 768px
+   media query, which is the one that used to pin Office text to 20px on phones
+   whatever the toggle said. */
+body.readable #officeCard .office-text {
+  font-size: clamp(20px, 2.6vw, 26px) !important;
+  line-height: 1.95 !important;
+}
+body.readable #officeCard .office-versicle {
+  font-size: clamp(19px, 2.35vw, 24px) !important;
+  line-height: 1.85 !important;
+}
+body.readable #officeCard .office-latin {
+  font-size: clamp(18px, 2.3vw, 22px) !important;
 }
 </style>
 
@@ -14040,20 +14066,23 @@ function warmOfficeCorpus(date) {
    Latin first, English second, English alone spoken. */
 function buildTraditionalOffice(corpus, hour, today, rite) {
   const parts = [];
+  // Latin sits in the app's gold, a step down in size, tight to the English
+  // beneath it, so the pair reads as one block rather than two paragraphs.
+  const LATIN = 'color:rgba(200,146,12,.78);font-size:clamp(15px,1.95vw,19px);margin-bottom:3px';
+  const LATIN_V = 'color:rgba(200,146,12,.72);margin-bottom:3px';
   const add = (type, text, speak, style) => {
     const part = { type, audio: (speak === undefined || speak === null || speak === false) ? 'skip' : 'speak' };
     if (text !== undefined) part.text = text;
     if (part.audio === 'speak') part.speak = (speak === true) ? text : speak;
     if (style) part.style = style;
+    // These two styles are the only ones that mark a language tier. Other
+    // styled parts -- the muted label line, for one -- are captions, and the
+    // renderer must not size them as Latin.
+    if (style === LATIN || style === LATIN_V) part.lang = 'la';
     parts.push(part);
   };
   const divider = () => add('divider');
   const eyebrow = (t, speak) => add('eyebrow', t, speak);
-
-  // Latin sits in the app's gold, a step down in size, tight to the English
-  // beneath it, so the pair reads as one block rather than two paragraphs.
-  const LATIN = 'color:rgba(200,146,12,.78);font-size:clamp(15px,1.95vw,19px);margin-bottom:3px';
-  const LATIN_V = 'color:rgba(200,146,12,.72);margin-bottom:3px';
 
   const lines = v => Array.isArray(v) ? v.join('\n') : (v || '');
 
@@ -14598,14 +14627,17 @@ function buildOffice(hour, rite, date) {
 /* The screen. Every style string here was lifted verbatim from the old
    renderOfficeHour() -- the golden test compares bytes, not appearance. */
 function renderOfficeHTML(doc) {
-  const p = (text, style = '') =>
-    `<p style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.92);line-height:1.85;white-space:pre-line;margin-bottom:8px;${style}">${text}</p>`;
+  // The class is a hook for readability mode, nothing more -- the inline style
+  // still carries the look. `latin` comes from the part's own language tier, so
+  // captions that merely happen to be styled are not swept in with it.
+  const p = (text, style = '', latin = false) =>
+    `<p class="office-text${latin ? ' office-latin' : ''}" style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.92);line-height:1.85;white-space:pre-line;margin-bottom:8px;${style}">${text}</p>`;
   const eyebrow = (text) =>
     `<p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:22px 0 10px">${text}</p>`;
   // The style suffix is appended only when there is one, so a styleless
   // versicle emits the exact bytes it always has -- the golden test checks.
-  const versicle = (text, style) =>
-    `<p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.88);line-height:1.75;white-space:pre-line;font-style:italic;margin-bottom:8px${style ? ';' + style : ''}">${text}</p>`;
+  const versicle = (text, style, latin = false) =>
+    `<p class="office-versicle${latin ? ' office-latin' : ''}" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.88);line-height:1.75;white-space:pre-line;font-style:italic;margin-bottom:8px${style ? ';' + style : ''}">${text}</p>`;
 
   let html = '';
   (doc.parts || []).forEach(part => {
@@ -14620,10 +14652,10 @@ function renderOfficeHTML(doc) {
         html += eyebrow(part.text);
         break;
       case 'versicle':
-        html += versicle(part.text, part.style);
+        html += versicle(part.text, part.style, part.lang === 'la');
         break;
       case 'text':
-        html += p(part.text, part.style || '');
+        html += p(part.text, part.style || '', part.lang === 'la');
         break;
       case 'divider':
         html += `<div style="width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,146,12,.25),transparent);margin:18px 0"></div>`;

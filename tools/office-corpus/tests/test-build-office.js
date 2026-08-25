@@ -190,7 +190,12 @@ async function capture() {
 
   if (!fs.existsSync(GOLDEN)) {
     fs.mkdirSync(pathMod.dirname(GOLDEN), { recursive: true });
-    fs.writeFileSync(GOLDEN, JSON.stringify(current, null, 1));
+    // chunkKeys is read back from the wire for the key check below, but it is
+    // transport, not the office -- the golden pins only the five compared
+    // fields, so a change in how the text is carried leaves this file alone.
+    const pinned = {};
+    for (const k of keys) { const { chunkKeys, ...rest } = current[k]; pinned[k] = rest; }
+    fs.writeFileSync(GOLDEN, JSON.stringify(pinned, null, 1));
     console.log(`BASELINE  captured ${keys.length} goldens -> ${pathMod.relative(process.cwd(), GOLDEN)}`);
     console.log('BASELINE  re-run to compare against it');
   } else {
