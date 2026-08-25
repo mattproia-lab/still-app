@@ -5,6 +5,8 @@ session: Divinum Officium evaluation, Office rebuild plan, rite toggle
 participants: Matt Proia, Claude Opus 5
 ingested: 2026-08-24
 updated: 2026-08-24 — §1 licence question resolved (Fr. Albert Marcello)
+updated: 2026-08-24 — §6 Stage 2 shipped, plus a fourth date bug
+updated: 2026-08-25 — §4 Stage 3 shipped: corpus endpoint, bilingual traditional rite
 ---
 
 # 2026-08-23 — Office rebuild: Divinum Officium as source, and a liturgical rite toggle
@@ -101,6 +103,8 @@ Adopting the traditional corpus **replaces** that structure rather than
 populating it.
 
 ## 4. Build sequence
+
+> **Superseded on sequencing and status — see [§4 amended 2026-08-25](#4-amended-2026-08-25--stage-3-shipped-the-corpus-reaches-the-app) at the end of this record.** All three stages have shipped, but not together and not in this order. The reasoning below still holds and was honoured in substance; the release shape was not.
 
 Three stages, **all shipped together** — nothing goes out partially.
 
@@ -353,3 +357,244 @@ The harness **extracts the functions out of `index.html` by source anchor**
 rather than copying them, and throws if an anchor moves, so the tests cannot
 drift from shipped code. They cover only the machine's local timezone; see the
 `TZ` caveat above.
+
+
+## §4 amended 2026-08-25 — Stage 3 shipped: the corpus reaches the app
+
+**Supersedes:** §4, on sequencing and status — the three stages did **not** ship
+together, and did not ship in the order it set out. Also supersedes §3 on
+status: the toggle is built and both rites now render real content.
+
+The traditional rite is live. Five commits, each green before the next started:
+
+| Commit | What |
+|---|---|
+| `2d5c074` | `buildOffice` split — three renderers unified behind one document |
+| `e27149f` | `www/index.html` drift guard |
+| `837ed29` | `office-corpus` Netlify function + `included_files` |
+| `de3a447` | `/netlify/*` blocked — function source was publicly readable |
+| `18bbf25` | the traditional branch — corpus renderer, bilingual display |
+
+**446 checks across eight suites**, all exiting zero, at every commit.
+
+### §4's "all shipped together" did not survive contact
+
+§4 said *"Three stages, all shipped together — nothing goes out partially"* and
+ordered them corpus → modern bugs → toggle. What actually happened was modern
+bugs (`697c247`) → toggle (`a1beede`, `c94fcfb`) → corpus integration, each
+shipped as it went green.
+
+**The reasoning behind §4 still holds and was honoured in substance.** Its point
+was that the harder piece should be proven before anything depends on it, and
+that modern fixes should land against a known-good reference. The corpus *was*
+generated and proven before the app touched it, and the modern rite is pinned
+byte-for-byte by a golden test that the traditional work had to pass at every
+step. What changed is that "shipped together" turned out to mean "kept green
+together" rather than "released in one commit". Recording the deviation rather
+than pretending the plan was followed.
+
+### The corpus endpoint
+
+`netlify/functions/office-corpus.js`. `GET ?date=&hour=` resolves one hour
+against `corpus/traditional/` and returns it self-contained — psalm verses and
+hymn stanzas inlined, no reference the client has to dereference, both
+languages.
+
+**The corpus is not served.** It travels inside the function's own bundle via
+`included_files` in `netlify.toml`, so `/corpus/*` stays the forced 404 that
+[deploy.md](../../wiki/app/deploy.md) records. Verified live 2026-08-25:
+`/corpus/traditional/store/psalms.json` returns 404 while the function reading
+it returns 200.
+
+Measured on the live deploy, not estimated:
+
+| | payload | latency |
+|---|---|---|
+| Vespers | 18.4 KB | 0.31 s |
+| Lauds | 19.2 KB | 0.27 s |
+| Vigils | 54.9 KB | 0.29 s |
+
+**No cold-start penalty from the ~21 MB bundle** — the pre-emptive Vigils split
+considered during design is not needed. `Cache-Control: max-age=86400,
+stale-while-revalidate=604800` and an `X-Corpus-Version` header; the CDN caches.
+
+**`ROOT` probes three candidate paths rather than assuming one.** `esbuild`
+flattens the function to the task root while `included_files` land relative to
+the base directory, so the repo-relative path is correct locally and wrong when
+deployed. This could not be verified before deploying — the probe was written
+on the argument, and the first deploy confirmed it. Errors carry a `code`
+(`bad_date`, `outside_window`, `no_traditional_compline`, `dangling_ref`,
+`empty_psalm`…) so the client branches on a string, not a status.
+
+### `buildOffice` stayed synchronous — this was the load-bearing decision
+
+The Office renders at cold launch with no await point, and guests have no
+profile at all; the comment above `RITE_KEY` has said so since the toggle
+landed. The traditional rite needs the network. **Making `buildOffice` async
+would have changed cold-launch behaviour for the modern rite — the default for
+every existing user — to buy the modern path nothing.**
+
+So the fetch happens *ahead of* the render, never inside it:
+
+- `prefetchOffice(date, hour)` is the only async thing in the path. It fires
+  when the hour chooser opens and when the rite changes — **not on render**.
+- `buildOffice` reads a synchronous cache. A hit builds the office; a miss
+  returns a doc with `source: 'pending'` and fires the prefetch, which repaints
+  on arrival.
+- The cache mirrors to `localStorage` (24 entries, quota-safe), so **every hour
+  already opened works offline**. This is what "bundle everything, offline is a
+  feature" (the corpus JSON-shape record, §4 decision 5) becomes in practice:
+  the bundle moved from the page to the device. Days never visited are not
+  offline, which inlining 3.4 MB of gzip into a 1.6 MB `index.html` was never
+  going to buy cheaply either.
+- `window._officeCurrentHour` gates the repaint, so a fetch landing after the
+  user has navigated away does not redraw someone else's screen.
+
+### The conclusion is not one text — five variants, found by rendering
+
+The corpus names `ordinary:{vigils,lauds,vespers}-conclusion` and
+`canticle:{magnificat,benedictus}` but carries **no text** for them. They were
+harvested from Divinum Officium's own render (render-as-oracle), never
+composed. A single static conclusion would have been wrong on **29 of the 861
+covered days**, silently.
+
+Rendering all 861 days × 3 hours found five:
+
+| # | When | What changes |
+|---|---|---|
+| 0 | ordinary days | `Benedicámus Dómino` |
+| 1 | All Souls (2 Nov) | the whole conclusion — `Réquiem ætérnam` |
+| 2 | Easter Octave (Lauds + Vespers); Vespers of the Saturday before Septuagesima | `Benedicámus Dómino, allelúia, allelúia` |
+| 3 | the Sacred Triduum | `Conclusio{omittitur}` — omitted entirely |
+| 4 | 25 April, Lauds | short form, no `Fidélium ánimæ` |
+
+**Two of these would not have been guessed.** Matins never takes the alleluia,
+even at Easter, while Lauds and Vespers do. And variant 2's appearance on the
+Saturday before Septuagesima is the *alleluia farewell* — the double alleluia
+added at First Vespers before alleluia is dropped until Easter — which is why
+that day sits beside the Easter Octave and why its Lauds that morning does not
+have it.
+
+**This is the argument for render-as-oracle in miniature.** The rubric is real,
+it is written down nowhere in the corpus, and no rule anyone would have reached
+for produces it. Recipe, provenance and the verification are at
+[`tools/office-corpus/harvest-ordinary/`](../../../tools/office-corpus/harvest-ordinary/).
+
+**Provenance check:** 209 of 252 verse strings extracted from the same renders
+are byte-identical to the already-committed `store/psalms.json`. The other 43
+are the two Gospel canticles (absent from the store — the gap being filled) and
+Divinum Officium's duplicate-numbered psalm incipit lines, which the main
+generator de-duplicated. No reference carries different wording between render
+and store.
+
+### Paired bilingual display — Latin to the eye, English to the ear
+
+Decided by Matt, 2026-08-25. Every text appears twice, Latin first, then
+English. The voice speaks the **English only**.
+
+This cost nothing structurally: a Latin block is an ordinary `text` part with
+its own style and `audio: 'skip'`, so the split's existing part vocabulary
+carried it without a new type. `renderOfficeHTML` needed one change —
+`versicle()` accepts a style, appended only when non-empty, so a styleless
+versicle emits the bytes it always did. The 165 golden checks confirm the
+modern rite is untouched.
+
+`doc.langs` becomes meaningful (`['la','en']`) rather than the constant
+`['en']` the split shipped.
+
+### First Vespers — Option A, and it is a known compromise
+
+**Every one of the 493 `vespers.json` documents is `kind: "second"`. There is no
+First Vespers text in the corpus at all.** The JSON-shape record's §4 decision 1
+("resolve at build time — a separate evening entry in the calendar index") was
+never implemented by the generator: `calendar/<year>.json` has one `vespers` key
+per date, and `calendar-index.json` carries `vespera` only as a Latin rubric
+string, on 199 of 1,096 days.
+
+**185 of those say the evening belongs to the following day.** So on roughly one
+evening in five, the app shows Second Vespers of a day whose Vespers is properly
+First Vespers of the next.
+
+**Matt chose Option A on 2026-08-25: ship Second Vespers always, and say so.**
+`doc.label` reads *"Second Vespers of S. Bartholomæi Apostoli"*, so a reader
+with traditional formation can see exactly what they are being given rather than
+being quietly handed the wrong office.
+
+The rejected alternative is worth recording: substituting the *next day's*
+Vespers on "de sequenti" days is closer to the calendar's intent but serves that
+day's **Second** Vespers — a different office again, with its own antiphons and
+chapter. It would be wrong in a quieter, harder-to-spot way.
+
+**The correct fix is regeneration with First Vespers**, and it remains open.
+`test-traditional.js` asserts that all vespers documents are `kind: "second"`,
+so the moment a regeneration adds First Vespers the test fails and the label
+logic gets revisited rather than silently outliving its premise.
+
+**English office titles are also missing.** The corpus carries only Latin, so
+the label reads *"Second Vespers of S. Bartholomæi Apostoli"* — correct Latin in
+an awkward English frame. Marked `TODO` in `officeLabel()`. Using the Latin
+as-is is deliberate: a hand-written English title would be a guess, and wrong
+English is worse than correct Latin in the rite whose whole point is fidelity.
+Fixing it properly means English titles in the corpus, a generator change.
+
+### Vigils is deferred pending a look at it
+
+Traditional Vigils renders at **226 parts / 87.8 KB of HTML** for a single day,
+against 26.6 KB for Vespers. Only the `full` form exists in the corpus
+(`forms` is `["full"]` all 3,081 times), which is consistent with `c94fcfb`
+pinning the Office to Full and removing the Concise/Full toggle — the
+JSON-shape record's decision 3 ("both forms, concise is the default") was never
+generated.
+
+**Matt's decision, 2026-08-25: build it full, judge it on screen.** No collapsing
+was designed for a problem that may not bite. If it does, hiding Nocturns II and
+III behind a tap is a `renderOfficeHTML` change, not a rebuild.
+
+### `/netlify/*` blocked — found while verifying this work
+
+`GET /netlify/functions/office-corpus.js` returned **200** with the file's
+source. Not introduced here: `publish = "."` had served the functions directory
+since the first function was committed. It surfaced only because this deploy was
+checked for the opposite problem — whether the corpus had leaked. It had not.
+
+No credentials were exposed; every secret comes from `process.env`. Fixed in
+`de3a447` and recorded as a fifth blocked path in
+[deploy.md](../../wiki/app/deploy.md).
+
+### Stage 3 is complete, pending the Vigils decision
+
+**What is done:** the corpus endpoint, the synchronous-cache architecture, the
+traditional renderer, bilingual display, the toggle wired end to end, and 446
+checks standing behind it.
+
+**What is open**, in the order it will bite:
+
+1. **Vigils length** — awaiting Matt's visual review.
+2. **A real browser fetch.** Every test feeds documents from the function
+   invoked in-process. The `prefetchOffice` → cache → repaint cycle has not been
+   exercised against an actual HTTP round-trip in a browser.
+3. **First Vespers** — Option A is a labelled compromise, not a fix.
+4. **English office titles** — a generator change.
+5. **Traditional Compline does not exist.** It falls through to the modern
+   constants with `fallback: 'modern-constants'` on the doc. §2 of this plan
+   only ever promised Vespers, Lauds and Vigils, so this is scope, not debt —
+   but a traditional-rite user does get a modern Compline.
+
+### Tests
+
+Eight suites at [`tools/office-corpus/tests/`](../../../tools/office-corpus/tests/),
+**446 checks**: `test-season` (21), `test-psalmweek` (22), `test-antiphon` (37),
+`test-no-office-mode` (27), `test-build-office` (165), `test-rite` (30),
+`test-office-corpus` (42), `test-traditional` (102).
+
+Two are worth naming:
+
+- **`test-build-office.js`** pins the modern rite byte-for-byte across 40
+  date/hour combinations and is what made the split and the traditional branch
+  safe to write. Its PART 0 compares `index.html` to `www/index.html`, because
+  every other check reads only the root copy — a stale `www/` once passed all
+  301 checks while holding three obsolete renderers.
+- **`test-office-corpus.js`** re-derives from the corpus the set of references
+  that carry no text, and fails if a regeneration widens it past the five in
+  `store/ordinary.json`. The ordinary table cannot silently fall behind the
+  corpus it serves.

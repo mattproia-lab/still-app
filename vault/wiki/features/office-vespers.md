@@ -40,6 +40,10 @@ Contrast with the Sing the Hours player on the same screen, which stacks four ca
 
 **Status 2026-08-24:** **Stage 2 is done.** Issues 2, 3 and 4 are fixed in `index.html`, along with **issue 5**, a fourth date bug found while testing them and not part of the original four. Issue 1 stays open by design — it needs the traditional corpus and the rite toggle (stage 3), not a date fix. Regression tests are versioned at [`tools/office-corpus/tests/`](../../../tools/office-corpus/tests/). Full write-up: [§6 amended](../../raw/decisions/2026-08-23-office-rebuild-plan.md).
 
+**Status 2026-08-25 — Stage 3 is done, and issue 1 is closed for the traditional rite.** The Office now has real daily propers: `buildOffice()` builds from the generated corpus, served by the `office-corpus` Netlify function, with Latin and English shown paired and the English alone spoken. **Issue 1 remains true of the `modern` rite**, which is still the seasonal-constants office this page describes and is still the default for existing users — so everything below stands for anyone who has not switched. Eight suites, 446 checks. Full write-up: [§4 amended 2026-08-25](../../raw/decisions/2026-08-23-office-rebuild-plan.md#4-amended-2026-08-25--stage-3-shipped-the-corpus-reaches-the-app).
+
+Two caveats a reader of this page should carry: traditional **Vespers is always Second Vespers** — the corpus has no First Vespers text, so on ~185 of 861 days the evening office properly belongs to the following day, and the screen labels it rather than hiding it; and there is **no traditional Compline**, which falls through to the modern constants.
+
 ## 1. No daily proper — the reported symptom
 
 **Vespers is identical every day for weeks at a time, by construction.** Within a season the only thing that changes is the three psalms, once a week. There is no day-of-week psalter, no calendar of saints, no Magnificat antiphon of the day.
