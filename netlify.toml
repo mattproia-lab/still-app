@@ -105,3 +105,20 @@
   to = "/404"
   status = 404
   force = true
+
+# Function SOURCE was publicly readable -- verified 2026-08-25, GET
+# /netlify/functions/office-corpus.js returned 200. publish = "." serves the
+# functions directory like any other, and the non-forced "/*.js" rewrite above
+# does not stop it (that one only fires for paths that do NOT exist on disk).
+#
+# No credentials were exposed: every secret comes from process.env, and the one
+# hardcoded literal is the OneSignal App ID, which is a public identifier. What
+# leaked is the source itself -- webhook validation logic, endpoint structure.
+#
+# This does NOT affect the functions themselves. They are served from
+# "/.netlify/functions/*", with a leading dot, which this pattern cannot match.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404"
+  status = 404
+  force = true

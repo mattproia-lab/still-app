@@ -24,7 +24,7 @@ was committed in `1de6c29` on 2026-08-24 and was publicly reachable at
 Nothing sensitive was in it, but the mechanism is indifferent to what the
 directory contains.
 
-**Four directories are currently blocked**, all by the same forced-404 pattern:
+**Five directories are currently blocked**, all by the same forced-404 pattern:
 
 | Path | Blocked in | What it holds |
 |---|---|---|
@@ -32,6 +32,35 @@ directory contains.
 | `/supabase/*` | `afae167` (2026-08-22) | database migrations |
 | `/corpus/*` | `c210e4b` (2026-08-24) | generated Office corpus, ~23 MB |
 | `/tools/*` | `c210e4b` (2026-08-24) | build-time generators |
+| `/netlify/*` | 2026-08-25 | Netlify function **source** — see below |
+
+### The `/netlify/*` block — source was readable for as long as functions existed
+
+**Verified live 2026-08-25:** `GET /netlify/functions/office-corpus.js`
+returned **200** with the file's source. This was not new — `publish = "."`
+serves the functions directory like any other, so every one of the 17 functions
+had been readable since it was committed. It surfaced while verifying that the
+`office-corpus` deploy had *not* exposed the corpus (it had not: `/corpus/*`
+returns 404 and the function reads its data from `included_files` instead).
+
+**No credentials were exposed.** Every secret is read from `process.env` —
+`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `SUPABASE_SERVICE_KEY`,
+`ANTHROPIC_API_KEY`, `ELEVEN_LABS_API_KEY`, `ONESIGNAL_REST_API_KEY`,
+`REVENUECAT_WEBHOOK_SECRET`. The only hardcoded literal is the OneSignal
+**App ID**, which is a public identifier by design and ships in the client. What
+leaked is source: webhook-validation logic and endpoint structure, useful to
+someone probing the API, not a key.
+
+**The non-forced `/*.js` rewrite is why this hid.** That rule
+(`from = "/*.js"`, no `force`) only fires for paths that do *not* exist on
+disk, so it never intercepted a real file — and because `/tools/*` and
+`/vault/*` were forced, testing those gave a false sense that everything was
+covered. `/netlify/` simply had no rule.
+
+**The block does not touch the functions.** They are served from
+`/.netlify/functions/*` — with a leading dot — which `/netlify/*` cannot match.
+Confirmed after deploy: the endpoint still answers 200 while the source
+returns 404.
 
 `force = true` is what makes each win over the real files on disk.
 
