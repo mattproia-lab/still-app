@@ -1,0 +1,4553 @@
+{
+ "_provenance": {
+  "source": "DivinumOfficium/divinum-officium (MIT — see vault decision record 2026-08-23)",
+  "method": "render-as-oracle: perl web/cgi-bin/horas/officium.pl, engine unmodified",
+  "extraction": "block-level tags -> newline; every other tag -> empty string, never a space",
+  "verification": "209/252 verse strings extracted from the same renders are byte-identical to store/psalms.json. The rest are the two Gospel canticles (absent from the store — the gap this file fills) and DO duplicate-numbered psalm incipit lines.",
+  "harvested": "2026-08-25",
+  "note": "Generated. Do not hand-edit. Every string is lifted from the engine render; none is composed. Day-proper antiphons are excluded — the corpus carries those."
+ },
+ "canticle:magnificat": {
+  "type": "canticle",
+  "name": "magnificat",
+  "citation": {
+   "la": "Luc. 1:46-55",
+   "en": "Luke 1:46-55"
+  },
+  "verses": [
+   {
+    "ref": "1:46",
+    "la": "Magníficat ✠ * ánima mea Dóminum.",
+    "en": "My soul ✠ * doth magnify the Lord."
+   },
+   {
+    "ref": "1:47",
+    "la": "Et exsultávit spíritus meus: * in Deo, salutári meo.",
+    "en": "And my spirit hath rejoiced * in God my Saviour."
+   },
+   {
+    "ref": "1:48",
+    "la": "Quia respéxit humilitátem ancíllæ suæ: * ecce enim ex hoc beátam me dicent omnes generatiónes.",
+    "en": "Because he hath regarded the humility of his handmaid; * for behold from henceforth all generations shall call me blessed."
+   },
+   {
+    "ref": "1:49",
+    "la": "Quia fecit mihi magna qui potens est: * et sanctum nomen eius.",
+    "en": "Because he that is mighty, hath done great things to me; * and holy is his name."
+   },
+   {
+    "ref": "1:50",
+    "la": "Et misericórdia eius, a progénie in progénies: * timéntibus eum.",
+    "en": "And his mercy is from generation unto generations, * to them that fear him."
+   },
+   {
+    "ref": "1:51",
+    "la": "Fecit poténtiam in brácchio suo: * dispérsit supérbos mente cordis sui.",
+    "en": "He hath shewed might in his arm: * he hath scattered the proud in the conceit of their heart."
+   },
+   {
+    "ref": "1:52",
+    "la": "Depósuit poténtes de sede: * et exaltávit húmiles.",
+    "en": "He hath put down the mighty from their seat, * and hath exalted the humble."
+   },
+   {
+    "ref": "1:53",
+    "la": "Esuriéntes implévit bonis: * et dívites dimísit inánes.",
+    "en": "He hath filled the hungry with good things; * and the rich he hath sent empty away."
+   },
+   {
+    "ref": "1:54",
+    "la": "Suscépit Israël púerum suum: * recordátus misericórdiæ suæ.",
+    "en": "He hath received Israel his servant, * being mindful of his mercy:"
+   },
+   {
+    "ref": "1:55",
+    "la": "Sicut locútus est ad patres nostros: * Ábraham, et sémini eius in sǽcula.",
+    "en": "As he spoke to our fathers, * to Abraham and to his seed for ever."
+   }
+  ],
+  "doxology": {
+   "v": {
+    "la": "℣. Glória Patri, et Fílio, * et Spirítui Sancto.",
+    "en": "℣. Glory be to the Father, and to the Son, * and to the Holy Ghost."
+   },
+   "r": {
+    "la": "℟. Sicut erat in princípio, et nunc, et semper, * et in sǽcula sæculórum. Amen.",
+    "en": "℟. As it was in the beginning, is now, * and ever shall be, world without end. Amen."
+   }
+  }
+ },
+ "canticle:benedictus": {
+  "type": "canticle",
+  "name": "benedictus",
+  "citation": {
+   "la": "Luc. 1:68-79",
+   "en": "Luke 1:68-79"
+  },
+  "verses": [
+   {
+    "ref": "1:68",
+    "la": "Benedíctus ✠ Dóminus, Deus Israël: * quia visitávit, et fecit redemptiónem plebis suæ:",
+    "en": "Blessed be the Lord ✠ God of Israel; * because he hath visited and wrought the redemption of his people:"
+   },
+   {
+    "ref": "1:69",
+    "la": "Et eréxit cornu salútis nobis: * in domo David, púeri sui.",
+    "en": "And hath raised up an horn of salvation to us, * in the house of David his servant:"
+   },
+   {
+    "ref": "1:70",
+    "la": "Sicut locútus est per os sanctórum, * qui a sǽculo sunt, prophetárum eius:",
+    "en": "As he spoke by the mouth of his holy Prophets, * who are from the beginning:"
+   },
+   {
+    "ref": "1:71",
+    "la": "Salútem ex inimícis nostris, * et de manu ómnium, qui odérunt nos.",
+    "en": "Salvation from our enemies, * and from the hand of all that hate us:"
+   },
+   {
+    "ref": "1:72",
+    "la": "Ad faciéndam misericórdiam cum pátribus nostris: * et memorári testaménti sui sancti.",
+    "en": "To perform mercy to our fathers, * and to remember his holy testament,"
+   },
+   {
+    "ref": "1:73",
+    "la": "Iusiurándum, quod iurávit ad Ábraham patrem nostrum, * datúrum se nobis:",
+    "en": "The oath, which he swore to Abraham our father, * that he would grant to us,"
+   },
+   {
+    "ref": "1:74",
+    "la": "Ut sine timóre, de manu inimicórum nostrórum liberáti, * serviámus illi.",
+    "en": "That being delivered from the hand of our enemies, * we may serve him without fear,"
+   },
+   {
+    "ref": "1:75",
+    "la": "In sanctitáte, et iustítia coram ipso, * ómnibus diébus nostris.",
+    "en": "In holiness and justice before him, * all our days."
+   },
+   {
+    "ref": "1:76",
+    "la": "Et tu, puer, Prophéta Altíssimi vocáberis: * præíbis enim ante fáciem Dómini, paráre vias eius:",
+    "en": "And thou, child, shalt be called the prophet of the Highest: * for thou shalt go before the face of the Lord to prepare his ways:"
+   },
+   {
+    "ref": "1:77",
+    "la": "Ad dandam sciéntiam salútis plebi eius: * in remissiónem peccatórum eórum:",
+    "en": "To give knowledge of salvation to his people, * unto the remission of their sins:"
+   },
+   {
+    "ref": "1:78",
+    "la": "Per víscera misericórdiæ Dei nostri: * in quibus visitávit nos, óriens ex alto:",
+    "en": "Through the bowels of the mercy of our God, * in which the Orient from on high hath visited us:"
+   },
+   {
+    "ref": "1:79",
+    "la": "Illumináre his, qui in ténebris, et in umbra mortis sedent: * ad dirigéndos pedes nostros in viam pacis.",
+    "en": "To enlighten them that sit in darkness, and in the shadow of death: * to direct our feet into the way of peace."
+   }
+  ],
+  "doxology": {
+   "v": {
+    "la": "℣. Glória Patri, et Fílio, * et Spirítui Sancto.",
+    "en": "℣. Glory be to the Father, and to the Son, * and to the Holy Ghost."
+   },
+   "r": {
+    "la": "℟. Sicut erat in princípio, et nunc, et semper, * et in sǽcula sæculórum. Amen.",
+    "en": "℟. As it was in the beginning, is now, * and ever shall be, world without end. Amen."
+   }
+  }
+ },
+ "conclusions": {
+  "note": "The conclusion is not invariant: in Paschaltide Lauds and Vespers take \"Benedicámus Dómino, allelúia, allelúia\" and Matins does not. Every day in the coverage window was rendered rather than deriving a rubric rule.",
+  "window": {
+   "first": "2026-08-24",
+   "last": "2028-12-31",
+   "days": 861
+  },
+  "refs": {
+   "ordinary:vigils-conclusion": "vigils",
+   "ordinary:lauds-conclusion": "lauds",
+   "ordinary:vespers-conclusion": "vespers"
+  },
+  "variants": [
+   {
+    "la": [
+     "℣. Dómine, exáudi oratiónem meam.",
+     "℟. Et clamor meus ad te véniat.",
+     "℣. Benedicámus Dómino.",
+     "℟. Deo grátias.",
+     "℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.",
+     "℟. Amen."
+    ],
+    "en": [
+     "℣. O Lord, hear my prayer.",
+     "℟. And let my cry come unto thee.",
+     "℣. Let us bless the Lord.",
+     "℟. Thanks be to God.",
+     "℣. May the souls of the faithful, through the mercy of God, rest in peace.",
+     "℟. Amen."
+    ]
+   },
+   {
+    "la": [
+     "Conclusio specialis",
+     "℣. Réquiem ætérnam * dona eis, Dómine.",
+     "℟. Et lux perpétua * lúceat eis.",
+     "℣. Requiéscant in pace.",
+     "℟. Amen."
+    ],
+    "en": [
+     "Conclusio specialis",
+     "℣. Eternal rest * grant unto them, O Lord.",
+     "℟. And let perpetual light * shine upon them.",
+     "℣. May they rest in peace.",
+     "℟. Amen."
+    ]
+   },
+   {
+    "la": [
+     "℣. Dómine, exáudi oratiónem meam.",
+     "℟. Et clamor meus ad te véniat.",
+     "℣. Benedicámus Dómino, allelúia, allelúia.",
+     "℟. Deo grátias, allelúia, allelúia.",
+     "℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.",
+     "℟. Amen."
+    ],
+    "en": [
+     "℣. O Lord, hear my prayer.",
+     "℟. And let my cry come unto thee.",
+     "℣. Let us bless the Lord, alleluia, alleluia.",
+     "℟. Thanks be to God, alleluia, alleluia.",
+     "℣. May the souls of the faithful, through the mercy of God, rest in peace.",
+     "℟. Amen."
+    ]
+   },
+   {
+    "omitted": true,
+    "marker": "Conclusio{omittitur}",
+    "note": "the Sacred Triduum omits the conclusion"
+   },
+   {
+    "la": [
+     "℣. Dómine, exáudi oratiónem meam.",
+     "℟. Et clamor meus ad te véniat.",
+     "℣. Benedicámus Dómino.",
+     "℟. Deo grátias."
+    ],
+    "en": [
+     "℣. O Lord, hear my prayer.",
+     "℟. And let my cry come unto thee.",
+     "℣. Let us bless the Lord.",
+     "℟. Thanks be to God."
+    ]
+   }
+  ],
+  "days": {
+   "2026-08-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-08-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-09-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-10-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-02": {
+    "vigils": 1,
+    "lauds": 1,
+    "vespers": 1
+   },
+   "2026-11-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-11-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2026-12-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 2
+   },
+   "2027-01-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-01-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-02-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-03-25": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2027-03-26": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2027-03-27": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2027-03-28": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-03-29": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-03-30": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-03-31": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-04-01": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-04-02": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2027-04-03": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 0
+   },
+   "2027-04-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-25": {
+    "vigils": 0,
+    "lauds": 4,
+    "vespers": 0
+   },
+   "2027-04-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-04-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-05-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-06-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-07-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-08-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-09-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-10-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-02": {
+    "vigils": 1,
+    "lauds": 1,
+    "vespers": 1
+   },
+   "2027-11-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-11-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2027-12-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-01-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 2
+   },
+   "2028-02-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-02-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-03-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-13": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2028-04-14": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2028-04-15": {
+    "vigils": 3,
+    "lauds": 3,
+    "vespers": 3
+   },
+   "2028-04-16": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-17": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-18": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-19": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-20": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-21": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 2
+   },
+   "2028-04-22": {
+    "vigils": 0,
+    "lauds": 2,
+    "vespers": 0
+   },
+   "2028-04-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-25": {
+    "vigils": 0,
+    "lauds": 4,
+    "vespers": 0
+   },
+   "2028-04-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-04-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-05-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-06-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-07-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-08-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-09-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-10-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-02": {
+    "vigils": 1,
+    "lauds": 1,
+    "vespers": 1
+   },
+   "2028-11-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-11-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-01": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-02": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-03": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-04": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-05": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-06": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-07": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-08": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-09": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-10": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-11": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-12": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-13": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-14": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-15": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-16": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-17": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-18": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-19": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-20": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-21": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-22": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-23": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-24": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-25": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-26": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-27": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-28": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-29": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-30": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   },
+   "2028-12-31": {
+    "vigils": 0,
+    "lauds": 0,
+    "vespers": 0
+   }
+  }
+ }
+}

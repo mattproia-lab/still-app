@@ -20,6 +20,23 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# The traditional Office corpus travels inside the office-corpus function's
+# bundle rather than being served. /corpus/* stays a forced 404 below: the
+# function reads these files off its own disk, nothing fetches them over HTTP.
+#
+# ~21 MB across 1,479 proper documents. Well inside Lambda's limits, but it is
+# the dominant cost of this function's deploy and cold start. Vigils alone is
+# 71% of it (~17 KB/document vs ~3 KB for Vespers); if bundle time or cold
+# start becomes a problem, split Vigils into its own function rather than
+# trimming coverage.
+[functions."office-corpus"]
+  included_files = [
+    "corpus/traditional/calendar/*.json",
+    "corpus/traditional/calendar-index.json",
+    "corpus/traditional/store/*.json",
+    "corpus/traditional/propers/**/*.json"
+  ]
+
 [functions.send-notifications]
   schedule = "0 1 * * *"
 
