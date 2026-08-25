@@ -13832,6 +13832,8 @@ let currentOfficeHour = null;
 
 function enterOfficeHour(hour) {
   currentOfficeHour = hour;
+  // prefetchOffice() repaints on arrival, but only for the hour still on screen.
+  window._officeCurrentHour = hour;
   const hourLabels = { vigils:'Vigils', lauds:'Lauds', vespers:'Vespers', compline:'Compline' };
   const titleEl = document.getElementById('officeScreenTitle');
   if (titleEl) titleEl.textContent = hourLabels[hour] || 'The Office';
@@ -13868,6 +13870,323 @@ function officeGoChooser() {
 }
 
 /* ═══════════════════════════════════════════
+   THE TRADITIONAL RITE — corpus cache and mapping
+   ───────────────────────────────────────────
+   buildOffice() is synchronous on purpose: the Office renders at cold launch
+   with no await point (see RITE_KEY). The traditional rite needs data over the
+   network, so the fetch happens ahead of the render, never inside it —
+   prefetchOffice() fills a cache and buildOffice() reads it synchronously. A
+   miss returns a 'pending' doc and fires the prefetch, which re-renders.
+
+   Screen shows Latin and English paired, Latin first. The voice speaks the
+   English only: every Latin part is audio:'skip'. That is why the paired
+   layout needs no change to renderOfficeHTML — a Latin block is an ordinary
+   text part with its own style.
+═══════════════════════════════════════════ */
+
+const OFFICE_CORPUS_ENDPOINT = '/.netlify/functions/office-corpus';
+const OFFICE_CORPUS_KEY = 'still_office_corpus_v1';
+const OFFICE_CORPUS_MAX = 24;          // 8 days x 3 hours
+const officeCorpus = new Map();        // "<date>/<hour>" -> resolved corpus doc
+const officeCorpusPending = new Set(); // in-flight, so a re-render does not refetch
+
+// Rehydrate whatever the last session fetched. Every hour already opened stays
+// available offline; nothing else does.
+(function loadOfficeCorpusCache() {
+  try {
+    const raw = localStorage.getItem(OFFICE_CORPUS_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    Object.keys(saved || {}).forEach(k => officeCorpus.set(k, saved[k]));
+  } catch (err) {
+    // A corrupt or over-quota cache is not worth a broken Office.
+    try { localStorage.removeItem(OFFICE_CORPUS_KEY); } catch (e) {}
+  }
+})();
+
+function saveOfficeCorpusCache() {
+  try {
+    const keys = [...officeCorpus.keys()].slice(-OFFICE_CORPUS_MAX);
+    const out = {};
+    keys.forEach(k => { out[k] = officeCorpus.get(k); });
+    localStorage.setItem(OFFICE_CORPUS_KEY, JSON.stringify(out));
+  } catch (err) {
+    // Quota. Drop the oldest half and let the next save try again.
+    const keys = [...officeCorpus.keys()];
+    keys.slice(0, Math.floor(keys.length / 2)).forEach(k => officeCorpus.delete(k));
+  }
+}
+
+function officeCorpusGet(date, hour) {
+  return officeCorpus.get(`${date}/${hour}`) || null;
+}
+
+// The only async thing in the traditional path. Safe to call repeatedly.
+async function prefetchOffice(date, hour) {
+  const key = `${date}/${hour}`;
+  if (officeCorpus.has(key) || officeCorpusPending.has(key)) return officeCorpus.get(key) || null;
+  officeCorpusPending.add(key);
+  try {
+    const res = await fetch(`${OFFICE_CORPUS_ENDPOINT}?date=${date}&hour=${hour}`);
+    const data = await res.json();
+    if (!res.ok) {
+      // Compline is expected to 404 -- the corpus has no Compline and the
+      // modern constants supply it. Anything else is worth a console line.
+      if (data && data.error !== 'no_traditional_compline') {
+        console.warn('office-corpus:', data && data.error, data && data.message);
+      }
+      officeCorpus.set(key, { _error: (data && data.error) || 'unreachable' });
+    } else {
+      officeCorpus.set(key, data);
+    }
+    saveOfficeCorpusCache();
+    return officeCorpus.get(key);
+  } catch (err) {
+    console.warn('office-corpus fetch failed:', err.message);
+    return null;
+  } finally {
+    officeCorpusPending.delete(key);
+    // Repaint if the user is still looking at the hour we just fetched.
+    if (window._officeCurrentHour === hour && document.getElementById('officeCard')) {
+      renderOfficeHour(hour);
+    }
+  }
+}
+
+// Warm the cache for the hours the user is most likely to open next.
+function warmOfficeCorpus(date) {
+  if (getLiturgicalRite() !== 'traditional') return;
+  ['vigils', 'lauds', 'vespers'].forEach(h => { prefetchOffice(date, h); });
+}
+
+/* Map one resolved corpus document onto the OfficeDoc part list.
+   Latin first, English second, English alone spoken. */
+function buildTraditionalOffice(corpus, hour, today, rite) {
+  const parts = [];
+  const add = (type, text, speak, style) => {
+    const part = { type, audio: (speak === undefined || speak === null || speak === false) ? 'skip' : 'speak' };
+    if (text !== undefined) part.text = text;
+    if (part.audio === 'speak') part.speak = (speak === true) ? text : speak;
+    if (style) part.style = style;
+    parts.push(part);
+  };
+  const divider = () => add('divider');
+  const eyebrow = (t, speak) => add('eyebrow', t, speak);
+
+  // Latin sits in the app's gold, a step down in size, tight to the English
+  // beneath it, so the pair reads as one block rather than two paragraphs.
+  const LATIN = 'color:rgba(200,146,12,.78);font-size:clamp(15px,1.95vw,19px);margin-bottom:3px';
+  const LATIN_V = 'color:rgba(200,146,12,.72);margin-bottom:3px';
+
+  const lines = v => Array.isArray(v) ? v.join('\n') : (v || '');
+
+  // A Latin/English pair. `speak` overrides what the voice says for the English.
+  const pair = (obj, opts) => {
+    if (!obj) return;
+    const o = opts || {};
+    const la = lines(obj.la), en = lines(obj.en);
+    if (la) add(o.versicle ? 'versicle' : 'text', la, null, o.versicle ? LATIN_V : LATIN);
+    if (en) add(o.versicle ? 'versicle' : 'text', en, o.speak === undefined ? true : o.speak);
+  };
+
+  const vr = (obj, opts) => {
+    if (!obj || !obj.v) return;
+    const o = opts || {};
+    const r = obj.r || {};
+    if (obj.v.la) add('versicle', `V. ${obj.v.la}` + (r.la ? `\nR. ${r.la}` : ''), null, LATIN_V);
+    if (obj.v.en) {
+      add('versicle', `V. ${obj.v.en}` + (r.en ? `\nR. ${r.en}` : ''),
+          o.silent ? null : obj.v.en + (r.en ? `\n${r.en}` : ''));
+    }
+  };
+
+  const office = corpus.office || {};
+  const hourTitle = { vigils: 'Matins', lauds: 'Lauds', vespers: 'Vespers' }[hour] || hour;
+
+  add('badge', [office.rank, corpus.corpusVersion ? 'Rubrics 1960' : null].filter(Boolean).join(' · '));
+  add('title', hourTitle, `${corpus.label || hourTitle}.`);
+  if (corpus.label) {
+    add('text', corpus.label, null,
+        'font-size:13px;font-style:normal;color:rgba(255,255,255,.5);margin-bottom:4px');
+  }
+  if ((office.commemorations || []).length) {
+    add('text', 'Commemoration: ' + office.commemorations.join('; '), null,
+        'font-size:12px;font-style:normal;color:rgba(255,255,255,.42)');
+  }
+  divider();
+
+  let nocturn = null;
+
+  (corpus.parts || []).forEach(part => {
+    switch (part.type) {
+
+      case 'rubric':
+        // *-incipit markers carry no text by design.
+        if (part.text && (part.text.la || part.text.en)) pair(part.text, { speak: null });
+        break;
+
+      case 'versicle':
+        vr(part);
+        break;
+
+      case 'invitatory':
+        eyebrow('Invitatory', 'Invitatory.');
+        pair((part.antiphon && part.antiphon.full) || null);
+        if (part.verses) pair(part.verses);
+        divider();
+        break;
+
+      case 'hymn':
+        eyebrow('Hymn', 'Hymn.');
+        if (part.stanzas) pair(part.stanzas);
+        divider();
+        break;
+
+      case 'psalmody':
+        (part.items || []).forEach((item, i) => {
+          if (item.nocturn_label && item.nocturn !== nocturn) {
+            nocturn = item.nocturn;
+            divider();
+            eyebrow(item.nocturn_label, item.nocturn_label + '.');
+          }
+          const ps = item.psalm || {};
+          const num = String(ps.ref || '').replace('psalm:', '');
+          const label = ps.canticle
+            ? `Canticle · ${ps.canticle}${ps.citation ? ' · ' + ps.citation : ''}`
+            : `Psalm ${num}${ps.range ? ' · ' + ps.range : ''}`;
+          eyebrow(label, label.replace(/ · /g, ', ') + '.');
+          if (item.antiphon && item.antiphon.text) pair(item.antiphon.text, { versicle: true });
+          if (ps.verses) {
+            pair({ la: ps.verses.map(v => v.la), en: ps.verses.map(v => v.en) });
+          }
+        });
+        divider();
+        break;
+
+      case 'chapter':
+        eyebrow('Chapter' + (part.citation ? ' · ' + part.citation : ''),
+                'Chapter.' + (part.citation ? ' ' + part.citation + '.' : ''));
+        pair(part.text);
+        if (part.response) pair(part.response, { versicle: true });
+        divider();
+        break;
+
+      case 'lesson':
+        eyebrow(`Lesson ${part.n || ''}`.trim() + (part.citation ? ' · ' + part.citation : ''),
+                `Lesson ${part.n || ''}.`.trim());
+        if (part.benedictio) pair(part.benedictio, { versicle: true, speak: null });
+        if (part.source) pair(part.source, { versicle: true });
+        pair(part.text);
+        if (part.responsory) {
+          eyebrow('Responsory');
+          pair(part.responsory.body);
+          if (part.responsory.refrain) pair(part.responsory.refrain, { versicle: true });
+          if (part.responsory.verse) pair(part.responsory.verse, { versicle: true });
+        }
+        divider();
+        break;
+
+      case 'absolution':
+        eyebrow('Absolution', 'Absolution.');
+        pair(part.text);
+        break;
+
+      case 'tedeum':
+        eyebrow('Te Deum');
+        if (part.lines) pair(part.lines);
+        divider();
+        break;
+
+      case 'canticle': {
+        const c = part.canticle || {};
+        const name = part.name === 'magnificat' ? 'Magnificat' : 'Benedictus';
+        eyebrow(`${name}${c.citation && c.citation.en ? ' · ' + c.citation.en : ''}`,
+                `The ${name}.`);
+        if (part.antiphon && part.antiphon.text) pair(part.antiphon.text, { versicle: true });
+        if (c.verses) pair({ la: c.verses.map(v => v.la), en: c.verses.map(v => v.en) });
+        if (c.doxology) {
+          pair({ la: c.doxology.v.la, en: c.doxology.v.en }, { versicle: true });
+          pair({ la: c.doxology.r.la, en: c.doxology.r.en }, { versicle: true });
+        }
+        // The antiphon is repeated after the canticle, as it is in choir.
+        if (part.antiphon && part.antiphon.text) pair(part.antiphon.text, { versicle: true, speak: null });
+        divider();
+        break;
+      }
+
+      case 'commemoration':
+        eyebrow('Commemoration' + (part.title && part.title.en ? ' · ' + part.title.en : ''),
+                'Commemoration.');
+        if (part.antiphon && part.antiphon.text) pair(part.antiphon.text, { versicle: true });
+        if (part.versicle) vr(part.versicle);
+        if (part.collect && part.collect.text) pair(part.collect.text);
+        divider();
+        break;
+
+      case 'collect':
+        eyebrow('Collect', 'Collect.');
+        pair(part.text);
+        break;
+
+      case 'conclusion':
+        if (part.omitted) {
+          add('text', part.note || 'The conclusion is omitted.', null,
+              'font-size:12px;font-style:normal;color:rgba(255,255,255,.42)');
+          break;
+        }
+        divider();
+        eyebrow('Conclusion');
+        if (part.lines) pair(part.lines, { versicle: true });
+        break;
+
+      default:
+        break;
+    }
+  });
+
+  parts.push({ type: 'button', audio: 'skip', id: `${hour}PlayBtn`,
+               onclick: `play${hourTitle === 'Matins' ? 'Vigils' : hourTitle}Audio()`,
+               text: `◎ Hear ${hourTitle}` });
+  add('nav');
+
+  return {
+    hour,
+    rite,
+    date: today,
+    title: hourTitle,
+    label: corpus.label || null,
+    office,
+    kind: corpus.kind || null,
+    source: 'corpus',
+    corpusVersion: corpus.corpusVersion || null,
+    langs: ['la', 'en'],
+    pace: true,
+    cacheKey: hashText(`trad-${today}-${hour}-${(corpus.office && corpus.office.key) || ''}`),
+    parts,
+  };
+}
+
+/* The doc shown while the corpus is on its way. Same shape, so every consumer
+   works unchanged; source:'pending' is how a caller tells. */
+function buildPendingOffice(hour, today, rite, failure) {
+  const hourTitle = { vigils: 'Matins', lauds: 'Lauds', vespers: 'Vespers' }[hour] || hour;
+  const parts = [];
+  parts.push({ type: 'badge', audio: 'skip', text: 'Rubrics 1960' });
+  parts.push({ type: 'title', audio: 'skip', text: hourTitle });
+  parts.push({ type: 'text', audio: 'skip',
+    text: failure
+      ? 'This office could not be fetched. Check your connection, or switch to the modern calendar in Settings.'
+      : 'Fetching today’s office…',
+    style: 'font-size:14px;font-style:normal;color:rgba(255,255,255,.55)' });
+  parts.push({ type: 'nav', audio: 'skip' });
+  return {
+    hour, rite, date: today, title: hourTitle,
+    source: failure ? 'unavailable' : 'pending',
+    langs: ['la', 'en'], pace: true, cacheKey: '', parts,
+  };
+}
+
+/* ═══════════════════════════════════════════
    THE OFFICE — build once, render twice
    ───────────────────────────────────────────
    buildOffice(hour, rite, date) returns an OfficeDoc: an ordered list of
@@ -13894,6 +14213,17 @@ function officeGoChooser() {
 function buildOffice(hour, rite, date) {
   const d         = date || new Date();
   const today     = d.toISOString().split('T')[0];
+
+  // The traditional rite comes from the corpus, read synchronously out of the
+  // cache prefetchOffice() fills. Compline is the exception: the corpus has no
+  // Compline at all, so it falls through to the constants below and says so on
+  // the doc rather than passing a modern office off as a traditional one.
+  if (rite === 'traditional' && hour !== 'compline') {
+    const cached = officeCorpusGet(today, hour);
+    if (cached && !cached._error) return buildTraditionalOffice(cached, hour, today, rite);
+    if (!cached) prefetchOffice(today, hour);
+    return buildPendingOffice(hour, today, rite, cached && cached._error);
+  }
   // `date` reaches the day-of-week choices (Te Deum, the Compline night psalm)
   // and the date stamp, but NOT the season or the psalter week: those two
   // functions still read the clock themselves. Passing a date other than today
@@ -14169,7 +14499,10 @@ function buildOffice(hour, rite, date) {
     title,
     season,
     psalmWeek,
-    source: 'constants',   // 'corpus' once the traditional rite lands
+    source: 'constants',   // 'corpus' when the traditional branch above runs
+    // Traditional Compline is the modern text: the corpus has none. Marked so
+    // the screen can be honest about it rather than implying otherwise.
+    fallback: (rite === 'traditional' && hour === 'compline') ? 'modern-constants' : undefined,
     langs: ['en'],
     pace,
     cacheKey,
@@ -14184,8 +14517,10 @@ function renderOfficeHTML(doc) {
     `<p style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.92);line-height:1.85;white-space:pre-line;margin-bottom:8px;${style}">${text}</p>`;
   const eyebrow = (text) =>
     `<p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:22px 0 10px">${text}</p>`;
-  const versicle = (text) =>
-    `<p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.88);line-height:1.75;white-space:pre-line;font-style:italic;margin-bottom:8px">${text}</p>`;
+  // The style suffix is appended only when there is one, so a styleless
+  // versicle emits the exact bytes it always has -- the golden test checks.
+  const versicle = (text, style) =>
+    `<p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.88);line-height:1.75;white-space:pre-line;font-style:italic;margin-bottom:8px${style ? ';' + style : ''}">${text}</p>`;
 
   let html = '';
   (doc.parts || []).forEach(part => {
@@ -14200,7 +14535,7 @@ function renderOfficeHTML(doc) {
         html += eyebrow(part.text);
         break;
       case 'versicle':
-        html += versicle(part.text);
+        html += versicle(part.text, part.style);
         break;
       case 'text':
         html += p(part.text, part.style || '');
@@ -14260,6 +14595,10 @@ function initOfficeScreen() {
   if (chooser) chooser.style.display = 'block';
   if (content) content.style.display = 'none';
   currentOfficeHour = null;
+  window._officeCurrentHour = null;
+  // Opening the chooser is the moment to warm the corpus: the user is about to
+  // pick an hour, and the fetch should already be in flight when they do.
+  try { warmOfficeCorpus(new Date().toISOString().split('T')[0]); } catch (e) {}
   // Auto-enter the current hour -- disabled, stay on chooser
   // const autoHour = window._officeAutoHour || 'lauds';
   // setTimeout(() => enterOfficeHour(autoHour), 150);
@@ -14414,6 +14753,14 @@ function setLiturgicalRite(rite) {
   localStorage.setItem(RITE_KEY, rite);
   renderRiteButtons(rite);
   pushLiturgicalRite(rite);
+  // Switching to traditional needs the corpus, and the user may walk straight
+  // to the Office from here. Start the fetch now, and repaint if an hour is up.
+  if (rite === 'traditional') {
+    try { warmOfficeCorpus(new Date().toISOString().split('T')[0]); } catch (e) {}
+  }
+  if (window._officeCurrentHour && document.getElementById('officeCard')) {
+    renderOfficeHour(window._officeCurrentHour);
+  }
 }
 
 // Mirror to the profile. Silent no-op for guests -- their choice stays local
