@@ -1,8 +1,8 @@
 # Office regression tests
 
 Regression tests for the Stage 2 modern-rite date bugs (plus the Ash Wednesday
-fix) the Stage 3 Office Calendar toggle, and the removal of the Office Mode
-(Concise/Full) toggle, recorded in
+fix) the Stage 3 Office Calendar toggle, the removal of the Office Mode
+(Concise/Full) toggle, and the buildOffice split, recorded in
 [`vault/raw/decisions/2026-08-23-office-rebuild-plan.md`](../../../vault/raw/decisions/2026-08-23-office-rebuild-plan.md).
 
 These test Office behaviour in `index.html`. They have nothing to do with the
@@ -15,6 +15,7 @@ node tools/office-corpus/tests/test-psalmweek.js   # getPsalmWeek rollover + anc
 node tools/office-corpus/tests/test-antiphon.js    # OFFICE_SEASONS antiphon wiring
 node tools/office-corpus/tests/test-rite.js        # Office Calendar toggle + profile sync
 node tools/office-corpus/tests/test-no-office-mode.js  # Office Mode removal stayed complete
+node tools/office-corpus/tests/test-build-office.js    # characterisation golden for the buildOffice split
 ```
 
 Each exits non-zero on failure. No dependencies, no test runner.
