@@ -42,7 +42,7 @@ function extractBlock(startPrefix, endPrefix) {
 }
 
 const REQUIRED = ['getLiturgicalSeason', 'getEaster', 'getAshWednesday', 'getPsalmWeek',
-                  'hashText', 'paceOfficeText', 'requestOfficeAudio',
+                  'hashText', 'paceOfficeText', 'requestOfficeAudio', 'getLiturgicalRite',
                   'playVigilsAudio', 'playLaudsAudio', 'playVespersAudio', 'playComplineAudio',
                   'renderOfficeHour'];
 const SPLIT_FNS = ['buildOffice', 'renderOfficeHTML', 'renderOfficeText'];
@@ -50,6 +50,10 @@ const SPLIT_FNS = ['buildOffice', 'renderOfficeHTML', 'renderOfficeText'];
 const src = [
   extractLine('const PSALTER_ROLL_HOUR'),
   extractLine('const PSALTER_ANCHOR_MS'),
+  // The split routes every render through the rite setting, so the harness has
+  // to carry it. The stub localStorage returns null, which is 'modern'.
+  extractLine('const RITE_KEY'),
+  extractLine('const RITES'),
   extractBlock('const OFFICE_SEASONS', 'const TE_DEUM'),
   ...REQUIRED.map(n => extractFn(n)),
   ...SPLIT_FNS.map(n => extractFn(n, true)).filter(Boolean),

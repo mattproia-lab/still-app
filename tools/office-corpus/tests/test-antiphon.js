@@ -42,16 +42,32 @@ for (const [k, [a, b]] of Object.entries(bounds)) {
 }
 
 // --- 3. Audio path matches the screen --------------------------------------
-const audio = (fn, expect) => {
+// Since the buildOffice split it does not merely match it -- it IS it. The
+// wrong-antiphon-in-the-audio-cache bug was a divergence between two copies of
+// the office; there is now one copy, so what has to be guarded is that the
+// play*Audio() builders stayed thin and never grow a second one.
+const thin = (fn) => {
   const a = L.findIndex(l => l.includes(`async function ${fn}(`));
-  const b = L.findIndex((l, i) => i > a && l.startsWith('async function'));
-  const body = L.slice(a, b > a ? b : a + 60).join('\n');
-  const uniq = [...new Set([...body.matchAll(/sData\.(\w+Antiphon)/g)].map(m => m[1]))];
-  check(uniq.length > 0 && uniq.every(r => r === expect),
-        `${fn}() reads only sData.${expect} (found: ${uniq.join(', ') || 'none'})`);
+  const b = L.findIndex((l, i) => i > a && l === '}');
+  if (a < 0 || b <= a) { check(false, `${fn}(): could not locate function`); return; }
+  const body = L.slice(a, b + 1).join('\n');
+  check(!/sData\./.test(body),  `${fn}() reads no sData -- buildOffice owns the antiphons`);
+  check(!/text \+=/.test(body), `${fn}() builds no office text of its own`);
+  check(/buildOffice\(/.test(body) && /renderOfficeText\(/.test(body),
+        `${fn}() goes through buildOffice + renderOfficeText`);
 };
-audio('playLaudsAudio', 'laudsAntiphon');
-audio('playVespersAudio', 'vespersAntiphon');
+['playVigilsAudio', 'playLaudsAudio', 'playVespersAudio', 'playComplineAudio'].forEach(thin);
+
+// buildOffice() is the single reader. If an antiphon is read anywhere else,
+// a second copy of the office has started to grow.
+const bs = L.findIndex(l => l.startsWith('function buildOffice('));
+const be = L.findIndex((l, i) => i > bs && l === '}');
+if (bs < 0 || be <= bs) check(false, 'buildOffice(): could not locate function');
+else {
+  const outside = L.filter((l, i) => (i < bs || i > be) && /sData\.\w*(Antiphon|vigils)/.test(l));
+  check(outside.length === 0,
+        `no antiphon is read outside buildOffice() (found ${outside.length})`);
+}
 
 console.log(`\n${fail === 0 ? 'ALL CHECKS PASS' : fail + ' check(s) failed'}`);
 process.exit(fail ? 1 : 0);

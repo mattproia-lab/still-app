@@ -30,17 +30,19 @@ absent('still_office_mode', 'still_office_mode does not appear at all (key left 
 
 // ---- 3. Full-mode content is now unconditional ------------------------------
 // Things that used to live behind `if (isFull)` must still be present.
+// Anchors follow the buildOffice split: eyebrows are now parts, not calls.
 const mustKeep = [
-  ["eyebrow('Evening Hymn')",   'Vespers Evening Hymn kept'],
-  ["eyebrow('Responsorium')",   'Vespers Responsorium kept'],
-  ["eyebrow('Intercessions')",  'Vespers Intercessions kept'],
-  ['Te Deum',                   'Te Deum kept'],
+  ["add('eyebrow', 'Evening Hymn'",  'Vespers Evening Hymn kept'],
+  ["add('eyebrow', 'Responsorium'",  'Vespers Responsorium kept'],
+  ["add('eyebrow', 'Intercessions'", 'Vespers Intercessions kept'],
+  ['Te Deum',                        'Te Deum kept'],
 ];
 for (const [needle, msg] of mustKeep)
   check(src.includes(needle), msg);
 
 // Psalm selection must take the full set, not a one-element slice.
-check(/const todayVPsalms = vPsalms;/.test(src), 'Vespers takes all three psalms');
+check(/const todayVPsalms = VESPERS_PSALMS\[\(psalmWeek - 1\) % 4 \+ 1\] \|\| VESPERS_PSALMS\[1\];/.test(src),
+      'Vespers takes all three psalms');
 check(!/\[vPsalms\[0\]\]/.test(src), 'no one-psalm Vespers slice remains');
 check(!/\[vigilsPsalms\[\(psalmWeek-1\) % 4\]\[0\]\]/.test(src), 'no one-psalm Vigils slice remains');
 

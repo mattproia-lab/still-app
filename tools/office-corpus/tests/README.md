@@ -26,6 +26,13 @@ rather than a clock. It asserts the sign-in conflict rule directly: profile
 wins on sign-in, local wins on explicit change, and a NULL profile adopts the
 local value instead of resetting it.
 
+`test-build-office.js` is the characterisation test for the split. PART 1 pins
+the rendered HTML, the TTS payload and the cache key for 10 dates × 4 hours
+against a golden file and fails on any changed byte; PART 2 asserts the
+`OfficeDoc` shape and that `renderOfficeHTML(doc)` / `renderOfficeText(doc)`
+reproduce PART 1's goldens exactly. Delete `golden/modern-office.json` and
+re-run to re-baseline — only ever do that for a change you mean to make.
+
 `harness.js` extracts the real functions out of `index.html` by source anchor
 and runs them under a frozen clock — it does **not** keep a copy of them, so
 the tests cannot silently drift from the shipped code. If an anchor moves the
