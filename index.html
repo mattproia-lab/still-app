@@ -2215,17 +2215,6 @@ body.is-mobile #mobileEnterTab { display: block; }
   <!-- Hour selector -->
   <div id="officeChooser" style="max-width:520px;margin:0 auto;padding:16px 38px 0;position:relative;z-index:55">
     <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px">The Liturgy of the Hours</p>
-    <!-- Mode toggle -->
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.1);margin-bottom:20px;max-width:260px">
-      <button onclick="setOfficeModeAndRender('concise')" id="officeConciseBtn2"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1);transition:all .2s">
-        Concise
-      </button>
-      <button onclick="setOfficeModeAndRender('full')" id="officeFullBtn2"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);transition:all .2s">
-        Full
-      </button>
-    </div>
     <!-- Hour buttons -->
     <div style="display:flex;flex-direction:column;gap:8px">
       <button onclick="enterOfficeHour('vigils')"
@@ -2266,16 +2255,6 @@ body.is-mobile #mobileEnterTab { display: block; }
 
   <!-- Hour content -- rendered by JS -->
   <div class="feature-main" id="officeContent" style="display:none;position:relative;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100vh - 120px);padding-bottom:80px">
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.1);margin:16px auto 20px;max-width:200px">
-      <button onclick="setOfficeModeAndRender('concise')" id="officeConciseBtn3"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:rgba(200,146,12,.14);color:#f0c040;border-right:1px solid rgba(255,255,255,.1);transition:all .2s">
-        Concise
-      </button>
-      <button onclick="setOfficeModeAndRender('full')" id="officeFullBtn3"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);transition:all .2s">
-        Full
-      </button>
-    </div>
     <div class="content-card" id="officeCard" style="max-width:620px;margin:0 auto"></div>
   </div>
 </div>
@@ -2892,15 +2871,6 @@ body.is-mobile #mobileEnterTab { display: block; }
           </button>
         </div>
       </div>
-      <!-- Office Mode -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px" id="settingsOfficeModeLabel">Office Mode</div>
-        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
-          <button id="officeConciseBtn" onclick="setOfficeMode('concise')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Concise</button>
-          <button id="officeFullBtn" onclick="setOfficeMode('full')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Full</button>
-        </div>
-      </div>
-
       <!-- Office Calendar -->
       <div id="rite-settings" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Office Calendar</div>
@@ -4268,7 +4238,6 @@ async function playVigilsAudio() {
   const psalmWeek = getPsalmWeek();
   const today = new Date().toISOString().split('T')[0];
   const cacheKey = hashText(`vigils- paced3-${today}-${season}-${psalmWeek}`);
-  const mode = getOfficeMode();
 
   const vigils = OFFICE_SEASONS[season];
   const vigilsPsalms = [
@@ -4277,9 +4246,7 @@ async function playVigilsAudio() {
     [PSALMS.ps130, PSALMS.ps1, PSALMS.ps22],
     [PSALMS.ps22, PSALMS.ps1, PSALMS.ps130],
   ];
-  const todayPsalms = mode === 'full'
-    ? vigilsPsalms[(psalmWeek-1) % 4]
-    : [vigilsPsalms[(psalmWeek-1) % 4][0]];
+  const todayPsalms = vigilsPsalms[(psalmWeek-1) % 4];
 
   let text = `Vigils.\n\n`;
   text += `O Lord, open thou my lips.\nAnd my mouth shall shew forth thy praise.\n\n`;
@@ -4396,28 +4363,23 @@ async function playLaudsAudio() {
   const season = getLiturgicalSeason();
   const psalmWeek = getPsalmWeek();
   const today = new Date().toISOString().split('T')[0];
-  const isFull = getOfficeMode() === 'full';
   const sData = OFFICE_SEASONS[season];
 
   // Mirrors the screen: ONE morning psalm, rotating by week
   const laudsPsalms = [PSALMS.ps63, PSALMS.ps5, PSALMS.ps100, PSALMS.ps63];
   const mainPs = laudsPsalms[(psalmWeek - 1) % 4];
 
-  const cacheKey = hashText(`lauds- paced3-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+  const cacheKey = hashText(`lauds- paced3-${today}-${season}-${psalmWeek}-full`);
 
   let text = `Lauds. Morning Prayer.\n\n`;
   text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
   text += `${sData.laudsAntiphon}\n\n`;
   text += `${mainPs.ref}\n\n${mainPs.text}\n\n`;
-  if (isFull) {
-    text += `The Benedictus. The Canticle of Zechariah.\n\n`;
-    text += `Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
-    text += `${sData.laudsAntiphon}\n\n`;
-  }
+  text += `The Benedictus. The Canticle of Zechariah.\n\n`;
+  text += `Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
+  text += `${sData.laudsAntiphon}\n\n`;
   text += `Short Reading. ${OFFICE_READINGS.lauds[season].ref}.\n\n${OFFICE_READINGS.lauds[season].text}\n\n`;
-  if (isFull) {
-    text += `The Lord hath prepared his throne in heaven.\nAnd his kingdom shall rule over all.\n\n`;
-  }
+  text += `The Lord hath prepared his throne in heaven.\nAnd his kingdom shall rule over all.\n\n`;
   text += `Collect.\n\n${OFFICE_COLLECTS.lauds[season]}\nAmen.\n\n`;
   text += `Let us bless the Lord.\nThanks be to God.`;
 
@@ -4428,32 +4390,25 @@ async function playVespersAudio() {
   const season = getLiturgicalSeason();
   const psalmWeek = getPsalmWeek();
   const today = new Date().toISOString().split('T')[0];
-  const isFull = getOfficeMode() === 'full';
   const sData = OFFICE_SEASONS[season];
   const mar = MARIAN[sData.marian];
 
-  // Mirrors the screen: VESPERS_PSALMS by week; full = 3 psalms, concise = 1
+  // Mirrors the screen: VESPERS_PSALMS by week, all three psalms
   const vPsalms = VESPERS_PSALMS[(psalmWeek - 1) % 4 + 1] || VESPERS_PSALMS[1];
-  const todayVPsalms = isFull ? vPsalms : [vPsalms[0]];
+  const todayVPsalms = vPsalms;
 
-  const cacheKey = hashText(`vespers- paced3-${today}-${season}-${psalmWeek}-${isFull ? 'full' : 'simple'}`);
+  const cacheKey = hashText(`vespers- paced3-${today}-${season}-${psalmWeek}-full`);
 
   let text = `Vespers. Evening Prayer.\n\n`;
   text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
-  if (isFull) {
-    text += `Evening Hymn.\n\nO blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.\n\n`;
-  }
+  text += `Evening Hymn.\n\nO blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.\n\n`;
   text += `${sData.vespersAntiphon}\n\n`;
   todayVPsalms.forEach(ps => { text += `${ps.ref}\n\n${ps.text}\n\n`; });
   text += `${sData.vespersAntiphon}\n\n`;
   text += `Short Reading. ${VESPERS_READINGS[season].ref}.\n\n${VESPERS_READINGS[season].text}\n\n`;
-  if (isFull) {
-    text += `Our heart hath rejoiced in him, because we have hoped in his holy name.\nLet thy mercy, O Lord, be upon us, as we have hoped in thee.\n\n`;
-  }
+  text += `Our heart hath rejoiced in him, because we have hoped in his holy name.\nLet thy mercy, O Lord, be upon us, as we have hoped in thee.\n\n`;
   text += `The Magnificat. The Canticle of Our Lady.\n\n${MAGNIFICAT}\n\n`;
-  if (isFull) {
-    text += `Intercessions.\n\nLord, as evening falls, we bring before thee the prayers of thy people.\nFor those who labour in darkness, grant them light.\nFor those who suffer alone, send them consolation.\nFor those who have died this day, receive them into thy peace.\nFor the Church throughout the world, preserve her in truth.\nLord, have mercy.\n\n`;
-  }
+  text += `Intercessions.\n\nLord, as evening falls, we bring before thee the prayers of thy people.\nFor those who labour in darkness, grant them light.\nFor those who suffer alone, send them consolation.\nFor those who have died this day, receive them into thy peace.\nFor the Church throughout the world, preserve her in truth.\nLord, have mercy.\n\n`;
   text += `Collect.\n\n${VESPERS_COLLECTS[season]}\nAmen.\n\n`;
   text += `${mar.title}.\n\n${mar.text}\n\n`;
   text += `Let us bless the Lord.\nThanks be to God.`;
@@ -4463,23 +4418,18 @@ async function playVespersAudio() {
 async function playComplineAudio() {
   const season = getLiturgicalSeason();
   const today = new Date().toISOString().split('T')[0];
-  const isFull = getOfficeMode() === 'full';
   const nightPsalm = new Date().getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
   const sData = OFFICE_SEASONS[season];
   const mar = MARIAN[sData.marian];
-  const cacheKey = hashText(`compline- paced3-${today}-${season}-${isFull ? 'full' : 'simple'}-${nightPsalm.ref}`);
+  const cacheKey = hashText(`compline- paced3-${today}-${season}-full-${nightPsalm.ref}`);
 
   let text = `Compline.\n\n`;
-  if (isFull) {
-    text += `Examination of Conscience.\n\nPause briefly. Call to mind the faults of this day.\n\n`;
-    text += `I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.\n\n`;
-  }
+  text += `Examination of Conscience.\n\nPause briefly. Call to mind the faults of this day.\n\n`;
+  text += `I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.\n\n`;
   text += `O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost: as it was in the beginning, is now, and ever shall be, world without end. Amen.\n\n`;
   text += `${sData.complineAntiphon}\n\n`;
   text += `${nightPsalm.ref}\n\n${nightPsalm.text}\n\n`;
-  if (isFull) {
-    text += `Psalm 133.\n\n${PSALMS.ps134.text}\n\n`;
-  }
+  text += `Psalm 133.\n\n${PSALMS.ps134.text}\n\n`;
   text += `${sData.complineAntiphon}\n\n`;
   text += `Short Reading. ${OFFICE_READINGS.compline[season].ref}\n\n${OFFICE_READINGS.compline[season].text}\n\n`;
   text += `Into thy hands, O Lord, I commend my spirit. For thou hast redeemed me, O Lord, thou God of truth.\n\n`;
@@ -14021,21 +13971,6 @@ const TE_DEUM = `We praise thee, O God: we acknowledge thee to be the Lord.\nAll
 // Office rendering
 let currentOfficeHour = null;
 
-function setOfficeModeAndRender(mode) {
-  setOfficeMode(mode);
-  if (currentOfficeHour) renderOfficeHour(currentOfficeHour);
-  if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 300);
-  // Update all concise/full button pairs
-  ['officeConciseBtn2','officeConciseBtn3'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) { btn.style.background = mode === 'concise' ? 'rgba(200,146,12,.14)' : 'none'; btn.style.color = mode === 'concise' ? '#f0c040' : 'rgba(255,255,255,.38)'; }
-  });
-  ['officeFullBtn2','officeFullBtn3'].forEach(id => {
-    const btn = document.getElementById(id);
-    if (btn) { btn.style.background = mode === 'full' ? 'rgba(200,146,12,.14)' : 'none'; btn.style.color = mode === 'full' ? '#f0c040' : 'rgba(255,255,255,.38)'; }
-  });
-}
-
 function enterOfficeHour(hour) {
   currentOfficeHour = hour;
   const hourLabels = { vigils:'Vigils', lauds:'Lauds', vespers:'Vespers', compline:'Compline' };
@@ -14076,10 +14011,8 @@ function officeGoChooser() {
 function renderOfficeHour(hour) {
   const card = document.getElementById('officeCard');
   if (!card) return;
-  const mode   = getOfficeMode();
   const season = getLiturgicalSeason();
   const sData  = OFFICE_SEASONS[season];
-  const isFull = mode === 'full';
   const isSunday = new Date().getDay() === 0;
   // Te Deum also fires on major solemnities from the sanctoral calendar
   const todaySaint = getTodaysSaint();
@@ -14109,11 +14042,9 @@ function renderOfficeHour(hour) {
     html += versicle('Glory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
     html += divider();
 
-    if (isFull) {
-      html += eyebrow('Hymn');
-      html += p(`${sData.vigils}\n\nO Brightness of the Father's face,\nImmortal Light of Light begone,\nO Jesus, Saviour of our race,\nHear us as we come to thee at dawn.`);
-      html += divider();
-    }
+    html += eyebrow('Hymn');
+    html += p(`${sData.vigils}\n\nO Brightness of the Father's face,\nImmortal Light of Light begone,\nO Jesus, Saviour of our race,\nHear us as we come to thee at dawn.`);
+    html += divider();
 
     // Vigils psalms -- vary by psalm week
     const vigilsPsalms = [
@@ -14122,10 +14053,10 @@ function renderOfficeHour(hour) {
       [PSALMS.ps130, PSALMS.ps1, PSALMS.ps22],
       [PSALMS.ps22, PSALMS.ps1, PSALMS.ps130],
     ];
-    const todayPsalms = isFull ? vigilsPsalms[(psalmWeek-1) % 4] : [vigilsPsalms[(psalmWeek-1) % 4][0]];
+    const todayPsalms = vigilsPsalms[(psalmWeek-1) % 4];
 
     todayPsalms.forEach((ps, i) => {
-      html += eyebrow((isFull ? `Psalm ${i+1} · ` : '') + ps.ref);
+      html += eyebrow(`Psalm ${i+1} · ` + ps.ref);
       if (i === 0) html += versicle(sData.vigils);
       html += p(ps.text);
     });
@@ -14134,12 +14065,10 @@ function renderOfficeHour(hour) {
     html += eyebrow('Reading · ' + OFFICE_READINGS.vigils[season].ref);
     html += p(`"${OFFICE_READINGS.vigils[season].text}"`);
 
-    if (isFull) {
-      html += eyebrow('Responsory');
-      html += versicle('In the night my soul longeth for thee, O God.\n My spirit within me watcheth for thee.');
-    }
+    html += eyebrow('Responsory');
+    html += versicle('In the night my soul longeth for thee, O God.\n My spirit within me watcheth for thee.');
 
-    if (isFull && isTeDeum) {
+    if (isTeDeum) {
       html += divider();
       html += eyebrow('Te Deum -- Sung on Sundays and Feasts');
       html += p(TE_DEUM);
@@ -14168,21 +14097,17 @@ function renderOfficeHour(hour) {
     html += eyebrow('Morning Psalm · ' + mainPs.ref);
     html += p(mainPs.text);
 
-    if (isFull) {
-      html += eyebrow('Canticle · Benedictus · Zechariah 1:68-79');
-      html += versicle(sData.laudsAntiphon);
-      html += p(`Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.`);
-      html += versicle(sData.laudsAntiphon);
-    }
+    html += eyebrow('Canticle · Benedictus · Zechariah 1:68-79');
+    html += versicle(sData.laudsAntiphon);
+    html += p(`Blessed be the Lord God of Israel;\nbecause he hath visited and wrought the redemption of his people.\nAnd hath raised up a horn of salvation to us, in the house of David his servant.\nAs he spoke by the mouth of his holy prophets, who are from the beginning.\nSalvation from our enemies, and from the hand of all that hate us.\nTo perform mercy to our fathers, and to remember his holy testament.\nThe oath which he swore to Abraham our father, that he would grant to us.\nThat being delivered from the hand of our enemies, we may serve him without fear,\nIn holiness and justice before him, all our days.\nAnd thou, child, shalt be called the prophet of the Highest;\nfor thou shalt go before the face of the Lord to prepare his ways.\nTo give knowledge of salvation to his people, unto the remission of their sins.\nThrough the bowels of the mercy of our God,\nin which the Orient from on high hath visited us.\nTo enlighten them that sit in darkness and in the shadow of death,\nto direct our feet into the way of peace.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.`);
+    html += versicle(sData.laudsAntiphon);
 
     html += divider();
     html += eyebrow('Short Reading · ' + OFFICE_READINGS.lauds[season].ref);
     html += p(`"${OFFICE_READINGS.lauds[season].text}"`);
 
-    if (isFull) {
-      html += eyebrow('Responsorium Breve');
-      html += versicle('The Lord hath prepared his throne in heaven.\n And his kingdom shall rule over all.');
-    }
+    html += eyebrow('Responsorium Breve');
+    html += versicle('The Lord hath prepared his throne in heaven.\n And his kingdom shall rule over all.');
 
     html += divider();
     html += eyebrow('Collect');
@@ -14199,21 +14124,19 @@ function renderOfficeHour(hour) {
     html += versicle(' O God, come to my assistance.\nO Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
     html += divider();
 
-    if (isFull) {
-      html += eyebrow('Evening Hymn');
-      html += p(`O blest Creator of the light,\nWho mak\'st the day with radiance bright,\nAnd o\'er the forming world didst call\nThe light from chaos first of all:\n\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people\'s prayers and tears.`);
-      html += divider();
-    }
+    html += eyebrow('Evening Hymn');
+    html += p(`O blest Creator of the light,\nWho mak\'st the day with radiance bright,\nAnd o\'er the forming world didst call\nThe light from chaos first of all:\n\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people\'s prayers and tears.`);
+    html += divider();
 
     // Evening psalms by week
     const vPsalms = VESPERS_PSALMS[(psalmWeek - 1) % 4 + 1] || VESPERS_PSALMS[1];
-    const todayVPsalms = isFull ? vPsalms : [vPsalms[0]];
+    const todayVPsalms = vPsalms;
 
     html += eyebrow('Antiphon');
     html += versicle(sData.vespersAntiphon);
 
     todayVPsalms.forEach((ps, i) => {
-      html += eyebrow((isFull ? `Psalm ${i+1} · ` : '') + ps.ref);
+      html += eyebrow(`Psalm ${i+1} · ` + ps.ref);
       html += p(ps.text);
     });
 
@@ -14223,10 +14146,8 @@ function renderOfficeHour(hour) {
     html += eyebrow('Short Reading · ' + VESPERS_READINGS[season].ref);
     html += p(`"${VESPERS_READINGS[season].text}"`);
 
-    if (isFull) {
-      html += eyebrow('Responsorium');
-      html += versicle('Our heart hath rejoiced in him,\nbecause we have hoped in his holy name.\n Let thy mercy, O Lord, be upon us,\nas we have hoped in thee.');
-    }
+    html += eyebrow('Responsorium');
+    html += versicle('Our heart hath rejoiced in him,\nbecause we have hoped in his holy name.\n Let thy mercy, O Lord, be upon us,\nas we have hoped in thee.');
 
     html += divider();
     html += eyebrow('Magnificat · Canticle of Our Lady · Luke 1:46-55');
@@ -14234,11 +14155,9 @@ function renderOfficeHour(hour) {
     html += p(MAGNIFICAT, 'font-size:clamp(16px,2vw,20px)');
     html += versicle(sData.vespersAntiphon);
 
-    if (isFull) {
-      html += divider();
-      html += eyebrow('Intercessions');
-      html += versicle('Lord, as evening falls, we bring before thee the prayers of thy people.\nFor those who labour in darkness -- grant them light.\nFor those who suffer alone -- send them consolation.\nFor those who have died this day -- receive them into thy peace.\nFor the Church throughout the world -- preserve her in truth.\nLord, have mercy.');
-    }
+    html += divider();
+    html += eyebrow('Intercessions');
+    html += versicle('Lord, as evening falls, we bring before thee the prayers of thy people.\nFor those who labour in darkness -- grant them light.\nFor those who suffer alone -- send them consolation.\nFor those who have died this day -- receive them into thy peace.\nFor the Church throughout the world -- preserve her in truth.\nLord, have mercy.');
 
     html += divider();
     html += eyebrow('Collect');
@@ -14258,13 +14177,11 @@ function renderOfficeHour(hour) {
     html += seasonBadge();
     html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">Compline</h2>`;
 
-    if (isFull) {
-      html += eyebrow('Examination of Conscience');
-      html += p('Pause briefly. Call to mind the faults of this day.', 'font-size:13px;color:rgba(255,255,255,.55);font-style:normal');
-      html += versicle('I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.');
-      html += versicle(' Have mercy on us, O Lord.\n For we have sinned against thee.');
-      html += divider();
-    }
+    html += eyebrow('Examination of Conscience');
+    html += p('Pause briefly. Call to mind the faults of this day.', 'font-size:13px;color:rgba(255,255,255,.55);font-style:normal');
+    html += versicle('I confess to Almighty God, and to you my brothers and sisters, that I have sinned through my own fault, in my thoughts and in my words, in what I have done and in what I have failed to do; and I ask Blessed Mary ever Virgin, all the angels and saints, and you, my brothers and sisters, to pray for me to the Lord our God.');
+    html += versicle(' Have mercy on us, O Lord.\n For we have sinned against thee.');
+    html += divider();
 
     html += eyebrow('Opening');
     html += versicle('O God, come to my assistance.\n O Lord, make haste to help me.\nGlory be to the Father, and to the Son, and to the Holy Ghost:\nAs it was in the beginning, is now, and ever shall be, world without end. Amen.');
@@ -14276,20 +14193,16 @@ function renderOfficeHour(hour) {
     html += versicle(sData.complineAntiphon);
     html += eyebrow('Night Psalm · ' + nightPsalm.ref);
     html += p(nightPsalm.text);
-    if (isFull) {
-      html += eyebrow('Psalm 133 (134) · Night Praise');
-      html += p(PSALMS.ps134.text);
-    }
+    html += eyebrow('Psalm 133 (134) · Night Praise');
+    html += p(PSALMS.ps134.text);
     html += versicle(sData.complineAntiphon);
 
     html += divider();
     html += eyebrow('Short Reading · ' + OFFICE_READINGS.compline[season].ref);
     html += p(`"${OFFICE_READINGS.compline[season].text}"`);
 
-    if (isFull) {
-      html += eyebrow('Responsorium');
-      html += versicle('Into thy hands, O Lord, I commend my spirit.\n Into thy hands, O Lord, I commend my spirit.\nV. For thou hast redeemed me, O Lord, thou God of truth.\nR. I commend my spirit.');
-    }
+    html += eyebrow('Responsorium');
+    html += versicle('Into thy hands, O Lord, I commend my spirit.\n Into thy hands, O Lord, I commend my spirit.\nV. For thou hast redeemed me, O Lord, thou God of truth.\nR. I commend my spirit.');
 
     html += divider();
     html += eyebrow('Nunc Dimittis · Canticle of Simeon');
@@ -14342,14 +14255,6 @@ function initOfficeScreen() {
   if (chooser) chooser.style.display = 'block';
   if (content) content.style.display = 'none';
   currentOfficeHour = null;
-  // Sync mode buttons
-  const mode = getOfficeMode();
-  const c2 = document.getElementById('officeConciseBtn2');
-  const f2 = document.getElementById('officeFullBtn2');
-  const activeS   = 'background:rgba(200,146,12,.14);color:#f0c040;';
-  const inactiveS = 'background:none;color:rgba(255,255,255,.38);';
-  if (c2) c2.style.cssText += mode === 'concise' ? activeS : inactiveS;
-  if (f2) f2.style.cssText += mode === 'full'    ? activeS : inactiveS;
   // Auto-enter the current hour -- disabled, stay on chooser
   // const autoHour = window._officeAutoHour || 'lauds';
   // setTimeout(() => enterOfficeHour(autoHour), 150);
@@ -14453,20 +14358,8 @@ function setBell(on) {
 // Bell toggle check is built into playBell directly -- no override needed
 
 /* ═══════════════════════════════════════════
-   OFFICE MODE -- concise / full, persists
+   SPIRITUAL DEPTH -- beginner / challenge, persists
 ═══════════════════════════════════════════ */
-function setOfficeMode(mode) {
-  localStorage.setItem('still_office_mode', mode);
-  const concBtn = document.getElementById('officeConciseBtn');
-  const fullBtn = document.getElementById('officeFullBtn');
-  const activeStyle   = 'background:rgba(200,146,12,.14);color:#f0c040;';
-  const inactiveStyle = 'background:none;color:rgba(255,255,255,.38);';
-  if (concBtn) concBtn.style.cssText += mode === 'concise' ? activeStyle : inactiveStyle;
-  if (fullBtn) fullBtn.style.cssText += mode === 'full'    ? activeStyle : inactiveStyle;
-}
-function getOfficeMode() {
-  return localStorage.getItem('still_office_mode') || 'concise';
-}
 function setDepth(level) {
   localStorage.setItem('still_spiritual_depth', level);
   const activeStyle   = 'background:rgba(200,146,12,.14);color:#f0c040;';
@@ -14658,8 +14551,7 @@ initSacristy();
 // Restore bell preference
 setBell(bellEnabled);
 
-// Restore office mode preference
-setOfficeMode(getOfficeMode());
+// Restore Office Calendar preference
 renderRiteButtons(getLiturgicalRite());
 
 // On mobile -- activate first feature by default so names aren't all tiny
