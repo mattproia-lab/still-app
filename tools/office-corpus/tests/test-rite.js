@@ -158,6 +158,39 @@ check(JSON.stringify(load().api.RITES) === '["modern","traditional"]', 'rites ar
   check(sect.bells === 'bells-settings' && sect.rite === 'rite-settings',
         'deep-link map covers both bells and rite');
 
+  // ---- the Office chooser's own pair ----------------------------------------
+  // The same choice in two places. Both must reach setLiturgicalRite(), and the
+  // paint has to cover all four or the two controls disagree on screen.
+  check(/id="officeRiteTraditionalBtn"[\s\S]{0,400}?setLiturgicalRite\('traditional'\)/.test(whole),
+        'Office chooser Traditional button wired to setLiturgicalRite');
+  check(/id="officeRiteModernBtn"[\s\S]{0,400}?setLiturgicalRite\('modern'\)/.test(whole),
+        'Office chooser Modern button wired to setLiturgicalRite');
+  // It has to sit above the hour cards, not below them.
+  const chooser = whole.slice(whole.indexOf('id="officeChooser"'));
+  check(chooser.indexOf('officeRiteTraditionalBtn') < chooser.indexOf("enterOfficeHour('vigils')"),
+        'the rite toggle is above the hour cards');
+  check(chooser.indexOf('officeChooserHeading') < chooser.indexOf('officeRiteTraditionalBtn'),
+        'and below the "Liturgy of the Hours" heading');
+  ['riteTraditionalBtn', 'riteModernBtn', 'officeRiteTraditionalBtn', 'officeRiteModernBtn']
+    .forEach(id => check(whole.includes("paint('" + id + "'"),
+                         `renderRiteButtons paints ${id}`));
+  check(!/cssText \+=/.test(whole.slice(whole.indexOf('function renderRiteButtons'),
+                                        whole.indexOf('function setLiturgicalRite'))),
+        'renderRiteButtons sets properties rather than appending to cssText');
+  check(/renderRiteButtons\(getLiturgicalRite\(\)\);/.test(
+          whole.slice(whole.indexOf('function initOfficeScreen'),
+                      whole.indexOf('function setRuleDate'))),
+        'opening the Office screen repaints the rite buttons');
+
+  // Both controls are driven by one setter, so switching from either persists
+  // the same value -- that is what keeps them in sync.
+  for (const rite of ['traditional', 'modern']) {
+    const t = load();
+    t.api.setLiturgicalRite(rite);
+    check(t.store['still_liturgical_rite'] === rite,
+          `setLiturgicalRite('${rite}') persists once for both controls`);
+  }
+
   console.log(`\n${fail === 0 ? 'ALL CHECKS PASS' : fail + ' check(s) failed'}`);
   process.exit(fail ? 1 : 0);
 })();

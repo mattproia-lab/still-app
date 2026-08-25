@@ -894,11 +894,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 ═══════════════════════════════════════════ */
 /* Settings header: never let the row push CLOSE off-screen */
 #settingsModal .modal-panel > div:first-child{ flex-wrap:wrap; row-gap:8px; }
-/* Settings: keep the header below the notch when the sheet reaches full height */
+/* Settings: keep the header below the notch when the sheet reaches full height.
+
+   The overlay is bottom-aligned (align-items:flex-end) and already reserves the
+   notch above and 140px + the home indicator below. A panel allowed to grow
+   past what is left does not shrink to fit -- it overflows upward, carrying the
+   header, and with it Sign Out and Close, off the top of the screen. That is
+   the iOS clipping: the inline max-height:90vh outran the space the overlay had
+   actually left, so the cap here has to win over it.
+
+   148px = the overlay's own 8px top padding plus its 140px bottom padding. The
+   margin-top that used to sit here added a second safe-area inset on top of the
+   overlay's padding-top and pushed the panel further up still. */
 #settingsModal .modal-panel{
   padding-top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
-  margin-top: calc(env(safe-area-inset-top, 0px) + 8px);
-  max-height: calc(90vh - env(safe-area-inset-top, 0px));
+  max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 148px) !important;
+  /* dvh where it is supported: iOS reports 100vh as the tallest the viewport
+     ever gets, not what is on screen while the toolbars are out. */
+  max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 148px) !important;
 }
 .modal-overlay{
   position:fixed;inset:0;z-index:200;background:rgba(0,0,4,.82);
@@ -2214,7 +2227,20 @@ body.is-mobile #mobileEnterTab { display: block; }
 
   <!-- Hour selector -->
   <div id="officeChooser" style="max-width:520px;margin:0 auto;padding:16px 38px 0;position:relative;z-index:55">
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px">The Liturgy of the Hours</p>
+    <p id="officeChooserHeading" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px">The Liturgy of the Hours</p>
+    <!-- The same choice the Settings sheet carries, put where it is actually
+         made. Both pairs call setLiturgicalRite() and both are repainted by
+         renderRiteButtons(), so whichever one is touched the other agrees. -->
+    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.1);margin-bottom:20px;max-width:260px">
+      <button id="officeRiteTraditionalBtn" onclick="setLiturgicalRite('traditional')"
+        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);border-right:1px solid rgba(255,255,255,.1);transition:all .2s">
+        Traditional
+      </button>
+      <button id="officeRiteModernBtn" onclick="setLiturgicalRite('modern')"
+        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);transition:all .2s">
+        Modern
+      </button>
+    </div>
     <!-- Hour buttons -->
     <div style="display:flex;flex-direction:column;gap:8px">
       <button onclick="enterOfficeHour('vigils')"
@@ -4092,6 +4118,20 @@ body.readable #officeCard .office-versicle {
 }
 body.readable #officeCard .office-latin {
   font-size: clamp(18px, 2.3vw, 22px) !important;
+}
+
+/* The screen header and the chooser heading are Office chrome, not part of the
+   Latin/English pairing, so nothing is protected by holding their colour back:
+   these take the whole effect, larger and brighter. Both are small tracked-out
+   caps at low opacity, which is exactly the combination the toggle exists for.
+   The id beats `.app-header .screen-title` in the 768px media query. */
+body.readable #officeScreenTitle {
+  font-size: 14px !important;
+  color: rgba(255,255,255,.72) !important;
+}
+body.readable #officeChooserHeading {
+  font-size: 11px !important;
+  color: rgba(255,255,255,.65) !important;
 }
 </style>
 
@@ -14718,6 +14758,9 @@ function initOfficeScreen() {
   if (content) content.style.display = 'none';
   currentOfficeHour = null;
   window._officeCurrentHour = null;
+  // The chooser's own rite buttons are painted on entry: the boot-time paint
+  // ran before this screen had ever been shown.
+  renderRiteButtons(getLiturgicalRite());
   // Opening the chooser is the moment to warm the corpus: the user is about to
   // pick an hour, and the fetch should already be in flight when they do.
   try { warmOfficeCorpus(new Date().toISOString().split('T')[0]); } catch (e) {}
@@ -14861,12 +14904,21 @@ function getLiturgicalRite() {
 // booting, can restore the buttons without it looking like a user choice and
 // firing a PATCH at the profile.
 function renderRiteButtons(rite) {
-  const activeStyle   = 'background:rgba(200,146,12,.14);color:#f0c040;';
-  const inactiveStyle = 'background:none;color:rgba(255,255,255,.38);';
-  const tradBtn = document.getElementById('riteTraditionalBtn');
-  const modBtn  = document.getElementById('riteModernBtn');
-  if (tradBtn) tradBtn.style.cssText += rite === 'traditional' ? activeStyle : inactiveStyle;
-  if (modBtn)  modBtn.style.cssText  += rite === 'modern'      ? activeStyle : inactiveStyle;
+  // Two pairs now: the Settings sheet and the Office chooser. Either may be
+  // absent from the DOM, which is what the null check is for.
+  //
+  // Setting the two properties rather than appending to cssText also stops the
+  // style attribute growing by a declaration on every toggle.
+  const paint = (id, on) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.style.background = on ? 'rgba(200,146,12,.14)' : 'none';
+    btn.style.color      = on ? '#f0c040' : 'rgba(255,255,255,.38)';
+  };
+  paint('riteTraditionalBtn',       rite === 'traditional');
+  paint('riteModernBtn',            rite === 'modern');
+  paint('officeRiteTraditionalBtn', rite === 'traditional');
+  paint('officeRiteModernBtn',      rite === 'modern');
 }
 
 // An explicit choice. Local wins, and is mirrored up.
