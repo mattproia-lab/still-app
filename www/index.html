@@ -14644,6 +14644,14 @@ function buildOffice(hour, rite, date) {
     playButton('complinePlayBtn', 'playComplineAudio()', '◎ Hear Compline');
   }
 
+  // The same condition the `fallback` marker below records. The corpus has no
+  // traditional Compline, so what is on screen is the modern text; say so on
+  // the card rather than letting it pass for the 1960 office. Same note type,
+  // placement and voice as the Vigils audio note.
+  if (rite === 'traditional' && hour === 'compline') {
+    add('note', 'Compline follows the modern form — traditional texts coming soon.');
+  }
+
   add('nav');
 
   return {
