@@ -15,11 +15,29 @@
 const fs = require('fs');
 const pathMod = require('path');
 const INDEX = pathMod.resolve(__dirname, '../../../index.html');
+const WWW_INDEX = pathMod.resolve(__dirname, '../../../www/index.html');
 const GOLDEN = pathMod.resolve(__dirname, 'golden/modern-office.json');
 
 const L = fs.readFileSync(INDEX, 'utf8').split(/\r?\n/);
 let fail = 0;
 const check = (ok, msg) => { console.log(`${ok ? 'PASS' : 'FAIL'}  ${msg}`); if (!ok) fail++; };
+
+// ------------------------------------------------------------ deploy copies
+// Everything below reads the root index.html. www/index.html is a second
+// shipped copy with nothing keeping it in sync, so a stale one would sail
+// through every other check in this file. Compare the bytes first.
+console.log('— PART 0: deploy copies in sync —');
+if (!fs.existsSync(WWW_INDEX)) {
+  check(false, 'www/index.html exists');
+} else {
+  const rootBytes = fs.readFileSync(INDEX);
+  const wwwBytes  = fs.readFileSync(WWW_INDEX);
+  const same = rootBytes.equals(wwwBytes);
+  check(same, `www/index.html is byte-identical to index.html` +
+              (same ? '' : ` (root ${rootBytes.length} bytes, www ${wwwBytes.length} bytes` +
+                           ` — resync with: cp index.html www/index.html)`));
+}
+console.log('');
 
 // ---------------------------------------------------------------- extraction
 function extractFn(name, optional) {

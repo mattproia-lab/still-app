@@ -61,6 +61,48 @@ Verified 2026-08-22: `www/` contains `index.html`, `bell-native.js`, `assets/`, 
 
 > **Drift is the default failure mode here.** As of 2026-08-22 `www/index.html` (15,770 lines) differs from root `index.html` (15,773) — the root has uncommitted edits that have not been synced. A native build made right now would ship the older page. Re-run the sync before any iOS/Android build.
 
+**Drift is now guarded, for `index.html` only.** It happened again on
+2026-08-25: the buildOffice split landed in root `index.html` while
+`www/index.html` still held all three of the old renderers, and every office
+test passed anyway because they all read the root copy. `test-build-office.js`
+now opens with a PART 0 byte-comparison of the two files and exits non-zero if
+they differ, so that particular staleness can no longer pass 301 green checks
+(`2d5c074` synced it, the guard landed after). **The other three sync targets —
+`bell-native.js`, `still-mobile/`, `assets/` — have no such guard.**
+
+### ⚠ Standing risk — `www/netlify.toml` is a second, unguarded deploy config
+
+`www/` carries its own [netlify.toml](../../../www/netlify.toml), noted above as
+"not listed in the sync command". It also declares `publish = "."`, and it is a
+**stale fork** of the root config: it has none of the four forced-404 blocks the
+root config carries.
+
+| Blocked path | root `netlify.toml` | `www/netlify.toml` |
+|---|---|---|
+| `/vault/*` | yes (`afae167`) | **no** |
+| `/supabase/*` | yes (`afae167`) | **no** |
+| `/corpus/*` | yes (`c210e4b`) | **no** |
+| `/tools/*` | yes (`c210e4b`) | **no** |
+
+The exposure is conditional, not live: it depends on which directory the
+Netlify site's *base directory* setting points at, and that setting is not in
+the repo — it lives in the Netlify UI, so it cannot be verified from here.
+Today's deploys evidently use the root config, since `/vault/*` was verified
+returning 404 live on 2026-08-23. **If the base directory is ever pointed at
+`www/`, or a second site is created from it, the vault ships public** — the
+same mechanism as the `corpus/` incident, with nothing to catch it.
+
+This is the `publish = "."` footgun with a second copy of the gun. It is not
+fixed here because it is a live-deploy decision, not a code change: **deferred
+to the same planned pre-Advent deploy window (2026-11-29)** as the real-publish-
+directory fix above, which would retire both configs together. Recorded
+2026-08-25.
+
+Interim rule, if the window slips:
+
+> Do not point any Netlify base directory at `www/` until its config carries
+> the four forced-404 blocks, or the real publish directory lands.
+
 ## Build environments
 
 - Windows + VS Code is the primary development environment.
