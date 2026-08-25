@@ -61,13 +61,22 @@ function extractBlock(startPrefix, endPrefix) {
 
 const REQUIRED = ['getLiturgicalSeason', 'getEaster', 'getAshWednesday', 'getPsalmWeek',
                   'hashText', 'paceOfficeText', 'requestOfficeAudio', 'getLiturgicalRite',
+                  'splitOfficeText', 'fetchOfficeClip',
                   'playVigilsAudio', 'playLaudsAudio', 'playVespersAudio', 'playComplineAudio',
                   'renderOfficeHour'];
 const SPLIT_FNS = ['buildOffice', 'renderOfficeHTML', 'renderOfficeText'];
 
+// What the voice service accepts in one request. The modern rite crosses it too
+// -- Vespers alone runs past 5000 -- so its spoken text is chunked like the
+// traditional rite's, and no piece that goes on the wire may reach the limit.
+const TTS_HARD_LIMIT = 5000;
+
 const src = [
   extractLine('const PSALTER_ROLL_HOUR'),
   extractLine('const PSALTER_ANCHOR_MS'),
+  extractLine('const OFFICE_TTS_MAX'),
+  extractFn('splitOfficeText'),
+  extractFn('fetchOfficeClip'),
   // The split routes every render through the rite setting, so the harness has
   // to carry it. The stub localStorage returns null, which is 'modern'.
   extractLine('const RITE_KEY'),
@@ -112,7 +121,8 @@ function load(frozenMs, saint) {
     '\n         playComplineAudio, getLiturgicalSeason, getPsalmWeek,' +
     '\n         buildOffice: typeof buildOffice === "function" ? buildOffice : null,' +
     '\n         renderOfficeHTML: typeof renderOfficeHTML === "function" ? renderOfficeHTML : null,' +
-    '\n         renderOfficeText: typeof renderOfficeText === "function" ? renderOfficeText : null };'
+    '\n         renderOfficeText: typeof renderOfficeText === "function" ? renderOfficeText : null,' +
+    '\n         splitOfficeText, OFFICE_TTS_MAX };'
   );
   const api = factory(
     FakeDate, document,
@@ -158,8 +168,14 @@ async function capture() {
         season:   api.getLiturgicalSeason(),
         psalmWeek: api.getPsalmWeek(),
         html:     card.innerHTML,
-        audioText: audio[0] ? audio[0].text : null,
-        cacheKey:  audio[0] ? audio[0].cacheKey : null,
+        // An office now goes out in pieces when it is too long for one
+        // request, so the wire is read back as a whole: the chunks concatenate
+        // into the spoken text, and every piece of one office shares a base
+        // cache key under its -NofM suffix. Reassembling here keeps this
+        // golden about the office rather than about the transport.
+        audioText: audio.length ? audio.map(a => a.text).join('') : null,
+        cacheKey:  audio.length ? audio[0].cacheKey.replace(/-\d+of\d+$/, '') : null,
+        chunkKeys: audio.map(a => a.cacheKey),
       };
     }
   }
@@ -217,6 +233,18 @@ async function capture() {
   check(noAudio.length === 0, `all ${keys.length} combinations captured audio text (missing: ${noAudio.join(', ') || 'none'})`);
   check(!!current['ordinary-mon/vigils'].audioText, 'Vigils audio captured despite bypassing requestOfficeAudio');
 
+  // Every request an office makes must be keyed to that office, and distinctly:
+  // the service caches by key, so a repeated key would replay the wrong clip.
+  const badKeys = keys.filter(k => {
+    const ck = current[k].chunkKeys || [];
+    const n = ck.length;
+    if (n === 1) return ck[0] !== current[k].cacheKey;
+    return new Set(ck).size !== n ||
+           !ck.every((key, i) => key === `${current[k].cacheKey}-${i + 1}of${n}`);
+  });
+  check(badKeys.length === 0,
+        `every chunk carries its own cache key (${badKeys.length} bad: ${badKeys.slice(0, 3).join(', ')})`);
+
   // ------------------------------------------------- PART 2: the doc contract
   console.log('\n— PART 2: buildOffice contract —');
   if (!splitExists) {
@@ -252,6 +280,14 @@ async function capture() {
         check(api.renderOfficeText(doc) === g.audioText,
               `${key}: renderOfficeText(doc) reproduces the golden audio text exactly`);
         check(doc.cacheKey === g.cacheKey, `${key}: doc.cacheKey matches the golden cache key`);
+
+        // --- what actually goes on the wire ---
+        const spoken = api.renderOfficeText(doc);
+        const chunks = api.splitOfficeText(spoken);
+        const longest = chunks.reduce((n, c) => Math.max(n, c.length), 0);
+        check(chunks.every(c => c.length < TTS_HARD_LIMIT),
+              `${key}: no chunk reaches ${TTS_HARD_LIMIT} chars (${chunks.length} chunk(s), longest ${longest})`);
+        check(chunks.join('') === spoken, `${key}: the chunks rejoin into the spoken text exactly`);
       }
     }
   }

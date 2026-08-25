@@ -42,10 +42,13 @@ const src = [
   extractFn('buildPendingOffice'),
   extractFn('renderOfficeHTML'),
   extractFn('renderOfficeText'),
+  extractLine('const OFFICE_TTS_MAX'),
+  extractFn('splitOfficeText'),
 ].join('\n\n');
 
 const api = new Function('localStorage', 'console', 'window', 'document',
-  src + '\nreturn { buildTraditionalOffice, buildPendingOffice, renderOfficeHTML, renderOfficeText };')(
+  src + '\nreturn { buildTraditionalOffice, buildPendingOffice, renderOfficeHTML, renderOfficeText,'
+      + '\n         splitOfficeText, OFFICE_TTS_MAX };')(
   { getItem: () => null, setItem: () => {}, removeItem: () => {} },
   { warn: () => {}, error: () => {}, log: () => {} },
   {}, { getElementById: () => null });
@@ -54,6 +57,11 @@ const corpusFn = require(pathMod.join(REPO, 'netlify/functions/office-corpus.js'
 const resolve = (date, hour) =>
   corpusFn.handler({ httpMethod: 'GET', queryStringParameters: { date, hour } })
     .then(r => ({ status: r.statusCode, doc: JSON.parse(r.body) }));
+
+// What the voice service accepts in one request. Nothing that goes on the wire
+// may reach it -- a whole office routinely would, which is why the spoken text
+// is chunked before it is sent.
+const TTS_HARD_LIMIT = 5000;
 
 // 2026-08-24 St Bartholomew (II. classis), 2027-03-28 Easter Sunday (alleluia
 // conclusion), 2026-11-02 All Souls (Requiem conclusion), 2027-03-26 Triduum.
@@ -99,6 +107,14 @@ const CASES = [
     check(/[àáâãäèéêëìíîïòóôõöùúûüæœǽ]/i.test(html), `${key}: html carries accented Latin`);
     check(html.indexOf('undefined') < 0, `${key}: no "undefined" leaked into the html`);
     check(text.indexOf('undefined') < 0, `${key}: no "undefined" leaked into the audio text`);
+
+    // -- what actually goes on the wire --
+    const chunks = api.splitOfficeText(text);
+    const longest = chunks.reduce((n, c) => Math.max(n, c.length), 0);
+    check(chunks.length > 0, `${key}: splits into ${chunks.length} chunk(s)`);
+    check(chunks.every(c => c.length < TTS_HARD_LIMIT),
+      `${key}: no chunk reaches ${TTS_HARD_LIMIT} chars (longest ${longest})`);
+    check(chunks.join('') === text, `${key}: the chunks rejoin into the spoken text exactly`);
     console.log('');
   }
 
@@ -107,6 +123,39 @@ const CASES = [
   const vesp = api.buildTraditionalOffice(vespCorpus, 'vespers', '2026-08-24', 'traditional');
   check(/^Second Vespers of /.test(vesp.label || ''), `label: "${vesp.label}"`);
   check(api.renderOfficeHTML(vesp).indexOf(vesp.label) >= 0, 'the label reaches the screen');
+
+  console.log('\n— the audio button —');
+  for (const hour of ['vespers', 'lauds', 'vigils']) {
+    const { doc: c } = await resolve('2026-08-24', hour);
+    const d = api.buildTraditionalOffice(c, hour, '2026-08-24', 'traditional');
+    const buttons = d.parts.filter(p => p.type === 'button');
+    const notes = d.parts.filter(p => p.type === 'note');
+    const html = api.renderOfficeHTML(d);
+    if (hour === 'vigils') {
+      check(buttons.length === 0, 'vigils: no Hear button is offered');
+      check(notes.length === 1 && notes[0].text === 'Audio for Vigils coming soon.',
+        'vigils: the note stands where the button would be');
+      check(notes.every(n => n.audio === 'skip'), 'vigils: the note is not spoken');
+      check(html.indexOf('Audio for Vigils coming soon.') >= 0, 'vigils: the note reaches the screen');
+      check(html.indexOf('vigilsPlayBtn') < 0, 'vigils: no play button in the html');
+    } else {
+      const player = hour === 'lauds' ? 'playLaudsAudio()' : 'playVespersAudio()';
+      check(buttons.length === 1 && buttons[0].id === `${hour}PlayBtn`, `${hour}: keeps its Hear button`);
+      check(html.indexOf(player) >= 0, `${hour}: the button calls ${player}`);
+      check(notes.length === 0, `${hour}: no "coming soon" note`);
+    }
+  }
+
+  console.log('\n— the chunker —');
+  check(api.OFFICE_TTS_MAX < TTS_HARD_LIMIT,
+    `the chunk ceiling (${api.OFFICE_TTS_MAX}) sits under the service limit (${TTS_HARD_LIMIT})`);
+  check(api.splitOfficeText('').length === 0, 'empty text yields no chunks');
+  check(api.splitOfficeText('short').length === 1, 'a short text stays one chunk');
+  // A section with no seam in it still has to be cut somewhere.
+  const wall = 'x'.repeat(12000);
+  const wallChunks = api.splitOfficeText(wall);
+  check(wallChunks.every(c => c.length < TTS_HARD_LIMIT) && wallChunks.join('') === wall,
+    `a seamless ${wall.length}-char section is forced into ${wallChunks.length} chunks anyway`);
 
   console.log('\n— pending and failure states —');
   const pending = api.buildPendingOffice('vespers', '2026-08-24', 'traditional', null);

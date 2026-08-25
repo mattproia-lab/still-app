@@ -4177,17 +4177,24 @@ const CHARACTER_AMBIENCE = {
 let _ambienceAudio = null;
 
 function playVoiceUrl(url, buttonEl, originalHtml, character) {
+  // A voice arrives either as a single clip or, when the text was too long for
+  // one TTS request, as an ordered run of them. The run plays back to back;
+  // the button and the ambience treat it as one utterance.
+  const urls = Array.isArray(url) ? url : [url];
+  let idx = 0;
+
   if (_currentAudio) { _currentAudio.pause(); _currentAudio = null; }
   if (_ambienceAudio) { _ambienceAudio.pause(); _ambienceAudio = null; }
 
-  const audio = new Audio(url);
+  const audio = new Audio(urls[0]);
   _currentAudio = audio;
 
   // Start ambience
   const ambienceSrc = CHARACTER_AMBIENCE[character];
   console.log('character:', character, 'ambienceSrc:', ambienceSrc);
+  let ambience = null;
   if (ambienceSrc) {
-    const ambience = new Audio(ambienceSrc);
+    ambience = new Audio(ambienceSrc);
     ambience.loop = true;
     ambience.volume = 0;
     _ambienceAudio = ambience;
@@ -4198,14 +4205,6 @@ function playVoiceUrl(url, buttonEl, originalHtml, character) {
       if (ambience.volume < 0.12) ambience.volume = Math.min(0.12, ambience.volume + 0.01);
       else clearInterval(fadeIn);
     }, 150);
-
-    // Fade ambience out when voice ends
-    audio.addEventListener('ended', () => {
-      let fadeOut = setInterval(() => {
-        if (ambience.volume > 0) ambience.volume = Math.max(0, ambience.volume - 0.01);
-        else { clearInterval(fadeOut); ambience.pause(); _ambienceAudio = null; }
-      }, 150);
-    });
   }
 
   buttonEl.innerHTML = '▐▐ Playing…';
@@ -4214,6 +4213,23 @@ function playVoiceUrl(url, buttonEl, originalHtml, character) {
   audio.play().catch(() => { buttonEl.innerHTML = originalHtml; });
 
   audio.addEventListener('ended', () => {
+    // Another piece of the same voice: swap the source and carry on, with the
+    // ambience still running underneath.
+    if (idx + 1 < urls.length) {
+      idx++;
+      audio.src = urls[idx];
+      audio.play().catch(() => { buttonEl.innerHTML = originalHtml; });
+      return;
+    }
+
+    // Fade ambience out when the voice ends
+    if (ambience) {
+      let fadeOut = setInterval(() => {
+        if (ambience.volume > 0) ambience.volume = Math.max(0, ambience.volume - 0.01);
+        else { clearInterval(fadeOut); ambience.pause(); _ambienceAudio = null; }
+      }, 150);
+    }
+
     buttonEl.innerHTML = '↺ Hear Again';
     buttonEl.disabled = false;
     buttonEl.onclick = () => playVoiceUrl(url, buttonEl, originalHtml, character);
@@ -4280,33 +4296,94 @@ function paceOfficeText(text) {
   return t;
 }
 
+/* The voice service takes 5000 characters in a request. A full office is
+   routinely longer -- traditional Vespers runs near 9000, and modern Vespers
+   crosses the line too -- so the text goes out in pieces and comes back as a
+   run of clips. 4800 leaves room under the ceiling. */
+const OFFICE_TTS_MAX = 4800;
+
+/* Cut the spoken text into requestable pieces. Sections are the seam: an
+   unpaced string separates them with a blank line, a paced one with a break
+   tag on its own line, and both are places the voice already rests, so a cut
+   there is inaudible. Pieces come back in order and rejoin into the original
+   exactly. A section too long to stand alone is split again at sentences, and
+   past that by force -- the ceiling is not negotiable. */
+function splitOfficeText(text, max) {
+  const limit = max || OFFICE_TTS_MAX;
+  if (!text) return [];
+
+  // Splitting on a lookahead keeps each separator attached to the section it
+  // introduces, which is what lets the pieces rejoin without loss.
+  const sections = [];
+  text.split(/(?=\n\n|\n<break\b)/).forEach(function (section) {
+    if (section.length <= limit) { sections.push(section); return; }
+    let rest = section;
+    while (rest.length > limit) {
+      // Prefer the last sentence end that still fits, then the last space,
+      // then the limit itself.
+      let cut = rest.lastIndexOf('. ', limit);
+      if (cut > 0) cut += 2; else cut = rest.lastIndexOf(' ', limit);
+      if (cut <= 0) cut = limit;
+      sections.push(rest.slice(0, cut));
+      rest = rest.slice(cut);
+    }
+    if (rest) sections.push(rest);
+  });
+
+  const chunks = [];
+  let current = '';
+  sections.forEach(function (section) {
+    if (current && current.length + section.length > limit) { chunks.push(current); current = section; }
+    else current += section;
+  });
+  if (current) chunks.push(current);
+  return chunks;
+}
+
+/* One request, one clip. Returns the URL the player should use. */
+async function fetchOfficeClip(text, cacheKey) {
+  const res = await fetch('https://still-tts.onrender.com/office-tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, cacheKey })
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error);
+
+  if (data.cached && data.url) return data.url;
+  if (data.audio) {
+    const binary = atob(data.audio);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return URL.createObjectURL(new Blob([bytes], { type: 'audio/mpeg' }));
+  }
+  throw new Error('no audio returned');
+}
+
 /* The only route to the TTS service. All four hours come through here now --
    Vigils and Compline used to carry their own copies of this fetch. `text` is
    sent as given: pacing belongs to renderOfficeText(), which knows whether the
-   hour is paced. */
+   hour is paced. An office that fits in one request keeps its original cache
+   key, so what is already cached stays cached; a split office keys each piece
+   separately, since the service caches by key and would otherwise hand back
+   the wrong clip. */
 async function requestOfficeAudio(text, cacheKey, btnId, btnLabel) {
   const btn = document.getElementById(btnId);
   if (btn) { btn.textContent = '\u25CC Preparing\u2026'; btn.disabled = true; }
   try {
-    const res = await fetch('https://still-tts.onrender.com/office-tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, cacheKey })
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
+    const chunks = splitOfficeText(text);
+    if (!chunks.length) throw new Error('nothing to speak');
 
-    let audioUrl;
-    if (data.cached && data.url) {
-      audioUrl = data.url;
-    } else if (data.audio) {
-      const binary = atob(data.audio);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      audioUrl = URL.createObjectURL(blob);
+    const urls = [];
+    for (let i = 0; i < chunks.length; i++) {
+      if (btn && chunks.length > 1) {
+        btn.textContent = `\u25CC Preparing\u2026 ${i + 1}/${chunks.length}`;
+      }
+      urls.push(await fetchOfficeClip(
+        chunks[i],
+        chunks.length > 1 ? `${cacheKey}-${i + 1}of${chunks.length}` : cacheKey));
     }
-    playVoiceUrl(audioUrl, btn, btnLabel, 'office');
+    playVoiceUrl(urls, btn, btnLabel, 'office');
   } catch (err) {
     console.error('Office audio error:', err.message);
     if (btn) { btn.textContent = btnLabel; btn.disabled = false; }
@@ -14144,9 +14221,17 @@ function buildTraditionalOffice(corpus, hour, today, rite) {
     }
   });
 
-  parts.push({ type: 'button', audio: 'skip', id: `${hour}PlayBtn`,
-               onclick: `play${hourTitle === 'Matins' ? 'Vigils' : hourTitle}Audio()`,
-               text: `◎ Hear ${hourTitle}` });
+  // Matins is the long hour: some 26,000 spoken characters, five times what
+  // the voice service takes in one request and a dozen requests before the
+  // first word is heard. It stays silent until that is worth building. Lauds
+  // and Vespers are a couple of pieces each and chunk cleanly.
+  if (hour === 'vigils') {
+    add('note', 'Audio for Vigils coming soon.');
+  } else {
+    parts.push({ type: 'button', audio: 'skip', id: `${hour}PlayBtn`,
+                 onclick: `play${hourTitle}Audio()`,
+                 text: `◎ Hear ${hourTitle}` });
+  }
   add('nav');
 
   return {
@@ -14545,6 +14630,11 @@ function renderOfficeHTML(doc) {
         break;
       case 'button':
         html += `<button id="${part.id}" onclick="${part.onclick}" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">${part.text}</button>`;
+        break;
+      // Stands where the Hear button would be, in the same place and the same
+      // gold, quieter and without the frame -- there is nothing to press.
+      case 'note':
+        html += `<p style="margin-top:20px;text-align:center;font-size:14px;font-style:italic;color:rgba(200,146,12,.45)">${part.text}</p>`;
         break;
       case 'nav':
         html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
