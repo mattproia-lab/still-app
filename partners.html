@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Partners — Still: Contemplative Prayer</title>
+<style>
+  :root {
+    --bg:#050407; --ink:#e8e2d6; --gold:#f0c040; --gold-dim:#d4a854;
+    --line:rgba(200,146,12,.18); --panel:rgba(255,255,255,.03); --muted:rgba(232,226,214,.45);
+  }
+  * { box-sizing:border-box; }
+  body { background:var(--bg); color:var(--ink); font-family:Georgia,'Times New Roman',serif;
+         max-width:1040px; margin:0 auto; padding:32px 18px 64px; line-height:1.6; }
+  h1 { font-size:1.5rem; font-weight:normal; color:var(--gold); margin:0 0 4px; }
+  h2 { font-family:Arial,Helvetica,sans-serif; font-size:.72rem; letter-spacing:.2em;
+       text-transform:uppercase; color:var(--gold-dim); margin:36px 0 12px; font-weight:700; }
+  .who { font-family:Arial,Helvetica,sans-serif; font-size:.78rem; color:var(--muted); }
+  .badge { display:inline-block; font-family:Arial,Helvetica,sans-serif; font-size:.6rem;
+           letter-spacing:.16em; text-transform:uppercase; color:var(--gold);
+           border:1px solid var(--line); border-radius:3px; padding:2px 7px; margin-left:8px; }
+
+  .cards { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+  .card { flex:1 1 150px; background:var(--panel); border:1px solid rgba(255,255,255,.07);
+          border-radius:10px; padding:14px 16px; }
+  .card .label { font-family:Arial,Helvetica,sans-serif; font-size:.6rem; letter-spacing:.16em;
+                 text-transform:uppercase; color:var(--muted); }
+  .card .value { font-size:1.5rem; color:var(--gold); margin-top:4px; }
+
+  .scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table { width:100%; border-collapse:collapse; font-family:Arial,Helvetica,sans-serif;
+          font-size:.82rem; min-width:520px; }
+  th { text-align:left; font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
+       color:var(--muted); font-weight:700; padding:8px 10px; border-bottom:1px solid var(--line); }
+  td { padding:10px; border-bottom:1px solid rgba(255,255,255,.05); vertical-align:top; }
+  td.num, th.num { text-align:right; white-space:nowrap; }
+  tr.rep-row td { color:var(--gold-dim); font-weight:700; border-bottom:1px solid var(--line); }
+  tr.total-row td { border-top:1px solid var(--line); border-bottom:none;
+                    color:var(--gold); font-weight:700; }
+  .code { font-family:'SF Mono',Consolas,monospace; color:var(--gold); }
+  .dim { color:var(--muted); }
+  .status-paid { color:#7fb069; }
+  .status-pending { color:var(--gold-dim); }
+
+  .note { font-family:Arial,Helvetica,sans-serif; font-size:.72rem; color:var(--muted);
+          margin-top:10px; line-height:1.6; }
+  .empty { font-family:Arial,Helvetica,sans-serif; font-size:.8rem; color:var(--muted);
+           background:var(--panel); border:1px solid rgba(255,255,255,.07);
+           border-radius:10px; padding:18px; }
+
+  /* Phones: the table stops being a grid and becomes one block per row, each
+     cell labelled by its column. Nothing is hidden and nothing scrolls
+     sideways, which matters because these are money columns. */
+  @media (max-width:600px) {
+    table { min-width:0; }
+    thead { display:none; }
+    tr { display:block; border:1px solid rgba(255,255,255,.07); border-radius:10px;
+         padding:6px 10px; margin-bottom:10px; background:var(--panel); }
+    td { display:flex; justify-content:space-between; gap:14px; border:none;
+         padding:5px 0; text-align:right; }
+    td::before { content:attr(data-label); font-size:.6rem; letter-spacing:.14em;
+                 text-transform:uppercase; color:var(--muted); text-align:left; flex:0 0 auto; }
+    td.num { text-align:right; }
+    tr.rep-row td, tr.total-row td { border:none; }
+    tr.total-row { border-color:var(--line); }
+  }
+</style>
+</head>
+<body>
+  <h1>Still — Partners</h1>
+  <div class="who" id="who">Loading…</div>
+  <div id="content"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var SUPA_URL  = 'https://zbskapivansfewegllnz.supabase.co';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI';
+  var HOME = 'https://stillprayer.app';
+
+  function leave() { location.replace(HOME); }
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+  var money = function (n) { return '$' + (Number(n) || 0).toFixed(2); };
+  var date  = function (d) { return d ? String(d).slice(0, 10) : '—'; };
+
+  /* One refresh attempt before giving up. Access tokens last an hour, so
+     without this a rep who left the tab open is bounced to the marketing site
+     rather than shown their report. */
+  function refresh() {
+    var rt = localStorage.getItem('still_refresh_token');
+    if (!rt) return Promise.resolve(null);
+    return fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_ANON, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: rt })
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.access_token) return null;
+        localStorage.setItem('still_access_token', d.access_token);
+        if (d.refresh_token) localStorage.setItem('still_refresh_token', d.refresh_token);
+        return d.access_token;
+      }).catch(function () { return null; });
+  }
+
+  function report(token) {
+    return fetch('/.netlify/functions/referral-report', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+  }
+
+  function load() {
+    var token = localStorage.getItem('still_access_token');
+    if (!token) return leave();
+    report(token).then(function (res) {
+      if (res.status === 401) {
+        return refresh().then(function (t) { return t ? report(t) : null; });
+      }
+      return res;
+    }).then(function (res) {
+      if (!res) return leave();
+      if (res.status === 401) return leave();
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function (data) { if (data) render(data); })
+      .catch(function (e) {
+        document.getElementById('who').textContent = '';
+        document.getElementById('content').innerHTML =
+          '<div class="empty">The report could not be loaded. ' + esc(e.message) + '</div>';
+      });
+  }
+
+  /* Members and monthly rate are derived from the commissions rows, keyed by
+     code. codes drives the table rather than commissions, so a code with no
+     live subscribers still shows as a row reading 0 -- otherwise a rep whose
+     referrals have all churned sees an empty page and cannot tell that from a
+     failure. */
+  function byCode(commissions) {
+    var m = {};
+    commissions.forEach(function (c) {
+      var k = c.code || '';
+      if (!m[k]) m[k] = { members: 0, monthly: 0 };
+      m[k].members += 1;
+      m[k].monthly += Number(c.monthly_commission) || 0;
+    });
+    return m;
+  }
+
+  /* Money comes from the payouts table and nowhere else.
+
+       paid    payout rows marked paid
+       owed    payout rows not yet marked paid
+       earned  both together -- everything recorded as a payout
+
+     None of it is derived from the monthly rate. A rep with subscribers but no
+     payout rows entered yet reads $0.00 earned, which is accurate: nothing has
+     been calculated for them yet. */
+  function payoutTotals(rows) {
+    var t = { earned: 0, paid: 0, owed: 0 };
+    (rows || []).forEach(function (p) {
+      var amt = Number(p.amount) || 0;
+      t.earned += amt;
+      if (p.status === 'paid') t.paid += amt; else t.owed += amt;
+    });
+    return t;
+  }
+
+  function codeRows(codes, stats) {
+    return codes.map(function (c) {
+      var s = stats[c.code] || { members: 0, monthly: 0 };
+      var members = c.max_referrals
+        ? s.members + ' <span class="dim">/ ' + esc(c.max_referrals) + '</span>'
+        : String(s.members);
+      return '<tr>' +
+        '<td data-label="Code"><span class="code">' + esc(c.code) + '</span></td>' +
+        '<td data-label="Channel">' + (c.channel ? esc(c.channel) : '<span class="dim">—</span>') + '</td>' +
+        '<td data-label="Description">' + (c.description ? esc(c.description) : '<span class="dim">—</span>') + '</td>' +
+        '<td class="num" data-label="Members">' + members + '</td>' +
+        '<td class="num" data-label="Monthly">' + money(s.monthly) + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  function table(head, rows) {
+    return '<div class="scroll"><table><thead><tr>' + head + '</tr></thead><tbody>' +
+           rows + '</tbody></table></div>';
+  }
+
+  function card(label, value) {
+    return '<div class="card"><div class="label">' + label + '</div>' +
+           '<div class="value">' + value + '</div></div>';
+  }
+
+  var CODE_HEAD = '<th>Code</th><th>Channel</th><th>Description</th>' +
+                  '<th class="num">Members</th><th class="num">Monthly</th>';
+
+  function render(data) {
+    var codes = data.codes || [], commissions = data.commissions || [], payouts = data.payouts || [];
+    var stats = byCode(commissions);
+
+    document.getElementById('who').innerHTML =
+      esc(data.email) + (data.admin ? '<span class="badge">Admin</span>' : '');
+
+    var members = commissions.length;
+    var monthly = commissions.reduce(function (t, c) { return t + (Number(c.monthly_commission) || 0); }, 0);
+    var totals = payoutTotals(payouts);
+
+    /* At a glance, above everything. For an admin these are the same figures
+       summed across every rep, which is what the totals row repeats. */
+    var html = '<div class="cards">' +
+      card('Active members', members) +
+      card('Monthly rate', money(monthly)) +
+      card('Earned', money(totals.earned)) +
+      card('Owed', money(totals.owed)) +
+    '</div>';
+
+    if (data.admin) {
+      /* One summary line per rep, then every code grouped under its rep. */
+      var byRep = {};
+      codes.forEach(function (c) {
+        var k = c.rep_email || '';
+        if (!byRep[k]) byRep[k] = { name: c.rep_name, email: c.rep_email, codes: [], members: 0, monthly: 0 };
+        byRep[k].codes.push(c);
+        var s = stats[c.code] || { members: 0, monthly: 0 };
+        byRep[k].members += s.members;
+        byRep[k].monthly += s.monthly;
+      });
+      // Payouts are keyed by rep independently of codes: a rep can have a
+      // payout recorded before any code is assigned, and would otherwise be
+      // missing from the totals entirely.
+      var payoutsByRep = {};
+      payouts.forEach(function (p) {
+        var k = (p.rep_email || '').trim().toLowerCase();
+        (payoutsByRep[k] = payoutsByRep[k] || []).push(p);
+      });
+      Object.keys(payoutsByRep).forEach(function (k) {
+        if (!byRep[k]) byRep[k] = { name: null, email: k, codes: [], members: 0, monthly: 0 };
+      });
+
+      var keys = Object.keys(byRep).sort();
+      var grand = { members: 0, monthly: 0, earned: 0, paid: 0, owed: 0 };
+
+      var repRows = keys.map(function (k) {
+        var r = byRep[k];
+        var t = payoutTotals(payoutsByRep[k]);
+        grand.members += r.members; grand.monthly += r.monthly;
+        grand.earned  += t.earned;  grand.paid    += t.paid;  grand.owed += t.owed;
+        return '<tr>' +
+          '<td data-label="Rep">' + (r.name ? esc(r.name) : '<span class="dim">—</span>') + '</td>' +
+          '<td data-label="Email">' + (r.email ? esc(r.email) : '<span class="dim">unassigned</span>') + '</td>' +
+          '<td class="num" data-label="Codes">' + r.codes.length + '</td>' +
+          '<td class="num" data-label="Members">' + r.members + '</td>' +
+          '<td class="num" data-label="Monthly">' + money(r.monthly) + '</td>' +
+          '<td class="num" data-label="Earned">' + money(t.earned) + '</td>' +
+          '<td class="num" data-label="Paid">' + money(t.paid) + '</td>' +
+          '<td class="num" data-label="Owed">' + money(t.owed) + '</td>' +
+        '</tr>';
+      }).join('');
+
+      repRows += '<tr class="total-row">' +
+        '<td data-label="Total">Total</td>' +
+        '<td data-label="Reps">' + keys.length + ' rep' + (keys.length === 1 ? '' : 's') + '</td>' +
+        '<td class="num" data-label="Codes">' + codes.length + '</td>' +
+        '<td class="num" data-label="Members">' + grand.members + '</td>' +
+        '<td class="num" data-label="Monthly">' + money(grand.monthly) + '</td>' +
+        '<td class="num" data-label="Earned">' + money(grand.earned) + '</td>' +
+        '<td class="num" data-label="Paid">' + money(grand.paid) + '</td>' +
+        '<td class="num" data-label="Owed">' + money(grand.owed) + '</td>' +
+      '</tr>';
+
+      html += '<h2>Reps</h2>' + table(
+        '<th>Rep</th><th>Email</th><th class="num">Codes</th><th class="num">Members</th>' +
+        '<th class="num">Monthly</th><th class="num">Earned</th>' +
+        '<th class="num">Paid</th><th class="num">Owed</th>', repRows);
+
+      html += '<h2>Codes</h2>' + table(CODE_HEAD, keys.map(function (k) {
+        var r = byRep[k];
+        if (!r.codes.length) return '';
+        return '<tr class="rep-row"><td colspan="5" data-label="Rep">' +
+                 esc(r.name || r.email || 'Unassigned') + '</td></tr>' +
+               codeRows(r.codes, stats);
+      }).join(''));
+    } else if (codes.length) {
+      html += '<h2>Your codes</h2>' + table(CODE_HEAD, codeRows(codes, stats));
+    } else {
+      html += '<h2>Your codes</h2><div class="empty">No referral codes are assigned to ' +
+              esc(data.email) + ' yet.</div>';
+    }
+
+    html += '<h2>Payouts</h2>';
+    if (payouts.length) {
+      html += table(
+        '<th>Period</th>' + (data.admin ? '<th>Rep</th>' : '') +
+        '<th class="num">Amount</th><th>Status</th><th>Paid</th>',
+        payouts.map(function (p) {
+          return '<tr>' +
+            '<td data-label="Period">' + date(p.period_start) + ' – ' + date(p.period_end) + '</td>' +
+            (data.admin ? '<td data-label="Rep">' + esc(p.rep_email) + '</td>' : '') +
+            '<td class="num" data-label="Amount">' + money(p.amount) + '</td>' +
+            '<td data-label="Status"><span class="status-' + (p.status === 'paid' ? 'paid' : 'pending') + '">' +
+              esc(p.status || 'pending') + '</span></td>' +
+            '<td data-label="Paid">' + date(p.paid_at) + '</td>' +
+          '</tr>';
+        }).join(''));
+    } else {
+      html += '<div class="empty">No payouts recorded yet.</div>';
+    }
+
+    html += '<p class="note"><strong>Monthly</strong> is the current commission rate for ' +
+            'active subscribers — 30% of net, after Stripe\'s 3% or the 15% app-store fee. ' +
+            'Annual subscribers are shown as their annual commission divided by 12. It is a ' +
+            'rate, not an amount earned: a subscriber who cancels tomorrow stops counting today. ' +
+            '<strong>Earned</strong>, <strong>Paid</strong> and <strong>Owed</strong> come from ' +
+            'recorded payouts — earned is paid plus owed. They are not derived from the monthly ' +
+            'rate, so a rep with no payout rows entered yet reads $0.00.</p>';
+
+    document.getElementById('content').innerHTML = html;
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

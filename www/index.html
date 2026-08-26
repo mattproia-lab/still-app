@@ -11825,12 +11825,69 @@ function onAuthed(user) {
   window.currentUser = user;
   refreshSubscription().then(() => { if (isSubscribed()) hidePaywall(); });
   syncLiturgicalRite();   // profile wins on sign-in; see section 3
+  captureSignupPlatform();   // first signup wins; never overwritten
   try {
     if (window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()
         && Capacitor.Plugins.Purchases && user && user.id) {
       Capacitor.Plugins.Purchases.logIn({ appUserID: user.id }).catch(function(){});
     }
   } catch (e) {}
+}
+
+/* Which platform this account first signed in from, recorded once.
+
+   Commission depends on it: a web subscriber nets 97% after Stripe, an App
+   Store or Play subscriber 85% after Apple or Google. rep_commissions reads
+   this column, and treats NULL as the app rate, so a wrong value here
+   overpays a rep where a missing one does not.
+
+   Written only when the column is null. First signup wins: reinstalling on
+   another platform, or opening the web app once, must not rewrite the history
+   the commission was calculated from.
+
+   Its own fetch rather than a column added to syncLiturgicalRite()'s select,
+   deliberately. refreshSubscription() carries a scar from exactly that: when
+   trial_extended_until was unreadable the whole select failed and took
+   subscription_status down with it. Isolated, the worst this can do is not
+   record a platform.
+
+   supaFetch() is NOT usable here. It authenticates as SUPA_ANON, and the
+   "Users can update own profile" policy requires auth.uid() = id, which an
+   anon-key request has no way to satisfy. Profile writes go through the user's
+   own token -- the pattern pushLiturgicalRite() already uses. */
+function detectSignupPlatform() {
+  if (!window.Capacitor?.isNativePlatform?.()) return 'web';
+  return window.Capacitor.getPlatform?.() === 'ios' ? 'ios' : 'android';
+}
+
+async function captureSignupPlatform() {
+  const uid = window.currentUser && window.currentUser.id;
+  if (!uid) return;                       // guests have no profile to write to
+  try {
+    const token = await getValidToken();
+    if (!token) return;
+
+    const res = await fetch(
+      `${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=signup_platform`,
+      { headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token } });
+    if (!res.ok) { console.warn('signup_platform read failed:', res.status); return; }
+
+    const data = await res.json();
+    if (!data || !data[0]) return;        // no profile row yet
+    if (data[0].signup_platform) return;  // already recorded -- leave it alone
+
+    await fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${uid}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPA_ANON,
+        'Authorization': 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ signup_platform: detectSignupPlatform() })
+    });
+  } catch (e) {
+    // Attribution only. Never let this block or break a sign-in.
+  }
 }
 
 async function signOut() {

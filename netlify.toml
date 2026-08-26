@@ -67,6 +67,20 @@
   to = "/:splat.js"
   status = 200
 
+# The partner commission portal. A passthrough, NOT a block: this is a real
+# page that has to be served. It is gated in the browser, not here -- a forced
+# 404 cannot tell a signed-in rep from anyone else and would lock out the
+# people it exists for.
+#
+# Nothing sensitive ships in the page. The anon key in it is public by design
+# (it is already in index.html), every figure arrives from
+# /.netlify/functions/referral-report, and that function refuses without a
+# valid Supabase JWT and filters by the caller's own email.
+[[redirects]]
+  from   = "/partners"
+  to     = "/partners.html"
+  status = 200
+
 [[redirects]]
   from   = "/api/sing-the-hours"
   to     = "/.netlify/functions/rss-proxy"

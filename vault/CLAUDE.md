@@ -80,6 +80,7 @@ If a new source contradicts the wiki, do not silently overwrite. Flag it: state 
 
 - Single ~14,000-line `index.html`, Capacitor wrapper, iOS + Android + web. Netlify deploy, Supabase auth (`zbskapivansfewegllnz`), RevenueCat mobile / Stripe web, ElevenLabs + Anthropic AI features, Render TTS server.
 - `www/` is manually synced build output: `cp index.html www/index.html && cp bell-native.js www/bell-native.js && cp -r still-mobile/. www/still-mobile/ && cp -r assets/. www/assets/`
+- **Not synced to `www/`:** `partners.html`, `delete-account.html`, `privacy.html`, `support.html`, `reset.html`. These are web-only pages served from the repo root by `publish = "."`; the native shell never loads them, and a copy in `www/` would be a second version to keep current for no one's benefit. `partners.html` additionally reaches `/.netlify/functions/referral-report`, which only exists on the deployed site.
 - Git: always `git add` specific files, never `git add .`. Include the push command with every code change.
 - iOS builds only on MacInCloud (`~/still-app`). Windows + VS Code is the primary environment.
 

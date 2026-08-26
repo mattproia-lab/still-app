@@ -10,6 +10,16 @@ async function updateProfile(userId, fields) {
     body: JSON.stringify(fields)
   });
 }
+/* Which plan, from the product that was bought. The two live ids are
+   'still_monthly' and 'still_yearly'; the test is broader than those so a
+   renamed or added annual sku ('..._annual') is still read correctly.
+
+   Returns null for a missing product id rather than assuming monthly -- same
+   rule as the Stripe side: a guess must not be recorded as an observation. */
+function planFromProductId(productId) {
+  if (typeof productId !== 'string') return null;
+  return /annual|yearly/i.test(productId) ? 'annual' : 'monthly';
+}
 async function addVoiceCredit(userId, cents) {
   const res = await fetch(`${SUPA_URL}/rest/v1/rpc/add_voice_credit`, {
     method: 'POST',
@@ -46,9 +56,12 @@ exports.handler = async function(event) {
     // 3) Subscriptions -> mark premium (same column as Stripe) + stamp family group
     else if (productId === 'still_monthly' || productId === 'still_yearly') {
       if (['INITIAL_PURCHASE','RENEWAL','UNCANCELLATION','PRODUCT_CHANGE','TRANSFER'].includes(type)) {
-        await updateProfile(userId, { subscription_status: 'premium', sub_group_id: groupId });
+        await updateProfile(userId, { subscription_status: 'premium', sub_group_id: groupId,
+                                      subscription_plan: planFromProductId(productId) });
       } else if (['CANCELLATION','EXPIRATION'].includes(type)) {
-        await updateProfile(userId, { subscription_status: 'free', sub_group_id: null });
+        // The plan goes with the subscription, as on the Stripe side.
+        await updateProfile(userId, { subscription_status: 'free', sub_group_id: null,
+                                      subscription_plan: null });
       }
     }
   } catch (e) {
