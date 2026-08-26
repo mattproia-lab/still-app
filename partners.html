@@ -49,6 +49,36 @@
            background:var(--panel); border:1px solid rgba(255,255,255,.07);
            border-radius:10px; padding:18px; }
 
+  .gate { font-family:Arial,Helvetica,sans-serif; font-size:.86rem; color:var(--ink);
+          background:var(--panel); border:1px solid var(--line); border-radius:10px;
+          padding:26px; margin-top:24px; line-height:1.7; }
+  .gate a { color:var(--gold); }
+
+  form.create { background:var(--panel); border:1px solid rgba(255,255,255,.07);
+                border-radius:10px; padding:18px; margin-top:12px; }
+  .row { display:flex; flex-wrap:wrap; gap:10px; }
+  .field { flex:1 1 180px; display:flex; flex-direction:column; gap:5px; }
+  .field label { font-family:Arial,Helvetica,sans-serif; font-size:.6rem; letter-spacing:.16em;
+                 text-transform:uppercase; color:var(--muted); }
+  .field input, .field select {
+    background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); border-radius:6px;
+    color:var(--ink); font-family:Arial,Helvetica,sans-serif; font-size:.88rem;
+    padding:10px 12px; outline:none; width:100%; }
+  .field input:focus, .field select:focus { border-color:rgba(200,146,12,.5); }
+  #newCode { font-family:'SF Mono',Consolas,monospace; letter-spacing:.08em;
+             text-transform:uppercase; }
+  .avail { font-family:Arial,Helvetica,sans-serif; font-size:.72rem; min-height:1.2em;
+           margin-top:8px; }
+  .avail.ok   { color:#7fb069; }
+  .avail.bad  { color:#c86b5e; }
+  .avail.wait { color:var(--muted); }
+  button.create {
+    margin-top:14px; background:rgba(200,146,12,.16); border:1px solid var(--line);
+    border-radius:6px; color:var(--gold); font-family:Arial,Helvetica,sans-serif;
+    font-size:.7rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+    padding:11px 20px; cursor:pointer; }
+  button.create:disabled { opacity:.4; cursor:default; }
+
   /* Phones: the table stops being a grid and becomes one block per row, each
      cell labelled by its column. Nothing is hidden and nothing scrolls
      sideways, which matters because these are money columns. */
@@ -64,6 +94,10 @@
     td.num { text-align:right; }
     tr.rep-row td, tr.total-row td { border:none; }
     tr.total-row { border-color:var(--line); }
+    /* 44px minimum so the control is tappable, and 16px inputs so iOS does not
+       zoom the page when one takes focus. */
+    .field input, .field select { font-size:16px; padding:12px; }
+    button.create { width:100%; padding:14px; }
   }
 </style>
 </head>
@@ -115,15 +149,63 @@
     });
   }
 
+  /* The uid comes off the JWT rather than a round trip to /auth/v1/user -- the
+     same decode getValidToken() does in index.html. */
+  function uidFromToken(t) {
+    try { return JSON.parse(atob(t.split('.')[1])).sub || null; } catch (e) { return null; }
+  }
+
+  /* One retry after a refresh, so an hour-old tab recovers instead of being
+     thrown back to the marketing site. */
+  function authed(build) {
+    var t = localStorage.getItem('still_access_token');
+    if (!t) return Promise.resolve(null);
+    return build(t).then(function (res) {
+      if (res.status !== 401) return res;
+      return refresh().then(function (t2) { return t2 ? build(t2) : null; });
+    });
+  }
+
+  /* subscription_status is read from the caller's own profile row, under their
+     own token, so RLS is what restricts it -- this page never sees anyone
+     else's. It is a courtesy check only: create-promo-code.js runs the same
+     test server-side with the service key, and that is the one that protects
+     anything. A user who edits this out still gets a 403. */
+  function checkPremium() {
+    var t = localStorage.getItem('still_access_token');
+    var uid = t && uidFromToken(t);
+    if (!uid) return Promise.resolve(false);
+    return authed(function (tok) {
+      return fetch(SUPA_URL + '/rest/v1/profiles?id=eq.' + uid + '&select=subscription_status', {
+        headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + tok }
+      });
+    }).then(function (res) {
+      if (!res || !res.ok) return false;
+      return res.json();
+    }).then(function (rows) {
+      return !!(rows && rows[0] && rows[0].subscription_status === 'premium');
+    }).catch(function () { return false; });
+  }
+
+  function showGate() {
+    document.getElementById('who').textContent = '';
+    document.getElementById('content').innerHTML =
+      '<div class="gate">Still Partners is available to active Still members. ' +
+      '<a href="' + HOME + '">Subscribe at stillprayer.app</a> to get started.</div>';
+  }
+
+  /* Order matters: the profile is fetched FIRST and the report is never
+     requested for a non-premium member. Three outcomes, deliberately
+     different -- no token at all redirects, signed in but not premium sees the
+     gate with a way forward, premium sees the report. */
   function load() {
     var token = localStorage.getItem('still_access_token');
     if (!token) return leave();
-    report(token).then(function (res) {
-      if (res.status === 401) {
-        return refresh().then(function (t) { return t ? report(t) : null; });
-      }
-      return res;
+    checkPremium().then(function (ok) {
+      if (!ok) { showGate(); return null; }
+      return authed(report);
     }).then(function (res) {
+      if (res === null) return null;         // gated, not an error
       if (!res) return leave();
       if (res.status === 401) return leave();
       if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -200,7 +282,98 @@
   var CODE_HEAD = '<th>Code</th><th>Channel</th><th>Description</th>' +
                   '<th class="num">Members</th><th class="num">Monthly</th>';
 
+  /* Availability is checked as they type, debounced. `seq` discards a slow
+     reply that lands after a newer one -- otherwise typing STMARY quickly can
+     leave the verdict for STMAR on screen, and the button would read
+     "available" for a string nobody checked. Debouncing alone does not fix
+     that; in-flight requests still resolve. */
+  var timer = null, seq = 0;
+
+  function wireCreate() {
+    var form = document.getElementById('createForm');
+    if (!form) return;
+    var input = document.getElementById('newCode');
+    var avail = document.getElementById('avail');
+    var btn   = document.getElementById('createBtn');
+    var ready = false;
+
+    function say(cls, msg) { avail.className = 'avail ' + cls; avail.textContent = msg; }
+    function setReady(v) { ready = v; btn.disabled = !v; }
+
+    input.addEventListener('input', function () {
+      // Uppercase and strip in place, preserving the caret so typing
+      // mid-string is not yanked to the end.
+      var pos = input.selectionStart;
+      input.value = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      input.setSelectionRange(pos, pos);
+
+      setReady(false);
+      clearTimeout(timer);
+      var code = input.value;
+      if (!code) { say('', ''); return; }
+      if (code.length < 3) { say('wait', 'At least 3 characters.'); return; }
+
+      say('wait', 'Checking\u2026');
+      var mine = ++seq;
+      timer = setTimeout(function () {
+        authed(function (tok) {
+          return fetch('/.netlify/functions/create-promo-code?code=' + encodeURIComponent(code), {
+            headers: { 'Authorization': 'Bearer ' + tok }
+          });
+        }).then(function (res) { return res && res.ok ? res.json() : null; })
+          .then(function (d) {
+            if (mine !== seq) return;                 // a newer keystroke won
+            if (!d) { say('bad', 'Could not check that code.'); return; }
+            if (!d.valid) { say('bad', d.error || 'Not a valid code.'); return; }
+            if (d.available) { say('ok', code + ' is available.'); setReady(true); }
+            else { say('bad', code + ' is already taken.'); }
+          }).catch(function () {
+            if (mine === seq) say('bad', 'Could not check that code.');
+          });
+      }, 400);
+    });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!ready) return;
+      setReady(false);
+      btn.textContent = 'Creating\u2026';
+      authed(function (tok) {
+        return fetch('/.netlify/functions/create-promo-code', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: input.value,
+            channel: document.getElementById('newChannel').value,
+            description: document.getElementById('newDesc').value
+          })
+        });
+      }).then(function (res) {
+        if (!res) return leave();
+        return res.json().then(function (d) { return { status: res.status, d: d }; });
+      }).then(function (r) {
+        if (!r) return;
+        btn.textContent = 'Create code';
+        if (r.status === 201 && r.d.created) {
+          // Re-render from the payload already in hand rather than refetching:
+          // a new code has no subscribers, so nothing else can have moved.
+          state.codes = (state.codes || []).concat([r.d.created]);
+          render(state);
+          return;
+        }
+        if (r.status === 403) { showGate(); return; }
+        say('bad', r.d.error || 'The code could not be created.');
+      }).catch(function () {
+        btn.textContent = 'Create code';
+        say('bad', 'The code could not be created.');
+      });
+    });
+  }
+
+  var state = null;   // last rendered payload, so a new code can be appended
+
   function render(data) {
+    state = data;
     var codes = data.codes || [], commissions = data.commissions || [], payouts = data.payouts || [];
     var stats = byCode(commissions);
 
@@ -293,6 +466,26 @@
               esc(data.email) + ' yet.</div>';
     }
 
+    html += '<h2>Create a code</h2>' +
+      '<form class="create" id="createForm" autocomplete="off">' +
+        '<div class="row">' +
+          '<div class="field"><label for="newCode">Code</label>' +
+            '<input id="newCode" maxlength="20" inputmode="latin" placeholder="STMARY26"></div>' +
+          '<div class="field"><label for="newChannel">Channel</label>' +
+            '<select id="newChannel">' +
+              '<option value="parish">Parish</option>' +
+              '<option value="social">Social</option>' +
+              '<option value="retreat">Retreat</option>' +
+              '<option value="personal">Personal</option>' +
+              '<option value="other">Other</option>' +
+            '</select></div>' +
+          '<div class="field"><label for="newDesc">Description</label>' +
+            '<input id="newDesc" maxlength="200" placeholder="Autumn parish mission"></div>' +
+        '</div>' +
+        '<div class="avail" id="avail"></div>' +
+        '<button type="submit" class="create" id="createBtn" disabled>Create code</button>' +
+      '</form>';
+
     html += '<h2>Payouts</h2>';
     if (payouts.length) {
       html += table(
@@ -321,6 +514,7 @@
             'rate, so a rep with no payout rows entered yet reads $0.00.</p>';
 
     document.getElementById('content').innerHTML = html;
+    wireCreate();
   }
 
   load();
