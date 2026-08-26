@@ -7,6 +7,7 @@ ingested: 2026-08-24
 updated: 2026-08-24 — §1 licence question resolved (Fr. Albert Marcello)
 updated: 2026-08-24 — §6 Stage 2 shipped, plus a fourth date bug
 updated: 2026-08-25 — §4 Stage 3 shipped: corpus endpoint, bilingual traditional rite
+updated: 2026-08-25 — §4 Stage 3 complete: rite toggle on the Office screen, TTS chunked, 516 checks
 ---
 
 # 2026-08-23 — Office rebuild: Divinum Officium as source, and a liturgical rite toggle
@@ -563,6 +564,8 @@ No credentials were exposed; every secret comes from `process.env`. Fixed in
 
 ### Stage 3 is complete, pending the Vigils decision
 
+> **Superseded on status — see [§4 amended 2026-08-25 (second)](#4-amended-2026-08-25-second--stage-3-complete-the-toggle-reaches-the-user) at the end of this record.** Open items 1 and 5 are closed; 2, 3 and 4 are carried forward unchanged.
+
 **What is done:** the corpus endpoint, the synchronous-cache architecture, the
 traditional renderer, bilingual display, the toggle wired end to end, and 446
 checks standing behind it.
@@ -598,3 +601,211 @@ Two are worth naming:
   that carry no text, and fails if a regeneration widens it past the five in
   `store/ordinary.json`. The ordinary table cannot silently fall behind the
   corpus it serves.
+
+---
+
+## §4 amended 2026-08-25 (second) — Stage 3 complete: the toggle reaches the user
+
+Supersedes the status section of [§4 amended 2026-08-25](#4-amended-2026-08-25--stage-3-shipped-the-corpus-reaches-the-app) ("Stage 3 is complete, pending the
+Vigils decision"). The corpus work was already done when that was written; what
+shipped since is the part the user actually touches. **Stage 3 is now complete.**
+
+Four commits, all on `main`, all with `www/` synced:
+
+| Commit | What |
+|---|---|
+| `ad09ab5` | Office TTS chunked under the 5000-character limit; traditional Vigils audio withdrawn |
+| `1988032` | Larger Brighter Text scales the Office by tier without touching its colour |
+| `2373717` | Rite toggle on the Office screen, settings-modal safe-area fix, larger Office headers |
+| `d9d20b2` | The modern-Compline fallback is disclosed on the card |
+
+### The toggle was two screens away from the thing it changes
+
+Matt reported the Office showing the modern player with Traditional selected. It
+was not a routing fault. Traced through `buildOffice()`, the traditional path is
+correct: with the corpus cached, Vigils, Lauds and Vespers all reach
+`buildTraditionalOffice()` — 47, 22 and 22 Latin blocks respectively. A cache
+miss shows the pending card, never the player.
+
+The cause was that **the rite could only be changed in Settings**, and
+`getLiturgicalRite()` returns `'modern'` for any unset value. The setting lives
+in `localStorage`, so it is per-device: set on one device, still modern on the
+phone. A user who never opened Settings — or who looked for the control on the
+Office screen and did not find it — stayed on the modern office for every hour
+and had no way to know why.
+
+`c94fcfb` had removed the Office Mode control from the Office chooser and left
+that spot empty. The rite toggle now sits there, between the "Liturgy of the
+Hours" heading and the hour cards, in that control's exact style. It calls the
+existing `setLiturgicalRite()`, so persistence, the profile mirror, the corpus
+warm and the re-render of any open hour all come free.
+
+`renderRiteButtons()` paints both pairs, which is what keeps the Office control
+and the Settings control in agreement in both directions. It now sets
+`background` and `color` as properties instead of appending to `style.cssText` —
+the old pattern grew the style attribute by a declaration on every toggle, and
+with four buttons it would have grown four.
+
+**Lesson for later stages: a setting that changes what a screen shows belongs on
+that screen.** The Settings card stays, but it was never sufficient alone.
+
+### Traditional Vigils has no audio, and it was never a Latin leak
+
+The reported symptom was the ElevenLabs 5000-character limit rejecting
+traditional Vespers audio, diagnosed as `renderOfficeText()` leaking Latin parts
+marked `audio: 'skip'` into the spoken string.
+
+**That diagnosis was wrong, and is worth recording as wrong.**
+`renderOfficeText()` already filtered strictly on `audio === 'speak'`; of 65
+parts in a Vespers doc, 34 are `skip` and every one carries `speak: ""`. No Latin
+ever reached the wire. The length is the English text itself — strip the Latin
+*and* the SSML pacing and traditional Vespers is still 7,728 characters.
+
+Measured spoken lengths, all over the 5000 limit:
+
+| | paced (on the wire) | English only |
+|---|---|---|
+| Traditional Vespers | 8,922 | 7,728 |
+| Traditional Lauds | 9,280 | 8,023 |
+| Traditional Vigils | 26,161 | 23,248 |
+| **Modern Vespers** | **5,138** | — |
+
+Modern Vespers crossing the line means this was never a traditional-rite bug.
+Nothing had ever chunked, and the Render TTS server takes the whole string in one
+POST.
+
+`splitOfficeText()` now cuts at section seams under a 4800 ceiling. The seam is a
+blank line in unpaced text and a break tag on its own line in paced text —
+`paceOfficeText()` replaces every blank line with a break tag, so splitting a
+paced office on blank lines alone would have produced one oversized chunk. A
+section too long to stand alone is split at sentences, then by force. The pieces
+rejoin into the original exactly, and that is asserted.
+
+**Cache keys had to change.** The TTS service caches by key; three chunks under
+one key would replay the wrong clip. A split office keys each piece `-NofM`; a
+single-chunk office keeps its original key, so nothing already cached was
+invalidated.
+
+**Traditional Vigils is silent.** At 26,161 characters it is six requests before
+the first word. It offers no Hear button, and a note stands where the button
+would be: *"Audio for Vigils coming soon."* This narrows what §2 promised and
+should be revisited alongside the on-screen Vigils review.
+
+### Readability mode was reaching the Office and doing the wrong thing
+
+`body.readable .content-card p` matched Office paragraphs all along — the Office
+card is a `.content-card` — but delivered neither of the two things its name
+promises:
+
+- **On mobile it changed nothing.** `#officeCard p` in the 768px media query is
+  `(1,0,1)` against the readable rule's `(0,2,2)`; the ID won, pinning Office
+  text to 20px with the toggle on or off. Only the colour got through.
+- **On desktop it shrank the text.** `1.15em` resolves against the 16px default
+  to 18.4px, while the inline clamp is already 22px at typical desktop widths.
+
+It also flattened the two-tier colour the bilingual office depends on — Latin in
+muted gold, English near-white — by brightening both to `.96`.
+
+The Office is now cut out of that rule and scaled by tier with **no colour
+declaration at all**, so the contrast survives untouched. Latin keeps its
+deliberate step below English rather than being flattened into it, and the 9px
+section labels are not scaled, because enlarging signposts to reading size
+flattens the page.
+
+Per-tier scaling needed a hook, so Office paragraphs carry `office-text` /
+`office-versicle`, and Latin blocks `office-latin`. **The tier is marked at build
+time as `part.lang = 'la'`, keyed on the `LATIN`/`LATIN_V` constants** — the first
+attempt inferred it from the presence of a `style`, which swept in the muted 13px
+label line ("Second Vespers of S. Bartholomæi Apostoli"), a caption, not Latin.
+Keyed on the constants, tagging matches the gold-styled parts exactly: 22 for
+Vespers and Lauds, 84 for Vigils.
+
+The modern golden was regenerated and the change verified to be nothing but the
+added attributes — all 40 entries byte-identical once the class attributes are
+stripped, with `season`, `psalmWeek`, `audioText`, `cacheKey` and object shape
+unchanged.
+
+### Sign Out and Close were clipped on iOS, and it was not the safe area
+
+Reported as a missing `env(safe-area-inset-top)`. The safe-area padding was
+already there and correct; adding more would not have helped.
+
+`.modal-overlay` is `align-items: flex-end`, and `#settingsModal` reserves
+`calc(140px + env(safe-area-inset-bottom))` below. The panel's **inline**
+`max-height: 90vh` overrode the stylesheet's non-important cap and outran what
+the overlay had left. A bottom-aligned flex item taller than its container
+overflows *upward* — on an iPhone 14 Pro, by 223px, carrying the header and with
+it Sign Out and Close off the top of the screen.
+
+The panel is now capped to the space the overlay actually leaves, with
+`!important` so it beats the inline value, plus a `100dvh` variant because iOS
+reports `100vh` as the tallest the viewport ever gets. The `margin-top` that had
+been there added a *second* safe-area inset on top of the overlay's own
+`padding-top` and pushed the panel up a further 67px.
+
+**Pattern worth remembering: on iOS, "clipped at the top" in a bottom-aligned
+overlay is usually an overflow problem, not a padding problem.**
+
+### Compline — disclosed now, corpus after Advent
+
+Traditional Compline has always shown the modern office. The doc already carried
+`fallback: 'modern-constants'`, commented as being marked "so the screen can be
+honest about it" — but nothing read it, so the two rites looked identical on
+screen.
+
+The card now says so, on that same condition:
+
+> Compline follows the modern form — traditional texts coming soon.
+
+Same note part, placement and styling as the Vigils audio note; silent, and the
+Hear Compline button stays because the audio is the modern text and works.
+
+**This is a post-Advent item.** §2 of this plan only ever promised Vespers, Lauds
+and Vigils, so a missing traditional Compline is scope rather than debt, and the
+disclosure closes the honesty gap that made it urgent. Building it means
+generating Compline into the corpus and extending `buildTraditionalOffice()` —
+work that should not compete with the [§5](#5-target--before-advent) Advent
+target of traditional Ordinary Time running by **2026-11-29**.
+
+### Tests — 516 checks
+
+Eight suites at [`tools/office-corpus/tests/`](../../../tools/office-corpus/tests/),
+**516 checks**, up from 446:
+
+| Suite | Checks | Δ |
+|---|---|---|
+| `test-season` | 21 | — |
+| `test-psalmweek` | 22 | — |
+| `test-antiphon` | 37 | — |
+| `test-no-office-mode` | 27 | — |
+| `test-build-office` | 190 | +25 |
+| `test-rite` | 42 | +12 |
+| `test-office-corpus` | 42 | — |
+| `test-traditional` | 135 | +33 |
+
+What the new checks buy: every chunk that goes on the wire is under 5000 and the
+chunks rejoin into the spoken text exactly, for both rites; traditional Vigils
+offers no audio button and does carry its note; the rite toggle sits above the
+hour cards and below the heading; all four rite buttons are painted, without
+`cssText +=`; and opening the Office repaints them.
+
+`test-build-office.js` also stopped persisting `chunkKeys` into the golden — it
+is read for the key check but never compared, and it is transport, not the
+office.
+
+### What is still open
+
+1. **A real browser fetch — still not exercised.** Every test feeds documents
+   from the function invoked in-process. A local server with the corpus function
+   wired in was stood up this session to check it in a browser; browser tooling
+   was not available, so the `prefetchOffice` → cache → repaint cycle **remains
+   unverified against an actual HTTP round-trip**. This is the oldest open item
+   and the one most likely to bite in production.
+2. **Vigils on screen** — 226 parts / 87.8 KB still awaits Matt's visual review.
+   Its audio is withdrawn regardless.
+3. **First Vespers** — Option A is a labelled compromise, not a fix.
+4. **English office titles** — a generator change.
+5. **Traditional Compline** — post-Advent, per above.
+
+Items 3, 4 and 5 are scope. Items 1 and 2 are the ones that could still change
+what ships before Advent.
