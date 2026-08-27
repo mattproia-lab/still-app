@@ -1,0 +1,24 @@
+# Binary files must never have their line endings rewritten.
+#
+# core.autocrlf is true in this repo, so git converts LF to CRLF on checkout for
+# anything it considers text. Git guesses by looking for NUL bytes near the
+# start of a file, and that guess FAILS for ReportLab PDFs: they are ASCII85
+# encoded, so there are no NULs to find. partnerships.pdf was classified as text
+# and a fresh checkout inflated it from 5,199 to 5,304 bytes -- 105 line feeds
+# rewritten as CRLF -- which corrupts the file.
+#
+# PNG and JPG are detected correctly on their own; they are listed anyway so the
+# rule is about the category rather than the one file that happened to break.
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.ico  binary
+*.mp3  binary
+*.mp4  binary
+*.m4a  binary
+*.woff  binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
