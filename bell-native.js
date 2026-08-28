@@ -5,11 +5,13 @@
  * Liturgy of the Hours — and the user's own custom bells — when Still runs
  * as a NATIVE iOS/Android build.
  *
+ * This is now the ONLY delivery path for bells. The four Netlify functions
+ * that used to push through OneSignal are stubs: the OneSignal web SDK was
+ * removed in 2391f30 and nothing replaced it, so those pushes reached nobody.
+ *
  * IDs: 1-4 the four Hours (vigils/lauds/vespers/compline), 5-7 custom slots.
- * The Hours ring with the user's chosen Bell Voice (still_bell_voice);
- * each custom slot carries its own voice. Launch path only ever ARMS
- * (never cancels); cancelling belongs to the explicit Save action, which
- * verifies against iOS's pending list and confirms with a toast.
+ * Launch path only ever ARMS (never cancels, never prompts); cancelling and
+ * permission prompting belong to the explicit Save action.
  * ----------------------------------------------------------------------------
  */
 (function () {
@@ -18,6 +20,17 @@
   var HOUR_IDS = { vigils: 1, lauds: 2, vespers: 3, compline: 4 };
   var CUSTOM_BASE_ID = 4; // slot N -> id 4+N (5,6,7)
   var ALL_IDS = [1, 2, 3, 4, 5, 6, 7];
+
+  /* Four bells + three custom slots, each a REPEATING daily schedule, so the
+     whole system costs 7 of iOS's 64 pending notifications and never expires.
+
+     It is deliberately not a queue of dated notifications refilled on open.
+     That model would cost one slot per bell per day -- 64 slots buys about 16
+     days -- and index.html's Desert Fathers series is sized against this:
+     "TARGET = 30 // weeks kept queued (bells 1-4 + 30 = well under iOS's 64)".
+     Bells taking 64 would put the device at 94 pending, and iOS keeps the 64
+     soonest and silently drops the rest. */
+  var EXPECTED_MIN = 1;   // re-arm if fewer bells are pending than we scheduled
 
   var FALLBACK_TIMES = {
     vigils:   { hour: 4,  minute: 0 },
@@ -32,9 +45,40 @@
   var BODY = 'The monastery bell tolls. Come to the Office.';
   var CUSTOM_BODY = 'The monastery bell tolls.';
 
-  function hourVoice() {
+  function selectedVoice() {
     try { return localStorage.getItem('still_bell_voice') || 'bell-call.wav'; }
     catch (e) { return 'bell-call.wav'; }
+  }
+
+  /* A notification sound is a NATIVE asset, not a web one. The four voices in
+     assets/ are served to the WebView and cannot be used here.
+
+     iOS  -- must be a file in the app bundle root. Exactly one is bundled:
+             bell.wav (22.1s, 44.1kHz stereo -- inside the 30s limit). Per-voice
+             selection on iOS needs the other three added to the bundle first.
+
+             KNOWN GAP: bell.wav is present at ios/App/App/bell.wav but is NOT
+             in the Xcode project -- project.pbxproj references no audio file at
+             all, so it is never copied into the bundle. Until it is added to
+             Copy Bundle Resources, iOS falls back to the default sound. This
+             field is set so it starts working the moment that is fixed.
+
+     Android -- must be in res/raw, referenced WITHOUT extension.
+             KNOWN GAP: android/app/src/main/res/raw/ does not exist yet, so
+             Android also falls back to the default until the wavs are copied
+             there. */
+  function bellSound() {
+    var platform = '';
+    try { platform = Capacitor.getPlatform ? Capacitor.getPlatform() : ''; } catch (e) {}
+    if (platform === 'ios') return 'bell.wav';
+    return selectedVoice().replace(/\.wav$/i, '');
+  }
+
+  function customSound(voice) {
+    try {
+      if (Capacitor.getPlatform && Capacitor.getPlatform() === 'ios') return 'bell.wav';
+    } catch (e) {}
+    return String(voice || 'bell-call.wav').replace(/\.wav$/i, '');
   }
 
   function isNative() {
@@ -109,7 +153,7 @@
   }
 
   function buildNotifications() {
-    var voice = hourVoice();
+    var sound = bellSound();
     var list = readHourSchedule()
       .filter(function (s) { return s.on; })
       .map(function (s) {
@@ -117,7 +161,7 @@
           id: HOUR_IDS[s.hour],
           title: TITLES[s.hour],
           body: BODY,
-          sound: voice,
+          sound: sound,
           schedule: {
             on: { hour: s.time.hour, minute: s.time.minute },
             allowWhileIdle: true
@@ -132,7 +176,7 @@
           id: CUSTOM_BASE_ID + c.slot,
           title: c.label,
           body: CUSTOM_BODY,
-          sound: c.voice,
+          sound: customSound(c.voice),
           schedule: {
             on: { hour: c.time.hour, minute: c.time.minute },
             allowWhileIdle: true
@@ -163,8 +207,8 @@
       console.log('[bell-native] pending bells: ' + bells.length);
       if (showToast) {
         showBellToast(bells.length > 0
-          ? 'The bells are set \u2014 ' + bells.length + ' scheduled.'
-          : 'No bells scheduled \u2014 check your toggles and try again.');
+          ? 'The bells are set — ' + bells.length + ' scheduled.'
+          : 'No bells scheduled — check your toggles and try again.');
       }
       return bells.length;
     } catch (e) {
@@ -183,14 +227,18 @@
     return perm.display === 'granted';
   }
 
-  // SAVE path: authoritative. Cancels ids 1-7, re-schedules what's on,
-  // verifies with a visible toast.
-  async function saveBells() {
-    if (!isNative()) return;
+  /* SAVE path: authoritative, and the ONLY path that may prompt for
+     permission -- the user has just asked for bells, so a prompt is expected
+     here and nowhere else.
+
+     Silent no-op off native: local notifications need the Capacitor plugin,
+     which the browser does not have. No error, no message. */
+  async function scheduleBells() {
+    if (!isNative()) return;                      // web: silent skip
     var LN = plugin();
     try {
       if (!(await ensurePermission())) {
-        showBellToast('Notifications are off for Still \u2014 enable them in iPhone Settings to hear the bells.');
+        showBellToast('Notifications are off for Still — enable them in iPhone Settings to hear the bells.');
         return;
       }
 
@@ -203,45 +251,50 @@
       if (toSchedule.length) {
         await LN.schedule({ notifications: toSchedule });
         try { localStorage.setItem('bellsScheduled', '1'); } catch (e) {}
+        try { localStorage.setItem('bellsCount', String(toSchedule.length)); } catch (e) {}
       } else {
         try { localStorage.removeItem('bellsScheduled'); } catch (e) {}
+        try { localStorage.removeItem('bellsCount'); } catch (e) {}
       }
 
       await verifyPending(true);
     } catch (e) {
-      console.warn('[bell-native] save failed', e);
-      showBellToast('Could not set the bells \u2014 please try again.');
+      console.warn('[bell-native] schedule failed', e);
+      showBellToast('Could not set the bells — please try again.');
     }
   }
 
-  // LAUNCH path: protective. NEVER cancels. Arms only when at least one
-  // toggle is visibly ON and iOS holds fewer than expected.
-  async function launchArm() {
-    if (!isNative()) return;
+  /* LAUNCH path: protective and silent. NEVER cancels, NEVER prompts.
+
+     iOS drops pending notifications on reinstall, restore, and occasionally on
+     OS update, so a user with bells enabled can quietly end up with none. This
+     compares what the OS actually holds against what the toggles say should be
+     there, and re-arms only when the OS is short.
+
+     Permission is checked, never requested: a silent background reschedule
+     must not raise a system prompt out of nowhere. If permission was revoked,
+     it gives up and waits for the user to visit Settings and press Save. */
+  async function checkAndRescheduleBells() {
+    if (!isNative()) return;                      // web: silent skip
     var LN = plugin();
     try {
       var perm = await LN.checkPermissions();
-      if (perm.display !== 'granted') return;
+      if (perm.display !== 'granted') return;     // check only -- no prompt
 
       var toSchedule = buildNotifications();
       if (!toSchedule.length) return;
 
       var pendingCount = await verifyPending(false);
-      if (pendingCount >= toSchedule.length) return;
+      if (pendingCount < 0) return;               // could not read the list
+      if (pendingCount >= Math.max(EXPECTED_MIN, toSchedule.length)) return;
 
       await LN.schedule({ notifications: toSchedule });
       try { localStorage.setItem('bellsScheduled', '1'); } catch (e) {}
-      console.log('[bell-native] launch re-armed ' + toSchedule.length + ' bell(s)');
+      console.log('[bell-native] re-armed ' + toSchedule.length +
+                  ' bell(s); OS held ' + pendingCount);
     } catch (e) {
-      console.warn('[bell-native] launch arm failed', e);
+      console.warn('[bell-native] reschedule failed', e);
     }
-  }
-
-  function hookSaveButton() {
-    var btn = document.getElementById('bellsSaveBtn');
-    if (!btn || btn._bellHooked) return;
-    btn._bellHooked = true;
-    btn.addEventListener('click', function () { setTimeout(saveBells, 400); });
   }
 
   function launchCatchUp() {
@@ -249,23 +302,25 @@
     var tries = 0;
     var timer = setInterval(function () {
       tries++;
-      hookSaveButton();
-
       var anyOn = !!document.querySelector('.bell-toggle[aria-pressed="true"], .custom-bell-toggle[aria-pressed="true"]');
       if (anyOn) {
         clearInterval(timer);
-        launchArm();
-      } else if (tries >= 60) { // ~30 seconds
+        checkAndRescheduleBells();
+      } else if (tries >= 60) {                   // ~30 seconds
         clearInterval(timer);
-        hookSaveButton();
       }
     }, 500);
   }
 
   function init() {
-    hookSaveButton();
     launchCatchUp();
   }
+
+  /* saveBellSettings() in index.html calls these directly now, instead of the
+     old 400ms-after-click listener on #bellsSaveBtn. That listener raced its
+     own save: it fired on a timer rather than after the toggles were read. */
+  window.scheduleBells = scheduleBells;
+  window.checkAndRescheduleBells = checkAndRescheduleBells;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

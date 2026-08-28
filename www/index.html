@@ -13209,6 +13209,13 @@ function saveBellSettings() {
   const savedMsg = document.getElementById('bellsSavedMsg');
   if (saveBtn) saveBtn.style.display = 'none';
   if (savedMsg) { savedMsg.style.display = 'block'; setTimeout(() => savedMsg.style.display = 'none', 2000); }
+
+  // Schedule on the device. This is the authoritative path and the only one
+  // that may prompt for notification permission. Silent no-op on web.
+  // Called before the Supabase write so the bells are set even if the network
+  // call fails -- they are a device concern, and the row is only a mirror.
+  try { if (window.scheduleBells) window.scheduleBells(); } catch (e) {}
+
   const token = localStorage.getItem('still_access_token');
   if (!token || !window.currentUser) return;
   fetch('https://zbskapivansfewegllnz.supabase.co/rest/v1/bell_preferences', {

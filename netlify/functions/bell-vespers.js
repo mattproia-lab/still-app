@@ -1,27 +1,29 @@
-const ONESIGNAL_APP_ID = '19eccbcf-5a1f-42ba-a23c-54726795a751';
-const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
-exports.handler = async () => {
-  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
-  const res = await fetch(`${SUPA_URL}/rest/v1/bell_preferences?vespers=eq.true&select=user_id,timezone`,
-    { headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` } });
-  if (!res.ok) return { statusCode: 500, body: 'Supabase error' };
-  const users = await res.json();
-  const now = new Date();
-  const eligible = users.filter(user => {
-    try {
-      const tz = user.timezone || 'America/New_York';
-      const localHour = parseInt(new Intl.DateTimeFormat('en-US', {
-        timeZone: tz, hour: 'numeric', hour12: false
-      }).format(now));
-      return localHour === 18; // 6pm
-    } catch(e) { return false; }
-  });
-  for (const user of eligible) {
-    await fetch('https://onesignal.com/api/v1/notifications', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${process.env.ONESIGNAL_REST_API_KEY}` },
-      body: JSON.stringify({ app_id: ONESIGNAL_APP_ID, include_aliases: { external_id: [user.user_id] }, target_channel: 'push', headings: { en: 'Vespers' }, contents: { en: 'Vespers bell. Draw near in the quiet.' }, url: 'https://stillprayer.app' })
-    });
-  }
-  return { statusCode: 200, body: JSON.stringify({ sent: eligible.length }) };
-};
+// netlify/functions/bell-vespers.js
+//
+// STUB. Bell delivery is client-side now.
+//
+// This used to POST Vespers to OneSignal on an hourly cron, filtering users
+// by their local hour. It stopped reaching anyone when the OneSignal web SDK
+// was removed in 2391f30 and nothing replaced it: the push targeted
+// include_aliases.external_id, an alias only the web SDK ever registered for
+// browser users, and initOneSignal() -- the native half -- is defined in
+// index.html but never called.
+//
+// Bells are now scheduled on the device by bell-native.js through
+// @capacitor/local-notifications, as repeating daily notifications on ids 1-4.
+// They need no server, survive being offline, and ring at the device's own
+// local time rather than a timezone column that could be null.
+//
+// Kept as a stub rather than deleted so the scheduled invocation in
+// netlify.toml has something to call and does not error. Safe to remove
+// together with its [functions.bell-vespers] block.
+
+exports.handler = async () => ({
+  statusCode: 200,
+  body: JSON.stringify({
+    ok: true,
+    hour: 'vespers',
+    delivery: 'client-side',
+    note: 'Vespers bells are scheduled on-device by bell-native.js via @capacitor/local-notifications. This endpoint no longer sends anything.'
+  })
+});

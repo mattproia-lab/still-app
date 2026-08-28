@@ -1,40 +1,29 @@
-const ONESIGNAL_APP_ID = '19eccbcf-5a1f-42ba-a23c-54726795a751';
-const SUPA_URL = 'https://zbskapivansfewegllnz.supabase.co';
+// netlify/functions/bell-compline.js
+//
+// STUB. Bell delivery is client-side now.
+//
+// This used to POST Compline to OneSignal on an hourly cron, filtering users
+// by their local hour. It stopped reaching anyone when the OneSignal web SDK
+// was removed in 2391f30 and nothing replaced it: the push targeted
+// include_aliases.external_id, an alias only the web SDK ever registered for
+// browser users, and initOneSignal() -- the native half -- is defined in
+// index.html but never called.
+//
+// Bells are now scheduled on the device by bell-native.js through
+// @capacitor/local-notifications, as repeating daily notifications on ids 1-4.
+// They need no server, survive being offline, and ring at the device's own
+// local time rather than a timezone column that could be null.
+//
+// Kept as a stub rather than deleted so the scheduled invocation in
+// netlify.toml has something to call and does not error. Safe to remove
+// together with its [functions.bell-compline] block.
 
-exports.handler = async () => {
-  const serviceKey = process.env.SUPABASE_SERVICE_KEY;
-
-  // Get all users with compline enabled
-  const res = await fetch(`${SUPA_URL}/rest/v1/bell_preferences?compline=eq.true&select=user_id,timezone`,
-    { headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` } });
-  if (!res.ok) return { statusCode: 500, body: 'Supabase error' };
-  const users = await res.json();
-
-  // Filter users where local time is currently 9pm (21:00)
-  const now = new Date();
-  const eligible = users.filter(user => {
-    try {
-      const tz = user.timezone || 'America/New_York';
-      const localHour = parseInt(new Intl.DateTimeFormat('en-US', {
-        timeZone: tz, hour: 'numeric', hour12: false
-      }).format(now));
-      return localHour === 21; // 9pm
-    } catch(e) { return false; }
-  });
-
-  for (const user of eligible) {
-    await fetch('https://onesignal.com/api/v1/notifications', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${process.env.ONESIGNAL_REST_API_KEY}` },
-      body: JSON.stringify({
-        app_id: ONESIGNAL_APP_ID,
-        include_aliases: { external_id: [user.user_id] },
-        target_channel: 'push',
-        headings: { en: 'Compline' },
-        contents: { en: 'Compline calls. Rest your soul in God.' },
-        url: 'https://stillprayer.app'
-      })
-    });
-  }
-  return { statusCode: 200, body: JSON.stringify({ sent: eligible.length }) };
-};
+exports.handler = async () => ({
+  statusCode: 200,
+  body: JSON.stringify({
+    ok: true,
+    hour: 'compline',
+    delivery: 'client-side',
+    note: 'Compline bells are scheduled on-device by bell-native.js via @capacitor/local-notifications. This endpoint no longer sends anything.'
+  })
+});
