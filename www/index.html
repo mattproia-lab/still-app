@@ -15210,6 +15210,17 @@ async function startCheckout(tier) {
       );
       if (!pkg) { alert('Unable to load subscription options. Please check your connection and try again.'); return; }
 
+      /* Link the RevenueCat customer to the Supabase account BEFORE buying. The
+         webhook keys the profile off app_user_id, so a purchase made before
+         logIn arrives as '$RCAnonymousID:...' and never reaches a profile --
+         the entitlement goes live while the account still reads free. Buying
+         signed out stays supported (Apple 5.1.1(v)); that path relies on the
+         entitlement now and the sign-in sync in initRevenueCat later. */
+      if (window.currentUser && window.currentUser.id) {
+        try { await Purchases.logIn({ appUserID: window.currentUser.id }); }
+        catch (e) { console.log('RevenueCat logIn before purchase failed:', e); }
+      }
+
       const result = await Purchases.purchasePackage({ aPackage: pkg });
       const isPro = result.customerInfo?.entitlements?.active?.['premium'];
       if (isPro) {
@@ -15313,14 +15324,24 @@ async function initRevenueCat() {
     // Netlify functions see the correct status without waiting for a webhook.
     try {
       const info = await Purchases.getCustomerInfo();
-      if (info.customerInfo?.entitlements?.active?.['premium']) {
+      const premiumEnt = info.customerInfo?.entitlements?.active?.['premium'];
+      if (premiumEnt) {
         localStorage.setItem(PW_SUB_KEY, 'active');
         window._subStatus = 'active';
         // Push to Supabase if signed in -- fixes Family Sharing gap where
-        // the webhook never fires with a Supabase user ID for shared members.
+        // the webhook never fires with a Supabase user ID for shared members,
+        // and repairs a row the webhook missed (anonymous buy, unmatched sku).
         if (window.currentUser && window.currentUser.id) {
           const token = localStorage.getItem('still_access_token');
           if (token) {
+            /* Carry the plan too, so a repaired row is not left premium with a
+               blank term. Split on ':' for the Play base-plan suffix, as the
+               package lookup above does. An entitlement that does not name its
+               product leaves subscription_plan untouched rather than writing a
+               guess over what the webhook may already have recorded. */
+            const sku = String(premiumEnt.productIdentifier || '').split(':')[0];
+            const patch = { subscription_status: 'premium' };
+            if (sku) patch.subscription_plan = /annual|yearly/i.test(sku) ? 'annual' : 'monthly';
             fetch(`${SUPA_URL}/rest/v1/profiles?id=eq.${window.currentUser.id}`, {
               method: 'PATCH',
               headers: {
@@ -15328,7 +15349,7 @@ async function initRevenueCat() {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ subscription_status: 'premium' })
+              body: JSON.stringify(patch)
             }).catch(() => {});
           }
         }
