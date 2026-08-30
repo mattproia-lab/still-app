@@ -70,15 +70,16 @@
   function bellSound() {
     var platform = '';
     try { platform = Capacitor.getPlatform ? Capacitor.getPlatform() : ''; } catch (e) {}
-    if (platform === 'ios') return 'bell.wav';
+    if (platform === 'ios') return selectedVoice();
     return selectedVoice().replace(/\.wav$/i, '');
   }
 
   function customSound(voice) {
-    try {
-      if (Capacitor.getPlatform && Capacitor.getPlatform() === 'ios') return 'bell.wav';
-    } catch (e) {}
-    return String(voice || 'bell-call.wav').replace(/\.wav$/i, '');
+    var platform = '';
+    try { platform = Capacitor.getPlatform ? Capacitor.getPlatform() : ''; } catch (e) {}
+    var v = String(voice || 'bell-call.wav');
+    if (platform === 'ios') return v;
+    return v.replace(/\.wav$/i, '');
   }
 
   function isNative() {
