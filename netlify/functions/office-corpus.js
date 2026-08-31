@@ -276,6 +276,52 @@ function resolveParts(parts, hour, date) {
   return out;
 }
 
+/* ── progressive Vigils ─────────────────────────────────────────────────
+   Vigils on a feast reaches ~69 KB against ~15 KB for Vespers, and its
+   nocturns are contiguous blocks, so the screen can be prayed from Nocturn I
+   while the rest is still on the wire.
+
+   Only `lesson` and `psalmody` carry a nocturn marker -- lesson on the part,
+   psalmody on its items. The rubrics, absolutions and versicles between them
+   carry none but belong to the block they sit in, so filtering on the marker
+   alone would silently drop the connective tissue and serve a broken office.
+   Assign by POSITION instead: everything before the first marker is the head
+   (invitatory, hymn, opening versicles), everything after the last is the tail
+   (Te Deum, collect, conclusion), and an unmarked part between them inherits
+   the last marker seen.
+
+   Absent the param the full office is returned, byte for byte as before. */
+function nocturnOf(part) {
+  if (part.nocturn !== undefined && part.nocturn !== null) return part.nocturn;
+  for (const it of part.items || []) {
+    if (it.nocturn !== undefined && it.nocturn !== null) return it.nocturn;
+  }
+  return null;
+}
+
+function sliceParts(parts, slice) {
+  if (slice !== 'first' && slice !== 'rest') return parts;
+  const marks = parts.map(nocturnOf);
+  const firstMarked = marks.findIndex(n => n !== null);
+  // An hour with no nocturns at all (Lauds, Vespers) is entirely "first".
+  if (firstMarked < 0) return slice === 'first' ? parts : [];
+
+  let lastMarked = -1;
+  marks.forEach((n, i) => { if (n !== null) lastMarked = i; });
+
+  let seen = null;
+  const eff = parts.map((part, i) => {
+    if (i < firstMarked) return 'head';
+    if (i > lastMarked) return 'tail';
+    if (marks[i] !== null) seen = marks[i];
+    return seen;
+  });
+
+  return slice === 'first'
+    ? parts.filter((part, i) => eff[i] === 'head' || eff[i] === 1)
+    : parts.filter((part, i) => eff[i] !== 'head' && eff[i] !== 1);
+}
+
 // ── Option A · name what is actually being served ───────────────────────
 // Traditional Vespers on the evening of day N is frequently First Vespers of
 // day N+1, and the corpus has no First Vespers text -- every vespers document
@@ -305,6 +351,9 @@ exports.handler = async function (event) {
   const q = event.queryStringParameters || {};
   const date = q.date;
   const hour = q.hour;
+  // Anything but the two known values is ignored rather than rejected: an old
+  // client sending nothing, or a stray param, still gets the whole office.
+  const slice = (q.slice === 'first' || q.slice === 'rest') ? q.slice : null;
 
   try {
     validate(date, hour);
@@ -324,7 +373,8 @@ exports.handler = async function (event) {
       source: 'corpus',
       corpusVersion: CORPUS_VERSION,
       nocturns: proper.nocturns === undefined ? null : proper.nocturns,
-      parts: resolveParts(proper.parts, hour, date),
+      slice,
+      parts: sliceParts(resolveParts(proper.parts, hour, date), slice),
     };
 
     return respond(200, payload, {

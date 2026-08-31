@@ -556,6 +556,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   pointer-events:none;transform:translate(-50%,-50%);
 }
 @keyframes rippleOut{0%{width:0;height:0;opacity:.6;}100%{width:200px;height:200px;opacity:0;}}
+/* The Office's loading line: a slow breath, so a wait reads as work. */
+@keyframes officeBreath{0%,100%{opacity:.42}50%{opacity:.92}}
 
 /* Session setup */
 .session-setup{text-align:center;padding:10px 0;}
@@ -14088,9 +14090,19 @@ const officeCorpusPending = new Set(); // in-flight, so a re-render does not ref
   }
 })();
 
+/* Only finished offices are written through. A transient failure used to be
+   persisted and then replayed on every later visit until 24 newer entries
+   evicted it, and a half-loaded office would come back from storage with no
+   second phase to complete it. Neither is worth keeping. */
+function officeCorpusIsKeepable(doc) {
+  return !!doc && !doc._partial && !doc._transient;
+}
+
 function saveOfficeCorpusCache() {
   try {
-    const keys = [...officeCorpus.keys()].slice(-OFFICE_CORPUS_MAX);
+    const keys = [...officeCorpus.keys()]
+      .filter(k => officeCorpusIsKeepable(officeCorpus.get(k)))
+      .slice(-OFFICE_CORPUS_MAX);
     const out = {};
     keys.forEach(k => { out[k] = officeCorpus.get(k); });
     localStorage.setItem(OFFICE_CORPUS_KEY, JSON.stringify(out));
@@ -14105,35 +14117,131 @@ function officeCorpusGet(date, hour) {
   return officeCorpus.get(`${date}/${hour}`) || null;
 }
 
-// The only async thing in the traditional path. Safe to call repeatedly.
+const OFFICE_FETCH_TIMEOUT_MS = 15000;
+const officeCorpusSlow = new Set();    // keys past the timeout, still trying
+const officeCorpusAbort = new Map();   // key -> AbortController, so a retry can cancel
+
+function officeCorpusIsSlow(date, hour) {
+  return officeCorpusSlow.has(`${date}/${hour}`);
+}
+
+/* Throw away whatever the last attempt left behind and start over. Bound to the
+   retry button the pending card shows once a fetch has gone slow or failed. */
+function retryOffice(hour) {
+  const today = new Date().toISOString().split('T')[0];
+  const key = `${today}/${hour}`;
+  const ctl = officeCorpusAbort.get(key);
+  if (ctl) { try { ctl.abort(); } catch (e) {} }
+  officeCorpus.delete(key);
+  officeCorpusPending.delete(key);
+  officeCorpusSlow.delete(key);
+  officeCorpusAbort.delete(key);
+  renderOfficeHour(hour);
+  prefetchOffice(today, hour);
+}
+
+/* The only async thing in the traditional path. Safe to call repeatedly.
+
+   Two phases. `slice=first` carries the head and Nocturn I -- 20 KB of a 69 KB
+   feast-day Vigils -- and is rendered the moment it lands, so the office can be
+   prayed from the invitatory while the rest is still coming. `slice=rest` then
+   brings Nocturns II and III and the Te Deum, collect and conclusion, and is
+   concatenated on. The two rejoin in corpus order exactly.
+
+   On the ~87% of days with a single nocturn, `rest` carries only the tail and
+   phase two is nearly empty; for Lauds and Vespers it is empty outright. The
+   partial doc is marked _partial so the audio path can refuse it -- cacheKey is
+   derived from the office key, not the parts, so speaking a half office would
+   poison the full office's cache entry. */
 async function prefetchOffice(date, hour) {
   const key = `${date}/${hour}`;
   if (officeCorpus.has(key) || officeCorpusPending.has(key)) return officeCorpus.get(key) || null;
   officeCorpusPending.add(key);
-  try {
-    const res = await fetch(`${OFFICE_CORPUS_ENDPOINT}?date=${date}&hour=${hour}`);
-    const data = await res.json();
-    if (!res.ok) {
-      // Compline is expected to 404 -- the corpus has no Compline and the
-      // modern constants supply it. Anything else is worth a console line.
-      if (data && data.error !== 'no_traditional_compline') {
-        console.warn('office-corpus:', data && data.error, data && data.message);
-      }
-      officeCorpus.set(key, { _error: (data && data.error) || 'unreachable' });
-    } else {
-      officeCorpus.set(key, data);
-    }
-    saveOfficeCorpusCache();
-    return officeCorpus.get(key);
-  } catch (err) {
-    console.warn('office-corpus fetch failed:', err.message);
-    return null;
-  } finally {
-    officeCorpusPending.delete(key);
-    // Repaint if the user is still looking at the hour we just fetched.
+
+  const ctl = new AbortController();
+  officeCorpusAbort.set(key, ctl);
+  const repaint = () => {
     if (window._officeCurrentHour === hour && document.getElementById('officeCard')) {
       renderOfficeHour(hour);
     }
+  };
+  /* A warning, not an abort. Vigils is genuinely heavy and a request 16s in is
+     usually about to succeed -- killing it would turn a slow render into no
+     render at all. The retry tap is what cancels. */
+  const slowTimer = setTimeout(() => { officeCorpusSlow.add(key); repaint(); },
+                               OFFICE_FETCH_TIMEOUT_MS);
+
+  /* Only Vigils is worth splitting. Lauds and Vespers have no nocturns, so
+     `first` would return the whole office and `rest` nothing -- a second
+     round trip, and a second chance at a cold start, for no bytes saved. */
+  const split = hour === 'vigils';
+  const request = async (slice) => {
+    const res = await fetch(
+      `${OFFICE_CORPUS_ENDPOINT}?date=${date}&hour=${hour}` + (slice ? `&slice=${slice}` : ''),
+      { signal: ctl.signal });
+    const data = await res.json();
+    return { ok: res.ok, data };
+  };
+
+  try {
+    const first = await request(split ? 'first' : null);
+    if (!first.ok) {
+      // Compline is expected to 404 -- the corpus has no Compline and the
+      // modern constants supply it. Anything else is worth a console line.
+      const err = first.data && first.data.error;
+      if (err !== 'no_traditional_compline') {
+        console.warn('office-corpus:', err, first.data && first.data.message);
+      }
+      // Transient failures are not written through to localStorage: a single
+      // 500 used to persist across sessions until 24 newer entries evicted it.
+      officeCorpus.set(key, { _error: err || 'unreachable',
+                              _transient: err !== 'no_traditional_compline' });
+      saveOfficeCorpusCache();
+      return officeCorpus.get(key);
+    }
+
+    if (!split) {
+      officeCorpus.set(key, first.data);
+      saveOfficeCorpusCache();
+      return officeCorpus.get(key);
+    }
+
+    // Paint Nocturn I now; the rest arrives underneath it.
+    officeCorpus.set(key, Object.assign({}, first.data, { _partial: true }));
+    clearTimeout(slowTimer);
+    officeCorpusSlow.delete(key);
+    repaint();
+
+    try {
+      const rest = await request('rest');
+      if (rest.ok) {
+        const merged = Object.assign({}, first.data, {
+          parts: (first.data.parts || []).concat((rest.data && rest.data.parts) || []),
+        });
+        delete merged.slice;
+        officeCorpus.set(key, merged);
+      } else {
+        // Nocturn I is on screen and prayable. Keep it, and leave the doc
+        // partial so the audio button stays disabled rather than speaking half.
+        console.warn('office-corpus rest:', rest.data && rest.data.error);
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') console.warn('office-corpus rest failed:', err.message);
+    }
+
+    saveOfficeCorpusCache();
+    return officeCorpus.get(key);
+  } catch (err) {
+    if (err.name === 'AbortError') return null;    // a retry is already running
+    console.warn('office-corpus fetch failed:', err.message);
+    officeCorpus.set(key, { _error: 'unreachable', _transient: true });
+    return null;
+  } finally {
+    clearTimeout(slowTimer);
+    officeCorpusPending.delete(key);
+    officeCorpusSlow.delete(key);
+    officeCorpusAbort.delete(key);
+    repaint();
   }
 }
 
@@ -14356,27 +14464,63 @@ function buildTraditionalOffice(corpus, hour, today, rite) {
     corpusVersion: corpus.corpusVersion || null,
     langs: ['la', 'en'],
     pace: true,
-    cacheKey: hashText(`trad-${today}-${hour}-${(corpus.office && corpus.office.key) || ''}`),
+    /* cacheKey is derived from the office key, not from the parts, so a partly
+       loaded office would hash to the SAME key as the finished one. Speaking it
+       would cache a truncated office under the full office's key, permanently.
+       A partial doc therefore carries no key at all. Vigils shows no audio
+       button today, so this is a guard for when it does. */
+    cacheKey: corpus._partial
+      ? ''
+      : hashText(`trad-${today}-${hour}-${(corpus.office && corpus.office.key) || ''}`),
     parts,
   };
 }
 
 /* The doc shown while the corpus is on its way. Same shape, so every consumer
-   works unchanged; source:'pending' is how a caller tells. */
-function buildPendingOffice(hour, today, rite, failure) {
+   works unchanged; source tells them apart.
+
+   Three states: 'loading' the moment the hour is tapped, 'slow' once the fetch
+   passes OFFICE_FETCH_TIMEOUT_MS but is still running, and 'failed' when it
+   gave up. The last two offer a retry; the first breathes so the wait reads as
+   work rather than a dead screen. */
+function buildPendingOffice(hour, today, rite, state) {
+  /* The argument was, and still may be, an error CODE ('unreachable',
+     'outside_window') rather than a state name -- callers that have one pass it
+     straight through. So anything truthy that is not one of the two in-flight
+     states means the fetch failed. */
+  const failed = !!state && state !== 'loading' && state !== 'slow';
   const hourTitle = { vigils: 'Matins', lauds: 'Lauds', vespers: 'Vespers' }[hour] || hour;
+  // The name they tapped, not the liturgical title -- "Loading Matins…" after
+  // tapping "Vigils" reads as some other office loading.
+  const tapped = { vigils: 'Vigils', lauds: 'Lauds', vespers: 'Vespers' }[hour] || hourTitle;
   const parts = [];
   parts.push({ type: 'badge', audio: 'skip', text: 'Rubrics 1960' });
   parts.push({ type: 'title', audio: 'skip', text: hourTitle });
-  parts.push({ type: 'text', audio: 'skip',
-    text: failure
-      ? 'This office could not be fetched. Check your connection, or switch to the modern calendar in Settings.'
-      : 'Fetching today’s office…',
-    style: 'font-size:14px;font-style:normal;color:rgba(255,255,255,.55)' });
+
+  if (failed) {
+    parts.push({ type: 'text', audio: 'skip',
+      text: 'This office could not be fetched. Check your connection, or switch to the modern calendar in Settings.',
+      style: 'font-size:14px;font-style:normal;color:rgba(255,255,255,.55)' });
+  } else if (state === 'slow') {
+    parts.push({ type: 'text', audio: 'skip',
+      text: 'Taking longer than expected…',
+      style: 'font-size:15px;font-style:normal;color:rgba(255,255,255,.72)' });
+  } else {
+    parts.push({ type: 'text', audio: 'skip',
+      text: `Loading ${tapped}…`,
+      style: 'font-size:16px;font-style:normal;color:rgba(200,146,12,.85);'
+           + 'animation:officeBreath 1.9s ease-in-out infinite' });
+  }
+
+  if (failed || state === 'slow') {
+    parts.push({ type: 'button', audio: 'skip', id: `${hour}RetryBtn`,
+                 onclick: `retryOffice('${hour}')`, text: '↻  Tap to retry' });
+  }
+
   parts.push({ type: 'nav', audio: 'skip' });
   return {
     hour, rite, date: today, title: hourTitle,
-    source: failure ? 'unavailable' : 'pending',
+    source: failed ? 'unavailable' : 'pending',
     langs: ['la', 'en'], pace: true, cacheKey: '', parts,
   };
 }
@@ -14417,7 +14561,9 @@ function buildOffice(hour, rite, date) {
     const cached = officeCorpusGet(today, hour);
     if (cached && !cached._error) return buildTraditionalOffice(cached, hour, today, rite);
     if (!cached) prefetchOffice(today, hour);
-    return buildPendingOffice(hour, today, rite, cached && cached._error);
+    return buildPendingOffice(hour, today, rite,
+      (cached && cached._error) ? 'failed'
+        : officeCorpusIsSlow(today, hour) ? 'slow' : 'loading');
   }
   // `date` reaches the day-of-week choices (Te Deum, the Compline night psalm)
   // and the date stamp, but NOT the season or the psalter week: those two
