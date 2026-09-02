@@ -3882,6 +3882,16 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   transition:border-color .2s;
 }
+/* A day that was fasted carries a gold thread down its left edge. The chip's
+   own border stays, so it reads as the same entry with a mark on it rather than
+   a different kind of thing. The practice calendar is already gold by intensity,
+   so the thread is deliberately a different axis -- an edge, not a fill -- and
+   the two cannot be confused. padding-left drops 14 -> 12 so the 2px rule
+   replaces the 1px border without shifting the text. */
+.activity-chip.fast-day{
+  border-left:2px solid rgba(240,192,64,.85);
+  padding-left:12px;
+}
 .activity-chip-icon{
   font-size:16px;flex-shrink:0;margin-top:1px;width:22px;text-align:center;
 }
@@ -5270,6 +5280,9 @@ function hideAnchorRecorder() {
    CONTEMPLATIVE SITTING -- STATE MACHINE
 ═══════════════════════════════════════════ */
 let sPhase='idle', sTimer=null, sDuration=10, sThoughts=[], sPhaseStart=0, sTimeLeft=0;
+// One fasting prayer per sitting. advanceSitting() re-enters after the prayer
+// and must fall through the second time; this is what lets it.
+let sFastPrayerDone = false;
 let watchThoughtCount=0, sitThoughtCount=0;
 let anchorAudio = null;  // currently playing anchor Audio object
 
@@ -5294,22 +5307,13 @@ function setSittingPhase(phase) {
 function startSitting() {
   sThoughts = []; sPhase = 'settle';
   watchThoughtCount = 0; sitThoughtCount = 0;
+  sFastPrayerDone = false;
   document.getElementById('anchorDisplay').textContent = anchorText;
-  // Fasting Mode: open the sitting with a fasting intention
-  let fi = document.getElementById('sittingFastIntention');
-  if (!fi) {
-    const anchor = document.getElementById('anchorDisplay');
-    fi = document.createElement('p');
-    fi.id = 'sittingFastIntention';
-    fi.style.cssText = 'text-align:center;font-family:"Playfair Display",serif;font-style:italic;font-size:13px;color:rgba(240,192,64,.7);margin:10px auto 0;max-width:340px;line-height:1.6;display:none';
-    anchor.parentNode.insertBefore(fi, anchor.nextSibling);
-  }
-  if (fasting) {
-    fi.textContent = 'You are fasting today. Offer this sitting with it \u2014 prayer and fasting are one act, one hunger, turned toward God.';
-    fi.style.display = 'block';
-  } else {
-    fi.style.display = 'none';
-  }
+  /* The fasting intention that used to sit under the anchor is now the prayer
+     between settle and the sit -- see showFastingPrayer(). Any element left in
+     the DOM by an earlier session is hidden rather than orphaned on screen. */
+  const staleFi = document.getElementById('sittingFastIntention');
+  if (staleFi) staleFi.style.display = 'none';
   setSittingPhase('idle');
 
   // 1. Play monastery bell
@@ -5324,6 +5328,50 @@ function startSitting() {
       setTimeout(() => beginSettle(), 800);
     }
   });
+}
+
+/* Fasting Mode: the prayer that opens a fasted sitting.
+
+   It falls between the settle phase and the timer -- settle has done its work
+   of arriving, and the sit has not begun, so this is the one moment in the
+   session with nothing running. It waits for a tap rather than a timer: the
+   prayer is the point, and a countdown would make it something to sit through.
+   The bell that opens the sit is deferred until the tap, so it still marks the
+   beginning of the timed silence rather than ringing under the words. */
+function showFastingPrayer(done) {
+  const host = document.getElementById('sitting-settle');
+  if (!host) { done(); return; }              // never strand the session
+  let panel = document.getElementById('fastPrayerPanel');
+  if (!panel) {
+    panel = document.createElement('div');
+    panel.id = 'fastPrayerPanel';
+    /* Fixed, not absolute: the host (.companion-state) is position:static, so an
+       inset:0 absolute child would anchor to some far ancestor instead. Fixed
+       covers the viewport regardless, which is what this wants. It still
+       inherits the host's display:none once settle stops being the active
+       phase, which is a free safety net if the tap handler ever misses. */
+    panel.style.cssText = 'position:fixed;inset:0;z-index:9800;display:flex;'
+      + 'flex-direction:column;align-items:center;justify-content:center;'
+      + 'text-align:center;gap:26px;padding:28px;background:rgba(4,4,14,.94);'
+      + 'animation:dcFadeIn .8s ease';
+    host.appendChild(panel);
+  }
+  panel.innerHTML =
+    '<div style="font-family:\'Montserrat\',sans-serif;font-size:9px;font-weight:700;'
+      + 'letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.75)">The Fast</div>'
+  + '<p style="font-family:\'Playfair Display\',serif;font-style:italic;'
+      + 'font-size:clamp(16px,2.3vw,20px);line-height:1.85;color:rgba(240,192,64,.88);'
+      + 'max-width:420px;margin:0">Lord, I am hungry.<br>Let this hunger become prayer.<br>'
+      + 'What I withhold from the body, give to the poor;<br>'
+      + 'what I lose in strength, restore in attention.<br>'
+      + '<span style="color:rgba(255,255,255,.75)">Not this, but You.</span></p>'
+  + '<button type="button" id="fastPrayerBegin" class="btn-primary gold" '
+      + 'style="justify-content:center;min-width:190px">Begin the silence</button>';
+  panel.style.display = 'flex';
+  document.getElementById('fastPrayerBegin').onclick = () => {
+    panel.style.display = 'none';
+    done();
+  };
 }
 
 /* ═══════════════════════════════════════════
@@ -5380,6 +5428,12 @@ function updateTimerDisplay(phase, secs) {
 
 function advanceSitting() {
   if (sPhase === 'settle') {
+    // Fasting: the prayer first, then the sit. Re-enters here on the tap.
+    if (fasting && !sFastPrayerDone) {
+      sFastPrayerDone = true;
+      showFastingPrayer(() => advanceSitting());
+      return;
+    }
     sPhase = 'sit'; playBell();
     setSittingPhase('sit');
     document.getElementById('sitCount').textContent = '0';
@@ -8272,7 +8326,7 @@ function activityChip(e) {
       ? `${e.decades} decades · with ${e.roster.slice(0,3).join(', ')}${e.roster.length>3?'…':''}`
       : `${e.decades} decades`;
   }
-  return `<div class="activity-chip">
+  return `<div class="activity-chip${e.fastDay ? ' fast-day' : ''}">
     <div class="activity-chip-icon">${icon}</div>
     <div class="activity-chip-body">
       <div class="activity-chip-title">${title}</div>
@@ -11195,7 +11249,7 @@ function initExamen() {
   examenActiveQuestions = fasting
     ? EXAMEN_QUESTIONS.concat([{
         q: 'The Fast',
-        prompt: 'Where did the fast pinch today \u2014 and what did you do with the pinch?',
+        prompt: 'Where did the fast create space for God today? Where did hunger become prayer?',
         sub: 'Hunger is not the point; what you turn it into is. A prayer offered, a mercy shown, an appetite obeyed \u2014 name it honestly.'
       }])
     : EXAMEN_QUESTIONS.slice();
@@ -15262,6 +15316,17 @@ function revealSettingsSection(section) {
 function toggleFastingFromSettings(on) {
   fasting = on;
   localStorage.setItem('still_fasting', on ? '1' : '0');
+  /* The midday reflections are dated notifications queued a fortnight ahead, so
+     they have to be queued and cleared as the toggle moves -- they do not read
+     the flag when they fire. Silent no-op off native; neither path prompts for
+     permission, which belongs to the bell Save alone. */
+  try {
+    if (on) { if (window.scheduleFastingReflections) window.scheduleFastingReflections(); }
+    else    { if (window.cancelFastingReflections)   window.cancelFastingReflections(); }
+    /* Lauds' body changes with the flag, and a repeating notification keeps the
+       text it was scheduled with until something rewrites it. */
+    if (window.refreshBellText) window.refreshBellText();
+  } catch (e) {}
   const btn = document.getElementById('fastingBtn');
   if (btn) btn.classList.toggle('on', on);
   const onBtn  = document.getElementById('fastOnBtn');

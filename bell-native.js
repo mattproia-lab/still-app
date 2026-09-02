@@ -44,6 +44,60 @@
   };
   var BODY = 'The monastery bell tolls. Come to the Office.';
   var CUSTOM_BODY = 'The monastery bell tolls.';
+  /* Lauds is the morning bell, so it is the one that carries the fast. Vigils is
+     night; Vespers and Compline are evening, and by then the intention has
+     either been kept or not -- a reminder there would be a reproach. */
+  var FAST_BODY = 'The monastery bell tolls. Come to the Office — and offer today’s fast with it.';
+
+  /* ── Fasting Mode: the midday reflection ────────────────────────────────
+     IDs 8001-8014, clear of the Hours (1-4), the custom slots (5-7), the
+     Desert Fathers series (9001-9899) and its test (8999). ALL_IDS does not
+     include them, so the bell Save path never cancels these -- they have their
+     own lifecycle, tied to the fasting toggle.
+
+     A repeating daily notification carries ONE fixed body forever, so a
+     rotating text has to be a queue of dated notifications, topped up on
+     launch. Same shape as the Desert Fathers series in index.html, and costed
+     against the same budget: 4 bells + 3 custom + 30 quotes + 14 fasting = 51
+     of iOS's 64 pending. */
+  var FAST_ID_MIN = 8001, FAST_DAYS = 14;
+  var FAST_HOUR = 12;                       // noon, local
+
+  function isFasting() {
+    try { return localStorage.getItem('still_fasting') === '1'; }
+    catch (e) { return false; }
+  }
+
+  function fastIds() {
+    var out = [];
+    for (var i = 0; i < FAST_DAYS; i++) out.push({ id: FAST_ID_MIN + i });
+    return out;
+  }
+
+  /* Scripture is Douay-Rheims, the same translation as the Lectio passages in
+     index.html -- Isaiah and Joel are quoted from those entries verbatim.
+     Bodies stay short: iOS truncates near 110 characters on the lock screen. */
+  var FAST_TEXTS = [
+    { t: 'Isaiah 58',            b: 'Is not this rather the fast that I have chosen? Deal thy bread to the hungry.' },
+    { t: 'Isaiah 58',            b: 'Loose the bands of wickedness, undo the bundles that oppress, let them that are broken go free.' },
+    { t: 'Joel 2',               b: 'Be converted to me with all your heart, in fasting, and in weeping, and mourning.' },
+    { t: 'Matthew 6',            b: 'When thou fastest, anoint thy head, and wash thy face; that thou appear not to men to fast.' },
+    { t: 'Tertullian',           b: 'Fasting is the soul of prayer, mercy is the lifegiving fasting. If you pray, fast; if you fast, show mercy.' },
+    { t: 'St John Chrysostom',   b: 'He who fasts is light of foot and runs toward God; he who does not fast is heavy and falls to the earth.' },
+    { t: 'St John Chrysostom',   b: 'Fasting is a medicine — but a medicine that becomes useless through the unskilfulness of him who employs it.' },
+    { t: 'St Peter Chrysologus', b: 'Prayer knocks, fasting obtains, mercy receives.' },
+    { t: 'St Basil the Great',   b: 'Take heed lest, having fasted from food, you devour your brother.' },
+    { t: 'St Thomas Aquinas',    b: 'Fasting is practised to bridle the lusts of the flesh, that the mind may rise more freely.' },
+    { t: 'Abba Moses',           b: 'Fasting without prayer is hunger. Prayer without fasting is distraction.' },
+    { t: 'Abba Moses',           b: 'The fast is not of the belly alone. Fast with the eyes, the tongue, the temper — or you have not fasted.' }
+  ];
+
+  // Stable per-day pick: the same calendar day always draws the same text, so a
+  // top-up that re-queues an already-scheduled day does not change it.
+  function fastTextFor(date) {
+    var day = Math.floor(date.getTime() / 86400000);
+    return FAST_TEXTS[((day % FAST_TEXTS.length) + FAST_TEXTS.length) % FAST_TEXTS.length];
+  }
 
   function selectedVoice() {
     try { return localStorage.getItem('still_bell_voice') || 'bell-call.wav'; }
@@ -161,7 +215,7 @@
         return {
           id: HOUR_IDS[s.hour],
           title: TITLES[s.hour],
-          body: BODY,
+          body: (s.hour === 'lauds' && isFasting()) ? FAST_BODY : BODY,
           sound: sound,
           schedule: {
             on: { hour: s.time.hour, minute: s.time.minute },
@@ -298,6 +352,80 @@
     }
   }
 
+  /* FASTING path: queue the midday reflections, or clear them.
+
+     Like the launch path, this checks permission and never requests it -- the
+     fasting toggle lives in Settings and must not raise a system prompt. If
+     permission was never granted the queue simply stays empty until the user
+     presses Save on the bells, which is the one place a prompt belongs. */
+  async function scheduleFastingReflections() {
+    if (!isNative()) return;
+    var LN = plugin();
+    try {
+      if (!isFasting()) return await cancelFastingReflections();
+
+      var perm = await LN.checkPermissions();
+      if (perm.display !== 'granted') return;     // check only -- no prompt
+
+      var now = Date.now();
+      var batch = [];
+      for (var i = 0; i < FAST_DAYS; i++) {
+        var at = new Date();
+        at.setDate(at.getDate() + i);
+        at.setHours(FAST_HOUR, 0, 0, 0);
+        if (at.getTime() <= now + 60000) continue;   // today's noon already gone
+        var item = fastTextFor(at);
+        batch.push({
+          id: FAST_ID_MIN + i,
+          title: 'The Fast · ' + item.t,
+          body: item.b,
+          schedule: { at: at, allowWhileIdle: true },
+          sound: bellSound()
+        });
+      }
+
+      // Replace rather than add: a top-up must not leave yesterday's slots or
+      // double-book a day already queued.
+      await LN.cancel({ notifications: fastIds() });
+      if (batch.length) await LN.schedule({ notifications: batch });
+      console.log('[bell-native] fasting reflections queued: ' + batch.length);
+    } catch (e) {
+      console.warn('[bell-native] fasting schedule failed', e);
+    }
+  }
+
+  /* Rewrite the bells in place, without prompting.
+
+     Lauds' body depends on the fasting flag, and a repeating notification
+     carries whatever text it was scheduled with -- so the toggle has to re-arm
+     the bells or the morning line never changes. Permission is CHECKED, never
+     requested: that belongs to Save alone. Scheduling the same ids overwrites,
+     so there is no cancel here and no window where the bells are missing. */
+  async function refreshBellText() {
+    if (!isNative()) return;
+    var LN = plugin();
+    try {
+      var perm = await LN.checkPermissions();
+      if (perm.display !== 'granted') return;     // check only -- no prompt
+      var toSchedule = buildNotifications();
+      if (!toSchedule.length) return;
+      await LN.schedule({ notifications: toSchedule });
+      console.log('[bell-native] bell text refreshed (fasting=' + isFasting() + ')');
+    } catch (e) {
+      console.warn('[bell-native] bell refresh failed', e);
+    }
+  }
+
+  async function cancelFastingReflections() {
+    if (!isNative()) return;
+    try {
+      await plugin().cancel({ notifications: fastIds() });
+      console.log('[bell-native] fasting reflections cleared');
+    } catch (e) {
+      console.warn('[bell-native] fasting cancel failed', e);
+    }
+  }
+
   function launchCatchUp() {
     if (!isNative()) return;
     var tries = 0;
@@ -315,6 +443,10 @@
 
   function init() {
     launchCatchUp();
+    /* Top up the fasting queue on every launch, the way the Desert Fathers
+       series does. Fourteen days is the cover; opening the app inside a
+       fortnight keeps it full. Silent and permissionless when not fasting. */
+    scheduleFastingReflections();
   }
 
   /* saveBellSettings() in index.html calls these directly now, instead of the
@@ -322,6 +454,10 @@
      own save: it fired on a timer rather than after the toggles were read. */
   window.scheduleBells = scheduleBells;
   window.checkAndRescheduleBells = checkAndRescheduleBells;
+  // toggleFastingFromSettings() in index.html drives these.
+  window.scheduleFastingReflections = scheduleFastingReflections;
+  window.cancelFastingReflections = cancelFastingReflections;
+  window.refreshBellText = refreshBellText;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
