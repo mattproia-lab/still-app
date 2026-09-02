@@ -14017,6 +14017,10 @@ const TE_DEUM = `We praise thee, O God: we acknowledge thee to be the Lord.\nAll
 let currentOfficeHour = null;
 
 function enterOfficeHour(hour) {
+  // Switching hours abandons the one being left; its fetch is now worthless.
+  if (window._officeCurrentHour && window._officeCurrentHour !== hour) {
+    abortOfficeFetch(window._officeCurrentHour);
+  }
   currentOfficeHour = hour;
   // prefetchOffice() repaints on arrival, but only for the hour still on screen.
   window._officeCurrentHour = hour;
@@ -14047,7 +14051,12 @@ function enterOfficeHour(hour) {
 }
 
 function officeGoChooser() {
+  // Whatever is still fetching belongs to the hour being left.
+  abortOfficeFetch(currentOfficeHour || window._officeCurrentHour);
   currentOfficeHour = null;
+  /* Never cleared before: a fetch landing after the user tapped back still
+     matched this and repainted a card they had already left. */
+  window._officeCurrentHour = null;
   releaseOfficeLock();
   const titleEl = document.getElementById('officeScreenTitle');
   if (titleEl) titleEl.textContent = 'The Office';
@@ -14125,19 +14134,43 @@ function officeCorpusIsSlow(date, hour) {
   return officeCorpusSlow.has(`${date}/${hour}`);
 }
 
+/* Cancel whatever is in flight for an hour and forget it, so the next visit
+   starts clean. Navigating away calls this: the request is worthless once the
+   user has gone, and on Vigils it would otherwise go on to fire a SECOND
+   request for slice=rest after they left. */
+function abortOfficeFetch(hour) {
+  if (!hour) return;
+  const key = `${new Date().toISOString().split('T')[0]}/${hour}`;
+  const ctl = officeCorpusAbort.get(key);
+  if (ctl) { try { ctl.abort(); } catch (e) {} }
+  officeCorpusAbort.delete(key);
+  officeCorpusPending.delete(key);
+  officeCorpusSlow.delete(key);
+  /* A half-loaded Vigils must not survive the abort. officeCorpus.has(key)
+     short-circuits prefetchOffice, so leaving after Nocturn I had painted would
+     otherwise pin the office permanently partial on return, with no second
+     phase left to finish it. */
+  const doc = officeCorpus.get(key);
+  if (doc && doc._partial) officeCorpus.delete(key);
+}
+
 /* Throw away whatever the last attempt left behind and start over. Bound to the
    retry button the pending card shows once a fetch has gone slow or failed. */
 function retryOffice(hour) {
   const today = new Date().toISOString().split('T')[0];
-  const key = `${today}/${hour}`;
-  const ctl = officeCorpusAbort.get(key);
-  if (ctl) { try { ctl.abort(); } catch (e) {} }
-  officeCorpus.delete(key);
-  officeCorpusPending.delete(key);
-  officeCorpusSlow.delete(key);
-  officeCorpusAbort.delete(key);
+  abortOfficeFetch(hour);
+  officeCorpus.delete(`${today}/${hour}`);   // retry discards a cached failure too
   renderOfficeHour(hour);
   prefetchOffice(today, hour);
+}
+
+/* The office's own way out. goHome() is shared by every screen (and defined
+   twice, at 4786 and 4963), so the abort belongs here rather than inside it. */
+function officeGoHome() {
+  abortOfficeFetch(currentOfficeHour || window._officeCurrentHour);
+  currentOfficeHour = null;
+  window._officeCurrentHour = null;
+  goHome();
 }
 
 /* The only async thing in the traditional path. Safe to call repeatedly.
@@ -14494,30 +14527,29 @@ function buildPendingOffice(hour, today, rite, state) {
   // tapping "Vigils" reads as some other office loading.
   const tapped = { vigils: 'Vigils', lauds: 'Lauds', vespers: 'Vespers' }[hour] || hourTitle;
   const parts = [];
-  parts.push({ type: 'badge', audio: 'skip', text: 'Rubrics 1960' });
-  parts.push({ type: 'title', audio: 'skip', text: hourTitle });
 
   if (failed) {
+    // Failure keeps the ordinary card: it has something to say and no hurry.
+    parts.push({ type: 'badge', audio: 'skip', text: 'Rubrics 1960' });
+    parts.push({ type: 'title', audio: 'skip', text: hourTitle });
     parts.push({ type: 'text', audio: 'skip',
       text: 'This office could not be fetched. Check your connection, or switch to the modern calendar in Settings.',
       style: 'font-size:14px;font-style:normal;color:rgba(255,255,255,.55)' });
-  } else if (state === 'slow') {
-    parts.push({ type: 'text', audio: 'skip',
-      text: 'Taking longer than expected…',
-      style: 'font-size:15px;font-style:normal;color:rgba(255,255,255,.72)' });
-  } else {
-    parts.push({ type: 'text', audio: 'skip',
-      text: `Loading ${tapped}…`,
-      style: 'font-size:16px;font-style:normal;color:rgba(200,146,12,.85);'
-           + 'animation:officeBreath 1.9s ease-in-out infinite' });
-  }
-
-  if (failed || state === 'slow') {
     parts.push({ type: 'button', audio: 'skip', id: `${hour}RetryBtn`,
                  onclick: `retryOffice('${hour}')`, text: '↻  Tap to retry' });
+    parts.push({ type: 'nav', audio: 'skip' });
+  } else {
+    /* Loading and slow replace the content area outright -- one centred line and
+       a way out, rather than a half-drawn card with nothing in it. */
+    parts.push({ type: 'loading', audio: 'skip',
+                 text: `Loading ${tapped}…`,
+                 sub: state === 'slow' ? 'Taking longer than expected…' : null });
+    if (state === 'slow') {
+      parts.push({ type: 'button', audio: 'skip', id: `${hour}RetryBtn`,
+                   onclick: `retryOffice('${hour}')`, text: '↻  Tap to retry' });
+    }
   }
 
-  parts.push({ type: 'nav', audio: 'skip' });
   return {
     hour, rite, date: today, title: hourTitle,
     source: failed ? 'unavailable' : 'pending',
@@ -14903,10 +14935,22 @@ function renderOfficeHTML(doc) {
       case 'note':
         html += `<p style="margin-top:20px;text-align:center;font-size:14px;font-style:italic;color:rgba(200,146,12,.45)">${part.text}</p>`;
         break;
+      /* Takes over the content area while the corpus is on its way. The way out
+         is inside this block, not in a nav below it, so it paints in the same
+         frame as the message rather than waiting on a card that has no content
+         yet. */
+      case 'loading':
+        html += `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:52vh;gap:24px;padding:20px">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:23px;letter-spacing:.02em;color:rgba(200,146,12,.9);animation:officeBreath 1.9s ease-in-out infinite">${part.text}</div>
+    ${part.sub ? `<div style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55)">${part.sub}</div>` : ''}
+    <button class="btn-primary gold" onclick="officeGoChooser()" style="justify-content:center;min-width:190px">← Other Hours</button>
+  </div>`;
+        break;
+
       case 'nav':
         html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
     <button class="btn-primary gold" onclick="officeGoChooser()" style="justify-content:center">← Other Hours</button>
-    <button class="btn-primary" onclick="goHome()">Return to Still</button>
+    <button class="btn-primary" onclick="officeGoHome()">Return to Still</button>
   </div>`;
         break;
     }
