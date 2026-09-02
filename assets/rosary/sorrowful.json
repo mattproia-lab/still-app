@@ -1,7 +1,7 @@
 {
   "set": "sorrowful",
   "title": "The Sorrowful Mysteries",
-  "schema": 1,
+  "schema": 2,
   "sources": {
     "original": null,
     "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
@@ -13,6 +13,7 @@
     {
       "id": "sorrowful-1",
       "title": "The Agony in the Garden",
+      "fruit": "Contrition",
       "meditations": [
         {
           "id": "sorrowful-1-01",
@@ -242,6 +243,7 @@
     {
       "id": "sorrowful-2",
       "title": "The Scourging at the Pillar",
+      "fruit": "Mortification",
       "meditations": [
         {
           "id": "sorrowful-2-01",
@@ -471,6 +473,7 @@
     {
       "id": "sorrowful-3",
       "title": "The Crowning with Thorns",
+      "fruit": "Moral Courage",
       "meditations": [
         {
           "id": "sorrowful-3-01",
@@ -712,6 +715,7 @@
     {
       "id": "sorrowful-4",
       "title": "The Carrying of the Cross",
+      "fruit": "Patience",
       "meditations": [
         {
           "id": "sorrowful-4-01",
@@ -948,6 +952,7 @@
     {
       "id": "sorrowful-5",
       "title": "The Crucifixion",
+      "fruit": "Salvation",
       "meditations": [
         {
           "id": "sorrowful-5-01",

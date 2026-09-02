@@ -1,7 +1,7 @@
 {
   "set": "joyful",
   "title": "The Joyful Mysteries",
-  "schema": 1,
+  "schema": 2,
   "sources": {
     "original": null,
     "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
@@ -14,6 +14,7 @@
     {
       "id": "joyful-1",
       "title": "The Annunciation",
+      "fruit": "Humility",
       "meditations": [
         {
           "id": "joyful-1-01",
@@ -246,6 +247,7 @@
     {
       "id": "joyful-2",
       "title": "The Visitation",
+      "fruit": "Love of Neighbor",
       "meditations": [
         {
           "id": "joyful-2-01",
@@ -487,6 +489,7 @@
     {
       "id": "joyful-3",
       "title": "The Nativity",
+      "fruit": "Poverty of Spirit",
       "meditations": [
         {
           "id": "joyful-3-01",
@@ -725,6 +728,7 @@
     {
       "id": "joyful-4",
       "title": "The Presentation",
+      "fruit": "Obedience",
       "meditations": [
         {
           "id": "joyful-4-01",
@@ -973,6 +977,7 @@
     {
       "id": "joyful-5",
       "title": "The Finding in the Temple",
+      "fruit": "Joy in Finding Jesus",
       "meditations": [
         {
           "id": "joyful-5-01",

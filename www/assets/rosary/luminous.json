@@ -1,7 +1,7 @@
 {
   "set": "luminous",
   "title": "The Luminous Mysteries",
-  "schema": 1,
+  "schema": 2,
   "sources": {
     "original": null,
     "catena": "St Thomas Aquinas, Catena Aurea on St Matthew and St John (Oxford trans., 1841)",
@@ -13,6 +13,7 @@
     {
       "id": "luminous-1",
       "title": "The Baptism in the Jordan",
+      "fruit": "Openness to the Holy Spirit",
       "meditations": [
         {
           "id": "luminous-1-01",
@@ -235,6 +236,7 @@
     {
       "id": "luminous-2",
       "title": "The Wedding at Cana",
+      "fruit": "To Jesus Through Mary",
       "meditations": [
         {
           "id": "luminous-2-01",
@@ -464,6 +466,7 @@
     {
       "id": "luminous-3",
       "title": "The Proclamation of the Kingdom",
+      "fruit": "Repentance",
       "meditations": [
         {
           "id": "luminous-3-01",
@@ -704,6 +707,7 @@
     {
       "id": "luminous-4",
       "title": "The Transfiguration",
+      "fruit": "Desire for Holiness",
       "meditations": [
         {
           "id": "luminous-4-01",
@@ -954,6 +958,7 @@
     {
       "id": "luminous-5",
       "title": "The Institution of the Eucharist",
+      "fruit": "Adoration",
       "meditations": [
         {
           "id": "luminous-5-01",

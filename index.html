@@ -4042,6 +4042,11 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .cow-toggle { display:block; margin:13px 0; font-size:.9rem; }
 .cow-begin { display:block; width:100%; margin-top:22px; padding:14px; border-radius:10px; border:none; background:rgba(226,204,164,.85); color:#060503; font-weight:600; font-size:1rem; cursor:pointer; }
 .cow-mystery { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.8); margin-bottom:14px; }
+/* The mystery title's type exactly -- size, tracking, case, alignment -- one
+   step down in colour so the pair reads as a single heading block rather than
+   two lines of equal rank. The negative top margin closes the gap the title's
+   own margin-bottom would otherwise leave between them. */
+.cow-fruit { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.55); margin:-8px 0 14px; }
 .cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; border-radius:12px; cursor:pointer; overflow:hidden; }
 .cow-img-inner { width:100%; height:100%; background-size:cover; background-position:center 22%; animation:cowDrift 45s ease-in-out infinite alternate; }
 @keyframes cowDrift { from { transform:scale(1); } to { transform:scale(1.07) translateY(-2%); } }
@@ -5721,6 +5726,7 @@ const CoW = (() => {
       <div class="cow-wrap">
         ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
         <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
+        ${mystery.fruit ? `<div class="cow-fruit">Fruit of this mystery: ${mystery.fruit}</div>` : ''}
         <div class="cow-img" id="cowImg"><div class="cow-img-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>
         <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
         <div class="cow-body">${med.body.split('\n').join('<br>')}</div>

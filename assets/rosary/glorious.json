@@ -1,7 +1,7 @@
 {
   "set": "glorious",
   "title": "The Glorious Mysteries",
-  "schema": 1,
+  "schema": 2,
   "sources": {
     "original": null,
     "liguori": "St Alphonsus Liguori, The Glories of Mary (1888)",
@@ -13,6 +13,7 @@
     {
       "id": "glorious-1",
       "title": "The Resurrection",
+      "fruit": "Faith",
       "meditations": [
         {
           "id": "glorious-1-01",
@@ -242,6 +243,7 @@
     {
       "id": "glorious-2",
       "title": "The Ascension",
+      "fruit": "Hope",
       "meditations": [
         {
           "id": "glorious-2-01",
@@ -466,6 +468,7 @@
     {
       "id": "glorious-3",
       "title": "The Descent of the Holy Spirit",
+      "fruit": "Gifts of the Holy Spirit",
       "meditations": [
         {
           "id": "glorious-3-01",
@@ -683,6 +686,7 @@
     {
       "id": "glorious-4",
       "title": "The Assumption",
+      "fruit": "Grace of a Happy Death",
       "meditations": [
         {
           "id": "glorious-4-01",
@@ -910,6 +914,7 @@
     {
       "id": "glorious-5",
       "title": "The Coronation of Mary",
+      "fruit": "Trust in Mary's Intercession",
       "meditations": [
         {
           "id": "glorious-5-01",
