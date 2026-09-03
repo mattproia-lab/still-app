@@ -368,16 +368,20 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
    it from the phone-only bumpFonts() rewrite near the end of the file.
 ═══════════════════════════════════════════ */
 [data-tokens]{background:var(--ink-0);
-  /* Atmosphere defaults: candle light pooling low centre (Sitting).
-     A screen overrides these on its root -- see #screen-lectio. */
-  --atmos-ground:#1e1108;--atmos-mid:#0d0704;--atmos-gy:100%;
-  --atmos-glow:255,176,84;--atmos-glow-2:232,140,58;--atmos-glow-3:120,60,20;
-  --atmos-core:255,216,150;--atmos-core-2:255,170,80;
-  --atmos-x:50%;--atmos-y:74%;--atmos-a:1;}
+  /* Atmosphere. One hue per practice, --atmos-rgb, taken verbatim from the
+     stained-glass array W[] in the script; the ground, glow and core are all
+     derived from it. A screen sets --atmos-rgb, --atmos-a (strength) and
+     --atmos-x/--atmos-y (where the light sits) on its root. Defaults: Sitting. */
+  --atmos-rgb:205,155,10;--atmos-a:.92;
+  --atmos-x:50%;--atmos-y:74%;--atmos-gy:100%;
+  --atmos-ground:color-mix(in srgb,rgb(var(--atmos-rgb)) 14%,var(--ink-0));
+  --atmos-mid:color-mix(in srgb,rgb(var(--atmos-rgb)) 7%,var(--ink-0));
+  --atmos-core:color-mix(in srgb,rgb(var(--atmos-rgb)) 55%,#fff);}
 
 /* Atmosphere -- drawn, not filmed. Four layers; only the two light layers
    animate, and only transform/opacity, so the compositor owns them. */
 .atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:var(--ink-0);
   background:radial-gradient(120% 75% at var(--atmos-x) var(--atmos-gy),var(--atmos-ground) 0%,var(--atmos-mid) 42%,var(--ink-0) 100%);}
 .atmos-glow,.atmos-flame{
   position:absolute;left:var(--atmos-x);top:var(--atmos-y);aspect-ratio:1;border-radius:50%;
@@ -385,14 +389,18 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 }
 .atmos-glow{width:min(160vw,960px);
   background:radial-gradient(circle,
-    rgba(var(--atmos-glow),calc(.26 * var(--atmos-a))) 0%,
-    rgba(var(--atmos-glow-2),calc(.13 * var(--atmos-a))) 26%,
-    rgba(var(--atmos-glow-3),calc(.05 * var(--atmos-a))) 50%,transparent 68%);
+    rgba(var(--atmos-rgb),calc(.26 * var(--atmos-a))) 0%,
+    rgba(var(--atmos-rgb),calc(.13 * var(--atmos-a))) 26%,
+    rgba(var(--atmos-rgb),calc(.05 * var(--atmos-a))) 50%,transparent 68%);
   animation:atmosBreath var(--d-drift) var(--ease-breath) infinite;}
 .atmos-flame{width:min(72vw,440px);
+  /* The core is the hue lifted toward white. The first background is the
+     fallback for engines without color-mix(). */
   background:radial-gradient(circle,
-    rgba(var(--atmos-core),calc(.30 * var(--atmos-a))) 0%,
-    rgba(var(--atmos-core-2),calc(.14 * var(--atmos-a))) 30%,transparent 60%);
+    rgba(var(--atmos-rgb),calc(.30 * var(--atmos-a))) 0%,transparent 60%);
+  background:radial-gradient(circle,
+    color-mix(in srgb,var(--atmos-core) calc(30% * var(--atmos-a)),transparent) 0%,
+    color-mix(in srgb,var(--atmos-core) calc(14% * var(--atmos-a)),transparent) 30%,transparent 60%);
   animation:atmosFlicker 5.3s ease-in-out infinite;}
 .atmos-grain{position:absolute;inset:0;opacity:.7;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
@@ -3791,12 +3799,9 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
    (.active, .show, .done, .past, .current, .open) are unchanged.
 ═══════════════════════════════════════════ */
 #screen-lectio{
-  /* Lamplight on the page: an ink-blue ground, a pale vellum glow behind the
-     text. Softer than the candle (--atmos-a) so scripture keeps its contrast. */
-  --atmos-ground:#0c1a1e;--atmos-mid:#050c0f;--atmos-gy:30%;
-  --atmos-glow:222,214,190;--atmos-glow-2:150,178,176;--atmos-glow-3:40,70,74;
-  --atmos-core:244,238,220;--atmos-core-2:190,206,200;
-  --atmos-x:50%;--atmos-y:36%;--atmos-a:.62;
+  /* Lectio's teal from the stained-glass array, placed behind the text. */
+  --atmos-rgb:0,172,192;--atmos-a:.90;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
   --measure-read:30rem;   /* about 65 characters of the serif */
 }
 .lectio-phase{display:none;padding-bottom:var(--s-7);}
@@ -3968,46 +3973,22 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 /* The glow is coloured by canonical hour. data-hour is set on the screen root
    by the small script after the markup, from the title the state code writes.
    Every hour is defined so a future Prime, Terce, Sext or None inherits. */
-#screen-office,#screen-office[data-hour="lauds"]{      /* warming gold */
-  --atmos-ground:#1c1208;--atmos-mid:#0d0804;--atmos-gy:100%;
-  --atmos-glow:255,196,110;--atmos-glow-2:240,150,70;--atmos-glow-3:120,70,20;
-  --atmos-core:255,226,170;--atmos-core-2:255,180,90;
-  --atmos-x:50%;--atmos-y:62%;--atmos-a:.95;--hour-rgb:242,199,119;}
+#screen-office,#screen-office[data-hour="lauds"]{      /* gold, from the array */
+  --atmos-rgb:205,155,10;--atmos-a:.95;--atmos-x:50%;--atmos-y:62%;--atmos-gy:100%;--hour-rgb:205,155,10;}
 #screen-office[data-hour="vigils"]{                    /* near-black */
-  --atmos-ground:#0a0a0f;--atmos-mid:#050508;
-  --atmos-glow:110,110,140;--atmos-glow-2:70,70,100;--atmos-glow-3:30,30,50;
-  --atmos-core:150,150,180;--atmos-core-2:90,90,120;
-  --atmos-y:70%;--atmos-a:.3;--hour-rgb:120,120,150;}
+  --atmos-rgb:110,110,140;--atmos-a:.3;--atmos-y:70%;--hour-rgb:110,110,140;}
 #screen-office[data-hour="prime"]{                     /* pale morning */
-  --atmos-ground:#16171c;--atmos-mid:#0b0c10;
-  --atmos-glow:236,228,205;--atmos-glow-2:190,190,200;--atmos-glow-3:80,80,100;
-  --atmos-core:250,246,232;--atmos-core-2:220,220,225;
-  --atmos-y:40%;--atmos-a:.7;--hour-rgb:236,228,205;}
+  --atmos-rgb:236,228,205;--atmos-a:.7;--atmos-y:40%;--hour-rgb:236,228,205;}
 #screen-office[data-hour="terce"]{                     /* bright */
-  --atmos-ground:#1a1610;--atmos-mid:#0e0c08;
-  --atmos-glow:255,240,200;--atmos-glow-2:255,214,140;--atmos-glow-3:140,100,40;
-  --atmos-core:255,252,240;--atmos-core-2:255,232,170;
-  --atmos-y:34%;--atmos-a:1.1;--hour-rgb:255,236,180;}
+  --atmos-rgb:255,240,200;--atmos-a:1.1;--atmos-y:34%;--hour-rgb:255,240,200;}
 #screen-office[data-hour="sext"]{                      /* brightest, sun high */
-  --atmos-ground:#1a1610;--atmos-mid:#0e0c08;
-  --atmos-glow:255,244,210;--atmos-glow-2:255,220,150;--atmos-glow-3:140,100,40;
-  --atmos-core:255,254,246;--atmos-core-2:255,236,180;
-  --atmos-y:30%;--atmos-a:1.2;--hour-rgb:255,244,200;}
+  --atmos-rgb:255,244,210;--atmos-a:1.2;--atmos-y:30%;--hour-rgb:255,244,210;}
 #screen-office[data-hour="none"]{                      /* amber */
-  --atmos-ground:#1c1208;--atmos-mid:#0d0804;
-  --atmos-glow:255,176,70;--atmos-glow-2:230,130,40;--atmos-glow-3:110,60,10;
-  --atmos-core:255,214,140;--atmos-core-2:255,170,70;
-  --atmos-y:50%;--atmos-a:.95;--hour-rgb:255,176,70;}
-#screen-office[data-hour="vespers"]{                   /* copper */
-  --atmos-ground:#1e0f08;--atmos-mid:#0d0604;
-  --atmos-glow:214,120,70;--atmos-glow-2:170,80,40;--atmos-glow-3:80,30,10;
-  --atmos-core:240,160,100;--atmos-core-2:210,110,60;
-  --atmos-y:68%;--atmos-a:.95;--hour-rgb:214,120,70;}
+  --atmos-rgb:255,176,70;--atmos-a:.95;--atmos-y:50%;--hour-rgb:255,176,70;}
+#screen-office[data-hour="vespers"]{                   /* rose, from the array */
+  --atmos-rgb:162,10,52;--atmos-a:.95;--atmos-y:68%;--hour-rgb:162,10,52;}
 #screen-office[data-hour="compline"]{                  /* deep blue-grey */
-  --atmos-ground:#0b1018;--atmos-mid:#05080c;
-  --atmos-glow:120,140,170;--atmos-glow-2:80,100,130;--atmos-glow-3:30,40,60;
-  --atmos-core:160,180,210;--atmos-core-2:110,130,160;
-  --atmos-y:72%;--atmos-a:.55;--hour-rgb:120,140,170;}
+  --atmos-rgb:120,140,170;--atmos-a:.55;--atmos-y:72%;--hour-rgb:120,140,170;}
 /* Changing hour crossfades the light rather than cutting */
 #screen-office .atmos,#screen-office .atmos-glow,#screen-office .atmos-flame{transition:background var(--d-breath) var(--ease-breath);}
 
@@ -4033,13 +4014,13 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-office .office-hour:hover{border-color:var(--gold-a55);background:var(--gold-a10);}
 #screen-office .office-hour-dot{flex-shrink:0;width:10px;height:10px;border-radius:50%;
   background:rgb(var(--hour-rgb));box-shadow:0 0 10px rgba(var(--hour-rgb),.55);}
-#screen-office .office-hour[data-hour="vigils"]{--hour-rgb:120,120,150;}
-#screen-office .office-hour[data-hour="lauds"]{--hour-rgb:242,199,119;}
+#screen-office .office-hour[data-hour="vigils"]{--hour-rgb:110,110,140;}
+#screen-office .office-hour[data-hour="lauds"]{--hour-rgb:205,155,10;}
 #screen-office .office-hour[data-hour="prime"]{--hour-rgb:236,228,205;}
-#screen-office .office-hour[data-hour="terce"]{--hour-rgb:255,236,180;}
-#screen-office .office-hour[data-hour="sext"]{--hour-rgb:255,244,200;}
+#screen-office .office-hour[data-hour="terce"]{--hour-rgb:255,240,200;}
+#screen-office .office-hour[data-hour="sext"]{--hour-rgb:255,244,210;}
 #screen-office .office-hour[data-hour="none"]{--hour-rgb:255,176,70;}
-#screen-office .office-hour[data-hour="vespers"]{--hour-rgb:214,120,70;}
+#screen-office .office-hour[data-hour="vespers"]{--hour-rgb:162,10,52;}
 #screen-office .office-hour[data-hour="compline"]{--hour-rgb:120,140,170;}
 #screen-office .office-hour-body{display:flex;flex-direction:column;gap:var(--s-1);min-width:0;}
 #screen-office .office-hour-name{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
@@ -4090,11 +4071,10 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
    examenFinish(), which emit the .examen-* classes below. No ring: no timer.
 ═══════════════════════════════════════════ */
 #screen-examen{
-  /* A lamp at the end of the day: warm, low, the light pooling at the floor. */
-  --atmos-ground:#1a120a;--atmos-mid:#0c0806;--atmos-gy:100%;
-  --atmos-glow:255,178,92;--atmos-glow-2:224,128,52;--atmos-glow-3:100,50,15;
-  --atmos-core:255,214,150;--atmos-core-2:255,168,80;
-  --atmos-x:50%;--atmos-y:82%;--atmos-a:.9;
+  /* The Examen's cobalt from the stained-glass array, low in the room:
+     evening, turned inward. Its own blue, not Compline's grey-blue. */
+  --atmos-rgb:22,50,215;--atmos-a:.90;
+  --atmos-x:50%;--atmos-y:75%;--atmos-gy:100%;
 }
 #screen-examen .examen-card{max-width:var(--measure);margin:0 auto;padding:var(--s-5) var(--s-4) var(--s-6);
   background:rgba(5,3,2,.28);border:1px solid var(--line);border-radius:var(--r-sm);backdrop-filter:none;}

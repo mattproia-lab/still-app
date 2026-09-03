@@ -77,21 +77,39 @@ is system-wide; a practice varies its atmosphere, not its accent.
 
 ### Atmosphere variables
 
-Set on `[data-tokens]` with Sitting's values; a screen overrides them on its
-root. RGB triplets, so alpha can be scaled with `--atmos-a`.
+One hue per practice. `--atmos-rgb` is an RGB triplet taken verbatim from the
+stained-glass array `W[]` in the script, so the practice's atmosphere is the
+same colour as its bead and its background wash on home. The ground, the
+breathing glow and the flicker core are all derived from it in the shared
+block; a screen sets only these on its root:
 
-| Variable | Sitting | Lectio | Meaning |
-|---|---|---|---|
-| `--atmos-ground` / `--atmos-mid` | #1e1108 / #0d0704 | #0c1a1e / #050c0f | Ground gradient stops |
-| `--atmos-gy` | 100% | 30% | Where the ground gradient is anchored |
-| `--atmos-glow` `-2` `-3` | 255,176,84 … | 222,214,190 … | The breathing glow, out to in |
-| `--atmos-core` `-2` | 255,216,150 … | 244,238,220 … | The flicker core |
-| `--atmos-x` / `--atmos-y` | 50% / 74% | 50% / 36% | Where the light sits |
-| `--atmos-a` | 1 | .62 | Overall strength |
+| Variable | Meaning |
+|---|---|
+| `--atmos-rgb` | The hue, `r,g,b`, from `W[]` |
+| `--atmos-a` | Strength, `W[].i` unless the practice needs otherwise |
+| `--atmos-x` / `--atmos-y` | Where the light sits |
+| `--atmos-gy` | Where the ground gradient is anchored (default 100%) |
 
-Sitting is a candle on a table: warm, low centre, watched. Lectio is lamplight
-on a page: cool ink ground, pale vellum glow placed behind the text, softer so
-scripture keeps its contrast. Put the glow where the eye rests in that practice.
+Derived (do not set per practice): `--atmos-ground` (hue at 14% into ink),
+`--atmos-mid` (7%), `--atmos-core` (hue lifted 55% toward white) via
+`color-mix()`; the flame layer carries a plain-rgba fallback for engines
+without it.
+
+### Practice palette
+
+| Practice | `--atmos-rgb` | `W[]` | Strength | Light sits |
+|---|---|---|---|---|
+| Sitting | 205,155,10 | gold | .92 | 50% / 74%, a candle on the table |
+| Lectio | 0,172,192 | teal | .90 | 50% / 36%, behind the text |
+| Examen | 22,50,215 | cobalt | .90 | 50% / 75%, low, turned inward |
+| Office · Lauds (and the chooser default) | 205,155,10 | gold | .95 | 62% |
+| Office · Vespers | 162,10,52 | rose | .95 | 68% |
+| Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
+| Breath Prayer (pending) | 100,20,200 | deep violet | .82 | to be designed |
+| Rosary (pending) | 162,10,52 or as decided | rose | — | to be designed |
+
+Put the glow where the eye rests in that practice. Text and gold accents do
+not change with the hue.
 
 ### Space
 
@@ -194,8 +212,10 @@ button stops breathing.
   confirm only the `html` field of the golden moved. The Sing the Hours
   player injects its own `<style>`; the id-scoped `.sth-*` rules outrank it.
 
-- **The Examen**: no timer, so no ring. The lamp sits low (`--atmos-y` 82%,
-  warm amber at .9). Every movement is painted by `renderExamenStep()` into
+- **The Examen**: no timer, so no ring. The array's cobalt sits low in the
+  room (`--atmos-rgb` 22,50,215, strength .90, `--atmos-y` 75%): its own blue,
+  more saturated and quieter than Compline's grey-blue, nothing like Vespers'
+  rose. Evening, but turned inward. Every movement is painted by `renderExamenStep()` into
   the one `.content-card`, wrapped in `.examen-step` so each replacement
   enters on `phaseIn`. The track is dots only (`.examen-track`, one per
   question, six when fasting) marked from `examenStep` in the template; the
@@ -207,16 +227,18 @@ button stops breathing.
 
 ### Hour palette
 
-| Hour | Glow | Strength | Height |
+| Hour | `--atmos-rgb` | Strength | Height |
 |---|---|---|---|
 | Vigils | near-black, cool grey `110,110,140` | .3 | 70% |
-| Lauds | warming gold `255,196,110` | .95 | 62% |
+| Lauds | gold `205,155,10` (the Sitting bead) | .95 | 62% |
 | Prime | pale morning `236,228,205` | .7 | 40% |
 | Terce | bright `255,240,200` | 1.1 | 34% |
 | Sext | brightest `255,244,210` | 1.2 | 30% |
 | None | amber `255,176,70` | .95 | 50% |
-| Vespers | copper `214,120,70` | .95 | 68% |
+| Vespers | rose `162,10,52` (the Office bead) | .95 | 68% |
 | Compline | deep blue-grey `120,140,170` | .55 | 72% |
+
+The chooser's hour dots use the same triplets (`--hour-rgb`).
 
 The light rises through the morning, stands high at midday, and sinks and
 cools toward night. Text and accents stay warm white and gold in every hour.
