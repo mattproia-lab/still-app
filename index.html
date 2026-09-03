@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <!-- ═══════════════════════════════════════════
      THE SACRISTY 
 ═══════════════════════════════════════════ -->
@@ -179,6 +182,47 @@ body { -webkit-text-size-adjust: 100%; }
   cursor:pointer;margin-top:8px;
 }
 .auth-toggle span { color:rgba(178,200,245,.7);text-decoration:underline; }
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS -- the visual system. Documented in DESIGN.md at the repo root.
+   Contemplative Sitting is the reference implementation; every other practice
+   inherits these rather than declaring its own colors, sizes or timings.
+═══════════════════════════════════════════ */
+:root{
+  /* Type -- one serif for the tradition's voice, one sans for the interface */
+  --font-serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;
+  --font-sans:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  /* Fluid scale, 390px -> 1200px viewport */
+  --t-micro:clamp(.625rem,.6rem + .1vw,.6875rem);     /* 10-11  tracked labels */
+  --t-xs:clamp(.75rem,.72rem + .15vw,.8125rem);        /* 12-13  hints, meta */
+  --t-sm:clamp(.875rem,.85rem + .15vw,.9375rem);       /* 14-15  interface notes */
+  --t-base:clamp(1rem,.95rem + .25vw,1.125rem);        /* 16-18  body */
+  --t-md:clamp(1.25rem,1.15rem + .5vw,1.5rem);         /* 20-24  quotes, instructions */
+  --t-lg:clamp(1.625rem,1.4rem + 1vw,2.125rem);        /* 26-34  headings */
+  --t-xl:clamp(2.5rem,2rem + 2vw,3.5rem);              /* 40-56  counts */
+  --t-2xl:clamp(3.5rem,2.8rem + 3vw,5rem);             /* 56-80  hero numbers */
+  --track-label:.22em;--track-wide:.32em;
+  --lh-tight:1.05;--lh-snug:1.3;--lh-text:1.6;--lh-loose:1.8;
+  /* Color -- warm dark ground, candle light, ember */
+  --ink-0:#050302;--ink-1:#0b0705;--ink-2:#140d08;
+  --candle:#f2c777;--candle-hi:#fff1cf;--gold:#d9a441;--gold-deep:#8c5d12;
+  --ember:#ff9448;--ember-hi:#ffd7a8;
+  --text-hi:rgba(255,246,232,.94);--text-mid:rgba(255,240,220,.68);
+  --text-low:rgba(255,236,214,.42);--text-faint:rgba(255,232,206,.24);
+  --line:rgba(255,226,190,.12);--line-strong:rgba(255,226,190,.24);
+  --gold-a10:rgba(217,164,65,.10);--gold-a25:rgba(217,164,65,.25);--gold-a55:rgba(217,164,65,.55);
+  /* Space */
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;
+  --gutter:clamp(18px,4vw,38px);--measure:34rem;
+  /* Motion -- a breath, not a bounce */
+  --d-fast:.2s;--d-base:.45s;--d-slow:.9s;--d-breath:1.8s;--d-drift:8s;
+  --ease-out:cubic-bezier(.2,.7,.2,1);--ease-breath:cubic-bezier(.45,0,.2,1);
+  /* Shape */
+  --r-sm:3px;--r-pill:999px;
+}
+@media (prefers-reduced-motion:reduce){
+  :root{--d-fast:.01s;--d-base:.2s;--d-slow:.3s;--d-breath:.3s;--d-drift:0s;}
+}
+
 /* ═══════════════════════════════════════════
    RESET + ROOT
 ═══════════════════════════════════════════ */
@@ -478,232 +522,246 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 .fasting-btn.on .ft-pip{background:#f0c040;border-color:#f0c040;box-shadow:0 0 8px rgba(240,192,64,.8);}
 
 /* ═══════════════════════════════════════════
-   CONTEMPLATIVE SITTING
+   CONTEMPLATIVE SITTING -- reference implementation of DESIGN.md
+   Scoped to #screen-sitting so it cannot leak into screens that have not
+   been redesigned yet. Class names the state machine toggles (.active,
+   .show, .selected, .chosen, .recording, .saved, .tap-ripple) are unchanged.
 ═══════════════════════════════════════════ */
-.sitting-wrap{max-width:560px;margin:0 auto;text-align:center;}
+#screen-sitting{background:var(--ink-0);}
 
-/* Phase indicator */
-.phase-track{
-  display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:28px;
+/* Atmosphere -- drawn, not filmed. Four layers; only the two light layers
+   animate, and only transform/opacity, so the compositor owns them. */
+.sit-atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(120% 75% at 50% 100%,#1e1108 0%,#0d0704 42%,var(--ink-0) 100%);}
+.sit-atmos-glow,.sit-atmos-flame{
+  position:absolute;left:50%;top:74%;aspect-ratio:1;border-radius:50%;
+  transform:translate(-50%,-50%);will-change:transform,opacity;
 }
-.phase-step{
-  display:flex;align-items:center;gap:0;
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.28);
-  transition:color .4s;
-}
-.phase-step.done{color:rgba(240,192,64,.6);}
-.phase-step.current{color:#fff;}
-.phase-step-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);margin-right:7px;transition:all .4s;flex-shrink:0;}
-.phase-step.done .phase-step-dot{background:rgba(200,146,12,.7);}
-.phase-step.current .phase-step-dot{background:#f0c040;box-shadow:0 0 8px rgba(240,192,64,.8);}
-.phase-connector{width:20px;height:1px;background:rgba(255,255,255,.12);margin:0 8px;}
+.sit-atmos-glow{width:min(160vw,960px);
+  background:radial-gradient(circle,rgba(255,176,84,.26) 0%,rgba(232,140,58,.13) 26%,rgba(120,60,20,.05) 50%,transparent 68%);
+  animation:sitBreath var(--d-drift) var(--ease-breath) infinite;}
+.sit-atmos-flame{width:min(72vw,440px);
+  background:radial-gradient(circle,rgba(255,216,150,.30) 0%,rgba(255,170,80,.14) 30%,transparent 60%);
+  animation:sitFlicker 5.3s ease-in-out infinite;}
+.sit-atmos-grain{position:absolute;inset:0;opacity:.7;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
+.sit-atmos-vignette{position:absolute;inset:0;
+  background:radial-gradient(ellipse 85% 75% at 50% 42%,transparent 38%,rgba(5,3,2,.5) 78%,rgba(5,3,2,.92) 100%);}
+@keyframes sitBreath{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.82}50%{transform:translate(-50%,-50%) scale(1.07);opacity:1}}
+@keyframes sitFlicker{0%,100%{opacity:.68}14%{opacity:.9}31%{opacity:.6}47%{opacity:.86}63%{opacity:.72}80%{opacity:.96}}
 
-/* Timer display */
-.timer-display{
-  font-family:'Playfair Display',serif;font-weight:700;
-  font-size:clamp(72px,14vw,110px);letter-spacing:-.04em;line-height:1;
-  color:#fff;margin:20px 0 10px;
-  text-shadow:0 0 60px rgba(255,255,255,.08);
+/* Header and content frame. The !importants answer the mobile block further
+   down, which sets these with !important for every feature screen. */
+#screen-sitting .app-header{position:relative;z-index:10;background:transparent;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) var(--gutter) 0!important;}
+#screen-sitting .back-btn,#screen-sitting .screen-title{
+  font-family:var(--font-sans);font-weight:500;font-size:var(--t-micro)!important;
+  letter-spacing:var(--track-label);color:var(--text-low);
 }
-.timer-label{
-  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.55);
-  margin-bottom:28px;
+#screen-sitting .screen-title{letter-spacing:var(--track-wide);}
+#screen-sitting .back-btn:hover{color:var(--text-hi);}
+#screen-sitting .back-arrow{font-size:1.1em;}
+#screen-sitting .settings-btn,#screen-sitting .info-btn{color:var(--text-low);font-size:15px;}
+#screen-sitting .settings-btn:hover,#screen-sitting .info-btn:hover{color:var(--candle);}
+#screen-sitting .feature-main{position:relative;z-index:10;overflow-y:auto;
+  padding:var(--s-4) var(--gutter) calc(env(safe-area-inset-bottom,0px) + 96px)!important;
+  font-family:var(--font-sans);color:var(--text-mid);}
+.sitting-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
+
+/* Phase tracker -- connectors flex, labels never wrap, so it fits 390px */
+#screen-sitting .phase-track{display:flex;align-items:center;justify-content:space-between;
+  max-width:360px;margin:var(--s-2) auto var(--s-6);min-width:0;}
+#screen-sitting .phase-step{display:flex;align-items:center;flex:0 0 auto;white-space:nowrap;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-faint);transition:color var(--d-slow) var(--ease-out);}
+#screen-sitting .phase-step.done{color:var(--gold-a55);}
+#screen-sitting .phase-step.current{color:var(--text-hi);}
+#screen-sitting .phase-step-dot{width:5px;height:5px;border-radius:50%;background:var(--text-faint);
+  margin-right:6px;flex-shrink:0;transition:background var(--d-slow),box-shadow var(--d-slow);}
+#screen-sitting .phase-step.done .phase-step-dot{background:var(--gold-a55);}
+#screen-sitting .phase-step.current .phase-step-dot{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+#screen-sitting .phase-connector{flex:1 1 6px;min-width:4px;height:1px;background:var(--line);margin:0 6px;}
+/* Before the session every step is quiet; after it every step is done.
+   (The state machine marks Settle current in both; :has is an enhancement.) */
+#screen-sitting:has(#sitting-idle.active) .phase-step{color:var(--text-faint);}
+#screen-sitting:has(#sitting-idle.active) .phase-step-dot{background:var(--text-faint);box-shadow:none;}
+#screen-sitting:has(#sitting-complete.active) .phase-step{color:var(--gold-a55);}
+#screen-sitting:has(#sitting-complete.active) .phase-step-dot{background:var(--gold-a55);box-shadow:none;}
+@media (max-width:420px){
+  #screen-sitting .phase-step{font-size:.5625rem;letter-spacing:.1em;}
+  #screen-sitting .phase-connector{margin:0 4px;}
 }
 
-/* Thought count */
-.thought-count{
-  font-family:'Playfair Display',serif;font-size:clamp(48px,8vw,64px);
-  font-weight:700;color:rgba(255,255,255,.92);line-height:1;margin-bottom:6px;
-}
-.thought-label{
-  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
-  letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.55);
-  margin-bottom:22px;
-}
+/* Phase panels enter on a breath. (Exit is display:none in the shared rule.) */
+#screen-sitting .companion-state.active{animation:sitPhaseIn var(--d-breath) var(--ease-breath) both;}
+@keyframes sitPhaseIn{from{opacity:0;transform:translateY(var(--rise,8px))}to{opacity:1;transform:translateY(0)}}
 
-/* Anchor line */
-.anchor-line{
-  font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);
-  font-style:italic;color:rgba(255,255,255,.85);line-height:1.65;
-  padding:16px 24px;border-left:2px solid rgba(200,146,12,.5);
-  margin:16px 0 20px;text-align:left;
-  opacity:0;transition:opacity .5s ease;
-  background:rgba(200,146,12,.04);
-}
-.anchor-line.show{opacity:1;}
+/* Type roles -- the tradition speaks in serif, the interface in sans */
+#screen-sitting .voice{font-family:var(--font-serif);font-style:italic;font-weight:400;
+  font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  margin:0 auto;max-width:30rem;text-wrap:balance;}
+#screen-sitting .voice-quiet{font-size:var(--t-base);color:var(--text-mid);margin-top:var(--s-5);}
+#screen-sitting .voice-attrib{display:block;font-family:var(--font-sans);font-style:normal;
+  font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--gold);opacity:.85;margin-top:var(--s-3);}
+#screen-sitting .instruction{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
+  color:var(--text-hi);max-width:26rem;margin:var(--s-4) auto var(--s-5);text-wrap:balance;}
+#screen-sitting .ui-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-2);}
+#screen-sitting .ui-note{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);
+  color:var(--text-mid);margin-bottom:var(--s-3);}
+#screen-sitting .ui-hint{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--s-3);}
+#screen-sitting .sit-rule{width:100%;height:1px;margin:var(--s-5) 0;
+  background:linear-gradient(to right,transparent,var(--line-strong),transparent);}
+#screen-sitting .sit-rule-short{width:64px;margin:var(--s-5) auto;}
 
-/* Tap zone */
-.tap-zone{
-  width:100%;min-height:180px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;border:1px solid rgba(255,255,255,.06);
-  margin:16px 0;position:relative;
-  transition:border-color .2s,background .2s;
-  background:rgba(255,255,255,.02);
-}
-.tap-zone:active,.tap-zone:hover{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.04);}
-.tap-zone-label{
-  font-family:'Playfair Display',serif;font-size:14px;font-style:italic;
-  color:rgba(255,255,255,.3);letter-spacing:.02em;text-align:center;
-  pointer-events:none;
-}
-.tap-ripple{
-  position:absolute;border-radius:50%;
-  background:rgba(255,255,255,.08);
-  animation:rippleOut .6s ease-out forwards;
+/* Counts */
+#screen-sitting .count-hero{font-family:var(--font-serif);font-weight:500;font-size:var(--t-2xl);
+  line-height:var(--lh-tight);color:var(--candle-hi);text-shadow:0 0 40px rgba(242,199,119,.25);margin-top:var(--s-2);}
+#screen-sitting .count-label{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin:var(--s-2) 0 var(--s-5);}
+#screen-sitting .count-line{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.08em;
+  color:var(--text-low);margin-bottom:var(--s-3);}
+#screen-sitting .count-line span{color:var(--text-mid);font-weight:500;}
+
+/* The timer -- a ring of light that dims toward silence. The m:ss the state
+   machine writes stays in the DOM (the ring script reads it) but is not shown. */
+#screen-sitting .timer-value{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+.sit-ring{--ring-frac:1;position:relative;width:min(62vw,240px);aspect-ratio:1;margin:0 auto;}
+.sit-ring-svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
+.sit-ring-track{fill:none;stroke:var(--line);stroke-width:1;}
+.sit-ring-arc{fill:none;stroke:var(--candle);stroke-width:1.5;stroke-linecap:round;
+  stroke-dasharray:552.92;stroke-dashoffset:calc(552.92px * (1 - var(--ring-frac)));
+  opacity:calc(.22 + .7 * var(--ring-frac));
+  filter:drop-shadow(0 0 6px rgba(242,199,119,.55));
+  transition:stroke-dashoffset 1s linear,opacity 1s linear;}
+.sit-ring-halo{position:absolute;left:50%;top:50%;width:160%;height:160%;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,190,100,.22) 0%,rgba(255,160,70,.08) 35%,transparent 62%);
+  opacity:calc(.15 + .85 * var(--ring-frac));transition:opacity 1s linear;
+  animation:sitBreath var(--d-drift) var(--ease-breath) infinite;}
+.sit-ring-core{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;
+  transform:translate(-50%,-50%);background:var(--candle-hi);
+  box-shadow:0 0 12px 4px rgba(255,214,140,.6),0 0 40px 12px rgba(255,170,80,.25);
+  opacity:calc(.25 + .75 * var(--ring-frac));transition:opacity 1s linear;}
+
+/* Tap zone -- the ring is the target; the whole block is the hit area */
+#screen-sitting .tap-zone{position:relative;width:100%;min-height:0;margin:var(--s-2) 0 0;
+  padding:var(--s-5) 0 var(--s-4);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:var(--s-4);cursor:pointer;background:none;border:0;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+#screen-sitting .tap-zone-label{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.06em;
+  color:var(--text-faint);line-height:1.5;pointer-events:none;}
+
+/* Each tapped thought is an ember: rises from the ring's center, fades.
+   tapThought() removes the element after 700ms, so the ember lives under that. */
+#screen-sitting .tap-ripple{position:absolute;left:50%;top:50%;width:10px;height:10px;border-radius:50%;
   pointer-events:none;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,var(--ember-hi) 0%,var(--ember) 45%,transparent 72%);
+  box-shadow:0 0 14px 4px rgba(255,148,72,.55),0 0 36px 10px rgba(255,148,72,.18);
+  animation:sitEmber .68s var(--ease-out) forwards;}
+@keyframes sitEmber{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,calc(-50% - 58px)) scale(1.5)}
 }
+@keyframes sitEmberStill{0%{opacity:0}20%{opacity:1}100%{opacity:0}}
+
+/* Anchor line. playAnchor() sets inline 12px/white on this element from the
+   old design; the tokens must win, hence the two !importants. */
+#screen-sitting .anchor-line{font-family:var(--font-serif);font-style:italic;
+  font-size:var(--t-md)!important;line-height:var(--lh-text);color:var(--text-hi)!important;
+  text-align:center;padding:0 var(--s-4);margin:var(--s-3) auto 0;max-width:26rem;
+  min-height:calc(var(--t-md) * var(--lh-text) * 2);background:none;border:0;
+  opacity:0;transition:opacity var(--d-slow) var(--ease-out);}
+#screen-sitting .anchor-line.show{opacity:1;}
+
+/* Setup: duration pills */
+#screen-sitting .duration-selector{display:flex;gap:var(--s-2);margin:0 0 var(--s-2);}
+#screen-sitting .dur-btn{flex:1 1 0;background:none;border:1px solid var(--line);border-radius:var(--r-pill);
+  color:var(--text-mid);padding:12px 0;cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-xs);font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  transition:border-color var(--d-base),color var(--d-base),background var(--d-base),box-shadow var(--d-base);}
+#screen-sitting .dur-btn:hover{border-color:var(--line-strong);color:var(--text-hi);}
+#screen-sitting .dur-btn.selected{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);
+  box-shadow:0 0 24px rgba(217,164,65,.12);}
+
+/* Setup: recording cards and anchor choices */
+#screen-sitting .rec-section{margin-bottom:var(--s-5);text-align:left;}
+#screen-sitting .rec-card{background:rgba(255,226,190,.03);border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);}
+#screen-sitting .rec-status{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--s-3);}
+#screen-sitting .rec-status.saved{color:var(--gold);}
+#screen-sitting .rec-controls{display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap;}
+#screen-sitting .rec-btn{display:inline-flex;align-items:center;gap:var(--s-2);background:none;
+  border:1px solid var(--line-strong);border-radius:var(--r-pill);padding:10px 18px;cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-mid);transition:all var(--d-fast);}
+#screen-sitting .rec-btn:hover{color:var(--text-hi);border-color:rgba(255,120,96,.6);}
+#screen-sitting .rec-btn.recording{border-color:rgba(255,120,96,.85);color:var(--text-hi);background:rgba(255,120,96,.06);}
+#screen-sitting .rec-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,120,96,.55);flex-shrink:0;}
+#screen-sitting .rec-btn.recording .rec-dot{background:#ff7860;box-shadow:0 0 8px rgba(255,120,96,.9);animation:recPulse 1s ease-in-out infinite;}
+@keyframes recPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.72);}}
+#screen-sitting .rec-clock{font-family:var(--font-sans);font-size:var(--t-xs);font-variant-numeric:tabular-nums;
+  color:rgba(255,120,96,.8);display:none;}
+#screen-sitting .rec-preview{background:none;border:1px solid var(--gold-a25);border-radius:var(--r-pill);padding:9px 14px;
+  cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--gold);display:none;transition:all var(--d-fast);}
+#screen-sitting .rec-preview:hover{border-color:var(--candle);color:var(--candle);}
+#screen-sitting .rec-alt{display:block;margin-top:var(--s-3);}
+#screen-sitting .anchor-choices{display:flex;flex-direction:column;gap:var(--s-2);margin-bottom:var(--s-3);}
+#screen-sitting .anchor-pill{background:none;border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:12px var(--s-4);text-align:left;cursor:pointer;
+  font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);
+  transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+#screen-sitting .anchor-pill:hover{border-color:var(--line-strong);color:var(--text-hi);}
+#screen-sitting .anchor-pill.chosen{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+#screen-sitting .anchor-pill.pill-action{font-family:var(--font-sans);font-style:normal;font-size:var(--t-xs);letter-spacing:.08em;}
+
+/* Buttons */
+#screen-sitting .btn-primary{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;border:1px solid var(--line-strong);
+  border-radius:var(--r-pill);color:var(--text-hi);padding:15px 26px;transition:all var(--d-base) var(--ease-out);}
+#screen-sitting .btn-primary:hover{border-color:var(--text-mid);background:rgba(255,226,190,.05);}
+#screen-sitting .btn-primary.gold{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);
+  box-shadow:0 0 30px rgba(217,164,65,.12);}
+#screen-sitting .btn-primary.gold:hover{border-color:var(--candle);background:rgba(217,164,65,.16);box-shadow:0 0 40px rgba(217,164,65,.22);}
+#screen-sitting .btn-begin{width:100%;justify-content:center;}
+#screen-sitting .btn-ghost{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-low);}
+#screen-sitting .btn-ghost:hover{color:var(--text-mid);}
+#screen-sitting .btn-row{display:flex;gap:var(--s-3);justify-content:center;flex-wrap:wrap;margin-top:var(--s-5);}
+#screen-sitting .graph-keep{display:none!important;}
+
+@media (prefers-reduced-motion:reduce){
+  .sit-atmos-glow,.sit-atmos-flame,.sit-ring-halo{animation:none;}
+  #screen-sitting .companion-state.active{--rise:0px;}
+  #screen-sitting .tap-ripple{animation:sitEmberStill .6s ease-out forwards;}
+}
+
+/* Kept for other screens that still reference them */
 @keyframes rippleOut{0%{width:0;height:0;opacity:.6;}100%{width:200px;height:200px;opacity:0;}}
 /* The Office's loading line: a slow breath, so a wait reads as work. */
 @keyframes officeBreath{0%,100%{opacity:.42}50%{opacity:.92}}
 
-/* Session setup */
-.session-setup{text-align:center;padding:10px 0;}
-.duration-selector{display:flex;gap:10px;justify-content:center;margin:18px 0;}
-.dur-btn{
-  background:none;border:1px solid rgba(255,255,255,.2);
-  color:rgba(255,255,255,.55);padding:10px 22px;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;transition:all .22s;
-}
-.dur-btn:hover,.dur-btn.selected{border-color:#f0c040;color:#f0c040;background:rgba(200,146,12,.07);}
-
-/* Anchor customization */
-.anchor-setup{margin:18px 0 24px;text-align:left;}
-.anchor-setup label{
-  display:block;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px;
-}
-.anchor-input{
-  width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
-  color:#fff;padding:11px 14px;font-family:'Playfair Display',serif;font-style:italic;
-  font-size:14px;outline:none;transition:border-color .2s;
-}
-.anchor-input:focus{border-color:rgba(200,146,12,.4);}
-.anchor-input::placeholder{color:rgba(255,255,255,.3);}
-
-/* Thought graph */
-.thought-graph{margin:22px 0;padding:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);}
-.graph-label{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:12px;text-align:left;}
-.graph-svg{width:100%;height:60px;overflow:visible;}
-
-/* Sitting instruction text */
-.phase-instruction{
-  font-family:'Playfair Display',serif;font-size:clamp(18px,2.4vw,24px);font-style:italic;
-  color:rgba(255,255,255,.82);line-height:1.65;margin:16px 0 22px;
-}
-
-/* Bell notification */
+/* Bell notification (global element, tokenized) */
 .bell-indicator{
   position:fixed;top:80px;left:50%;transform:translateX(-50%);
-  z-index:90;opacity:0;transition:opacity .4s;
-  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;
-  color:rgba(240,192,64,.8);
-  background:rgba(4,4,10,.9);border:1px solid rgba(200,146,12,.3);
-  padding:8px 20px;pointer-events:none;
+  z-index:90;opacity:0;transition:opacity var(--d-base);
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--candle);background:rgba(5,3,2,.85);border:1px solid var(--gold-a25);
+  border-radius:var(--r-pill);padding:8px 18px;pointer-events:none;
 }
 .bell-indicator.show{opacity:1;}
 
-/* ═══════════════════════════════════════════
-   RECORDING UI
-═══════════════════════════════════════════ */
-.rec-section{margin-bottom:22px;}
-.rec-section-label{
-  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.55);
-  display:block;margin-bottom:6px;
-}
-.rec-section-note{
-  font-family:'Heebo',sans-serif;font-size:14px;font-weight:300;
-  color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:12px;font-style:italic;
-}
-.rec-card{
-  background:rgba(255,255,255,.03);border:1px solid rgba(200,146,12,.18);
-  padding:16px 18px;
-}
-.rec-status{
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;
-  letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.28);
-  margin-bottom:12px;
-}
-.rec-status.saved{color:rgba(200,146,12,.7);}
-.rec-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.rec-btn{
-  display:inline-flex;align-items:center;gap:9px;
-  background:none;border:1px solid rgba(255,73,64,.35);
-  padding:9px 18px;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.65);transition:all .2s;
-}
-.rec-btn:hover{border-color:rgba(255,73,64,.6);color:#fff;}
-.rec-btn.recording{border-color:rgba(255,73,64,.85);background:rgba(255,73,64,.06);color:#fff;}
-.rec-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:rgba(255,73,64,.5);flex-shrink:0;transition:all .2s;
-}
-.rec-btn.recording .rec-dot{
-  background:#ff4940;box-shadow:0 0 8px rgba(255,73,64,.9);
-  animation:recPulse 1s ease-in-out infinite;
-}
-@keyframes recPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.72);}}
-.rec-clock{
-  font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;
-  letter-spacing:.08em;color:rgba(255,73,64,.7);display:none;
-}
-.rec-preview{
-  background:none;border:1px solid rgba(200,146,12,.28);
-  padding:8px 14px;cursor:pointer;
-  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
-  letter-spacing:.15em;text-transform:uppercase;
-  color:rgba(200,146,12,.7);transition:all .2s;display:none;
-}
-.rec-preview:hover{border-color:#f0c040;color:#f0c040;}
-
-/* Anchor choice pills */
-.anchor-choices{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
-.anchor-pill{
-  background:none;border:1px solid rgba(255,255,255,.1);
-  padding:11px 16px;text-align:left;cursor:pointer;
-  font-family:'Playfair Display',serif;font-size:13px;font-style:italic;
-  color:rgba(255,255,255,.52);transition:all .22s;
-}
-.anchor-pill:hover{border-color:rgba(200,146,12,.35);color:rgba(255,255,255,.82);}
-.anchor-pill.chosen{border-color:rgba(200,146,12,.55);color:#f0c040;background:rgba(200,146,12,.06);}
-
-/* Tap dim overlay during anchor playback */
+/* Tap dim overlay during anchor playback (global element) */
 .tap-dim{
   position:fixed;inset:0;z-index:88;
   background:rgba(0,0,0,.55);
   pointer-events:none;opacity:0;transition:opacity .4s ease;
 }
 .tap-dim.show{opacity:1;}
-
-/* Improved graph */
-.graph-wrap{
-  margin:22px 0;padding:20px 18px 14px;
-  background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
-}
-.graph-header{
-  display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;
-}
-.graph-title{
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.38);
-}
-.graph-trend{
-  font-family:'Playfair Display',serif;font-size:12px;font-style:italic;
-  color:rgba(200,146,12,.7);
-}
-.graph-svg-full{width:100%;height:80px;overflow:visible;display:block;}
-.graph-axis{
-  display:flex;justify-content:space-between;margin-top:5px;
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.2);
-}
 
 /* ═══════════════════════════════════════════
    THE COMPANION
@@ -1092,9 +1150,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .feat-subhead { font-size: 17px !important; color: rgba(255,255,255,.88) !important; }
   .feat-eyebrow { color: rgba(255,255,255,.68) !important; }
   .feat-heading { font-size: clamp(26px,7vw,38px) !important; }
-  .tap-zone { min-height: 150px !important; }
-  .phase-instruction { font-size: 19px !important; color: rgba(255,255,255,.88) !important; line-height: 1.7 !important; }
-  .timer-label { color: rgba(255,255,255,.58) !important; font-size: 10px !important; }
   .lectio-curr-phrase {
     font-size: clamp(22px, 5vw, 30px) !important;
     min-height: 70px !important;
@@ -1109,7 +1164,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .back-btn span:last-child { display: none !important; }
   /* Home info button -- always visible on mobile */
   #homeInfoBtn { display: block !important; font-size: 20px !important; color: rgba(255,255,255,.55) !important; }
-  .graph-wrap { padding: 12px 10px 8px !important; }
   .night-watch { padding: 20px !important; }
   .nw-quote { font-size: clamp(14px, 4vw, 19px) !important; }
   .autobio-tab { font-size: 7px !important; letter-spacing: .1em !important; }
@@ -1478,22 +1532,26 @@ body.is-mobile #mobileEnterTab { display: block; }
 
 <!-- ═══════════════════════════════════════════
      CONTEMPLATIVE SITTING
+     Reference screen for DESIGN.md. The IDs, onclick hooks and the
+     .companion-state phase panels are the state machine's contract
+     (setSittingPhase / updateTimerDisplay / tapThought / playAnchor);
+     everything else here is visual.
 ═══════════════════════════════════════════ -->
-<div id="screen-sitting" class="screen">
-  <!-- Candle video background -- contemplative sitting -->
-  <div style="position:absolute;inset:0;z-index:0;pointer-events:none">
-    <video id="sittingCandle" autoplay muted loop playsinline
-  style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.95">
-      <source src="assets/candle.mp4" type="video/mp4">
-    </video>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,2,.85) 0%,rgba(2,2,2,.45) 22%,rgba(2,2,2,.12) 50%,rgba(2,2,2,.45) 100%)"></div>
+<div id="screen-sitting" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. Replaces assets/candle.mp4; the router's
+       #sittingCandle lookup is null-guarded. -->
+  <div class="sit-atmos" aria-hidden="true">
+    <div class="sit-atmos-glow"></div>
+    <div class="sit-atmos-flame"></div>
+    <div class="sit-atmos-grain"></div>
+    <div class="sit-atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Contemplative Sitting</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
+  <div class="feature-main">
     <div class="sitting-wrap">
 
       <!-- Phase tracker -->
@@ -1510,29 +1568,29 @@ body.is-mobile #mobileEnterTab { display: block; }
       <!-- IDLE: session setup -->
       <div id="sitting-idle" class="companion-state active">
 
-        <p class="feat-subhead" style="text-align:center;margin-bottom:4px">
-          "The goal is acquisition of the Holy Spirit through stillness."
-        </p>
-        <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.5);text-align:center;margin-bottom:18px">-- St. Seraphim of Sarov</p>
+        <blockquote class="voice">
+          “The goal is acquisition of the Holy Spirit through stillness.”
+          <span class="voice-attrib">— St. Seraphim of Sarov</span>
+        </blockquote>
 
-        <div class="feat-divider"></div>
+        <div class="sit-rule"></div>
 
         <!-- Duration -->
-        <span class="rec-section-label">Session Length</span>
-        <div class="duration-selector" style="margin-top:8px">
+        <span class="ui-label">Session Length</span>
+        <div class="duration-selector">
           <button class="dur-btn selected" onclick="selectDuration(this,10)">10 min</button>
           <button class="dur-btn" onclick="selectDuration(this,20)">20 min</button>
           <button class="dur-btn" onclick="selectDuration(this,30)">30 min</button>
         </div>
 
-        <div class="feat-divider"></div>
+        <div class="sit-rule"></div>
 
         <!-- Opening Prayer Recording -->
         <div class="rec-section">
-          <span class="rec-section-label">Opening Prayer</span>
-          <p class="rec-section-note">Record your own voice. It plays after the monastery bell opens the session.</p>
+          <span class="ui-label">Opening Prayer</span>
+          <div class="ui-note">Record your own voice. It plays after the monastery bell opens the session.</div>
           <div class="rec-card">
-            <div class="rec-status" id="openingStatus">No recording yet -- bell only</div>
+            <div class="rec-status" id="openingStatus">No recording yet — bell only</div>
             <div class="rec-controls">
               <button class="rec-btn" id="openingRecBtn" onclick="toggleRecording('opening')">
                 <span class="rec-dot" id="openingDot"></span>
@@ -1546,17 +1604,17 @@ body.is-mobile #mobileEnterTab { display: block; }
 
         <!-- Anchor Prayer -->
         <div class="rec-section">
-          <span class="rec-section-label">Anchor Prayer</span>
-          <p class="rec-section-note">Plays through the speaker each time you tap a thought away. Choose a Desert Fathers text or record your own voice.</p>
+          <span class="ui-label">Anchor Prayer</span>
+          <div class="ui-note">Plays through the speaker each time you tap a thought away. Choose a Desert Fathers text or record your own voice.</div>
           <div class="anchor-choices" id="anchorChoices">
             <button class="anchor-pill chosen" onclick="chooseAnchor(this,'O God, come to my assistance. Lord, make haste to help me.')">
-              "O God, come to my assistance. Lord, make haste to help me."
+              “O God, come to my assistance. Lord, make haste to help me.”
             </button>
             <button class="anchor-pill" onclick="chooseAnchor(this,'Lord Jesus Christ, Son of God, have mercy on me, a sinner.')">
-              "Lord Jesus Christ, Son of God, have mercy on me, a sinner."
+              “Lord Jesus Christ, Son of God, have mercy on me, a sinner.”
             </button>
-            <button class="anchor-pill" id="recordAnchorPill" onclick="showAnchorRecorder()">
-              ◎ Record my own voice ->
+            <button class="anchor-pill pill-action" id="recordAnchorPill" onclick="showAnchorRecorder()">
+              ◎ Record my own voice →
             </button>
           </div>
           <div class="rec-card" id="anchorRecCard" style="display:none">
@@ -1569,83 +1627,90 @@ body.is-mobile #mobileEnterTab { display: block; }
               <span class="rec-clock" id="anchorClock">0:00</span>
               <button class="rec-preview" id="anchorPreview" onclick="previewRecording('anchor')">▶ Preview</button>
             </div>
-            <button class="btn-ghost" onclick="hideAnchorRecorder()" style="margin-top:10px;display:block">Use text default instead</button>
+            <button class="btn-ghost rec-alt" onclick="hideAnchorRecorder()">Use text default instead</button>
           </div>
         </div>
 
-        <div class="feat-divider"></div>
+        <div class="sit-rule"></div>
 
-        <button class="btn-primary gold" onclick="startSitting()" style="width:100%;justify-content:center;font-size:11px">
-          Begin · Ring the Bell ->
-        </button>
-        <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:12px;font-style:italic">
-          Load monastery bell file in Settings ⚙
-        </p>
+        <button class="btn-primary gold btn-begin" onclick="startSitting()">Begin · Ring the Bell →</button>
+        <div class="ui-hint">Load a monastery bell file in Settings ⚙</div>
       </div>
 
       <!-- SETTLE phase -->
       <div id="sitting-settle" class="companion-state">
-        <p class="phase-instruction" style="text-align:center;margin-top:40px">Your session will begin in a moment.</p>
+        <div class="instruction">Your session will begin in a moment.</div>
+        <div class="sit-ring" id="ring-settle" aria-hidden="true">
+          <div class="sit-ring-halo"></div>
+          <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
+          <span class="sit-ring-core"></span>
+        </div>
+        <span class="timer-value" id="settleTimer" aria-hidden="true">0:15</span>
       </div>
 
       <!-- WATCH phase -->
       <div id="sitting-watch" class="companion-state">
-        <div class="thought-count" id="watchCount">0</div>
-        <div class="thought-label">Thoughts noticed</div>
-        <div class="timer-display" id="watchTimer">3:00</div>
-        <div class="timer-label">Watch · Notice what arises</div>
-        <p class="phase-instruction">Thoughts will come. That is not failure.<br>Tap each time a thought arises.<br>Name it -- then let it pass.</p>
+        <div class="count-hero" id="watchCount">0</div>
+        <div class="count-label">Thoughts noticed</div>
+        <span class="timer-value" id="watchTimer" aria-hidden="true">3:00</span>
+        <div class="instruction">Thoughts will come. That is not failure.<br>Tap each time a thought arises.<br>Name it — then let it pass.</div>
         <div class="tap-zone" id="watchTapZone" onclick="tapThought('watch')">
+          <div class="sit-ring" id="ring-watch" aria-hidden="true">
+            <div class="sit-ring-halo"></div>
+            <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
+            <span class="sit-ring-core"></span>
+          </div>
           <div class="tap-zone-label">Tap when a thought arises</div>
         </div>
       </div>
 
       <!-- STILLNESS phase -->
-      <div id="sitting-sit" class="companion-state" style="position:relative">
-        <div style="position:absolute;top:0;right:0;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.5)">
-          <span id="sitCount">0</span> thoughts
-        </div>
-        <div class="anchor-line" id="anchorDisplay"></div>
-        <div class="tap-zone" id="sitTapZone" onclick="tapThought('sit')" style="min-height:280px;margin-top:32px">
+      <div id="sitting-sit" class="companion-state">
+        <div class="count-line"><span id="sitCount">0</span> thoughts</div>
+        <span class="timer-value" id="sitTimer" aria-hidden="true">10:00</span>
+        <div class="tap-zone" id="sitTapZone" onclick="tapThought('sit')">
+          <div class="sit-ring" id="ring-sit" aria-hidden="true">
+            <div class="sit-ring-halo"></div>
+            <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
+            <span class="sit-ring-core"></span>
+          </div>
           <div class="tap-zone-label" id="sitTapLabel">Tap when a thought arises</div>
         </div>
-        <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(255,255,255,.92);line-height:1.7;text-align:center;margin-top:28px;padding:0 16px">
-          "It is best to learn to silence the faculties and to cause them to be still so that God may speak."
-        </p>
-        <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.8);text-align:center;margin-top:6px">-- St. John of the Cross</p>
-        </div>
+        <div class="anchor-line" id="anchorDisplay"></div>
+        <blockquote class="voice voice-quiet">
+          “It is best to learn to silence the faculties and to cause them to be still so that God may speak.”
+          <span class="voice-attrib">— St. John of the Cross</span>
+        </blockquote>
+      </div>
 
       <!-- RETURN phase -->
       <div id="sitting-return" class="companion-state">
-        <div class="timer-display" id="returnTimer">2:00</div>
-        <div class="timer-label">Return</div>
-        <p class="phase-instruction">Slowly. Gently.<br>Carry this stillness with you into the world.<br>The bell will close the practice.</p>
+        <span class="timer-value" id="returnTimer" aria-hidden="true">2:00</span>
+        <div class="sit-ring" id="ring-return" aria-hidden="true">
+          <div class="sit-ring-halo"></div>
+          <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
+          <span class="sit-ring-core"></span>
+        </div>
+        <div class="instruction">Slowly. Gently.<br>Carry this stillness with you into the world.<br>The bell will close the practice.</div>
       </div>
 
       <!-- COMPLETE -->
       <div id="sitting-complete" class="companion-state">
-        <p class="feat-eyebrow" style="text-align:center">Session Complete</p>
-        <div class="thought-count gold-text" id="completeTotalCount" style="font-size:52px;display:block;text-align:center">0</div>
-        <p class="timer-label">Total thoughts noticed during stillness</p>
-
-        <div class="graph-wrap">
-          <div class="graph-header">
-            <span class="graph-title">Thought frequency · across the session</span>
-            <span class="graph-trend" id="graphTrend"></span>
-          </div>
+        <span class="ui-label">Session Complete</span>
+        <div class="count-hero" id="completeTotalCount">0</div>
+        <div class="count-label">Thoughts noticed during stillness</div>
+        <!-- drawThoughtGraph() still runs from completeSitting() and writes into
+             these two elements. The chart is no longer shown. -->
+        <div class="graph-keep" hidden>
+          <span id="graphTrend"></span>
           <svg class="graph-svg-full" id="thoughtGraphSvg" viewBox="0 0 460 80"></svg>
-          <div class="graph-axis">
-            <span>Start</span>
-            <span>Mid-session</span>
-            <span>End</span>
-          </div>
         </div>
-
-        <p class="feat-body" style="text-align:center;margin-bottom:8px;font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:rgba(255,255,255,.65)" id="sessionQuote">
-          "Do not be surprised if you fall every day; do not give up, but stand your ground courageously."
-        </p>
-        <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.45);text-align:center;margin-bottom:22px">-- St. John Climacus</p>
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <div class="sit-rule sit-rule-short"></div>
+        <blockquote class="voice" id="sessionQuote">
+          “Do not be surprised if you fall every day; do not give up, but stand your ground courageously.”
+          <span class="voice-attrib">— St. John Climacus</span>
+        </blockquote>
+        <div class="btn-row">
           <button class="btn-primary" onclick="resetSitting()">Sit Again</button>
           <button class="btn-primary gold" onclick="goHome()">Return to Still</button>
         </div>
@@ -1654,6 +1719,44 @@ body.is-mobile #mobileEnterTab { display: block; }
     </div>
   </div>
 </div>
+<script>
+/* Sitting timer ring -- visual layer only.
+   The state machine writes "m:ss" into #settleTimer / #watchTimer / #sitTimer /
+   #returnTimer (updateTimerDisplay). This watches those writes and turns the
+   remaining fraction into --ring-frac on that phase's ring, which the CSS
+   renders as an arc of light dimming toward silence. It never calls into the
+   state machine and keeps nothing but each phase's opening length. */
+(function(){
+  var rings  = { settleTimer:'ring-settle', watchTimer:'ring-watch', sitTimer:'ring-sit', returnTimer:'ring-return' };
+  var panels = { 'sitting-settle':'settleTimer', 'sitting-watch':'watchTimer', 'sitting-sit':'sitTimer', 'sitting-return':'returnTimer' };
+  var total  = {};
+  function secs(txt){ var m = /^\s*(\d+):(\d\d)\s*$/.exec(txt || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+  function paint(id, txt){
+    var ring = document.getElementById(rings[id]);
+    if (!ring) return;
+    var s = secs(txt); if (s === null) return;
+    if (!(id in total) || s > total[id]) total[id] = s;   /* first write of a phase is its length */
+    ring.style.setProperty('--ring-frac', total[id] ? (s / total[id]).toFixed(4) : '0');
+  }
+  var mo = new MutationObserver(function(recs){
+    recs.forEach(function(r){
+      if (r.type === 'attributes') {
+        var t = panels[r.target.id];
+        if (t && r.target.classList.contains('active')) delete total[t];  /* phase (re)entered */
+      } else {
+        /* Read the value from the record, not the live node: several writes can
+           land in one tick and each must be seen in order. */
+        var n = r.target.nodeType === 3 ? r.target.parentNode : r.target;
+        var txt = r.type === 'characterData' ? r.target.data
+                : (r.addedNodes.length ? r.addedNodes[0].textContent : null);
+        if (n && n.id in rings && txt !== null) paint(n.id, txt);
+      }
+    });
+  });
+  Object.keys(rings).forEach(function(id){ var el = document.getElementById(id); if (el) mo.observe(el, { childList:true, characterData:true, subtree:true }); });
+  Object.keys(panels).forEach(function(id){ var el = document.getElementById(id); if (el) mo.observe(el, { attributes:true, attributeFilter:['class'] }); });
+})();
+</script>
 <!-- ═══════════════════════════════════════════
      CLOUD OF WITNESSES
 ═══════════════════════════════════════════ -->
@@ -3677,8 +3780,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
   .app-header .screen-title { font-size: 13px !important; }
 
-  .sitting-phase-label { font-size: 16px !important; }
-  .sitting-timer { font-size: 48px !important; }
 
   .companion-wrap p, .deeper-wrap p { font-size: 16px !important; line-height: 1.75 !important; }
 
@@ -15657,6 +15758,8 @@ async function verifyCode() {
 if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
   function bumpFonts() {
     document.querySelectorAll('*').forEach(el => {
+      // Screens built on the DESIGN.md tokens size their own type; leave them alone.
+      if (el.closest('[data-tokens]')) return;
       if (el.closest('.fasting-btn') || el.closest('.fasting-wrap') || 
           el.closest('.dot-nav') || el.closest('.dn-item') ||
           el.closest('#dotNav') ||
