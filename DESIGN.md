@@ -194,6 +194,17 @@ button stops breathing.
   confirm only the `html` field of the golden moved. The Sing the Hours
   player injects its own `<style>`; the id-scoped `.sth-*` rules outrank it.
 
+- **The Examen**: no timer, so no ring. The lamp sits low (`--atmos-y` 82%,
+  warm amber at .9). Every movement is painted by `renderExamenStep()` into
+  the one `.content-card`, wrapped in `.examen-step` so each replacement
+  enters on `phaseIn`. The track is dots only (`.examen-track`, one per
+  question, six when fasting) marked from `examenStep` in the template; the
+  movement is named beneath it (`.examen-movement`) with the movement just
+  finished carried above it in `.examen-prev`. `examenFinish()` paints
+  `.examen-complete`. The app's five movements are Gratitude, Awareness,
+  Feeling, Grace, Forward; their prompts are the journal entry's keys, so
+  they are data, not copy.
+
 ### Hour palette
 
 | Hour | Glow | Strength | Height |

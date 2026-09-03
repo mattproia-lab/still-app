@@ -742,24 +742,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   color:rgba(255,255,255,.5);line-height:1.72;font-style:italic;margin-top:12px;
 }
 
-/* Examen questions */
-.examen-q{
-  margin-bottom:18px;
-}
-.examen-q-label{
-  font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,19px);
-  font-style:italic;color:#fff;line-height:1.5;margin-bottom:10px;display:block;
-}
-.examen-textarea{
-  width:100%;background:rgba(255,255,255,.04);border:none;
-  border-bottom:1px solid rgba(255,255,255,.12);
-  color:#fff;padding:10px 0;font-family:'Playfair Display',serif;
-  font-size:14px;font-style:italic;outline:none;resize:none;
-  min-height:60px;line-height:1.65;transition:border-color .2s;
-}
-.examen-textarea:focus{border-bottom-color:rgba(200,146,12,.4);}
-.examen-textarea::placeholder{color:rgba(255,255,255,.25);font-style:italic;}
-
 /* Lectio */
 .lectio-phrase{
   font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,30px);
@@ -2088,21 +2070,24 @@ body.is-mobile #mobileEnterTab { display: block; }
 
 <!-- ═══════════════════════════════════════════
      EXAMEN
+     On the DESIGN.md tokens. The card is painted by renderExamenStep() and
+     examenFinish(); the header and the .content-card the flow queries are the
+     contract. Atmosphere drawn in CSS replaces still-mobile/src/image/examen_bg.jpg.
 ═══════════════════════════════════════════ -->
-<div id="screen-examen" class="screen">
-  <!-- Candle and vision -- Ignatian Examen -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/examen_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.92"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,18,.92) 0%,rgba(2,4,18,.68) 20%,rgba(2,4,18,.35) 48%,rgba(2,4,18,.72) 100%)"></div>
+<div id="screen-examen" class="screen" data-tokens>
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Examen</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
-    <div class="content-card" style="background:rgba(2,4,18,.6);backdrop-filter:blur(2px)">
+  <div class="feature-main">
+    <div class="content-card examen-card">
       <!-- Rendered by initExamen() -->
     </div>
   </div>
@@ -4097,6 +4082,59 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 @media (prefers-reduced-motion:reduce){
   #screen-office .atmos,#screen-office .atmos-glow,#screen-office .atmos-flame{transition:none;}
   #screen-office .office-loading-text{animation:none;}
+}
+
+/* ═══════════════════════════════════════════
+   THE EXAMEN -- on the DESIGN.md tokens
+   Scoped to #screen-examen. The card is painted by renderExamenStep() and
+   examenFinish(), which emit the .examen-* classes below. No ring: no timer.
+═══════════════════════════════════════════ */
+#screen-examen{
+  /* A lamp at the end of the day: warm, low, the light pooling at the floor. */
+  --atmos-ground:#1a120a;--atmos-mid:#0c0806;--atmos-gy:100%;
+  --atmos-glow:255,178,92;--atmos-glow-2:224,128,52;--atmos-glow-3:100,50,15;
+  --atmos-core:255,214,150;--atmos-core-2:255,168,80;
+  --atmos-x:50%;--atmos-y:82%;--atmos-a:.9;
+}
+#screen-examen .examen-card{max-width:var(--measure);margin:0 auto;padding:var(--s-5) var(--s-4) var(--s-6);
+  background:rgba(5,3,2,.28);border:1px solid var(--line);border-radius:var(--r-sm);backdrop-filter:none;}
+#screen-examen .examen-card::before{display:none;}
+
+/* Each movement replaces the card's contents; the new one enters on a breath,
+   so five movements read as one page deepening. */
+#screen-examen .examen-step{animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+
+/* Five dots for five movements (six when fasting): no labels, the movement
+   is named beneath. Marked by renderExamenStep() from examenStep. */
+#screen-examen .examen-track{justify-content:center;max-width:240px;margin:0 auto var(--s-6);}
+#screen-examen .examen-track .phase-step-dot{margin-right:0;width:6px;height:6px;}
+#screen-examen .examen-track .phase-connector{flex:0 0 18px;margin:0 6px;}
+
+/* The movement just finished, carried forward quietly above the next */
+#screen-examen .examen-prev{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-faint);min-height:1.3em;margin-bottom:var(--s-1);}
+#screen-examen .examen-movement{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);
+  text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-3);}
+#screen-examen .examen-prompt{font-family:var(--font-serif);font-style:italic;font-size:var(--t-lg);line-height:1.25;
+  color:var(--text-hi);margin-bottom:var(--s-3);text-wrap:balance;}
+#screen-examen .examen-sub{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);margin-bottom:var(--s-5);}
+#screen-examen .examen-answer{width:100%;box-sizing:border-box;background:rgba(255,240,220,.03);border:1px solid var(--line);
+  border-radius:var(--r-sm);color:var(--text-hi);padding:var(--s-3) var(--s-4);
+  font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  resize:none;outline:none;min-height:8rem;transition:border-color var(--d-base);}
+#screen-examen .examen-answer:focus{border-color:var(--gold-a55);}
+#screen-examen .examen-answer::placeholder{color:var(--text-faint);}
+#screen-examen .examen-nav{display:flex;justify-content:space-between;align-items:center;gap:var(--s-3);margin-top:var(--s-5);}
+#screen-examen .examen-hint{text-align:center;margin-top:var(--s-4);}
+
+/* Complete */
+#screen-examen .examen-complete{text-align:center;padding:var(--s-6) 0;}
+#screen-examen .examen-star{font-family:var(--font-serif);font-size:var(--t-xl);line-height:1;color:var(--candle);
+  text-shadow:0 0 30px rgba(242,199,119,.35);margin-bottom:var(--s-4);}
+#screen-examen .examen-complete .body{margin-bottom:var(--s-5);}
+
+@media (prefers-reduced-motion:reduce){
+  #screen-examen .examen-step{--rise:0px;}
 }
 
 /* ── Autobiography ────────────────────────── */
@@ -11492,33 +11530,34 @@ function initExamen() {
 function renderExamenStep() {
     const q = examenActiveQuestions[examenStep];
   const total = examenActiveQuestions.length;
-  const pct = (examenStep / total * 100).toFixed(0);
   const card = document.querySelector('#screen-examen .content-card');
   if (!card) return;
 
+  // Presentation only: the movement track (one dot per question) and the
+  // movement just finished, carried forward above the next.
+  const prev = examenStep > 0 ? examenActiveQuestions[examenStep - 1].q : '';
+  const track = examenActiveQuestions.map((_, i) =>
+    `<span class="phase-step${i < examenStep ? ' done' : i === examenStep ? ' current' : ''}"><span class="phase-step-dot"></span></span>` +
+    (i < total - 1 ? '<span class="phase-connector"></span>' : '')).join('');
+
   card.innerHTML = `
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px">
-      <div style="flex:1;height:2px;background:rgba(255,255,255,.08);border-radius:1px">
-        <div style="height:100%;width:${pct}%;background:rgba(200,146,12,.6);border-radius:1px;transition:width .4s ease"></div>
+    <div class="examen-step">
+      <div class="phase-track examen-track" aria-hidden="true">${track}</div>
+      <div class="examen-prev">${prev}</div>
+      <div class="examen-movement">${q.q}</div>
+      <div class="examen-prompt">${q.prompt}</div>
+      <div class="examen-sub">${q.sub}</div>
+      <textarea id="examenAnswer" class="examen-answer"
+        placeholder="Write freely…"
+        rows="5">${examenAnswers[examenStep]}</textarea>
+      <div class="examen-nav">
+        ${examenStep > 0 ? `<button class="btn-ghost" onclick="examenBack()">← Back</button>` : `<span></span>`}
+        ${examenStep < total-1
+          ? `<button class="btn-primary gold" onclick="examenNext()">Continue →</button>`
+          : `<button class="btn-primary gold" onclick="examenFinish()">Save to Journal →</button>`}
       </div>
-      <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;color:rgba(255,255,255,.3);white-space:nowrap">${examenStep+1} / ${total}</span>
-    </div>
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:10px">${q.q}</p>
-    <p style="font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);font-style:italic;color:#fff;line-height:1.25;margin-bottom:8px">${q.prompt}</p>
-    <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.4);line-height:1.5;margin-bottom:24px">${q.sub}</p>
-    <textarea id="examenAnswer"
-      style="width:100%;box-sizing:border-box;background:rgba(255,255,255,.03);border:none;border-bottom:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.9);font-family:'Playfair Display',serif;font-size:16px;font-style:italic;line-height:1.7;padding:12px 4px;resize:none;outline:none;min-height:120px;transition:border-color .2s"
-      placeholder="Write freely…"
-      onfocus="this.style.borderBottomColor='rgba(200,146,12,.6)'"
-      onblur="this.style.borderBottomColor='rgba(255,255,255,.15)'"
-      rows="5">${examenAnswers[examenStep]}</textarea>
-    <div style="display:flex;gap:10px;margin-top:20px;justify-content:space-between;align-items:center">
-      ${examenStep > 0 ? `<button class="btn-ghost" onclick="examenBack()" style="font-size:13px">← Back</button>` : `<div></div>`}
-      ${examenStep < total-1
-        ? `<button class="btn-primary gold" onclick="examenNext()">Continue -></button>`
-        : `<button class="btn-primary gold" onclick="examenFinish()">Save to Journal -></button>`}
-    </div>
-    ${examenStep === 0 ? `<p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.2);text-align:center;margin-top:14px;font-style:italic">Daily Conscience · St. Ignatius of Loyola · Private</p>` : ''}`;
+      ${examenStep === 0 ? `<div class="ui-hint examen-hint">Daily Conscience · St. Ignatius of Loyola · Private</div>` : ''}
+    </div>`;
 
   setTimeout(() => document.getElementById('examenAnswer')?.focus(), 80);
 }
@@ -11549,11 +11588,11 @@ function examenFinish() {
   const card = document.querySelector('#screen-examen .content-card');
   if (!card) return;
   card.innerHTML = `
-    <div style="text-align:center;padding:40px 0">
-      <p style="font-family:'Playfair Display',serif;font-size:36px;color:rgba(200,146,12,.8);margin-bottom:16px">✦</p>
-      <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;margin-bottom:8px">Received.</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.45);line-height:1.6;margin-bottom:32px">Saved to your private journal.</p>
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+    <div class="examen-step examen-complete">
+      <div class="examen-star">✦</div>
+      <div class="heading">Received.</div>
+      <div class="body">Saved to your private journal.</div>
+      <div class="btn-row">
         <button class="btn-primary gold" onclick="initExamen()">Begin Again</button>
         <button class="btn-ghost" onclick="goHome()">Return to Still</button>
       </div>
