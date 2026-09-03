@@ -7701,7 +7701,6 @@ function checkOratioReady() {
 
 // Claude: generate ONE contemplative question -- never two
 async function generateLectioQ() {
-  if (!key) { openSettings(); return; }
   const passage = PASSAGES[lState.passageIndex];
   const prompt = `Scripture passage (${passage.ref}): "${passage.phrases.join(' ')}"
 The word that found the reader: "${lState.word || '(none recorded)'}"
@@ -7719,7 +7718,7 @@ Generate ONE single contemplative question. Not therapeutic. Not advice. A quest
     const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:120,
+      body:JSON.stringify({ feature:'lectio', access_token:await getValidToken(), model:'claude-sonnet-4-6', max_tokens:120,
         system:'You are a contemplative guide in the tradition of the Desert Fathers and Catholic mystics. You generate single, short, inward-opening questions for Lectio Divina. Never advice. Never therapy. Never more than one question. Maximum 40 words.',
         messages:[{role:'user',content:prompt}]})
     });
@@ -7781,7 +7780,6 @@ async function generateClosingPrayer() {
   // Default if no key or error
   const defaultPrayer = `Lord, you have spoken and we have tried to listen. What we received today -- however small -- we offer back to you. Let the word that found us continue its work in the hours ahead, in the way you know best. We return now to the ordinary, carrying what you have given. Amen.`;
 
-  if (!key) { if (prayerEl) prayerEl.textContent = defaultPrayer; return; }
 
   const passage = PASSAGES[lState.passageIndex];
   const prompt = `Session summary:
@@ -7798,7 +7796,7 @@ Write a short closing collect prayer (4–5 sentences). First person singular. I
     const res = await fetch(window.FN_BASE + '/.netlify/functions/claude', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:180,
+      body:JSON.stringify({ feature:'lectio', access_token:await getValidToken(), model:'claude-sonnet-4-6', max_tokens:180,
         system:'You write brief closing collect prayers for Lectio Divina sessions. Liturgical, intimate, first person. Gather the interior thread of what happened without quoting. End with Amen. 80 words maximum.',
         messages:[{role:'user',content:prompt}]})
     });
@@ -8470,7 +8468,6 @@ async function buildMonthNarrative(entries) {
 
   if (!digest.length) return `<p>No completed practices to compile this month.</p>`;
 
-  if (!key) return buildLocalNarrative(entries, monthName, sittings, lectios, examens, journals, fasts);
 
   const prompt = `Write a first-person spiritual autobiography journal entry for ${monthName}. Voice: contemplative, honest, literary -- like Augustine's Confessions or Thérèse's Story of a Soul. Not sentimental. No therapeutic language. Use the specific facts below.
 
