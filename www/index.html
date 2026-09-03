@@ -4074,10 +4074,16 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   /* The Examen's cobalt from the stained-glass array, low in the room:
      evening, turned inward. Its own blue, not Compline's grey-blue. */
   --atmos-rgb:22,50,215;--atmos-a:.90;
-  --atmos-x:50%;--atmos-y:75%;--atmos-gy:100%;
+  --atmos-x:50%;--atmos-y:58%;--atmos-gy:100%;
 }
 #screen-examen .examen-card{max-width:var(--measure);margin:0 auto;padding:var(--s-5) var(--s-4) var(--s-6);
-  background:rgba(5,3,2,.28);border:1px solid var(--line);border-radius:var(--r-sm);backdrop-filter:none;}
+  background:rgba(0,0,0,.1);border:0;border-radius:var(--r-sm);backdrop-filter:none;}
+/* Wide viewports: the card sits at the vertical centre of the frame.
+   margin:auto inside a flex column centres without clipping when it is taller. */
+@media (min-width:901px){
+  #screen-examen .feature-main{display:flex;flex-direction:column;}
+  #screen-examen .examen-card{margin:auto;width:100%;}
+}
 #screen-examen .examen-card::before{display:none;}
 
 /* Each movement replaces the card's contents; the new one enters on a breath,
@@ -11483,9 +11489,9 @@ const Guide = (function () {
    EXAMEN -- animated one-question-at-a-time flow
 ═══════════════════════════════════════════ */
 const EXAMEN_QUESTIONS = [
-  { q:'Gratitude',  prompt:'Where did you feel most alive today?',           sub:'Begin with thanksgiving -- not what went well, but what you actually felt.' },
+  { q:'Gratitude',  prompt:'Where did you feel most alive today?',           sub:'Begin with thanksgiving — not what went well, but what you actually felt.' },
   { q:'Awareness',  prompt:'Where were you most drained or resistant?',      sub:'No judgment. Just notice.' },
-  { q:'Feeling',    prompt:'What was the emotional undertone of today?',     sub:'Underneath the events -- what was the weather of your inner life?' },
+  { q:'Feeling',    prompt:'What was the emotional undertone of today?',     sub:'Underneath the events — what was the weather of your inner life?' },
   { q:'Grace',      prompt:'Where did you notice God -- expected or not?',    sub:'A moment of clarity, kindness given or received, unexpected peace.' },
   { q:'Forward',    prompt:'What do you want to say to God right now?',      sub:'Speak simply. Nothing is too small or too large to bring.' },
 ];
