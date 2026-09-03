@@ -179,6 +179,37 @@ button stops breathing.
   passage list is built by `buildPassageList()`; its template now emits classes
   only, no inline presentation.
 
+- **The Office**: no timer, so no ring. The glow takes the colour of the
+  canonical hour through `#screen-office[data-hour]`, one variable set per
+  hour (all eight are defined; the app currently builds four). A small script
+  after the markup mirrors the hour name the state code writes into
+  `#officeScreenTitle` onto `data-hour`; on the chooser the light is the hour
+  the clock says. `.office-hour` cards carry a dot in their hour's colour.
+  The card is painted by `renderOfficeHTML()`, which emits `.office-*`
+  classes (`badge`, `title`, `eyebrow`, `text`, `versicle`, `latin`,
+  `divider`, `hear`, `note`, `loading`, `nav`); a part's own `style` string
+  from the corpus passes through as before. Its HTML bytes are pinned by
+  `tools/office-corpus/tests/test-build-office.js`; when the templates
+  change, delete `tests/golden/modern-office.json`, run the test twice, and
+  confirm only the `html` field of the golden moved. The Sing the Hours
+  player injects its own `<style>`; the id-scoped `.sth-*` rules outrank it.
+
+### Hour palette
+
+| Hour | Glow | Strength | Height |
+|---|---|---|---|
+| Vigils | near-black, cool grey `110,110,140` | .3 | 70% |
+| Lauds | warming gold `255,196,110` | .95 | 62% |
+| Prime | pale morning `236,228,205` | .7 | 40% |
+| Terce | bright `255,240,200` | 1.1 | 34% |
+| Sext | brightest `255,244,210` | 1.2 | 30% |
+| None | amber `255,176,70` | .95 | 50% |
+| Vespers | copper `214,120,70` | .95 | 68% |
+| Compline | deep blue-grey `120,140,170` | .55 | 72% |
+
+The light rises through the morning, stands high at midday, and sinks and
+cools toward night. Text and accents stay warm white and gold in every hour.
+
 ## Rules for the next practice
 
 1. Add `data-tokens` to the screen root. It scopes you into the shared
