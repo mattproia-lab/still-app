@@ -374,41 +374,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   animation:goldShimmer 7s ease-in-out infinite;
 }
 
-/* ---- Lectio legibility ---- */
-#screen-lectio > div[style*="z-index:0"]::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom,
-    rgba(5,16,22,.45) 0%,
-    rgba(5,16,22,.60) 45%,
-    rgba(5,16,22,.72) 100%);
-  pointer-events: none;
-}
-#screen-lectio > div[style*="z-index:0"] img { opacity: .55; }
-
-#screen-lectio p,
-#screen-lectio li {
-  color: rgba(255,255,255,.88);
-  text-shadow: 0 1px 6px rgba(0,0,0,.55);
-}
-#screen-lectio blockquote,
-#screen-lectio em,
-#screen-lectio i {
-  color: rgba(255,255,255,.78);
-  text-shadow: 0 1px 6px rgba(0,0,0,.55);
-}
-#screen-lectio textarea,
-#screen-lectio input[type="text"] {
-  background: rgba(0,0,0,.38);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 6px;
-  color: rgba(255,255,255,.92);
-}
-#screen-lectio textarea::placeholder,
-#screen-lectio input[type="text"]::placeholder {
-  color: rgba(255,255,255,.55);
-}
 /* ═══════════════════════════════════════════
    HOME SCREEN
 ═══════════════════════════════════════════ */
@@ -522,65 +487,169 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 .fasting-btn.on .ft-pip{background:#f0c040;border-color:#f0c040;box-shadow:0 0 8px rgba(240,192,64,.8);}
 
 /* ═══════════════════════════════════════════
-   CONTEMPLATIVE SITTING -- reference implementation of DESIGN.md
-   Scoped to #screen-sitting so it cannot leak into screens that have not
-   been redesigned yet. Class names the state machine toggles (.active,
-   .show, .selected, .chosen, .recording, .saved, .tap-ripple) are unchanged.
+   TOKEN SCREENS -- shared components (DESIGN.md)
+   Scoped to [data-tokens] so nothing leaks into screens not yet redesigned.
+   A screen opts in with data-tokens on its root; that attribute also exempts
+   it from the phone-only bumpFonts() rewrite near the end of the file.
 ═══════════════════════════════════════════ */
-#screen-sitting{background:var(--ink-0);}
+[data-tokens]{background:var(--ink-0);
+  /* Atmosphere defaults: candle light pooling low centre (Sitting).
+     A screen overrides these on its root -- see #screen-lectio. */
+  --atmos-ground:#1e1108;--atmos-mid:#0d0704;--atmos-gy:100%;
+  --atmos-glow:255,176,84;--atmos-glow-2:232,140,58;--atmos-glow-3:120,60,20;
+  --atmos-core:255,216,150;--atmos-core-2:255,170,80;
+  --atmos-x:50%;--atmos-y:74%;--atmos-a:1;}
 
 /* Atmosphere -- drawn, not filmed. Four layers; only the two light layers
    animate, and only transform/opacity, so the compositor owns them. */
-.sit-atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
-  background:radial-gradient(120% 75% at 50% 100%,#1e1108 0%,#0d0704 42%,var(--ink-0) 100%);}
-.sit-atmos-glow,.sit-atmos-flame{
-  position:absolute;left:50%;top:74%;aspect-ratio:1;border-radius:50%;
+.atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(120% 75% at var(--atmos-x) var(--atmos-gy),var(--atmos-ground) 0%,var(--atmos-mid) 42%,var(--ink-0) 100%);}
+.atmos-glow,.atmos-flame{
+  position:absolute;left:var(--atmos-x);top:var(--atmos-y);aspect-ratio:1;border-radius:50%;
   transform:translate(-50%,-50%);will-change:transform,opacity;
 }
-.sit-atmos-glow{width:min(160vw,960px);
-  background:radial-gradient(circle,rgba(255,176,84,.26) 0%,rgba(232,140,58,.13) 26%,rgba(120,60,20,.05) 50%,transparent 68%);
-  animation:sitBreath var(--d-drift) var(--ease-breath) infinite;}
-.sit-atmos-flame{width:min(72vw,440px);
-  background:radial-gradient(circle,rgba(255,216,150,.30) 0%,rgba(255,170,80,.14) 30%,transparent 60%);
-  animation:sitFlicker 5.3s ease-in-out infinite;}
-.sit-atmos-grain{position:absolute;inset:0;opacity:.7;
+.atmos-glow{width:min(160vw,960px);
+  background:radial-gradient(circle,
+    rgba(var(--atmos-glow),calc(.26 * var(--atmos-a))) 0%,
+    rgba(var(--atmos-glow-2),calc(.13 * var(--atmos-a))) 26%,
+    rgba(var(--atmos-glow-3),calc(.05 * var(--atmos-a))) 50%,transparent 68%);
+  animation:atmosBreath var(--d-drift) var(--ease-breath) infinite;}
+.atmos-flame{width:min(72vw,440px);
+  background:radial-gradient(circle,
+    rgba(var(--atmos-core),calc(.30 * var(--atmos-a))) 0%,
+    rgba(var(--atmos-core-2),calc(.14 * var(--atmos-a))) 30%,transparent 60%);
+  animation:atmosFlicker 5.3s ease-in-out infinite;}
+.atmos-grain{position:absolute;inset:0;opacity:.7;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
-.sit-atmos-vignette{position:absolute;inset:0;
+.atmos-vignette{position:absolute;inset:0;
   background:radial-gradient(ellipse 85% 75% at 50% 42%,transparent 38%,rgba(5,3,2,.5) 78%,rgba(5,3,2,.92) 100%);}
-@keyframes sitBreath{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.82}50%{transform:translate(-50%,-50%) scale(1.07);opacity:1}}
-@keyframes sitFlicker{0%,100%{opacity:.68}14%{opacity:.9}31%{opacity:.6}47%{opacity:.86}63%{opacity:.72}80%{opacity:.96}}
+@keyframes atmosBreath{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.82}50%{transform:translate(-50%,-50%) scale(1.07);opacity:1}}
+@keyframes atmosFlicker{0%,100%{opacity:.68}14%{opacity:.9}31%{opacity:.6}47%{opacity:.86}63%{opacity:.72}80%{opacity:.96}}
 
-/* Header and content frame. The !importants answer the mobile block further
-   down, which sets these with !important for every feature screen. */
-#screen-sitting .app-header{position:relative;z-index:10;background:transparent;
+/* Header and content frame. The !importants answer the mobile blocks further
+   down, which set these with !important for every feature screen. */
+[data-tokens] .app-header{position:relative;z-index:10;background:transparent;
   padding:calc(env(safe-area-inset-top,0px) + 18px) var(--gutter) 0!important;}
-#screen-sitting .back-btn,#screen-sitting .screen-title{
+[data-tokens] .back-btn,[data-tokens] .app-header .screen-title{
   font-family:var(--font-sans);font-weight:500;font-size:var(--t-micro)!important;
   letter-spacing:var(--track-label);color:var(--text-low);
 }
-#screen-sitting .screen-title{letter-spacing:var(--track-wide);}
-#screen-sitting .back-btn:hover{color:var(--text-hi);}
-#screen-sitting .back-arrow{font-size:1.1em;}
-#screen-sitting .settings-btn,#screen-sitting .info-btn{color:var(--text-low);font-size:15px;}
-#screen-sitting .settings-btn:hover,#screen-sitting .info-btn:hover{color:var(--candle);}
-#screen-sitting .feature-main{position:relative;z-index:10;overflow-y:auto;
+[data-tokens] .app-header .screen-title{letter-spacing:var(--track-wide);text-align:center;}
+[data-tokens] .back-btn:hover{color:var(--text-hi);}
+[data-tokens] .back-arrow{font-size:1.1em;}
+[data-tokens] .settings-btn,[data-tokens] .info-btn{color:var(--text-low);font-size:15px;}
+[data-tokens] .settings-btn:hover,[data-tokens] .info-btn:hover{color:var(--candle);}
+[data-tokens] .feature-main{position:relative;z-index:10;overflow-y:auto;
   padding:var(--s-4) var(--gutter) calc(env(safe-area-inset-bottom,0px) + 96px)!important;
   font-family:var(--font-sans);color:var(--text-mid);}
-.sitting-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
 
 /* Phase tracker -- connectors flex, labels never wrap, so it fits 390px */
-#screen-sitting .phase-track{display:flex;align-items:center;justify-content:space-between;
+[data-tokens] .phase-track{display:flex;align-items:center;justify-content:space-between;
   max-width:360px;margin:var(--s-2) auto var(--s-6);min-width:0;}
-#screen-sitting .phase-step{display:flex;align-items:center;flex:0 0 auto;white-space:nowrap;
+[data-tokens] .phase-step{display:flex;align-items:center;flex:0 0 auto;white-space:nowrap;
   font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text-faint);transition:color var(--d-slow) var(--ease-out);}
-#screen-sitting .phase-step.done{color:var(--gold-a55);}
-#screen-sitting .phase-step.current{color:var(--text-hi);}
-#screen-sitting .phase-step-dot{width:5px;height:5px;border-radius:50%;background:var(--text-faint);
+[data-tokens] .phase-step.done{color:var(--gold-a55);}
+[data-tokens] .phase-step.current{color:var(--text-hi);}
+[data-tokens] .phase-step-dot{width:5px;height:5px;border-radius:50%;background:var(--text-faint);
   margin-right:6px;flex-shrink:0;transition:background var(--d-slow),box-shadow var(--d-slow);}
-#screen-sitting .phase-step.done .phase-step-dot{background:var(--gold-a55);}
-#screen-sitting .phase-step.current .phase-step-dot{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
-#screen-sitting .phase-connector{flex:1 1 6px;min-width:4px;height:1px;background:var(--line);margin:0 6px;}
+[data-tokens] .phase-step.done .phase-step-dot{background:var(--gold-a55);}
+[data-tokens] .phase-step.current .phase-step-dot{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+[data-tokens] .phase-connector{flex:1 1 6px;min-width:4px;height:1px;background:var(--line);margin:0 6px;}
+@media (max-width:420px){
+  [data-tokens] .phase-step{font-size:.5625rem;letter-spacing:.1em;}
+  [data-tokens] .phase-connector{margin:0 4px;}
+}
+
+/* Phase panels enter on a breath. (Exit is display:none in each screen's rule.) */
+[data-tokens] .companion-state.active,[data-tokens] .lectio-phase.active{animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+@keyframes phaseIn{from{opacity:0;transform:translateY(var(--rise,8px))}to{opacity:1;transform:translateY(0)}}
+
+/* Type roles -- the tradition speaks in serif, the interface in sans */
+[data-tokens] .voice{font-family:var(--font-serif);font-style:italic;font-weight:400;
+  font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  margin:0 auto;max-width:30rem;text-wrap:balance;}
+[data-tokens] .voice-quiet{font-size:var(--t-base);color:var(--text-mid);margin-top:var(--s-5);}
+[data-tokens] .voice-left{text-align:left;margin-left:0;text-wrap:pretty;}
+[data-tokens] .voice-attrib{display:block;font-family:var(--font-sans);font-style:normal;
+  font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--gold);opacity:.85;margin-top:var(--s-3);}
+[data-tokens] .voice-card{border:1px solid var(--line);border-radius:var(--r-sm);
+  background:rgba(255,240,220,.025);padding:var(--s-4) var(--s-5);margin:0 0 var(--s-5);}
+[data-tokens] .heading{font-family:var(--font-serif);font-weight:500;font-size:var(--t-lg);
+  line-height:var(--lh-tight);color:var(--text-hi);text-wrap:balance;margin:0 0 var(--s-4);}
+[data-tokens] .body{font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);
+  color:var(--text-mid);margin:0 0 var(--s-5);}
+[data-tokens] .body-small{font-size:var(--t-sm);color:var(--text-low);}
+[data-tokens] .instruction{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
+  color:var(--text-hi);max-width:26rem;margin:var(--s-4) auto var(--s-5);text-wrap:balance;}
+[data-tokens] .ui-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-2);}
+[data-tokens] .ui-note{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);
+  color:var(--text-mid);margin-bottom:var(--s-3);}
+[data-tokens] .ui-hint{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--s-3);}
+[data-tokens] .rule{width:100%;height:1px;margin:var(--s-5) 0;
+  background:linear-gradient(to right,transparent,var(--line-strong),transparent);}
+[data-tokens] .rule-short{width:64px;margin:var(--s-5) auto;}
+
+/* Counts */
+[data-tokens] .count-hero{font-family:var(--font-serif);font-weight:500;font-size:var(--t-2xl);
+  line-height:var(--lh-tight);color:var(--candle-hi);text-shadow:0 0 40px rgba(242,199,119,.25);margin-top:var(--s-2);}
+[data-tokens] .count-label{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin:var(--s-2) 0 var(--s-5);}
+[data-tokens] .count-line{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.08em;
+  color:var(--text-low);margin-bottom:var(--s-3);}
+[data-tokens] .count-line span{color:var(--text-mid);font-weight:500;}
+
+/* The timer -- a ring of light that dims toward silence. The m:ss a state
+   machine writes stays in the DOM (the ring script reads it) but is not shown. */
+[data-tokens] .timer-value{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+.ring{--ring-frac:1;position:relative;width:min(62vw,240px);aspect-ratio:1;margin:0 auto;}
+.ring-svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
+.ring-track{fill:none;stroke:var(--line);stroke-width:1;}
+.ring-arc{fill:none;stroke:var(--candle);stroke-width:1.5;stroke-linecap:round;
+  stroke-dasharray:552.92;stroke-dashoffset:calc(552.92px * (1 - var(--ring-frac)));
+  opacity:calc(.22 + .7 * var(--ring-frac));
+  filter:drop-shadow(0 0 6px rgba(242,199,119,.55));
+  transition:stroke-dashoffset 1s linear,opacity 1s linear;}
+.ring-halo{position:absolute;left:50%;top:50%;width:160%;height:160%;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,190,100,.22) 0%,rgba(255,160,70,.08) 35%,transparent 62%);
+  opacity:calc(.15 + .85 * var(--ring-frac));transition:opacity 1s linear;
+  animation:atmosBreath var(--d-drift) var(--ease-breath) infinite;}
+.ring-core{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;
+  transform:translate(-50%,-50%);background:var(--candle-hi);
+  box-shadow:0 0 12px 4px rgba(255,214,140,.6),0 0 40px 12px rgba(255,170,80,.25);
+  opacity:calc(.25 + .75 * var(--ring-frac));transition:opacity 1s linear;}
+
+/* Buttons */
+[data-tokens] .btn-primary{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;border:1px solid var(--line-strong);
+  border-radius:var(--r-pill);color:var(--text-hi);padding:15px 26px;transition:all var(--d-base) var(--ease-out);}
+[data-tokens] .btn-primary:hover{border-color:var(--text-mid);background:rgba(255,226,190,.05);}
+[data-tokens] .btn-primary.gold{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);
+  box-shadow:0 0 30px rgba(217,164,65,.12);}
+[data-tokens] .btn-primary.gold:hover{border-color:var(--candle);background:rgba(217,164,65,.16);box-shadow:0 0 40px rgba(217,164,65,.22);}
+[data-tokens] .btn-begin{width:100%;justify-content:center;}
+[data-tokens] .btn-ghost{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-low);}
+[data-tokens] .btn-ghost:hover{color:var(--text-mid);}
+[data-tokens] .btn-row{display:flex;gap:var(--s-3);justify-content:center;align-items:center;flex-wrap:wrap;margin-top:var(--s-5);}
+[data-tokens] .btn-row.left{justify-content:flex-start;}
+
+@media (prefers-reduced-motion:reduce){
+  .atmos-glow,.atmos-flame,.ring-halo{animation:none;}
+  [data-tokens] .companion-state.active,[data-tokens] .lectio-phase.active{--rise:0px;}
+}
+
+/* ═══════════════════════════════════════════
+   CONTEMPLATIVE SITTING -- reference implementation of DESIGN.md
+   Only what is particular to Sitting lives here. Class names the state
+   machine toggles (.active, .show, .selected, .chosen, .recording, .saved,
+   .tap-ripple) are unchanged.
+═══════════════════════════════════════════ */
+.sitting-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
+
 /* By id: setSittingPhase() assigns className outright, so a helper class would be wiped. */
 #screen-sitting #ps-watch,#screen-sitting #ps-watch + .phase-connector{display:none;}
 /* Before the session every step is quiet; after it every step is done.
@@ -589,63 +658,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 #screen-sitting:has(#sitting-idle.active) .phase-step-dot{background:var(--text-faint);box-shadow:none;}
 #screen-sitting:has(#sitting-complete.active) .phase-step{color:var(--gold-a55);}
 #screen-sitting:has(#sitting-complete.active) .phase-step-dot{background:var(--gold-a55);box-shadow:none;}
-@media (max-width:420px){
-  #screen-sitting .phase-step{font-size:.5625rem;letter-spacing:.1em;}
-  #screen-sitting .phase-connector{margin:0 4px;}
-}
-
-/* Phase panels enter on a breath. (Exit is display:none in the shared rule.) */
-#screen-sitting .companion-state.active{animation:sitPhaseIn var(--d-breath) var(--ease-breath) both;}
-@keyframes sitPhaseIn{from{opacity:0;transform:translateY(var(--rise,8px))}to{opacity:1;transform:translateY(0)}}
-
-/* Type roles -- the tradition speaks in serif, the interface in sans */
-#screen-sitting .voice{font-family:var(--font-serif);font-style:italic;font-weight:400;
-  font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
-  margin:0 auto;max-width:30rem;text-wrap:balance;}
-#screen-sitting .voice-quiet{font-size:var(--t-base);color:var(--text-mid);margin-top:var(--s-5);}
-#screen-sitting .voice-attrib{display:block;font-family:var(--font-sans);font-style:normal;
-  font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
-  color:var(--gold);opacity:.85;margin-top:var(--s-3);}
-#screen-sitting .instruction{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
-  color:var(--text-hi);max-width:26rem;margin:var(--s-4) auto var(--s-5);text-wrap:balance;}
-#screen-sitting .ui-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
-  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-2);}
-#screen-sitting .ui-note{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);
-  color:var(--text-mid);margin-bottom:var(--s-3);}
-#screen-sitting .ui-hint{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--s-3);}
-#screen-sitting .sit-rule{width:100%;height:1px;margin:var(--s-5) 0;
-  background:linear-gradient(to right,transparent,var(--line-strong),transparent);}
-#screen-sitting .sit-rule-short{width:64px;margin:var(--s-5) auto;}
-
-/* Counts */
-#screen-sitting .count-hero{font-family:var(--font-serif);font-weight:500;font-size:var(--t-2xl);
-  line-height:var(--lh-tight);color:var(--candle-hi);text-shadow:0 0 40px rgba(242,199,119,.25);margin-top:var(--s-2);}
-#screen-sitting .count-label{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
-  text-transform:uppercase;color:var(--text-low);margin:var(--s-2) 0 var(--s-5);}
-#screen-sitting .count-line{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.08em;
-  color:var(--text-low);margin-bottom:var(--s-3);}
-#screen-sitting .count-line span{color:var(--text-mid);font-weight:500;}
-
-/* The timer -- a ring of light that dims toward silence. The m:ss the state
-   machine writes stays in the DOM (the ring script reads it) but is not shown. */
-#screen-sitting .timer-value{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
-.sit-ring{--ring-frac:1;position:relative;width:min(62vw,240px);aspect-ratio:1;margin:0 auto;}
-.sit-ring-svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible;}
-.sit-ring-track{fill:none;stroke:var(--line);stroke-width:1;}
-.sit-ring-arc{fill:none;stroke:var(--candle);stroke-width:1.5;stroke-linecap:round;
-  stroke-dasharray:552.92;stroke-dashoffset:calc(552.92px * (1 - var(--ring-frac)));
-  opacity:calc(.22 + .7 * var(--ring-frac));
-  filter:drop-shadow(0 0 6px rgba(242,199,119,.55));
-  transition:stroke-dashoffset 1s linear,opacity 1s linear;}
-.sit-ring-halo{position:absolute;left:50%;top:50%;width:160%;height:160%;border-radius:50%;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(255,190,100,.22) 0%,rgba(255,160,70,.08) 35%,transparent 62%);
-  opacity:calc(.15 + .85 * var(--ring-frac));transition:opacity 1s linear;
-  animation:sitBreath var(--d-drift) var(--ease-breath) infinite;}
-.sit-ring-core{position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;
-  transform:translate(-50%,-50%);background:var(--candle-hi);
-  box-shadow:0 0 12px 4px rgba(255,214,140,.6),0 0 40px 12px rgba(255,170,80,.25);
-  opacity:calc(.25 + .75 * var(--ring-frac));transition:opacity 1s linear;}
 
 /* Tap zone -- the ring is the target; the whole block is the hit area */
 #screen-sitting .tap-zone{position:relative;width:100%;min-height:0;margin:var(--s-2) 0 0;
@@ -719,25 +731,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 #screen-sitting .anchor-pill:hover{border-color:var(--line-strong);color:var(--text-hi);}
 #screen-sitting .anchor-pill.chosen{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
 #screen-sitting .anchor-pill.pill-action{font-family:var(--font-sans);font-style:normal;font-size:var(--t-xs);letter-spacing:.08em;}
-
-/* Buttons */
-#screen-sitting .btn-primary{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
-  letter-spacing:var(--track-label);text-transform:uppercase;border:1px solid var(--line-strong);
-  border-radius:var(--r-pill);color:var(--text-hi);padding:15px 26px;transition:all var(--d-base) var(--ease-out);}
-#screen-sitting .btn-primary:hover{border-color:var(--text-mid);background:rgba(255,226,190,.05);}
-#screen-sitting .btn-primary.gold{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);
-  box-shadow:0 0 30px rgba(217,164,65,.12);}
-#screen-sitting .btn-primary.gold:hover{border-color:var(--candle);background:rgba(217,164,65,.16);box-shadow:0 0 40px rgba(217,164,65,.22);}
-#screen-sitting .btn-begin{width:100%;justify-content:center;}
-#screen-sitting .btn-ghost{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text-low);}
-#screen-sitting .btn-ghost:hover{color:var(--text-mid);}
-#screen-sitting .btn-row{display:flex;gap:var(--s-3);justify-content:center;flex-wrap:wrap;margin-top:var(--s-5);}
 #screen-sitting .graph-keep{display:none!important;}
 
 @media (prefers-reduced-motion:reduce){
-  .sit-atmos-glow,.sit-atmos-flame,.sit-ring-halo{animation:none;}
-  #screen-sitting .companion-state.active{--rise:0px;}
   #screen-sitting .tap-ripple{animation:sitEmberStill .6s ease-out forwards;}
 }
 
@@ -1152,11 +1148,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   .feat-subhead { font-size: 17px !important; color: rgba(255,255,255,.88) !important; }
   .feat-eyebrow { color: rgba(255,255,255,.68) !important; }
   .feat-heading { font-size: clamp(26px,7vw,38px) !important; }
-  .lectio-curr-phrase {
-    font-size: clamp(22px, 5vw, 30px) !important;
-    min-height: 70px !important;
-    padding: 14px 6px !important;
-  }
   .modal-overlay { align-items: flex-end !important; }
   .modal-panel {
     max-height: 88vh !important;
@@ -1542,11 +1533,11 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-sitting" class="screen" data-tokens>
   <!-- Atmosphere, drawn in CSS. Replaces assets/candle.mp4; the router's
        #sittingCandle lookup is null-guarded. -->
-  <div class="sit-atmos" aria-hidden="true">
-    <div class="sit-atmos-glow"></div>
-    <div class="sit-atmos-flame"></div>
-    <div class="sit-atmos-grain"></div>
-    <div class="sit-atmos-vignette"></div>
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
   <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
@@ -1578,7 +1569,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <span class="voice-attrib">— St. Seraphim of Sarov</span>
         </blockquote>
 
-        <div class="sit-rule"></div>
+        <div class="rule"></div>
 
         <!-- Duration -->
         <span class="ui-label">Session Length</span>
@@ -1588,7 +1579,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <button class="dur-btn" onclick="selectDuration(this,30)">30 min</button>
         </div>
 
-        <div class="sit-rule"></div>
+        <div class="rule"></div>
 
         <!-- Opening Prayer Recording -->
         <div class="rec-section">
@@ -1636,7 +1627,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           </div>
         </div>
 
-        <div class="sit-rule"></div>
+        <div class="rule"></div>
 
         <button class="btn-primary gold btn-begin" onclick="startSitting()">Begin · Ring the Bell →</button>
         <div class="ui-hint">Load a monastery bell file in Settings ⚙</div>
@@ -1645,10 +1636,10 @@ body.is-mobile #mobileEnterTab { display: block; }
       <!-- SETTLE phase -->
       <div id="sitting-settle" class="companion-state">
         <div class="instruction">Your session will begin in a moment.</div>
-        <div class="sit-ring" id="ring-settle" aria-hidden="true">
-          <div class="sit-ring-halo"></div>
-          <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
-          <span class="sit-ring-core"></span>
+        <div class="ring" id="ring-settle" aria-hidden="true">
+          <div class="ring-halo"></div>
+          <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="88"/><circle class="ring-arc" cx="100" cy="100" r="88"/></svg>
+          <span class="ring-core"></span>
         </div>
         <span class="timer-value" id="settleTimer" aria-hidden="true">0:15</span>
       </div>
@@ -1660,10 +1651,10 @@ body.is-mobile #mobileEnterTab { display: block; }
         <span class="timer-value" id="watchTimer" aria-hidden="true">3:00</span>
         <div class="instruction">Thoughts will come. That is not failure.<br>Tap each time a thought arises.<br>Name it — then let it pass.</div>
         <div class="tap-zone" id="watchTapZone" onclick="tapThought('watch')">
-          <div class="sit-ring" id="ring-watch" aria-hidden="true">
-            <div class="sit-ring-halo"></div>
-            <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
-            <span class="sit-ring-core"></span>
+          <div class="ring" id="ring-watch" aria-hidden="true">
+            <div class="ring-halo"></div>
+            <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="88"/><circle class="ring-arc" cx="100" cy="100" r="88"/></svg>
+            <span class="ring-core"></span>
           </div>
           <div class="tap-zone-label">Tap when a thought arises</div>
         </div>
@@ -1675,10 +1666,10 @@ body.is-mobile #mobileEnterTab { display: block; }
         <span class="timer-value" id="sitTimer" aria-hidden="true">10:00</span>
         <div class="instruction">Thoughts will come. That is not failure.<br>Tap each time a thought arises.<br>Name it — then let it pass.</div>
         <div class="tap-zone" id="sitTapZone" onclick="tapThought('sit')">
-          <div class="sit-ring" id="ring-sit" aria-hidden="true">
-            <div class="sit-ring-halo"></div>
-            <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
-            <span class="sit-ring-core"></span>
+          <div class="ring" id="ring-sit" aria-hidden="true">
+            <div class="ring-halo"></div>
+            <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="88"/><circle class="ring-arc" cx="100" cy="100" r="88"/></svg>
+            <span class="ring-core"></span>
           </div>
           <div class="tap-zone-label" id="sitTapLabel">Tap when a thought arises</div>
         </div>
@@ -1692,10 +1683,10 @@ body.is-mobile #mobileEnterTab { display: block; }
       <!-- RETURN phase -->
       <div id="sitting-return" class="companion-state">
         <span class="timer-value" id="returnTimer" aria-hidden="true">2:00</span>
-        <div class="sit-ring" id="ring-return" aria-hidden="true">
-          <div class="sit-ring-halo"></div>
-          <svg class="sit-ring-svg" viewBox="0 0 200 200"><circle class="sit-ring-track" cx="100" cy="100" r="88"/><circle class="sit-ring-arc" cx="100" cy="100" r="88"/></svg>
-          <span class="sit-ring-core"></span>
+        <div class="ring" id="ring-return" aria-hidden="true">
+          <div class="ring-halo"></div>
+          <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="88"/><circle class="ring-arc" cx="100" cy="100" r="88"/></svg>
+          <span class="ring-core"></span>
         </div>
         <div class="instruction">Slowly. Gently.<br>Carry this stillness with you into the world.<br>The bell will close the practice.</div>
       </div>
@@ -1711,7 +1702,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <span id="graphTrend"></span>
           <svg class="graph-svg-full" id="thoughtGraphSvg" viewBox="0 0 460 80"></svg>
         </div>
-        <div class="sit-rule sit-rule-short"></div>
+        <div class="rule rule-short"></div>
         <blockquote class="voice" id="sessionQuote">
           “Do not be surprised if you fall every day; do not give up, but stand your ground courageously.”
           <span class="voice-attrib">— St. John Climacus</span>
@@ -1726,41 +1717,54 @@ body.is-mobile #mobileEnterTab { display: block; }
   </div>
 </div>
 <script>
-/* Sitting timer ring -- visual layer only.
-   The state machine writes "m:ss" into #settleTimer / #watchTimer / #sitTimer /
-   #returnTimer (updateTimerDisplay). This watches those writes and turns the
-   remaining fraction into --ring-frac on that phase's ring, which the CSS
-   renders as an arc of light dimming toward silence. It never calls into the
-   state machine and keeps nothing but each phase's opening length. */
+/* Timer rings -- visual layer only (DESIGN.md).
+   Each practice's state machine writes "m:ss" into a timer element. This
+   watches those writes and turns the remaining fraction into --ring-frac on
+   that phase's ring, which the CSS renders as an arc of light dimming toward
+   silence. It never calls into a state machine and keeps nothing but each
+   phase's opening length. Add a row per timed phase. */
 (function(){
-  var rings  = { settleTimer:'ring-settle', watchTimer:'ring-watch', sitTimer:'ring-sit', returnTimer:'ring-return' };
-  var panels = { 'sitting-settle':'settleTimer', 'sitting-watch':'watchTimer', 'sitting-sit':'sitTimer', 'sitting-return':'returnTimer' };
-  var total  = {};
-  function secs(txt){ var m = /^\s*(\d+):(\d\d)\s*$/.exec(txt || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+  var RINGS = [
+    { timer:'settleTimer',      ring:'ring-settle',       panel:'sitting-settle' },
+    { timer:'watchTimer',       ring:'ring-watch',        panel:'sitting-watch'  },
+    { timer:'sitTimer',         ring:'ring-sit',          panel:'sitting-sit'    },
+    { timer:'returnTimer',      ring:'ring-return',       panel:'sitting-return' },
+    { timer:'contemplatiTimer', ring:'ring-contemplatio', panel:'lp-contemplate' }
+  ];
+  var byTimer = {}, byPanel = {}, total = {};
+  RINGS.forEach(function(r){ byTimer[r.timer] = r; byPanel[r.panel] = r; });
+  /* "m:ss" -> seconds; anything else (Lectio writes "✦" at the end) -> 0 */
+  function secs(txt){ var m = /^\s*(\d+):(\d\d)\s*$/.exec(txt || ''); return m ? (+m[1]) * 60 + (+m[2]) : 0; }
   function paint(id, txt){
-    var ring = document.getElementById(rings[id]);
+    var ring = document.getElementById(byTimer[id].ring);
     if (!ring) return;
-    var s = secs(txt); if (s === null) return;
+    var s = secs(txt);
     if (!(id in total) || s > total[id]) total[id] = s;   /* first write of a phase is its length */
     ring.style.setProperty('--ring-frac', total[id] ? (s / total[id]).toFixed(4) : '0');
   }
   var mo = new MutationObserver(function(recs){
     recs.forEach(function(r){
       if (r.type === 'attributes') {
-        var t = panels[r.target.id];
-        if (t && r.target.classList.contains('active')) delete total[t];  /* phase (re)entered */
+        var p = byPanel[r.target.id];
+        if (p && r.target.classList.contains('active')) delete total[p.timer];  /* phase (re)entered */
       } else {
         /* Read the value from the record, not the live node: several writes can
            land in one tick and each must be seen in order. */
         var n = r.target.nodeType === 3 ? r.target.parentNode : r.target;
         var txt = r.type === 'characterData' ? r.target.data
                 : (r.addedNodes.length ? r.addedNodes[0].textContent : null);
-        if (n && n.id in rings && txt !== null) paint(n.id, txt);
+        if (n && n.id in byTimer && txt !== null) paint(n.id, txt);
       }
     });
   });
-  Object.keys(rings).forEach(function(id){ var el = document.getElementById(id); if (el) mo.observe(el, { childList:true, characterData:true, subtree:true }); });
-  Object.keys(panels).forEach(function(id){ var el = document.getElementById(id); if (el) mo.observe(el, { attributes:true, attributeFilter:['class'] }); });
+  function arm(){
+    RINGS.forEach(function(r){
+      var t = document.getElementById(r.timer), p = document.getElementById(r.panel);
+      if (t) mo.observe(t, { childList:true, characterData:true, subtree:true });
+      if (p) mo.observe(p, { attributes:true, attributeFilter:['class'] });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
 })();
 </script>
 <!-- ═══════════════════════════════════════════
@@ -1790,96 +1794,110 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      LECTIO DIVINA -- Four movements faithfully
      Guigo II · Fr. Michael Casey O.C.S.O.
+     On the DESIGN.md tokens. IDs, onclick hooks, inputs and the .lectio-phase
+     panels are the state machine's contract (lectioGoTo / renderLectioPhrase /
+     buildPassageList / showClaudeQ / startContemplatioTimer); the rest is visual.
 ═══════════════════════════════════════════ -->
-<div id="screen-lectio" class="screen">
-  <!-- Illuminated manuscript -- Lectio Divina -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/lectio_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.88"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(1,6,10,.92) 0%,rgba(1,6,10,.68) 20%,rgba(1,6,10,.38) 50%,rgba(1,6,10,.72) 100%)"></div>
+<div id="screen-lectio" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. Replaces still-mobile/src/image/lectio_bg.jpg. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title" id="lectioPhaseTitle">Lectio Divina</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="padding-top:10px;position:relative;z-index:10;overflow-y:auto">
+  <div class="feature-main">
+
+    <!-- Movement track: marked from the active phase in CSS (see :has rules) -->
+    <div class="phase-track" aria-hidden="true">
+      <div class="phase-step" id="lt-lectio"><span class="phase-step-dot"></span>Lectio</div>
+      <div class="phase-connector"></div>
+      <div class="phase-step" id="lt-meditatio"><span class="phase-step-dot"></span>Meditatio</div>
+      <div class="phase-connector"></div>
+      <div class="phase-step" id="lt-oratio"><span class="phase-step-dot"></span>Oratio</div>
+      <div class="phase-connector"></div>
+      <div class="phase-step" id="lt-contemplatio"><span class="phase-step-dot"></span>Contemplatio</div>
+    </div>
 
     <!-- ── PHASE 0: PREPARATION ─────────────── -->
     <div class="lectio-phase active" id="lp-prep">
-      <div style="max-width:520px;margin:0 auto;text-align:center">
-        <p class="feat-eyebrow" style="margin-bottom:16px">Sacred Reading · Lectio Divina</p>
-        <p class="feat-heading" style="font-size:clamp(24px,3.8vw,46px);margin-bottom:22px">Before we<br>open the text.</p>
-        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(200,146,12,.18);padding:20px 22px;margin-bottom:20px;text-align:left">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.7);line-height:1.72;margin-bottom:10px">
-            "Even before we open the text we allow ourselves to come under the influence of what we are about to read."
-          </p>
-          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.5)">-- Fr. Michael Casey, O.C.S.O.</p>
+      <div class="lectio-col lectio-center">
+        <span class="ui-label">Sacred Reading · Lectio Divina</span>
+        <div class="heading">Before we open the text.</div>
+        <div class="voice-card">
+          <blockquote class="voice voice-left">
+            “Even before we open the text we allow ourselves to come under the influence of what we are about to read.”
+            <span class="voice-attrib">— Fr. Michael Casey, O.C.S.O.</span>
+          </blockquote>
         </div>
-        <p class="feat-body" style="color:rgba(255,255,255,.52);margin-bottom:24px;text-align:left">
-          Take a breath. Let the noise of the day settle. You are not reading to complete a task or gather information. You are reading to make contact with God. The text will flow over you -- slowly -- until something catches. That is not your doing.
-        </p>
-        <div style="background:rgba(255,255,255,.025);border-left:2px solid rgba(200,146,12,.3);padding:14px 18px;margin-bottom:26px;text-align:left">
-          <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.65);line-height:1.65">
-            "Open my eyes, that I may behold wondrous things out of your law."
-          </p>
-          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.42);margin-top:8px">-- Psalm 119:18</p>
+        <div class="body" style="text-align:left">
+          Take a breath. Let the noise of the day settle. You are not reading to complete a task or gather information. You are reading to make contact with God. The text will flow over you — slowly — until something catches. That is not your doing.
         </div>
-        <button class="btn-primary gold" onclick="lectioGoTo('choose')" style="width:100%;justify-content:center">I am ready · Choose a passage -></button>
+        <blockquote class="voice voice-left voice-quiet" style="margin-top:0;margin-bottom:var(--s-6)">
+          “Open thou my eyes: and I will consider the wondrous things of thy law.”
+          <span class="voice-attrib">— Psalm 118 (119):18</span>
+        </blockquote>
+        <button class="btn-primary gold btn-begin" onclick="lectioGoTo('choose')">I am ready · Choose a passage →</button>
       </div>
     </div>
 
     <!-- ── PHASE 1: CHOOSE PASSAGE ─────────── -->
     <div class="lectio-phase" id="lp-choose">
-      <div style="max-width:560px;margin:0 auto">
-        <p class="feat-eyebrow" style="margin-bottom:8px">Choose your passage</p>
-        <p class="feat-body" style="color:rgba(255,255,255,.45);margin-bottom:20px">
-          "The Gospels are our most direct means of access. You can strike gold very quickly in them." -- Fr. Casey
-        </p>
-        <div id="passageList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px"></div>
+      <div class="lectio-col">
+        <span class="ui-label">Choose your passage</span>
+        <blockquote class="voice voice-left voice-quiet" style="margin-top:0;margin-bottom:var(--s-5)">
+          “The Gospels are our most direct means of access. You can strike gold very quickly in them.”
+          <span class="voice-attrib">— Fr. Casey</span>
+        </blockquote>
+        <div id="passageList"></div>
         <button class="btn-ghost" onclick="lectioGoTo('prep')">← Back</button>
       </div>
     </div>
 
     <!-- ── PHASE 2: LECTIO (Reading) ─────────── -->
     <div class="lectio-phase" id="lp-read">
-      <div style="max-width:600px;margin:0 auto;text-align:center">
+      <div class="lectio-col lectio-col-read">
 
         <!-- Pass indicator -->
-        <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:22px">
+        <div class="lectio-pass">
           <div class="lectio-pass-dot" id="pass1dot"></div>
           <div class="lectio-pass-dot" id="pass2dot"></div>
-          <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.32)" id="passLabel">First Reading</span>
+          <span id="passLabel">First Reading</span>
         </div>
 
-        <!-- Previous phrase -->
+        <!-- The phrase before, carried faintly -->
         <div class="lectio-prev-phrase" id="lectioPrevPhrase"></div>
 
         <!-- Current phrase -- the heart of the experience -->
         <div class="lectio-curr-phrase" id="lectioCurrPhrase"></div>
 
         <!-- Reference -->
-        <p class="lectio-ref-small" id="lectioReadRef"></p>
+        <div class="lectio-ref-small" id="lectioReadRef"></div>
 
         <!-- Progress dots -->
-        <div class="lectio-progress" id="lectioProgress" style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:14px;flex-wrap:wrap"></div>
+        <div class="lectio-progress" id="lectioProgress"></div>
 
         <!-- Navigation -->
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:26px;flex-wrap:wrap" id="lectioReadNav">
+        <div class="lectio-nav" id="lectioReadNav">
           <button class="btn-ghost" onclick="lectioPhrasePrev()" id="lectioPrevBtn">← Previous</button>
           <button class="btn-primary gold" onclick="lectioPhraseNext()" id="lectioNextBtn">
-            <span id="lectioNextLabel">Next -></span>
+            <span id="lectioNextLabel">Next →</span>
           </button>
         </div>
 
         <!-- Pass-complete banner -->
         <div class="pass-banner" id="passBanner">
-          <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.68);line-height:1.65;margin-bottom:16px" id="passBannerMsg">
-            "The word of God is so precious that we do not want to miss the slightest nuance it might contain." Read it once more, more slowly.
-          </p>
-          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn-primary" id="secondReadBtn" onclick="startNextPass()">Read it again -></button>
-            <button class="btn-primary gold" onclick="lectioGoTo('meditate')">A word has found me -></button>
+          <div id="passBannerMsg">
+            “The word of God is so precious that we do not want to miss the slightest nuance it might contain.” Read it once more, more slowly.
+          </div>
+          <div class="btn-row">
+            <button class="btn-primary" id="secondReadBtn" onclick="startNextPass()">Read it again →</button>
+            <button class="btn-primary gold" onclick="lectioGoTo('meditate')">A word has found me →</button>
           </div>
         </div>
 
@@ -1888,27 +1906,27 @@ body.is-mobile #mobileEnterTab { display: block; }
 
     <!-- ── PHASE 3: MEDITATIO ─────────────── -->
     <div class="lectio-phase" id="lp-meditate">
-      <div style="max-width:580px;margin:0 auto">
-        <p class="feat-eyebrow" style="margin-bottom:8px">Meditatio · Meditation</p>
-        <p class="feat-heading" style="font-size:clamp(22px,3.5vw,40px);margin-bottom:10px">The word<br>that found you.</p>
-        <p class="feat-body" style="color:rgba(255,255,255,.48);margin-bottom:22px">
-          "It is a bit like the medical procedure known as palpation -- the physician pokes and pushes, and if there's no response, he moves on. However, if you yelp, he knows there's something there." -- Fr. Casey
-        </p>
+      <div class="lectio-col">
+        <div class="heading">The word that found you.</div>
+        <blockquote class="voice voice-left voice-quiet" style="margin-top:0;margin-bottom:var(--s-5)">
+          “It is a bit like the medical procedure known as palpation — the physician pokes and pushes, and if there's no response, he moves on. However, if you yelp, he knows there's something there.”
+          <span class="voice-attrib">— Fr. Casey</span>
+        </blockquote>
 
         <!-- The word -->
-        <div style="margin-bottom:26px">
-          <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.35);display:block;margin-bottom:10px">Write the word or phrase</span>
+        <div class="lectio-field">
+          <span class="ui-label">Write the word or phrase</span>
           <input type="text" class="lectio-word-field" id="lectioWordInput"
             placeholder="The word that caught you…" maxlength="100"
             oninput="lState.word=this.value"/>
         </div>
 
-        <div class="feat-divider"></div>
+        <div class="rule"></div>
 
         <!-- Three echoes from Origen -- via Fr. Casey -->
-        <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:300;color:rgba(255,255,255,.42);line-height:1.6;margin-bottom:14px">
-          "From the time of Origen, three levels of meaning have been distinguished -- an echo in the mind, in the conscience, and in the spirit. These are not outcomes we manufacture, but they follow the workings of grace." -- Fr. Casey
-        </p>
+        <div class="body body-small">
+          “From the time of Origen, three levels of meaning have been distinguished — an echo in the mind, in the conscience, and in the spirit. These are not outcomes we manufacture, but they follow the workings of grace.” — Fr. Casey
+        </div>
 
         <div class="echo-container">
 
@@ -1923,7 +1941,7 @@ body.is-mobile #mobileEnterTab { display: block; }
             </div>
             <div class="echo-body">
               <textarea class="echo-textarea" id="echo-mind"
-                placeholder="Understanding -- what does this word reveal about God or the mysteries of faith?…" rows="3"
+                placeholder="Understanding — what does this word reveal about God or the mysteries of faith?…" rows="3"
                 oninput="lState.echoMind=this.value"></textarea>
             </div>
           </div>
@@ -1939,7 +1957,7 @@ body.is-mobile #mobileEnterTab { display: block; }
             </div>
             <div class="echo-body">
               <textarea class="echo-textarea" id="echo-conscience"
-                placeholder="Conscience -- where does this touch your life, your choices, your direction?…" rows="3"
+                placeholder="Conscience — where does this touch your life, your choices, your direction?…" rows="3"
                 oninput="lState.echoConscience=this.value"></textarea>
             </div>
           </div>
@@ -1955,15 +1973,15 @@ body.is-mobile #mobileEnterTab { display: block; }
             </div>
             <div class="echo-body">
               <textarea class="echo-textarea" id="echo-spirit"
-                placeholder="Spirit -- what longing, praise, or prayer toward God does this open?…" rows="3"
+                placeholder="Spirit — what longing, praise, or prayer toward God does this open?…" rows="3"
                 oninput="lState.echoSpirit=this.value"></textarea>
             </div>
           </div>
 
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
-          <button class="btn-primary gold" onclick="lectioGoTo('pray')">Move to Prayer -></button>
+        <div class="btn-row left" style="margin-top:0">
+          <button class="btn-primary gold" onclick="lectioGoTo('pray')">Move to Prayer →</button>
           <button class="btn-ghost" onclick="lectioGoTo('read')">← Return to Reading</button>
         </div>
       </div>
@@ -1971,99 +1989,91 @@ body.is-mobile #mobileEnterTab { display: block; }
 
     <!-- ── PHASE 4: ORATIO (Prayer) ──────────── -->
     <div class="lectio-phase" id="lp-pray">
-      <div style="max-width:580px;margin:0 auto">
-        <p class="feat-eyebrow" style="margin-bottom:8px">Oratio · Prayer</p>
-        <p class="feat-heading" style="font-size:clamp(22px,3.5vw,40px);margin-bottom:10px">Let your response<br>become prayer.</p>
-        <p class="feat-body" style="color:rgba(255,255,255,.48);margin-bottom:20px">
-          "Prayer is the devoted turning of the heart to God for the removal of evil and the acquisition of good." -- Guigo II
-        </p>
+      <div class="lectio-col">
+        <div class="heading">Let your response become prayer.</div>
+        <blockquote class="voice voice-left voice-quiet" style="margin-top:0;margin-bottom:var(--s-5)">
+          “Prayer is the devoted turning of the heart to God for the removal of evil and the acquisition of good.”
+          <span class="voice-attrib">— Guigo II</span>
+        </blockquote>
 
-        <!-- Word reminder -->
-        <div class="oratio-word-reminder">
-          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.48);margin-bottom:5px">Your word</p>
-          <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;color:rgba(255,255,255,.78)" id="oratioWordDisplay">--</p>
+        <!-- The word, carried forward from Meditatio -->
+        <div class="lectio-carry oratio-word-reminder">
+          <span class="lectio-carry-label">Your word</span>
+          <div class="lectio-carry-word" id="oratioWordDisplay">—</div>
         </div>
 
-        <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.32);display:block;margin-bottom:10px">Write to God, not about him</span>
+        <span class="ui-label">Write to God, not about him</span>
         <textarea class="oratio-textarea" id="lectioOratioTA"
           placeholder="Lord…" rows="6"
           oninput="lState.oratio=this.value;checkOratioReady()"></textarea>
 
-        <!-- Claude question -- appears after user writes -->
+        <!-- The question -- appears once generated -->
         <div class="claude-q-card" id="claudeQCard">
-          <p class="claude-q-text" id="claudeQText"></p>
+          <div class="claude-q-text" id="claudeQText"></div>
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center">
-          <button class="btn-primary gold" onclick="lectioGoTo('contemplate')" id="oratioFwdBtn">Enter Contemplation -></button>
-          <button class="btn-primary" onclick="generateLectioQ()" id="generateQBtn" style="opacity:.7">Generate a question</button>
-          <button class="btn-ghost" onclick="lectioGoTo('meditate')">← Meditation</button>
+        <div class="btn-row left">
+          <button class="btn-primary gold" onclick="lectioGoTo('contemplate')" id="oratioFwdBtn">Enter Contemplation →</button>
+          <button class="btn-primary" onclick="generateLectioQ()" id="generateQBtn">Generate a question</button>
         </div>
-        <p style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.2);margin-top:10px;font-style:italic">Claude generates one question -- never two. Requires API key in Settings ⚙</p>
+        <button class="btn-ghost lectio-back" onclick="lectioGoTo('meditate')">← Meditation</button>
       </div>
     </div>
 
     <!-- ── PHASE 5: CONTEMPLATIO ─────────────── -->
     <div class="lectio-phase" id="lp-contemplate">
       <div class="contemplatio-wrap">
-        <!-- Candle -->
-        <svg width="40" height="60" viewBox="0 0 40 60" xmlns="http://www.w3.org/2000/svg">
-          <g style="animation:flameFlick 2.4s ease-in-out infinite;transform-origin:center bottom">
-            <ellipse cx="20" cy="16" rx="7" ry="12" fill="rgba(240,192,64,.2)"/>
-            <ellipse cx="20" cy="19" rx="4.5" ry="8" fill="rgba(248,200,64,.42)"/>
-            <ellipse cx="20" cy="22" rx="2.5" ry="5" fill="rgba(255,242,165,.78)"/>
-          </g>
-          <line x1="20" y1="30" x2="20" y2="33" stroke="rgba(100,80,40,.65)" stroke-width="1.5"/>
-          <rect x="14" y="33" width="12" height="25" rx="1.5" fill="rgba(18,12,4,.95)" stroke="rgba(200,146,12,.28)" stroke-width="1"/>
-          <ellipse cx="20" cy="15" rx="12" ry="9" fill="rgba(240,192,64,.08)"/>
-        </svg>
 
-        <p class="feat-eyebrow" style="margin-bottom:14px">Contemplatio</p>
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);font-style:italic;color:rgba(255,255,255,.62);line-height:1.65;max-width:400px;margin-bottom:6px">
-          "Contemplation is the elevation of the mind suspended in God, tasting the joys of eternal sweetness."
-        </p>
-        <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.38);margin-bottom:30px">-- Guigo II, Ladder of Monks</p>
+        <!-- The shared ring. startContemplatioTimer() writes m:ss into
+             #contemplatiTimer (hidden); the ring script reads it. -->
+        <div class="ring" id="ring-contemplatio" aria-hidden="true">
+          <div class="ring-halo"></div>
+          <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="88"/><circle class="ring-arc" cx="100" cy="100" r="88"/></svg>
+          <span class="ring-core"></span>
+        </div>
+        <span class="contemplatio-timer timer-value" id="contemplatiTimer" aria-hidden="true">5:00</span>
 
-        <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,.32);margin-bottom:16px">No more words are needed. Rest here.</p>
+        <div class="contemplatio-rest">No more words are needed. Rest here.</div>
+        <blockquote class="voice voice-quiet" style="margin-top:0">
+          “Contemplation is the elevation of the mind suspended in God, tasting the joys of eternal sweetness.”
+          <span class="voice-attrib">— Guigo II, Ladder of Monks</span>
+        </blockquote>
 
-        <div class="contemplatio-timer" id="contemplatiTimer">5:00</div>
-
-        <button class="btn-primary gold" onclick="completeContemplatio()" id="contemplatioDoneBtn" style="display:none;margin-top:6px">
-          Receive your closing prayer ->
+        <button class="btn-primary gold" onclick="completeContemplatio()" id="contemplatioDoneBtn" style="display:none">
+          Receive your closing prayer →
         </button>
-        <button class="btn-ghost" onclick="skipContemplatio()" style="margin-top:14px;display:block">Skip to closing prayer</button>
+        <button class="btn-ghost lectio-back" onclick="skipContemplatio()">Skip to closing prayer</button>
       </div>
     </div>
 
     <!-- ── PHASE 6: COMPLETE ──────────────────── -->
     <div class="lectio-phase" id="lp-complete">
-      <div style="max-width:560px;margin:0 auto">
-        <p class="feat-eyebrow" style="margin-bottom:8px;text-align:center">Lectio Complete</p>
-        <p class="feat-heading" style="font-size:clamp(22px,3.5vw,40px);text-align:center;margin-bottom:20px">Closing Prayer</p>
+      <div class="lectio-col lectio-center">
+        <div class="heading">Closing Prayer</div>
 
-        <!-- Closing prayer -- gathered by Claude from the session -->
+        <!-- Closing prayer -- gathered from the session -->
         <div class="closing-prayer-card" id="closingPrayerCard">
-          <p class="closing-prayer-text" id="closingPrayerText" style="color:rgba(255,255,255,.38);font-style:italic">Gathering from your session…</p>
+          <div class="closing-prayer-text" id="closingPrayerText">Gathering from your session…</div>
         </div>
 
-        <!-- Session summary chips -->
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
-          <div style="flex:1;min-width:110px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:12px;text-align:center">
-            <div style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:4px" id="summaryRef">--</div>
-            <div style="font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.24)">Passage</div>
+        <!-- Session summary -->
+        <div class="lectio-summary">
+          <div class="lectio-chip">
+            <div class="lectio-chip-value" id="summaryRef">—</div>
+            <div class="lectio-chip-label">Passage</div>
           </div>
-          <div style="flex:1;min-width:110px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:12px;text-align:center">
-            <div style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(200,146,12,.75);margin-bottom:4px;line-height:1.2" id="summaryWord">--</div>
-            <div style="font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.24)">Your word</div>
+          <div class="lectio-chip">
+            <div class="lectio-chip-value" id="summaryWord">—</div>
+            <div class="lectio-chip-label">Your word</div>
           </div>
-          <div style="flex:1;min-width:110px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);padding:12px;text-align:center">
-            <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:rgba(200,146,12,.75);margin-bottom:4px" id="summaryPasses">--</div>
-            <div style="font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.24)">Readings</div>
+          <div class="lectio-chip">
+            <div class="lectio-chip-value" id="summaryPasses">—</div>
+            <div class="lectio-chip-label">Readings</div>
           </div>
         </div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-primary gold" onclick="saveLectioSession()">Save to Autobiography -></button>
+        <div class="btn-row">
+          <button class="btn-primary gold" onclick="saveLectioSession()">Save to Autobiography →</button>
           <button class="btn-primary" onclick="goHome()">Return to Still</button>
         </div>
       </div>
@@ -3718,61 +3728,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 @media (max-width: 768px) {
   .letter-mobile { display: block; }
   .letter-desktop { display: none; }
-  .lectio-passage-title { font-size: 20px !important; }
-  .lectio-passage-preview { font-size: 16px !important; }
-  .lectio-section-label { font-size: 13px !important; }
-/* ── LECTIO mobile overrides ─────────── */
-.lectio-section-label {
-  font-size: 15px !important;
-  letter-spacing: .18em !important;
-  margin-bottom: 14px !important;
-}
-.lectio-source-summary {
-  font-size: 22px !important;
-  padding: 18px 20px !important;
-}
-.lectio-source-count {
-  font-size: 14px !important;
-}
-.passage-choice {
-  padding: 22px 20px !important;
-}
-.passage-choice-ref {
-  font-size: 13px !important;
-  letter-spacing: .16em !important;
-  margin-bottom: 12px !important;
-}
-.passage-choice-preview {
-  font-size: 19px !important;
-  line-height: 1.55 !important;
-}
-#lp-choose .feat-body {
-  font-size: 16px !important;
-  line-height: 1.65 !important;
-}
-#lp-choose .feat-eyebrow {
-  font-size: 15px !important;
-  letter-spacing: .18em !important;
-}
-/* Reading phase */
-.lectio-prev-phrase { font-size: 16px !important; line-height: 1.65 !important; }
-.lectio-curr-phrase { font-size: 26px !important; line-height: 1.5 !important; padding: 22px 8px !important; min-height: 140px !important; }
-.lectio-ref-small { font-size: 11px !important; letter-spacing: .22em !important; }
-#passLabel { font-size: 12px !important; letter-spacing: .18em !important; }
-#passBannerMsg { font-size: 17px !important; line-height: 1.7 !important; }
-/* Meditatio */
-.lectio-word-field { font-size: 24px !important; }
-.echo-title { font-size: 17px !important; }
-.echo-subtitle { font-size: 14px !important; line-height: 1.5 !important; }
-.echo-textarea { font-size: 16px !important; line-height: 1.7 !important; }
-/* Oratio */
-.oratio-textarea { font-size: 18px !important; line-height: 1.75 !important; }
-#oratioWordDisplay { font-size: 20px !important; }
-.claude-q-text { font-size: 18px !important; line-height: 1.75 !important; }
-/* Contemplatio */
-.contemplatio-timer { font-size: 64px !important; }
-/* Closing */
-#closingPrayerText { font-size: 18px !important; line-height: 1.75 !important; }
   /* Larger fonts for mobile readability */
   .feat-item.is-active .fn { font-size: 36px !important; }
   .feat-item.is-near .fn { font-size: 22px !important; }
@@ -3809,166 +3764,177 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 }
 
 /* ═══════════════════════════════════════════
-   LECTIO DIVINA STYLES
+   LECTIO DIVINA -- on the DESIGN.md tokens
+   Scoped to #screen-lectio. IDs and the classes the state machine toggles
+   (.active, .show, .done, .past, .current, .open) are unchanged.
 ═══════════════════════════════════════════ */
-
-/* Phase system */
-.lectio-phase{display:none;padding-bottom:50px;}
+#screen-lectio{
+  /* Lamplight on the page: an ink-blue ground, a pale vellum glow behind the
+     text. Softer than the candle (--atmos-a) so scripture keeps its contrast. */
+  --atmos-ground:#0c1a1e;--atmos-mid:#050c0f;--atmos-gy:30%;
+  --atmos-glow:222,214,190;--atmos-glow-2:150,178,176;--atmos-glow-3:40,70,74;
+  --atmos-core:244,238,220;--atmos-core-2:190,206,200;
+  --atmos-x:50%;--atmos-y:36%;--atmos-a:.62;
+  --measure-read:30rem;   /* about 65 characters of the serif */
+}
+.lectio-phase{display:none;padding-bottom:var(--s-7);}
 .lectio-phase.active{display:block;}
+#screen-lectio .lectio-col{max-width:var(--measure);margin:0 auto;}
+#screen-lectio .lectio-col-read{max-width:var(--measure-read);text-align:center;}
+#screen-lectio .lectio-center{text-align:center;}
+#screen-lectio .lectio-center .voice-card{text-align:left;}
+#screen-lectio .lectio-back{display:block;margin-top:var(--s-4);}
 
-/* Reading -- phrase display */
-.lectio-prev-phrase{
-  font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,18px);font-style:italic;
-  color:rgba(255,255,255,.26);line-height:1.6;text-align:center;
-  padding:0 12px 10px;min-height:40px;transition:all .5s ease;letter-spacing:.01em;
-}
-.lectio-curr-phrase{
-  font-family:'Playfair Display',serif;font-size:clamp(21px,3.8vw,42px);font-style:italic;font-weight:400;
-  color:#ffffff;line-height:1.45;text-align:center;
-  padding:24px 12px;min-height:110px;
-  display:flex;align-items:center;justify-content:center;
-  transition:all .4s ease;letter-spacing:.01em;
-  text-shadow:0 0 40px rgba(255,255,255,.06);
-}
-.lectio-ref-small{
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;
-  color:rgba(200,146,12,.45);text-align:center;margin-top:6px;
-}
-.lectio-pass-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.1);transition:all .35s;
-}
-.lectio-pass-dot.done{background:rgba(200,146,12,.7);border-color:rgba(200,146,12,.7);box-shadow:0 0 8px rgba(200,146,12,.5);}
-.lp-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.08);
-  transition:all .3s;flex-shrink:0;
-}
-.lp-dot.past{background:rgba(200,146,12,.4);border-color:rgba(200,146,12,.35);}
-.lp-dot.current{background:#f0c040;border-color:#f0c040;box-shadow:0 0 7px rgba(240,192,64,.8);transform:scale(1.4);}
+/* Movement track -- the spine that makes four movements one page. The state
+   machine only toggles .lectio-phase.active, so the track is marked from that
+   in CSS; :has is an enhancement, the track is aria-hidden. */
+#screen-lectio .phase-track{max-width:400px;}
+@media (max-width:420px){#screen-lectio .phase-step{letter-spacing:.04em;}}
+#screen-lectio:has(#lp-read.active) #lt-lectio,
+#screen-lectio:has(#lp-meditate.active) #lt-meditatio,
+#screen-lectio:has(#lp-pray.active) #lt-oratio,
+#screen-lectio:has(#lp-contemplate.active) #lt-contemplatio{color:var(--text-hi);}
+#screen-lectio:has(#lp-read.active) #lt-lectio .phase-step-dot,
+#screen-lectio:has(#lp-meditate.active) #lt-meditatio .phase-step-dot,
+#screen-lectio:has(#lp-pray.active) #lt-oratio .phase-step-dot,
+#screen-lectio:has(#lp-contemplate.active) #lt-contemplatio .phase-step-dot{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+#screen-lectio:has(#lp-meditate.active) #lt-lectio,
+#screen-lectio:has(#lp-pray.active) :is(#lt-lectio,#lt-meditatio),
+#screen-lectio:has(#lp-contemplate.active) :is(#lt-lectio,#lt-meditatio,#lt-oratio),
+#screen-lectio:has(#lp-complete.active) .phase-step{color:var(--gold-a55);}
+#screen-lectio:has(#lp-meditate.active) #lt-lectio .phase-step-dot,
+#screen-lectio:has(#lp-pray.active) :is(#lt-lectio,#lt-meditatio) .phase-step-dot,
+#screen-lectio:has(#lp-contemplate.active) :is(#lt-lectio,#lt-meditatio,#lt-oratio) .phase-step-dot,
+#screen-lectio:has(#lp-complete.active) .phase-step-dot{background:var(--gold-a55);}
 
 /* Passage choice */
-.passage-choice{
-  background:none;border:1px solid rgba(255,255,255,.12);
-  padding:18px 20px;text-align:left;cursor:pointer;
-  transition:all .22s;width:100%;
-}
-.passage-choice:hover{border-color:rgba(200,146,12,.45);background:rgba(200,146,12,.05);}
-.passage-choice-ref{
-  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(220,165,30,.85);margin-bottom:8px;display:block;
-}
-.passage-choice-preview{
-  font-family:'Playfair Display',serif;font-size:17px;font-style:italic;
-  color:rgba(255,255,255,.85);line-height:1.55;display:block;
-}
-/* Word field */
-.lectio-word-field{
-  width:100%;background:none;border:none;border-bottom:2px solid rgba(200,146,12,.3);
-  color:#ffffff;padding:10px 0;
-  font-family:'Playfair Display',serif;font-size:clamp(20px,3.2vw,32px);font-style:italic;font-weight:400;
-  outline:none;letter-spacing:.01em;transition:border-color .2s;
-}
-.lectio-word-field:focus{border-bottom-color:rgba(240,192,64,.65);}
-.lectio-word-field::placeholder{color:rgba(255,255,255,.2);font-style:italic;}
+#screen-lectio .lectio-section-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin:0 0 var(--s-2);}
+#screen-lectio .lectio-section-label.is-today{color:var(--gold);}
+#screen-lectio #passageList{display:flex;flex-direction:column;gap:var(--s-2);margin-bottom:var(--s-5);}
+#screen-lectio .lectio-today{margin-bottom:var(--s-4);}
+#screen-lectio .passage-choice{width:100%;background:none;border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:var(--s-4);text-align:left;cursor:pointer;transition:border-color var(--d-base),background var(--d-base);}
+#screen-lectio .passage-choice:hover,#screen-lectio .passage-choice.is-today{border-color:var(--gold-a55);background:var(--gold-a10);}
+#screen-lectio .passage-choice-ref{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-2);}
+#screen-lectio .passage-choice-preview{display:block;font-family:var(--font-serif);font-style:italic;
+  font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-hi);}
+#screen-lectio #lectioCategories{display:flex;flex-direction:column;gap:var(--s-2);}
+#screen-lectio .lectio-source-group{border:1px solid var(--line);border-radius:var(--r-sm);transition:border-color var(--d-base);}
+#screen-lectio .lectio-source-group[open]{border-color:var(--line-strong);}
+#screen-lectio .lectio-source-summary{display:flex;justify-content:space-between;align-items:center;list-style:none;
+  cursor:pointer;padding:14px var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--text-hi);}
+#screen-lectio .lectio-source-summary::-webkit-details-marker{display:none;}
+#screen-lectio .lectio-source-count{font-family:var(--font-sans);font-style:normal;font-size:var(--t-xs);
+  letter-spacing:.08em;color:var(--text-low);}
+#screen-lectio .lectio-source-body{padding:var(--s-2) var(--s-3) var(--s-3);display:flex;flex-direction:column;gap:var(--s-2);}
 
-/* Echo accordion */
-.echo-container{display:flex;flex-direction:column;margin-bottom:20px;border:1px solid rgba(255,255,255,.08);}
-.echo-item{border-bottom:1px solid rgba(255,255,255,.06);transition:border-color .2s;}
-.echo-item:last-child{border-bottom:none;}
-.echo-item.open{background:rgba(200,146,12,.03);}
-.echo-header{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 16px;cursor:pointer;transition:background .18s;
-}
-.echo-header:hover{background:rgba(255,255,255,.025);}
-.echo-num{
-  font-family:'Playfair Display',serif;font-size:16px;font-style:italic;
-  color:rgba(200,146,12,.5);flex-shrink:0;width:22px;text-align:center;
-}
-.echo-title{font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;color:rgba(255,255,255,.82);line-height:1.3;}
-.echo-subtitle{font-family:'Heebo',sans-serif;font-size:11px;font-weight:300;color:rgba(255,255,255,.36);line-height:1.4;margin-top:2px;}
-.echo-chevron{margin-left:auto;font-size:20px;color:rgba(255,255,255,.22);transition:transform .25s;flex-shrink:0;font-style:normal;}
-.echo-item.open .echo-chevron{transform:rotate(90deg);color:rgba(200,146,12,.55);}
-.echo-body{padding:0 16px 16px;display:none;}
-.echo-item.open .echo-body{display:block;}
-.echo-textarea{
-  width:100%;background:rgba(255,255,255,.04);border:none;border-bottom:1px solid rgba(255,255,255,.1);
-  color:#ffffff;padding:10px 0;
-  font-family:'Playfair Display',serif;font-size:14px;font-style:italic;
-  outline:none;resize:none;min-height:70px;line-height:1.7;transition:border-color .2s;
-}
-.echo-textarea:focus{border-bottom-color:rgba(200,146,12,.42);}
-.echo-textarea::placeholder{color:rgba(255,255,255,.2);font-style:italic;}
+/* Reading -- one phrase at a time, at a reading measure */
+#screen-lectio .lectio-pass{display:flex;align-items:center;justify-content:center;gap:var(--s-2);margin:0 0 var(--s-5);}
+#screen-lectio .lectio-pass-dot{width:6px;height:6px;border-radius:50%;background:var(--text-faint);
+  transition:background var(--d-slow),box-shadow var(--d-slow);}
+#screen-lectio .lectio-pass-dot.done{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.7);}
+#screen-lectio #passLabel{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin-left:var(--s-1);}
+#screen-lectio .lectio-prev-phrase{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);
+  line-height:var(--lh-text);color:var(--text-faint);text-align:center;padding:0 var(--s-3);
+  min-height:calc(var(--t-base) * var(--lh-text) * 2);transition:color var(--d-slow);}
+#screen-lectio .lectio-curr-phrase{font-family:var(--font-serif);font-style:italic;font-weight:400;
+  font-size:var(--t-lg);line-height:1.4;color:var(--text-hi);text-align:center;
+  padding:var(--s-5) var(--s-2);min-height:8rem;display:flex;align-items:center;justify-content:center;
+  text-wrap:balance;text-shadow:0 0 40px rgba(255,240,220,.08);}
+#screen-lectio .lectio-ref-small{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);opacity:.8;text-align:center;margin-top:var(--s-2);}
+#screen-lectio .lectio-progress{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:var(--s-4);flex-wrap:wrap;}
+#screen-lectio .lp-dot{width:4px;height:4px;border-radius:50%;background:var(--text-faint);flex-shrink:0;
+  transition:background var(--d-base),transform var(--d-base),box-shadow var(--d-base);}
+#screen-lectio .lp-dot.past{background:var(--gold-a55);}
+#screen-lectio .lp-dot.current{background:var(--candle);box-shadow:0 0 6px rgba(242,199,119,.8);transform:scale(1.5);}
+#screen-lectio .lectio-nav{display:flex;gap:var(--s-3);justify-content:center;align-items:center;margin-top:var(--s-6);flex-wrap:wrap;}
+#screen-lectio #lectioPrevBtn{transition:opacity var(--d-base);}
+#screen-lectio .pass-banner{display:none;margin-top:var(--s-6);padding:var(--s-5);border:1px solid var(--gold-a25);
+  border-radius:var(--r-sm);background:var(--gold-a10);text-align:center;}
+#screen-lectio .pass-banner.show{display:block;animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+#screen-lectio #passBannerMsg{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);
+  line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+#screen-lectio .pass-banner .btn-row{margin-top:var(--s-4);}
 
-/* Pass complete banner */
-.pass-banner{
-  margin-top:20px;padding:18px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(200,146,12,.18);
-  display:none;
-}
-.pass-banner.show{display:block;}
+/* Meditatio -- the word, then three echoes */
+#screen-lectio .lectio-field{margin:0 0 var(--s-5);}
+#screen-lectio .lectio-word-field{width:100%;background:none;border:0;border-bottom:1px solid var(--gold-a55);border-radius:0;
+  color:var(--candle-hi);padding:var(--s-3) 0;font-family:var(--font-serif);font-style:italic;font-size:var(--t-lg);
+  line-height:var(--lh-snug);outline:none;transition:border-color var(--d-base);}
+#screen-lectio .lectio-word-field:focus{border-bottom-color:var(--candle);}
+#screen-lectio .lectio-word-field::placeholder{color:var(--text-faint);}
+#screen-lectio .echo-container{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-sm);margin-bottom:var(--s-5);}
+#screen-lectio .echo-item{border-bottom:1px solid var(--line);transition:background var(--d-base);}
+#screen-lectio .echo-item:last-child{border-bottom:0;}
+#screen-lectio .echo-item.open{background:var(--gold-a10);}
+#screen-lectio .echo-header{display:flex;align-items:flex-start;gap:var(--s-3);padding:var(--s-4);cursor:pointer;}
+#screen-lectio .echo-num{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--gold);
+  width:1.4em;text-align:center;flex-shrink:0;line-height:1.2;}
+#screen-lectio .echo-title{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+#screen-lectio .echo-subtitle{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);margin-top:var(--s-1);}
+#screen-lectio .echo-chevron{margin-left:auto;color:var(--text-faint);font-size:var(--t-md);line-height:1.2;flex-shrink:0;
+  transition:transform var(--d-base),color var(--d-base);}
+#screen-lectio .echo-item.open .echo-chevron{transform:rotate(90deg);color:var(--gold);}
+#screen-lectio .echo-body{display:none;padding:0 var(--s-4) var(--s-4);}
+#screen-lectio .echo-item.open .echo-body{display:block;animation:phaseIn var(--d-slow) var(--ease-out) both;}
+#screen-lectio .echo-textarea,#screen-lectio .oratio-textarea{width:100%;background:rgba(255,240,220,.03);
+  border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);padding:var(--s-3) var(--s-4);
+  font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  outline:none;resize:none;min-height:5rem;transition:border-color var(--d-base);}
+#screen-lectio .oratio-textarea{min-height:9rem;}
+#screen-lectio .echo-textarea:focus,#screen-lectio .oratio-textarea:focus{border-color:var(--gold-a55);}
+#screen-lectio .echo-textarea::placeholder,#screen-lectio .oratio-textarea::placeholder{color:var(--text-faint);}
 
-/* Oratio */
-.oratio-word-reminder{
-  border-left:2px solid rgba(200,146,12,.38);
-  padding:10px 16px;margin-bottom:18px;background:rgba(200,146,12,.03);
-}
-.oratio-textarea{
-  width:100%;background:rgba(255,255,255,.04);border:none;border-bottom:1px solid rgba(255,255,255,.1);
-  color:#ffffff;padding:12px 0;
-  font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,17px);font-style:italic;
-  outline:none;resize:none;min-height:120px;line-height:1.72;transition:border-color .2s;
-}
-.oratio-textarea:focus{border-bottom-color:rgba(200,146,12,.42);}
-.oratio-textarea::placeholder{color:rgba(255,255,255,.22);font-style:italic;}
+/* Oratio -- the word carried forward, then prayer */
+#screen-lectio .lectio-carry{margin:0 0 var(--s-5);padding:var(--s-4) var(--s-5);border-left:2px solid var(--gold-a55);
+  background:var(--gold-a10);border-radius:0 var(--r-sm) var(--r-sm) 0;}
+#screen-lectio .lectio-carry-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-1);}
+#screen-lectio .lectio-carry-word{font-family:var(--font-serif);font-style:italic;font-size:var(--t-lg);
+  color:var(--candle-hi);line-height:var(--lh-snug);text-shadow:0 0 40px rgba(242,199,119,.2);}
+#screen-lectio .claude-q-card{display:none;position:relative;margin:var(--s-5) 0 0;padding:var(--s-5) var(--s-4) var(--s-4);
+  border:1px solid var(--gold-a25);border-radius:var(--r-sm);background:var(--gold-a10);}
+#screen-lectio .claude-q-card.show{display:block;animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+#screen-lectio .claude-q-card::before,#screen-lectio .closing-prayer-card::before{
+  position:absolute;top:0;left:var(--s-4);transform:translateY(-50%);max-width:calc(100% - 2 * var(--s-4));
+  background:var(--ink-0);padding:0 var(--s-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);}
+#screen-lectio .claude-q-card::before{content:'A contemplative question';}
+#screen-lectio .claude-q-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);}
+/* Generating: generateLectioQ() sets the button text and disables it while it
+   waits. The disabled state goes quiet and breathes until the question lands. */
+#screen-lectio #generateQBtn:disabled{opacity:1;color:var(--text-low);border-color:var(--line);cursor:default;
+  animation:officeBreath 1.9s ease-in-out infinite;}
 
-/* Claude question card */
-.claude-q-card{
-  position:relative;padding:18px 20px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(200,146,12,.18);
-  margin:18px 0;display:none;
-}
-.claude-q-card.show{display:block;}
-.claude-q-card::before{
-  content:'A contemplative question';
-  position:absolute;top:0;left:16px;transform:translateY(-50%);
-  background:rgba(4,4,10,.95);padding:0 8px;
-  font-family:'Montserrat',sans-serif;font-size:6px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.52);
-}
-.claude-q-text{
-  font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,18px);font-style:italic;
-  color:rgba(200,210,240,.9);line-height:1.72;
+/* Contemplatio -- the shared ring, no digits */
+#screen-lectio .contemplatio-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:60vh;text-align:center;padding:var(--s-4) 0;}
+#screen-lectio .contemplatio-wrap .ring{margin:var(--s-4) auto var(--s-5);}
+#screen-lectio .contemplatio-rest{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);color:var(--text-low);margin:0 0 var(--s-4);}
+#screen-lectio #contemplatioDoneBtn{margin-top:var(--s-6);}
+
+/* Complete -- the closing prayer, then what was received */
+#screen-lectio .closing-prayer-card{position:relative;padding:var(--s-6) var(--s-5) var(--s-5);border:1px solid var(--gold-a25);
+  border-radius:var(--r-sm);background:var(--gold-a10);margin:var(--s-2) 0 var(--s-5);text-align:center;}
+#screen-lectio .closing-prayer-card::before{content:'Gathered from your session';}
+#screen-lectio .closing-prayer-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);
+  line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+#screen-lectio .lectio-summary{display:flex;gap:var(--s-2);margin-bottom:var(--s-5);}
+#screen-lectio .lectio-chip{flex:1 1 0;min-width:0;border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-3) var(--s-2);text-align:center;}
+#screen-lectio .lectio-chip-value{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--candle);
+  line-height:var(--lh-snug);margin-bottom:var(--s-1);overflow-wrap:anywhere;}
+#screen-lectio #summaryRef{font-style:normal;font-size:var(--t-base);}
+#screen-lectio .lectio-chip-label{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);}
+
+@media (prefers-reduced-motion:reduce){
+  #screen-lectio #generateQBtn:disabled{animation:none;}
 }
 
-/* Contemplatio */
-.contemplatio-wrap{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;min-height:65vh;text-align:center;padding:30px 20px;
-}
-.contemplatio-timer{
-  font-family:'Playfair Display',serif;font-size:52px;font-weight:700;
-  color:rgba(255,255,255,.22);letter-spacing:-.04em;margin:20px 0;
-  transition:color .5s;
-}
-.contemplatio-timer.done{color:rgba(200,146,12,.5);}
-
-/* Closing prayer card */
-.closing-prayer-card{
-  position:relative;padding:24px 22px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(200,146,12,.2);
-  margin-bottom:22px;
-}
-.closing-prayer-card::before{
-  content:'Closing prayer · gathered from your session';
-  position:absolute;top:0;left:16px;transform:translateY(-50%);
-  background:rgba(4,4,10,.95);padding:0 8px;
-  font-family:'Montserrat',sans-serif;font-size:6px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);
-}
 /* ── Autobiography ────────────────────────── */
 .autobio-tab{
   flex:1;padding:11px 8px;
@@ -7607,34 +7573,32 @@ function buildPassageList() {
   const todayIdx = PASSAGES.indexOf(today);
   const sources = ['Psalms','Gospels','Paul','Prophets','Wisdom','Other NT','OT Narrative'];
 
-  const sectionLabel = `font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;`;
-
   let html = '';
 
   // Today's passage
-  html += `<div style="margin-bottom:18px">
-    <p class="lectio-section-label" style="${sectionLabel}color:rgba(220,165,30,.85);margin-bottom:10px">${fasting ? 'Fast Day Passage' : "Today's Passage"}</p>
-    <button class="passage-choice" onclick="chooseLectioPassage(${todayIdx})" style="border-color:rgba(200,146,12,.4);background:rgba(200,146,12,.06)">
+  html += `<div class="lectio-today">
+    <div class="lectio-section-label is-today">${fasting ? 'Fast Day Passage' : "Today's Passage"}</div>
+    <button class="passage-choice is-today" onclick="chooseLectioPassage(${todayIdx})">
       <span class="passage-choice-ref">${today.ref} · ${today.ctx}</span>
       <span class="passage-choice-preview">${today.phrases[0]}…</span>
     </button>
   </div>`;
 
   // Category buttons
-  html += `<p class="lectio-section-label" style="${sectionLabel}color:rgba(255,255,255,.55);margin-bottom:12px">Browse by Source</p>`;
-  html += `<div id="lectioCategories" style="display:flex;flex-direction:column;gap:6px">`;
+  html += `<div class="lectio-section-label">Browse by Source</div>`;
+  html += `<div id="lectioCategories">`;
 
   sources.forEach(src => {
     const srcPassages = PASSAGES.filter(p => p.source === src);
     if (!srcPassages.length) return;
-    html += `<details class="lectio-source-group" style="border:1px solid rgba(255,255,255,.1)">
-      <summary class="lectio-source-summary" style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.88);padding:14px 18px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center">
-        ${src} <span class="lectio-source-count" style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);font-style:normal;letter-spacing:.08em">${srcPassages.length}</span>
+    html += `<details class="lectio-source-group">
+      <summary class="lectio-source-summary">
+        ${src} <span class="lectio-source-count">${srcPassages.length}</span>
       </summary>
-      <div style="padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+      <div class="lectio-source-body">
         ${srcPassages.map(p => {
           const i = PASSAGES.indexOf(p);
-          return `<button class="passage-choice" onclick="chooseLectioPassage(${i})" style="text-align:left">
+          return `<button class="passage-choice" onclick="chooseLectioPassage(${i})">
             <span class="passage-choice-ref">${p.ref} · ${p.ctx}</span>
             <span class="passage-choice-preview">${p.phrases[0]}…</span>
           </button>`;
@@ -7729,7 +7693,7 @@ function renderLectioPhrase() {
   const nextLbl = document.getElementById('lectioNextLabel');
   if (nextLbl) {
     if (idx >= phrases.length - 1) nextLbl.textContent = 'Complete ✓';
-    else nextLbl.textContent = 'Next ->';
+    else nextLbl.textContent = 'Next →';
   }
 
   // Prev button
@@ -7769,7 +7733,7 @@ function completeLectioPass() {
 
   if (lState.readPass === 1) {
     if (bannerMsg) bannerMsg.textContent = '"We read over the text several times. Perhaps noticing different aspects with each new reading." -- Fr. Casey. Read it once more, more slowly. Notice what is different.';
-    if (secondBtn) secondBtn.textContent = 'Read it again ->';
+    if (secondBtn) secondBtn.textContent = 'Read it again →';
     if (secondBtn) secondBtn.style.display = 'block';
   } else {
     if (bannerMsg) bannerMsg.textContent = 'You have read this passage with care. If a word or phrase has found you -- even faintly -- carry it into Meditatio. "What faith inspires us to do is to use our deadness as a springboard." -- Fr. Casey';
@@ -7933,7 +7897,7 @@ function saveLectioSession() {
     passes: lState.readPass
   });
   const btn = document.querySelector('[onclick="saveLectioSession()"]');
-  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Autobiography ->', 2200); }
+  if (btn) { btn.textContent = 'Saved ✦'; setTimeout(() => btn.textContent = 'Save to Autobiography →', 2200); }
 }
 
 function saveExamen() {
