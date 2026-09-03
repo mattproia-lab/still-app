@@ -2331,81 +2331,115 @@ body.is-mobile #mobileEnterTab { display: block; }
 </div>
 
 <!-- ═══════════════════════════════════════════
-     THE OFFICE -- Vigils, Lauds, Compline
+     THE OFFICE -- Vigils, Lauds, Vespers, Compline
      Complete in-app. Douay-Rheims. Seasonal.
      Auto-detects current hour.
+     On the DESIGN.md tokens. IDs, onclicks and the #officeChooser /
+     #officeContent toggles are the state code's contract; the card is painted
+     by renderOfficeHTML(). The glow takes the colour of the hour (data-hour,
+     set by the script after this markup).
 ═══════════════════════════════════════════ -->
-<div id="screen-office" class="screen" style="overflow-y:auto;-webkit-overflow-scrolling:touch">
-  <!-- Candle background -- office -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-  <img src="assets/candlelauds.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:1"/>
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,2,.6) 0%,rgba(2,2,2,.3) 50%,rgba(2,2,2,.6) 100%)"></div>
-</div>
-  <header class="app-header" style="position:relative;z-index:10">
+<div id="screen-office" class="screen" data-tokens data-hour="lauds">
+  <!-- Atmosphere, drawn in CSS. Replaces assets/candlelauds.jpg. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
+  </div>
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title" id="officeScreenTitle">The Office</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
 
   <!-- Hour selector -->
-  <div id="officeChooser" style="max-width:520px;margin:0 auto;padding:16px 38px 0;position:relative;z-index:55">
-    <p id="officeChooserHeading" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px">The Liturgy of the Hours</p>
-    <!-- The same choice the Settings sheet carries, put where it is actually
-         made. Both pairs call setLiturgicalRite() and both are repainted by
-         renderRiteButtons(), so whichever one is touched the other agrees. -->
-    <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.1);margin-bottom:20px;max-width:260px">
-      <button id="officeRiteTraditionalBtn" onclick="setLiturgicalRite('traditional')"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);border-right:1px solid rgba(255,255,255,.1);transition:all .2s">
-        Traditional
-      </button>
-      <button id="officeRiteModernBtn" onclick="setLiturgicalRite('modern')"
-        style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;border:none;cursor:pointer;background:none;color:rgba(255,255,255,.38);transition:all .2s">
-        Modern
-      </button>
+  <div class="feature-main" id="officeChooser">
+    <div class="office-col">
+      <span class="ui-label" id="officeChooserHeading">The Liturgy of the Hours</span>
+      <blockquote class="voice voice-left office-voice">
+        “Seven times a day I have given praise to thee, for the judgments of thy justice.”
+        <span class="voice-attrib">— Psalm 118 (119):164</span>
+      </blockquote>
+      <!-- The same choice the Settings sheet carries, put where it is actually
+           made. Both pairs call setLiturgicalRite() and both are repainted by
+           renderRiteButtons(), so whichever one is touched the other agrees. -->
+      <div class="office-rite" role="group" aria-label="Rite">
+        <button id="officeRiteTraditionalBtn" class="office-rite-btn" onclick="setLiturgicalRite('traditional')">Traditional</button>
+        <button id="officeRiteModernBtn" class="office-rite-btn" onclick="setLiturgicalRite('modern')">Modern</button>
+      </div>
+      <!-- Hour buttons -->
+      <div class="office-hours">
+        <button class="office-hour" data-hour="vigils" onclick="enterOfficeHour('vigils')">
+          <span class="office-hour-dot" aria-hidden="true"></span>
+          <span class="office-hour-body">
+            <span class="office-hour-name">Vigils</span>
+            <span class="office-hour-sub">Night Office · Midnight–5am</span>
+          </span>
+        </button>
+        <button class="office-hour" data-hour="lauds" onclick="enterOfficeHour('lauds')">
+          <span class="office-hour-dot" aria-hidden="true"></span>
+          <span class="office-hour-body">
+            <span class="office-hour-name">Lauds</span>
+            <span class="office-hour-sub">Morning Prayer · 5am–11am</span>
+          </span>
+        </button>
+        <div id="sth-slot-lauds" data-sth-hour="lauds"></div>
+        <button class="office-hour" data-hour="vespers" onclick="enterOfficeHour('vespers')">
+          <span class="office-hour-dot" aria-hidden="true"></span>
+          <span class="office-hour-body">
+            <span class="office-hour-name">Vespers</span>
+            <span class="office-hour-sub">Evening Prayer · 5pm–8pm</span>
+          </span>
+        </button>
+        <div id="sth-slot-vespers" data-sth-hour="vespers"></div>
+        <button class="office-hour" data-hour="compline" onclick="enterOfficeHour('compline')">
+          <span class="office-hour-dot" aria-hidden="true"></span>
+          <span class="office-hour-body">
+            <span class="office-hour-name">Compline</span>
+            <span class="office-hour-sub">Night Prayer · 8pm–Midnight</span>
+          </span>
+        </button>
+        <div id="sth-slot-compline" data-sth-hour="compline"></div>
+      </div>
+      <div class="ui-hint office-credit">Sing the Hours · Paul Rose</div>
     </div>
-    <!-- Hour buttons -->
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <button onclick="enterOfficeHour('vigils')"
-        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
-        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Vigils</div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Night Office · Midnight–5am</div>
-      </button>
-      <button onclick="enterOfficeHour('lauds')"
-        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
-        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
-        
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Lauds</div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Morning Prayer · 5am–11am</div>
-      </button>
-      <div id="sth-slot-lauds" data-sth-hour="lauds"></div>
-      <button onclick="enterOfficeHour('vespers')"
-        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
-        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Vespers</div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Evening Prayer · 5pm–8pm</div>
-      </button>
-      <div id="sth-slot-vespers"" data-sth-hour="vespers"></div>
-      <button onclick="enterOfficeHour('compline')"
-        style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:14px 18px;text-align:left;cursor:pointer;transition:all .22s"
-        onmouseover="this.style.borderColor='rgba(200,146,12,.38)'"
-        onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:#fff;margin-bottom:3px">Compline</div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55)">Night Prayer · 8pm–Midnight</div>
-      </button>
-      <div id="sth-slot-compline" data-sth-hour="compline"></div>
-    </div>
-    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px;font-style:italic">Sing the Hours · Paul Rose</p>  
   </div>
 
   <!-- Hour content -- rendered by JS -->
-  <div class="feature-main" id="officeContent" style="display:none;position:relative;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;height:calc(100vh - 120px);padding-bottom:80px">
-    <div class="content-card" id="officeCard" style="max-width:620px;margin:0 auto"></div>
+  <div class="feature-main" id="officeContent" style="display:none">
+    <div class="content-card office-card" id="officeCard"></div>
   </div>
 </div>
+<script>
+/* Office atmosphere by hour -- visual layer only (DESIGN.md).
+   enterOfficeHour() writes the hour's name into #officeScreenTitle and
+   officeGoChooser() writes "The Office" back. This mirrors that into data-hour
+   on the screen root, which the CSS colours the glow from. On the chooser the
+   light is the hour the clock says (window._officeAutoHour, set by
+   setOfficeTime()). It calls nothing. */
+(function(){
+  var NAMES = { vigils:'vigils', matins:'vigils', lauds:'lauds', prime:'prime', terce:'terce', sext:'sext', none:'none', vespers:'vespers', compline:'compline' };
+  function apply(){
+    var root = document.getElementById('screen-office'), title = document.getElementById('officeScreenTitle');
+    if (!root || !title) return;
+    var key = (title.textContent || '').trim().toLowerCase();
+    var hour = NAMES[key] || NAMES[window._officeAutoHour] || 'lauds';
+    if (root.getAttribute('data-hour') !== hour) root.setAttribute('data-hour', hour);
+    /* A new hour starts at its opening. The card kept the previous hour's
+       scroll position; enterOfficeHour() never reset it. */
+    var content = document.getElementById('officeContent');
+    if (content && key !== 'the office') content.scrollTop = 0;
+  }
+  function arm(){
+    var title = document.getElementById('officeScreenTitle');
+    if (!title) return;
+    new MutationObserver(apply).observe(title, { childList:true, characterData:true, subtree:true });
+    apply();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════
      RULE OF LIFE
@@ -3750,7 +3784,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
   .auth-input { font-size: 16px !important; }
   .auth-btn { font-size: 13px !important; }
-  #officeCard p, #officeCard div { font-size: 20px !important; line-height: 1.9 !important; }
   #screen-darkness .content-card p { font-size: 20px !important; line-height: 1.9 !important; }
   #cResponseText, #mysticResponseText, #dResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
 }
@@ -3937,6 +3970,133 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
 @media (prefers-reduced-motion:reduce){
   #screen-lectio #generateQBtn:disabled{animation:none;}
+}
+
+/* ═══════════════════════════════════════════
+   THE OFFICE -- on the DESIGN.md tokens
+   Scoped to #screen-office. IDs, onclicks and the inline display toggles the
+   state code writes (#officeChooser / #officeContent) are unchanged. The card
+   is painted by renderOfficeHTML(), which emits the .office-* classes below.
+═══════════════════════════════════════════ */
+#screen-office{overflow:hidden!important;}
+
+/* The glow is coloured by canonical hour. data-hour is set on the screen root
+   by the small script after the markup, from the title the state code writes.
+   Every hour is defined so a future Prime, Terce, Sext or None inherits. */
+#screen-office,#screen-office[data-hour="lauds"]{      /* warming gold */
+  --atmos-ground:#1c1208;--atmos-mid:#0d0804;--atmos-gy:100%;
+  --atmos-glow:255,196,110;--atmos-glow-2:240,150,70;--atmos-glow-3:120,70,20;
+  --atmos-core:255,226,170;--atmos-core-2:255,180,90;
+  --atmos-x:50%;--atmos-y:62%;--atmos-a:.95;--hour-rgb:242,199,119;}
+#screen-office[data-hour="vigils"]{                    /* near-black */
+  --atmos-ground:#0a0a0f;--atmos-mid:#050508;
+  --atmos-glow:110,110,140;--atmos-glow-2:70,70,100;--atmos-glow-3:30,30,50;
+  --atmos-core:150,150,180;--atmos-core-2:90,90,120;
+  --atmos-y:70%;--atmos-a:.3;--hour-rgb:120,120,150;}
+#screen-office[data-hour="prime"]{                     /* pale morning */
+  --atmos-ground:#16171c;--atmos-mid:#0b0c10;
+  --atmos-glow:236,228,205;--atmos-glow-2:190,190,200;--atmos-glow-3:80,80,100;
+  --atmos-core:250,246,232;--atmos-core-2:220,220,225;
+  --atmos-y:40%;--atmos-a:.7;--hour-rgb:236,228,205;}
+#screen-office[data-hour="terce"]{                     /* bright */
+  --atmos-ground:#1a1610;--atmos-mid:#0e0c08;
+  --atmos-glow:255,240,200;--atmos-glow-2:255,214,140;--atmos-glow-3:140,100,40;
+  --atmos-core:255,252,240;--atmos-core-2:255,232,170;
+  --atmos-y:34%;--atmos-a:1.1;--hour-rgb:255,236,180;}
+#screen-office[data-hour="sext"]{                      /* brightest, sun high */
+  --atmos-ground:#1a1610;--atmos-mid:#0e0c08;
+  --atmos-glow:255,244,210;--atmos-glow-2:255,220,150;--atmos-glow-3:140,100,40;
+  --atmos-core:255,254,246;--atmos-core-2:255,236,180;
+  --atmos-y:30%;--atmos-a:1.2;--hour-rgb:255,244,200;}
+#screen-office[data-hour="none"]{                      /* amber */
+  --atmos-ground:#1c1208;--atmos-mid:#0d0804;
+  --atmos-glow:255,176,70;--atmos-glow-2:230,130,40;--atmos-glow-3:110,60,10;
+  --atmos-core:255,214,140;--atmos-core-2:255,170,70;
+  --atmos-y:50%;--atmos-a:.95;--hour-rgb:255,176,70;}
+#screen-office[data-hour="vespers"]{                   /* copper */
+  --atmos-ground:#1e0f08;--atmos-mid:#0d0604;
+  --atmos-glow:214,120,70;--atmos-glow-2:170,80,40;--atmos-glow-3:80,30,10;
+  --atmos-core:240,160,100;--atmos-core-2:210,110,60;
+  --atmos-y:68%;--atmos-a:.95;--hour-rgb:214,120,70;}
+#screen-office[data-hour="compline"]{                  /* deep blue-grey */
+  --atmos-ground:#0b1018;--atmos-mid:#05080c;
+  --atmos-glow:120,140,170;--atmos-glow-2:80,100,130;--atmos-glow-3:30,40,60;
+  --atmos-core:160,180,210;--atmos-core-2:110,130,160;
+  --atmos-y:72%;--atmos-a:.55;--hour-rgb:120,140,170;}
+/* Changing hour crossfades the light rather than cutting */
+#screen-office .atmos,#screen-office .atmos-glow,#screen-office .atmos-flame{transition:background var(--d-breath) var(--ease-breath);}
+
+/* Frame. The state code writes display/height/padding inline on #officeContent
+   on every entry; the !importants let the tokens keep the frame. */
+#screen-office .office-col{max-width:var(--measure);margin:0 auto;}
+#screen-office #officeContent{height:auto!important;flex:1;min-height:0;}
+#screen-office .office-card{max-width:36rem;margin:0 auto;padding:var(--s-5) var(--s-4) var(--s-6);
+  background:rgba(5,3,2,.28);border:1px solid var(--line);border-radius:var(--r-sm);backdrop-filter:none;}
+#screen-office .office-card::before{display:none;}
+
+/* Chooser */
+#screen-office .office-voice{margin:0 0 var(--s-5);}
+#screen-office .office-rite{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-pill);overflow:hidden;margin-bottom:var(--s-5);}
+#screen-office .office-rite-btn{background:none;border:0;padding:10px 18px;cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-low);transition:background var(--d-base),color var(--d-base);}
+#screen-office .office-rite-btn + .office-rite-btn{border-left:1px solid var(--line);}
+#screen-office .office-hours{display:flex;flex-direction:column;gap:var(--s-2);}
+#screen-office .office-hour{display:flex;align-items:center;gap:var(--s-4);width:100%;background:none;
+  border:1px solid var(--line);border-radius:var(--r-sm);padding:var(--s-4);text-align:left;cursor:pointer;
+  transition:border-color var(--d-base),background var(--d-base);}
+#screen-office .office-hour:hover{border-color:var(--gold-a55);background:var(--gold-a10);}
+#screen-office .office-hour-dot{flex-shrink:0;width:10px;height:10px;border-radius:50%;
+  background:rgb(var(--hour-rgb));box-shadow:0 0 10px rgba(var(--hour-rgb),.55);}
+#screen-office .office-hour[data-hour="vigils"]{--hour-rgb:120,120,150;}
+#screen-office .office-hour[data-hour="lauds"]{--hour-rgb:242,199,119;}
+#screen-office .office-hour[data-hour="prime"]{--hour-rgb:236,228,205;}
+#screen-office .office-hour[data-hour="terce"]{--hour-rgb:255,236,180;}
+#screen-office .office-hour[data-hour="sext"]{--hour-rgb:255,244,200;}
+#screen-office .office-hour[data-hour="none"]{--hour-rgb:255,176,70;}
+#screen-office .office-hour[data-hour="vespers"]{--hour-rgb:214,120,70;}
+#screen-office .office-hour[data-hour="compline"]{--hour-rgb:120,140,170;}
+#screen-office .office-hour-body{display:flex;flex-direction:column;gap:var(--s-1);min-width:0;}
+#screen-office .office-hour-name{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+#screen-office .office-hour-sub{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase;color:var(--text-low);}
+#screen-office .office-credit{text-align:center;margin-top:var(--s-4);}
+
+/* Sing the Hours player (injected by still-mobile/sing-the-hours.js with its
+   own <style>). The id prefix outranks its rules; nothing in the script changes. */
+#screen-office .sth-player{margin:var(--s-2) 0 var(--s-3);background:var(--gold-a10);border:1px solid var(--gold-a25);
+  border-radius:var(--r-sm);padding:var(--s-4);font-family:var(--font-sans);}
+#screen-office .sth-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);color:var(--gold);margin-bottom:var(--s-2);}
+#screen-office .sth-eyebrow-dot{background:var(--gold);}
+#screen-office .sth-title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+#screen-office .sth-meta,#screen-office .sth-not-today{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:0;color:var(--text-low);}
+#screen-office .sth-audio{accent-color:var(--gold);border-radius:var(--r-sm);}
+
+/* The card -- psalmody, antiphons, readings, closing */
+#screen-office .office-badge{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-2);}
+#screen-office .office-title{font-family:var(--font-serif);font-style:italic;font-weight:500;font-size:var(--t-xl);
+  line-height:var(--lh-tight);color:var(--candle-hi);margin-bottom:var(--s-4);text-shadow:0 0 40px rgba(242,199,119,.18);}
+#screen-office .office-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);margin:var(--s-5) 0 var(--s-2);}
+#screen-office .office-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-loose);
+  color:var(--text-hi);white-space:pre-line;margin-bottom:var(--s-2);}
+#screen-office .office-versicle{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-loose);
+  color:var(--text-mid);white-space:pre-line;margin-bottom:var(--s-2);}
+#screen-office .office-latin{color:var(--gold);opacity:.9;font-size:var(--t-base);}
+#screen-office .office-divider{width:100%;height:1px;margin:var(--s-5) 0;
+  background:linear-gradient(to right,transparent,var(--gold-a25),transparent);}
+#screen-office .office-hear{display:block;margin:var(--s-5) auto 0;color:var(--gold);}
+#screen-office .office-note{margin-top:var(--s-5);text-align:center;font-family:var(--font-serif);font-style:italic;
+  font-size:var(--t-sm);color:var(--gold);opacity:.6;}
+#screen-office .office-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  min-height:52vh;gap:var(--s-5);padding:var(--s-4);}
+#screen-office .office-loading-text{font-family:var(--font-serif);font-size:var(--t-md);color:var(--gold);animation:officeBreath 1.9s ease-in-out infinite;}
+#screen-office .office-loading-sub{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-mid);}
+#screen-office .office-nav{margin-top:var(--s-6);}
+
+@media (prefers-reduced-motion:reduce){
+  #screen-office .atmos,#screen-office .atmos-glow,#screen-office .atmos-flame{transition:none;}
+  #screen-office .office-loading-text{animation:none;}
 }
 
 /* ── Autobiography ────────────────────────── */
@@ -15024,29 +15184,30 @@ function buildOffice(hour, rite, date) {
   };
 }
 
-/* The screen. Every style string here was lifted verbatim from the old
-   renderOfficeHour() -- the golden test compares bytes, not appearance. */
+/* The screen. Presentation lives in the .office-* classes (DESIGN.md); a
+   part's own `style` -- the corpus and the Marian subtitles carry one -- is
+   passed through as before. The golden test pins these bytes; re-baseline it
+   when the templates change. */
 function renderOfficeHTML(doc) {
-  // The class is a hook for readability mode, nothing more -- the inline style
-  // still carries the look. `latin` comes from the part's own language tier, so
-  // captions that merely happen to be styled are not swept in with it.
+  // The classes are the readability-mode hooks too. `latin` comes from the
+  // part's own language tier, so captions that merely happen to be styled are
+  // not swept in with it.
+  const attr = (style) => style ? ` style="${style}"` : '';
   const p = (text, style = '', latin = false) =>
-    `<p class="office-text${latin ? ' office-latin' : ''}" style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.92);line-height:1.85;white-space:pre-line;margin-bottom:8px;${style}">${text}</p>`;
+    `<div class="office-text${latin ? ' office-latin' : ''}"${attr(style)}>${text}</div>`;
   const eyebrow = (text) =>
-    `<p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:22px 0 10px">${text}</p>`;
-  // The style suffix is appended only when there is one, so a styleless
-  // versicle emits the exact bytes it always has -- the golden test checks.
+    `<div class="office-eyebrow">${text}</div>`;
   const versicle = (text, style, latin = false) =>
-    `<p class="office-versicle${latin ? ' office-latin' : ''}" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);color:rgba(255,255,255,.88);line-height:1.75;white-space:pre-line;font-style:italic;margin-bottom:8px${style ? ';' + style : ''}">${text}</p>`;
+    `<div class="office-versicle${latin ? ' office-latin' : ''}"${attr(style)}>${text}</div>`;
 
   let html = '';
   (doc.parts || []).forEach(part => {
     switch (part.type) {
       case 'badge':
-        html += `<p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.55);margin-bottom:6px">${part.text}</p>`;
+        html += `<div class="office-badge">${part.text}</div>`;
         break;
       case 'title':
-        html += `<h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);font-weight:700;font-style:italic;color:#fff;line-height:.95;margin-bottom:18px">${part.text}</h2>`;
+        html += `<div class="office-title" role="heading" aria-level="2">${part.text}</div>`;
         break;
       case 'eyebrow':
         html += eyebrow(part.text);
@@ -15058,31 +15219,31 @@ function renderOfficeHTML(doc) {
         html += p(part.text, part.style || '', part.lang === 'la');
         break;
       case 'divider':
-        html += `<div style="width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(200,146,12,.25),transparent);margin:18px 0"></div>`;
+        html += `<div class="office-divider"></div>`;
         break;
       case 'button':
-        html += `<button id="${part.id}" onclick="${part.onclick}" class="btn-ghost" style="margin-top:20px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,146,12,.7)">${part.text}</button>`;
+        html += `<button id="${part.id}" onclick="${part.onclick}" class="btn-ghost office-hear">${part.text}</button>`;
         break;
       // Stands where the Hear button would be, in the same place and the same
       // gold, quieter and without the frame -- there is nothing to press.
       case 'note':
-        html += `<p style="margin-top:20px;text-align:center;font-size:14px;font-style:italic;color:rgba(200,146,12,.45)">${part.text}</p>`;
+        html += `<div class="office-note">${part.text}</div>`;
         break;
       /* Takes over the content area while the corpus is on its way. The way out
          is inside this block, not in a nav below it, so it paints in the same
          frame as the message rather than waiting on a card that has no content
          yet. */
       case 'loading':
-        html += `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:52vh;gap:24px;padding:20px">
-    <div style="font-family:'Cormorant Garamond',serif;font-size:23px;letter-spacing:.02em;color:rgba(200,146,12,.9);animation:officeBreath 1.9s ease-in-out infinite">${part.text}</div>
-    ${part.sub ? `<div style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55)">${part.sub}</div>` : ''}
-    <button class="btn-primary gold" onclick="officeGoChooser()" style="justify-content:center;min-width:190px">← Other Hours</button>
+        html += `<div class="office-loading">
+    <div class="office-loading-text">${part.text}</div>
+    ${part.sub ? `<div class="office-loading-sub">${part.sub}</div>` : ''}
+    <button class="btn-primary gold" onclick="officeGoChooser()">← Other Hours</button>
   </div>`;
         break;
 
       case 'nav':
-        html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px">
-    <button class="btn-primary gold" onclick="officeGoChooser()" style="justify-content:center">← Other Hours</button>
+        html += `<div class="btn-row left office-nav">
+    <button class="btn-primary gold" onclick="officeGoChooser()">← Other Hours</button>
     <button class="btn-primary" onclick="officeGoHome()">Return to Still</button>
   </div>`;
         break;
