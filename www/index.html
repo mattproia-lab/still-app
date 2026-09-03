@@ -5,135 +5,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
-<!-- ═══════════════════════════════════════════
-     THE SACRISTY 
-═══════════════════════════════════════════ -->
-<div id="screen-sacristy" style="display:none;position:fixed;inset:0;z-index:8000;background:#000;overflow:hidden">
-
-  <!-- Full-bleed image -->
-  <img id="sacristyImg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;transition:opacity .5s ease;background:#000" src="" alt=""/>
-
-  <!-- Minimal top bar -->
-  <div style="position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:48px 28px 20px">
-    <button onclick="closeSacristy()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.45);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">← Close</button>
-    <span id="sacristyLabel" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.22)"></span>
-    <button onclick="openSacristyInfo()" style="background:none;border:none;cursor:pointer;font-size:17px;color:rgba(255,255,255,.35);padding:4px;transition:color .2s" onmouseover="this.style.color='rgba(200,146,12,.8)'" onmouseout="this.style.color='rgba(255,255,255,.35)'">ⓘ</button>
-  </div>
-
-  <!-- Swipe / tap navigation areas -->
-  <div onclick="sacristyPrev()" style="position:absolute;left:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
-  <div onclick="sacristyNext()" style="position:absolute;right:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
-
-  <!-- Dot indicators -->
-  <div id="sacristyDots" style="position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10"></div>
-
- <!-- Shop button -- under gallery images (web only; hidden on iOS) -->
-  <button id="shopBtn" onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
- 
-  <!-- Info overlay -->
-  <div id="sacristyInfoOverlay" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;flex-direction:column;justify-content:flex-end;padding:48px 32px">
-    <button onclick="closeSacristyInfo()" style="position:absolute;top:52px;right:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em">Close ×</button>
-    <p id="sacristyInfoFeature" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.8);margin-bottom:10px"></p>
-    <p id="sacristyInfoText" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.2vw,20px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.75;margin-bottom:24px"></p>
-    <button id="sacristyInfoEnter" onclick="enterFromSacristy()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 24px;cursor:pointer;align-self:flex-start;transition:all .2s">Enter This Practice -></button>
-  </div>
-
-</div>
-
-<div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
-  <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
-
-    <!-- STEP 1 -- Video Hero -->
-    <div class="ob-step" id="ob-1" style="position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden;z-index:9999">
-      <video id="heroVideo" autoplay muted loop playsinline
-        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity 1.4s ease"
-        src="still-mobile/src/image/hero.mp4"></video>
-      <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
-      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries -- adapted for the interior life you actually have.</p>
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
-        <button onclick="obNext(2)"
-          style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
-          onmouseover="this.style.boxShadow='0 0 28px rgba(160,32,240,.35)';this.style.borderColor='rgba(200,140,255,.8)'"
-          onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
-          CLICK HERE
-        </button>
-                       <!-- Store badges (web only) -->
-        <div id="storeBadges" style="display:none;margin-top:34px;text-align:center">
-          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(190,140,255,.4);margin-bottom:12px">Or take Still with you</p>
-          <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
-            <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
-          </a>
-          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:inline-block">
-            <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
-          </a>
-        </div>
-      </div>
-      <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(190,140,255,.5),transparent)"></div>
-        <span style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(190,140,255,.4)">Scroll</span>
-      </div>
-    </div>
-
-    <!-- STEP 2 -- Guestmaster Welcome Letter -->
-    <div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000;-webkit-overflow-scrolling:touch">
-      <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 90px;box-sizing:border-box">
-
-        <div style="text-align:center;font-size:34px;color:#b8860b;margin-bottom:4px">✝</div>
-        <h1 style="text-align:center;font-family:Georgia,serif;font-size:24px;letter-spacing:1px;color:#f4e9d8;margin:0 0 6px">Cell of the Guest</h1>
-        <p style="text-align:center;font-family:Georgia,serif;font-style:italic;font-size:15px;color:rgba(244,233,216,.6);margin:0 0 24px;max-width:480px">A word of welcome from Brother Guestmaster, before you begin.</p>
-
-        <!-- The guestmaster letter, on every platform.
-
-             The welcome film was REMOVED rather than hidden. An iframe inside a
-             display:none parent still loads, so a hidden embed would have gone
-             on calling youtube-nocookie.com during every onboarding for a video
-             nobody could see. It also failed outright in the Capacitor shell
-             (error 153), which is why native was already being given the letter
-             instead. -->
-<div id="obWelcomeLetter" style="width:100%;max-width:560px">
-  <img src="still-mobile/src/image/guestmaster_letter.jpg"
-       alt="A letter of welcome from Brother Guestmaster"
-       style="width:100%;height:auto;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55)">
-  <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
-  <button id="obGuestmasterBtn" onclick="playGuestmasterAudio()"
-          style="margin-top:14px;width:100%;padding:12px;background:rgba(200,146,12,.1);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer">
-    ◎ Hear the letter read aloud
-  </button>
-</div>
-        <button onclick="obFinish()"
-          style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
-          Begin ->
-        </button>
-
-      </div>
-    </div>
-
-<script>
-  if (!window.Capacitor?.isNativePlatform?.()) {
-  const badges = document.getElementById('storeBadges');
-  if (badges) badges.style.display = 'block';
-}
-  const hv = document.getElementById('heroVideo');
-  if (hv) {
-    hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
-    if (hv.readyState >= 3) hv.style.opacity = '1';
-    // iOS declines autoplay in Low Power Mode and similar states.
-    // Kick playback explicitly; if refused, retry on the first touch anywhere.
-    hv.play().catch(() => {
-      document.addEventListener('touchstart', () => { hv.play().catch(()=>{}); }, { once: true });
-    });
-    // Re-arm after backgrounding: iOS pauses webview media on suspend
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && hv.paused) hv.play().catch(()=>{});
-    });
-  }
-</script>
-
-
-<script src="still-mobile/sing-the-hours.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <style>
   * { touch-action: manipulation; }
 body { -webkit-text-size-adjust: 100%; }
@@ -463,6 +335,9 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
 /* Bottom dot nav */
 .dot-nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;z-index:200;}
+/* The dot nav belongs to home. showScreen() calls updateDots(-1) "hide on
+   feature screens" but that only un-highlights; this hides it. */
+body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 .dn-item{cursor:pointer;padding:8px 5px;display:flex;align-items:center;}
 .dn-pip{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.12);transition:all .32s;display:block;}
 .dn-item:hover .dn-pip{background:rgba(255,255,255,.45);}
@@ -744,7 +619,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 
 /* Bell notification (global element, tokenized) */
 .bell-indicator{
-  position:fixed;top:80px;left:50%;transform:translateX(-50%);
+  /* In the bottom strip the dot nav vacates while a practice is open (it shows for 2.5s). */
+  position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);left:50%;transform:translateX(-50%);
   z-index:90;opacity:0;transition:opacity var(--d-base);
   font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
   letter-spacing:var(--track-label);text-transform:uppercase;
@@ -1242,7 +1118,6 @@ body.is-mobile #mobileEnterTab { display: block; }
 }
 
 </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <script>
 (function() {
   var hash = window.location.hash.substring(1);
@@ -1256,6 +1131,135 @@ body.is-mobile #mobileEnterTab { display: block; }
 </script>
 </head>
 <body>
+<!-- ═══════════════════════════════════════════
+     THE SACRISTY 
+═══════════════════════════════════════════ -->
+<div id="screen-sacristy" style="display:none;position:fixed;inset:0;z-index:8000;background:#000;overflow:hidden">
+
+  <!-- Full-bleed image -->
+  <img id="sacristyImg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;transition:opacity .5s ease;background:#000" src="" alt=""/>
+
+  <!-- Minimal top bar -->
+  <div style="position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:48px 28px 20px">
+    <button onclick="closeSacristy()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.45);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">← Close</button>
+    <span id="sacristyLabel" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.22)"></span>
+    <button onclick="openSacristyInfo()" style="background:none;border:none;cursor:pointer;font-size:17px;color:rgba(255,255,255,.35);padding:4px;transition:color .2s" onmouseover="this.style.color='rgba(200,146,12,.8)'" onmouseout="this.style.color='rgba(255,255,255,.35)'">ⓘ</button>
+  </div>
+
+  <!-- Swipe / tap navigation areas -->
+  <div onclick="sacristyPrev()" style="position:absolute;left:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
+  <div onclick="sacristyNext()" style="position:absolute;right:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
+
+  <!-- Dot indicators -->
+  <div id="sacristyDots" style="position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10"></div>
+
+ <!-- Shop button -- under gallery images (web only; hidden on iOS) -->
+  <button id="shopBtn" onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
+ 
+  <!-- Info overlay -->
+  <div id="sacristyInfoOverlay" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;flex-direction:column;justify-content:flex-end;padding:48px 32px">
+    <button onclick="closeSacristyInfo()" style="position:absolute;top:52px;right:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em">Close ×</button>
+    <p id="sacristyInfoFeature" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.8);margin-bottom:10px"></p>
+    <p id="sacristyInfoText" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.2vw,20px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.75;margin-bottom:24px"></p>
+    <button id="sacristyInfoEnter" onclick="enterFromSacristy()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 24px;cursor:pointer;align-self:flex-start;transition:all .2s">Enter This Practice -></button>
+  </div>
+
+</div>
+
+<div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
+  <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
+
+    <!-- STEP 1 -- Video Hero -->
+    <div class="ob-step" id="ob-1" style="position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden;z-index:9999">
+      <video id="heroVideo" autoplay muted loop playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity 1.4s ease"
+        src="still-mobile/src/image/hero.mp4"></video>
+      <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
+      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries -- adapted for the interior life you actually have.</p>
+        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
+        <button onclick="obNext(2)"
+          style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
+          onmouseover="this.style.boxShadow='0 0 28px rgba(160,32,240,.35)';this.style.borderColor='rgba(200,140,255,.8)'"
+          onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
+          CLICK HERE
+        </button>
+                       <!-- Store badges (web only) -->
+        <div id="storeBadges" style="display:none;margin-top:34px;text-align:center">
+          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(190,140,255,.4);margin-bottom:12px">Or take Still with you</p>
+          <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
+            <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
+          </a>
+          <a id="playBadge" href="https://play.google.com/store/apps/details?id=app.stillprayer.still" target="_blank" rel="noopener" style="display:inline-block">
+            <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
+          </a>
+        </div>
+      </div>
+      <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
+        <div style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(190,140,255,.5),transparent)"></div>
+        <span style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(190,140,255,.4)">Scroll</span>
+      </div>
+    </div>
+
+    <!-- STEP 2 -- Guestmaster Welcome Letter -->
+    <div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000;-webkit-overflow-scrolling:touch">
+      <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 90px;box-sizing:border-box">
+
+        <div style="text-align:center;font-size:34px;color:#b8860b;margin-bottom:4px">✝</div>
+        <h1 style="text-align:center;font-family:Georgia,serif;font-size:24px;letter-spacing:1px;color:#f4e9d8;margin:0 0 6px">Cell of the Guest</h1>
+        <p style="text-align:center;font-family:Georgia,serif;font-style:italic;font-size:15px;color:rgba(244,233,216,.6);margin:0 0 24px;max-width:480px">A word of welcome from Brother Guestmaster, before you begin.</p>
+
+        <!-- The guestmaster letter, on every platform.
+
+             The welcome film was REMOVED rather than hidden. An iframe inside a
+             display:none parent still loads, so a hidden embed would have gone
+             on calling youtube-nocookie.com during every onboarding for a video
+             nobody could see. It also failed outright in the Capacitor shell
+             (error 153), which is why native was already being given the letter
+             instead. -->
+<div id="obWelcomeLetter" style="width:100%;max-width:560px">
+  <img src="still-mobile/src/image/guestmaster_letter.jpg"
+       alt="A letter of welcome from Brother Guestmaster"
+       style="width:100%;height:auto;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55)">
+  <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
+  <button id="obGuestmasterBtn" onclick="playGuestmasterAudio()"
+          style="margin-top:14px;width:100%;padding:12px;background:rgba(200,146,12,.1);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer">
+    ◎ Hear the letter read aloud
+  </button>
+</div>
+        <button onclick="obFinish()"
+          style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
+          Begin ->
+        </button>
+
+      </div>
+    </div>
+
+<script>
+  if (!window.Capacitor?.isNativePlatform?.()) {
+  const badges = document.getElementById('storeBadges');
+  if (badges) badges.style.display = 'block';
+}
+  const hv = document.getElementById('heroVideo');
+  if (hv) {
+    hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
+    if (hv.readyState >= 3) hv.style.opacity = '1';
+    // iOS declines autoplay in Low Power Mode and similar states.
+    // Kick playback explicitly; if refused, retry on the first touch anywhere.
+    hv.play().catch(() => {
+      document.addEventListener('touchstart', () => { hv.play().catch(()=>{}); }, { once: true });
+    });
+    // Re-arm after backgrounding: iOS pauses webview media on suspend
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && hv.paused) hv.play().catch(()=>{});
+    });
+  }
+</script>
+
+
+<script src="still-mobile/sing-the-hours.js"></script>
 <div id="authOverlay" class="auth-overlay" style="display:none">
   <div class="auth-box">
     <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:8px;text-align:center">Still</p>
