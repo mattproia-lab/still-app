@@ -102,7 +102,12 @@ animations `none`, the ember fades in place instead of rising.
 - **Phase track** `.phase-track`: `justify-content:space-between`, labels
   `flex:0 0 auto; white-space:nowrap`, connectors `flex:1 1 6px; min-width:4px`.
   Under 420px the label drops to 9px and .1em tracking. `:has()` quiets every
-  step in idle and marks every step done in complete.
+  step in idle and marks every step done in complete. Three steps show:
+  Settle, Watch, Return. The labels are display text only; the state machine's
+  phases are still settle / watch / sit / return, `#ps-watch` stays in the DOM
+  hidden by id (`setSittingPhase()` writes to it and assigns `className`
+  outright, so a helper class would be wiped), and the sit state is the one
+  labelled "Watch".
 - **Ring** `.sit-ring`: SVG circle r=88 in a 200 viewBox, circumference 552.92.
   `--ring-frac` (1 → 0) drives `stroke-dashoffset`, arc opacity (.92 → .22), the
   halo and the core. Transitions are 1s linear so one-second ticks read as

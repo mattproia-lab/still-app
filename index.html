@@ -581,6 +581,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 #screen-sitting .phase-step.done .phase-step-dot{background:var(--gold-a55);}
 #screen-sitting .phase-step.current .phase-step-dot{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
 #screen-sitting .phase-connector{flex:1 1 6px;min-width:4px;height:1px;background:var(--line);margin:0 6px;}
+/* By id: setSittingPhase() assigns className outright, so a helper class would be wiped. */
+#screen-sitting #ps-watch,#screen-sitting #ps-watch + .phase-connector{display:none;}
 /* Before the session every step is quiet; after it every step is done.
    (The state machine marks Settle current in both; :has is an enhancement.) */
 #screen-sitting:has(#sitting-idle.active) .phase-step{color:var(--text-faint);}
@@ -1554,13 +1556,16 @@ body.is-mobile #mobileEnterTab { display: block; }
   <div class="feature-main">
     <div class="sitting-wrap">
 
-      <!-- Phase tracker -->
+      <!-- Phase tracker. Display labels only: the state machine's phase names
+           (settle / watch / sit / return) are unchanged. setSittingPhase()
+           writes to all four step ids, so #ps-watch stays in the DOM, hidden;
+           the sit state is what the person experiences as "Watch". -->
       <div class="phase-track" id="phaseTrack">
         <div class="phase-step" id="ps-settle"><span class="phase-step-dot"></span>Settle</div>
         <div class="phase-connector"></div>
         <div class="phase-step" id="ps-watch"><span class="phase-step-dot"></span>Watch</div>
         <div class="phase-connector"></div>
-        <div class="phase-step" id="ps-sit"><span class="phase-step-dot"></span>Stillness</div>
+        <div class="phase-step" id="ps-sit"><span class="phase-step-dot"></span>Watch</div>
         <div class="phase-connector"></div>
         <div class="phase-step" id="ps-return"><span class="phase-step-dot"></span>Return</div>
       </div>
@@ -1668,6 +1673,7 @@ body.is-mobile #mobileEnterTab { display: block; }
       <div id="sitting-sit" class="companion-state">
         <div class="count-line"><span id="sitCount">0</span> thoughts</div>
         <span class="timer-value" id="sitTimer" aria-hidden="true">10:00</span>
+        <div class="instruction">Thoughts will come. That is not failure.<br>Tap each time a thought arises.<br>Name it — then let it pass.</div>
         <div class="tap-zone" id="sitTapZone" onclick="tapThought('sit')">
           <div class="sit-ring" id="ring-sit" aria-hidden="true">
             <div class="sit-ring-halo"></div>
