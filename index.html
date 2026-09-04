@@ -2125,68 +2125,87 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      BREATH PRAYER / JESUS PRAYER 
 ═══════════════════════════════════════════ -->
-<div id="screen-breath" class="screen">
-  <!-- Hesychast monk -- breath prayer image -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/breath_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.9"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,10,.88) 0%,rgba(4,2,10,.55) 25%,rgba(4,2,10,.22) 55%,rgba(4,2,10,.65) 100%)"></div>
+<div id="screen-breath" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. Replaces still-mobile/src/image/breath_bg.jpg.
+       This is the one practice where the light itself breathes: the script
+       after the markup mirrors the orb's scale (which the pacing code writes)
+       onto data-breath on this root, and the glow swells on the inhale and
+       settles on the exhale in the code's own 4s / 4s. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Breath Prayer</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;position:relative;z-index:10;overflow-y:auto">
+  <div class="feature-main">
+    <div class="breath-wrap">
 
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.6);margin-bottom:10px">Jesus Prayer</p>
-    <p id="breathPrayer" style="font-family:'Playfair Display',serif;font-size:clamp(14px,2vw,18px);font-style:italic;color:rgba(255,255,255,.55);text-align:center;line-height:1.6;margin-bottom:36px;max-width:320px">Lord Jesus Christ,<br>Son of God,<br>have mercy on me, a sinner.</p>
+      <span class="breath-eyebrow">Jesus Prayer</span>
+      <!-- The whole prayer. setBreathPrayer() rewrites this element and only
+           this one (the two breath lines below carry fixed text), so it stays
+           on the screen: a quiet whole above the breathing halves. -->
+      <div id="breathPrayer" class="breath-prayer">Lord Jesus Christ,<br>Son of God,<br>have mercy on me, a sinner.</div>
 
-    <!-- Prayer of the Heart -->
-    <div id="prayerOfHeart" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:20px">
-      
-      <!-- Time in prayer -->
-      <div id="heartTimer" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:32px">0:00</div>
+      <!-- Prayer of the Heart. Ids, onclicks and the elements the pacing code
+           writes to (orb transform, line colours, button text and colour,
+           milestone display) are unchanged. -->
+      <div id="prayerOfHeart" class="heart">
 
-      <!-- Breathing orb -->
-      <div style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:40px">
-        <div id="heartOrb" style="width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(200,146,12,.35) 0%,rgba(100,60,0,.15) 60%,transparent 100%);transition:transform 4s ease-in-out,opacity 4s ease-in-out;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="startHeartPrayer()">
-          <div style="width:120px;height:120px;border-radius:50%;border:1px solid rgba(200,146,12,.25);display:flex;align-items:center;justify-content:center">
-            <div style="width:60px;height:60px;border-radius:50%;border:1px solid rgba(200,146,12,.4);background:rgba(200,146,12,.08)"></div>
+        <!-- Time in prayer: counts up, so no ring; a quiet figure -->
+        <div id="heartTimer" class="heart-timer">0:00</div>
+
+        <!-- The orb: the tap target, scaled by the pacing code -->
+        <div class="heart-orb-wrap">
+          <div id="heartOrb" class="heart-orb" onclick="startHeartPrayer()" role="button" aria-label="Begin or pause the prayer">
+            <div class="heart-orb-ring"><div class="heart-orb-core"></div></div>
           </div>
         </div>
+
+        <!-- The prayer, in breath: line 1 on the inhale, line 2 on the exhale -->
+        <div id="heartLine1" class="heart-line">Lord Jesus Christ, Son of God,</div>
+        <div id="heartLine2" class="heart-line">have mercy on me, a sinner.</div>
+
+        <!-- Start / pause -->
+        <button id="heartStartBtn" class="btn-primary gold heart-start" onclick="startHeartPrayer()">Begin</button>
+
+        <!-- Bell toggle. The inline colour is the one toggleHeartBell() writes
+             for "on", so the first paint matches heartBellEnabled = true. -->
+        <div class="heart-bell">
+          <button id="heartBellBtn" class="heart-bell-btn" onclick="toggleHeartBell()" style="color:rgba(200,146,12,.7)">◎ Bell every 10</button>
+        </div>
+
+        <!-- Milestone: showHeartMilestone() writes the <p> and shows the block -->
+        <div id="heartMilestone" class="heart-milestone" style="display:none">
+          <p></p>
+        </div>
+
+        <!-- Tradition note -->
+        <div class="breath-note">The prayer the hesychasts prayed without ceasing · Let it breathe itself</div>
       </div>
-
-      <!-- Prayer text -- inhale line -->
-      <p id="heartLine1" style="font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,22px);font-style:italic;color:rgba(255,255,255,.85);text-align:center;margin-bottom:6px;transition:opacity 2s ease;letter-spacing:.02em">Lord Jesus Christ, Son of God,</p>
-      
-      <!-- Prayer text -- exhale line -->
-      <p id="heartLine2" style="font-family:'Playfair Display',serif;font-size:clamp(16px,4vw,22px);font-style:italic;color:rgba(255,255,255,.55);text-align:center;margin-bottom:40px;transition:opacity 2s ease;letter-spacing:.02em">have mercy on me, a sinner.</p>
-
-      <!-- Start / pause -->
-      <button id="heartStartBtn" onclick="startHeartPrayer()" 
-        style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.7);background:none;border:1px solid rgba(200,146,12,.3);padding:14px 32px;cursor:pointer;margin-bottom:24px;transition:all .3s">
-        Begin
-      </button>
-
-      <!-- Bell toggle -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:32px">
-        <button id="heartBellBtn" onclick="toggleHeartBell()" 
-          style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);background:none;border:none;cursor:pointer;transition:color .3s">
-          ◎ Bell every 10
-        </button>
-      </div>
-
-      <!-- Milestone -->
-      <div id="heartMilestone" style="display:none;text-align:center;padding:16px 24px;border-top:1px solid rgba(200,146,12,.15)">
-        <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(200,146,12,.8)"></p>
-      </div>
-
-      <!-- Tradition note -->
-      <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.2);text-align:center;max-width:280px;line-height:1.6;margin-top:16px">The prayer the hesychasts prayed without ceasing · Let it breathe itself</p>
     </div>
   </div>
 </div>
+<script>
+/* Breath -- visual layer only (DESIGN.md). The pacing code scales #heartOrb
+   (1.3 on the inhale, 0.85 on the exhale, 1 at rest and on pause). This
+   mirrors that onto data-breath on the screen root so the atmosphere can
+   breathe with it. It reads one style attribute and calls nothing. */
+(function(){
+  var orb = document.getElementById('heartOrb'), scr = document.getElementById('screen-breath');
+  if (!orb || !scr) return;
+  function sync(){
+    var t = orb.style.transform || '';
+    scr.setAttribute('data-breath', /1\.3/.test(t) ? 'inhale' : /0?\.85/.test(t) ? 'exhale' : 'rest');
+  }
+  new MutationObserver(sync).observe(orb, { attributes:true, attributeFilter:['style'] });
+  sync();
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════
      COMMUNITY
@@ -4079,6 +4098,103 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
 @media (prefers-reduced-motion:reduce){
   #screen-examen .examen-step{--rise:0px;}
+}
+
+/* ═══════════════════════════════════════════
+   BREATH PRAYER -- on the DESIGN.md tokens
+   The array's deep violet. No ring: the session counts up and has no length.
+   No card. The one practice where the atmosphere itself breathes: the glow
+   and flame drop the drift loop and instead transition with data-breath,
+   which the script after the markup mirrors from the orb's scale in the
+   pacing code's own time (4s in, 4s out). Ids and the inline styles the
+   pacing code writes are unchanged; the !importants below map those inline
+   values onto the tokens.
+═══════════════════════════════════════════ */
+#screen-breath{
+  --atmos-rgb:100,20,200;--atmos-a:.82;
+  --atmos-x:50%;--atmos-y:42%;--atmos-gy:60%;   /* behind the orb */
+  --d-inhale:4s;   /* the pacing code's inhale and exhale, and the orb's own transition */
+}
+#screen-breath .atmos-glow,#screen-breath .atmos-flame{animation:none;
+  transition:transform var(--d-inhale) ease-in-out,opacity var(--d-inhale) ease-in-out;}
+#screen-breath .atmos-glow{opacity:.82;}
+#screen-breath .atmos-flame{opacity:.72;}
+#screen-breath[data-breath="inhale"] .atmos-glow{transform:translate(-50%,-50%) scale(1.18);opacity:1;}
+#screen-breath[data-breath="inhale"] .atmos-flame{transform:translate(-50%,-50%) scale(1.26);opacity:.98;}
+#screen-breath[data-breath="exhale"] .atmos-glow{transform:translate(-50%,-50%) scale(.9);opacity:.64;}
+#screen-breath[data-breath="exhale"] .atmos-flame{transform:translate(-50%,-50%) scale(.82);opacity:.48;}
+
+#screen-breath .breath-wrap{max-width:var(--measure);margin:0 auto;min-height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+#screen-breath .breath-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-6);}
+/* The whole prayer, the one element setBreathPrayer() rewrites: quiet, above the halves */
+#screen-breath .breath-prayer{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);
+  color:var(--text-low);max-width:22rem;margin:0 0 var(--s-6);text-wrap:balance;}
+#screen-breath .heart{display:flex;flex-direction:column;align-items:center;width:100%;}
+
+/* Time in prayer: a quiet figure, not a ring, since nothing counts down */
+#screen-breath .heart-timer{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+  color:var(--text-low);font-variant-numeric:tabular-nums;margin-bottom:var(--s-6);}
+
+/* The orb: a halo of the practice's own light around a hairline ring and a
+   candle core. The pacing code scales it (its transform stays inline); only
+   the transition timing and the drawing live here. */
+#screen-breath .heart-orb-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:var(--s-7);}
+#screen-breath .heart-orb{width:180px;height:180px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,rgba(var(--atmos-rgb),.42) 0%,rgba(var(--atmos-rgb),.18) 42%,transparent 70%);
+  transition:transform var(--d-inhale) ease-in-out,opacity var(--d-inhale) ease-in-out;
+  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;}
+#screen-breath .heart-orb-ring{width:120px;height:120px;border-radius:50%;border:1px solid var(--gold-a25);
+  display:flex;align-items:center;justify-content:center;}
+#screen-breath .heart-orb-core{width:60px;height:60px;border-radius:50%;border:1px solid var(--gold-a55);
+  background:radial-gradient(circle,rgba(255,241,207,.16) 0%,var(--gold-a10) 60%,transparent 100%);
+  box-shadow:0 0 24px rgba(242,199,119,.18);}
+
+/* The prayer in breath. The pacing code writes the two lines' colours inline
+   (.95 on the line being breathed, .25 on the other); those values are mapped
+   onto the text levels here, and the lines cross-fade over a slow breath. */
+#screen-breath .heart-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);
+  color:var(--text-mid);max-width:26rem;transition:color 2s var(--ease-breath);}
+#screen-breath #heartLine1{margin-bottom:var(--s-2);}
+#screen-breath #heartLine2{margin-bottom:var(--s-7);}
+#screen-breath .heart-line[style*=".95)"]{color:var(--text-hi)!important;}     /* serialized "0.95)" */
+#screen-breath .heart-line[style*=".25)"]{color:var(--text-faint)!important;}
+
+/* Begin / Pause / Continue. The pacing code writes the button's colour inline
+   (gold at rest, dim white while running); mapped onto the tokens. */
+#screen-breath .heart-start{cursor:pointer;color:var(--candle)!important;margin-bottom:var(--s-4);min-width:180px;}
+/* Once the CSSOM has written the value the attribute reads "rgba(255, 255, 255, 0.4)", with spaces */
+#screen-breath .heart-start[style*="255,255,255"],#screen-breath .heart-start[style*="255, 255, 255"]{
+  color:var(--text-mid)!important;border-color:var(--line-strong);background:none;box-shadow:none;}
+
+/* Bell every ten. toggleHeartBell() writes gold for on, dim white for off. */
+#screen-breath .heart-bell{margin-bottom:var(--s-6);}
+#screen-breath .heart-bell-btn{background:none;border:0;padding:8px 12px;cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gold)!important;transition:color var(--d-base);}
+#screen-breath .heart-bell-btn[style*="255,255,255"],#screen-breath .heart-bell-btn[style*="255, 255, 255"]{color:var(--text-faint)!important;}
+
+/* Milestone: showHeartMilestone() shows the block for four seconds */
+#screen-breath .heart-milestone{border-top:1px solid var(--line);padding:var(--s-4) var(--s-5) var(--s-2);
+  margin-bottom:var(--s-3);max-width:26rem;animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+/* The <p> is what the code writes to; the !importants answer the mobile block's .feature-main p */
+#screen-breath .heart-milestone p{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md)!important;
+  line-height:var(--lh-text)!important;color:var(--candle);margin:0;text-wrap:balance;}
+
+#screen-breath .breath-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);
+  color:var(--text-faint);max-width:18rem;margin-top:var(--s-4);}
+
+@media (prefers-reduced-motion:reduce){
+  /* The light breathes in brightness only; the orb holds still (its inline
+     scale is overridden) and the lines still cross-fade. */
+  #screen-breath[data-breath="inhale"] .atmos-glow,#screen-breath[data-breath="exhale"] .atmos-glow,
+  #screen-breath[data-breath="inhale"] .atmos-flame,#screen-breath[data-breath="exhale"] .atmos-flame{transform:translate(-50%,-50%);}
+  #screen-breath .heart-orb{transform:none!important;transition:opacity var(--d-inhale) ease-in-out;}
+  #screen-breath[data-breath="inhale"] .heart-orb{opacity:1;}
+  #screen-breath[data-breath="exhale"] .heart-orb{opacity:.6;}
+  #screen-breath .heart-milestone{--rise:0px;}
 }
 
 /* ── Autobiography ────────────────────────── */

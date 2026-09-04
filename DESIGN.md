@@ -110,7 +110,7 @@ without it.
 | Office · Lauds (and the chooser default) | 205,155,10 | gold | .95 | 62% |
 | Office · Vespers | 162,10,52 | rose | .95 | 68% |
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
-| Breath Prayer (pending) | 100,20,200 | deep violet | .82 | to be designed |
+| Breath Prayer | 100,20,200 | deep violet | .82 | 50% / 42%, behind the orb; it breathes |
 | Rosary (pending) | 162,10,52 or as decided | rose | — | to be designed |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
@@ -292,6 +292,30 @@ button stops breathing.
   its EB Garamond, its `@media (max-width:640px)` overrides and the global
   `.ctr-*` block are gone; `#pathsOverlay` left the safe-area padding list
   because the header carries the inset.
+
+- **Breath Prayer**: no ring, because the session counts up and has no
+  length; the elapsed time is a quiet tabular figure. No card. The array's
+  deep violet (`--atmos-rgb` 100,20,200, strength .82) sits behind the orb
+  (42%, ground anchored at 60%). This is the one practice where the
+  atmosphere itself breathes: on `#screen-breath` the glow and flame drop the
+  drift loop and instead transition (4s ease-in-out, `--d-inhale`, the
+  pacing code's own interval) with `data-breath` on the screen root, swelling
+  and brightening on `inhale`, settling and dimming on `exhale`, still at
+  `rest`. A small script after the markup mirrors the attribute from the
+  scale the pacing code writes to `#heartOrb` (1.3, 0.85, 1); it calls
+  nothing. The orb keeps its inline transform and its tap; its drawing (a
+  halo in the practice's hue, a hairline ring, a candle core) and its
+  transition live in CSS. The pacing code also writes the two prayer lines'
+  colours, the Begin button's colour and the bell toggle's colour inline;
+  attribute selectors on those exact values (`[style*=".95)"]`,
+  `[style*="255,255,255"]`) map them onto the text levels with commented
+  `!important`s, and the lines cross-fade over two seconds. The milestone's
+  `<p>` is what `showHeartMilestone()` writes to, so it stays a `<p>` with
+  `!important` sizes against the mobile block. `#breathPrayer` is the whole
+  prayer and the one element `setBreathPrayer()` rewrites (the two breath
+  lines carry fixed text), so it stays on the screen as a quiet serif block
+  beneath the eyebrow. Under reduced motion the light breathes in
+  brightness only and the orb's inline scale is overridden to none.
 
 ### Hour palette
 
