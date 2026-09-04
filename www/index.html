@@ -2187,31 +2187,6 @@ body.is-mobile #mobileEnterTab { display: block; }
 </script>
 
 <!-- ═══════════════════════════════════════════
-     COMMUNITY
-═══════════════════════════════════════════ -->
-<div id="screen-community" class="screen">
-  <!-- Bread and cup -- the shared table -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/community_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.90"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,8,.90) 0%,rgba(4,2,8,.62) 20%,rgba(4,2,8,.32) 52%,rgba(4,2,8,.72) 100%)"></div>
-  </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
-    <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title">Community</span>
-    <button class="settings-btn" onclick="openSettings()">⚙</button>
-  </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
-    <div class="content-card" id="communityCard">
-      <!-- Rendered by initCommunity() -->
-      <div style="text-align:center;padding:40px 0">
-        <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">Loading tonight's question…</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
      THE COMPANION
 ═══════════════════════════════════════════ -->
 <div id="screen-companion" class="screen">
@@ -4933,9 +4908,6 @@ const F=[
   {name:'Reading Toward the Center',badge:'Revelation',screen:'center',
    h:'The most feared book, read from its heart.',
    b:'Twenty-six days through Revelation\u2019s mirror, pair by pair, to the room where the accuser has already lost. Ends each day in silence.',cta:'Descend'},
-  {name:'Community',badge:'Anonymous · 9pm',screen:'community',
-   h:'Every night at 9pm. One question.',
-   b:'Three strangers. No usernames. No likes. Just the knowledge that others are asking the same things.',cta:'Enter'},
   {name:'Saint of the Day',badge:'Daily Letter',screen:'saint',
    h:'One saint. One moment. Delivered daily.',
    b:'Not a biography -- a moment from their life that speaks to where you are right now.',cta:'Enter'},
@@ -4968,7 +4940,6 @@ const W=[
   {r:100,g:20, b:200,i:.82,base:'#040007'}, // Breath Prayer -- deep violet
   {r:64, g:52, b:150,i:.74,base:'#030214'}, // Guided Journeys- a twilight indigo
   {r:235,g:215,b:170, i:.62,base:'#070604'}, // Reading Toward the Center -- center flame
-  {r:192,g:28, b:172,i:.88,base:'#060006'}, // Community -- violet
   {r:188,g:110,b:12, i:.90,base:'#070400'}, // Saint -- amber
   {r:162,g:10, b:52, i:.88,base:'#060002'}, // Office -- rose
   {r:8,  g:120,b:32, i:.88,base:'#010600'}, // Rule -- forest
@@ -5356,7 +5327,6 @@ function enterFeature(i){
   if(F[i].screen==='examen') initExamen();
   if(F[i].screen==='darkness') initDarknessScreen();
   if(F[i].screen==='rule') { restoreRuleFromCloud(); loadRuleItems(); }
-  if(F[i].screen==='community') initCommunity();
   if(F[i].screen==='dialogue') DC.init();
   if(F[i].screen==='sitting') {
     const sc = document.getElementById('sittingCandle');
@@ -12444,20 +12414,6 @@ const INFO_CONTENT = {
     `
   },
 
-  community: {
-    title: 'Community',
-    body: `
-      <p>Loneliness is epidemic. But the solutions offered -- social media, group chats, comment sections -- are built on the same architecture as the problem. They require performance. They reward the presentation of a self rather than the disclosure of one. They make connection contingent on approval.</p>
-      <p>This feature is built on a different principle: anonymous encounter. Every evening at 9pm, one contemplative question is sent to every user of the app. You answer privately. You then see three anonymous answers from other users. No usernames. No likes. No replies. Just the knowledge that someone else, somewhere, was asked the same question and gave a different answer.</p>
-      <div class="info-panel-quote">
-        <p>"Two or three gathered in my name -- there I am among them."</p>
-        <span>-- Matthew 18:20</span>
-      </div>
-      <p>The early Church met in homes. They prayed together before they knew each other well. The shared practice was the community -- not the other way around. This feature recovers that instinct: practice first, belonging follows.</p>
-      <p>What makes something sacred is not its beauty but its honesty. When you read another person's anonymous answer to a question you were also asked, and it is more honest than you expected, something changes. You are less alone. Not because you are now friends, but because you have been seen -- without anyone knowing it was you.</p>
-    `
-  },
-
   companion: {
     title: 'The Companion',
     body: `
@@ -12608,7 +12564,7 @@ function closeInfo() {
 // Maps screen-id -> info key
 const SCREEN_INFO_MAP = {
   sitting:'sitting', lectio:'lectio', examen:'examen',
-  darkness:'darkness', community:'community', companion:'companion',
+  darkness:'darkness', companion:'companion',
   saint:'saint', office:'office', rule:'rule',
   autobiography:'autobiography', deeper:'deeper'
 };
@@ -12649,8 +12605,8 @@ document.addEventListener('keydown',e=>{
    OFFICE -- detect morning/evening
 ═══════════════════════════════════════════ */
 /* ═══════════════════════════════════════════
-   COMMUNITY -- Live Supabase backend
-   Anonymous daily question + 3 responses
+   SUPABASE -- shared backend: auth, sync, storage
+   (The Community practice that once headed this block is gone.)
 ═══════════════════════════════════════════ */
 const SUPA_URL  = 'https://zbskapivansfewegllnz.supabase.co';
 const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic2thcGl2YW5zZmV3ZWdsbG56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwMDI4NzcsImV4cCI6MjA5MzU3ODg3N30.NdmTcuGPRd_oosaa7P6sKbMUduiSVji8cz7XRQdRLvI';
@@ -12985,83 +12941,6 @@ async function supaFetch(path, opts={}) {
   return res.json();
 }
 
-// Generate a stable anonymous device ID
-function getDeviceId() {
-  let id = localStorage.getItem('still_device_id');
-  if (!id) {
-    id = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-    localStorage.setItem('still_device_id', id);
-  }
-  return id;
-}
-
-// Check if this device already submitted today
-function getTodaySubmitKey(questionId) {
-  return 'still_submitted_' + questionId;
-}
-function hasSubmittedToday(questionId) {
-  return !!localStorage.getItem(getTodaySubmitKey(questionId));
-}
-function markSubmitted(questionId) {
-  localStorage.setItem(getTodaySubmitKey(questionId), '1');
-}
-
-// Time until midnight
-function timeUntilMidnight() {
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  const diff = midnight - now;
-  const h = Math.floor(diff / 3600000);
-  const m = Math.floor((diff % 3600000) / 60000);
-  return `${h}h ${m}m`;
-}
-
-let communityQuestion = null;
-
-async function initCommunity() {
-  const card = document.getElementById('communityCard');
-  if (!card) return;
-  // Loading state
-  card.innerHTML = `<div style="text-align:center;padding:40px 0">
-    <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">Loading tonight's question…</p>
-  </div>`;
-  try {
-    // Local calendar date (not UTC) -- "tonight's question" means the user's tonight.
-    const d = new Date();
-    const today = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-    const data = await supaFetch(
-      `/rest/v1/questions?active_date=eq.${today}&approved=eq.true&limit=1`
-    );
-    if (data && data.length) {
-      communityQuestion = data[0];
-    } else {
-      // Fallback: nothing seeded for today -- rotate through the whole library
-      // by day-of-year so the community never goes dark. Everyone sees the
-      // same question on the same local date.
-      const all = await supaFetch('/rest/v1/questions?approved=eq.true&order=active_date.asc&select=*');
-      if (!all || !all.length) { renderCommunityEmpty(card); return; }
-      const start = new Date(d.getFullYear(), 0, 0);
-      const doy = Math.floor((d - start) / 86400000);
-      communityQuestion = all[doy % all.length];
-    }
-    if (hasSubmittedToday(communityQuestion.id)) {
-      // Already answered -- show others' responses
-      await renderCommunityResponses(card, communityQuestion);
-    } else {
-      renderCommunityQuestion(card, communityQuestion);
-    }
-  } catch(err) {
-    console.error('Community fetch error:', err.message);
-    card.innerHTML = `
-      <div style="text-align:center;padding:40px 20px">
-        <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.45);margin-bottom:12px">Could not load the question.</p>
-        <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,73,64,.5);margin-bottom:8px">${err.message}</p>
-        <button class="btn-ghost" onclick="initCommunity()" style="margin-top:12px">Try Again</button>
-        <button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>
-      </div>`;
-  }
-}
 async function playDarknessReflection(idx) {
   const t = DARKNESS_TEXTS[idx];
   const cacheKey = hashText(`darkness-${t.title}`);
@@ -13107,21 +12986,6 @@ async function playDarknessReflection(idx) {
     if (btn) { btn.textContent = '◎ Hear Reflection'; btn.disabled = false; }
   }
 }
-function renderCommunityQuestion(card, q) {
-  card.innerHTML = `
-    <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:16px">Anonymous · Daily</p>
-    <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:20px 22px;margin-bottom:24px">
-      <p style="font-family:'Playfair Display',serif;font-size:clamp(17px,2.2vw,22px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.65" id="communityQText">${q.text}</p>
-    </div>
-    <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.45);line-height:1.65;margin-bottom:18px">Your answer is anonymous. After you submit, three responses from others appear. No names. No likes. Just the knowledge that you are not alone.</p>
-    <textarea id="communityAnswer" class="companion-textarea"
-      placeholder="Write your answer here. No one will know it's you."
-      rows="5" style="margin-bottom:16px"></textarea>
-    <div id="communityErr" style="display:none;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center;margin-bottom:10px"></div>
-    <button class="btn-primary gold" onclick="submitCommunity()" id="communitySubmitBtn" style="width:100%;justify-content:center">Submit & See Others -></button>
-    <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:14px">New question in ${timeUntilMidnight()}</p>`;
-}
-
 
 /* ═══════════════════════════════════════════
    ANALYTICS -- anonymous event tracking
@@ -13146,155 +13010,6 @@ async function trackEvent(eventType, metadata={}) {
   } catch(e) { /* silent -- never interrupt the user */ }
 }
 
-async function submitCommunity() {
-  const answer = document.getElementById('communityAnswer')?.value.trim();
-  const errEl  = document.getElementById('communityErr');
-  const btn    = document.getElementById('communitySubmitBtn');
-
-  if (!answer) {
-    if (errEl) { errEl.textContent = 'Write something first.'; errEl.style.display = 'block'; }
-    return;
-  }
-  if (answer.length < 10) {
-    if (errEl) { errEl.textContent = 'A little more -- say what is true.'; errEl.style.display = 'block'; }
-    return;
-  }
-
-  if (btn) { btn.textContent = 'Submitting…'; btn.disabled = true; }
-
-  const resp = await fetch(window.FN_BASE + '/.netlify/functions/community-submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      question_id: communityQuestion.id,
-      text: answer,
-      device_id: getDeviceId()
-    })
-  });
-
-  if (!resp.ok) {
-    const data = await resp.json().catch(() => ({}));
-    if (btn) { btn.textContent = 'Submit & See Others ->'; btn.disabled = false; }
-    if (errEl) {
-      errEl.textContent = data.error === 'blocked'
-        ? 'Those words don\u2019t belong here. Try saying it another way.'
-        : 'Something went quiet \u2014 try once more.';
-      errEl.style.display = 'block';
-    }
-    return;
-  }
-
-  markSubmitted(communityQuestion.id);
-  trackEvent('community');
-  DB.save('community', { question: communityQuestion.text, answer });
-
-  const card = document.getElementById('communityCard');
-  await renderCommunityResponses(card, communityQuestion);
-}
-async function reportResponse(responseId, btn) {
-  if (!confirm('Report this response as inappropriate?')) return;
-  if (btn) { btn.textContent = 'Reporting…'; btn.disabled = true; }
-  try {
-    const resp = await fetch(window.FN_BASE + '/.netlify/functions/community-report', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ response_id: responseId, device_id: getDeviceId() })
-    });
-    if (resp.ok) {
-      const card = btn.closest('div');
-      if (card) { card.style.opacity = '.4'; }
-      btn.textContent = 'Reported';
-    } else {
-      btn.textContent = 'Report';
-      btn.disabled = false;
-    }
-  } catch (e) {
-    if (btn) { btn.textContent = 'Report'; btn.disabled = false; }
-  }
-}
-async function renderCommunityResponses(card, q) {
-  card.innerHTML = `<div style="text-align:center;padding:30px 0 10px">
-    <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.4)">Finding others who answered…</p>
-  </div>`;
-
-  try {
-    const deviceId = getDeviceId();
-   const all = await supaFetch(
-  `/rest/v1/responses?question_id=eq.${q.id}&device_id=neq.${deviceId}&hidden=eq.false&limit=50`
-);
-
-    const shuffled = (all || []).sort(() => Math.random() - 0.5).slice(0, 3);
-
-    // Fill remaining slots with AI if fewer than 3 real responses
-    const needed = 3 - shuffled.length;
-    let aiResponses = [];
-    if (needed > 0) {
-      try {
-        const aiResult = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-6',
-            max_tokens: 1000,
-            system: `You generate ${needed} anonymous, honest, human-feeling responses to a contemplative question. 
-              Each response should feel like a real person wrote it at 9pm -- unpolished, genuine, a little vulnerable. 
-              Not theological. Not perfect. Just true. 
-              Return only a JSON array of strings, nothing else. No preamble.`,
-            messages: [{
-              role: 'user',
-              content: `Question: "${q.text}"\n\nGenerate ${needed} responses.`
-            }]
-          })
-        });
-        const aiData = await aiResult.json();
-        const raw = aiData.content[0].text;
-        aiResponses = JSON.parse(raw);
-      } catch(e) {
-        // Silent -- AI backstop fails gracefully
-      }
-    }
-
-    // Real responses keep their id; AI backstop entries are id-less
-    const allResponses = [
-      ...shuffled.map(r => ({ text: r.text, id: r.id })),
-      ...aiResponses.map(t => ({ text: t, id: null }))
-    ];
-
-    let responsesHtml = '';
-    if (allResponses.length === 0) {
-      responsesHtml = `<p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4);text-align:center;padding:20px 0">You are the first to answer today.<br>Others will appear as the community gathers.</p>`;
-    } else {
-      responsesHtml = allResponses.map(item => `
-        <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.25);padding:16px 18px;margin-bottom:12px">
-          <p style="font-family:'Playfair Display',serif;font-size:clamp(14px,1.8vw,17px);font-style:italic;color:rgba(255,255,255,.75);line-height:1.75">${escapeHtml(item.text)}</p>
-          ${item.id ? `<button onclick="reportResponse('${item.id}', this)" style="background:none;border:none;color:rgba(255,255,255,.25);font-family:'Heebo',sans-serif;font-size:10px;letter-spacing:.05em;cursor:pointer;margin-top:8px;padding:0">Report</button>` : ''}
-        </div>`).join('');
-    }
-
-    card.innerHTML = `
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(192,28,172,.7);margin-bottom:14px">Tonight's Question</p>
-      <div style="background:rgba(255,255,255,.03);border-left:2px solid rgba(192,28,172,.4);padding:16px 20px;margin-bottom:24px">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,2vw,19px);font-style:italic;color:rgba(255,255,255,.7);line-height:1.6">${escapeHtml(q.text)}</p>
-      </div>
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:14px">From the Community</p>
-      ${responsesHtml}
-      <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.22);text-align:center;margin-top:18px">You've answered. New question in ${timeUntilMidnight()}.</p>
-      <button class="btn-ghost" onclick="goHome()" style="margin-top:16px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>`;
-
-  } catch(err) {
-    card.innerHTML += `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.3);text-align:center;padding:20px">Could not load responses right now.</p>
-      <button class="btn-ghost" onclick="goHome()" style="display:block;margin:0 auto">Return to Still</button>`;
-  }
-}
-
-function renderCommunityEmpty(card) {
-  card.innerHTML = `
-    <div style="text-align:center;padding:40px 20px">
-      <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff;margin-bottom:12px">No question today.</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.4);line-height:1.65;margin-bottom:24px">The community question arrives each evening.<br>Come back after 9pm.</p>
-      <button class="btn-ghost" onclick="goHome()">Return to Still</button>
-    </div>`;
-}
 async function initSingTheHours() {
   const slots = document.querySelectorAll('[data-sth-hour]');
   for (const slot of slots) {
@@ -13327,21 +13042,19 @@ function buildSacristyImages() {
       info:'Amma Sophia -- a woman who has walked the contemplative path for decades. She speaks from within the tradition. Warm, unhurried, grounded in experience. She has sat in the same silence long enough to know what it costs and what it gives.' },
     { screen:'companion',    label:'The Companion',         featureIdx:0,
       info:'A Desert Father kneels in prayer at dusk, staff beside him. The hesychast tradition teaches that unceasing prayer -- the Jesus Prayer repeated until it breathes itself -- transforms the whole person. The Companion speaks from this silence.' },
-    { screen:'rule',         label:'Rule of Life',          featureIdx:8,
+    { screen:'rule',         label:'Rule of Life',          featureIdx:12,
       info:'A Benedictine monk holds the Regula Sancti Benedicti -- written by Benedict of Nursia in 516 AD. "Listen carefully, my child, to my instructions." Seventy-three chapters governing prayer, work, humility, and community. The first rule ever written for ordinary Christians.' },
     { screen:'autobiography',label:'Spiritual Autobiography',featureIdx:10,
       info:'Story of a Soul lies open as roses rise from its pages into a violet lancet arch -- Thérèse of Lisieux\'s own promise fulfilled: \'After my death, I will let fall a shower of roses.\' She wrote her autobiography under obedience and died at twenty-four before it was published. It became one of the most widely read books in Christian history.' },
-    { screen:'breath',       label:'Breath Prayer',         featureIdx:5,
+    { screen:'breath',       label:'Breath Prayer',         featureIdx:7,
       info:'A hesychast monk sits with hands at his heart, light emanating from within. The Jesus Prayer -- Lord Jesus Christ, Son of God, have mercy on me, a sinner -- is repeated until it synchronizes with the breath and continues even in sleep. The monk\'s entire life becomes a single unceasing prayer.' },
-    { screen:'deeper',       label:'Deeper',                featureIdx:11,
+    { screen:'deeper',       label:'Deeper',                featureIdx:14,
       info:'A monk kneels in silent prayer beneath a lancet arch as light descends through a cross. The mysteries of Christ -- Incarnation, Passion, Resurrection -- are not propositions to be understood but depths to be entered. Deeper is the room at the bottom of the tradition.' },
-    { screen:'darkness',     label:'Darkness Mode',         featureIdx:4,
+    { screen:'darkness',     label:'Darkness Mode',         featureIdx:6,
       info:'A figure prostrate on cracked stone, arms folded, beneath the faint outline of a lancet arch. Psalm 88 ends without resolution. John of the Cross wrote his greatest theology in a cell six feet by ten feet. The dark night is not abandonment. It is the deepest form of proximity.' },
-    { screen:'lectio',       label:'Lectio Divina',         featureIdx:2,
+    { screen:'lectio',       label:'Lectio Divina',         featureIdx:3,
       info:'An illuminated manuscript lies open on a stone altar as light descends from a teal lancet arch and the living word rises from the page. Lectio Divina -- sacred reading -- is the practice of reading until one word catches and holds you. Not study. Not information. Contact. The word of God doing something to you that you cannot do to yourself.' },
-    { screen:'community',    label:'Community',             featureIdx:6,
-      info:'Bread and cup on a rough wooden table, beneath a violet lancet arch scattered with stars. No figures. No names. Just what strangers share before they know each other. Every night one question goes out to everyone who opens this screen. Three answers come back. The knowledge that you are not alone in what you are carrying is itself a form of prayer.' },
-    { screen:'examen',       label:'The Examen',            featureIdx:3,
+    { screen:'examen',       label:'The Examen',            featureIdx:4,
       info:'A candle illuminates a vision: footprints, hands breaking bread, a cup offered, a solitary figure -- all within a lancet arch. Ignatius taught that God is present in every moment. The Examen is the practice of learning to see where. Five questions. The most honest four minutes of the day.' },
     { screen:'witnesses', src:'assets/rosary/cloud-of-witnesses.jpg', label:'Cloud of Witnesses', featureIdx:2,
       info:'A wooden rosary laid on stone, and above it the company it summons -- saints and angels gathered in cloud-light. Hebrews 12:1: so great a cloud of witnesses. Nobody prays the rosary alone; the image shows the room as it actually is.' },
