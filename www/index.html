@@ -1751,13 +1751,13 @@ body.is-mobile #mobileEnterTab { display: block; }
   </div>
   <header class="app-header" style="position:relative;z-index:10;background:transparent">
     <button class="back-btn" onclick="CoW.exit()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title">Cloud of Witnesses</span>
+    <span class="screen-title">Rosary Meditations</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
   <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
     <div class="content-card">
       <div class="feat-eyebrow">The Rosary</div>
-      <div class="feat-heading" style="font-size:clamp(24px,3.5vw,40px)">Cloud of Witnesses</div>
+      <div class="feat-heading" style="font-size:clamp(24px,3.5vw,40px)">Rosary Meditations</div>
       <div id="cowSetup"></div>
       <div id="cowPray" style="display:none"></div>
     </div>
@@ -4884,7 +4884,7 @@ const F=[
   {name:'Contemplative Sitting',badge:'Daily Practice',screen:'sitting',
    h:'Trained intentional stillness that carries into your whole day.',
    b:'Four phases: Settle · Watch · Enter Stillness · Return. Your own recorded voice as anchor.',cta:'Begin Session'},
-  {name:'Cloud of Witnesses', badge:'Rosary', screen:'witnesses',
+  {name:'Rosary Meditations', badge:'Rosary', screen:'witnesses',
    h:'You never pray the rosary alone.',
    b:'Name your intentions. Name who prays with you -- saints, guardian angels, the holy souls. Then walk the mysteries with the whole company of heaven.', cta:'Enter'},
   {name:'Lectio Divina',badge:'Sacred Reading',screen:'lectio',
@@ -12305,7 +12305,7 @@ const INFO_CONTENT = {
     `
   },
   witnesses: {
-    title: 'Cloud of Witnesses',
+    title: 'Rosary Meditations',
     body: `
       <p>The rosary is the most communal of solitary prayers. From its Dominican origins in the thirteenth century it was understood not as a private devotion but as a psalter of the poor -- 150 Hail Marys standing in for the 150 psalms the monks chanted in choir. When you pray it, you join a choir you cannot see.</p>
       <div class="info-panel-quote">
@@ -13056,7 +13056,7 @@ function buildSacristyImages() {
       info:'An illuminated manuscript lies open on a stone altar as light descends from a teal lancet arch and the living word rises from the page. Lectio Divina -- sacred reading -- is the practice of reading until one word catches and holds you. Not study. Not information. Contact. The word of God doing something to you that you cannot do to yourself.' },
     { screen:'examen',       label:'The Examen',            featureIdx:4,
       info:'A candle illuminates a vision: footprints, hands breaking bread, a cup offered, a solitary figure -- all within a lancet arch. Ignatius taught that God is present in every moment. The Examen is the practice of learning to see where. Five questions. The most honest four minutes of the day.' },
-    { screen:'witnesses', src:'assets/rosary/cloud-of-witnesses.jpg', label:'Cloud of Witnesses', featureIdx:2,
+    { screen:'witnesses', src:'assets/rosary/cloud-of-witnesses.jpg', label:'Rosary Meditations', featureIdx:2,
       info:'A wooden rosary laid on stone, and above it the company it summons -- saints and angels gathered in cloud-light. Hebrews 12:1: so great a cloud of witnesses. Nobody prays the rosary alone; the image shows the room as it actually is.' },
     { screen:'witnesses', src:'assets/rosary/madonna.jpg', label:'The Concluding Prayers', featureIdx:2,
       info:'Our Lady in candlelight, where every rosary ends -- the Salve Regina, the Rosary Prayer, St. Michael. After five mysteries the words fall away and what remains is her: the Mother holding the Child, four flames keeping watch.' },
