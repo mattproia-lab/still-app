@@ -21,7 +21,12 @@ tokens and components the same way, not by inventing new values.
   a mid-range phone composites them for free. Photographs are permitted at a
   practice's threshold only, never behind reading text: graded toward the
   practice's hue, under the shared grain and vignette, and gone on one slow
-  fade before the first inner screen.
+  fade before the first inner screen. Devotional images are the other
+  exception: where an image is content (the Rosary's mystery images, its
+  closing Madonna and Child) it is shown as a framed image in the flow
+  (`.devotional`): the shared frame, the grain and the vignette on the image
+  itself, the atmosphere's hue bleeding into its edges, with the text beneath
+  or beside it, never over it.
 - **Time is light, not a number.** A phase's timer is a ring that dims toward
   silence. Countdown digits stay in the DOM for the state machine but are
   visually hidden.
@@ -112,7 +117,7 @@ without it.
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
 | Breath Prayer | 100,20,200 | deep violet | .82 | 50% / 42%, behind the orb; it breathes |
 | Rule of Life | 8,120,32 | forest | .88 | 50% / 36%, behind the text |
-| Rosary (pending) | 162,10,52 or as decided | rose | — | to be designed |
+| Rosary Meditations | 226,204,164 | pearl gold | .62 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
 not change with the hue.
@@ -347,6 +352,28 @@ button stops breathing.
   the atmosphere, header, add row, seeds and foot, and sets the sheet in the
   app's faces in ink on white. Untouched: the Examen, the calendar, the
   cloud mirror's shape.
+
+- **Rosary Meditations**: no ring; the beads are the progress. No card. The
+  array's pearl gold (`--atmos-rgb` 226,204,164, strength .62) sits behind
+  the text at the Guide's height. The images are content, not backdrop: the
+  cloud-of-witnesses photograph is no longer the screen's background, and
+  each mystery's image is the first thing on its screen, a `.devotional`
+  frame at reading measure (`#cowImg`, still the tap target for another
+  meditation), then the title, the fruit, the scripture and the meditation
+  in the serif. The beads (`.cow-beads`, painted by `beadsHTML()` inside the
+  `CoW` module) are five decades on one line, an Our Father bead and ten
+  Hail Marys each: decades prayed in gold, the decade in hand lit as the
+  meditations advance through its pool, the current bead in the candle;
+  nothing lit on the opening, everything lit at the close. The close is the
+  Madonna and Child: `#cowBgImg`, which `finish()` swaps and `exit()` swaps
+  back, now lives in a `.cow-hero.devotional` at the top of the scroller,
+  hidden until `.cow-finale`, then full-height like a threshold, fading up
+  over `--d-breath`, with the concluding prayers beneath it. The module's
+  templates use `<div>` where they used `<p>` and `<h3>`, because the
+  mobile block sizes `.feature-main p` with `!important`; every id, `data-*`
+  hook, `.cow-*` class the module binds to, the audio, the prayers, the
+  mystery data and the saves are unchanged. There was no bead-arc code to
+  remove; only a stale banner line naming it.
 
 ### Hour palette
 
