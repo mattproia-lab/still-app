@@ -18,7 +18,10 @@ tokens and components the same way, not by inventing new values.
   quiet sans (labels, buttons, notes, counts' captions). Nothing else.
 - **Drawn light, not photographs.** Backgrounds are gradients, grain and a
   breathing glow. No video, no JPEG. Only `transform` and `opacity` animate, so
-  a mid-range phone composites them for free.
+  a mid-range phone composites them for free. Photographs are permitted at a
+  practice's threshold only, never behind reading text: graded toward the
+  practice's hue, under the shared grain and vignette, and gone on one slow
+  fade before the first inner screen.
 - **Time is light, not a number.** A phase's timer is a ring that dims toward
   silence. Countdown digits stay in the DOM for the state machine but are
   visually hidden.
@@ -103,6 +106,7 @@ without it.
 | Lectio | 0,172,192 | teal | .90 | 50% / 36%, behind the text |
 | Examen | 22,50,215 | cobalt | .90 | 50% / 58%, behind the answer |
 | The Guide | 156,74,47 | ember | .86 | 50% / 36%, behind the text |
+| Spiritual Paths | 64,52,150 | twilight indigo | .74 | 50% / 36%, behind the text |
 | Office · Lauds (and the chooser default) | 205,155,10 | gold | .95 | 62% |
 | Office · Vespers | 162,10,52 | rose | .95 | 68% |
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
@@ -249,9 +253,45 @@ button stops breathing.
   `typo()` at render time; the data, some of which `saveExamen()` writes, is
   untouched. Class names the IIFE's `wire()` and `onKey()` query (`.go`,
   `.ghost`, `.back`, `.controls`, `.opt`, `.choice`, `.num`, `data-*` hooks)
-  are kept and carry the shared button classes beside them. The old
-  parchment skin's mobile overrides (`@media (max-width:640px)`) now name only
-  `#pathsOverlay`. `injectFonts()` is a no-op: the faces are in `<head>`.
+  are kept and carry the shared button classes beside them. `injectFonts()`
+  is a no-op: the faces are in `<head>`.
+
+- **Spiritual Paths**: no timer, so no ring; no card. The array's twilight
+  indigo (`--atmos-rgb` 64,52,150, strength .74) sits behind the text at
+  Lectio's height (36%, ground anchored at 30%): a reading practice, laid out
+  like the Guide. The `Paths` object builds an overlay, `#pathsOverlay`, in
+  `_ensure()`: `data-tokens` on the root, the atmosphere fixed to the
+  viewport, a sticky `.app-header` on an opaque band, and a `.vessel` holding
+  `#pathsStage`, which `_frame()` repaints with each screen inside
+  `.sg-screen.in` (`phaseIn`). The stylesheet is injected from a template
+  literal, so no backtick or `${` may appear in it. Two screens are
+  thresholds and keep their photographs, the one exception to drawn light:
+  the entry screen (`.threshold`, `paths-bg.webp`) and Reading Toward the
+  Center's intro (`.threshold-center`, `center-bg.webp`). Each is an
+  `.atmos-photo` layer between the flame and the grain, graded toward the
+  indigo, shown only while its class is on the root. `_frame()` drops both
+  classes before every render and the threshold renders add theirs back, so
+  leaving a threshold is one slow fade (`--d-veil`, 1.5 × `--d-breath`) in
+  which the photograph goes and the glow beneath it rises; the header band
+  is a pseudo-element so it can thin over the photograph the same way.
+  `centerHome()` still writes `--veil-a` / `--veil-b` as lamps are lit; the
+  centre photograph's grade reads them. The discernment's spine is
+  `_track(phase)`: the four phases from the day data as a `.phase-track`,
+  those walked done, the one in hand current, all done on the finished
+  screen. Scripture is `.scripture` (serif italic, gold hairline) with a
+  sans attribution; the teaching, the practice and the Center's mirrors are
+  `p.body` in the serif at `--t-md`; the Douay-Rheims verses are
+  `.ctr-passage` with verse numbers in the sans; the reflection read back on
+  the rest days (`.panel`) is serif italic, mid-weight, no card. Labels,
+  options (`.opt`), inputs (`.note`, 16px so iOS does not zoom), buttons
+  (`.go` carrying `.btn-primary` beside it) and the lamps map (`.ctr-*`, now
+  scoped here rather than global) are on the tokens. `_typo()` curls quotes
+  and sets em dashes at render time in `_body()`, the reflection, the
+  textarea placeholder and the verses; the data is untouched, since
+  `centerComplete()` reads the mirror for the carry. The old parchment skin,
+  its EB Garamond, its `@media (max-width:640px)` overrides and the global
+  `.ctr-*` block are gone; `#pathsOverlay` left the safe-area padding list
+  because the header carries the inset.
 
 ### Hour palette
 
@@ -308,4 +348,10 @@ cools toward night. Text and accents stay warm white and gold in every hour.
    sticky; otherwise the light scrolls away with the first screenful.
 10. Content that is data (strings a save function writes, or keys) keeps its
    double hyphens and straight quotes; fix the display with a transform at
-   render time (`typo()` in the Guide, the replace in `renderExamenStep()`).
+   render time (`typo()` in the Guide, `_typo()` in Spiritual Paths, the
+   replace in `renderExamenStep()`).
+11. Photographs are permitted at a practice's threshold only, never behind
+   reading text. A threshold photograph is one `.atmos-photo` layer between
+   the flame and the grain, graded toward the practice's `--atmos-rgb`, shown
+   by a class on the root and removed on a single slow fade before the first
+   inner screen. Inner screens are drawn light only.
