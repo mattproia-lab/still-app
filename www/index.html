@@ -23,7 +23,6 @@ body { -webkit-text-size-adjust: 100%; }
 #home,
 #infoPanel,
 #settingsModal,
-#pathsOverlay,
 [id^="screen-"] {
   padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
 }
@@ -3713,32 +3712,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .dc-fade-slow{animation:dcFadeIn 2.8s ease both;}
 @keyframes dcFadeIn{from{opacity:0}to{opacity:1}}
 
-  @media (max-width: 640px) {
-  /* Spiritual Paths keeps the parchment skin -- enlarge the reading text on
-     mobile (safe in light or dark). The Guide is on the DESIGN.md tokens now. */
-  #pathsOverlay { font-size: 19px !important; }
-
-  #pathsOverlay .subtitle { font-size: 1.2rem !important; }
-  #pathsOverlay .ctr-passage { font-size: 1.08rem !important; }
-  #pathsOverlay p.body,
-  #pathsOverlay .panel p { font-size: 1.12rem !important; }
-
-  #pathsOverlay .scripture { font-size: 1.4rem !important; }
-
-  #pathsOverlay .opt { font-size: 1.08rem !important; }
-
-  #pathsOverlay input.note,
-  #pathsOverlay textarea.note { font-size: 1.08rem !important; }
-  #pathsOverlay .colophon { font-size: 0.95rem !important; }
-
-  /* Darken the muted tones for daylight legibility -- only in the
-     light (parchment) mode, which is how the screen opens. */
-  #pathsOverlay:not(.dark):not(.threshold):not(.threshold-center) {
-    --ink: #241f1b !important;
-    --ink-soft: #473d32 !important;
-    --ink-faint: #564a3d !important;
-  }
-}
  .letter-mobile { display: none; }
 .letter-desktop { display: block; }
 @media (max-width: 768px) {
@@ -4260,30 +4233,8 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   letter-spacing:.22em;text-transform:uppercase;color:rgba(200,146,12,.5);
 }
 
-/* ── READING TOWARD THE CENTER -- lamps (parchment ground) ── */
-.ctr-map{margin:26px 0 10px;}
-.ctr-row{display:flex;align-items:center;gap:14px;padding:9px 0;cursor:pointer;
-  border:none;background:none;width:100%;text-align:left;-webkit-tap-highlight-color:transparent;}
-.ctr-row[disabled]{cursor:default;opacity:.4;}
-.ctr-lamp{width:9px;height:9px;border-radius:50%;flex:none;background:rgba(70,52,28,.18);
-  transition:all 1.2s ease;}
-.ctr-row .ctr-lamp.lit{background:radial-gradient(circle at 38% 32%, #ffe9a8, #e0a82a 60%, #8a6210);
-  box-shadow:0 0 9px 2px rgba(200,150,40,.5);}
-.ctr-row-title{flex:1;font-family:'Playfair Display',Georgia,serif;font-size:16.5px;
-  color:rgba(45,35,22,.85);}
-.ctr-row.ctr-done .ctr-row-title{color:rgba(45,35,22,.45);}
-.ctr-week{margin:22px 0 4px;}
-.ctr-centerrow{justify-content:center;gap:0;padding:18px 0 6px;}
-.ctr-centerlamp{width:20px;height:20px;border-radius:50%;background:rgba(70,52,28,.14);
-  transition:all 2s ease;}
-.ctr-centerlamp.lit{background:radial-gradient(circle at 38% 32%, #fffdf4, #ffe9a8 45%, #e0a82a 80%);
-  box-shadow:0 0 22px 7px rgba(200,150,40,.5);}
-.ctr-lamb{display:block;margin:10px auto 0;opacity:0;transition:opacity 3s ease;}
-.ctr-lamb.show{opacity:.9;}
-.ctr-readings{font-family:'Playfair Display',Georgia,serif;font-size:19px;font-style:italic;
-  color:rgba(40,30,18,.88);margin:6px 0;}
-.ctr-rest{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-style:italic;
-  color:#8a6210;margin-top:26px;text-align:center;line-height:1.7;}
+/* Reading Toward the Center's lamps (.ctr-*) are styled inside the Spiritual
+   Paths stylesheet, which Paths._ensure() injects on the DESIGN.md tokens. */
 
 #screen-witnesses { overflow-y:auto; }
 .cow-wrap { max-width:520px; margin:0 auto; padding:24px 20px 60px; }
@@ -9412,6 +9363,11 @@ const Paths = {
   /* ============ small helpers ============ */
   _today() { return new Date().toISOString().slice(0,10); },
   _esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
+  /* Display only. The day and mirror data keep their double hyphens and
+     straight quotes (centerComplete() reads the mirror for the carry, and the
+     prompts are the journal's keys); the page shows an em dash and curled
+     quotes. Never applied to anything on its way to storage. */
+  _typo(s) { return String(s==null?'':s).replace(/\s--\s/g,' — ').replace(/--/g,'—').replace(/"([^"]*)"/g,'“$1”').replace(/(\w)'(\w)/g,'$1’$2'); },
   _pending: null,
   _emerging: null,
  
@@ -9445,85 +9401,177 @@ const Paths = {
       const st = document.createElement('style');
       st.id = 'pathsCSS';
       st.textContent = `
+        /* ═══════════════════════════════════════════
+           SPIRITUAL PATHS -- on the DESIGN.md tokens
+           The overlay root carries data-tokens, so the shared components apply;
+           everything here is scoped to #pathsOverlay. A reading practice, laid
+           out like the Guide: no ring, no card, the light behind the text.
+           The two threshold screens keep their photographs (the one place a
+           photograph is allowed); every inner screen is drawn light only.
+        ═══════════════════════════════════════════ */
         #pathsOverlay{
-          --ink:#2a2521; --ink-soft:#6a5f54; --ink-faint:#776c5e;
-          --parchment:#f4eee1; --parchment-card:#f7f2e8;
-          --ember:#9c4a2f; --ember-soft:#b8674a; --gold:#a8853f;
-          --line:rgba(42,37,33,0.15); --line-soft:rgba(42,37,33,0.08); --shadow:rgba(60,44,28,0.10); --measure:38rem;
-          position:fixed; inset:0; z-index:9997; display:none; overflow-y:auto; -webkit-overflow-scrolling:touch;
-          background-color:var(--parchment);
-          background-image:radial-gradient(120% 80% at 18% 8%, rgba(255,250,238,0.85) 0%, rgba(255,250,238,0) 46%),radial-gradient(120% 90% at 88% 100%, rgba(176,146,93,0.10) 0%, rgba(176,146,93,0) 50%),radial-gradient(90% 70% at 50% 50%, rgba(156,74,47,0.025) 0%, rgba(156,74,47,0) 70%);
-          color:var(--ink); font-family:"EB Garamond", Georgia, serif; font-size:18px; line-height:1.72; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+          /* The twilight indigo of the stained-glass array, at Lectio's height */
+          --atmos-rgb:64,52,150;--atmos-a:.74;
+          --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+          --measure-read:30rem;   /* about 65 characters of the serif */
+          --d-veil:calc(var(--d-breath) * 1.5);   /* the photograph's fade */
+          position:fixed;inset:0;z-index:9997;display:none;
+          overflow-y:auto;-webkit-overflow-scrolling:touch;
+          background:var(--ink-0);color:var(--text-mid);
+          font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);
+          -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
         }
-        #pathsOverlay *{ box-sizing:border-box; }
-        /* Threshold mode: photo backdrop + light ink for entry screens only */
-        #pathsOverlay.threshold{
-          --ink:#f0e9db; --ink-soft:#cfc4ae; --ink-faint:#a89b85;
-          --line:rgba(240,233,219,0.22); --line-soft:rgba(240,233,219,0.10);
-          background-color:#10130f;
-          background-image:linear-gradient(rgba(12,14,10,0.45), rgba(12,14,10,0.66)), url('assets/paths-bg.webp');
-          background-size:cover; background-position:center;
+        #pathsOverlay *{box-sizing:border-box;}
+        /* The overlay itself is the scroller (_frame() resets scrollTop), so the
+           light is fixed to the viewport and the page moves over it. */
+        #pathsOverlay .atmos{position:fixed;}
+        #pathsOverlay button:focus-visible,#pathsOverlay textarea:focus-visible,#pathsOverlay input:focus-visible{outline:1px solid var(--gold-a55);outline-offset:3px;}
+
+        /* The threshold photographs sit between the light and the grain, graded
+           toward the indigo. Each is shown only while its threshold class is on
+           the root; when the class goes the photo fades on one slow breath and
+           the atmosphere beneath it rises. Reading Toward the Center's veil
+           thins as lamps are lit: centerHome() writes --veil-a / --veil-b. */
+        #pathsOverlay .atmos-photo{position:absolute;inset:0;opacity:0;
+          background-size:cover;background-position:center;filter:saturate(.55);
+          transition:opacity var(--d-veil) var(--ease-breath);}
+        #pathsOverlay .atmos-photo.paths{background-image:
+          linear-gradient(to bottom,rgba(var(--atmos-rgb),.42) 0%,rgba(var(--atmos-rgb),.34) 45%,rgba(5,3,2,.9) 100%),
+          url('assets/paths-bg.webp');}
+        #pathsOverlay .atmos-photo.center{background-image:
+          linear-gradient(to bottom,rgba(var(--atmos-rgb),var(--veil-a,.5)) 0%,rgba(5,3,2,var(--veil-b,.7)) 100%),
+          url('assets/center-bg.webp');}
+        #pathsOverlay.threshold .atmos-photo.paths,
+        #pathsOverlay.threshold-center .atmos-photo.center{opacity:1;}
+
+        /* Header: sticky in the scroller on an opaque band that thins over a
+           photograph (the band is a pseudo-element so its opacity can fade). */
+        #pathsOverlay .app-header{position:sticky;top:0;z-index:20;padding-bottom:var(--s-4)!important;}
+        #pathsOverlay .app-header::before{content:"";position:absolute;inset:0;z-index:-1;
+          background:linear-gradient(to bottom,var(--ink-0) 0%,var(--ink-0) 72%,transparent 100%);
+          transition:opacity var(--d-veil) var(--ease-breath);}
+        #pathsOverlay.threshold .app-header::before,#pathsOverlay.threshold-center .app-header::before{opacity:.45;}
+        #pathsOverlay .sg-back{background:none;border:0;padding:0;cursor:pointer;}
+        #pathsOverlay .sg-header-spacer{width:2.4rem;}
+
+        #pathsOverlay .vessel{position:relative;z-index:10;max-width:var(--measure);margin:0 auto;
+          padding:var(--s-3) var(--gutter) calc(env(safe-area-inset-bottom,0px) + 96px);
+          display:flex;flex-direction:column;min-height:calc(100vh - 64px);min-height:calc(100dvh - 64px);}
+        #pathsOverlay .stage{flex:1;display:flex;flex-direction:column;position:relative;}
+        /* Each screen enters on a breath. Only the thresholds sit at the centre of the frame. */
+        #pathsOverlay .sg-screen{position:relative;z-index:2;}
+        #pathsOverlay .sg-screen.in{animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+        #pathsOverlay.threshold .sg-screen,#pathsOverlay.threshold-center .sg-screen{margin:auto 0;}
+        #pathsOverlay .sg-screen-inner{display:block;}
+
+        /* The spine of a discernment: its four phases, marked from the day in hand */
+        #pathsOverlay .paths-track{margin:0 auto var(--s-5);}
+        @media (max-width:420px){ #pathsOverlay .paths-track .phase-step{letter-spacing:.06em;} }
+
+        /* Type. The tradition speaks in the serif at reading measure; the
+           interface, its labels and its buttons, in the sans. */
+        #pathsOverlay .overline{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+          letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);margin:0 0 var(--s-4);}
+        #pathsOverlay h1.title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-lg);line-height:var(--lh-tight);
+          letter-spacing:0;color:var(--text-hi);margin:0 0 var(--s-3);text-wrap:balance;}
+        #pathsOverlay.threshold h1.title,#pathsOverlay.threshold-center h1.title{font-size:var(--t-xl);}
+        #pathsOverlay .subtitle{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);
+          color:var(--text-mid);margin:0 0 var(--s-5);}
+        #pathsOverlay p.body{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
+          color:var(--text-hi);max-width:var(--measure-read);margin:0 0 var(--s-4);text-wrap:pretty;}
+        #pathsOverlay p.body strong{font-weight:500;color:var(--candle);}
+        #pathsOverlay em{font-style:italic;}
+        #pathsOverlay .section-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+          letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin:var(--s-5) 0 var(--s-3);}
+        #pathsOverlay .scripture{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);
+          color:var(--text-hi);border-left:1px solid var(--gold-a55);padding:2px 0 2px var(--s-4);margin:0 0 var(--s-2);
+          max-width:var(--measure-read);text-wrap:pretty;}
+        #pathsOverlay .scripture-ref{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+          text-transform:uppercase;color:var(--gold);opacity:.85;padding-left:calc(var(--s-4) + 1px);margin:0 0 var(--s-5);}
+        /* Reading Toward the Center: the Douay-Rheims verses */
+        #pathsOverlay .ctr-passage-ref{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+          text-transform:uppercase;color:var(--gold);margin:var(--s-4) 0 var(--s-2);}
+        #pathsOverlay .ctr-passage{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
+          color:var(--text-hi);max-width:var(--measure-read);margin:0 0 var(--s-3);text-wrap:pretty;}
+        #pathsOverlay .ctr-passage sup{font-family:var(--font-sans);font-size:.55em;line-height:0;color:var(--gold-a55);
+          margin-right:.25em;position:relative;top:-.55em;vertical-align:baseline;}
+        #pathsOverlay .ctr-translation{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+          text-transform:uppercase;color:var(--text-faint);margin:0 0 var(--s-5);}
+        /* The reflection read back on the rest days: the app's voice, quiet, no card */
+        #pathsOverlay .panel{margin:0 0 var(--s-5);max-width:var(--measure-read);}
+        #pathsOverlay .panel p{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);
+          color:var(--text-mid);margin:0;text-wrap:pretty;}
+
+        /* Choices: what moved, which path, whether peace holds */
+        #pathsOverlay .resonance{display:flex;flex-direction:column;gap:var(--s-2);margin:0 0 var(--s-4);}
+        #pathsOverlay .opt{position:relative;text-align:left;width:100%;min-height:48px;background:none;border:1px solid var(--line);
+          border-radius:var(--r-sm);padding:12px var(--s-4) 12px 40px;cursor:pointer;-webkit-appearance:none;appearance:none;
+          font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);
+          transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+        #pathsOverlay .opt::before{content:"";position:absolute;left:var(--s-4);top:50%;transform:translateY(-50%);width:9px;height:9px;
+          border-radius:50%;border:1px solid var(--text-faint);transition:border-color var(--d-base),background var(--d-base),box-shadow var(--d-base);}
+        #pathsOverlay .opt:hover{border-color:var(--line-strong);color:var(--text-hi);}
+        #pathsOverlay .opt[aria-pressed="true"]{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+        #pathsOverlay .opt[aria-pressed="true"]::before{border-color:var(--candle);background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+
+        /* What the person writes, in the serif; 16px keeps iOS from zooming */
+        #pathsOverlay input.note,#pathsOverlay textarea.note{width:100%;display:block;-webkit-appearance:none;appearance:none;
+          background:rgba(255,240,220,.03);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+          padding:var(--s-3) var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+          outline:none;margin:0 0 var(--s-4);transition:border-color var(--d-base);}
+        #pathsOverlay textarea.note{min-height:5.5rem;resize:vertical;}
+        #pathsOverlay input.note:focus,#pathsOverlay textarea.note:focus{border-color:var(--gold-a55);}
+        #pathsOverlay input.note::placeholder,#pathsOverlay textarea.note::placeholder{color:var(--text-faint);font-style:italic;}
+
+        /* Controls: the way forward in gold, everything else quiet; stacked, full width */
+        #pathsOverlay .go{display:block;margin-top:var(--s-5);cursor:pointer;background:none;-webkit-appearance:none;appearance:none;}
+        #pathsOverlay .go + .go{margin-top:var(--s-2);}
+        #pathsOverlay .go.ghost{color:var(--text-mid);}
+        #pathsOverlay .tender-link{display:block;width:100%;min-height:44px;margin-top:var(--s-6);padding:10px 0;background:none;border:0;
+          cursor:pointer;text-align:center;font-family:var(--font-sans);font-size:var(--t-sm);font-style:italic;color:var(--text-low);
+          text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px;transition:color var(--d-fast);}
+        #pathsOverlay .tender-link:hover{color:var(--text-mid);}
+        #pathsOverlay .colophon{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);
+          text-align:center;max-width:26rem;margin:var(--s-5) auto var(--s-2);text-wrap:pretty;}
+
+        /* Reading Toward the Center: the lamps, converging on the centre */
+        #pathsOverlay .ctr-map{margin:var(--s-4) 0 var(--s-2);}
+        #pathsOverlay .ctr-week{margin:var(--s-5) 0 var(--s-2);}
+        #pathsOverlay .ctr-row{display:flex;align-items:center;gap:var(--s-3);width:100%;padding:9px 0;cursor:pointer;
+          background:none;border:0;text-align:left;color:var(--text-hi);-webkit-tap-highlight-color:transparent;}
+        #pathsOverlay .ctr-row[disabled]{cursor:default;opacity:.45;}
+        #pathsOverlay .ctr-lamp{width:7px;height:7px;border-radius:50%;flex:none;background:var(--text-faint);
+          transition:background 1.2s var(--ease-out),box-shadow 1.2s var(--ease-out);}
+        #pathsOverlay .ctr-lamp.lit{background:var(--candle);box-shadow:0 0 8px 2px rgba(242,199,119,.55);}
+        #pathsOverlay .ctr-row-title{flex:1;font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-hi);}
+        #pathsOverlay .ctr-row.ctr-done .ctr-row-title{color:var(--text-low);}
+        #pathsOverlay .ctr-centerrow{justify-content:center;gap:0;padding:var(--s-4) 0 var(--s-2);}
+        #pathsOverlay .ctr-centerlamp{width:18px;height:18px;border-radius:50%;background:var(--text-faint);
+          transition:background 2s var(--ease-out),box-shadow 2s var(--ease-out);}
+        #pathsOverlay .ctr-centerlamp.lit{background:radial-gradient(circle at 40% 35%,var(--candle-hi),var(--candle) 55%,var(--gold) 100%);
+          box-shadow:0 0 22px 7px rgba(242,199,119,.45);}
+        #pathsOverlay .ctr-lamb{display:block;margin:var(--s-3) auto 0;opacity:0;transition:opacity 3s var(--ease-out);}
+        #pathsOverlay .ctr-lamb.show{opacity:.9;}
+        #pathsOverlay .ctr-rest{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);
+          color:var(--candle);text-align:center;max-width:26rem;margin:var(--s-6) auto;text-wrap:balance;}
+
+        @media (prefers-reduced-motion:reduce){
+          #pathsOverlay .sg-screen.in{--rise:0px;}
         }
-        #pathsOverlay.threshold-center{
-          --ink:#f0e9db; --ink-soft:#cfc4ae; --ink-faint:#a89b85;
-          --line:rgba(240,233,219,0.22); --line-soft:rgba(240,233,219,0.10);
-          --veil-a:0.50; --veil-b:0.70;
-          background-color:#0e1016;
-          background-image:linear-gradient(rgba(10,11,18,var(--veil-a)), rgba(10,11,18,var(--veil-b))), url('assets/center-bg.webp');
-          background-size:cover; background-position:center;
-        }
-        #pathsOverlay .vessel{ position:relative; z-index:1; max-width:var(--measure); margin:0 auto; min-height:100vh; min-height:100dvh; padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,5vw,2rem) clamp(2.6rem,8vw,4rem); display:flex; flex-direction:column; justify-content:center; }
-        #pathsOverlay .sg-back{ position:fixed; top:calc(env(safe-area-inset-top,0px) + .75rem); left:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:none; border:none; width:2.75rem; height:2.75rem; cursor:pointer; color:var(--ink-soft); font-size:1.5rem; line-height:1; transition:color .3s ease; }
-        #pathsOverlay .sg-back:hover{ color:var(--ember); }
-        #pathsOverlay .sg-screen-inner{ display:flex; flex-direction:column; }
-        #pathsOverlay .sg-screen-inner > *{ animation:pg-rise .8s cubic-bezier(.2,.7,.25,1) both; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(2){ animation-delay:.08s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(3){ animation-delay:.16s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(4){ animation-delay:.24s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(5){ animation-delay:.32s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(6){ animation-delay:.40s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(7){ animation-delay:.48s; }
-        #pathsOverlay .sg-screen-inner > *:nth-child(8){ animation-delay:.56s; }
-        @keyframes pg-rise{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
-        @media (prefers-reduced-motion: reduce){ #pathsOverlay .sg-screen-inner > *{ animation:none; } }
-        #pathsOverlay .overline{ font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 1.1rem; }
-        #pathsOverlay h1.title{ font-family:"Cormorant Garamond", serif; font-weight:500; font-size:clamp(2.4rem,8vw,3.4rem); line-height:1.04; letter-spacing:0.005em; margin:0 0 0.5rem; color:var(--ink); }
-        #pathsOverlay .subtitle{ font-style:italic; font-size:1.08rem; color:var(--ink-soft); margin:0 0 1.6rem; }
-        #pathsOverlay p.body{ margin:0 0 1.15rem; }
-        #pathsOverlay em{ font-style:italic; }
-        #pathsOverlay .ctr-passage-ref{ font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin:1.2rem 0 0.5rem; }
-        #pathsOverlay .ctr-passage{ font-size:1.02rem; line-height:1.8; color:var(--ink); margin:0 0 0.4rem; }
-        #pathsOverlay .ctr-passage sup{ font-size:0.62em; color:var(--ink-faint); margin-right:0.18em; }
-        #pathsOverlay .ctr-translation{ font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); margin:0.2rem 0 1.4rem; }
-        #pathsOverlay .section-label{ font-size:0.7rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--ink-faint); margin:1.5rem 0 0.8rem; }
-        #pathsOverlay .scripture{ font-family:"Cormorant Garamond",serif; font-size:1.35rem; font-style:italic; color:var(--ink); line-height:1.4; border-left:2px solid var(--ember); padding:0.2rem 0 0.2rem 1.1rem; margin:0 0 0.4rem; }
-        #pathsOverlay .scripture-ref{ font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin:0 0 1.6rem; padding-left:1.1rem; }
-        #pathsOverlay .panel{ background:var(--parchment-card); border:1px solid var(--line-soft); border-left:2px solid var(--gold); border-radius:2px; padding:1.1rem 1.25rem; margin:0 0 1.4rem; box-shadow:0 1px 0 var(--shadow); }
-        #pathsOverlay .panel p{ margin:0; font-style:italic; color:var(--ink); line-height:1.6; }
-        #pathsOverlay .resonance{ display:flex; flex-direction:column; gap:0.55rem; margin:0 0 1.4rem; }
-        #pathsOverlay .opt{ -webkit-appearance:none; appearance:none; text-align:left; width:100%; font-family:"EB Garamond",serif; font-size:1.05rem; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:2px; padding:0.85rem 1rem 0.85rem 2.7rem; cursor:pointer; position:relative; transition:border-color .4s ease, color .4s ease, background-color .4s ease; }
-        #pathsOverlay .opt::before{ content:""; position:absolute; left:1rem; top:50%; transform:translateY(-50%); width:0.78rem; height:0.78rem; border-radius:50%; border:1px solid var(--ink-faint); transition:all .3s ease; }
-        #pathsOverlay .opt:hover{ border-color:var(--gold); color:var(--ink); }
-        #pathsOverlay .opt[aria-pressed="true"]{ color:var(--ember); border-color:var(--ember); background:rgba(156,74,47,0.05); }
-        #pathsOverlay .opt[aria-pressed="true"]::before{ border-color:var(--ember); background:radial-gradient(circle, var(--ember) 0 45%, transparent 48%); box-shadow:0 0 0 3px rgba(156,74,47,0.10); }
-        #pathsOverlay input.note, #pathsOverlay textarea.note{ width:100%; font-family:"EB Garamond",serif; font-size:1.05rem; font-style:italic; color:var(--ink); line-height:1.6; background:transparent; border:0; border-bottom:1px solid var(--line); padding:0.5rem 0.1rem 0.6rem; outline:none; transition:border-color .4s ease; margin:0 0 1rem; }
-        #pathsOverlay textarea.note{ min-height:3.4rem; resize:vertical; }
-        #pathsOverlay input.note::placeholder, #pathsOverlay textarea.note::placeholder{ color:var(--ink-faint); font-style:italic; }
-        #pathsOverlay input.note:focus, #pathsOverlay textarea.note:focus{ border-bottom-color:var(--ember); }
-        #pathsOverlay .go{ -webkit-appearance:none; appearance:none; display:block; width:100%; margin-top:0.7rem; font-family:"EB Garamond",serif; font-size:0.82rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--parchment); background:var(--ember); border:1px solid var(--ember); border-radius:2px; padding:0.95rem 1.7rem; cursor:pointer; transition:filter .3s ease, box-shadow .4s ease, transform .15s ease; box-shadow:0 2px 10px rgba(156,74,47,0.18); }
-        #pathsOverlay .go:hover{ filter:brightness(0.93); box-shadow:0 4px 16px rgba(156,74,47,0.26); }
-        #pathsOverlay .go:active{ transform:translateY(1px); }
-        #pathsOverlay .go.ghost{ color:var(--ember); background:transparent; box-shadow:none; }
-        #pathsOverlay .go.ghost:hover{ background:rgba(156,74,47,0.06); filter:none; }
-        #pathsOverlay .tender-link{ display:block; width:100%; margin-top:1.4rem; background:none; border:0; color:var(--ember-soft); font-family:"EB Garamond",serif; font-size:0.95rem; font-style:italic; text-decoration:underline; cursor:pointer; text-align:center; }
-        #pathsOverlay .tender-link:hover{ color:var(--ember); }
-        #pathsOverlay .colophon{ margin-top:1.4rem; font-size:0.85rem; font-style:italic; color:var(--ink-faint); text-align:center; line-height:1.55; }
-        @media (max-width:640px){ #pathsOverlay .opt{ min-height:48px; } #pathsOverlay .tender-link{ min-height:44px; } }
       `;
       document.head.appendChild(st);
     }
     const el = document.createElement('div');
     el.id='pathsOverlay';
+    el.setAttribute('data-tokens','');
+    el.setAttribute('role','dialog');
+    el.setAttribute('aria-label','Spiritual Paths');
+    // The frame: the atmosphere (with the two threshold photographs between the
+    // light and the grain), the sticky header, and the stage _frame() paints.
+    el.innerHTML =
+      `<div class="atmos" aria-hidden="true"><div class="atmos-glow"></div><div class="atmos-flame"></div><div class="atmos-photo paths"></div><div class="atmos-photo center"></div><div class="atmos-grain"></div><div class="atmos-vignette"></div></div>
+       <header class="app-header"><button class="sg-back back-btn" onclick="Paths.close()" aria-label="Back"><span class="back-arrow">&#8592;</span><span>Still</span></button><span class="screen-title">Spiritual Paths</span><span class="sg-header-spacer" aria-hidden="true"></span></header>
+       <div class="vessel"><div class="stage" id="pathsStage"></div></div>`;
     document.body.appendChild(el);
   },
  
@@ -9539,27 +9587,37 @@ const Paths = {
   /* ============ shared UI bits ============ */
   _frame(inner) {
     const o = document.getElementById('pathsOverlay');
+    // Dropping a threshold class starts the photograph's fade; the render that
+    // follows adds it back at once when the screen is a threshold.
     o.classList.remove('threshold', 'threshold-center');
-    o.innerHTML =
-      `<button class="sg-back" onclick="Paths.close()" aria-label="Back">&#8592;</button>
-       <div class="vessel"><div class="stage"><div class="sg-screen in"><div class="sg-screen-inner">${inner}</div></div></div></div>`;
+    const stage = document.getElementById('pathsStage') || o;
+    stage.innerHTML = `<div class="sg-screen in"><div class="sg-screen-inner">${inner}</div></div>`;
     try { o.scrollTop = 0; } catch(e){}
   },
   _h(t){ return `<h1 class="title">${t}</h1>`; },
   _sub(t){ return `<p class="subtitle">${t}</p>`; },
-  _gold(label,onclick){ return `<button class="go" onclick="${onclick}">${label}</button>`; },
-  _ghost(label,onclick){ return `<button class="go ghost" onclick="${onclick}">${label}</button>`; },
+  _gold(label,onclick){ return `<button class="go btn-primary gold btn-begin" onclick="${onclick}">${label}</button>`; },
+  _ghost(label,onclick){ return `<button class="go ghost btn-primary btn-begin" onclick="${onclick}">${label}</button>`; },
+  /* The discernment's spine: its phases in order (from the day data), the one
+     in hand lit, those walked marked done. `true` marks every phase done. */
+  _track(phase){
+    const phases = this.DISCERNMENT.days.map(d=>d.phase).filter((p,i,a)=>a.indexOf(p)===i);
+    const cur = phase===true ? phases.length : phases.indexOf(phase);
+    return `<div class="phase-track paths-track" aria-hidden="true">` + phases.map((p,i)=>
+      `<span class="phase-step${i<cur?' done':(i===cur?' current':'')}"><span class="phase-step-dot"></span>${p}</span>` +
+      (i<phases.length-1 ? `<span class="phase-connector"></span>` : '')
+    ).join('') + `</div>`;
+  },
   _scripture(d){ return `<p class="scripture">${d.scripture}</p><p class="scripture-ref">${d.ref}</p>`; },
-  _body(t){ return `<p class="body">${t}</p>`; },
+  _body(t){ return `<p class="body">${this._typo(t)}</p>`; },
   _label(t){ return `<p class="section-label">${t}</p>`; },
-  _textarea(ph){ return `<textarea id="discInput" class="note" placeholder="${this._esc(ph)}"></textarea>`; },
+  _textarea(ph){ return `<textarea id="discInput" class="note" placeholder="${this._esc(this._typo(ph))}"></textarea>`; },
   _struggleLink(){ return `<button class="tender-link" onclick="Paths.reportStruggle()">I\u2019m struggling right now</button>`; },
  
   /* ============ HOME ============ */
   _renderHome() {
     const p = this.DISCERNMENT;
     this._frame(
-      `<p class="overline">Spiritual Paths</p>` +
       this._h(p.title) + this._sub(p.subtitle) +
       this._body('A guided way of bringing a real decision to God \u2014 not to be told the answer, but to grow free enough to recognise it. Walked over about two weeks, a few quiet minutes a day.') +
       `<p class="colophon">This accompanies your prayer; it never replaces a spiritual director or confessor. For grave matters \u2014 vocation, marriage \u2014 please walk it with one.</p>` +
@@ -9626,6 +9684,7 @@ const Paths = {
     this._pending=null; this._emerging=disc.emergingChoice||null;
  
     let inner =
+      this._track(d.phase) +
       `<p class="overline">${d.phase} \u00b7 Day ${n} of 14</p>` +
       this._h(`\u201c${this._esc(disc.decision)}\u201d`) +
       this._scripture(d) +
@@ -9635,7 +9694,7 @@ const Paths = {
     if (d.type==='reflection') {
       const ref = (disc.reflections && disc.reflections[n]) ? disc.reflections[n] : this._composeReflection(disc);
       inner += this._label('What these days have shown');
-      inner += `<div class="panel"><p id="discReflection">${this._esc(ref)}</p></div>`;
+      inner += `<div class="panel"><p id="discReflection">${this._typo(this._esc(ref))}</p></div>`;
       if (d.emergingChoice) {
         inner += this._label('Which choice is beginning to emerge?');
         inner += this._optionButtons(disc, 'emerging');
@@ -9765,7 +9824,9 @@ const Paths = {
  
   /* ============ rest / desolation / done ============ */
   _renderRest(disc) {
+    const next = this._dayDef(Math.min(disc.currentDay,14));
     this._frame(
+      (next ? this._track(next.phase) : '') +
       this._h('Rest until tomorrow') +
       this._body('You\u2019ve walked today\u2019s step. Discernment unfolds slowly \u2014 let what you prayed today settle overnight before you take the next. Come back tomorrow.') +
       `<p class="colophon">Day ${Math.min(disc.currentDay,14)} of 14 awaits</p>` +
@@ -9797,6 +9858,7 @@ const Paths = {
   _renderDone(disc) {
     const label=(disc.options.find(o=>o.id===disc.finalChoice)||{}).label||'';
     this._frame(
+      this._track(true) +
       this._h('A discernment, made') +
       this._scripture(this._dayDef(14)) +
       this._body(`You brought \u201c${this._esc(disc.decision)}\u201d to God over these days, and chose: <strong>${this._esc(label)}</strong>.`) +
@@ -10500,7 +10562,7 @@ Paths.centerDay = function(n){
     this._label('The readings') +
     d.readings.map(function(ref){
       var vs = CENTER_SCRIPTURE[ref] || [];
-      var body = vs.map(function(x){ return '<sup>'+x.v+'</sup>'+esc(x.t); }).join(' ');
+      var body = vs.map(function(x){ return '<sup>'+x.v+'</sup>'+Paths._typo(esc(x.t)); }).join(' ');
       return '<p class="ctr-passage-ref">'+esc(ref)+'</p><div class="ctr-passage">'+body+'</div>';
     }).join('') +
     `<p class="ctr-translation">Douay-Rheims translation</p>` +
