@@ -101,7 +101,8 @@ without it.
 |---|---|---|---|---|
 | Sitting | 205,155,10 | gold | .92 | 50% / 74%, a candle on the table |
 | Lectio | 0,172,192 | teal | .90 | 50% / 36%, behind the text |
-| Examen | 22,50,215 | cobalt | .90 | 50% / 75%, low, turned inward |
+| Examen | 22,50,215 | cobalt | .90 | 50% / 58%, behind the answer |
+| The Guide | 156,74,47 | ember | .86 | 50% / 36%, behind the text |
 | Office · Lauds (and the chooser default) | 205,155,10 | gold | .95 | 62% |
 | Office · Vespers | 162,10,52 | rose | .95 | 68% |
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
@@ -213,7 +214,7 @@ button stops breathing.
   player injects its own `<style>`; the id-scoped `.sth-*` rules outrank it.
 
 - **The Examen**: no timer, so no ring. The array's cobalt sits low in the
-  room (`--atmos-rgb` 22,50,215, strength .90, `--atmos-y` 75%): its own blue,
+  room (`--atmos-rgb` 22,50,215, strength .90, `--atmos-y` 58%): its own blue,
   more saturated and quieter than Compline's grey-blue, nothing like Vespers'
   rose. Evening, but turned inward. Every movement is painted by `renderExamenStep()` into
   the one `.content-card`, wrapped in `.examen-step` so each replacement
@@ -223,7 +224,34 @@ button stops breathing.
   finished carried above it in `.examen-prev`. `examenFinish()` paints
   `.examen-complete`. The app's five movements are Gratitude, Awareness,
   Feeling, Grace, Forward; their prompts are the journal entry's keys, so
-  they are data, not copy.
+  they are data, not copy. The Grace prompt's double hyphen is shown as an em
+  dash by a replace in `renderExamenStep()`, never in the data.
+
+- **The Guide**: no timer, so no ring; no card, the light comes through. The
+  array's ember (`--atmos-rgb` 156,74,47, strength .86) sits behind the text
+  at Lectio's height (36%, ground anchored at 30%): a reading practice. The
+  practice is a self-contained IIFE (`const Guide`) that builds an overlay,
+  `#stillGuide`, not a `.screen`; `build()` gives the root `data-tokens` and
+  the four atmosphere layers, and `injectStyles()` injects the stylesheet
+  from the `CSS` template literal (so CSS escapes are written `\\2014`, and
+  no backtick or `${` may appear). The overlay itself scrolls, because
+  `transition()` resets `root.scrollTop`, so `.atmos` is `position:fixed`
+  under it and the header is `sticky` on an opaque band. The spine is
+  painted by `renderRail()`: five dots (`.sg-track`) for the five movements,
+  only the current one marked, since the Guide may be entered anywhere; while
+  searching the heart the seven root numerals (`.sg-roots`) sit beneath. Each
+  screen opens with `head()`: what was just finished in `.sg-prev` (the
+  previous card's title, the previous root's name, the previous stage's
+  heading), then the movement in `.sg-movement`. Granada's passages are
+  `.sg-passage` (serif, `--t-md`, `--measure-read`); the questions put to the
+  reader (`.sg-prompt`, `ul.questions`) and every instruction are sans. The
+  content's double hyphens and straight quotes are display-transformed by
+  `typo()` at render time; the data, some of which `saveExamen()` writes, is
+  untouched. Class names the IIFE's `wire()` and `onKey()` query (`.go`,
+  `.ghost`, `.back`, `.controls`, `.opt`, `.choice`, `.num`, `data-*` hooks)
+  are kept and carry the shared button classes beside them. The old
+  parchment skin's mobile overrides (`@media (max-width:640px)`) now name only
+  `#pathsOverlay`. `injectFonts()` is a no-op: the faces are in `<head>`.
 
 ### Hour palette
 
@@ -274,3 +302,10 @@ cools toward night. Text and accents stay warm white and gold in every hour.
    per-panel eyebrows that repeat the header title and the track.
 8. Screenshot at 390×844 in every state before and after. The glow should be
    visible in each state; if a state is all text, it is too dense.
+9. A practice built as an overlay (the Guide) takes `data-tokens` on the
+   overlay root and the atmosphere layers as its first child. If the overlay
+   is its own scroller, fix the atmosphere to the viewport and make the header
+   sticky; otherwise the light scrolls away with the first screenful.
+10. Content that is data (strings a save function writes, or keys) keeps its
+   double hyphens and straight quotes; fix the display with a transform at
+   render time (`typo()` in the Guide, the replace in `renderExamenStep()`).
