@@ -765,28 +765,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   text-align:center;margin-bottom:22px;
 }
 
-/* Rule of Life */
-.rule-item{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06);
-}
-.rule-check{
-  width:16px;height:16px;border:1px solid rgba(200,146,12,.35);
-  flex-shrink:0;margin-top:3px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(200,146,12,.03);transition:all .25s;
-}
-.rule-check.checked{background:rgba(240,192,64,.16);border-color:#f0c040;box-shadow:0 0 10px rgba(240,192,64,.28);}
-.rule-check.checked::after{content:'✦';font-size:7px;color:#f0c040;}
-.rule-name{font-family:'Playfair Display',serif;font-size:16px;color:#dde0f0;letter-spacing:-.02em;margin-bottom:3px;}
-.rule-desc{font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
-.rule-add{display:flex;gap:8px;margin-top:16px;}
-.rule-input{
-  flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(200,146,12,.15);
-  color:#fff;padding:9px 14px;font-family:'Playfair Display',serif;font-style:italic;font-size:13px;outline:none;
-}
-.rule-input:focus{border-color:rgba(240,192,64,.38);}
-.rule-input::placeholder{color:rgba(255,255,255,.25);}
+/* Rule of Life: styled in the RULE OF LIFE block on the DESIGN.md tokens, further down. */
 
 /* Night Watch */
 .night-watch{
@@ -2455,46 +2434,54 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      RULE OF LIFE
 ═══════════════════════════════════════════ -->
-<div id="screen-rule" class="screen">
-  <!-- Benedictine monk background -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/rule_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.88"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,8,4,.88) 0%,rgba(2,8,4,.72) 22%,rgba(2,8,4,.55) 50%,rgba(2,8,4,.72) 100%)"></div>
+<div id="screen-rule" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. Replaces still-mobile/src/image/rule_bg.jpg:
+       the Rule is a document, not a practice with a threshold. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Rule of Life</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
-    <div class="content-card">
-      <div class="feat-eyebrow">Your Personal Compass</div>
-      <div class="feat-heading" style="font-size:clamp(24px,3.5vw,40px)">My Rule</div>
-      <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.5);margin-bottom:20px" id="ruleDate"></p>
-      <div id="ruleItems">
-        <div class="rule-item" id="rule-item-0">
-          <div class="rule-check" onclick="this.classList.toggle('checked');saveRuleItems()"></div>
-          <div style="flex:1">
-            <div class="rule-name">Stillness at sunrise</div>
-            <div class="rule-desc">Five minutes of silence before the first word, screen, or task.</div>
-          </div>
-          <button onclick="deleteRuleItem('rule-item-0')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.22);font-size:18px;padding:4px 8px;line-height:1;transition:color .2s" onmouseover="this.style.color='rgba(255,73,64,.7)'" onmouseout="this.style.color='rgba(255,255,255,.22)'">×</button>
-        </div>
-        <div class="rule-item" id="rule-item-1">
-          <div class="rule-check" onclick="this.classList.toggle('checked');saveRuleItems()"></div>
-          <div style="flex:1">
-            <div class="rule-name">One Examen</div>
-            <div class="rule-desc">At day's close: where did I meet grace? Where did I miss it?</div>
-          </div>
-          <button onclick="deleteRuleItem('rule-item-1')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.22);font-size:18px;padding:4px 8px;line-height:1;transition:color .2s" onmouseover="this.style.color='rgba(255,73,64,.7)'" onmouseout="this.style.color='rgba(255,255,255,.22)'">×</button>
-        </div>
+  <div class="feature-main">
+    <div class="rol-wrap">
+      <div class="rol-head">
+        <div class="heading rol-title">A Rule of Life</div>
+        <div class="rol-date" id="ruleDate"></div>
       </div>
-      <div class="rule-add">
-        <input class="rule-input" id="ruleNewItem" placeholder="Add a new commitment…" maxlength="60"/>
-        <button class="btn-primary gold" onclick="addRuleItem()" style="padding:9px 16px">Add</button>
+
+      <!-- The commitments, grouped by rhythm. Painted by renderRuleItems()
+           from the store; the two default items that used to live here as
+           markup are gone, so an empty store reads as empty. -->
+      <div id="ruleItems" class="rol-items"></div>
+
+      <!-- Add: the commitment, its rhythm, and one line once the rule is long -->
+      <div class="rol-add">
+        <div class="rol-add-row">
+          <input class="rol-input" id="ruleNewItem" placeholder="Add a commitment…" maxlength="60" onkeydown="if(event.key==='Enter'){event.preventDefault();addRuleItem();}"/>
+          <button type="button" class="btn-primary gold rol-add-btn" onclick="addRuleItem()">Add</button>
+        </div>
+        <div class="rol-rhythms" id="ruleNewRhythm" role="group" aria-label="Rhythm">
+          <button type="button" class="rol-pill" data-rhythm="daily" aria-pressed="true" onclick="setRuleNewRhythm('daily')">Each day</button>
+          <button type="button" class="rol-pill" data-rhythm="weekly" aria-pressed="false" onclick="setRuleNewRhythm('weekly')">Each week</button>
+          <button type="button" class="rol-pill" data-rhythm="seasonal" aria-pressed="false" onclick="setRuleNewRhythm('seasonal')">This season</button>
+        </div>
+        <div class="rol-growing" id="ruleGrowing" hidden>A rule that keeps growing stops being a rule.</div>
       </div>
-      <p class="feat-body" style="text-align:center;margin-top:16px;font-size:11px;opacity:.4">No streaks. No guilt. A mirror of what you've chosen to become.</p>
+
+      <!-- Seeds: four traditions. Painted by renderRuleSeeds(): open beneath
+           the empty state, behind a quiet link once anything is written. -->
+      <div class="rol-seeds" id="ruleSeeds"></div>
+
+      <div class="rol-foot">
+        <button type="button" class="btn-ghost rol-print" onclick="printRule()">Print this page</button>
+        <div class="rol-closing">No streaks. No guilt. A mirror of what you've chosen to become.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -4195,6 +4182,120 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   #screen-breath[data-breath="inhale"] .heart-orb{opacity:1;}
   #screen-breath[data-breath="exhale"] .heart-orb{opacity:.6;}
   #screen-breath .heart-milestone{--rise:0px;}
+}
+
+/* ═══════════════════════════════════════════
+   RULE OF LIFE -- on the DESIGN.md tokens
+   A document, not a practice: no threshold, no photograph, no card, no ring.
+   The array's forest green behind the text, as in the Guide. The rule is
+   read, not ticked: each commitment in the serif, edit on tap, a remove
+   that is easy to miss, grouped by rhythm under quiet headings.
+═══════════════════════════════════════════ */
+#screen-rule{
+  --atmos-rgb:8,120,32;--atmos-a:.88;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+  --measure-read:30rem;
+}
+#screen-rule .rol-wrap{max-width:var(--measure);margin:0 auto;}
+#screen-rule .rol-head{margin-bottom:var(--s-6);}
+#screen-rule .rol-title{margin-bottom:var(--s-2);}
+#screen-rule .rol-date{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);opacity:.85;}
+#screen-rule [hidden]{display:none!important;}
+
+/* Empty */
+#screen-rule .rol-empty{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);
+  color:var(--text-mid);max-width:var(--measure-read);margin:0 0 var(--s-6);text-wrap:pretty;}
+
+/* Groups by rhythm */
+#screen-rule .rol-group{margin-bottom:var(--s-5);}
+#screen-rule .rol-group-head{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);
+  color:var(--text-low);padding-bottom:var(--s-2);border-bottom:1px solid var(--line);}
+
+/* A commitment: the name is the edit control; the remove sits faint at the edge */
+#screen-rule .rol-item{position:relative;padding:var(--s-3) var(--s-6) var(--s-3) 0;border-bottom:1px solid var(--line);}
+#screen-rule .rol-name{display:block;width:100%;text-align:left;background:none;border:0;padding:0;cursor:text;
+  font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);text-wrap:pretty;
+  transition:color var(--d-fast);-webkit-tap-highlight-color:transparent;}
+#screen-rule .rol-name:hover,#screen-rule .rol-name:focus-visible{color:var(--candle);outline:none;}
+#screen-rule .rol-desc{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);margin-top:var(--s-1);}
+#screen-rule .rol-source{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.06em;color:var(--text-faint);margin-top:var(--s-1);}
+#screen-rule .rol-remove{position:absolute;right:0;top:calc(var(--s-3) - 2px);background:none;border:0;padding:4px 6px;cursor:pointer;
+  font-size:16px;line-height:1;color:var(--text-faint);opacity:.6;transition:color var(--d-fast),opacity var(--d-fast);}
+#screen-rule .rol-remove:hover,#screen-rule .rol-remove:focus-visible{color:var(--text-mid);opacity:1;outline:none;}
+
+/* Editing: the name in an input, the rhythm as pills, keep or let go */
+#screen-rule .rol-item-editing{padding-right:0;}
+#screen-rule .rol-input{width:100%;display:block;-webkit-appearance:none;appearance:none;
+  background:rgba(255,240,220,.03);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+  padding:var(--s-3) var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);
+  outline:none;transition:border-color var(--d-base);}
+#screen-rule .rol-input:focus{border-color:var(--gold-a55);}
+#screen-rule .rol-input::placeholder{color:var(--text-faint);}
+#screen-rule .rol-rhythms{display:flex;gap:var(--s-2);flex-wrap:wrap;margin-top:var(--s-3);}
+#screen-rule .rol-pill{background:none;border:1px solid var(--line);border-radius:var(--r-pill);color:var(--text-low);
+  padding:8px 13px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;white-space:nowrap;transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+#screen-rule .rol-pill:hover{border-color:var(--line-strong);color:var(--text-mid);}
+#screen-rule .rol-pill[aria-pressed="true"]{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+#screen-rule .rol-edit-row{display:flex;align-items:center;gap:var(--s-5);margin-top:var(--s-3);}
+#screen-rule .rol-edit-row .btn-ghost{background:none;border:0;padding:8px 0;cursor:pointer;}
+#screen-rule .rol-edit-row .rol-remove-edit{margin-left:auto;color:var(--text-faint);}
+
+/* Add */
+#screen-rule .rol-add{margin-top:var(--s-6);}
+#screen-rule .rol-add-row{display:flex;align-items:stretch;gap:var(--s-2);}
+#screen-rule .rol-add-row .rol-input{flex:1;min-width:0;}
+#screen-rule .rol-add-btn{flex:0 0 auto;padding:0 22px;cursor:pointer;}
+#screen-rule .rol-growing{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  color:var(--text-low);margin-top:var(--s-3);}
+
+/* Seeds: four traditions, each a pattern in three or four commitments */
+#screen-rule .rol-seeds{margin-top:var(--s-7);}
+#screen-rule .rol-seeds-label{margin-bottom:var(--s-2);}
+#screen-rule .rol-seeds-toggle{background:none;border:0;padding:8px 0;cursor:pointer;}
+#screen-rule .rol-seed-list{display:flex;flex-direction:column;margin-top:var(--s-2);}
+#screen-rule .rol-seed{border-top:1px solid var(--line);padding:var(--s-4) 0;}
+#screen-rule .rol-seed:last-child{border-bottom:1px solid var(--line);}
+#screen-rule .rol-seed-name{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+#screen-rule .rol-seed-pattern{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-low);margin-top:2px;}
+#screen-rule .rol-seed-items{list-style:none;margin:var(--s-3) 0 0;padding:0;}
+#screen-rule .rol-seed-items li{position:relative;padding-left:var(--s-4);margin-bottom:var(--s-1);
+  font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);}
+#screen-rule .rol-seed-items li::before{content:"\2014";position:absolute;left:0;top:0;color:var(--gold-a55);}
+#screen-rule .rol-seed-rhythm{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-faint);margin-left:var(--s-2);white-space:nowrap;}
+#screen-rule .rol-seed-add{background:none;border:0;padding:8px 0 0;cursor:pointer;color:var(--gold);}
+#screen-rule .rol-seed-add:hover{color:var(--candle);}
+
+/* Foot */
+#screen-rule .rol-foot{margin-top:var(--s-7);text-align:center;}
+#screen-rule .rol-print{background:none;border:0;padding:8px 0;cursor:pointer;margin-bottom:var(--s-4);}
+#screen-rule .rol-closing{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);
+  max-width:22rem;margin:0 auto;}
+
+/* Print: the rule as one clean sheet in the app's type, no chrome. Only the
+   Rule screen prints, and only what is read: title, date, groups, items. */
+@media print{
+  @page{margin:22mm;}
+  html,body{overflow:visible;height:auto;background:#fff;color:#111;}
+  body > *:not(#screen-rule){display:none!important;}
+  #screen-rule{position:static;display:block;opacity:1;pointer-events:auto;overflow:visible;background:#fff;color:#111;}
+  #screen-rule .atmos,#screen-rule .app-header,#screen-rule .rol-add,#screen-rule .rol-seeds,#screen-rule .rol-print,
+  #screen-rule .rol-remove,#screen-rule .rol-edit-row,#screen-rule .rol-rhythms{display:none!important;}
+  #screen-rule .rol-foot{margin-top:14mm;text-align:left;}
+  #screen-rule .rol-closing{color:#666;margin:0;}
+  #screen-rule .feature-main{overflow:visible;padding:0!important;color:#111;}
+  #screen-rule .rol-wrap{max-width:none;}
+  #screen-rule .rol-title{color:#111;}
+  #screen-rule .rol-date{color:#555;opacity:1;}
+  #screen-rule .rol-group-head{color:#555;border-bottom-color:#ddd;}
+  #screen-rule .rol-item{border-bottom-color:#e6e6e6;padding-right:0;break-inside:avoid;}
+  #screen-rule .rol-name{color:#111;}
+  #screen-rule .rol-desc{color:#444;}
+  #screen-rule .rol-source{color:#888;}
+  #screen-rule .rol-empty{color:#444;}
+  #screen-rule .rol-input{border-color:#ccc;background:none;color:#111;}
 }
 
 /* ── Autobiography ────────────────────────── */
@@ -9032,24 +9133,8 @@ function initLectio() {
   const claudeCard = document.getElementById('claudeQCard');
   if (claudeCard) claudeCard.classList.remove('show');
 }
-function deleteRuleItem(id) {
-  const el = document.getElementById(id);
-  if (el) { el.remove(); saveRuleItems(); }
-}
-
-function addRuleItem(){
-  const inp=document.getElementById('ruleNewItem');
-  const v=inp.value.trim();if(!v)return;
-  const items=document.getElementById('ruleItems');
-  const id = 'rule-item-' + Date.now();
-  const d=document.createElement('div');d.className='rule-item';d.id=id;
-  d.innerHTML=`<div class="rule-check" onclick="this.classList.toggle('checked');saveRuleItems()"></div>
-    <div style="flex:1"><div class="rule-name">${v}</div><div class="rule-desc">Added to your rule.</div></div>
-    <button onclick="deleteRuleItem('${id}')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.22);font-size:18px;padding:4px 8px;line-height:1;transition:color .2s" onmouseover="this.style.color='rgba(255,73,64,.7)'" onmouseout="this.style.color='rgba(255,255,255,.22)'">×</button>`;
-  items.appendChild(d);
-  inp.value='';
-  saveRuleItems();
-} 
+/* deleteRuleItem() and addRuleItem() live with the rest of the Rule of Life
+   in the RULE OF LIFE block below. */
 
 const Sync = {
   MODE_KEY: 'still_storage_mode',   // 'cloud' | 'device'
@@ -10734,19 +10819,76 @@ Paths.centerSilence = function(n){
 })();
  
 /* ═══════════════════════════════════════════
-   RULE OF LIFE -- localStorage persistence
+   RULE OF LIFE -- model, persistence, rendering
+
+   Storage is localStorage 'still_rule_items', an array. An item is
+     { id, name, desc?, rhythm?, source?, checked? }
+   rhythm is 'daily' | 'weekly' | 'seasonal' and is read as 'daily' when
+   absent, so every older store displays. Older stores hold three shapes and
+   all three load: { name, desc, checked } from the ticked era, { name } alone
+   (what the Guide writes), and bare strings from before that. Fields are
+   only written when set; checked is passed through untouched, since nothing
+   reads it now. source names where an item came from: a Guide movement, or
+   a seed's tradition.
+   The array stays a pure array (the Guide rewrites it as one; Memory.rule()
+   maps over it), so the rule's established date lives beside it in
+   'still_rule_established' as an ISO date, written on the first save that
+   holds at least one item and never rewritten. Older stores are stamped on
+   their next save. The cloud mirror (Sync.pushEntry, one upserted row, id 1,
+   type rule_of_life) carries { items, established }; restoreRuleFromCloud()
+   brings the date down when the device has none.
 ═══════════════════════════════════════════ */
 const RULE_KEY = 'still_rule_items';
+const RULE_EST_KEY = 'still_rule_established';
+function ruleEstablished(){ try { return localStorage.getItem(RULE_EST_KEY) || ''; } catch(e) { return ''; } }
+const RULE_RHYTHMS = [
+  { key:'daily',    head:'Each day,',    pill:'Each day' },
+  { key:'weekly',   head:'Each week,',   pill:'Each week' },
+  { key:'seasonal', head:'This season,', pill:'This season' }
+];
+const RULE_GROWING_AT = 6;   // from the sixth commitment, one line under the input
+let ruleItems = [];          // the model in memory, the store's truth once loaded
+let ruleNewRhythm = 'daily';
+let ruleEditingId = null;
+let ruleSeedsOpen = false;
+
+function ruleNewId(){ return 'rule-item-' + Date.now() + Math.floor(Math.random()*9999); }
+function ruleEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ruleRhythmOf(it){ return RULE_RHYTHMS.some(r => r.key === it.rhythm) ? it.rhythm : 'daily'; }
+/* One stored item of any shape ever written -> a model item, or null */
+function ruleNormalize(raw) {
+  if (raw == null) return null;
+  if (typeof raw === 'string') { const s = raw.trim(); return s ? { id: ruleNewId(), name: s } : null; }
+  if (typeof raw !== 'object' || !raw.name) return null;
+  const it = { id: raw.id || ruleNewId(), name: String(raw.name).trim() };
+  if (!it.name) return null;
+  if (raw.desc) it.desc = String(raw.desc);
+  if (RULE_RHYTHMS.some(r => r.key === raw.rhythm)) it.rhythm = raw.rhythm;
+  if (raw.source) it.source = String(raw.source);
+  if (typeof raw.checked === 'boolean') it.checked = raw.checked;
+  return it;
+}
+function ruleRead() {
+  try {
+    const a = JSON.parse(localStorage.getItem(RULE_KEY) || '[]');
+    return (Array.isArray(a) ? a : []).map(ruleNormalize).filter(Boolean);
+  } catch(e) { return []; }
+}
 
 function saveRuleItems() {
-  const items = [];
-  document.querySelectorAll('.rule-item').forEach(el => {
-    const name = el.querySelector('.rule-name')?.textContent?.trim();
-    const desc = el.querySelector('.rule-desc')?.textContent?.trim();
-    const checked = el.querySelector('.rule-check')?.classList.contains('checked');
-    if (name) items.push({ id: el.id, name, desc, checked: !!checked });
+  const items = ruleItems.map(it => {
+    const o = { id: it.id, name: it.name };
+    if (it.desc) o.desc = it.desc;
+    if (it.rhythm) o.rhythm = it.rhythm;
+    if (it.source) o.source = it.source;
+    if (typeof it.checked === 'boolean') o.checked = it.checked;
+    return o;
   });
   try { localStorage.setItem(RULE_KEY, JSON.stringify(items)); } catch(e) {}
+  // The established date: stamped once, on the first save that holds an item
+  if (items.length && !ruleEstablished()) {
+    try { localStorage.setItem(RULE_EST_KEY, new Date().toISOString().slice(0, 10)); } catch(e) {}
+  }
 
   // NEW -- mirror the rule to the cloud as ONE upserted row
   try {
@@ -10755,31 +10897,187 @@ function saveRuleItems() {
         id: 1,
         type: 'rule_of_life',
         date: new Date().toISOString(),
-        items: items
+        items: items,
+        established: ruleEstablished() || undefined
       });
     }
   } catch(e) {}
 }
 
 function loadRuleItems() {
-  try {
-    const stored = JSON.parse(localStorage.getItem(RULE_KEY) || 'null');
-    if (!stored || !stored.length) return;
-    const container = document.getElementById('ruleItems');
-    if (!container) return;
-    container.innerHTML = '';
-    stored.forEach(item => {
-      const d = document.createElement('div');
-      d.className = 'rule-item';
-      d.id = item.id || ('rule-item-' + Date.now() + Math.floor(Math.random()*9999));
-      const id = d.id;
-      d.innerHTML = `<div class="rule-check${item.checked ? ' checked' : ''}" onclick="this.classList.toggle('checked');saveRuleItems()"></div>
-        <div style="flex:1"><div class="rule-name">${item.name}</div><div class="rule-desc">${item.desc || ''}</div></div>
-        <button onclick="deleteRuleItem('${id}')" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.22);font-size:18px;padding:4px 8px;line-height:1;transition:color .2s" onmouseover="this.style.color='rgba(255,73,64,.7)'" onmouseout="this.style.color='rgba(255,255,255,.22)'">×</button>`;
-      container.appendChild(d);
-    });
-  } catch(e) {}
+  ruleItems = ruleRead();
+  ruleEditingId = null;
+  renderRuleItems();
 }
+
+/* ---- rendering ---- */
+function renderRuleItems() {
+  const box = document.getElementById('ruleItems');
+  if (!box) return;
+  if (!ruleItems.length) {
+    box.innerHTML = `<div class="rol-empty">Nothing written yet. Three or four commitments are enough; the rest of your life is the margin they leave.</div>`;
+  } else {
+    box.innerHTML = RULE_RHYTHMS.map(r => {
+      const list = ruleItems.filter(it => ruleRhythmOf(it) === r.key);
+      if (!list.length) return '';
+      return `<div class="rol-group" data-rhythm="${r.key}"><div class="rol-group-head">${r.head}</div>${list.map(ruleItemHTML).join('')}</div>`;
+    }).join('');
+  }
+  const growing = document.getElementById('ruleGrowing');
+  if (growing) growing.hidden = ruleItems.length < RULE_GROWING_AT;
+  if (typeof setRuleDate === 'function') setRuleDate();
+  renderRuleSeeds();
+}
+function ruleItemHTML(it) {
+  const id = ruleEsc(it.id);
+  if (it.id === ruleEditingId) {
+    const pills = RULE_RHYTHMS.map(r =>
+      `<button type="button" class="rol-pill" data-edit-rhythm="${r.key}" aria-pressed="${ruleRhythmOf(it) === r.key}" onclick="ruleEditRhythm('${id}','${r.key}')">${r.pill}</button>`).join('');
+    return `<div class="rol-item rol-item-editing" id="${id}">
+      <input class="rol-input" data-edit-name value="${ruleEsc(it.name)}" maxlength="60" aria-label="Commitment"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();saveRuleEdit('${id}');}else if(event.key==='Escape'){cancelRuleEdit();}">
+      <div class="rol-rhythms" role="group" aria-label="Rhythm">${pills}</div>
+      <div class="rol-edit-row">
+        <button type="button" class="btn-ghost" data-edit-save onclick="saveRuleEdit('${id}')">Keep</button>
+        <button type="button" class="btn-ghost" onclick="cancelRuleEdit()">Cancel</button>
+        <button type="button" class="btn-ghost rol-remove-edit" onclick="deleteRuleItem('${id}')">Remove</button>
+      </div>
+    </div>`;
+  }
+  // "Added to your rule." was the old add's placeholder description: data kept, not shown
+  const desc = it.desc && it.desc !== 'Added to your rule.' ? `<div class="rol-desc">${ruleEsc(it.desc)}</div>` : '';
+  const source = it.source ? `<div class="rol-source">${ruleEsc(it.source)}</div>` : '';
+  return `<div class="rol-item" id="${id}">
+    <button type="button" class="rol-name" data-edit onclick="editRuleItem('${id}')" title="Tap to edit">${ruleEsc(it.name)}</button>
+    ${desc}${source}
+    <button type="button" class="rol-remove" onclick="deleteRuleItem('${id}')" aria-label="Remove this commitment">×</button>
+  </div>`;
+}
+
+/* ---- editing ---- */
+function editRuleItem(id) {
+  ruleEditingId = id;
+  renderRuleItems();
+  const inp = document.querySelector('#ruleItems [data-edit-name]');
+  if (inp) { inp.focus(); try { inp.setSelectionRange(inp.value.length, inp.value.length); } catch(e) {} }
+}
+function cancelRuleEdit() { ruleEditingId = null; renderRuleItems(); }
+function ruleEditRhythm(id, key) {
+  const row = document.getElementById(id);
+  if (!row) return;
+  row.querySelectorAll('[data-edit-rhythm]').forEach(b => b.setAttribute('aria-pressed', b.getAttribute('data-edit-rhythm') === key ? 'true' : 'false'));
+}
+function saveRuleEdit(id) {
+  const it = ruleItems.find(x => x.id === id);
+  const row = document.getElementById(id);
+  if (!it || !row) { cancelRuleEdit(); return; }
+  const name = (row.querySelector('[data-edit-name]') || {}).value;
+  const pill = row.querySelector('[data-edit-rhythm][aria-pressed="true"]');
+  if (name && name.trim()) it.name = name.trim().slice(0, 60);
+  if (pill) it.rhythm = pill.getAttribute('data-edit-rhythm');
+  ruleEditingId = null;
+  saveRuleItems();
+  renderRuleItems();
+}
+function deleteRuleItem(id) {
+  ruleItems = ruleItems.filter(x => x.id !== id);
+  if (ruleEditingId === id) ruleEditingId = null;
+  saveRuleItems();
+  renderRuleItems();
+}
+
+/* ---- adding ---- */
+function setRuleNewRhythm(key) {
+  ruleNewRhythm = RULE_RHYTHMS.some(r => r.key === key) ? key : 'daily';
+  document.querySelectorAll('#ruleNewRhythm [data-rhythm]').forEach(b => b.setAttribute('aria-pressed', b.getAttribute('data-rhythm') === ruleNewRhythm ? 'true' : 'false'));
+}
+function addRuleItem() {
+  const inp = document.getElementById('ruleNewItem');
+  const v = (inp ? inp.value : '').trim();
+  if (!v) return;
+  ruleItems.push({ id: ruleNewId(), name: v.slice(0, 60), rhythm: ruleNewRhythm });
+  if (inp) inp.value = '';
+  saveRuleItems();
+  renderRuleItems();
+}
+
+/* ---- seeds ----
+   Four traditions, each a pattern in three or four commitments with the
+   rhythm set. vault/raw/theology holds no text for any of these traditions
+   yet, so each seed is a plain statement of the tradition's pattern, nothing
+   quoted, and each is marked below. Selecting a seed adds its commitments
+   (skipping any name already present); it never replaces what is there. */
+const RULE_SEEDS = [
+  { key:'benedict', name:'Benedict', pattern:'Prayer and work in a steady round; the guest received.',
+    // [NEEDED: source] -- the Rule of St Benedict is not in vault/raw; pattern stated, nothing quoted
+    items:[
+      { name:'Stop for prayer at fixed hours: morning, midday, evening.', rhythm:'daily' },
+      { name:'Read Scripture slowly, in a time kept for it.', rhythm:'daily' },
+      { name:'Work with the hands, and let the work be prayer.', rhythm:'daily' },
+      { name:'Receive a guest as you would receive Christ.', rhythm:'weekly' }
+    ] },
+  { key:'ignatius', name:'Ignatius', pattern:'God in all things; notice what moves you before you choose.',
+    // [NEEDED: source] -- the Spiritual Exercises are not in vault/raw; pattern stated, nothing quoted
+    items:[
+      { name:'An Examen at the close of the day.', rhythm:'daily' },
+      { name:'Offer one ordinary task, done with full attention, to God.', rhythm:'daily' },
+      { name:'Before deciding anything, read back the week’s consolations and desolations.', rhythm:'weekly' },
+      { name:'Make a retreat, even of a single day.', rhythm:'seasonal' }
+    ] },
+  { key:'bcp', name:'The Book of Common Prayer', pattern:'The Daily Office, the Psalter, the Lord’s Day, the year.',
+    // [NEEDED: source] -- the Book of Common Prayer is not in vault/raw; pattern stated, nothing quoted
+    items:[
+      { name:'Morning Prayer and Evening Prayer, said or read.', rhythm:'daily' },
+      { name:'The Psalms in course, a portion each day.', rhythm:'daily' },
+      { name:'The Lord’s Supper on the Lord’s Day.', rhythm:'weekly' },
+      { name:'Keep the seasons: fast in Lent, feast at Easter.', rhythm:'seasonal' }
+    ] },
+  { key:'finkenwalde', name:'Bonhoeffer’s Finkenwalde', pattern:'The day together, the day alone, and confession.',
+    // [NEEDED: source] -- Life Together is not in vault/raw; pattern stated, nothing quoted
+    items:[
+      { name:'Begin the day together: a psalm, a reading, a hymn, and prayer.', rhythm:'daily' },
+      { name:'Half an hour alone with one passage of Scripture, the same passage all week.', rhythm:'daily' },
+      { name:'Intercede by name for the people given to you.', rhythm:'daily' },
+      { name:'Confess to one brother or sister, and hear their confession.', rhythm:'weekly' }
+    ] }
+];
+function toggleRuleSeeds() { ruleSeedsOpen = !ruleSeedsOpen; renderRuleSeeds(); }
+function renderRuleSeeds() {
+  const box = document.getElementById('ruleSeeds');
+  if (!box) return;
+  const open = !ruleItems.length || ruleSeedsOpen;
+  const head = ruleItems.length
+    ? `<button type="button" class="btn-ghost rol-seeds-toggle" data-seeds-toggle aria-expanded="${open}" onclick="toggleRuleSeeds()">${open ? 'Close' : 'Begin from a tradition'}</button>`
+    : `<span class="ui-label rol-seeds-label">Begin from a tradition</span>`;
+  const list = open ? `<div class="rol-seed-list">` + RULE_SEEDS.map(s =>
+    `<div class="rol-seed">
+      <div class="rol-seed-name">${ruleEsc(s.name)}</div>
+      <div class="rol-seed-pattern">${ruleEsc(s.pattern)}</div>
+      <ul class="rol-seed-items">${s.items.map(i => `<li>${ruleEsc(i.name)}<span class="rol-seed-rhythm">${ruleEsc(RULE_RHYTHMS.find(r => r.key === i.rhythm).pill)}</span></li>`).join('')}</ul>
+      <button type="button" class="btn-ghost rol-seed-add" data-seed="${s.key}" onclick="applyRuleSeed('${s.key}')">Add these ${s.items.length}</button>
+    </div>`).join('') + `</div>` : '';
+  box.innerHTML = head + list;
+}
+function applyRuleSeed(key) {
+  const seed = RULE_SEEDS.find(s => s.key === key);
+  if (!seed) return;
+  const have = new Set(ruleItems.map(i => i.name.toLowerCase()));
+  seed.items.forEach(i => {
+    if (have.has(i.name.toLowerCase())) return;
+    ruleItems.push({ id: ruleNewId(), name: i.name, rhythm: i.rhythm, source: seed.name });
+    have.add(i.name.toLowerCase());
+  });
+  ruleSeedsOpen = false;
+  saveRuleItems();
+  renderRuleItems();
+}
+
+/* ---- print: one clean sheet; the print stylesheet does the rest ---- */
+function printRule() {
+  if (ruleEditingId) cancelRuleEdit();
+  try { window.print(); } catch(e) {}
+}
+
 function restoreRuleFromCloud() {
   try {
     const all = (typeof DB !== 'undefined') ? DB.all() : [];
@@ -10787,6 +11085,10 @@ function restoreRuleFromCloud() {
     if (!ruleEntries.length) return;
     const latest = ruleEntries[ruleEntries.length - 1];
     const local = JSON.parse(localStorage.getItem(RULE_KEY) || '[]');
+    // The established date comes down whenever this device has none
+    if (latest.established && !localStorage.getItem(RULE_EST_KEY)) {
+      localStorage.setItem(RULE_EST_KEY, String(latest.established).slice(0, 10));
+    }
     if (!local.length && latest.items && latest.items.length) {
       localStorage.setItem(RULE_KEY, JSON.stringify(latest.items));
       if (typeof loadRuleItems === 'function') loadRuleItems();
@@ -11267,11 +11569,13 @@ const Guide = (function () {
       items.forEach(it=>{ const n=(typeof it==="string"?it:(it&&it.name)); if(n) state.ruleAdded[n]=true; });
     }catch(e){}
   }
-  function addRule(name){
+  /* source names the movement the item came from; the Rule shows it as a
+     faint provenance line. Items written before it existed have none. */
+  function addRule(name, source){
     try{
       let items=[]; const raw=localStorage.getItem('still_rule_items'); if(raw) items=JSON.parse(raw)||[];
       const exists=items.some(it=> (typeof it==="string"?it:(it&&it.name))===name );
-      if(!exists){ items.push({ name:name }); localStorage.setItem('still_rule_items', JSON.stringify(items)); }
+      if(!exists){ items.push(source ? { name:name, source:source } : { name:name }); localStorage.setItem('still_rule_items', JSON.stringify(items)); }
       return true;
     }catch(e){ return false; }
   }
@@ -11652,14 +11956,14 @@ const Guide = (function () {
     const addRes=stage.querySelector("[data-addres]");
     if(addRes) addRes.addEventListener("click",()=>{
       const txt=state.resolution.trim(); if(!txt) return;
-      addRule(txt); state.resAddedToRule=true;
+      addRule(txt, "The Guide · Searching the Heart"); state.resAddedToRule=true;
       addRes.classList.add("added"); addRes.disabled=true; addRes.innerHTML="&#10003; Added to your Rule of Life";
     });
     stage.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>{ state.threefoldTab=t.getAttribute("data-tab"); render(); }));
     stage.querySelectorAll("[data-rule]").forEach(btn=>btn.addEventListener("click",()=>{
       if(btn.classList.contains("added")) return;
       const name=btn.getAttribute("data-rule");
-      addRule(name); state.ruleAdded[name]=true;
+      addRule(name, "The Guide · The Threefold Life"); state.ruleAdded[name]=true;
       btn.classList.add("added"); btn.textContent="✓ in your rule"; btn.disabled=true;
     }));
   }
@@ -15571,7 +15875,10 @@ function initOfficeScreen() {
 
 function setRuleDate(){
   const m=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const d=new Date();
+  // The stored established date (still_rule_established, ISO); today only when nothing is stored
+  const est = (typeof ruleEstablished === 'function') ? ruleEstablished() : '';
+  const parsed = est ? new Date(est.slice(0,10) + 'T00:00:00') : null;
+  const d = (parsed && !isNaN(parsed)) ? parsed : new Date();
   const el=document.getElementById('ruleDate');
   if(el)el.textContent=`Established ${m[d.getMonth()]} ${d.getFullYear()}`;
 }

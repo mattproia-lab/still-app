@@ -111,6 +111,7 @@ without it.
 | Office · Vespers | 162,10,52 | rose | .95 | 68% |
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
 | Breath Prayer | 100,20,200 | deep violet | .82 | 50% / 42%, behind the orb; it breathes |
+| Rule of Life | 8,120,32 | forest | .88 | 50% / 36%, behind the text |
 | Rosary (pending) | 162,10,52 or as decided | rose | — | to be designed |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
@@ -316,6 +317,36 @@ button stops breathing.
   lines carry fixed text), so it stays on the screen as a quiet serif block
   beneath the eyebrow. Under reduced motion the light breathes in
   brightness only and the orb's inline scale is overridden to none.
+
+- **Rule of Life**: a document, not a practice, so no threshold, no
+  photograph, no ring, no card. The array's forest (`--atmos-rgb` 8,120,32,
+  strength .88) sits behind the text at the Guide's height. The rule is read,
+  not ticked: no checkboxes. Each commitment is a serif line (`.rol-name`,
+  a button that opens the inline editor on tap), an optional sans description
+  beneath, and a faint provenance line (`.rol-source`) where the item came
+  from a Guide movement or a seed's tradition; the remove is a faint `×` at
+  the edge. Items are grouped by rhythm under quiet serif headings ("Each
+  day," "Each week," "This season."), painted by `renderRuleItems()` from the
+  in-memory model. The store (`still_rule_items`) gains optional `rhythm`
+  and `source` fields; `rhythm` reads as daily when absent, and every older
+  shape (`{name, desc, checked}`, the Guide's `{name}`, bare strings) loads
+  through `ruleNormalize()`. The Guide's `addRule(name, source)` now names
+  its movement. The established date is stored beside the array in
+  `still_rule_established` (ISO), stamped on the first save that holds an
+  item, mirrored in the cloud row and restored from it; `setRuleDate()`
+  renders it, falling back to today only when nothing is stored. From the sixth commitment one serif line sits under the
+  input (`.rol-growing`); the add is never refused. Four seeds
+  (`RULE_SEEDS`: Benedict, Ignatius, the Book of Common Prayer, Bonhoeffer's
+  Finkenwalde) are shown open beneath the empty state and behind a "Begin
+  from a tradition" link once anything is written; each adds its
+  commitments with the rhythm set and the tradition as source, skipping
+  names already present, never replacing. The vault holds no text for these
+  traditions, so each seed states the pattern without quotation and carries
+  `[NEEDED: source]` in a code comment. "Print this page" calls
+  `window.print()`; the `@media print` block shows only `#screen-rule`, drops
+  the atmosphere, header, add row, seeds and foot, and sets the sheet in the
+  app's faces in ink on white. Untouched: the Examen, the calendar, the
+  cloud mirror's shape.
 
 ### Hour palette
 
