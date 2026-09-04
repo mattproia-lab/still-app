@@ -3714,31 +3714,17 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 @keyframes dcFadeIn{from{opacity:0}to{opacity:1}}
 
   @media (max-width: 640px) {
-  /* The Guide + Spiritual Paths share one parchment skin -- enlarge the
-     reading text on mobile (safe in light or dark). */
-  #stillGuide,
+  /* Spiritual Paths keeps the parchment skin -- enlarge the reading text on
+     mobile (safe in light or dark). The Guide is on the DESIGN.md tokens now. */
   #pathsOverlay { font-size: 19px !important; }
 
-  #stillGuide .lead,
-  #stillGuide .subtitle,
   #pathsOverlay .subtitle { font-size: 1.2rem !important; }
   #pathsOverlay .ctr-passage { font-size: 1.08rem !important; }
-  #stillGuide p.body,
-  #stillGuide .essence,
-  #stillGuide .gloss,
-  #stillGuide ul.questions li,
-  #stillGuide ol.remedies li,
-  #stillGuide .card-passage,
-  #stillGuide .tender-note,
   #pathsOverlay p.body,
   #pathsOverlay .panel p { font-size: 1.12rem !important; }
 
-  #stillGuide .scripture,
   #pathsOverlay .scripture { font-size: 1.4rem !important; }
 
-  #stillGuide .opt,
-  #stillGuide .choice,
-  #stillGuide .excuse,
   #pathsOverlay .opt { font-size: 1.08rem !important; }
 
   #pathsOverlay input.note,
@@ -3746,8 +3732,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   #pathsOverlay .colophon { font-size: 0.95rem !important; }
 
   /* Darken the muted tones for daylight legibility -- only in the
-     light (parchment) mode, which is how both screens open. */
-  #stillGuide:not(.dark),
+     light (parchment) mode, which is how the screen opens. */
   #pathsOverlay:not(.dark):not(.threshold):not(.threshold-center) {
     --ink: #241f1b !important;
     --ink-soft: #473d32 !important;
@@ -10809,180 +10794,244 @@ const Guide = (function () {
   ];
 
   const CSS = `
+  /* ═══════════════════════════════════════════
+     THE GUIDE -- on the DESIGN.md tokens
+     Injected by injectStyles(). The overlay root carries data-tokens, so the
+     shared components apply; everything here is scoped to #stillGuide.
+     No ring: nothing is timed. No bordered card: the light comes through.
+  ═══════════════════════════════════════════ */
   #stillGuide{
-    --ink:#2a2521; --ink-soft:#6a5f54; --ink-faint:#776c5e;
-    --parchment:#f4eee1; --parchment-deep:#ece2cf; --parchment-card:#f7f2e8;
-    --ember:#9c4a2f; --ember-soft:#b8674a; --gold:#a8853f;
-    --line:rgba(42,37,33,0.15); --line-soft:rgba(42,37,33,0.08); --shadow:rgba(60,44,28,0.10); --measure:38rem;
-    position:fixed; inset:0; z-index:2147483000; display:none; opacity:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
-    background-color:var(--parchment);
-    background-image:radial-gradient(120% 80% at 18% 8%, rgba(255,250,238,0.85) 0%, rgba(255,250,238,0) 46%),radial-gradient(120% 90% at 88% 100%, rgba(176,146,93,0.10) 0%, rgba(176,146,93,0) 50%),radial-gradient(90% 70% at 50% 50%, rgba(156,74,47,0.025) 0%, rgba(156,74,47,0) 70%);
-    color:var(--ink); font-family:"EB Garamond", Georgia, serif; font-size:18px; line-height:1.72; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; transition:opacity .35s ease;
+    /* The Guide's ember from the stained-glass array, behind the text as in Lectio */
+    --atmos-rgb:156,74,47;--atmos-a:.86;
+    --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+    --measure-read:30rem;   /* about 65 characters of the serif */
+    position:fixed;inset:0;z-index:2147483000;display:none;opacity:0;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:var(--ink-0);color:var(--text-mid);
+    font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    transition:opacity var(--d-base) var(--ease-out);
   }
-  #stillGuide.dark{
-    --ink:#ece3d2; --ink-soft:#b3a690; --ink-faint:#8f8472;
-    --parchment:#181410; --parchment-deep:#221c16; --parchment-card:#211b15;
-    --ember:#cc6e44; --ember-soft:#d98b68; --gold:#c6a568;
-    --line:rgba(236,227,210,0.14); --line-soft:rgba(236,227,210,0.06); --shadow:rgba(0,0,0,0.45);
-    background-color:var(--parchment);
-    background-image:radial-gradient(120% 80% at 18% 8%, rgba(64,50,34,0.40) 0%, rgba(64,50,34,0) 46%),radial-gradient(120% 90% at 88% 100%, rgba(198,165,104,0.12) 0%, rgba(198,165,104,0) 50%),radial-gradient(90% 70% at 50% 50%, rgba(204,110,68,0.06) 0%, rgba(204,110,68,0) 70%);
-  }
-  #stillGuide.open{ opacity:1; }
-  #stillGuide::before{ content:""; position:absolute; inset:0; pointer-events:none; z-index:0; opacity:0.04; mix-blend-mode:multiply; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-  #stillGuide.dark::before{ mix-blend-mode:screen; opacity:0.05; }
-  #stillGuide *{ box-sizing:border-box; }
-  #stillGuide button:focus-visible, #stillGuide textarea:focus-visible{ outline:2px solid var(--ember); outline-offset:2px; border-radius:2px; }
-  #stillGuide .vessel{ position:relative; z-index:1; max-width:var(--measure); margin:0 auto; min-height:100vh; min-height:100dvh; padding:clamp(1.6rem,5vw,3rem) clamp(1.4rem,5vw,2rem) clamp(2.6rem,8vw,4rem); display:flex; flex-direction:column; }
-  #stillGuide .sg-close{ position:fixed; top:calc(env(safe-area-inset-top,0px) + 1rem); right:1rem; z-index:3; -webkit-appearance:none; appearance:none; background:rgba(244,238,225,0.7); border:1px solid var(--line); border-radius:50%; width:2.6rem; height:2.6rem; cursor:pointer; color:var(--ink-soft); font-size:1.1rem; line-height:1; backdrop-filter:blur(4px); transition:color .3s ease, border-color .3s ease; }
-  #stillGuide.dark .sg-close{ background:rgba(24,20,16,0.75); }
-  #stillGuide .sg-close:hover{ color:var(--ember); border-color:var(--ember); }
-  #stillGuide .rail{ display:flex; align-items:center; justify-content:center; gap:clamp(0.55rem,3.2vw,0.95rem); min-height:1.4rem; margin-bottom:clamp(1.5rem,5vw,2.4rem); flex-wrap:wrap; }
-  #stillGuide .rail .num{ font-family:"Cormorant Garamond", serif; font-size:0.92rem; letter-spacing:0.06em; color:var(--ink-faint); transition:color .6s ease, transform .6s ease; line-height:1; }
-  #stillGuide .rail button.num{ -webkit-appearance:none; appearance:none; background:none; border:0; padding:0.3rem; cursor:pointer; }
-  #stillGuide .rail button.num:hover{ color:var(--ember); }
-  #stillGuide .rail .num.done{ color:var(--gold); }
-  #stillGuide .rail .num.active{ color:var(--ember); transform:scale(1.32); }
-  #stillGuide .rail .label{ font-size:0.68rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--ink-faint); }
-  #stillGuide .stage{ flex:1; display:flex; flex-direction:column; justify-content:center; position:relative; }
-#stillGuide .sg-screen{ opacity:0; position:relative; z-index:2; }
-#stillGuide .sg-screen.in{ opacity:1; }
-#stillGuide .sg-screen.leaving{ opacity:0; transform:translateY(-8px); transition:opacity .34s ease, transform .34s ease; pointer-events:none; z-index:1; }
-#stillGuide .sg-screen-inner{ display:flex; flex-direction:column; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *{ animation:sg-rise .85s cubic-bezier(.2,.7,.25,1) both; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(1){ animation-delay:.02s; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(2){ animation-delay:.10s; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(3){ animation-delay:.18s; }
- #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(4){ animation-delay:.26s; }
- #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(5){ animation-delay:.34s; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(6){ animation-delay:.42s; }
-  #stillGuide .sg-screen.in .sg-screen-inner > *:nth-child(7){ animation-delay:.50s; }
-  #stillGuide .sg-screen .screen.in .sg-screen-inner > *:nth-child(8){ animation-delay:.58s; }
-  @keyframes sg-rise{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
-  @media (prefers-reduced-motion: reduce){ #stillGuide .sg-screen.in .sg-screen-inner > *{ animation:none; } #stillGuide .sg-screen, #stillGuide .sg-screen.leaving{ transition:none; } }
-  #stillGuide .overline{ font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 1.1rem; }
-  #stillGuide h1.title{ font-family:"Cormorant Garamond", serif; font-weight:500; font-size:clamp(2.8rem,9vw,3.9rem); line-height:1.02; letter-spacing:0.005em; margin:0 0 0.5rem; }
-  #stillGuide .subtitle{ font-style:italic; font-size:1.08rem; color:var(--ink-soft); margin:0 0 1.8rem; }
-  #stillGuide p.body{ margin:0 0 1.15rem; } #stillGuide p.body:last-of-type{ margin-bottom:0; }
-  #stillGuide .lead{ font-size:1.12rem; } #stillGuide em{ font-style:italic; }
-  #stillGuide .rule{ width:3.2rem; height:1px; background:var(--gold); border:0; margin:0 0 1.7rem; }
-  #stillGuide .section-label, #stillGuide .q-label{ font-size:0.7rem; letter-spacing:0.26em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 0.9rem; }
-  #stillGuide .hub-arc{ color:var(--ink-soft); font-style:italic; margin:0 0 2rem; font-size:1.05rem; }
-  #stillGuide .movements{ display:flex; flex-direction:column; }
-  #stillGuide .mv{ -webkit-appearance:none; appearance:none; text-align:left; width:100%; display:flex; align-items:baseline; gap:1.1rem; cursor:pointer; background:transparent; border:0; border-top:1px solid var(--line); padding:1.15rem 0.2rem; color:var(--ink); transition:padding-left .35s ease; font-family:inherit; }
-  #stillGuide .mv:last-child{ border-bottom:1px solid var(--line); }
-  #stillGuide .mv:hover{ padding-left:0.6rem; }
-  #stillGuide .mv .mv-num{ font-family:"Cormorant Garamond",serif; font-size:1.5rem; color:var(--gold); min-width:2.4rem; line-height:1; transition:color .35s ease; }
-  #stillGuide .mv:hover .mv-num{ color:var(--ember); }
-  #stillGuide .mv .mv-body{ flex:1; }
-  #stillGuide .mv .mv-name{ font-family:"Cormorant Garamond",serif; font-size:1.55rem; font-weight:500; line-height:1.1; }
-  #stillGuide .mv .mv-sub{ font-style:italic; color:var(--ink-soft); font-size:0.98rem; margin-top:0.1rem; }
-  #stillGuide .mv .mv-arrow{ color:var(--ink-faint); font-size:1.1rem; align-self:center; transition:color .35s ease, transform .35s ease; }
-  #stillGuide .mv:hover .mv-arrow{ color:var(--ember); transform:translateX(3px); }
-  #stillGuide .root-numeral{ font-family:"Cormorant Garamond",serif; font-size:clamp(3.2rem,13vw,4.6rem); font-weight:500; color:var(--ember); line-height:0.9; margin:0 0 0.2rem; }
-  #stillGuide .root-name{ font-family:"Cormorant Garamond",serif; font-weight:500; font-size:clamp(2.3rem,8vw,3rem); line-height:1.05; margin:0 0 0.15rem; }
-  #stillGuide .root-latin{ font-style:italic; color:var(--gold); font-size:1.05rem; letter-spacing:0.04em; margin:0 0 1.4rem; }
-  #stillGuide .essence{ font-size:1.14rem; color:var(--ink); margin:0 0 0.9rem; }
-  #stillGuide .gloss{ color:var(--ink-soft); margin:0 0 1.7rem; }
-  #stillGuide ul.questions{ list-style:none; margin:0 0 1.9rem; padding:0; }
-  #stillGuide ul.questions li{ position:relative; padding-left:1.5rem; margin-bottom:0.85rem; font-size:1.06rem; color:var(--ink); font-style:italic; }
-  #stillGuide ul.questions li::before{ content:"--"; position:absolute; left:0; top:0; color:var(--ember-soft); font-style:normal; }
-  #stillGuide .resonance{ display:flex; flex-direction:column; gap:0.6rem; margin:0 0 1.5rem; }
-  #stillGuide .opt{ -webkit-appearance:none; appearance:none; text-align:left; font-family:"EB Garamond",serif; font-size:1.05rem; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:2px; padding:0.85rem 1rem 0.85rem 2.7rem; cursor:pointer; position:relative; transition:border-color .4s ease, color .4s ease, background-color .4s ease; }
-  #stillGuide .opt::before{ content:""; position:absolute; left:1rem; top:50%; transform:translateY(-50%); width:0.78rem; height:0.78rem; border-radius:50%; border:1px solid var(--ink-faint); transition:all .3s ease; }
-  #stillGuide .opt:hover{ border-color:var(--gold); color:var(--ink); }
-  #stillGuide .opt[aria-pressed="true"]{ color:var(--ember); border-color:var(--ember); background:rgba(156,74,47,0.05); }
-  #stillGuide .opt[aria-pressed="true"]::before{ border-color:var(--ember); background:radial-gradient(circle, var(--ember) 0 45%, transparent 48%); box-shadow:0 0 0 3px rgba(156,74,47,0.10); }
-  #stillGuide .opt .o-sub{ display:block; font-size:0.84rem; font-style:italic; color:var(--ink-faint); margin-top:0.1rem; }
-  #stillGuide .note-wrap{ margin:0 0 0.4rem; }
-  #stillGuide textarea.note{ width:100%; min-height:3.4rem; resize:vertical; font-family:"EB Garamond",serif; font-size:1.02rem; font-style:italic; color:var(--ink); line-height:1.6; background:transparent; border:0; border-bottom:1px solid var(--line); padding:0.4rem 0.1rem 0.6rem; outline:none; transition:border-color .4s ease; }
-  #stillGuide textarea.note::placeholder{ color:var(--ink-faint); font-style:italic; }
-  #stillGuide textarea.note:focus{ border-bottom-color:var(--ember); }
-  #stillGuide .virtue-name{ font-family:"Cormorant Garamond",serif; font-weight:500; font-size:clamp(2rem,7vw,2.6rem); color:var(--ember); line-height:1.06; margin:0 0 0.2rem; }
-  #stillGuide .virtue-sub{ font-style:italic; color:var(--ink-soft); margin:0 0 1.5rem; font-size:1.08rem; }
-  #stillGuide .scripture{ font-family:"Cormorant Garamond",serif; font-size:1.35rem; font-style:italic; color:var(--ink); line-height:1.4; border-left:2px solid var(--ember); padding:0.2rem 0 0.2rem 1.1rem; margin:0 0 0.4rem; }
-  #stillGuide .scripture-ref{ font-size:0.72rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin:0 0 1.6rem; padding-left:1.1rem; }
-  #stillGuide .panel{ background:var(--parchment-card); border:1px solid var(--line-soft); border-left:2px solid var(--gold); border-radius:2px; padding:1.1rem 1.25rem; margin:0 0 1.4rem; box-shadow:0 1px 0 var(--shadow); }
-  #stillGuide .panel .section-label{ margin-bottom:0.5rem; }
-  #stillGuide .panel p{ margin:0; font-style:italic; color:var(--ink); }
-  #stillGuide .remedy-block{ margin:0 0 1.5rem; }
-  #stillGuide ol.remedies{ margin:0.2rem 0 0; padding:0; list-style:none; counter-reset:r; }
-  #stillGuide ol.remedies li{ counter-increment:r; position:relative; padding-left:2.1rem; margin-bottom:0.7rem; color:var(--ink); }
-  #stillGuide ol.remedies li::before{ content:counter(r); position:absolute; left:0; top:0.05rem; font-family:"Cormorant Garamond",serif; font-size:1.15rem; color:var(--ember); width:1.4rem; text-align:center; }
-  #stillGuide .short-remedy{ text-align:center; font-family:"Cormorant Garamond",serif; font-size:1.5rem; font-style:italic; color:var(--ember); line-height:1.3; margin:1.8rem 0; padding:1.3rem 1rem; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-  #stillGuide .regimen{ background:rgba(156,74,47,0.04); border:1px solid rgba(156,74,47,0.18); border-radius:3px; padding:1.2rem 1.3rem; margin:0 0 1.4rem; }
-  #stillGuide .regimen-title{ font-family:"Cormorant Garamond",serif; font-size:1.4rem; font-weight:500; color:var(--ember); margin:0 0 0.2rem; }
-  #stillGuide .regimen-note{ font-style:italic; color:var(--ink-soft); font-size:0.95rem; margin:0 0 1rem; }
-  #stillGuide ul.regimen-steps{ list-style:none; margin:0; padding:0; }
-  #stillGuide ul.regimen-steps li{ position:relative; padding-left:1.6rem; margin-bottom:0.65rem; color:var(--ink); }
-  #stillGuide ul.regimen-steps li::before{ content:"✦"; position:absolute; left:0; top:0.05rem; color:var(--gold); font-size:0.85rem; }
-  #stillGuide .choose-list{ display:flex; flex-direction:column; gap:0.45rem; margin:0 0 1.6rem; }
-  #stillGuide .choice{ -webkit-appearance:none; appearance:none; display:flex; align-items:baseline; gap:0.9rem; text-align:left; width:100%; font-family:"EB Garamond",serif; background:transparent; border:1px solid var(--line); border-radius:2px; padding:0.75rem 1rem; cursor:pointer; color:var(--ink-soft); transition:all .35s ease; }
-  #stillGuide .choice:hover{ border-color:var(--gold); color:var(--ink); }
-  #stillGuide .choice[aria-pressed="true"]{ border-color:var(--ember); background:rgba(156,74,47,0.05); color:var(--ink); }
-  #stillGuide .choice .c-num{ font-family:"Cormorant Garamond",serif; color:var(--gold); font-size:1.15rem; min-width:1.6rem; }
-  #stillGuide .choice[aria-pressed="true"] .c-num{ color:var(--ember); }
-  #stillGuide .choice .c-name{ font-size:1.12rem; }
-  #stillGuide .choice .c-meter{ margin-left:auto; font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-faint); white-space:nowrap; }
-  #stillGuide .choice[data-strong="2"] .c-meter{ color:var(--ember); } #stillGuide .choice[data-strong="1"] .c-meter{ color:var(--gold); }
-  #stillGuide .card-counter{ font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 1.2rem; }
-  #stillGuide .card-title{ font-family:"Cormorant Garamond",serif; font-weight:500; font-size:clamp(2.1rem,7.5vw,2.9rem); line-height:1.05; margin:0 0 0.3rem; }
-  #stillGuide .card-kicker{ font-style:italic; color:var(--gold); font-size:1.02rem; margin:0 0 1.4rem; }
-  #stillGuide .card-passage{ font-size:1.12rem; margin:0 0 1.5rem; }
-  #stillGuide .card-prompt{ font-style:italic; color:var(--ember); font-size:1.1rem; border-left:2px solid var(--ember); padding-left:1rem; margin:0 0 1.6rem; }
-  #stillGuide .tender-note{ font-style:italic; color:var(--ink-soft); font-size:0.96rem; border-left:2px solid var(--gold); padding-left:1rem; margin:0 0 1.4rem; }
-  #stillGuide .excuse-list{ display:flex; flex-direction:column; gap:0.55rem; margin:0 0 1.6rem; }
-  #stillGuide .excuse{ -webkit-appearance:none; appearance:none; text-align:left; width:100%; font-family:"Cormorant Garamond",serif; font-size:1.3rem; font-style:italic; color:var(--ink-soft); background:transparent; border:1px solid var(--line); border-radius:2px; padding:0.9rem 1.1rem; cursor:pointer; transition:all .35s ease; line-height:1.25; }
-  #stillGuide .excuse:hover{ border-color:var(--gold); color:var(--ink); }
-  #stillGuide .excuse[aria-pressed="true"]{ border-color:var(--ember); background:rgba(156,74,47,0.05); color:var(--ember); }
-  #stillGuide .reply-reveal{ overflow:hidden; max-height:0; opacity:0; transition:max-height .6s ease, opacity .5s ease, margin .5s ease; margin:0; }
-  #stillGuide .reply-reveal.open{ max-height:760px; opacity:1; margin:0 0 1.6rem; }
-  #stillGuide .tabs{ display:flex; gap:0.4rem; margin:0 0 1.8rem; border-bottom:1px solid var(--line); }
-  #stillGuide .tab{ -webkit-appearance:none; appearance:none; background:transparent; border:0; cursor:pointer; font-family:"EB Garamond",serif; font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-faint); padding:0.6rem 0.7rem 0.8rem; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .3s ease; }
-  #stillGuide .tab:hover{ color:var(--ink); }
-  #stillGuide .tab[aria-selected="true"]{ color:var(--ember); border-bottom-color:var(--ember); }
-  #stillGuide .virtue-row{ border-top:1px solid var(--line-soft); padding:1.1rem 0; }
-  #stillGuide .virtue-row:last-child{ border-bottom:1px solid var(--line-soft); }
-  #stillGuide .vr-head{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; }
-  #stillGuide .vr-name{ font-family:"Cormorant Garamond",serif; font-size:1.45rem; font-weight:500; color:var(--ink); }
-  #stillGuide .vr-line{ color:var(--ink-soft); margin:0.25rem 0 0.7rem; }
-  #stillGuide .vr-practice{ font-style:italic; color:var(--ink); font-size:1.0rem; }
-  #stillGuide .vr-practice::before{ content:"Practice -- "; font-style:normal; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); }
-  #stillGuide .add-rule{ -webkit-appearance:none; appearance:none; background:transparent; border:1px solid var(--line); border-radius:2px; cursor:pointer; font-family:"EB Garamond",serif; font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-faint); padding:0.45rem 0.8rem; white-space:nowrap; transition:all .3s ease; }
-  #stillGuide .add-rule:hover{ border-color:var(--ember); color:var(--ember); }
-  #stillGuide .add-rule.added{ border-color:var(--gold); color:var(--gold); cursor:default; }
-  #stillGuide .summary{ border-top:1px solid var(--line); margin-top:1.7rem; padding-top:1.4rem; }
-  #stillGuide .summary .row{ margin-bottom:1rem; } #stillGuide .summary .row:last-child{ margin-bottom:0; }
-  #stillGuide .summary .r-label{ font-size:0.68rem; letter-spacing:0.24em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:0.25rem; }
-  #stillGuide .summary .r-val{ font-size:1.08rem; color:var(--ink); } #stillGuide .summary .r-val.q{ font-style:italic; }
-  #stillGuide .summary .r-empty{ color:var(--ink-faint); font-style:italic; }
-  #stillGuide .res-rule-btn{ -webkit-appearance:none; appearance:none; width:100%; font-family:"EB Garamond",serif; font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--ember); background:transparent; border:1px solid var(--ember); border-radius:2px; padding:0.75rem 1rem; cursor:pointer; transition:all .3s ease; margin:1.3rem 0 0; }
-  #stillGuide .res-rule-btn:hover{ background:rgba(156,74,47,0.06); }
-  #stillGuide .res-rule-btn.added{ color:var(--gold); border-color:var(--gold); cursor:default; }
-  #stillGuide .harvest-list{ display:flex; flex-direction:column; }
-  #stillGuide .harvest-row{ border-top:1px solid var(--line-soft); padding:1rem 0; }
-  #stillGuide .harvest-row:last-child{ border-bottom:1px solid var(--line-soft); }
-  #stillGuide .h-date{ font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:0.25rem; }
-  #stillGuide .h-root{ font-family:"Cormorant Garamond",serif; font-size:1.4rem; color:var(--ember); line-height:1.1; }
-  #stillGuide .h-res{ font-style:italic; color:var(--ink); margin-top:0.2rem; }
-  #stillGuide .h-res .r-empty{ color:var(--ink-faint); }
-  #stillGuide .controls{ display:flex; align-items:center; gap:1.4rem; margin-top:clamp(1.8rem,6vw,2.6rem); }
-  #stillGuide .controls.center{ justify-content:center; }
-  #stillGuide button.go{ -webkit-appearance:none; appearance:none; font-family:"EB Garamond",serif; font-size:0.82rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--parchment); background:var(--ember); border:1px solid var(--ember); border-radius:2px; padding:0.85rem 1.7rem; cursor:pointer; transition:background-color .4s ease, transform .15s ease, box-shadow .4s ease, filter .3s ease; box-shadow:0 2px 10px rgba(156,74,47,0.18); }
-  #stillGuide button.go:hover{ filter:brightness(0.92); box-shadow:0 4px 16px rgba(156,74,47,0.26); }
-  #stillGuide button.go:active{ transform:translateY(1px); }
-  #stillGuide button.go.ghost{ color:var(--ember); background:transparent; box-shadow:none; }
-  #stillGuide button.go.ghost:hover{ background:rgba(156,74,47,0.06); filter:none; }
-  #stillGuide button.back{ -webkit-appearance:none; appearance:none; font-family:"EB Garamond",serif; font-size:0.74rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-faint); background:none; border:0; cursor:pointer; padding:0.4rem 0; transition:color .3s ease; }
-  #stillGuide button.back:hover{ color:var(--ember); }
-  #stillGuide .spacer{ flex:1; }
-  #stillGuide .colophon{ margin-top:2.4rem; font-size:0.78rem; font-style:italic; color:var(--ink-faint); text-align:center; line-height:1.5; }
-  #stillGuide .home-link{ display:inline-block; margin-bottom:1.6rem; font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--ink-faint); cursor:pointer; background:none; border:0; padding:0; transition:color .3s ease; font-family:inherit; }
-  #stillGuide .home-link:hover{ color:var(--ember); }
-  @media (max-width:640px){
-    #stillGuide .opt, #stillGuide .choice, #stillGuide .excuse{ min-height:48px; }
-    #stillGuide button.back, #stillGuide .home-link{ min-height:44px; display:inline-flex; align-items:center; }
-    #stillGuide .add-rule{ min-height:40px; }
-    #stillGuide .mv{ padding-top:1.25rem; padding-bottom:1.25rem; }
+  #stillGuide.open{opacity:1;}
+  #stillGuide *{box-sizing:border-box;}
+  /* The overlay itself is the scroller (transition() resets root.scrollTop),
+     so the light is fixed to the viewport and the page moves over it. */
+  #stillGuide .atmos{position:fixed;}
+  #stillGuide button:focus-visible,#stillGuide textarea:focus-visible{outline:1px solid var(--gold-a55);outline-offset:3px;}
+
+  /* Header: sticky in the scroller, fading into the ground so the way out stays in reach */
+  #stillGuide .app-header{position:sticky;top:0;z-index:20;padding-bottom:var(--s-4)!important;
+    background:linear-gradient(to bottom,var(--ink-0) 0%,var(--ink-0) 72%,transparent 100%);}
+  #stillGuide .sg-close{background:none;border:0;padding:0;}
+  #stillGuide .sg-header-spacer{width:2.4rem;}
+
+  #stillGuide .vessel{position:relative;z-index:10;max-width:var(--measure);margin:0 auto;
+    padding:var(--s-3) var(--gutter) calc(env(safe-area-inset-bottom,0px) + 96px);
+    display:flex;flex-direction:column;min-height:calc(100vh - 64px);min-height:calc(100dvh - 64px);}
+  #stillGuide .stage{flex:1;display:flex;flex-direction:column;position:relative;}
+  /* Only the threshold screens (welcome, welcome back) sit at the centre of the frame */
+  #stillGuide .sg-screen.sg-threshold{margin:auto 0;}
+
+  /* The spine: one dot per movement, the one in hand lit. Painted by renderRail(). */
+  #stillGuide .rail{margin:0 0 var(--s-5);}
+  #stillGuide .rail:empty{display:none;}
+  #stillGuide .sg-track{justify-content:center;max-width:240px;margin:0 auto;}
+  #stillGuide .sg-track .phase-step-dot{margin-right:0;width:6px;height:6px;}
+  #stillGuide .sg-track .phase-connector{flex:0 0 18px;margin:0 6px;}
+  /* While searching the heart, the seven roots sit under the dots as numerals */
+  #stillGuide .sg-roots{display:flex;justify-content:center;gap:var(--s-3);margin-top:var(--s-3);}
+  #stillGuide .sg-roots .num{font-family:var(--font-serif);font-size:var(--t-base);line-height:1;letter-spacing:.04em;
+    color:var(--text-faint);background:none;border:0;padding:4px 2px;transition:color var(--d-slow) var(--ease-out);}
+  #stillGuide .sg-roots button.num{cursor:pointer;}
+  #stillGuide .sg-roots .num.done{color:var(--gold-a55);}
+  #stillGuide .sg-roots .num.active{color:var(--candle);text-shadow:0 0 10px rgba(242,199,119,.5);}
+  @media (max-width:420px){ #stillGuide .sg-roots{gap:var(--s-2);} }
+
+  /* Each screen enters on a breath and leaves on a short fade (transition()
+     replaces it after 320ms). The animation is dropped on leaving so its
+     fill does not hold the opacity up. */
+  #stillGuide .sg-screen{position:relative;z-index:2;opacity:0;}
+  #stillGuide .sg-screen.in{opacity:1;animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+  #stillGuide .sg-screen.leaving{animation:none;opacity:0;transition:opacity .3s var(--ease-out);pointer-events:none;z-index:1;}
+  #stillGuide .sg-screen-inner{display:flex;flex-direction:column;}
+
+  /* What was just finished, carried above what is in hand; then the movement's name */
+  #stillGuide .sg-prev{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);
+    text-transform:uppercase;color:var(--text-faint);min-height:1.3em;margin-bottom:var(--s-1);}
+  #stillGuide .sg-movement{display:flex;justify-content:space-between;gap:var(--s-3);
+    font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);
+    text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-4);}
+  #stillGuide .sg-count{color:var(--text-faint);font-weight:400;letter-spacing:var(--track-label);white-space:nowrap;}
+
+  /* Type. Granada speaks in the serif at reading measure; the interface, and
+     the questions it puts to the reader, in the sans. */
+  #stillGuide .sg-title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-xl);line-height:var(--lh-tight);
+    color:var(--text-hi);margin:0 0 var(--s-2);}
+  #stillGuide .sg-subtitle{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);
+    color:var(--text-mid);margin:0 0 var(--s-5);}
+  #stillGuide .sg-passage{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);
+    color:var(--text-hi);max-width:var(--measure-read);margin:0 0 var(--s-4);text-wrap:pretty;}
+  #stillGuide .sg-passage.quiet{color:var(--text-mid);}
+  #stillGuide .sg-passage em,#stillGuide .body em,#stillGuide .sg-subtitle em{font-style:italic;}
+  #stillGuide .sg-prompt{font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-hi);
+    border-left:1px solid var(--gold-a55);padding-left:var(--s-4);margin:0 0 var(--s-5);max-width:var(--measure-read);}
+  #stillGuide .sg-kicker{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-low);margin:0 0 var(--s-4);}
+  #stillGuide .sg-em{font-weight:500;color:var(--candle);}
+  #stillGuide .body{max-width:var(--measure-read);}
+  #stillGuide .body.tight{margin-bottom:var(--s-3);}
+  #stillGuide .rule{margin:var(--s-4) 0 var(--s-5);}
+  #stillGuide .rule-short{margin-left:0;}
+  #stillGuide .ui-label{margin-bottom:var(--s-3);}
+  #stillGuide .voice{max-width:var(--measure-read);}
+  #stillGuide .voice-left{margin-left:0;}
+  #stillGuide .sg-quote{margin:var(--s-5) 0;}
+  #stillGuide .tender-note{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);
+    border-left:1px solid var(--line-strong);padding-left:var(--s-4);margin:0 0 var(--s-5);max-width:var(--measure-read);}
+
+  /* Hub: the five movements as one list */
+  #stillGuide .movements{display:flex;flex-direction:column;margin-top:var(--s-4);}
+  #stillGuide .mv{display:flex;align-items:baseline;gap:var(--s-4);width:100%;text-align:left;cursor:pointer;
+    background:none;border:0;border-top:1px solid var(--line);padding:var(--s-4) var(--s-1);color:var(--text-hi);
+    transition:padding-left var(--d-base) var(--ease-out);-webkit-tap-highlight-color:transparent;}
+  #stillGuide .mv:last-child{border-bottom:1px solid var(--line);}
+  #stillGuide .mv:hover{padding-left:var(--s-3);}
+  #stillGuide .mv-num{font-family:var(--font-serif);font-size:var(--t-md);color:var(--gold);min-width:2.2rem;line-height:1;}
+  #stillGuide .mv-body{flex:1;display:flex;flex-direction:column;gap:2px;}
+  #stillGuide .mv-name{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+  #stillGuide .mv-sub{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-low);}
+  #stillGuide .mv-arrow{color:var(--text-faint);align-self:center;transition:color var(--d-fast),transform var(--d-base) var(--ease-out);}
+  #stillGuide .mv:hover .mv-arrow{color:var(--candle);transform:translateX(3px);}
+  #stillGuide .home-link{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:none;border:0;padding:8px 0;cursor:pointer;
+    font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-low);transition:color var(--d-fast);}
+  #stillGuide .home-link:hover{color:var(--text-hi);}
+  #stillGuide .home-link.harvest{margin-top:var(--s-5);}
+  #stillGuide .colophon{margin-top:var(--s-6);text-align:center;}
+
+  /* The excuses: each lie in the serif, the reply beneath the one chosen */
+  #stillGuide .excuse-list{display:flex;flex-direction:column;gap:var(--s-2);margin:0 0 var(--s-5);}
+  #stillGuide .excuse{width:100%;text-align:left;background:none;border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:12px var(--s-4);cursor:pointer;font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);
+    color:var(--text-mid);transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+  #stillGuide .excuse:hover{border-color:var(--line-strong);color:var(--text-hi);}
+  #stillGuide .excuse[aria-pressed="true"]{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+  #stillGuide .reply-reveal{display:none;}
+  #stillGuide .reply-reveal.open{display:block;margin:0 0 var(--s-5);}
+
+  /* Searching the heart: a root */
+  #stillGuide .sg-numeral{font-family:var(--font-serif);font-weight:500;font-size:var(--t-2xl);line-height:.9;color:var(--candle);
+    text-shadow:0 0 30px rgba(242,199,119,.25);margin:0 0 var(--s-2);}
+  #stillGuide .sg-root-name{margin-bottom:var(--s-1);}
+  #stillGuide .sg-latin{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+    text-transform:uppercase;color:var(--gold);margin:0 0 var(--s-5);}
+  #stillGuide ul.questions{list-style:none;margin:0 0 var(--s-5);padding:0;max-width:var(--measure-read);}
+  #stillGuide ul.questions li{position:relative;padding-left:var(--s-5);margin-bottom:var(--s-3);
+    font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);}
+  #stillGuide ul.questions li::before{content:"\\2014";position:absolute;left:0;top:0;color:var(--gold);}
+  #stillGuide .resonance{display:flex;flex-direction:column;gap:var(--s-2);margin:0 0 var(--s-4);}
+  #stillGuide .opt{position:relative;text-align:left;width:100%;background:none;border:1px solid var(--line);border-radius:var(--r-sm);
+    padding:12px var(--s-4) 12px 40px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-snug);
+    color:var(--text-mid);transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+  #stillGuide .opt::before{content:"";position:absolute;left:var(--s-4);top:50%;transform:translateY(-50%);width:9px;height:9px;
+    border-radius:50%;border:1px solid var(--text-faint);transition:border-color var(--d-base),background var(--d-base),box-shadow var(--d-base);}
+  #stillGuide .opt:hover{border-color:var(--line-strong);color:var(--text-hi);}
+  #stillGuide .opt[aria-pressed="true"]{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+  #stillGuide .opt[aria-pressed="true"]::before{border-color:var(--candle);background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+  #stillGuide .opt .o-sub{display:block;font-size:var(--t-sm);color:var(--text-low);margin-top:2px;}
+  #stillGuide .opt[aria-pressed="true"] .o-sub{color:var(--gold);}
+  #stillGuide .note-wrap{margin:0 0 var(--s-2);max-width:var(--measure-read);}
+  #stillGuide textarea.note{width:100%;min-height:5.5rem;resize:vertical;display:block;
+    background:rgba(255,240,220,.03);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+    padding:var(--s-3) var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+    outline:none;transition:border-color var(--d-base);}
+  #stillGuide textarea.note:focus{border-color:var(--gold-a55);}
+  #stillGuide textarea.note::placeholder{color:var(--text-faint);}
+  #stillGuide textarea.note.tall{min-height:7.5rem;}
+
+  /* What rose to the surface */
+  #stillGuide .choose-list{display:flex;flex-direction:column;gap:var(--s-2);margin:0 0 var(--s-5);}
+  #stillGuide .choice{display:flex;align-items:baseline;gap:var(--s-3);width:100%;text-align:left;background:none;
+    border:1px solid var(--line);border-radius:var(--r-sm);padding:12px var(--s-4);cursor:pointer;color:var(--text-mid);
+    transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+  #stillGuide .choice:hover{border-color:var(--line-strong);color:var(--text-hi);}
+  #stillGuide .choice[aria-pressed="true"]{border-color:var(--gold-a55);background:var(--gold-a10);color:var(--text-hi);}
+  #stillGuide .c-num{font-family:var(--font-serif);font-size:var(--t-base);color:var(--gold);min-width:1.8rem;}
+  #stillGuide .c-name{font-family:var(--font-serif);font-size:var(--t-md);line-height:1.2;}
+  #stillGuide .choice[aria-pressed="true"] .c-name{color:var(--candle);}
+  #stillGuide .c-meter{margin-left:auto;font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-faint);white-space:nowrap;}
+  #stillGuide .choice[data-strong="2"] .c-meter{color:var(--candle);}
+  #stillGuide .choice[data-strong="1"] .c-meter{color:var(--gold);}
+
+  /* The remedy */
+  #stillGuide .sg-virtue{font-family:var(--font-serif);font-weight:500;font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);
+    text-shadow:0 0 40px rgba(242,199,119,.2);margin:0 0 var(--s-2);}
+  #stillGuide .voice-card{max-width:var(--measure-read);}
+  #stillGuide .voice-card .ui-label{margin-bottom:var(--s-2);}
+  #stillGuide .voice-card .sg-passage{margin:0;font-size:var(--t-base);font-style:italic;}
+  #stillGuide .remedy-block{margin:0 0 var(--s-5);max-width:var(--measure-read);}
+  #stillGuide ol.remedies{margin:0;padding:0;list-style:none;counter-reset:r;}
+  #stillGuide ol.remedies li{counter-increment:r;position:relative;padding-left:var(--s-6);margin-bottom:var(--s-3);
+    font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);}
+  #stillGuide ol.remedies li::before{content:counter(r);position:absolute;left:0;top:0;font-family:var(--font-serif);
+    font-variant-numeric:lining-nums;font-size:var(--t-md);line-height:1.4;color:var(--gold);width:1.4rem;}
+  #stillGuide .short-remedy{text-align:center;font-family:var(--font-serif);font-style:italic;font-size:var(--t-lg);line-height:1.25;
+    color:var(--candle);margin:var(--s-6) 0;padding:var(--s-5) var(--s-4);text-wrap:balance;
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  #stillGuide .regimen{border:1px solid var(--gold-a25);border-radius:var(--r-sm);padding:var(--s-4) var(--s-5);margin:0 0 var(--s-5);max-width:var(--measure-read);}
+  #stillGuide .regimen-title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);margin:0 0 2px;}
+  #stillGuide .regimen-note{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-low);margin:0 0 var(--s-3);}
+  #stillGuide ul.regimen-steps{list-style:none;margin:0;padding:0;}
+  #stillGuide ul.regimen-steps li{position:relative;padding-left:var(--s-5);margin-bottom:var(--s-2);
+    font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);}
+  #stillGuide ul.regimen-steps li::before{content:"\\2726";position:absolute;left:0;top:.15em;color:var(--gold);font-size:.7em;}
+
+  /* The threefold life */
+  #stillGuide .tabs{display:flex;gap:var(--s-2);margin:0 0 var(--s-5);border-bottom:1px solid var(--line);}
+  #stillGuide .tab{background:none;border:0;border-bottom:1px solid transparent;margin-bottom:-1px;cursor:pointer;
+    font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text-faint);padding:10px var(--s-2) 12px;transition:color var(--d-base),border-color var(--d-base);}
+  #stillGuide .tab:hover{color:var(--text-mid);}
+  #stillGuide .tab[aria-selected="true"]{color:var(--candle);border-bottom-color:var(--candle);}
+  #stillGuide .virtue-row{border-top:1px solid var(--line);padding:var(--s-4) 0;}
+  #stillGuide .virtue-row:last-child{border-bottom:1px solid var(--line);}
+  #stillGuide .vr-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);}
+  #stillGuide .vr-name{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+  #stillGuide .vr-line{font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);margin:var(--s-1) 0 var(--s-2);max-width:var(--measure-read);}
+  #stillGuide .vr-practice{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-hi);max-width:var(--measure-read);}
+  #stillGuide .vr-practice::before{content:"Practice \\2014  ";font-size:var(--t-micro);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+  #stillGuide .add-rule{flex-shrink:0;background:none;border:1px solid var(--line);border-radius:var(--r-pill);cursor:pointer;
+    font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--text-low);padding:7px 12px;white-space:nowrap;transition:border-color var(--d-fast),color var(--d-fast);}
+  #stillGuide .add-rule:hover{border-color:var(--gold-a55);color:var(--candle);}
+  #stillGuide .add-rule.added{border-color:var(--gold-a25);color:var(--gold);cursor:default;}
+
+  /* Closing: the summary and the harvest */
+  #stillGuide .summary{border-top:1px solid var(--line);margin-top:var(--s-5);padding-top:var(--s-5);max-width:var(--measure-read);}
+  #stillGuide .summary .row{margin-bottom:var(--s-4);}
+  #stillGuide .summary .row:last-child{margin-bottom:0;}
+  #stillGuide .r-val{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);}
+  #stillGuide .r-val.q{font-style:italic;}
+  #stillGuide .r-empty{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-faint);font-style:normal;}
+  #stillGuide .res-rule-btn{width:100%;justify-content:center;margin-top:var(--s-5);}
+  #stillGuide .res-rule-btn.added{border-color:var(--gold-a25);color:var(--gold);background:none;box-shadow:none;cursor:default;}
+  #stillGuide .harvest-list{display:flex;flex-direction:column;}
+  #stillGuide .harvest-row{border-top:1px solid var(--line);padding:var(--s-4) 0;}
+  #stillGuide .harvest-row:last-child{border-bottom:1px solid var(--line);}
+  #stillGuide .h-date{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--s-1);}
+  #stillGuide .h-root{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:1.2;color:var(--candle);}
+  #stillGuide .h-res{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);margin-top:var(--s-1);}
+
+  /* Controls: back on the left, the way forward on the right; stacked on the threshold */
+  #stillGuide .controls{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);margin-top:var(--s-5);}
+  #stillGuide .controls.center{justify-content:center;flex-wrap:wrap;}
+  #stillGuide .controls.stack{flex-direction:column;align-items:stretch;gap:var(--s-2);}
+  #stillGuide .controls .spacer{flex:1;}
+  #stillGuide .controls .btn-begin{justify-content:center;}
+
+  @media (prefers-reduced-motion:reduce){
+    #stillGuide .sg-screen.in{--rise:0px;}
+    #stillGuide .mv,#stillGuide .mv-arrow{transition:none;}
   }
   `;
   /* ── STATE ── */
@@ -10998,6 +11047,10 @@ const Guide = (function () {
 
   /* ── HELPERS ── */
   function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  /* Display only. The content keeps its double hyphens and straight quotes
+     (some of it is what saveExamen() writes); the page shows an em dash and
+     curled quotes. Never applied to anything on its way to storage. */
+  function typo(s){ return String(s==null?"":s).replace(/\s--\s/g," \u2014 ").replace(/--/g,"\u2014").replace(/"([^"]*)"/g,"\u201c$1\u201d").replace(/(\w)'(\w)/g,"$1\u2019$2"); }
   function predominantIndex(){ let best=-1,bestVal=-1; state.roots.forEach((r,i)=>{ const v=r.resonance==null?0:r.resonance; if(v>bestVal){bestVal=v;best=i;} }); return { index:best, value:bestVal }; }
 
   function persist(){
@@ -11068,19 +11121,44 @@ const Guide = (function () {
     }catch(e){ return ""; }
   }
 
+  /* ── THE SPINE ── */
+  const MOVEMENTS=[
+    { v:"motives",   n:"I",   name:"The Motives",          sub:"Why turn toward God at all" },
+    { v:"last",      n:"II",  name:"The Four Last Things", sub:"What is at stake" },
+    { v:"excuses",   n:"III", name:"The Excuses",          sub:"What holds you back" },
+    { v:"examen",    n:"IV",  name:"Searching the Heart",  sub:"The seven roots, and their cure" },
+    { v:"threefold", n:"V",   name:"The Threefold Life",   sub:"How then to live" }
+  ];
+  function movementOf(view){ for(let i=0;i<MOVEMENTS.length;i++){ if(MOVEMENTS[i].v===view) return i; } return -1; }
+  function movementLabel(view){ const m=MOVEMENTS[movementOf(view)]; return m ? m.n+" · "+m.name : ""; }
+  /* One dot per movement, the one in hand lit. Only the current is marked:
+     the Guide can be entered anywhere, so nothing is claimed as done. */
+  function trackHTML(cur){
+    return `<div class="phase-track sg-track" aria-hidden="true">`+MOVEMENTS.map((m,i)=>
+      `<span class="phase-step${i===cur?' current':''}"><span class="phase-step-dot"></span></span>`+(i<MOVEMENTS.length-1?`<span class="phase-connector"></span>`:``)).join("")+`</div>`;
+  }
+  /* What was just finished, carried quietly above the movement's name */
+  function head(prev,label,count){
+    return `<div class="sg-prev">${prev||""}</div><div class="sg-movement"><span>${label}</span>${count?`<span class="sg-count">${count}</span>`:``}</div>`;
+  }
+  const HOME=`<button class="back btn-ghost" data-home="1">← The Guide</button>`;
+  const RETURN=`<button class="go ghost btn-primary" data-home="1">Return</button>`;
+
   /* ── RAIL ── */
   function renderRail(){
+    const cur=movementOf(state.view);
+    if(cur<0){ rail.innerHTML=""; return; }
+    let h=trackHTML(cur);
     if(state.view==="examen" && state.examenStep>=1 && state.examenStep<=7){
-      const cur=state.examenStep-1; let h="";
-      CONTENT.roots.forEach((r,i)=>{
-        if(i<cur){ h+=`<button class="num done" data-railjump="${i}" aria-label="Return to root ${r.numeral}, ${r.name}">${r.numeral}</button>`; }
-        else if(i===cur){ h+=`<span class="num active" aria-current="step" aria-label="Current root ${r.numeral}, ${r.name}">${r.numeral}</span>`; }
-        else { h+=`<span class="num" aria-label="Root ${r.numeral}, ${r.name}, not yet reached">${r.numeral}</span>`; }
+      const c=state.examenStep-1; let r="";
+      CONTENT.roots.forEach((x,i)=>{
+        if(i<c){ r+=`<button class="num done" data-railjump="${i}" aria-label="Return to root ${x.numeral}, ${x.name}">${x.numeral}</button>`; }
+        else if(i===c){ r+=`<span class="num active" aria-current="step" aria-label="Current root ${x.numeral}, ${x.name}">${x.numeral}</span>`; }
+        else { r+=`<span class="num" aria-label="Root ${x.numeral}, ${x.name}, not yet reached">${x.numeral}</span>`; }
       });
-      rail.innerHTML=h; return;
+      h+=`<div class="sg-roots">${r}</div>`;
     }
-    const labels={ welcome:"The Guide", resume:"Welcome back", hub:"The Guide", motives:"I · The Motives", last:"II · The Four Last Things", excuses:"III · The Excuses", examen:"IV · Searching the Heart", threefold:"V · The Threefold Life", harvest:"My Harvest" };
-    rail.innerHTML=`<span class="label">${labels[state.view]||""}</span>`;
+    rail.innerHTML=h;
   }
 
   /* ── NAV ── */
@@ -11096,52 +11174,46 @@ const Guide = (function () {
 
   /* ── SCREENS ── */
   function screenWelcome(){
-    return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">Welcome</p>
-      <h1 class="title">The Guide</h1>
-      <p class="subtitle">the whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></p>
-      <hr class="rule">
-      <p class="body lead">This is an old and gentle map of the spiritual life. It looks honestly at where the heart goes wrong &mdash; but it begins, and ends, in mercy. You are not here to be condemned, only to be made a little freer.</p>
-      <p class="body">You can walk the whole path in an evening, or go straight to searching your heart tonight.</p>
-      <div class="controls" style="flex-direction:column; align-items:stretch; gap:0.8rem;">
-        <button class="go" data-welcome="full">Begin the full path</button>
-        <button class="go ghost" data-welcome="examen">Jump to Searching the Heart</button>
+    return `<div class="sg-screen sg-threshold"><div class="sg-screen-inner">
+      ${head("","Welcome")}
+      <div class="sg-title">The Guide</div>
+      <div class="sg-subtitle">The whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></div>
+      <div class="rule rule-short"></div>
+      <div class="body">This is an old and gentle map of the spiritual life. It looks honestly at where the heart goes wrong &mdash; but it begins, and ends, in mercy. You are not here to be condemned, only to be made a little freer.</div>
+      <div class="body">You can walk the whole path in an evening, or go straight to searching your heart tonight.</div>
+      <div class="controls stack">
+        <button class="go btn-primary gold btn-begin" data-welcome="full">Begin the full path</button>
+        <button class="go ghost btn-primary btn-begin" data-welcome="examen">Jump to Searching the Heart</button>
       </div>
     </div></div>`;
   }
   function screenResume(){
     const p=state.pending; let where="";
     if(p){
-      if(p.step>=1 && p.step<=7){ const r=CONTENT.roots[p.step-1]; where=`You were searching the root of <strong style="font-weight:500;color:var(--ember);">${r.name.toLowerCase()}</strong>.`; }
+      if(p.step>=1 && p.step<=7){ const r=CONTENT.roots[p.step-1]; where=`You were searching the root of <strong class="sg-em">${r.name.toLowerCase()}</strong>.`; }
       else { where=`You were near the end of your searching.`; }
     }
-    return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">Welcome back</p>
-      <hr class="rule">
-      <p class="body lead">You left an examination unfinished. ${where}</p>
-      <p class="body">Continue where you left off, or begin again with a clear heart?</p>
-      <div class="controls" style="flex-direction:column; align-items:stretch; gap:0.8rem;">
-        <button class="go" data-resume="continue">Continue where I left off</button>
-        <button class="go ghost" data-resume="fresh">Begin again</button>
+    return `<div class="sg-screen sg-threshold"><div class="sg-screen-inner">
+      ${head("","Welcome back")}
+      <div class="rule rule-short"></div>
+      <div class="body">You left an examination unfinished. ${where}</div>
+      <div class="body">Continue where you left off, or begin again with a clear heart?</div>
+      <div class="controls stack">
+        <button class="go btn-primary gold btn-begin" data-resume="continue">Continue where I left off</button>
+        <button class="go ghost btn-primary btn-begin" data-resume="fresh">Begin again</button>
       </div>
     </div></div>`;
   }
   function screenHub(){
-    const mv=[
-      { v:"motives", n:"I", name:"The Motives", sub:"Why turn toward God at all" },
-      { v:"last", n:"II", name:"The Four Last Things", sub:"What is at stake" },
-      { v:"excuses", n:"III", name:"The Excuses", sub:"What holds you back" },
-      { v:"examen", n:"IV", name:"Searching the Heart", sub:"The seven roots, and their cure" },
-      { v:"threefold", n:"V", name:"The Threefold Life", sub:"How then to live" }
-    ].map(m=>`<button class="mv" data-view="${m.v}"><span class="mv-num">${m.n}</span><span class="mv-body"><span class="mv-name">${m.name}</span><span class="mv-sub">${m.sub}</span></span><span class="mv-arrow">›</span></button>`).join("");
+    const mv=MOVEMENTS.map(m=>`<button class="mv" data-view="${m.v}"><span class="mv-num">${m.n}</span><span class="mv-body"><span class="mv-name">${m.name}</span><span class="mv-sub">${m.sub}</span></span><span class="mv-arrow">›</span></button>`).join("");
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">A Contemplative Path</p>
-      <h1 class="title">The Guide</h1>
-      <p class="subtitle">the whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></p>
-      <p class="hub-arc">Louis wrote not to frighten souls but to free them. The way runs in order &mdash; first <em>why</em> to turn, then <em>what is at stake</em>, then <em>what holds you back</em>, then <em>where the sin lies</em> and how to root it out, and at last <em>how to live</em>. Walk it through, or enter wherever your heart is tonight.</p>
+      ${head("","A Contemplative Path")}
+      <div class="sg-title">The Guide</div>
+      <div class="sg-subtitle">The whole way of Ven. Louis of Granada · <em>The Sinner&rsquo;s Guide</em></div>
+      <div class="body">Louis wrote not to frighten souls but to free them. The way runs in order &mdash; first <em>why</em> to turn, then <em>what is at stake</em>, then <em>what holds you back</em>, then <em>where the sin lies</em> and how to root it out, and at last <em>how to live</em>. Walk it through, or enter wherever your heart is tonight.</div>
       <div class="movements">${mv}</div>
-      <button class="home-link" data-view="harvest" style="margin:1.4rem 0 0;">&#10087; My Harvest -- past examinations</button>
-      <p class="colophon">&ldquo;In all your works remember your last end, and you shall never sin.&rdquo;</p>
+      <button class="home-link harvest" data-view="harvest">&#10087; My Harvest &mdash; past examinations</button>
+      <blockquote class="voice colophon">&ldquo;In all thy works remember thy last end, and thou shalt never sin.&rdquo;<span class="voice-attrib">&mdash; Ecclesiasticus 7:40</span></blockquote>
     </div></div>`;
   }
   function screenHarvest(){
@@ -11152,100 +11224,93 @@ const Guide = (function () {
     if(entries.length>=3){
       const tally={}; entries.slice(0,12).forEach(e=>{ if(e.root) tally[e.root]=(tally[e.root]||0)+1; });
       let top=null,n=0; Object.keys(tally).forEach(k=>{ if(tally[k]>n){n=tally[k];top=k;} });
-      if(top) crown=`<p class="body" style="margin-bottom:1.4rem;">Across your recent examinations, the root of <strong style="font-weight:500;color:var(--ember);">${top}</strong> has stirred most often. Not a verdict &mdash; simply where Love keeps drawing your gaze, and where steady attention will bear the most fruit.</p>`;
+      if(top) crown=`<div class="body">Across your recent examinations, the root of <strong class="sg-em">${top}</strong> has stirred most often. Not a verdict &mdash; simply where Love keeps drawing your gaze, and where steady attention will bear the most fruit.</div>`;
     }
     let body;
     if(!entries.length){
-      body=`<p class="body" style="color:var(--ink-soft); font-style:italic;">Your harvest is still empty. After your first searching of the heart, it will gather here &mdash; each date, the root you tended, and the resolution you made.</p>`;
+      body=`<div class="body body-small">Your harvest is still empty. After your first searching of the heart, it will gather here &mdash; each date, the root you tended, and the resolution you made.</div>`;
     } else {
       body=entries.slice(0,40).map(e=>{
         const d=e.date?new Date(e.date):null;
         const ds=d?d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}):"";
         const res=(e.resolution&&e.resolution.trim())?`&ldquo;${esc(e.resolution.trim())}&rdquo;`:`<span class="r-empty">no resolution written</span>`;
-        return `<div class="harvest-row"><div class="h-date">${ds}</div><div class="h-root">${e.root||"--"}</div><div class="h-res">${res}</div></div>`;
+        return `<div class="harvest-row"><div class="h-date">${ds}</div><div class="h-root">${e.root||"—"}</div><div class="h-res">${res}</div></div>`;
       }).join("");
     }
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <button class="home-link" data-home="1">‹ The Guide</button>
-      <p class="overline">My Harvest</p>
-      <hr class="rule">${crown}
+      ${head("","My Harvest")}${crown}
       <div class="harvest-list">${body}</div>
-      <div class="controls"><button class="back" data-home="1">The Guide</button><span class="spacer"></span><button class="go ghost" data-home="1">Return</button></div>
+      <div class="controls">${HOME}<span class="spacer"></span>${RETURN}</div>
     </div></div>`;
   }
   function screenCards(kind){
     const set= kind==="motives" ? CONTENT.motives : CONTENT.lastThings;
     const i=state.cardIndex, c=set[i], isLast=i===set.length-1;
-    const overline= kind==="motives" ? "I · The Motives" : "II · The Four Last Things";
-    const tender = c.tender ? `<p class="tender-note">There is no need to press on tonight. You may rest here, and return another time -- the door of mercy stays open.</p>` : ``;
+    const tender = c.tender ? `<div class="tender-note">There is no need to press on tonight. You may rest here, and return another time &mdash; the door of mercy stays open.</div>` : ``;
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <button class="home-link" data-home="1">‹ The Guide</button>
-      <p class="card-counter">${overline} &nbsp;·&nbsp; ${i+1} of ${set.length}</p>
-      <h2 class="card-title">${c.title}</h2>
-      <p class="card-kicker">${c.kicker}</p>
-      <p class="card-passage">${c.passage}</p>
-      <p class="card-prompt">${c.prompt}</p>
+      ${head(i>0?set[i-1].title:"", movementLabel(kind), `${i+1} of ${set.length}`)}
+      <div class="heading">${c.title}</div>
+      <div class="sg-kicker">${typo(c.kicker)}</div>
+      <div class="sg-passage">${typo(c.passage)}</div>
+      <div class="sg-prompt">${typo(c.prompt)}</div>
       ${tender}
       <div class="controls">
-        ${ i>0 ? `<button class="back" data-card="prev">Back</button>` : `<button class="back" data-home="1">The Guide</button>` }
+        ${ i>0 ? `<button class="back btn-ghost" data-card="prev">← Back</button>` : HOME }
         <span class="spacer"></span>
-        ${ isLast ? `<button class="go ghost" data-home="1">Return</button>` : `<button class="go" data-card="next">Continue</button>` }
+        ${ isLast ? RETURN : `<button class="go btn-primary gold" data-card="next">Continue →</button>` }
       </div>
     </div></div>`;
   }
   function screenExcuses(){
-    const list=CONTENT.excuses.map((e,i)=>`<button class="excuse" aria-pressed="${state.excuseChosen===i?'true':'false'}" data-excuse="${i}">${e.lie}</button>`).join("");
+    const list=CONTENT.excuses.map((e,i)=>`<button class="excuse" aria-pressed="${state.excuseChosen===i?'true':'false'}" data-excuse="${i}">${typo(e.lie)}</button>`).join("");
     let reveal=`<div class="reply-reveal"></div>`;
     if(state.excuseChosen!=null){
       const e=CONTENT.excuses[state.excuseChosen];
       reveal=`<div class="reply-reveal open">
-        <p class="card-kicker" style="margin-bottom:0.8rem;">${e.kicker}</p>
-        <p class="card-passage">${e.reply}</p>
-        <p class="q-label">Sit with this</p>
-        <p class="card-prompt" style="margin-bottom:1.2rem;">${e.prompt}</p>
+        <div class="sg-kicker">${typo(e.kicker)}</div>
+        <div class="sg-passage">${typo(e.reply)}</div>
+        <span class="ui-label">Sit with this</span>
+        <div class="sg-prompt">${typo(e.prompt)}</div>
         <div class="note-wrap"><textarea class="note" data-exnote="1" placeholder="Name it honestly here (optional)&hellip;">${esc(state.excuseNote)}</textarea></div>
       </div>`;
     }
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <button class="home-link" data-home="1">‹ The Guide</button>
-      <p class="overline">III · The Excuses</p>
-      <hr class="rule">
-      <p class="body lead">Before you can root out a single sin, Louis says, you must disarm the excuse that keeps you from beginning. He catalogs the great ones &mdash; the quiet lies we tell ourselves to put conversion off.</p>
-      <p class="body">Which of these is most often <em>yours</em>?</p>
-      <div class="excuse-list" style="margin-top:0.4rem;">${list}</div>
+      ${head("", movementLabel("excuses"))}
+      <div class="body">Before you can root out a single sin, Louis says, you must disarm the excuse that keeps you from beginning. He catalogs the great ones &mdash; the quiet lies we tell ourselves to put conversion off.</div>
+      <div class="body tight">Which of these is most often <em>yours</em>?</div>
+      <div class="excuse-list">${list}</div>
       ${reveal}
-      <div class="controls"><button class="back" data-home="1">The Guide</button><span class="spacer"></span><button class="go ghost" data-home="1">Return</button></div>
+      <div class="controls">${HOME}<span class="spacer"></span>${RETURN}</div>
     </div></div>`;
   }
   function examenStillness(){
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <button class="home-link" data-home="1">‹ The Guide</button>
-      <p class="overline">IV · Searching the Heart</p>
-      <hr class="rule">
-      <p class="body lead">You do not search your heart to be condemned, but because you are already loved, already sought, already redeemed.</p>
-      <p class="body">Let the noise of the day settle, like sediment in still water. Breathe slowly. Loosen your grip. You are held.</p>
-      <p class="body" style="font-style:italic; color:var(--ink-soft);">&ldquo;Search me, O God, and know my heart; try me, and know my thoughts.&rdquo;</p>
-      <div class="controls"><button class="back" data-home="1">The Guide</button><span class="spacer"></span><button class="go" data-ex="next">When you are ready</button></div>
+      ${head("", movementLabel("examen"))}
+      <div class="body">You do not search your heart to be condemned, but because you are already loved, already sought, already redeemed.</div>
+      <div class="body">Let the noise of the day settle, like sediment in still water. Breathe slowly. Loosen your grip. You are held.</div>
+      <blockquote class="voice voice-left sg-quote">&ldquo;Prove me, O God, and know my heart: examine me, and know my paths.&rdquo;<span class="voice-attrib">&mdash; Psalm 138:23</span></blockquote>
+      <div class="controls">${HOME}<span class="spacer"></span><button class="go btn-primary gold" data-ex="next">When you are ready →</button></div>
     </div></div>`;
   }
   function examenRoot(i){
     const r=CONTENT.roots[i], st=state.roots[i];
     const opts=RES_OPTS.map(o=>`<button class="opt" aria-pressed="${st.resonance===o.v?'true':'false'}" data-res="${o.v}" data-root="${i}">${o.label}<span class="o-sub">${o.sub}</span></button>`).join("");
-    const qs=r.questions.map(q=>`<li>${q}</li>`).join("");
+    const qs=r.questions.map(q=>`<li>${typo(q)}</li>`).join("");
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="root-numeral">${r.numeral}</p>
-      <h2 class="root-name">${r.name}</h2>
-      <p class="root-latin">${r.latin}</p>
-      <p class="essence">${r.essence}</p>
-      <p class="gloss">${r.gloss}</p>
+      ${head(i>0?CONTENT.roots[i-1].name:"", "Searching the Heart", `Root ${r.numeral} of VII`)}
+      <div class="sg-numeral">${r.numeral}</div>
+      <div class="heading sg-root-name">${r.name}</div>
+      <div class="sg-latin">${r.latin}</div>
+      <div class="sg-passage">${typo(r.essence)}</div>
+      <div class="sg-passage quiet">${typo(r.gloss)}</div>
       <div>
-        <p class="q-label">Sit with these</p>
+        <span class="ui-label">Sit with these</span>
         <ul class="questions">${qs}</ul>
-        <p class="section-label">How does this root rest in you today?</p>
+        <span class="ui-label">How does this root rest in you today?</span>
         <div class="resonance">${opts}</div>
         <div class="note-wrap"><textarea class="note" data-note="${i}" placeholder="If something rose to mind, name it here (optional)&hellip;">${esc(st.note)}</textarea></div>
       </div>
-      <div class="controls"><button class="back" data-ex="back">Back</button><span class="spacer"></span><button class="go" data-ex="next">${i===CONTENT.roots.length-1?"Gather the harvest":"Next root"}</button></div>
+      <div class="controls"><button class="back btn-ghost" data-ex="back">← Back</button><span class="spacer"></span><button class="go btn-primary gold" data-ex="next">${i===CONTENT.roots.length-1?"Gather the harvest":"Next root"} →</button></div>
     </div></div>`;
   }
   function examenPredominant(){
@@ -11255,45 +11320,46 @@ const Guide = (function () {
     const meter=v=>v===2?"Alive":(v===1?"Stirring":"At peace");
     const list=order.map(o=>{ const r=CONTENT.roots[o.i]; return `<button class="choice" aria-pressed="${state.chosenRoot===o.i?'true':'false'}" data-choose="${o.i}" data-strong="${o.v}"><span class="c-num">${r.numeral}</span><span class="c-name">${r.name}</span><span class="c-meter">${meter(o.v)}</span></button>`; }).join("");
     const opening= value===0
-      ? `<p class="body lead">Across all seven, your heart seems at peace today &mdash; and that, too, is grace. If you wish, choose one root simply to tend with care.</p>`
-      : `<p class="body lead">The old guides taught that each soul has a <em>predominant fault</em> &mdash; one root from which most of its sins quietly grow.</p><p class="body">To weed the whole garden at once is to weed none. So look honestly: which root stirred most? That is not the place of your shame &mdash; it is the place of your next freedom.</p>`;
-    return `<divclass="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">What rose to the surface</p>
-      <hr class="rule">${opening}
-      <div><p class="section-label" style="margin-top:0.4rem;">Choose the one to tend</p><div class="choose-list">${list}</div></div>
-      <div class="controls"><button class="back" data-ex="back">Back</button><span class="spacer"></span><button class="go" data-ex="next">Find its remedy</button></div>
+      ? `<div class="body">Across all seven, your heart seems at peace today &mdash; and that, too, is grace. If you wish, choose one root simply to tend with care.</div>`
+      : `<div class="body">The old guides taught that each soul has a <em>predominant fault</em> &mdash; one root from which most of its sins quietly grow.</div><div class="body">To weed the whole garden at once is to weed none. So look honestly: which root stirred most? That is not the place of your shame &mdash; it is the place of your next freedom.</div>`;
+    return `<div class="sg-screen"><div class="sg-screen-inner">
+      ${head("The seven roots", "Searching the Heart")}
+      <div class="heading">What rose to the surface</div>
+      ${opening}
+      <div><span class="ui-label">Choose the one to tend</span><div class="choose-list">${list}</div></div>
+      <div class="controls"><button class="back btn-ghost" data-ex="back">← Back</button><span class="spacer"></span><button class="go btn-primary gold" data-ex="next">Find its remedy →</button></div>
     </div></div>`;
   }
   function examenRemedy(){
     const i=state.chosenRoot==null?predominantIndex().index:state.chosenRoot; const r=CONTENT.roots[i];
-    const gen=r.remediesGeneral.map(x=>`<li>${x}</li>`).join("");
-    const par=r.remediesParticular.map(x=>`<li>${x}</li>`).join("");
-    const steps=r.regimen.steps.map(x=>`<li>${x}</li>`).join("");
+    const gen=r.remediesGeneral.map(x=>`<li>${typo(x)}</li>`).join("");
+    const par=r.remediesParticular.map(x=>`<li>${typo(x)}</li>`).join("");
+    const steps=r.regimen.steps.map(x=>`<li>${typo(x)}</li>`).join("");
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">For the root of ${r.name.toLowerCase()}</p>
-      <p class="body" style="margin-bottom:1.3rem; color:var(--ink-soft); font-style:italic;">No vice is driven out by force. Each is healed only by the slow growth of its contrary virtue.</p>
-      <p class="section-label">Cultivate, in its place</p>
-      <h2 class="virtue-name">${r.virtue}</h2>
-      <p class="virtue-sub">${r.virtueLine}</p>
-      <p class="scripture">&ldquo;${r.scripture.text}&rdquo;</p>
-      <p class="scripture-ref">${r.scripture.ref}</p>
-      <div class="panel"><p class="section-label">A thought to carry</p><p>${r.consideration}</p></div>
-      <div class="remedy-block"><p class="section-label">General remedies &mdash; the disposition</p><ol class="remedies">${gen}</ol></div>
-      <div class="remedy-block"><p class="section-label">Particular remedies &mdash; in the moment</p><ol class="remedies">${par}</ol></div>
-      <p class="short-remedy">&ldquo;${r.shortRemedy}&rdquo;</p>
-      <div class="regimen"><p class="regimen-title">${r.regimen.title}</p><p class="regimen-note">${r.regimen.note}</p><ul class="regimen-steps">${steps}</ul></div>
-      <div class="controls"><button class="back" data-ex="back">Back</button><span class="spacer"></span><button class="go" data-ex="next">Make a resolution</button></div>
+      ${head("What rose to the surface", "Searching the Heart")}
+      <div class="heading">For the root of ${r.name.toLowerCase()}</div>
+      <div class="body body-small">No vice is driven out by force. Each is healed only by the slow growth of its contrary virtue.</div>
+      <span class="ui-label">Cultivate, in its place</span>
+      <div class="sg-virtue">${r.virtue}</div>
+      <div class="sg-passage">${typo(r.virtueLine)}</div>
+      <blockquote class="voice voice-left sg-quote">&ldquo;${r.scripture.text}&rdquo;<span class="voice-attrib">&mdash; ${r.scripture.ref}</span></blockquote>
+      <div class="voice-card"><span class="ui-label">A thought to carry</span><div class="sg-passage">${typo(r.consideration)}</div></div>
+      <div class="remedy-block"><span class="ui-label">General remedies &mdash; the disposition</span><ol class="remedies">${gen}</ol></div>
+      <div class="remedy-block"><span class="ui-label">Particular remedies &mdash; in the moment</span><ol class="remedies">${par}</ol></div>
+      <div class="short-remedy">&ldquo;${typo(r.shortRemedy)}&rdquo;</div>
+      <div class="regimen"><div class="regimen-title">${typo(r.regimen.title)}</div><div class="regimen-note">${typo(r.regimen.note)}</div><ul class="regimen-steps">${steps}</ul></div>
+      <div class="controls"><button class="back btn-ghost" data-ex="back">← Back</button><span class="spacer"></span><button class="go btn-primary gold" data-ex="next">Make a resolution →</button></div>
     </div></div>`;
   }
   function examenResolution(){
     const i=state.chosenRoot==null?predominantIndex().index:state.chosenRoot; const r=CONTENT.roots[i];
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">The first remedy</p>
-      <hr class="rule">
-      <p class="body lead">Louis names the first remedy against any sin a <em>firm and definite resolution</em> against it.</p>
-      <p class="body">Not &ldquo;I will try to be better&rdquo; &mdash; that resolves nothing. One small, specific thing you will <em>do</em>, or refuse, before you sleep again. You may take the first step of the regimen above, or name your own. Concerning <strong style="font-weight:500; color:var(--ember);">${r.name.toLowerCase()}</strong> &mdash;</p>
-      <div class="note-wrap" style="margin-top:0.6rem;"><textarea class="note" data-resolution="1" placeholder="Tomorrow, concerning this root, I will&hellip;" style="min-height:5rem;">${esc(state.resolution)}</textarea></div>
-      <div class="controls"><button class="back" data-ex="back">Back</button><span class="spacer"></span><button class="go" data-ex="next">Close in peace</button></div>
+      ${head(`For the root of ${r.name.toLowerCase()}`, "Searching the Heart")}
+      <div class="heading">The first remedy</div>
+      <div class="body">Louis names the first remedy against any sin a <em>firm and definite resolution</em> against it.</div>
+      <div class="body">Not &ldquo;I will try to be better&rdquo; &mdash; that resolves nothing. One small, specific thing you will <em>do</em>, or refuse, before you sleep again. You may take the first step of the regimen above, or name your own. Concerning <strong class="sg-em">${r.name.toLowerCase()}</strong> &mdash;</div>
+      <div class="note-wrap"><textarea class="note tall" data-resolution="1" placeholder="Tomorrow, concerning this root, I will&hellip;">${esc(state.resolution)}</textarea></div>
+      <div class="controls"><button class="back btn-ghost" data-ex="back">← Back</button><span class="spacer"></span><button class="go btn-primary gold" data-ex="next">Close in peace →</button></div>
     </div></div>`;
   }
   function examenClosing(){
@@ -11305,21 +11371,21 @@ const Guide = (function () {
     const hasRes=!!state.resolution.trim();
     const resText=hasRes?`&ldquo;${esc(state.resolution.trim())}&rdquo;`:`<span class="r-empty">Left unwritten &mdash; carried in the heart</span>`;
     const ruleBtn=hasRes ? (state.resAddedToRule
-        ? `<button class="res-rule-btn added" disabled>&#10003; Added to your Rule of Life</button>`
-        : `<button class="res-rule-btn" data-addres="1">Add this resolution to my Rule</button>`) : ``;
+        ? `<button class="res-rule-btn btn-primary added" disabled>&#10003; Added to your Rule of Life</button>`
+        : `<button class="res-rule-btn btn-primary" data-addres="1">Add this resolution to my Rule</button>`) : ``;
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <p class="overline">The peace of a good conscience</p>
-      <hr class="rule">
-      <p class="body lead">You have looked at yourself honestly &mdash; and you are still held.</p>
-      <p class="body">This is the rest Louis counts among the great privileges of virtue: not the peace of having nothing left to mend, but the peace of one who has turned, again, toward the light.</p>
-      <p class="body">Carry your resolution gently. Do not carry the rest. Begin again tomorrow &mdash; for the God who began this good work in you is the one who will bring it to completion.</p>
+      ${head("The first remedy", "Searching the Heart")}
+      <div class="heading">The peace of a good conscience</div>
+      <div class="body">You have looked at yourself honestly &mdash; and you are still held.</div>
+      <div class="body">This is the rest Louis counts among the great privileges of virtue: not the peace of having nothing left to mend, but the peace of one who has turned, again, toward the light.</div>
+      <div class="body">Carry your resolution gently. Do not carry the rest. Begin again tomorrow &mdash; for the God who began this good work in you is the one who will bring it to completion.</div>
       <div class="summary">
-        <div class="row"><p class="r-label">What stirred</p><p class="r-val">${stirredText}</p></div>
-        <div class="row"><p class="r-label">The root you are tending</p><p class="r-val">${r.name} &mdash; by the practice of ${r.virtue.toLowerCase()}</p></div>
-        <div class="row"><p class="r-label">Your resolution</p><p class="r-val q">${resText}</p></div>
+        <div class="row"><span class="ui-label">What stirred</span><div class="r-val">${stirredText}</div></div>
+        <div class="row"><span class="ui-label">The root you are tending</span><div class="r-val">${r.name} &mdash; by the practice of ${r.virtue.toLowerCase()}</div></div>
+        <div class="row"><span class="ui-label">Your resolution</span><div class="r-val q">${resText}</div></div>
       </div>
       ${ruleBtn}
-      <div class="controls center"><button class="go ghost" data-ex="restart">Search again</button> <button class="go ghost" data-home="1">The Guide</button></div>
+      <div class="controls center"><button class="go ghost btn-primary" data-ex="restart">Search again</button> <button class="go ghost btn-primary" data-home="1">The Guide</button></div>
     </div></div>`;
   }
   function screenExamen(){
@@ -11336,17 +11402,15 @@ const Guide = (function () {
     const sec=CONTENT.threefold[state.threefoldTab];
     const rows=sec.virtues.map(v=>{
       const added=state.ruleAdded[v.name];
-      return `<div class="virtue-row"><div class="vr-head"><span class="vr-name">${v.name}</span><button class="add-rule ${added?'added':''}" data-rule="${esc(v.name)}" ${added?'disabled':''}>${added?'✓ in your rule':'+ add to rule'}</button></div><p class="vr-line">${v.line}</p><p class="vr-practice">${v.practice}</p></div>`;
+      return `<div class="virtue-row"><div class="vr-head"><span class="vr-name">${v.name}</span><button class="add-rule ${added?'added':''}" data-rule="${esc(v.name)}" ${added?'disabled':''}>${added?'✓ in your rule':'+ add to rule'}</button></div><div class="vr-line">${typo(v.line)}</div><div class="vr-practice">${typo(v.practice)}</div></div>`;
     }).join("");
     return `<div class="sg-screen"><div class="sg-screen-inner">
-      <button class="home-link" data-home="1">‹ The Guide</button>
-      <p class="overline">V · The Threefold Life</p>
-      <hr class="rule">
-      <p class="body lead">Rooting out sin is only half the work. Louis ends the <em>Guide</em> with the life that takes its place &mdash; the virtues owed to yourself, to your neighbor, and to God.</p>
+      ${head("", movementLabel("threefold"))}
+      <div class="body">Rooting out sin is only half the work. Louis ends the <em>Guide</em> with the life that takes its place &mdash; the virtues owed to yourself, to your neighbor, and to God.</div>
       <div class="tabs">${tabs}</div>
-      <p class="body" style="color:var(--ink-soft); font-style:italic; margin-bottom:1.4rem;">${sec.intro}</p>
+      <div class="body body-small">${typo(sec.intro)}</div>
       <div>${rows}</div>
-      <div class="controls"><button class="back" data-home="1">The Guide</button><span class="spacer"></span><button class="go ghost" data-home="1">Return</button></div>
+      <div class="controls">${HOME}<span class="spacer"></span>${RETURN}</div>
     </div></div>`;
   }
 
@@ -11444,18 +11508,18 @@ const Guide = (function () {
     }
   }
   function injectFonts(){
-    if(document.getElementById("still-guide-fonts")) return;
-    const l=document.createElement("link"); l.id="still-guide-fonts"; l.rel="stylesheet";
-    l.href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap";
-    document.head.appendChild(l);
+    /* The Guide sets in the app's own faces (Cormorant Garamond, Instrument
+       Sans), which <head> already loads; there is nothing to inject. */
   }
   function injectStyles(){
     if(document.getElementById("still-guide-styles")) return;
     const s=document.createElement("style"); s.id="still-guide-styles"; s.textContent=CSS; document.head.appendChild(s);
   }
   function build(){
-    root=document.createElement("div"); root.id="stillGuide"; root.setAttribute("role","dialog"); root.setAttribute("aria-label","The Guide -- a contemplative practice");
-    root.innerHTML=`<button class="sg-close" aria-label="Close practice">&#10005;</button><div class="vessel"><div class="rail" id="sgRail" aria-label="Progress"></div><div class="stage" id="sgStage"></div></div>`;
+    root=document.createElement("div"); root.id="stillGuide"; root.setAttribute("data-tokens",""); root.setAttribute("role","dialog"); root.setAttribute("aria-label","The Guide — a contemplative practice");
+    root.innerHTML=`<div class="atmos" aria-hidden="true"><div class="atmos-glow"></div><div class="atmos-flame"></div><div class="atmos-grain"></div><div class="atmos-vignette"></div></div>
+      <header class="app-header"><button class="sg-close back-btn" aria-label="Close practice"><span class="back-arrow">←</span><span>Still</span></button><span class="screen-title">The Guide</span><span class="sg-header-spacer" aria-hidden="true"></span></header>
+      <div class="vessel"><div class="rail" id="sgRail" aria-label="Progress"></div><div class="stage" id="sgStage"></div></div>`;
     document.body.appendChild(root);
     rail=root.querySelector("#sgRail"); stage=root.querySelector("#sgStage");
     root.querySelector(".sg-close").addEventListener("click", close);
@@ -11531,7 +11595,7 @@ function renderExamenStep() {
       <div class="phase-track examen-track" aria-hidden="true">${track}</div>
       <div class="examen-prev">${prev}</div>
       <div class="examen-movement">${q.q}</div>
-      <div class="examen-prompt">${q.prompt}</div>
+      <div class="examen-prompt">${q.prompt.replace(/\s--\s/g,' \u2014 ')}</div>
       <div class="examen-sub">${q.sub}</div>
       <textarea id="examenAnswer" class="examen-answer"
         placeholder="Write freely…"
