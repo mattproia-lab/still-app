@@ -117,7 +117,7 @@ without it.
 | Office · Vigils, Compline | as defined below | — | .3 / .55 | 70% / 72% |
 | Breath Prayer | 100,20,200 | deep violet | .82 | 50% / 42%, behind the orb; it breathes |
 | Rule of Life | 8,120,32 | forest | .88 | 50% / 36%, behind the text |
-| Rosary Meditations | 226,204,164 | pearl gold | .62 | 50% / 36%, behind the text |
+| Rosary Meditations | 192,28,172 | violet | .88 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
 not change with the hue.
@@ -354,7 +354,7 @@ button stops breathing.
   cloud mirror's shape.
 
 - **Rosary Meditations**: no ring; the beads are the progress. No card. The
-  array's pearl gold (`--atmos-rgb` 226,204,164, strength .62) sits behind
+  array's violet, Community's retired hue (`--atmos-rgb` 192,28,172, strength .88), sits behind
   the text at the Guide's height. The images are content, not backdrop: the
   cloud-of-witnesses photograph is no longer the screen's background, and
   each mystery's image is the first thing on its screen, a `.devotional`
