@@ -336,8 +336,8 @@ button stops breathing.
   item, mirrored in the cloud row and restored from it; `setRuleDate()`
   renders it, falling back to today only when nothing is stored. From the sixth commitment one serif line sits under the
   input (`.rol-growing`); the add is never refused. Four seeds
-  (`RULE_SEEDS`: Benedict, Ignatius, the Book of Common Prayer, Francis de
-  Sales) are shown open beneath the empty state and behind a "Begin
+  (`RULE_SEEDS`: Benedict, Ignatius, the Divine Office, Francis de Sales)
+  are shown open beneath the empty state and behind a "Begin
   from a tradition" link once anything is written; each adds its
   commitments with the rhythm set and the tradition as source, skipping
   names already present, never replacing. The vault holds no text for these
