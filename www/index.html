@@ -519,6 +519,22 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 [data-tokens] .btn-row{display:flex;gap:var(--s-3);justify-content:center;align-items:center;flex-wrap:wrap;margin-top:var(--s-5);}
 [data-tokens] .btn-row.left{justify-content:flex-start;}
 
+/* Devotional images: content, not backdrop (DESIGN.md). A framed image in
+   the flow at reading measure, the grain and the vignette on the image
+   itself, the atmosphere's hue bleeding into its edges. Text sits beneath or
+   beside it, never over it. The frame holds an <img> or a background-image
+   child; the pseudo-elements draw the grain and the vignette above it. */
+[data-tokens] .devotional{position:relative;width:100%;max-width:var(--measure-read,30rem);margin:0 auto;overflow:hidden;
+  border-radius:var(--r-sm);border:1px solid var(--line);background:var(--ink-1);
+  box-shadow:0 0 0 1px rgba(var(--atmos-rgb),.05),0 0 48px rgba(var(--atmos-rgb),calc(.22 * var(--atmos-a))),0 18px 40px rgba(0,0,0,.45);}
+[data-tokens] .devotional > img,[data-tokens] .devotional > .devotional-inner{display:block;width:100%;height:100%;}
+[data-tokens] .devotional::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.55;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
+[data-tokens] .devotional::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:radial-gradient(ellipse 90% 80% at 50% 45%,transparent 46%,rgba(5,3,2,.26) 78%,rgba(5,3,2,.58) 100%),
+    linear-gradient(to bottom,rgba(var(--atmos-rgb),.10),transparent 28%,transparent 72%,rgba(var(--atmos-rgb),.10));
+  box-shadow:inset 0 0 44px rgba(var(--atmos-rgb),calc(.30 * var(--atmos-a)));}
+
 @media (prefers-reduced-motion:reduce){
   .atmos-glow,.atmos-flame,.ring-halo{animation:none;}
   [data-tokens] .companion-state.active,[data-tokens] .lectio-phase.active{--rise:0px;}
@@ -837,7 +853,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 /* ═══════════════════════════════════════════
    MOBILE RESPONSIVE -- iPhone / Android
    All features visible, no scroll
-   Arc of beads at bottom
    Dogstudio left-aligned list
 ═══════════════════════════════════════════ */
 @media (max-width: 1024px) {
@@ -1742,25 +1757,31 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      CLOUD OF WITNESSES
 ═══════════════════════════════════════════ -->
-<div id="screen-witnesses" class="screen">
-  <!-- Rosary in cloud-light background -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img id="cowBgImg" src="assets/rosary/cloud-of-witnesses.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center top;opacity:0.88"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,5,3,.88) 0%,rgba(6,5,3,.72) 22%,rgba(6,5,3,.55) 50%,rgba(6,5,3,.72) 100%)"></div>
+<div id="screen-witnesses" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. The cloud-of-witnesses photograph is no
+       longer the backdrop: the practice's images are content, framed in the
+       flow (DESIGN.md, devotional images). -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="CoW.exit()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Rosary Meditations</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
-    <div class="content-card">
-      <div class="feat-eyebrow">The Rosary</div>
-      <div class="feat-heading" style="font-size:clamp(24px,3.5vw,40px)">Rosary Meditations</div>
-      <div id="cowSetup"></div>
-      <div id="cowPray" style="display:none"></div>
+  <div class="feature-main">
+    <!-- The close: finish() swaps this image to the Madonna and Child and adds
+         .cow-finale to the screen; exit() swaps it back. It is shown only in the
+         finale, full-height like a threshold, fading up on one breath, with the
+         concluding prayers beneath it. Lazy, so the hidden default never loads. -->
+    <div class="cow-hero devotional" aria-hidden="true">
+      <img id="cowBgImg" src="assets/rosary/cloud-of-witnesses.jpg" alt="" loading="lazy"/>
     </div>
+    <div id="cowSetup"></div>
+    <div id="cowPray" style="display:none"></div>
   </div>
 </div>
 <!-- ═══════════════════════════════════════════
@@ -4428,62 +4449,142 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 /* Reading Toward the Center's lamps (.ctr-*) are styled inside the Spiritual
    Paths stylesheet, which Paths._ensure() injects on the DESIGN.md tokens. */
 
-#screen-witnesses { overflow-y:auto; }
-.cow-wrap { max-width:520px; margin:0 auto; padding:24px 20px 60px; }
-.cow-title { text-align:center; }
-.cow-sub { opacity:.55; font-style:italic; font-size:.85rem; text-align:center; margin-bottom:22px; }
-.cow-label { display:block; margin:18px 0 6px; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:rgba(226,204,164,.75); }
-.cow-wrap textarea, .cow-wrap input[type=text], #cowRosterAdd { width:100%; background:rgba(226,204,164,.06); border:1px solid rgba(226,204,164,.18); border-radius:8px; color:inherit; padding:10px 12px; font:inherit; }
-.cow-chips, .cow-roster, .cow-sets { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0; }
-.cow-chip, .cow-set, .cow-r { background:none; border:1px solid rgba(226,204,164,.25); border-radius:999px; color:inherit; padding:6px 14px; font-size:.85rem; cursor:pointer; }
-.cow-set.sel { background:rgba(226,204,164,.16); border-color:rgba(226,204,164,.6); }
-.cow-r { background:rgba(226,204,164,.12); border-color:transparent; }
-.cow-toggle { display:block; margin:13px 0; font-size:.9rem; }
-.cow-begin { display:block; width:100%; margin-top:22px; padding:14px; border-radius:10px; border:none; background:rgba(226,204,164,.85); color:#060503; font-weight:600; font-size:1rem; cursor:pointer; }
-.cow-mystery { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.8); margin-bottom:14px; }
-/* The mystery title's type exactly -- size, tracking, case, alignment -- one
-   step down in colour so the pair reads as a single heading block rather than
-   two lines of equal rank. The negative top margin closes the gap the title's
-   own margin-bottom would otherwise leave between them. */
-.cow-fruit { text-align:center; letter-spacing:.16em; text-transform:uppercase; font-size:.78rem; color:rgba(226,204,164,.55); margin:-8px 0 14px; }
-.cow-img { width:100%; aspect-ratio:4/3; background-color:#0b0906; border-radius:12px; cursor:pointer; overflow:hidden; }
-.cow-img-inner { width:100%; height:100%; background-size:cover; background-position:center 22%; animation:cowDrift 45s ease-in-out infinite alternate; }
-@keyframes cowDrift { from { transform:scale(1); } to { transform:scale(1.07) translateY(-2%); } }
-.cow-scripture { margin:18px 0 12px; font-style:italic; opacity:.85; line-height:1.55; }
-.cow-ref { display:block; text-align:right; font-style:normal; font-size:.72rem; opacity:.5; margin-top:4px; }
-.cow-body { line-height:1.85; margin-bottom:12px; }
-.cow-credit { background:none; border:none; padding:0; color:rgba(226,204,164,.5); font-size:.75rem; font-style:italic; cursor:pointer; }
-.cow-credit-full { font-size:.75rem; opacity:.55; line-height:1.6; }
-.cow-prayers { margin:16px 0; font-size:.85rem; opacity:.85; }
-.cow-prayers summary { color:rgba(226,204,164,.7); cursor:pointer; margin-bottom:6px; }
-.cow-hint { text-align:center; font-size:.72rem; opacity:.4; margin:16px 0 4px; }
-.cow-done { text-align:center; padding-top:80px; line-height:2; }
-.cow-done-soft { opacity:.65; }
-.cow-addrow { display:flex; gap:8px; }
-.cow-addrow input { flex:1; }
-.cow-addbtn { flex-shrink:0; background:rgba(226,204,164,.16); border:1px solid rgba(226,204,164,.4); border-radius:8px; color:inherit; padding:0 16px; font:inherit; cursor:pointer; }
-.cow-listen { display:block; margin:2px 0 10px; background:none; border:1px solid rgba(226,204,164,.35); border-radius:999px; color:rgba(226,204,164,.85); padding:6px 16px; font-size:.8rem; cursor:pointer; }
-.cow-opening { text-align:center; padding-top:60px; cursor:pointer; min-height:70vh; }
-.cow-open-line { font-size:1.05rem; line-height:1.8; margin:26px 0 14px; }
-.cow-open-soft { opacity:.6; line-height:1.8; margin:12px 0; }
-.cow-open-int { font-style:italic; color:rgba(226,204,164,.85); margin:22px 0; line-height:1.7; }
-.cow-int-echo { text-align:center; font-style:italic; font-size:.8rem; color:rgba(226,204,164,.55); margin:-6px 0 12px; }
-.cow-dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:rgba(226,204,164,.25); margin:0 3px; }
-.cow-dot.on { background:rgba(226,204,164,.85); }
-.cow-open-prayers { text-align:left; font-size:.85rem; opacity:.75; line-height:1.7; margin:20px auto; max-width:440px; }
-.cow-open-prayers p { margin:12px 0; }
-.cow-final-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
-.cow-prayer-blk { margin:16px 0; }
-.cow-prayer-blk h3 { font-style:italic; font-weight:400; font-size:.95rem; color:rgba(226,204,164,.9); margin-bottom:6px; }
-.cow-prayer-blk p { font-size:.85rem; line-height:1.6; opacity:.8; margin-bottom:8px; }
-.cow-vers { color:rgba(226,204,164,.9); font-style:italic; }
-.cow-complete { text-align:center; font-style:italic; font-size:.85rem; opacity:.65; margin:14px 0 10px; }
-.cow-min { background:none; border:1px solid rgba(226,204,164,.35); border-radius:7px; color:rgba(226,204,164,.85); cursor:pointer; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; padding:5px 9px; }
-.cow-pill { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:rgba(12,11,10,.7); border:1px solid rgba(226,204,164,.35); border-radius:999px; color:rgba(226,204,164,.9); cursor:pointer; font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; padding:9px 18px; z-index:20; }
-#screen-witnesses.cow-finale img#cowBgImg { opacity:1; }
-#screen-witnesses.cow-finale #cowBgImg + div { background:linear-gradient(to bottom,rgba(6,5,3,.45) 0%,rgba(6,5,3,.15) 30%,rgba(6,5,3,.15) 75%,rgba(6,5,3,.45) 100%) !important; }
-#screen-witnesses.cow-finale .content-card { margin-right:5vw; margin-left:auto; max-width:420px; }
-@media (max-width:640px){ #screen-witnesses.cow-finale .content-card { margin:0 auto; max-width:420px; } }
+/* ═══════════════════════════════════════════
+   ROSARY MEDITATIONS -- on the DESIGN.md tokens
+   The array's pearl gold behind the text. No card, no ring: the beads are
+   the progress. The images are content, framed in the flow (.devotional):
+   each mystery's image first, then the title, the fruit, the meditation.
+   The close is the Madonna and Child, full-height, the prayers beneath.
+   Ids, data-* hooks, the .cow-* classes CoW binds to, the audio, the
+   prayers and the saves are unchanged.
+═══════════════════════════════════════════ */
+#screen-witnesses{
+  --atmos-rgb:226,204,164;--atmos-a:.62;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+  --measure-read:30rem;
+}
+#screen-witnesses .cow-wrap{max-width:var(--measure);margin:0 auto;}
+
+/* The close: the hero image is hidden until finish() adds .cow-finale, then
+   stands full-height like a threshold and fades up on one breath. finish()
+   also writes object-fit:contain inline, which the frame respects. */
+#screen-witnesses .cow-hero{display:none;}
+#screen-witnesses.cow-finale .cow-hero{display:block;max-width:none;height:calc(100vh - 150px);height:calc(100dvh - 150px);min-height:400px;
+  margin:0 auto var(--s-6);animation:cowHero var(--d-breath) var(--ease-breath) both;}
+/* finish() writes object-fit:contain inline (the old backdrop's need); the frame
+   is full-height, so the image fills it and the centred statue stays whole. */
+#screen-witnesses .cow-hero img{width:100%;height:100%;object-fit:cover!important;object-position:center!important;}
+@keyframes cowHero{from{opacity:0}to{opacity:1}}
+
+/* The beads: five decades on one line, an Our Father bead and ten Hail
+   Marys each. Painted by beadsHTML(): decades prayed in gold, the decade in
+   hand lit as the meditations advance, the current bead in the candle. */
+#screen-witnesses .cow-beads{display:flex;align-items:center;justify-content:center;gap:2px;margin:0 auto var(--s-5);max-width:360px;}
+#screen-witnesses .cow-bead{width:3px;height:3px;border-radius:50%;background:var(--text-faint);flex:none;
+  transition:background var(--d-slow) var(--ease-out),box-shadow var(--d-slow) var(--ease-out);}
+#screen-witnesses .cow-bead.big{width:6px;height:6px;margin:0 2px;}
+#screen-witnesses .cow-bead.gap{width:6px;height:0;background:none;}
+#screen-witnesses .cow-bead.done{background:var(--gold-a55);}
+#screen-witnesses .cow-bead.now{background:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.8);}
+
+/* Selection */
+#screen-witnesses .cow-sub{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-mid);
+  text-align:center;max-width:var(--measure-read);margin:0 auto var(--s-6);text-wrap:balance;}
+#screen-witnesses .cow-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin:var(--s-5) 0 var(--s-2);}
+#screen-witnesses .cow-wrap textarea,#screen-witnesses .cow-wrap input[type=text],#screen-witnesses #cowRosterAdd{width:100%;display:block;
+  -webkit-appearance:none;appearance:none;background:rgba(255,240,220,.03);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+  padding:var(--s-3) var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);
+  outline:none;resize:vertical;transition:border-color var(--d-base);}
+#screen-witnesses .cow-wrap textarea:focus,#screen-witnesses #cowRosterAdd:focus{border-color:var(--gold-a55);}
+#screen-witnesses .cow-wrap textarea::placeholder,#screen-witnesses #cowRosterAdd::placeholder{color:var(--text-faint);}
+#screen-witnesses .cow-chips,#screen-witnesses .cow-roster,#screen-witnesses .cow-sets{display:flex;flex-wrap:wrap;gap:var(--s-2);margin:var(--s-2) 0;}
+#screen-witnesses .cow-chip,#screen-witnesses .cow-set,#screen-witnesses .cow-r{background:none;border:1px solid var(--line);border-radius:var(--r-pill);
+  color:var(--text-mid);padding:8px 14px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.04em;
+  transition:border-color var(--d-base),color var(--d-base),background var(--d-base);}
+#screen-witnesses .cow-chip:hover,#screen-witnesses .cow-set:hover{border-color:var(--line-strong);color:var(--text-hi);}
+#screen-witnesses .cow-set{font-size:var(--t-micro);font-weight:500;letter-spacing:.12em;text-transform:uppercase;}
+#screen-witnesses .cow-set.sel{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+#screen-witnesses .cow-r{border-color:var(--gold-a25);color:var(--candle);background:var(--gold-a10);}
+#screen-witnesses .cow-addrow{display:flex;gap:var(--s-2);align-items:stretch;}
+#screen-witnesses .cow-addrow input{flex:1;min-width:0;}
+#screen-witnesses .cow-addbtn{flex:0 0 auto;background:none;border:1px solid var(--line-strong);border-radius:var(--r-pill);color:var(--text-mid);
+  padding:0 18px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  transition:border-color var(--d-base),color var(--d-base);}
+#screen-witnesses .cow-addbtn:hover{border-color:var(--text-mid);color:var(--text-hi);}
+#screen-witnesses .cow-toggle{display:flex;align-items:center;gap:var(--s-3);font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-mid);
+  margin:var(--s-3) 0;cursor:pointer;}
+#screen-witnesses .cow-toggle input{accent-color:var(--candle);width:16px;height:16px;margin:0;}
+#screen-witnesses .cow-begin{display:block;margin-top:var(--s-6);cursor:pointer;}
+
+/* The opening and the movement label */
+#screen-witnesses .cow-opening{text-align:center;padding:var(--s-6) 0 var(--s-8);cursor:pointer;min-height:60vh;-webkit-tap-highlight-color:transparent;}
+#screen-witnesses .cow-mystery{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);
+  text-transform:uppercase;color:var(--gold);text-align:center;margin:0 0 var(--s-2);}
+#screen-witnesses .cow-fruit{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-low);text-align:center;margin:0 0 var(--s-5);}
+#screen-witnesses .cow-open-line{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  max-width:26rem;margin:var(--s-5) auto var(--s-4);text-wrap:balance;}
+#screen-witnesses .cow-open-soft{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);max-width:26rem;margin:var(--s-3) auto;}
+#screen-witnesses .cow-open-int{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);
+  max-width:26rem;margin:var(--s-5) auto;text-wrap:balance;}
+#screen-witnesses .cow-open-prayers{text-align:left;max-width:var(--measure-read);margin:var(--s-5) auto;
+  font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);}
+#screen-witnesses .cow-open-prayers > div,#screen-witnesses .cow-prayers > div{margin:0 0 var(--s-4);}
+#screen-witnesses .cow-open-prayers strong,#screen-witnesses .cow-prayers strong{display:block;font-family:var(--font-sans);font-weight:500;font-size:var(--t-micro);
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-1);}
+#screen-witnesses .cow-hint{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);text-align:center;margin:var(--s-5) 0 var(--s-2);}
+
+/* A decade: the image first, at reading measure, framed; then the title, the fruit, the meditation */
+#screen-witnesses .cow-img{cursor:pointer;aspect-ratio:4/3;margin:0 auto var(--s-5);-webkit-tap-highlight-color:transparent;}
+#screen-witnesses .cow-img-inner{width:100%;height:100%;background-size:cover;background-position:center 22%;animation:cowDrift 45s ease-in-out infinite alternate;}
+@keyframes cowDrift{from{transform:scale(1);}to{transform:scale(1.07) translateY(-2%);}}
+#screen-witnesses .cow-scripture{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  max-width:var(--measure-read);margin:0 auto var(--s-4);text-wrap:pretty;}
+#screen-witnesses .cow-ref{display:block;font-family:var(--font-sans);font-style:normal;font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);opacity:.85;margin-top:var(--s-2);}
+#screen-witnesses .cow-body{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  max-width:var(--measure-read);margin:0 auto var(--s-5);text-wrap:pretty;}
+#screen-witnesses .cow-int-echo{font-family:var(--font-serif);font-style:italic;font-size:var(--t-sm);color:var(--text-low);text-align:center;
+  max-width:var(--measure-read);margin:0 auto var(--s-4);}
+#screen-witnesses .cow-listen{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid var(--line-strong);border-radius:var(--r-pill);
+  color:var(--text-mid);padding:9px 16px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;margin:0 auto var(--s-4);transition:border-color var(--d-fast),color var(--d-fast);}
+#screen-witnesses .cow-listen:hover{border-color:var(--text-mid);color:var(--text-hi);}
+#screen-witnesses .cow-controls{max-width:var(--measure-read);margin:0 auto;text-align:center;}
+#screen-witnesses .cow-credit{display:block;background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-xs);
+  font-style:italic;color:var(--text-faint);margin:0 auto var(--s-4);}
+#screen-witnesses .cow-credit:hover{color:var(--text-low);}
+#screen-witnesses .cow-credit-full{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);
+  max-width:var(--measure-read);margin:0 auto var(--s-4);}
+#screen-witnesses .cow-prayers{max-width:var(--measure-read);margin:var(--s-4) auto;font-family:var(--font-serif);font-size:var(--t-base);
+  line-height:var(--lh-text);color:var(--text-mid);text-align:left;}
+#screen-witnesses .cow-prayers summary{list-style:none;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-3);}
+#screen-witnesses .cow-prayers summary::-webkit-details-marker{display:none;}
+#screen-witnesses .cow-prayers[open] summary{margin-bottom:var(--s-4);}
+
+/* The close: the concluding prayers beneath the image */
+#screen-witnesses .cow-final{max-width:var(--measure-read);margin:0 auto;}
+#screen-witnesses .cow-final-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s-3);margin-bottom:var(--s-4);}
+#screen-witnesses .cow-final-head .cow-mystery{margin:0;text-align:left;}
+#screen-witnesses .cow-prayer-blk{margin:0 0 var(--s-5);}
+#screen-witnesses .cow-prayer-title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);margin:0 0 var(--s-2);}
+#screen-witnesses .cow-prayer-blk > div{font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);margin:0 0 var(--s-3);text-wrap:pretty;}
+#screen-witnesses .cow-vers{color:var(--gold);font-style:italic;}
+#screen-witnesses .cow-done-soft{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);text-align:center;margin:var(--s-5) 0 var(--s-2);}
+#screen-witnesses .cow-complete{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--candle);text-align:center;margin:var(--s-3) 0 var(--s-4);}
+#screen-witnesses .cow-min{background:none;border:1px solid var(--line);border-radius:var(--r-pill);color:var(--text-low);cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;white-space:nowrap;
+  transition:border-color var(--d-fast),color var(--d-fast);}
+#screen-witnesses .cow-min:hover{border-color:var(--line-strong);color:var(--text-mid);}
+#screen-witnesses .cow-pill{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);left:50%;transform:translateX(-50%);z-index:20;
+  background:rgba(5,3,2,.85);border:1px solid var(--gold-a25);border-radius:var(--r-pill);color:var(--candle);cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;padding:9px 18px;}
+
+@media (prefers-reduced-motion:reduce){
+  #screen-witnesses .cow-img-inner{animation:none;}
+}
 /* ── Readability mode ── */
 body.readable #cResponseText,
 body.readable #mysticResponseText,
@@ -6052,6 +6153,26 @@ const CoW = (() => {
 
   const prefs = () => { try { return JSON.parse(localStorage.getItem(LS))||{}; } catch { return {}; } };
 
+  /* The beads (visual layer, DESIGN.md): five decades on one line, an Our
+     Father bead and ten Hail Marys each. Decades prayed are gold; the decade
+     in hand lights one Hail Mary per meditation taken (the tenth holds), the
+     current bead in the candle. mIdx -1 is the opening (nothing lit);
+     all=true is the close (everything lit). Reads state, changes none. */
+  function beadsHTML(mIdx, medIdx, poolLen, all){
+    let h = '';
+    for (let d = 0; d < 5; d++){
+      const done = all || d < mIdx, cur = !all && d === mIdx;
+      const lit = cur ? Math.min(10, (medIdx % poolLen) + 1) : 0;   // one bead per meditation, the tenth holds
+      h += `<span class="cow-bead big ${done || cur ? 'done' : ''}"></span>`;
+      for (let b = 0; b < 10; b++){
+        const c = done ? 'done' : (cur && b < lit ? (b === lit - 1 ? 'now' : 'done') : '');
+        h += `<span class="cow-bead ${c}"></span>`;
+      }
+      if (d < 4) h += `<span class="cow-bead gap"></span>`;
+    }
+    return `<div class="cow-beads" aria-hidden="true">${h}</div>`;
+  }
+
   /* ═══════ SETUP ═══════ */
   async function init(){
     const todaySet = setForToday();
@@ -6062,7 +6183,7 @@ const CoW = (() => {
     host.style.display='block';
     host.innerHTML = `
       <div class="cow-wrap">
-        <p class="cow-sub">Seeing we also are compassed about with so great a cloud of witnesses&hellip; &mdash; Heb. 12:1</p>
+        <div class="cow-sub">Seeing we also are compassed about with so great a cloud of witnesses&hellip; &mdash; Heb. 12:1</div>
 
         <label class="cow-label">Your intentions</label>
         <textarea id="cowIntentions" rows="3" placeholder="For whom, for what, do you pray this rosary?"></textarea>
@@ -6086,7 +6207,7 @@ const CoW = (() => {
           ${SETS.map(s=>`<button type="button" class="cow-set ${s===todaySet?'sel':''}" data-s="${s}">${SET_LABEL[s]}${s===todaySet?' &middot; today':''}</button>`).join('')}
         </div>
 
-        <button type="button" class="cow-begin" id="cowBegin">Begin</button>
+        <button type="button" class="cow-begin btn-primary gold btn-begin" id="cowBegin">Begin</button>
       </div>`;
 
     const roster = new Set();
@@ -6138,17 +6259,18 @@ const CoW = (() => {
     const host = document.getElementById('cowPray');
     host.innerHTML = `
       <div class="cow-wrap cow-opening" id="cowOpening">
+        ${beadsHTML(-1, 0, 1, false)}
         <div class="cow-mystery">${S.setTitle}</div>
-        <p class="cow-open-line">In the name of the Father, and of the Son, and of the Holy Ghost.</p>
-        <p class="cow-open-soft">Begin as you always do &mdash; the Creed on the crucifix, an Our Father, three Hail Marys, a Glory Be.</p>
+        <div class="cow-open-line">In the name of the Father, and of the Son, and of the Holy Ghost.</div>
+        <div class="cow-open-soft">Begin as you always do &mdash; the Creed on the crucifix, an Our Father, three Hail Marys, a Glory Be.</div>
         ${S.showPrayers ? `<div class="cow-open-prayers">
-          <p><strong>Apostles' Creed</strong><br>${PRAYERS.creed}</p>
-          <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
-          <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
-          <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
+          <div><strong>Apostles' Creed</strong>${PRAYERS.creed}</div>
+          <div><strong>Our Father</strong>${PRAYERS.our}</div>
+          <div><strong>Hail Mary</strong>${PRAYERS.hail}</div>
+          <div><strong>Glory Be</strong>${PRAYERS.glory}</div>
         </div>` : ''}
-        ${S.roster.length ? `<p class="cow-open-soft">Praying with you: ${S.roster.join(', ')}.</p>` : ''}
-        ${S.intentions ? `<p class="cow-open-int">${S.intentions}</p>` : ''}
+        ${S.roster.length ? `<div class="cow-open-soft">Praying with you: ${S.roster.join(', ')}.</div>` : ''}
+        ${S.intentions ? `<div class="cow-open-int">${S.intentions}</div>` : ''}
         <div class="cow-hint">tap anywhere when you reach the first bead</div>
       </div>`;
     host.scrollTop = 0; window.scrollTo(0,0);
@@ -6162,18 +6284,20 @@ const CoW = (() => {
     const host = document.getElementById('cowPray');
     host.innerHTML = `
       <div class="cow-wrap">
-        ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
+        ${beadsHTML(S.mIdx, S.medIdx, pool.length, false)}
+        <div class="cow-img devotional" id="cowImg"><div class="cow-img-inner devotional-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>
         <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
         ${mystery.fruit ? `<div class="cow-fruit">Fruit of this mystery: ${mystery.fruit}</div>` : ''}
-        <div class="cow-img" id="cowImg"><div class="cow-img-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>
         <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
         <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
-        <button type="button" class="cow-listen" id="cowListen">&#9654; Listen</button>
-        ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
+        <div class="cow-controls">
+          <button type="button" class="cow-listen" id="cowListen">&#9654; Listen</button>
+          ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
+        </div>
         ${S.showPrayers ? prayersHTML() : ''}
-        <div class="cow-hint">${S.medIdx===0 && S.mIdx===0 ? 'tap the image for another meditation' :
-          pool.map((_,i)=>`<span class="cow-dot ${i===S.medIdx%pool.length?'on':''}"></span>`).join('')}</div>
-        <button type="button" class="cow-begin" id="cowNext">${S.mIdx<4 ? 'Next mystery &rarr;' : 'Finish the rosary'}</button>
+        ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
+        <div class="cow-hint">${S.medIdx===0 && S.mIdx===0 ? 'tap the image for another meditation' : ''}</div>
+        <button type="button" class="cow-begin btn-primary gold btn-begin" id="cowNext">${S.mIdx<4 ? 'Next mystery &rarr;' : 'Finish the rosary'}</button>
       </div>`;
     host.scrollTop = 0; window.scrollTo(0,0);
 
@@ -6194,10 +6318,10 @@ const CoW = (() => {
 
   function prayersHTML(){
     return `<details class="cow-prayers"><summary>The prayers</summary>
-      <p><strong>Our Father</strong><br>${PRAYERS.our}</p>
-      <p><strong>Hail Mary</strong><br>${PRAYERS.hail}</p>
-      <p><strong>Glory Be</strong><br>${PRAYERS.glory}</p>
-      <p><strong>Fatima Prayer</strong><br>${PRAYERS.fatima}</p>
+      <div><strong>Our Father</strong>${PRAYERS.our}</div>
+      <div><strong>Hail Mary</strong>${PRAYERS.hail}</div>
+      <div><strong>Glory Be</strong>${PRAYERS.glory}</div>
+      <div><strong>Fatima Prayer</strong>${PRAYERS.fatima}</div>
     </details>`;
   }
 
@@ -6261,30 +6385,31 @@ const CoW = (() => {
     document.getElementById('screen-witnesses').classList.add('cow-finale');
     document.getElementById('cowPray').innerHTML = `
       <div class="cow-wrap cow-final" id="cowFinal">
+        ${beadsHTML(5, 0, 1, true)}
         <div class="cow-final-head">
           <div class="cow-mystery">Concluding Prayers</div>
           <button type="button" class="cow-min" id="cowMin">Minimize</button>
         </div>
         <div class="cow-prayer-blk">
-          <h3>Hail, Holy Queen</h3>
-          <p>${PRAYERS.salve.split('. Pray for us')[0]}.</p>
-          <p><span class="cow-vers">V.</span> Pray for us, O holy Mother of God.<br>
-          <span class="cow-vers">R.</span> That we may be made worthy of the promises of Christ.</p>
+          <div class="cow-prayer-title">Hail, Holy Queen</div>
+          <div>${PRAYERS.salve.split('. Pray for us')[0]}.</div>
+          <div><span class="cow-vers">V.</span> Pray for us, O holy Mother of God.<br>
+          <span class="cow-vers">R.</span> That we may be made worthy of the promises of Christ.</div>
         </div>
         <div class="cow-prayer-blk">
-          <h3>Rosary Prayer</h3>
-          <p><span class="cow-vers">V.</span> Let us pray,</p>
-          <p><span class="cow-vers">R.</span> O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal salvation. Grant, we beseech Thee, that while meditating on these mysteries of the most holy Rosary of the Blessed Virgin Mary, that we may both imitate what they contain and obtain what they promise, through Christ our Lord. Amen.</p>
-          <p>Most Sacred Heart of Jesus, <span class="cow-vers">have mercy on us.</span><br>
-          Immaculate Heart of Mary, <span class="cow-vers">pray for us.</span></p>
+          <div class="cow-prayer-title">Rosary Prayer</div>
+          <div><span class="cow-vers">V.</span> Let us pray,</div>
+          <div><span class="cow-vers">R.</span> O God, whose only begotten Son, by His life, death, and resurrection, has purchased for us the rewards of eternal salvation. Grant, we beseech Thee, that while meditating on these mysteries of the most holy Rosary of the Blessed Virgin Mary, that we may both imitate what they contain and obtain what they promise, through Christ our Lord. Amen.</div>
+          <div>Most Sacred Heart of Jesus, <span class="cow-vers">have mercy on us.</span><br>
+          Immaculate Heart of Mary, <span class="cow-vers">pray for us.</span></div>
         </div>
         <div class="cow-prayer-blk">
-          <h3>Prayer to St. Michael</h3>
-          <p>St. Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, O Prince of the heavenly host, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen.</p>
+          <div class="cow-prayer-title">Prayer to St. Michael</div>
+          <div>St. Michael the Archangel, defend us in battle. Be our protection against the wickedness and snares of the devil. May God rebuke him, we humbly pray; and do thou, O Prince of the heavenly host, by the power of God, cast into hell Satan and all the evil spirits who prowl about the world seeking the ruin of souls. Amen.</div>
         </div>
-        ${S.roster.length ? `<p class="cow-done-soft">You prayed with ${S.roster.join(', ')}.</p>` : ''}
-        <p class="cow-complete">The rosary is complete.</p>
-        <button type="button" class="cow-begin" onclick="CoW.exit()">Return</button>
+        ${S.roster.length ? `<div class="cow-done-soft">You prayed with ${S.roster.join(', ')}.</div>` : ''}
+        <div class="cow-complete">The rosary is complete.</div>
+        <button type="button" class="cow-begin btn-primary gold btn-begin" onclick="CoW.exit()">Return</button>
       </div>
       <button type="button" class="cow-pill" id="cowPill" style="display:none">Show prayers</button>`;
     document.getElementById('cowMin').onclick = () => {
@@ -13236,6 +13361,7 @@ function isSubscribed() {
   const email = (window.currentUser && currentUser.email || '').toLowerCase();
   const COMP_EMAILS = [
     PARISH_EMAIL,
+    'm.p.schneider.lc@hotmail.com',
     'gwilson@charlestondiocese.org',
     'guerricheckel@gmail.com',
     'matt@proiadigitalllc.com',
