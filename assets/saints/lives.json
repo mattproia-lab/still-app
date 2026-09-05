@@ -1,0 +1,1846 @@
+{
+ "schema": "still-saints-lives/1",
+ "source": "Moved from the SAINTS table in index.html (in-house writing, May 2026); keys are romcal 1.3.0 celebration keys where a celebration on the date matched the name, else MM-DD.",
+ "fields": {
+  "name": "display name",
+  "feast": "display rank string",
+  "rank": "solemnity | feast | memorial | optional",
+  "date": "MM-DD",
+  "bio": "one paragraph",
+  "prayer": "one prayer",
+  "practice": "optional: one concrete thing to do today, like the saint (empty until written)",
+  "practice_source": "optional: where the practice comes from (empty until written)"
+ },
+ "entries": {
+  "maryMotherOfGod": {
+   "name": "Mary, Mother of God",
+   "feast": "Solemnity of Mary",
+   "rank": "solemnity",
+   "date": "01-01",
+   "bio": "On the eighth day after Christmas, the Church celebrates the divine motherhood of the Blessed Virgin Mary. The Council of Ephesus in 431 AD defined Mary as Theotokos -- God-bearer -- against Nestorius, who would have separated the divine and human natures of Christ. To call Mary Mother of God is not to elevate her above God, but to confess that the child she bore in her womb was truly and fully God. She is the first and greatest of the redeemed, the one in whom the Incarnation became flesh.",
+   "prayer": "Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsBasilTheGreatAndGregoryNazianzenBishopsAndDoctors": {
+   "name": "Ss. Basil the Great & Gregory Nazianzen",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-02",
+   "bio": "Basil of Caesarea and Gregory of Nazianzus met as students in Athens and formed one of the great friendships of the early Church. Together with Gregory of Nyssa (Basil's brother), they are called the Cappadocian Fathers. They articulated the doctrine of the Trinity with a precision that has never been surpassed: one God in three Persons, each fully divine, each distinct. Basil founded the first organized monastic communities in the East. Gregory preached sermons of such beauty that they are still read as theological poetry.",
+   "prayer": "God our Father, you revealed the mystery of the Trinity through the witness of Basil and Gregory. May their teaching guide us into the depths of your divine life.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "theMostHolyNameOfJesus": {
+   "name": "The Holy Name of Jesus",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-03",
+   "bio": "The name Jesus -- Yeshua in Hebrew, \"God saves\" -- was given by the angel before his birth. It is the name at which, Paul writes, every knee shall bow. The devotion to the Holy Name flourished in the medieval period, particularly through the Franciscans and Saint Bernardine of Siena, who promoted the monogram IHS. To speak the name of Jesus in prayer is already to pray -- the Desert Fathers taught that the whole of contemplation could be contained in this one invocation.",
+   "prayer": "Jesus. Lord Jesus Christ, Son of God, have mercy on me, a sinner.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "tuesdayAfterEpiphany": {
+   "name": "The Epiphany of the Lord",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "01-06",
+   "bio": "The word epiphany means manifestation. On this day the Church celebrates the revelation of Christ to the Gentiles -- represented by the Magi -- and therefore to all the nations. The Magi followed a star. They carried gifts. They found a child. The Church reads into this scene the entire drama of the spiritual life: the long journey, the guidance of obscure signs, the encounter with the one who was sought, and the return home by a different way.",
+   "prayer": "O God, who on this day revealed your only-begotten Son to the nations by the guidance of a star: grant that we, who know you now by faith, may be brought to contemplate the beauty of your majesty.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintRaymondOfPenyafortPriest": {
+   "name": "St. Raymond of Penyafort",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-07",
+   "bio": "Raymond was a Catalan Dominican of the thirteenth century, confessor to Pope Gregory IX, and the man who compiled the Decretals -- the systematic collection of canon law that governed the Church for seven centuries. At the age of sixty-five, having organized the first mendicant missions to the Moors and Jews of Spain, he resigned as Master General of the Dominicans to pursue a life of prayer. He lived to be nearly a hundred. His life is a study in the patience required to build institutions that outlast their founders.",
+   "prayer": "Lord, you gave Raymond the grace to serve both learning and prayer. May we too find in each day's work a form of contemplation.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "01-12": {
+   "name": "St. Marguerite Bourgeoys",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-12",
+   "bio": "Marguerite came to New France in 1653, the first teacher in Montreal. She founded the Congregation of Notre Dame, the first uncloistered religious community in the New World -- women who could move freely through the streets and forests to serve the poor. She refused the comfort of enclosure. Her sisters were called \"daughters of the village.\" She died in 1700, having given fifty years to the children of a colony at the edge of the known world.",
+   "prayer": "Saint Marguerite, you went where the need was greatest without waiting for the world to come to you. Give us your courage to move.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintHilaryOfPoitiersBishopAndDoctor": {
+   "name": "St. Hilary of Poitiers",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-13",
+   "bio": "Hilary was a Gallo-Roman bishop of the fourth century who became the great champion of Nicene orthodoxy in the West during the Arian crisis. Exiled to the East by the Emperor Constantius, he used his exile to study Greek theology and returned to the West with a deeper understanding of the Trinity than most Western bishops possessed. He is called the Athanasius of the West. His treatise On the Trinity remains a work of rare precision and depth.",
+   "prayer": "O God, you raised up Hilary to defend the divinity of your Son. Strengthen our faith in the mystery of the Trinity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAnthonyOfEgyptAbbot": {
+   "name": "St. Anthony of Egypt",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-17",
+   "bio": "Anthony was born in Egypt around 251 AD, sold his possessions at twenty years old upon hearing the Gospel read in church, and went into the desert. He is the father of Christian monasticism -- not because he invented solitary prayer, but because his life became the pattern that thousands imitated. Athanasius wrote his biography, and through it Anthony became the most famous Christian in the world by the time he died at 105. The story of his temptations in the desert has never stopped being told.",
+   "prayer": "O God, who led Anthony into the desert to seek your face: lead us also into that interior solitude where you speak to the heart.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsFabianPopeAndSebastianMartyrs": {
+   "name": "St. Fabian",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-20",
+   "bio": "Fabian was elected Pope in 236 AD when, according to tradition, a dove descended on his head during the election -- he had come to Rome merely as a visitor. He organized the Church of Rome into regions served by deacons, established the Liberian Catalogue (the first list of popes), and died a martyr under the Emperor Decius in 250. Saint Cyprian wrote that his death was \"worthy of the purity and holiness of his life.\"",
+   "prayer": "Lord God, who strengthened Fabian to seal his witness with his blood: grant that we may hold the faith with equal courage.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAgnesVirginAndMartyr": {
+   "name": "St. Agnes",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-21",
+   "bio": "Agnes was twelve or thirteen years old, a Roman girl of noble family, when she was martyred around 304 AD during the persecution of Diocletian. She had consecrated her virginity to Christ, refused marriage to the son of a Roman official, and was executed. She is one of the few women named in the Canon of the Mass. The white lamb -- agnus -- became her symbol. Her youth, her simplicity, and the absoluteness of her fidelity have made her one of the most beloved saints in the calendar.",
+   "prayer": "O God, who counted Agnes worthy of the palm of martyrdom in the very flower of her youth: grant that we may follow her in purity of faith and courage of heart.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintVincentDeaconAndMartyr": {
+   "name": "St. Vincent of Saragossa",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-22",
+   "bio": "Vincent was a Spanish deacon martyred in Valencia in 304 AD under Diocletian. His bishop, Valerius, was exiled; Vincent was tortured with a rack, iron hooks, a bed of hot coals, and a dungeon spiked with broken pottery. He survived each torment long enough to continue comforting his torturers. Augustine preached two sermons on him. Prudentius wrote a celebrated poem about his passion. His courage became the paradigm of the deacon-martyr in the Western Church.",
+   "prayer": "Give us, Lord, through the intercession of Vincent, a love for you strong enough to outlast suffering.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintFrancisDeSalesBishopAndDoctor": {
+   "name": "St. Francis de Sales",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-24",
+   "bio": "Francis de Sales was bishop of Geneva -- a see largely lost to Calvinism -- and one of the most humanly wise spiritual directors in the tradition. His Introduction to the Devout Life was addressed not to monks but to ordinary people: merchants, mothers, soldiers. He taught that holiness was possible in every state of life, that gentleness was stronger than severity, and that the spiritual life must be adapted to the person, not the person to the spiritual life. His correspondence with Jane de Chantal produced some of the most beautiful letters of spiritual direction ever written.",
+   "prayer": "O God, who gave Francis de Sales a gentle wisdom for the guidance of souls: teach us, through his intercession, that the love of neighbour is the shortest path to you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "conversionOfSaintPaulApostle": {
+   "name": "The Conversion of St. Paul",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "01-25",
+   "bio": "Saul of Tarsus was a Pharisee, trained under Gamaliel, a persecutor of the Church by his own description. On the road to Damascus he was thrown to the ground, blinded, and heard a voice: \"Saul, Saul, why dost thou persecute me?\" The encounter was total and irreversible. He became Paul -- the Apostle to the Gentiles, the author of half the New Testament, the theologian of grace and of the cross. His conversion is celebrated not only as his personal transformation but as the pattern of God's habit of choosing the unlikely.",
+   "prayer": "O God, who taught the whole world through the preaching of blessed Paul: grant that we who celebrate his conversion may follow his example and come to your presence.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsTimothyAndTitusBishops": {
+   "name": "Ss. Timothy & Titus",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-26",
+   "bio": "Timothy and Titus were companions of Paul. Timothy, the son of a Greek father and Jewish mother, was circumcised by Paul for missionary purposes and served the church in Ephesus. Titus, a Gentile convert, was Paul's emissary to Corinth and the first bishop of Crete. Paul's letters to them -- the Pastoral Epistles -- are the oldest surviving documents of episcopal governance. They are remembered together because they both received letters from Paul instructing them in the care of God's people.",
+   "prayer": "Lord, you guided your Church through the faithful service of Timothy and Titus. Raise up in our time bishops and pastors formed in the same school of charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAngelaMericiVirgin": {
+   "name": "St. Angela Merici",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "01-27",
+   "bio": "Angela founded the Company of St. Ursula in Brescia in 1535 -- the first teaching order of women in the Church, dedicated to the education of poor girls. She did not establish a convent; her sisters lived in their own homes and moved freely through the city. Angela had a mystical vision in a field as a young woman that she would found a community of virgins serving God. She spent forty years preparing. She is the patron saint of the disabled, the sick, and those who have lost their parents.",
+   "prayer": "O God, who called Angela to serve the young and the poor: raise up in our time her daughters's spirit of creative and courageous charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintThomasAquinasPriestAndDoctor": {
+   "name": "St. Thomas Aquinas",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "01-28",
+   "bio": "Thomas was born in 1225, the son of a Norman count, educated at Monte Cassino and Naples, a Dominican friar despite his family's fierce objections, a student of Albert the Great in Cologne and Paris, the greatest systematic theologian in the history of the Church. His Summa Theologiae runs to four thousand pages and touches virtually every question of philosophy, theology, and ethics. Near the end of his life, after a mystical experience during Mass, he stopped writing. \"All that I have written seems to me like straw compared to what I have seen.\" He died in 1274.",
+   "prayer": "Grant us, Lord, by the intercession of Thomas Aquinas, sharpness of mind in the study of your truth, and warmth of heart in its contemplation.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "presentationOfTheLord": {
+   "name": "The Presentation of the Lord",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "02-02",
+   "bio": "Forty days after Christmas, Mary and Joseph brought the child Jesus to the Temple in Jerusalem, as the Law required. There they encountered two figures of extraordinary antiquity: Simeon, who had been promised he would not die before seeing the Messiah, and Anna, a widow of eighty-four who had spent her life in the Temple in prayer and fasting. Simeon took the child in his arms and sang what became the Nunc Dimittis -- the canticle of Compline. The encounter of the old world with the new, of the long waiting with its fulfillment, is the image the Church meditates on this day.",
+   "prayer": "Almighty Father, your Son was presented in the Temple and recognized as the light of the nations. May we receive him with the faith of Simeon and the devotion of Anna.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBlaseBishopAndMartyrSaintAnsgarBishop": {
+   "name": "St. Blaise",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "02-03",
+   "bio": "Blaise was bishop of Sebaste in Armenia, martyred in 316 AD. According to tradition, he healed a boy choking on a fishbone, and this is the origin of the blessing of throats performed on his feast day. He was a physician before becoming a bishop. The blessing of throats with crossed candles is one of the oldest sacramentals in the Western calendar. His intercession is invoked for all diseases of the throat.",
+   "prayer": "Through the intercession of Saint Blaise, bishop and martyr, may God deliver you from ailments of the throat and from every other evil.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAgathaVirginAndMartyr": {
+   "name": "St. Agatha",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "02-05",
+   "bio": "Agatha was a young Sicilian woman martyred around 251 AD for refusing the advances of the Roman consul Quintianus. She endured torture with extraordinary courage, and tradition says that when Saint Peter appeared to her in prison, her wounds were healed. She is the patron of those suffering from breast cancer, bellmakers, bakers, and the island of Sicily. She is one of the few women whose name has been in the Roman Canon of the Mass since at least the sixth century.",
+   "prayer": "O God, who strengthened the heart of your servant Agatha against all the assaults of the enemy: grant us also the grace to overcome all adversity through love of you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPaulMikiAndCompanionsMartyrs": {
+   "name": "Ss. Paul Miki & Companions",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "02-06",
+   "bio": "On February 5, 1597, twenty-six Christians -- Franciscan missionaries and Japanese converts, including three young boys -- were crucified on a hill outside Nagasaki. Paul Miki, a Jesuit scholastic, preached from his cross. He forgave his executioners. He testified to the faith that had brought him there. Japan had received the Gospel from Francis Xavier in 1549; the persecution that followed produced one of the most luminous martyrologies in the history of the Church.",
+   "prayer": "O God, who consecrated the first fruits of the faith in Japan with the blood of Paul and his companions: grant, through their intercession, that the seed they planted may continue to bear fruit.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJeromeEmilianiSaintJosephineBakhitaVirgin": {
+   "name": "St. Jerome Emiliani",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "02-08",
+   "bio": "Jerome was a Venetian soldier, imprisoned by enemies at Castelnuovo in 1511. In his prison cell he promised his life to the Virgin if he were freed. He escaped, became a priest, and spent the rest of his life founding orphanages, hospitals, and schools for the poor and abandoned children of northern Italy. He died in 1537 caring for the sick during a plague, having caught the disease himself. He is the patron saint of orphans and abandoned children.",
+   "prayer": "Father of the orphan and defender of the poor, through the intercession of Jerome Emiliani, strengthen those who care for the abandoned.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintScholasticaVirgin": {
+   "name": "St. Scholastica",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "02-10",
+   "bio": "Scholastica was the twin sister of Benedict of Nursia. She founded a convent near Monte Cassino. Once a year the twins met at a house between their two monasteries. At their last meeting, as the evening ended and Benedict prepared to return, Scholastica prayed that he would stay. A sudden storm made it impossible for him to leave. Three days later she died. Gregory the Great tells the story to illustrate that she who loved more was the more powerful. The greater love was hers.",
+   "prayer": "Lord, you drew Scholastica to yourself with so great a love that she could not be separated from you in death. Grant us a portion of her ardor.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfLourdes": {
+   "name": "Our Lady of Lourdes",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "02-11",
+   "bio": "On February 11, 1858, a fourteen-year-old girl named Bernadette Soubirous saw a light in the grotto of Massabielle near Lourdes in the French Pyrenees. The apparitions continued eighteen times. The figure identified herself: \"I am the Immaculate Conception.\" The spring that appeared has become one of the most visited pilgrimage sites in the world. Millions who come to Lourdes are sick. Most are not cured. All are changed by the encounter with suffering endured in faith.",
+   "prayer": "O Mary, conceived without sin, pray for us who have recourse to you. Comfort the sick, strengthen the weak, and lead all who seek you to your Son.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsCyrilMonkAndMethodiusBishop": {
+   "name": "Ss. Cyril & Methodius",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "02-14",
+   "bio": "Brothers from Thessaloniki, ninth-century missionaries to the Slavic peoples. Cyril created the Glagolitic alphabet -- the precursor of Cyrillic -- specifically to translate the Scriptures and liturgy into the Slavic tongue. They believed the Gospel must be heard in the language of the people, a conviction that put them in conflict with German bishops who insisted on Latin. John Paul II named them co-patrons of Europe alongside Benedict. Their mission established the Orthodox and Catholic traditions of Eastern Europe.",
+   "prayer": "God of all peoples, you sent Cyril and Methodius to give the Slavic peoples a language for your word. Bless the diversity of your Church and unite all nations in the praise of your name.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "sevenHolyFoundersOfTheServiteOrder": {
+   "name": "The Seven Founders of the Servite Order",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "02-17",
+   "bio": "Seven Florentine merchants, members of a Marian confraternity, withdrew to Monte Senario in 1233 after a vision of the Virgin on the Feast of the Assumption. They became the founding community of the Order of Servants of Mary. They lived in strict poverty, spending their time in prayer, penance, and contemplation of Our Lady's sorrows. One of them, Alexis Falconieri, lived to see his order officially confirmed and died at the age of 110.",
+   "prayer": "O God, who gathered these seven holy men in devotion to the Mother of Sorrows: grant us through their intercession a share in the contemplation of the suffering that brought our redemption.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPeterDamianBishopAndDoctorOfTheChurch": {
+   "name": "St. Peter Damian",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "02-21",
+   "bio": "Peter was a monk and hermit of the eleventh century who became the most severe reformer of his age. His Liber Gomorrhianus was a blistering attack on the sexual corruption of the clergy. His Book on the Lord's Desire for Our Salvation was a meditation on the love of God. He was made Cardinal of Ostia against his will, used the office to reform monasteries across Italy, and begged repeatedly to be allowed to return to his hermitage. He died on the road in 1072, having never stopped his double work of reform and contemplation.",
+   "prayer": "Lord, you gave Peter the courage to call the Church to holiness. Give us the same clear sight and the same love that is its source.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "chairOfSaintPeterApostle": {
+   "name": "The Chair of St. Peter",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "02-22",
+   "bio": "The ancient stone chair preserved in the apse of St. Peter's Basilica symbolizes the authority of the Bishop of Rome as successor to Peter. Jesus said: \"Thou art Peter, and upon this rock I will build my church.\" This feast celebrates not merely a piece of furniture but the principle of apostolic succession -- the unbroken chain of ordained ministry reaching back through the centuries to the twelve. Whatever one makes of the papacy's history, this principle has given the Church a remarkable continuity of identity across two thousand years.",
+   "prayer": "O Lord, who hast built your Church upon the rock of Peter's confession: grant that no flood of error may overwhelm the foundation you yourself have laid.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPolycarpBishopAndMartyr": {
+   "name": "St. Polycarp",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "02-23",
+   "bio": "Polycarp was bishop of Smyrna, a disciple of the Apostle John, who had himself been the beloved disciple. He was martyred in 155 AD at the age of eighty-six. His martyrdom is recorded in the first eyewitness account of a Christian martyrdom to survive. When asked to renounce Christ, he said: \"For eighty-six years I have served him, and he has done me no wrong. How can I blaspheme my King and Saviour?\" He was burned at the stake, and when the flames did not consume him, he was stabbed. He is a link between the apostolic generation and the second century Church.",
+   "prayer": "O God, you strengthened Polycarp to hold fast to the faith received from the Apostle John. Grant us the same tenacity in love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCasimir": {
+   "name": "St. Casimir",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "03-04",
+   "bio": "Casimir was a prince of Poland and Lithuania, third son of King Casimir IV, born in 1458. He refused a crown offered to him by Hungarian nobles, preferring prayer and fasting to political ambition. He lived austerely, sleeping on the floor, spending nights in prayer outside locked church doors. He died at twenty-five of tuberculosis. A Latin hymn to Mary -- Omni die dic Mariae -- was found in his hand after death and is still sung. He is the patron saint of Poland and Lithuania.",
+   "prayer": "Lord, you gave Casimir the wisdom to prefer your kingdom to all earthly crowns. Give us grace to desire what is truly lasting.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsPerpetuaAndFelicityMartyrs": {
+   "name": "Ss. Perpetua & Felicity",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "03-07",
+   "bio": "Perpetua was a twenty-two-year-old noblewoman, newly baptized, nursing her infant son. Felicity was her slave, pregnant, martyred eight months into her pregnancy -- she gave birth in prison two days before her death. They were executed in the arena at Carthage in 203 AD during the persecution of Septimius Severus. Perpetua's prison diary is the oldest surviving text written by a Christian woman. Her final words to her brother: \"Stand fast in the faith, love one another, and do not be scandalised by our suffering.\"",
+   "prayer": "Father of the martyrs, you strengthened Perpetua and Felicity to choose death rather than deny you. Give us a share of their unconquerable love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnOfGodReligious": {
+   "name": "St. John of God",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "03-08",
+   "bio": "John was a Portuguese soldier and bookseller who at the age of forty heard a sermon by John of Avila and suffered a conversion so violent that he was thought to have gone mad. He was committed to the Royal Hospital in Granada, where his care for the insane converted him to a ministry of hospitality. He founded the Brothers Hospitallers -- the Order of Saint John of God -- who still run hospitals throughout the world. He died in 1550, his health broken by years of carrying sick patients on his back.",
+   "prayer": "O God, who endowed John of God with the spirit of compassion: grant us through his intercession a heart like his, tender toward suffering wherever it appears.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintFrancesOfRomeReligious": {
+   "name": "St. Frances of Rome",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "03-09",
+   "bio": "Frances was a Roman noblewoman of the fifteenth century who wished to be a nun but was married at thirteen to Lorenzo de Ponziani. She raised three children, managed a household, survived plague and war, buried two of her children, and all the while lived as though in constant prayer. For twenty-three years she was guided by an angel visible only to her. After her husband's death she joined the community of Oblates she had founded. She is the patron saint of motorists -- because her angel allegedly lit the road in front of her carriage.",
+   "prayer": "Lord, Frances lived as a wife, mother, and servant of the poor without ever ceasing to pray. Teach us her art of finding you in the midst of ordinary life.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPatrickBishop": {
+   "name": "St. Patrick",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "03-17",
+   "bio": "Patrick was a Romano-British Christian, enslaved at sixteen by Irish raiders and taken to Ireland. He escaped, trained for the priesthood, and returned to Ireland as its bishop -- to the very country that had enslaved him. His Confessio is a document of extraordinary humility: he apologizes repeatedly for his lack of education, then proceeds to describe a life of such missionary courage and apostolic fruitfulness that the apologies read as the deepest form of pride. He converted the island. He died around 460 AD.",
+   "prayer": "Arise today through the strength of heaven, the light of the sun, the radiance of the moon, the splendor of fire. Christ with me, Christ before me, Christ behind me, Christ in me.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCyrilOfJerusalemBishopAndDoctor": {
+   "name": "St. Cyril of Jerusalem",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "03-18",
+   "bio": "Cyril was bishop of Jerusalem from 349 to 387 AD, with frequent interruptions for exile imposed by Arian emperors. His Catechetical Lectures -- delivered to those preparing for baptism at Easter -- are among the most complete and vivid accounts of early Christian initiation that survive. He explained the sacraments by doing them: baptism, confirmation, Eucharist. His description of first communion -- the bread and the chalice received with hands cupped like a throne -- is one of the most beautiful passages in patristic literature.",
+   "prayer": "Lord God, who gave Cyril the gift of explaining the mysteries of faith with clarity and warmth: grant that we may receive those mysteries with the same awe that he described.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "josephHusbandOfMary": {
+   "name": "St. Joseph, Husband of Mary",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "03-19",
+   "bio": "Joseph is the most silent of the major figures in the Gospel. He receives angelic messages in dreams. He acts on them without recorded speech. He takes Mary as his wife, flees to Egypt, returns to Nazareth, searches for the lost boy in Jerusalem. He is called a just man. The tradition holds that he died before the public ministry of Jesus -- that he was spared the Passion that Mary witnessed. He is the patron of the universal Church, of a happy death, of workers, of fathers, of the interior life.",
+   "prayer": "Guardian of the Redeemer, faithful servant in silence and in darkness: teach us to act without needing to understand, and to trust without needing to see.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "annunciation": {
+   "name": "The Annunciation of the Lord",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "03-25",
+   "bio": "The Angel Gabriel appeared to Mary in Nazareth. He told her she would conceive and bear the Son of God. She asked how this could be. He told her. She said: \"Behold the handmaid of the Lord; be it done to me according to thy word.\" In that moment -- in the yes of a young woman in an obscure village -- the Incarnation began. The Church has always read this as the hinge of human history: the moment at which God entered the creation he had made. Nine months later is December 25.",
+   "prayer": "Pour forth, we beseech thee O Lord, thy grace into our hearts; that we, to whom the Incarnation of Christ thy Son was made known by the message of an angel, may by his Passion and Cross be brought to the glory of his Resurrection.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnBaptistDeLaSallePriest": {
+   "name": "St. John Baptist de la Salle",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "04-07",
+   "bio": "John Baptist de la Salle was a French priest of the seventeenth century who gave up his wealth, his canonry, and his social position to found free schools for poor boys. He created the first teacher training college in history, invented the practice of teaching in French rather than Latin, and established the Brothers of the Christian Schools. He was harassed by rivals, abandoned by followers, and died in 1719 at sixty-eight, having transformed the education of the poor. He is the patron saint of teachers.",
+   "prayer": "O God, who gave John Baptist the zeal to educate the young and the poor: raise up in our time teachers fired with the same charity and the same patience.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintStanislausBishopAndMartyr": {
+   "name": "St. Stanislaus",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "04-11",
+   "bio": "Stanislaus was bishop of Kraków, martyred in 1079 by King Bolesław II of Poland, whom he had excommunicated for his crimes. The king killed him personally with a sword while he was celebrating Mass. He is the patron saint of Poland, and his martyrdom -- like Becket's ninety years later -- established the principle that the Church's authority extends even to kings. His relics in the Wawel Cathedral have been a site of pilgrimage and national identity for nine centuries.",
+   "prayer": "Lord, you gave Stanislaus the courage to oppose royal tyranny in defense of your law. Strengthen those who speak truth to power in every age.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMartinIPopeAndMartyr": {
+   "name": "St. Martin I",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-13",
+   "bio": "Martin was pope from 649 to 653, during the Monothelite controversy -- the heresy that Christ had only one will. He called the Lateran Council, which condemned the heresy. The Emperor Constans II, who supported the heresy, had him arrested, tried for treason, publicly humiliated, and exiled to Crimea, where he died of neglect and starvation in 655. His letters from exile describe not bitterness but grief that no one in Rome thought to send him bread. He is the last pope venerated as a martyr.",
+   "prayer": "O God, who sustained Martin through exile and hunger: grant that we may hold the faith with his tenacity and offer our suffering with his peace.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAnselmOfCanterburyBishopAndDoctorOfTheChurch": {
+   "name": "St. Anselm",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-21",
+   "bio": "Anselm was an Italian monk who became Prior of Bec in Normandy and eventually Archbishop of Canterbury -- twice exiled by English kings for defending the Church's freedom. He is called the Father of Scholasticism. His ontological argument for the existence of God -- that God is that than which nothing greater can be conceived -- has been debated by philosophers for nine centuries. His Cur Deus Homo (Why God Became Man) is the classic treatment of the theology of atonement. His prayer life was as serious as his logic.",
+   "prayer": "O God, whom to know is life, whom to seek is rest, and whom to find is all: grant that we may follow Anselm in seeking understanding through faith, and faith through love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintGeorgeMartyrSaintAdalbertBishopAndMartyr": {
+   "name": "St. George",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-23",
+   "bio": "George was a soldier martyred in Palestine around 303 AD during the persecution of Diocletian. Almost nothing is known about him historically, but he became one of the most venerated martyrs in both East and West. The dragon legend belongs to medieval hagiography -- an allegorization of his victory over the ancient serpent. He is the patron of England, Georgia, and soldiers. What we do know is that his courage in death impressed the generation that witnessed it so deeply that his name was remembered for seventeen centuries.",
+   "prayer": "O God, who granted George the grace to overcome the ancient dragon of sin and death: grant us courage in every battle of the spirit.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintFidelisOfSigmaringenPriestAndMartyr": {
+   "name": "St. Fidelis of Sigmaringen",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-24",
+   "bio": "Mark Rey was a German lawyer who became a Capuchin friar, taking the name Fidelis (Faithful). He was assigned to preach the Counter-Reformation in the Graubünden region of Switzerland. The Calvinist community there, supported by Protestant forces, killed him in 1622 -- the first martyr of the Congregation for the Propagation of the Faith. His last recorded words before being killed: \"I came to plant the faith, not to take your lives.\"",
+   "prayer": "Lord, Fidelis gave his life in faithful service to the Gospel. May his witness strengthen all who preach the faith in hostile places.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMarkTheEvangelist": {
+   "name": "St. Mark",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "04-25",
+   "bio": "Mark was a companion of Paul and Barnabas, cousin of Barnabas, interpreter and disciple of Peter. His Gospel -- the shortest and most vivid of the four -- was almost certainly composed in Rome and reflects Peter's preaching. The word \"immediately\" (euthys) appears forty-one times in his sixteen chapters. Things happen fast in Mark. Jesus acts, heals, commands, and moves on. The Church in Alexandria claims Mark as its founder. His symbol is the lion, because his Gospel opens in the wilderness with the voice of one crying out.",
+   "prayer": "O God, who exalted blessed Mark by the glory of the Gospel: grant us to be so guided by his teaching that we may follow in the footsteps of Christ.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPeterChanelPriestAndMartyrSaintLouisGrignonDeMontfortPriest": {
+   "name": "St. Peter Chanel",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-28",
+   "bio": "Peter was a French Marist priest, the first martyr of Oceania. He arrived on the island of Futuna in 1837. Within three years his gentle manner had won the affection of the islanders and the hostility of their king, Niuliki, whose own son had asked to be baptized. The king sent warriors to kill him in 1841. He died saying \"It is well with me.\" The entire island converted within two years of his death. He is the patron saint of Oceania.",
+   "prayer": "Lord, the blood of Peter Chanel watered the seeds of faith in Oceania. Bless the Church that grew from his sacrifice.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCatherineOfSienaVirginAndDoctorOfTheChurch": {
+   "name": "St. Catherine of Siena",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "04-29",
+   "bio": "Catherine Benincasa was the twenty-third of twenty-five children, a Dominican tertiary, a mystic who bore the stigmata, a prolific letter-writer to popes and princes, and the woman who persuaded Gregory XI to return the papacy from Avignon to Rome after seventy years. She dictated her Dialogue in an ecstatic state to three secretaries simultaneously. She is a Doctor of the Church. She died at thirty-three. One of her most quoted passages: \"Be who God meant you to be, and you will set the world on fire.\"",
+   "prayer": "O God, you enkindled the heart of Catherine with divine love and gave her wisdom to counsel the Church. Grant us through her intercession the same burning desire for your truth and your peace.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPiusVPope": {
+   "name": "St. Pius V",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "04-30",
+   "bio": "Antonio Ghislieri was a Dominican friar who became pope in 1566 and presided over the implementation of the Council of Trent. He reformed the breviary and the Roman Missal -- creating what became known as the Tridentine Mass -- reorganized the Roman Curia, and excommunicated Elizabeth I of England. He organized the Holy League that defeated the Ottoman fleet at Lepanto in 1571. He credited the victory to the Rosary and established October 7 as the Feast of Our Lady of the Rosary. He died in 1572.",
+   "prayer": "O God, who guided your Church through the wisdom of Pius V in a time of great turmoil: grant us leaders of equal faith and courage in our own turbulent age.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJosephTheWorker": {
+   "name": "St. Joseph the Worker",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-01",
+   "bio": "This feast was established by Pius XII in 1955, on the same day as International Workers Day, as a Christian response to the communist appropriation of labor as a purely economic category. Joseph worked as a carpenter. The Son of God spent thirty of his thirty-three years in a workshop, making things with his hands. The theology of work implicit in this is immense: labor is not a curse but a participation in the creativity of God, a form of prayer, a way of serving the neighbor.",
+   "prayer": "O God, Creator of all things, you willed that your Son should take upon himself the life of a working man. Grant that we may find in our daily work a participation in your creative love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAthanasiusBishopAndDoctor": {
+   "name": "St. Athanasius",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "05-02",
+   "bio": "Athanasius was bishop of Alexandria from 328 to 373 AD -- forty-five years in office, seventeen of them spent in exile. He was exiled five times by four different emperors for defending the Nicene definition of the divinity of Christ against Arianism. His biography of Anthony of Egypt (which he wrote from personal acquaintance) launched the monastic movement. His phrase: \"God became man so that man might become God.\" The tradition still repeats it. He died peacefully in his bed, having outlasted every emperor who had exiled him.",
+   "prayer": "Almighty God, you strengthened Athanasius to defend the divinity of your Son against the whole power of the Empire. Grant us his confidence in the truth entrusted to the Church.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsPhilipAndJamesApostles": {
+   "name": "Ss. Philip & James",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "05-03",
+   "bio": "Philip was from Bethsaida, the same town as Peter and Andrew. When Nathanael doubted, Philip said simply: \"Come and see.\" At the Last Supper it was Philip who said: \"Lord, show us the Father, and it is sufficient for us.\" Jesus replied: \"He that hath seen me hath seen the Father.\" James the Less -- distinguished from James the brother of John -- was a kinsman of the Lord and the first bishop of Jerusalem. His letter in the New Testament insists with uncomfortable directness that faith without works is dead.",
+   "prayer": "O God, who gladdens us each year with the feast of your apostles Philip and James: grant that we may come through their prayers to the knowledge of the Father whom Philip sought.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "05-04": {
+   "name": "Bl. Michael Ghebre & Companions",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-04",
+   "bio": "Michael Ghebre was an Ethiopian monk of the Vincentian mission, martyred in 1855 along with Giustino De Jacobis during the persecution of Emperor Theodore II. They represent the long history of the Ethiopian Church's encounter with Rome -- complex, contested, and at its best, deeply faithful on both sides.",
+   "prayer": "Lord, who sustained your martyrs in Ethiopia through the hope of resurrection: grant that their witness may bear fruit in the unity of all who bear the name of Christ.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "05-10": {
+   "name": "St. Damien of Molokai",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-10",
+   "bio": "Jozef De Veuster was a Belgian Sacred Hearts priest who volunteered to serve the leper colony on the island of Molokai in Hawaii in 1873. He stayed for sixteen years, building churches, digging graves, dressing wounds, and eventually contracting leprosy himself. When he preached his first sermon after his diagnosis, he began: \"We lepers...\" He died in 1889 at forty-nine. Robert Louis Stevenson, who visited Molokai, called him \"a saint and a hero.\"",
+   "prayer": "Lord, Damien gave himself completely to those whom the world had abandoned. May his witness challenge us to seek out the excluded and forgotten.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsNereusAndAchilleusMartyrsSaintPancrasMartyr": {
+   "name": "Ss. Nereus & Achilleus",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-12",
+   "bio": "Nereus and Achilleus were Roman soldiers -- according to tradition, guards of the household of Domitilla -- who converted to Christianity and were martyred in the late first or early second century. They are among the earliest martyrs of Rome. An inscription placed by Pope Damasus in the fourth century above their tomb records that they threw down their weapons on the day of their baptism. \"Suddenly converted, they left the work of the tyrant, threw away their shields and weapons of war, and joyfully carried the trophies of the conqueror Christ.\"",
+   "prayer": "O God, who strengthened Nereus and Achilleus to prefer your service to all earthly power: grant that we too may lay down whatever hinders us from following you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfFatima": {
+   "name": "Our Lady of Fatima",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-13",
+   "bio": "Between May 13 and October 13, 1917, three children -- Lucia, Francisco, and Jacinta -- saw apparitions of the Virgin Mary in the fields near Fatima, Portugal, while Europe was destroying itself in the Great War. She asked for prayer, penance, and the consecration of Russia. On October 13, a crowd of seventy thousand witnessed what has been called the Miracle of the Sun. The theological weight of Fatima lies in its insistence on two things the modern world most resists: the reality of hell, and the power of the Rosary.",
+   "prayer": "O Mary, who appeared at Fatima to call the world to penance and prayer: convert our hearts, obtain peace for the nations, and lead all souls to God.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMatthiasTheApostle": {
+   "name": "St. Matthias",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "05-14",
+   "bio": "Matthias was chosen by lot to replace Judas Iscariot among the Twelve. He had been a follower of Jesus from the baptism of John to the Ascension -- a witness to the entire public ministry. The casting of lots was understood as a form of prayer: letting God decide. Tradition places his mission in Judea, Cappadocia, or Ethiopia, and his martyrdom by axe. He is a saint of humility -- chosen to fill a gap, to complete a number, faithful in obscurity.",
+   "prayer": "O God, who numbered Matthias among the Apostles: grant that we may be numbered among the elect of your eternal kingdom.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "05-15": {
+   "name": "St. Isidore the Farmer",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-15",
+   "bio": "Isidore was a Spanish farmhand in Madrid, born around 1070, who ploughed other men's fields all his life and died poor. He attended Mass every morning before work. The other farmhands complained that his devotion made him late. Angels were said to plough in his place while he prayed. He is the patron of farmers and of Madrid, canonized in 1622 alongside Ignatius of Loyola, Francis Xavier, Teresa of Ávila, and Philip Neri. He and Teresa are the only Spaniards canonized that day.",
+   "prayer": "Lord, Isidore found you in the furrows of the earth. Teach us to consecrate our daily work as he consecrated his.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBernardineOfSienaPriest": {
+   "name": "St. Bernardine of Siena",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-20",
+   "bio": "Bernardine was a Franciscan friar and the greatest popular preacher of fifteenth-century Italy. His sermons on the Holy Name of Jesus spread the IHS monogram across the Italian city-states. He declined three bishoprics. He preached across Italy for forty years, drawing crowds of ten thousand in the open air, mediating between feuding factions, reforming the Observant Franciscans. He died in 1444 at sixty-three, his voice worn out from preaching. His last sermon was delivered lying down.",
+   "prayer": "Lord, you gave Bernardine the gift of preaching the Holy Name with fire and joy. May the name of Jesus be always on our lips and in our hearts.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintChristopherMagallanesAndCompanionsMartyrs": {
+   "name": "St. Christopher Magallanes & Companions",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-21",
+   "bio": "Christopher Magallanes was a Mexican priest martyred in 1927 during the Cristero War -- the violent persecution of the Catholic Church under the anticlerical government of President Calles. He was arrested on the way to celebrate an unauthorized Mass, falsely accused of fomenting rebellion, and shot. His last words: \"I die innocent, and I ask God that my blood may serve to unite my Mexican brothers.\" He is one of twenty-five martyrs of Mexico beatified together in 1992.",
+   "prayer": "Lord, the martyrs of Mexico shed their blood rather than abandon your people. May their witness sustain the faith of all who are persecuted for your name.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintRitaOfCascia": {
+   "name": "St. Rita of Cascia",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-22",
+   "bio": "Rita was an Augustinian nun of fifteenth-century Italy, but before she was a nun she was a wife and mother who had been forced into an arranged marriage against her will and later widowed. She asked three times to enter the convent; three times she was refused as a widow. According to tradition, she was miraculously transported inside the cloister walls. She received the stigmata of a crown of thorns. She is the patron of impossible causes, of abused wives, of widows, and of those for whom there seems to be no way forward.",
+   "prayer": "O God, who gave Rita grace to bear the cross of marriage, widowhood, and religious life with equal fidelity: hear through her intercession those who bring you their impossible cases.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBedeTheVenerablePriestAndDoctorSaintGregoryViiPopeSaintMaryMagdaleneDePazziVirgin": {
+   "name": "St. Bede the Venerable",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-25",
+   "bio": "Bede was an English monk of Jarrow who spent his entire life in his monastery and produced the most substantial body of scholarly work in early medieval Europe: commentaries on almost every book of the Bible, a history of the English Church and people, scientific treatises, hagiographies, hymns. His Historia Ecclesiastica Gentis Anglorum is the primary source for the history of Christianity in Britain. He died in 735 while dictating a translation of John's Gospel. His last words were the Gloria Patri.",
+   "prayer": "O God, who adorned your Church with the wisdom of Bede: may we, instructed by his learning and guided by his prayer, come to know you and make you known.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPhilipNeriPriest": {
+   "name": "St. Philip Neri",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "05-26",
+   "bio": "Philip was a Florentine who came to Rome at eighteen and lived there for sixty-five years. He spent nights in prayer in the catacombs. He heard confessions for ten hours a day. He founded the Oratory -- informal spiritual gatherings of laity and clergy that combined prayer, music, and discussion, and gave the world the oratorio musical form. His spiritual gifts included levitation, ecstasy, the reading of hearts, and an irrepressible sense of humor. He is called the Apostle of Rome and the patron saint of joy.",
+   "prayer": "O God, who never ceased to work in Philip with the fire of the Holy Spirit: grant that we may be filled with the same flame of charity and the same joy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAugustineOfCanterburyBishop": {
+   "name": "St. Augustine of Canterbury",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "05-27",
+   "bio": "Augustine was a prior of a Roman monastery whom Gregory the Great sent to England in 596 to evangelize the Anglo-Saxons. He arrived afraid -- the journey was long and the people were said to be fierce. Gregory's response to his fear is famous: press on. Augustine arrived, was received by King Ethelbert of Kent, converted him, became the first Archbishop of Canterbury, and baptized ten thousand on Christmas Day 597. The English Church traces its apostolic origins to this journey.",
+   "prayer": "O God, who guided Augustine to preach the Gospel to the English people: bless through his intercession the land he evangelized and the Church he planted.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "visitationOfTheBlessedVirginMary": {
+   "name": "The Visitation of the Blessed Virgin Mary",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "05-31",
+   "bio": "After the Annunciation, Mary went in haste to the hill country to visit her cousin Elizabeth. When Elizabeth heard Mary's greeting, the child in her womb leaped for joy. Elizabeth cried: \"Blessed art thou among women, and blessed is the fruit of thy womb! And whence is this to me, that the mother of my Lord should come to me?\" And Mary sang the Magnificat. The scene is one of the most intimate in the Gospel: two pregnant women, a leaping infant, a canticle of praise. The first human being to recognize the presence of Christ was John the Baptist in his mother's womb.",
+   "prayer": "Almighty God, you inspired the Virgin Mary, mother of your Son, to visit Elizabeth and assist her in her need: keep us open to the working of your Spirit, and with Mary may we always magnify your holy name.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJustinMartyr": {
+   "name": "St. Justin Martyr",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-01",
+   "bio": "Justin was a philosopher from Samaria who converted to Christianity after searching through the schools of philosophy and finding only in the Gospel the truth his reason had been seeking. He wrote two Apologies defending Christianity to the Emperor Antoninus Pius, and a Dialogue with Trypho, a Jew, which is the oldest extended piece of Christian apologetics that survives. He was beheaded in Rome around 165 AD, giving us the oldest description of a Sunday Eucharist in Christian literature.",
+   "prayer": "O God, who guided Justin from the search of philosophy to the certainty of faith: grant that all who seek you with sincerity may find you, the Truth that all wisdom anticipates.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsMarcellinusAndPeterMartyrs": {
+   "name": "Ss. Marcellinus & Peter",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-02",
+   "bio": "Marcellinus was a Roman priest and Peter an exorcist, both martyred under Diocletian around 304 AD. Constantine later built a basilica over their tomb. Their names appear in the Roman Canon of the Mass -- the oldest layer of the Eucharistic prayer -- in the list of martyrs read at every Mass. Almost nothing is known about them historically, but they have been prayed to at every Roman Rite Mass for sixteen centuries.",
+   "prayer": "O God, who granted Marcellinus and Peter the crown of martyrdom: may their intercession strengthen us in the hour of trial.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsCharlesLwangaAndCompanionsMartyrs": {
+   "name": "St. Charles Lwanga & Companions",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-03",
+   "bio": "Charles Lwanga and twenty-one companions -- pages and attendants at the court of King Mwanga II of Buganda -- were martyred between 1885 and 1887. Mwanga had them killed when they refused his sexual advances and for their refusal to abandon their Christian faith. Charles was burned alive at Munyonyo. He and his companions are the patron martyrs of sub-Saharan Africa. They were young men -- the eldest was forty-one, several were teenagers -- who died singing hymns.",
+   "prayer": "O God, who adorned the Church in Africa with the blood of Charles and his companions: grant through their intercession that the faith they sealed with their lives may grow and flourish in our time.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBonifaceBishopAndMartyr": {
+   "name": "St. Boniface",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-05",
+   "bio": "Wynfrith of Devon was an English Benedictine monk who became the Apostle of Germany. He felled the sacred oak of the Germanic god Donar at Geismar without being struck down -- a public test of the power of the Christian God that converted the region. He organized the German Church, reformed the Frankish Church under Charlemagne's grandfather, and died at eighty in Frisia, where he had returned to evangelize, killed by pagan raiders in 754. He and his companions were reading at the time of the attack.",
+   "prayer": "Lord God, you sent Boniface to bring the Gospel to the peoples of Germany. May his courage inspire all who carry the faith to new frontiers.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintNorbertBishop": {
+   "name": "St. Norbert",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-06",
+   "bio": "Norbert was a German nobleman and canon who experienced a conversion when nearly killed by a bolt of lightning in 1115. He sold his estates, walked barefoot to Cologne in winter to be ordained a priest, and founded the Order of Premonstratensians at Prémontrée in France in 1120. The Norbertines (Canons Regular of Prémontré) combined monastic prayer with pastoral ministry. He became Archbishop of Magdeburg and worked to reconcile the papacy and the Holy Roman Empire. He died in 1134.",
+   "prayer": "O God, who converted Norbert by a sudden calling and gave him zeal for your house: grant that we may hear your call and follow it with his wholehearted abandon.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintEphremDeaconAndDoctor": {
+   "name": "St. Ephrem the Syrian",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-09",
+   "bio": "Ephrem was a deacon of the Syrian Church at Edessa, the greatest Syriac writer in the tradition. His hymns -- hundreds of them -- were sung by choirs of women at liturgical celebrations and remain in the repertoire of Eastern Christianity today. He is called the Harp of the Holy Spirit. He wrote in verse because, he said, heretics used hymns to spread their errors, and the truth deserved to be sung as beautifully. He is a Doctor of the Church. He died in 373.",
+   "prayer": "Pour out upon us, Lord, a portion of the spirit of prayer and praise that filled Ephrem the Syrian, that our lips too may sing of your glory and your mercy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBarnabasTheApostle": {
+   "name": "St. Barnabas",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-11",
+   "bio": "Barnabas -- Joseph the Levite from Cyprus -- was one of the first acts of Christian generosity: he sold his field and brought the proceeds to the apostles. He introduced Paul to the Jerusalem community after his conversion, when everyone else was afraid of him. He and Paul were sent out together on the first missionary journey. They parted ways over Mark, whom Paul had dismissed and Barnabas defended. He went with Mark to Cyprus. He is called an apostle though not one of the Twelve. His feast is his monument.",
+   "prayer": "O God, who granted Barnabas the grace to see the hand of God at work in those others had rejected: grant us the same generosity of spirit.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAnthonyOfPaduaPriestAndDoctor": {
+   "name": "St. Anthony of Padua",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-13",
+   "bio": "Anthony was a Portuguese Augustinian canon who became a Franciscan after the bodies of the first Franciscan martyrs -- killed in Morocco in 1220 -- were brought through Coimbra. He intended to go to Africa; illness redirected him to Italy, where he encountered Francis. He became the greatest preacher of his age, preaching in the open air to crowds that no building could contain. His fame as a finder of lost things comes from a postulant who stole his psalter, had a terrifying dream, and returned it. He died in 1231 at thirty-six.",
+   "prayer": "O God, who gave Anthony to your people as a preacher of the Gospel and a finder of what is lost: grant that his intercession may restore to us what we most need.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintRomualdAbbot": {
+   "name": "St. Romuald",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-19",
+   "bio": "Romuald was an Italian nobleman who witnessed his father kill a relative in a duel and retired to a Ravenna monastery in horror. He spent his life wandering the forests of Italy, founding hermitages, reforming monasteries, and seeking the absolute silence of the desert. He founded the Camaldolese -- a form of monastic life that combines the eremitical life of the hermit with the communal life of the monastery. He lived to be over a hundred. His Rule is brief: \"Sit in your cell as in paradise.\"",
+   "prayer": "O God, who drew Romuald to the silence of the desert to seek your face: grant us the grace to find, in whatever silence our life permits, the same encounter.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAloysiusGonzagaReligious": {
+   "name": "St. Aloysius Gonzaga",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-21",
+   "bio": "Luigi Gonzaga was the eldest son of a Mantuan nobleman, heir to the marquisate of Castiglione, who renounced his inheritance at seventeen to enter the Jesuits. He had been consecrated to the Virgin at nine and taken a vow of perpetual chastity. He died in 1591 at twenty-three, caring for plague victims in Rome. His spiritual director was Robert Bellarmine. He is the patron of Catholic youth, of those with AIDS, and of students. His discipline was severe; his charity was total.",
+   "prayer": "O God, who endowed Aloysius with angelic purity of life: grant through his intercession and example that we may follow him in purity of heart.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPaulinusOfNolaBishopSaintsJohnFisherBishopAndThomasMoreMartyrs": {
+   "name": "St. Paulinus of Nola",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-22",
+   "bio": "Paulinus was a wealthy Roman aristocrat, governor of Campania, friend of Augustine and Ambrose and Jerome. After the death of his infant son, he was baptized, gave away his vast estates to the poor, and became bishop of Nola in southern Italy. His letters are among the most affectionate in Latin literature. He is said to have sold himself into slavery to ransom a widow's son from the Vandals, then been released when the Vandal king was converted by his conversation.",
+   "prayer": "Lord God, you moved Paulinus to abandon wealth for the love of the poor. Make us as generous with what we have been given.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "birthOfJohnTheBaptist": {
+   "name": "The Nativity of St. John the Baptist",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "06-24",
+   "bio": "John is the only saint besides Mary whose birth is celebrated as a feast (most saints are commemorated on the day of their death). He was born six months before Jesus. His birth was announced by Gabriel. His mother Elizabeth, aged and barren, conceived by God's intervention -- like Sarah before her. He preached in the desert, baptized in the Jordan, called Israel to repentance, and pointed to the Lamb of God. He died in prison, beheaded because a woman who danced pleased a king who had imprisoned him. Jesus said: \"Among those born of women, there has arisen none greater than John the Baptist.\"",
+   "prayer": "O God, who raised up John the Baptist to make straight the paths of your Son: grant that we who have heard his voice in the wilderness may walk in the way he prepared.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintIrenaeusBishopAndMartyr": {
+   "name": "St. Irenaeus",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "06-28",
+   "bio": "Irenaeus was bishop of Lyon in the late second century, born in Asia Minor, a disciple of Polycarp who was a disciple of John. He wrote Against Heresies -- a systematic refutation of Gnosticism -- and the Demonstration of Apostolic Preaching, a summary of the faith. His theology of recapitulation -- that Christ sums up and restores all that Adam lost -- is one of the most influential frameworks in Christian thought. His most quoted line: \"The glory of God is man fully alive; and the life of man is the vision of God.\"",
+   "prayer": "O God, who gave Irenaeus the wisdom to defend the faith against those who would make it a secret knowledge for the few: grant that we may receive the whole truth of the Gospel.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "peterAndPaulApostles": {
+   "name": "Ss. Peter & Paul",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "06-29",
+   "bio": "Peter and Paul are the twin pillars of the Roman Church. Peter the fisherman who confessed: \"Thou art the Christ, the Son of the living God.\" Paul the Pharisee who heard: \"Saul, Saul, why dost thou persecute me?\" They were different men -- Peter impulsive, Paul relentless; Peter from Galilee, Paul from Tarsus; Peter Jewish through and through, Paul the theologian of Gentile inclusion. Both were martyred in Rome under Nero. Both are buried in Rome. The city that killed them is identified by their names.",
+   "prayer": "O God, who consecrated this day with the martyrdom of your apostles Peter and Paul: grant that your Church may always follow the teaching of those through whom the faith was first planted.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "firstMartyrsOfTheChurchOfRome": {
+   "name": "The First Martyrs of Rome",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "06-30",
+   "bio": "The Christians burned alive in the gardens of Nero in 64 AD, following the Great Fire of Rome, are the first recorded martyrs of the Roman Church. Tacitus describes them being covered in animal skins and torn apart by dogs, crucified, or set on fire to illuminate Nero's gardens at night. Their names were not recorded. They are the anonymous foundation of the Roman Church -- a community that survived by dying.",
+   "prayer": "God of the martyrs, you built your Church on the witness of those whose names we do not know. Remember them, and through their unknown sacrifice, sustain the faith they sealed.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintThomasTheApostle": {
+   "name": "St. Thomas the Apostle",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "07-03",
+   "bio": "Thomas called Didymus -- the Twin -- said to the disciples when Jesus proposed returning to Judea: \"Let us also go, that we may die with him.\" At the Last Supper he said he did not know where Jesus was going. After the Resurrection he was absent when Jesus appeared to the others, and refused to believe without seeing the wounds. When Jesus appeared again and invited him to touch the wounds, Thomas said: \"My Lord and my God.\" Jesus replied: \"Blessed are they that have not seen, and have believed.\" Thomas is the patron of those who believe through doubt.",
+   "prayer": "O God, who permitted Thomas to doubt so that we who come after might believe the more firmly: grant us, through his intercession, faith strong enough to confess: My Lord and my God.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintElizabethOfPortugal": {
+   "name": "St. Elizabeth of Portugal",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-04",
+   "bio": "Elizabeth was queen of Portugal, wife of King Dinis, daughter of the King of Aragon. She survived an unfaithful husband, a rebellious son, two wars, and the death of her husband -- and used each experience of suffering to go deeper into prayer and charity. She built hospitals, ransomed prisoners, cared for the poor personally. She became a Franciscan tertiary after her husband's death. She died in 1336 trying to make peace between her son and his son-in-law. She is called the Peacemaker.",
+   "prayer": "Lord, Elizabeth used the power of her position entirely for the service of peace and the poor. May she intercede for peace wherever families and nations are at war.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMariaGorettiVirginAndMartyr": {
+   "name": "St. Maria Goretti",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-06",
+   "bio": "Maria was eleven years old when Alessandro Serenelli, a nineteen-year-old neighbor, attacked her with a knife for refusing his advances. She died the following day, having forgiven him. Alessandro was imprisoned for thirty years, converted after Maria appeared to him in a dream, and attended her canonization in 1950, sitting beside her mother. He spent the rest of his life as a lay brother in a Capuchin monastery. She is the patron of rape victims and of youth.",
+   "prayer": "O God, who gave Maria Goretti strength to preserve her purity unto death and to forgive her murderer: grant, through her intercession, the grace of forgiveness to all who have been wounded by violence.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsAugustineZhaoRongPriestAndCompanionsMartyrs": {
+   "name": "St. Augustine Zhao Rong & Companions",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-09",
+   "bio": "Augustine Zhao Rong was a Chinese soldier who converted to Christianity while guarding foreign missionaries being taken to martyrdom. He became a priest and was martyred in 1815 during the Jiaqing persecution. He is one of 120 martyrs of China, martyred between 1648 and 1930, canonized by John Paul II in 2000. Eighty-seven of the 120 were Chinese laypeople. Their martyrdom spans three centuries of the Church's encounter with Chinese civilization.",
+   "prayer": "O God, who raised up the martyrs of China as witnesses of the faith across three centuries: sustain the Church in China through their intercession.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBenedictOfNursiaAbbot": {
+   "name": "St. Benedict",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "07-11",
+   "bio": "Benedict of Nursia was born around 480 AD, educated in Rome, horrified by its corruption, and withdrew to a cave at Subiaco. He eventually founded Monte Cassino and wrote his Rule -- the most influential document in the history of Western monasticism. The Rule is moderate, humane, and psychologically wise in a way that still impresses. It values stability, obedience, and conversion of life. It governed the monasteries that preserved classical learning through the chaos of the early Middle Ages. Benedict is the patron of Europe.",
+   "prayer": "O God, who made blessed Benedict an outstanding guide in the school of divine service: grant that, putting nothing before love of you, we may hasten with joy along the way of your commandments.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintHenryBishopAndMartyr": {
+   "name": "St. Henry",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-13",
+   "bio": "Henry II was Holy Roman Emperor from 1002 to 1024, a deeply devout man who used his political power in the service of Church reform. He founded the diocese of Bamberg, reformed monasteries throughout his empire, and worked with Pope Benedict VIII. He and his wife Cunigunde are both saints -- one of the few married couples in the canon. He is the patron of Benedictine oblates and of those who are handicapped.",
+   "prayer": "O God, who guided Henry to seek your kingdom first in the exercise of earthly power: grant that we may use whatever authority we possess in your service.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "07-14": {
+   "name": "Bl. Kateri Tekakwitha",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "07-14",
+   "bio": "Kateri was a Mohawk woman born in what is now New York State in 1656. Her mother was a Christian Algonquin, her father a non-Christian Mohawk chief. Smallpox at four left her disfigured and partially blind. She was baptized at twenty and had to flee her village after refusing marriage. She walked two hundred miles to the Jesuit mission at Kahnawake in Canada, where she lived a life of extreme asceticism and contemplative prayer until her death at twenty-four. At her death, witnesses reported that her disfigured face became beautiful. She is the first Native American to be canonized.",
+   "prayer": "O God, you chose the flower of the Mohawks to be a lily of purity among her people: grant through Kateri's intercession that all peoples may find in your love a dignity that no suffering can take away.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBonaventureBishopAndDoctor": {
+   "name": "St. Bonaventure",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "07-15",
+   "bio": "Bonaventure was a Franciscan friar and theologian, contemporary and friend of Thomas Aquinas, who wrote both the official biography of Francis of Assisi and some of the most beautiful mystical theology in the tradition. His Soul's Journey into God (Itinerarium Mentis in Deum) traces the ascent of the soul through six stages of contemplation to mystical union. He is a Doctor of the Church, called the Seraphic Doctor. He died in 1274 during the Council of Lyon, where he had played a decisive role in the reunion of the Eastern and Western churches.",
+   "prayer": "O God, who inflamed the blessed Bonaventure with burning love of you: grant that we may follow his steps to union with you, the source of all light.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfMountCarmel": {
+   "name": "Our Lady of Mount Carmel",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-16",
+   "bio": "Mount Carmel in Israel was the home of the prophet Elijah, who prayed for rain on its summit after the drought sent by God. The Carmelite Order traces its origins to a community of hermits who settled on Carmel in the twelfth century, living near a spring associated with Elijah. The Brown Scapular, associated with this feast, was received according to tradition by St. Simon Stock in 1251. Teresa of Ávila and John of the Cross reformed and deepened the Carmelite tradition in the sixteenth century.",
+   "prayer": "O God, whose servant Elijah stood before you on Mount Carmel: through the intercession of Our Lady of Mount Carmel, draw us to the summit of the mountain of prayer.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMaryMagdalene": {
+   "name": "St. Mary Magdalene",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "07-22",
+   "bio": "Mary Magdalene stands at every crucial moment of the Gospel: she is at the cross, she is at the tomb, she is the first to see the risen Christ, she is the first to proclaim the resurrection to the Apostles. For this last reason, tradition calls her the Apostle to the Apostles. She had been delivered of seven demons. She anointed the feet of Jesus with precious ointment and dried them with her hair. John Paul II elevated her from memorial to feast, calling her \"the apostle of apostles\" in the tradition of Bernard of Clairvaux.",
+   "prayer": "O God, who entrusted Mary Magdalene before all others with the news of the Resurrection: grant that we may proclaim the living Christ with the same love and the same urgency.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBridgetOfSwedenReligious": {
+   "name": "St. Bridget of Sweden",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-23",
+   "bio": "Bridget was a Swedish noblewoman, married, mother of eight children, who began receiving mystical visions after the death of her husband. Her Revelations -- recorded by her confessor -- fill eight volumes. She founded the Brigittine Order. She spent the last decades of her life in Rome, calling popes and princes to reform. She was present at the deaths of two of her children: her daughter Cecilia, and her daughter Catherine, who became a saint herself. She died in Rome in 1373 and is a patron of Europe.",
+   "prayer": "Lord, you gave Bridget the grace to find you in the visions of contemplation and in the demands of family life. Grant us the same wholeness.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCharbelMakhloufPriestAndHermit": {
+   "name": "St. Charbel Makhlouf",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-24",
+   "bio": "Charbel was a Maronite monk of Lebanon, born in 1828, who spent sixteen years in the monastery and then twenty-three years as a hermit at the hermitage of Saints Peter and Paul near Annaya. He died in 1898 on Christmas Eve. After his burial, a brilliant light was seen around his tomb for forty-five nights. His body, found incorrupt months later, exuded a bloody sweat for years. He was canonized in 1977. He is one of the most venerated saints of Lebanon and of Eastern Christianity.",
+   "prayer": "O God, who led Charbel into the silence of the hermitage and made him a sign of your presence: grant us through his intercession a hunger for the prayer that transforms.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJamesApostle": {
+   "name": "St. James the Apostle",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "07-25",
+   "bio": "James was the son of Zebedee, brother of John, one of the three apostles present at the Transfiguration and at Gethsemane. With John he asked to sit at the right and left hand of Jesus in his glory -- Jesus asked if they could drink his cup. James was the first of the Twelve to be martyred, beheaded by Herod Agrippa around 44 AD. His body, according to tradition, was carried to Compostela in Spain, making his shrine one of the three great pilgrimages of medieval Christianity alongside Rome and Jerusalem.",
+   "prayer": "O God, who sanctified James as the first of the Apostles to seal his witness with his blood: grant that we may follow his example in bearing our cross.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsJoachimAndAnne": {
+   "name": "Ss. Joachim & Anne",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "07-26",
+   "bio": "Joachim and Anne are the parents of the Virgin Mary -- the grandparents of Jesus. They are not named in the Gospels; their names come from the Protoevangelium of James, a second-century apocryphal text. What is certain from the Gospel is that Mary existed, was born of human parents, and was raised by them. The tradition has venerated them as the link between the Old Covenant and the New, as the people through whom the line of David reached its fulfillment in Mary and in Jesus.",
+   "prayer": "O God, who gave holy Joachim and Anne the honor of being the parents of the Mother of your Son: grant that we may receive, through their intercession, the salvation they prepared.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMartha": {
+   "name": "St. Martha",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "07-29",
+   "bio": "Martha of Bethany was a friend of Jesus, sister of Mary and Lazarus. She complained when her sister sat at his feet while she worked alone. He replied that Mary had chosen the better part. When Lazarus died, it was Martha who ran to meet Jesus on the road and said: \"Lord, if you had been here, my brother would not have died. But even now I know that whatever you ask of God, God will give you.\" His reply: \"I am the resurrection and the life.\" She is the patron of innkeepers, cooks, and those who serve.",
+   "prayer": "O God, who received the confession of faith from Martha's lips: grant that we may serve you with her diligence and confess you with her boldness.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPeterChrysologusBishopAndDoctor": {
+   "name": "St. Peter Chrysologus",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "07-30",
+   "bio": "Peter was archbishop of Ravenna in the fifth century, called Chrysologus -- Golden-Worded -- for the beauty of his preaching. About 176 of his sermons survive, making him one of the best-documented preachers of the early Church. He wrote to the heretic Eutyches, who had appealed to him against the Council of Chalcedon: \"We urge in the name of our Lord Jesus Christ that you give ready obedience to what has been written by the blessed pope of Rome, for blessed Peter, who lives and presides in his own see, provides the truth of faith to those who seek it.\"",
+   "prayer": "O God, who gave Peter Chrysologus the golden words of preaching: grant that we may receive the word that was proclaimed with such beauty.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintIgnatiusOfLoyolaPriest": {
+   "name": "St. Ignatius of Loyola",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "07-31",
+   "bio": "Íñigo Lopez de Loyola was a Basque soldier wounded at Pamplona in 1521. During his convalescence he read the lives of the saints and experienced a conversion -- discerning the difference between the consolation left by thoughts of God and the emptiness left by worldly daydreams. He made a pilgrimage to Montserrat, spent a year at Manresa in prayer, and wrote the Spiritual Exercises -- the most systematic and influential manual of discernment in the Western tradition. He founded the Society of Jesus. He died in 1556 at sixty-five.",
+   "prayer": "O God, who raised up Ignatius to be a soldier of your Church: grant that armed with his weapons -- prayer and discernment -- we may fight and overcome our spiritual adversaries.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAlphonsusMariaDeLiguoriBishopAndDoctorOfTheChurch": {
+   "name": "St. Alphonsus Liguori",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-01",
+   "bio": "Alphonsus was a Neapolitan lawyer who abandoned the law at twenty-seven after losing a case through a mistake and entered the priesthood. He founded the Redemptorists -- the Congregation of the Most Holy Redeemer -- to preach to the rural poor of southern Italy who had been abandoned by the clergy. His Moral Theology, his The Glories of Mary, and his The Practice of the Love of Jesus Christ made him the most widely read Catholic spiritual writer of his century. He is a Doctor of the Church.",
+   "prayer": "O God, who filled Alphonsus with a burning love for those abandoned by the world: grant that we may bring your consolation to those who most need to hear of your mercy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJeanVianneyTheCureOfArsPriest": {
+   "name": "St. John Vianney",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-04",
+   "bio": "Jean-Marie Vianney was the Curé of Ars -- the village priest of a tiny French village -- from 1818 until his death in 1859. He was of modest intelligence; he failed his seminary examinations twice. What he had was holiness. People traveled from across France and Europe to have their confession heard by him. He reportedly spent sixteen to eighteen hours a day in the confessional. He was attacked regularly by a poltergeist he called \"the Grappin.\" He is the patron of parish priests.",
+   "prayer": "O God, who gave the Curé of Ars such love for prayer and for sinners: grant that his example may draw us to seek reconciliation and to love the poor.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "dedicationOfTheBasilicaOfSaintMaryMajor": {
+   "name": "The Dedication of the Basilica of St. Mary Major",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-05",
+   "bio": "Santa Maria Maggiore in Rome is one of the four major basilicas and the oldest church in the West dedicated to the Virgin Mary. According to tradition, the site was indicated by a miraculous snowfall on the Esquiline Hill in August 352 AD. The basilica houses the image of the Salus Populi Romani -- Health of the Roman People -- venerated since early Christian centuries. Pope Francis has visited this image before and after every pastoral journey.",
+   "prayer": "O God, who chose Mary as the dwelling place of your eternal Word: grant that in her church and through her intercession we may find the same welcome she gave to her Son.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "transfiguration": {
+   "name": "The Transfiguration of the Lord",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "08-06",
+   "bio": "On a high mountain -- Tabor, the tradition says -- Jesus was transfigured before Peter, James, and John. His face shone like the sun. His garments became white as snow. Moses and Elijah appeared beside him. A cloud overshadowed them. A voice spoke: \"This is my beloved Son, in whom I am well pleased: hear ye him.\" The disciples fell to the ground. When they looked up, they saw Jesus only. The Transfiguration is the event in the Gospel most explicitly concerned with what the spiritual life is moving toward: the vision of divine glory in a human face.",
+   "prayer": "O God, who revealed your Son in the glory of his Transfiguration: strengthen our faith so that, having heard his voice, we may follow him to the glory he shared with Moses and Elijah.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintSixtusIiPopeAndCompanionsMartyrsSaintCajetanPriest": {
+   "name": "St. Sixtus II & Companions",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-07",
+   "bio": "Sixtus was pope from 257 to 258 AD, martyred during the persecution of Emperor Valerian, who forbade Christians to hold assemblies or enter cemeteries. He was seized while celebrating Mass in the Roman catacombs and executed on the spot with four deacons. His deacon Lawrence was martyred three days later. Sixtus's name appears in the Roman Canon of the Mass. His martyrdom is one of the best documented in early Christianity.",
+   "prayer": "O God, you strengthened Sixtus and his companions to give their lives rather than cease from offering the Eucharist. Preserve in us the same devotion to the sacrifice of your Son.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintDominicPriest": {
+   "name": "St. Dominic",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-08",
+   "bio": "Dominic de Guzmán was a Castilian canon regular who encountered the Cathar heresy in southern France and conceived the idea of an order of preachers -- men educated in theology, living in apostolic poverty, preaching the Gospel in the manner of the apostles. The Order of Preachers (Dominicans) was officially recognized in 1216. Dominic spent nine years preaching in Languedoc before the crusade against the Cathars drowned his work in blood. He is said to have spent his nights in prayer and his days in conversation. He died in 1221.",
+   "prayer": "O God, who made Dominic a herald of your truth: grant that his children may ever follow his example of preaching and prayer in the service of your word.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintTeresaBenedictaOfTheCrossEdithSteinVirginAndMartyr": {
+   "name": "St. Teresa Benedicta of the Cross (Edith Stein)",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-09",
+   "bio": "Edith Stein was a German Jewish philosopher, assistant to Edmund Husserl, who converted to Catholicism in 1922 after reading Teresa of Ávila's autobiography in one night. She became a Carmelite nun, taking the name Teresa Benedicta of the Cross. She was arrested by the Nazis in 1942 at her convent in Echt, Netherlands, and murdered at Auschwitz-Birkenau on August 9, 1942. She is a patron of Europe and of martyrs. Her philosophical work on empathy preceded her life of martyrdom by thirty years.",
+   "prayer": "God of Abraham and Father of our Lord Jesus Christ, you brought Edith Stein to the knowledge of your truth and to the way of the cross: may she intercede for us who must also carry our cross.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintLawrenceOfRomeDeaconAndMartyr": {
+   "name": "St. Lawrence",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "08-10",
+   "bio": "Lawrence was one of the seven deacons of Rome, martyred in 258 AD during the persecution of Valerian, three days after his pope Sixtus II. He was executed on a gridiron. According to tradition, he said to his executioners midway through: \"Turn me over -- I am done on this side.\" This may be legend, but it captures something true about his witness: the courage that could joke in the face of death. He is the patron of librarians, archivists, and cooks.",
+   "prayer": "O God, who enkindled in Lawrence such a love that he burned not with the fire of his torment but with the fire of your love: grant us a share in that same fire.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintClareVirgin": {
+   "name": "St. Clare of Assisi",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-11",
+   "bio": "Clare was eighteen when she ran away from her family at midnight to meet Francis of Assisi and begin a new life. She founded the Order of Poor Ladies -- the Poor Clares -- and lived in it for forty-two years, never leaving the convent of San Damiano, praying, fasting, and caring for the sick. She outlived Francis by twenty-seven years. She protected her convent from invading Saracen soldiers by exposing the Blessed Sacrament from the window -- they fled. She is the patron of television because she reportedly saw a distant Mass on the wall of her cell.",
+   "prayer": "O God, who led Clare by the way of poverty and contemplation: grant that we may follow her in detachment from the world and attachment to you alone.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsPontianPopeAndHippolytusPriestMartyrs": {
+   "name": "Ss. Pontian & Hippolytus",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-13",
+   "bio": "Pontian was pope and Hippolytus was his rival -- at one time the first antipope in Christian history -- who were both condemned to the mines of Sardinia by the Emperor Maximinus in 235 AD. In the mines they were reconciled. Both died of the harsh conditions. Hippolytus is the author of the Apostolic Tradition, the oldest complete description of a Roman Eucharistic prayer that survives, and the Apostolic Constitutions. Their reconciliation in suffering is itself a theological statement.",
+   "prayer": "Lord God, who united Pontian and Hippolytus in the fellowship of suffering: grant that the divisions of your Church may be healed in the same spirit of charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMaximilianMaryKolbePriestAndMartyr": {
+   "name": "St. Maximilian Kolbe",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-14",
+   "bio": "Maximilian Kolbe was a Polish Franciscan priest imprisoned at Auschwitz in 1941. When the Nazis selected ten prisoners to be starved to death as reprisal for an escape, Kolbe stepped forward and asked to take the place of Franciszek Gajowniczek, a father of children. He led the men in his cell in prayer and hymns as they died, one by one. When he was the last survivor after two weeks, the guards killed him with an injection of carbolic acid. He is the patron of drug addicts, political prisoners, and those in difficult family situations.",
+   "prayer": "O God, who filled Maximilian Kolbe with love for you and for his neighbour: grant that his example of total self-giving may inspire in us a more generous and courageous love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "assumption": {
+   "name": "The Assumption of the Blessed Virgin Mary",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "08-15",
+   "bio": "The Assumption of Mary -- her taking up body and soul into heavenly glory at the end of her earthly life -- was defined as dogma by Pius XII in 1950. The doctrine had been held by virtually universal consensus in the Church since the early centuries; the definition made it formal. Theologically, the Assumption is the first fruit of the Resurrection applied to a human being other than Christ: the pledge and anticipation of what all the redeemed will receive at the last day. Mary in glory is the image of what the Church is destined to become.",
+   "prayer": "O God, who took to yourself, body and soul, the Immaculate Virgin Mary, mother of your Son: grant that our hearts, fixed on things above, may merit to share in her glory.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintStephenOfHungary": {
+   "name": "St. Stephen of Hungary",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-16",
+   "bio": "Stephen was the first king of Hungary, crowned on Christmas Day 1000 AD with a crown sent by Pope Sylvester II. He christianized Hungary with a combination of persuasion, force, and institutional genius -- founding bishoprics, monasteries, and parishes across the country. He survived his son's death before him and ruled for forty years, dying in 1038 on the Feast of the Assumption. He is said to have offered his kingdom to Our Lady on his deathbed, making Hungary \"the kingdom of Mary.\"",
+   "prayer": "Lord God, you gave Stephen wisdom to govern and charity to serve: grant that those who lead nations may govern with justice and mercy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnEudesPriest": {
+   "name": "St. John Eudes",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-19",
+   "bio": "John Eudes was a French Oratorian of the seventeenth century who became the apostle of devotion to the Hearts of Jesus and Mary -- the liturgical devotions that would eventually become the feasts of the Sacred Heart and the Immaculate Heart. He founded the Congregation of Jesus and Mary (the Eudists) for the formation of priests and the Society of Our Lady of Charity for the rehabilitation of women who had been forced into prostitution. He is called the father of the devotion to the Sacred Heart.",
+   "prayer": "O God, who gave John Eudes such devotion to the Hearts of Jesus and Mary: through his intercession, unite our hearts to the Heart of your Son.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBernardOfClairvauxAbbotAndDoctorOfTheChurch": {
+   "name": "St. Bernard of Clairvaux",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-20",
+   "bio": "Bernard entered the abbey of Cîteaux at twenty-two, bringing thirty companions with him -- including several of his brothers. He founded the abbey of Clairvaux, reformed the Cistercian Order, preached the Second Crusade (a disaster he considered his personal failure), wrote on the love of God with an ardor and precision unmatched in the Latin tradition, and was the most influential churchman of the twelfth century. His sermons on the Song of Songs -- eighty-six of them -- remain among the greatest mystical writings in any language.",
+   "prayer": "O God, who made Bernard a burning and shining light in your Church: through his intercession, fill us with the same spirit of prayer and zeal.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPiusXPope": {
+   "name": "St. Pius X",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-21",
+   "bio": "Giuseppe Sarto was a village priest who became pope in 1903. He lowered the age for First Communion to the age of reason -- overturning centuries of practice -- and decreed that children should receive frequently. He reformed the breviary and restored Gregorian chant. He condemned the theological movement called Modernism in the decree Lamentabili and the encyclical Pascendi. He died in August 1914, his health broken by the outbreak of the First World War, which he had tried to prevent. He is the patron of First Communicants.",
+   "prayer": "O God, who restored through Pius X the ancient practice of frequent communion: grant that we may receive the Eucharist with the faith he tried to safeguard.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "queenshipOfBlessedVirginMary": {
+   "name": "The Queenship of the Blessed Virgin Mary",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-22",
+   "bio": "Established by Pius XII in 1954, eight days after the Assumption, this memorial celebrates Mary's glory in heaven as Queen -- not by right of conquest but by grace, as the mother of the King. The Church has always understood Mary's queenship as one of service, not domination: the one who said \"Behold the handmaid of the Lord\" does not cease to be a handmaid in glory. She intercedes for the Church she mothered.",
+   "prayer": "Grant us, Lord, who celebrate the Queenship of the Virgin Mary, to be made worthy, through her intercession and guidance, to attain the heavenly kingdom.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintRoseOfLima": {
+   "name": "St. Rose of Lima",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-23",
+   "bio": "Rose was the first person born in the Americas to be canonized. Born in Lima in 1586, she was a Third Order Dominican who modeled her life on Catherine of Siena and underwent extreme physical penances. She tended the sick and dying in a room of her parents' house that became the first hospital in South America. She had visions and suffered intense spiritual desolation -- what she called \"the wars of the soul.\" She died at thirty-one and her funeral was attended by virtually the entire city of Lima.",
+   "prayer": "Lord God, you drew Rose by the way of the cross into mystical union with your Son: grant us patience in aridity and trust in spiritual darkness.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBartholomewTheApostle": {
+   "name": "St. Bartholomew",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "08-24",
+   "bio": "Bartholomew -- probably the same person as Nathanael in John's Gospel -- was brought to Jesus by Philip. When told that Jesus of Nazareth was the one Moses wrote about, he said: \"Can anything good come out of Nazareth?\" Jesus saw him coming and said: \"Behold a true Israelite, in whom there is no guile.\" He was a man of direct speech. Tradition places his mission in India and Armenia, where he was martyred by flaying. He is the patron of leather workers and of Armenia.",
+   "prayer": "O God, who strengthened Bartholomew in faith: grant that through his intercession your Church may love what he believed and preach what he taught.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintLouisSaintJosephOfCalasanzPriest": {
+   "name": "St. Louis IX of France",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "08-25",
+   "bio": "Louis was king of France from 1226 to 1270, the most powerful monarch in Europe. He was also, by all accounts, a genuinely holy man -- a daily hearer of Mass, a visitor of lepers, a founder of hospitals and the Sainte-Chapelle (built to house the Crown of Thorns), a reformer of justice who personally heard cases under an oak tree in the Bois de Vincennes. He led two crusades, both failures. He died of dysentery in Tunis on his second crusade, saying \"Jerusalem, Jerusalem\" as he died.",
+   "prayer": "O God, who moved Louis to see his royal power as a service to your people: grant that all in authority may govern with justice, mercy, and the fear of God.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMonica": {
+   "name": "St. Monica",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-27",
+   "bio": "Monica was a Berber woman from North Africa, the mother of Augustine. She prayed for his conversion for seventeen years while he lived with a woman without marriage, fathered a child out of wedlock, and moved through various philosophical and religious experiments. She followed him to Milan. She died in Ostia in 387, shortly after his baptism, saying: \"Put this body anywhere. Don't trouble yourselves about it. I only ask this of you, that you remember me at the altar of the Lord.\" Her perseverance is the model of intercessory prayer.",
+   "prayer": "God of patience and mercy, you gave Monica the grace to win her son Augustine through tears and prayer. Sustain all those who pray for the conversion of those they love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAugustineOfHippoBishopAndDoctorOfTheChurch": {
+   "name": "St. Augustine of Hippo",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-28",
+   "bio": "Augustine was born in 354 in Thagaste, North Africa, to a pagan father and Monica. He studied rhetoric, took a mistress, had a son, explored Manicheism, taught in Rome and Milan, heard Ambrose preach, was baptized at thirty-two, and became bishop of Hippo at forty-one. He wrote the Confessions -- the first autobiography in Western literature -- the City of God, On the Trinity, and enough other works to fill more than forty volumes. His influence on Western theology, philosophy, and literature is incalculable. He died in 430 as the Vandals besieged Hippo.",
+   "prayer": "Lord, you turned Augustine from the path of error to the truth of the Gospel. Grant that all who seek you in restless hearts may find their rest in you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "theBeheadingOfSaintJohnTheBaptistMartyr": {
+   "name": "The Passion of St. John the Baptist",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "08-29",
+   "bio": "Herod had imprisoned John because John told him it was not lawful to have his brother's wife. At a birthday banquet, the daughter of Herodias danced and pleased Herod so much that he swore to give her whatever she asked. She asked, at her mother's prompting, for the head of John the Baptist on a platter. So it was done. John was the last and greatest of the prophets. He prepared the way. He pointed to the Lamb. He died because he told a king the truth. The Church remembers his death with the same solemnity as his birth.",
+   "prayer": "Lord, you gave John the Baptist the strength to speak truth to power even at the cost of his life: grant us his courage in every season of cowardice.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintGregoryTheGreatPopeAndDoctor": {
+   "name": "St. Gregory the Great",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-03",
+   "bio": "Gregory was a Roman aristocrat who became a monk, then a diplomat (papal legate in Constantinople), then abbot, then -- against his will -- pope in 590. He reformed the liturgy (Gregorian chant bears his name), organized the Church's social welfare during a plague and a flood, sent Augustine to England, wrote the Dialogues (including a life of Benedict), preached 40 homilies on Ezekiel, 22 on the Gospels, and the Moralia -- a massive commentary on Job that is one of the monuments of Christian ascetic theology. He signed his letters: \"Servant of the servants of God.\"",
+   "prayer": "O God, who guided your Church through the wisdom of Gregory the Great: grant that we may follow his example of humble service and contemplative action.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "birthOfTheBlessedVirginMary": {
+   "name": "The Nativity of the Blessed Virgin Mary",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "09-08",
+   "bio": "The Church celebrates the birth of Mary as a feast -- the first dawn before the Sun of Justice. Her birth is the beginning of the fulfillment of all the prophecies and longings of the Old Testament. Joachim and Anne were her parents. She was born in a world waiting. She would be the one through whom the waiting ended.",
+   "prayer": "O God, your Virgin Mother's birth brought joy to the whole world. Grant that, just as she bore your Son into the world, so may we bear him to those around us.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnChrysostomBishopAndDoctor": {
+   "name": "St. John Chrysostom",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-13",
+   "bio": "John was a monk of Antioch, ordained a deacon by Meletius and a priest by Flavian, and became the most celebrated preacher of the Eastern Church -- his surname Chrysostom means \"golden-mouthed.\" He was made patriarch of Constantinople in 398 and spent the next six years reforming a corrupt clergy and rebuking the extravagance of the empress Eudoxia. She had him exiled twice. He died on a forced march in 407. His liturgy -- the Divine Liturgy of Saint John Chrysostom -- is still celebrated every Sunday in the Orthodox Church.",
+   "prayer": "O God, who adorned your Church with the eloquence and virtue of John Chrysostom: grant through his intercession a mouth of gold for proclaiming your truth.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "theExaltationOfTheHolyCross": {
+   "name": "The Exaltation of the Holy Cross",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "09-14",
+   "bio": "This feast commemorates the finding of the True Cross by Saint Helena in Jerusalem around 320 AD, and the dedication of the basilica built over the site of Calvary and the Tomb by Constantine in 335. The cross -- the instrument of a slave's death -- became the sign of victory, the throne of the King of kings, the tree of life in the new paradise. Paul's words: \"I resolved to know nothing among you except Jesus Christ and him crucified.\" The Church exalts what the world despised.",
+   "prayer": "O God, who willed that your only-begotten Son should undergo the cross to save the human race: grant that we, who on earth have known his mystery, may merit the grace of his redemption in heaven.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfSorrows": {
+   "name": "Our Lady of Sorrows",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-15",
+   "bio": "This feast is inseparable from the preceding day's. The cross could not be exalted without the woman who stood beneath it. Simeon had told her: \"A sword shall pierce your own soul also.\" She is the Mater Dolorosa -- the Mother of Sorrows -- a figure who has given form to human grief for two thousand years. The Stabat Mater, composed in the thirteenth century, is among the most frequently set texts in Western music. She is the model of how suffering can be borne -- not stoically, but in faith.",
+   "prayer": "O God, who willed that at the hour of salvation a sword of grief should pierce the soul of the Virgin Mary: grant that we who honor her sorrows may obtain the happy fruit of your passion.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsCorneliusPopeAndCyprianBishopMartyrs": {
+   "name": "Ss. Cornelius & Cyprian",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-16",
+   "bio": "Cornelius was pope from 251 to 253, Cyprian bishop of Carthage from 248 to 258. Both died as a result of the persecutions under Valerian -- Cornelius in exile, Cyprian by beheading. Both were principals in the Novatianist controversy: Novatian taught that those who had lapsed under persecution could never be readmitted to the Church; Cornelius and Cyprian -- who had himself fled during the Decian persecution -- taught the mercy of re-admission after penance. Cyprian's treatise On the Unity of the Church is the first systematic ecclesiology in Christian history.",
+   "prayer": "O God, who granted Cornelius and Cyprian the prize of martyrdom: grant us, through their intercession, to remain united in faith and love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintRobertBellarmineBishopAndDoctor": {
+   "name": "St. Robert Bellarmine",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "09-17",
+   "bio": "Robert Bellarmine was a Jesuit cardinal, the greatest controversialist theologian of the Counter-Reformation, spiritual director of Aloysius Gonzaga, and a man who gave away his personal wealth to the poor. He was the judge in the case of Galileo -- twice: in 1616 he told Galileo that the heliocentric theory could not be held as fact; Bellarmine knew the difference between a theory and a demonstrated truth. He wrote the Catechism of Christian Doctrine that was used across the Catholic world for three centuries.",
+   "prayer": "O God, who gave Robert Bellarmine both the strength of argument and the tenderness of charity: grant us the wisdom to hold the faith firmly and to speak it with love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJanuariusBishopAndMartyr": {
+   "name": "St. Januarius",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "09-19",
+   "bio": "Januarius was bishop of Benevento, martyred under Diocletian around 305 AD. He is the patron saint of Naples. A phial of what is claimed to be his dried blood, preserved in the cathedral of Naples, liquefies three times a year on his feast days. The phenomenon has been observed since 1389 and has no scientific explanation that has achieved consensus. Whether the liquefaction is miraculous or natural, the devotion it has sustained in the people of Naples for six centuries is undeniable.",
+   "prayer": "O God, who granted Januarius the grace of martyrdom: through his intercession, strengthen our faith in the God who surpasses our understanding.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAndrewKimTaegonPriestAndPaulChongHasangAndCompanionsMartyrs": {
+   "name": "Ss. Andrew Kim Tae-gon, Paul Chong Ha-sang & Companions",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-20",
+   "bio": "Korea received Christianity entirely through the witness of laypeople -- there were no missionaries. A group of Korean Catholics brought back Christian texts from Beijing in the eighteenth century and formed the first Christian community in Korea without clergy. Their descendants, persecuted in four waves between 1839 and 1867, produced 103 martyrs canonized by John Paul II in Seoul in 1984. Andrew Kim Tae-gon was the first Korean priest; he was beheaded at twenty-five.",
+   "prayer": "O God, who built your Church in Korea through the witness of laypeople and the blood of martyrs: grant that our faith may bear the same quality of testimony.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMatthewApostleAndEvangelist": {
+   "name": "St. Matthew",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "09-21",
+   "bio": "Matthew was a tax collector -- a member of the most despised profession in first-century Judea, a collaborator with the Roman occupation. Jesus walked past his tax booth and said: \"Follow me.\" He rose and followed. The Gospel of Matthew, written for a Jewish-Christian community, is the most cited Gospel in the early Church, the one that begins the New Testament. Matthew is the patron of tax collectors, accountants, and bankers.",
+   "prayer": "O God, who called Matthew from his counting table to the school of your grace: grant us the same readiness to leave our securities and follow you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPioOfPietrelcinaPadrePioPriest": {
+   "name": "St. Pius of Pietrelcina (Padre Pio)",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-23",
+   "bio": "Francesco Forgione was a Capuchin friar from Pietrelcina in southern Italy who bore the visible wounds of Christ in his hands, feet, and side from 1918 until his death in 1968. He spent sixteen to nineteen hours a day in the confessional. Reports of bilocation, the reading of consciences, miraculous healings, and extraordinary spiritual gifts surrounded him throughout his life. He founded a hospital -- the Casa Sollievo della Sofferenza (Home for the Relief of Suffering) -- that still operates as one of the finest medical centers in Italy.",
+   "prayer": "O God, who conformed Padre Pio to your crucified Son and gave him the gift of compassion for sinners: grant through his intercession that we may be united to the cross that saves.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsCosmasAndDamianMartyrs": {
+   "name": "Ss. Cosmas & Damian",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "09-26",
+   "bio": "Cosmas and Damian were twin brothers, physicians from Syria, martyred in the early fourth century under Diocletian. They are said to have practiced medicine without payment -- anargyroi, the silverless ones -- serving the poor freely. They are the patrons of physicians, pharmacists, and surgeons. Their names appear in the Roman Canon of the Mass. Their intercession has been invoked by the sick for seventeen centuries.",
+   "prayer": "O God, who adorned the physicians Cosmas and Damian with the palm of martyrdom: through their intercession, bless those who care for the sick with healing hands and hearts.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintVincentDePaulPriest": {
+   "name": "St. Vincent de Paul",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-27",
+   "bio": "Vincent de Paul was a French priest who spent his early years anxious for preferment and haunted by a period of captivity as a slave in Tunis. After a second conversion in 1617, he devoted himself entirely to the rural poor. He founded the Congregation of the Mission (Vincentians) and, with Louise de Marillac, the Daughters of Charity -- the first women's religious congregation to work outside the cloister. He organized relief for prisoners, galley slaves, foundlings, and the victims of wars. He is the patron of charitable organizations.",
+   "prayer": "O God, who gave Vincent the grace to imitate your Son in preaching the Gospel to the poor: grant through his intercession that we may love the poor with his practical and inventive charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintWenceslausMartyrSaintsLawrenceRuizAndCompanionsMartyrs": {
+   "name": "St. Wenceslaus",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "09-28",
+   "bio": "Wenceslaus was duke of Bohemia from 921 to 929, a Christian ruler who promoted the faith in a pagan land. He was murdered by his brother Boleslav, who then found himself unable to rule a people who venerated his brother as a saint. The popular carol \"Good King Wenceslas\" reflects a historical reality: he was known for personal acts of charity to the poor in the depth of winter. He is the patron saint of the Czech Republic.",
+   "prayer": "Lord, you gave Wenceslaus the courage to witness to the faith in life and in death. May his intercession sustain the faith of the people he loved.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsMichaelGabrielAndRaphaelArchangels": {
+   "name": "Ss. Michael, Gabriel & Raphael",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "09-29",
+   "bio": "Michael -- \"Who is like God?\" -- is the warrior angel, the leader of the heavenly armies, the guardian of Israel, the weigher of souls at the last judgment. Gabriel -- \"God is my strength\" -- is the messenger, the one who announced the Incarnation to Mary and the birth of John the Baptist to Zechariah. Raphael -- \"God heals\" -- is the angel of healing, the guide of Tobias, the guardian of pilgrims. The three archangels named in Scripture are celebrated together as representatives of the entire angelic court.",
+   "prayer": "O God, who order the ministry of angels and of men with wonderful harmony: grant that those who always stand before you in heaven may protect our lives on earth.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJeromePriestAndDoctor": {
+   "name": "St. Jerome",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "09-30",
+   "bio": "Jerome was the greatest linguist of the early Church -- fluent in Latin, Greek, and Hebrew -- and the translator of the Bible into Latin: the Vulgate, which remained the standard biblical text of Western Christianity for fifteen hundred years. He was irascible, combative, and mercilessly self-critical. His letters are among the most vivid documents of the late fourth century. He spent the last thirty-five years of his life in a cave in Bethlehem, translating and commenting on Scripture, with a community of women scholars he had trained in Rome. He died in 420.",
+   "prayer": "O God, who gave Jerome a burning love for your word: grant that your people may be nourished by the sacred Scriptures and grow in knowledge and love of you.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintThereseOfTheChildJesusVirginAndDoctor": {
+   "name": "St. Thérèse of the Child Jesus",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-01",
+   "bio": "Thérèse Martin was born in Normandy in 1873 and entered the Carmelite convent at Lisieux at fifteen, dying of tuberculosis at twenty-four. She wrote her autobiography -- The Story of a Soul -- at her prioress's request. It became one of the most widely read books in Christian history. Her \"little way\" -- the way of spiritual childhood, of doing small things with great love, of trusting entirely in God's mercy -- has been received as one of the most significant spiritual discoveries of the modern era. She is a Doctor of the Church.",
+   "prayer": "O God, who opened the kingdom of heaven to little ones: grant that by following Thérèse in her little way, we may know the confidence that comes from being loved as a child.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "guardianAngels": {
+   "name": "The Holy Guardian Angels",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-02",
+   "bio": "Jesus said: \"See that you do not despise one of these little ones; for I say to you that their angels in heaven always see the face of my Father who is in heaven.\" The Church has always understood this to teach that each human being has a guardian angel -- a personal messenger and protector assigned by God. The Guardian Angels are not named in Scripture but their ministry is pervasive throughout both Testaments: angels strengthen, guide, protect, announce, and accompany.",
+   "prayer": "O God, who in your divine providence assign holy angels to guard us: grant that we may always be guarded by their protection and rejoice with them for ever.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintFrancisOfAssisi": {
+   "name": "St. Francis of Assisi",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-04",
+   "bio": "Giovanni di Pietro di Bernardone was the son of a wealthy cloth merchant. At twenty-five, following a conversion illness and an encounter with a leper whose hand he kissed, he heard Christ speak to him from the crucifix at San Damiano: \"Francis, go and repair my house, which is falling into ruin.\" He rebuilt it literally, then spiritually -- founding the Order of Friars Minor (the Franciscans), writing the Canticle of the Creatures, and receiving the stigmata on Mount La Verna in 1224. He died in 1226, calling death \"Sister.\" He is the patron of ecology, of animals, and of Italy.",
+   "prayer": "O God, who gave Francis the grace to imitate your Son in poverty and humility: grant that we may follow his example and be joyfully united to you through creation.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintBrunoPriest": {
+   "name": "St. Bruno",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-06",
+   "bio": "Bruno was a distinguished master of theology at Reims who founded the Carthusians -- the strictest monastic order in the Church -- at the Grande Chartreuse in the Alps in 1084. He had been deeply involved in the reform of the Church when he withdrew. He spent his last years in Calabria, in another hermitage. He never wrote a Rule; the silence of the Carthusians is itself their rule. Their motto: Stat Crux dum volvitur orbis. The cross stands while the world turns.",
+   "prayer": "O God, who called Bruno to seek you in silence and solitude: grant that in the noise of our lives we may find the interior desert where you are heard.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfTheRosary": {
+   "name": "Our Lady of the Rosary",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-07",
+   "bio": "This feast was established by Pius V after the naval victory of Lepanto on October 7, 1571, which he credited to the Rosary being prayed throughout Europe. The Rosary is a form of meditation on the life of Christ in company with Mary: each decade of Hail Marys accompanies a mystery -- Joyful, Luminous, Sorrowful, Glorious. The prayer is simultaneously Marian and Christological. John Paul II called it \"a summary of the Gospel.\" The simplicity of the repeated words creates the silence in which the mysteries are contemplated.",
+   "prayer": "O God, whose only-begotten Son has purchased for us the rewards of eternal life: grant, we beseech thee, that meditating upon these mysteries in the most holy Rosary, we may imitate what they contain.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintDenisAndCompanionsMartyrsSaintJohnLeonardiPriest": {
+   "name": "St. Denis & Companions",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-09",
+   "bio": "Denis was the first bishop of Paris, martyred around 258 AD during the persecution of Valerian. According to tradition, after his beheading on Montmartre -- the Hill of Martyrs -- he walked two miles to the place of his burial carrying his head and singing psalms. He is the patron of France. The legend of Denis is a study in how the tradition transformed historical memory into theological statement: the martyr continues to speak even after the executioner has done his work.",
+   "prayer": "O God, who strengthened Denis and his companions in their testimony: grant us courage to speak and act for the faith in our own generation.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCallistusIPopeAndMartyr": {
+   "name": "St. Callistus I",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-14",
+   "bio": "Callistus was pope from 217 to 222, a man of complicated background -- a former slave, implicated in financial scandals before his conversion, a deacon under Zephyrinus, then pope. He was attacked fiercely by Hippolytus, his theological rival. He extended mercy to apostates, recognized marriages between free and slave women that Roman law did not recognize, and readmitted to communion those who had committed serious sins after penance. He died, possibly in a popular uprising, in 222. His catacombs -- the Catacomb of Callistus -- are the burial place of many popes.",
+   "prayer": "O God, who gave Callistus the courage to extend your mercy beyond what prudence counseled: grant us a portion of his boldness in forgiving.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintTeresaOfJesusVirginAndDoctorOfTheChurch": {
+   "name": "St. Teresa of Jesus (Ávila)",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-15",
+   "bio": "Teresa Sánchez de Cepeda Dávila y Ahumada entered the Carmelite Convent of the Incarnation in Ávila at twenty-one and was miserable for twenty years. At thirty-nine she experienced a definitive conversion before an image of the wounded Christ. She spent the rest of her life in ecstatic prayer, founding seventeen reformed Carmelite convents across Spain, writing the Interior Castle and the Way of Perfection, collaborating with John of the Cross on the reform of the friars, and managing logistics, finances, and personnel across a network of monasteries. She is a Doctor of the Church.",
+   "prayer": "O God, who gave Teresa of Jesus a burning thirst for your glory and the souls of your people: grant that we, nourished by her heavenly teaching, may be inflamed with the same desire.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintHedwigReligiousSaintMargaretMaryAlacoqueVirgin": {
+   "name": "St. Hedwig",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-16",
+   "bio": "Hedwig was duchess of Silesia in the thirteenth century, wife of Henry I, mother of seven. She used her considerable wealth to build monasteries and hospitals, to ransom prisoners and release serfs, and to care personally for the poor and the sick. After her husband's death she entered the Cistercian monastery she had founded at Trebnitz. She walked barefoot even in winter, carrying her shoes rather than wearing them. She is the patron of those who have lost their children and of those in unhappy marriages.",
+   "prayer": "O God, who gave Hedwig the grace to turn the authority of a princess entirely into service of the poor: grant us the same conversion of power into charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintIgnatiusOfAntiochBishopAndMartyr": {
+   "name": "St. Ignatius of Antioch",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-17",
+   "bio": "Ignatius was bishop of Antioch, arrested during the reign of Trajan and sent to Rome to be executed in the arena around 107 AD. During the journey he wrote seven letters -- to the churches of Ephesus, Magnesia, Tralles, Rome, Philadelphia, and Smyrna, and to Polycarp. In his letter to the Romans he pleaded not to be rescued: \"Allow me to be eaten by the beasts, through whom I can attain to God. I am God's wheat, and I am to be ground by the teeth of wild beasts, so that I may become pure bread of Christ.\" The language of the Eucharist becomes the language of his martyrdom.",
+   "prayer": "O God, who filled Ignatius of Antioch with a desire for martyrdom and a vision of the Church as the body of Christ: grant through his teaching that we may understand the mystery of the Eucharist with his depth.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintLukeTheEvangelist": {
+   "name": "St. Luke",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "10-18",
+   "bio": "Luke was a physician, a Gentile, a companion of Paul, and the author of the third Gospel and the Acts of the Apostles -- the longest single contribution to the New Testament. His Gospel is the Gospel of mercy: the prodigal son, the good Samaritan, the lost sheep, the penitent thief, Zacchaeus, and the weeping women of Jerusalem are all found only in Luke. He is the patron of physicians, artists, and butchers. An early tradition says he painted the first icon of the Virgin Mary.",
+   "prayer": "O God, who chose Luke the physician to reveal your love for the sick and the sinful: grant that we may follow the Christ he described -- the physician of bodies and souls.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsJeanDeBrebeufAndIsaacJoguesPriestsAndCompanionsMartyrsSaintPaulOfTheCrossPriest": {
+   "name": "Ss. John de Brébeuf, Isaac Jogues & Companions",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "10-19",
+   "bio": "The North American Martyrs were eight Jesuit missionaries -- six priests and two laybrothers -- killed by the Iroquois and Mohawks between 1642 and 1649 in what is now upstate New York and Ontario. Isaac Jogues had already had his fingers chewed off in a previous captivity; when he returned to the mission, the Dutch Reformed minister who had helped rescue him could not understand why he was going back. Jogues replied that he was going to die. John de Brébeuf sang hymns as he was tortured. They are the patron saints of Canada.",
+   "prayer": "O God, you called John de Brébeuf and his companions to preach the Gospel and to suffer for it: grant through their intercession that the faith they planted may continue to grow.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "popeSaintJohnPaulII": {
+   "name": "St. John Paul II",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-22",
+   "bio": "Karol Józef Wojtyła was born in Wadowice, Poland in 1920, ordained a priest in 1946, made bishop in 1958, cardinal in 1967, and elected pope on October 16, 1978 -- the first non-Italian pope since 1523. He visited 129 countries, met with world leaders, canonized 482 saints, wrote 14 encyclicals, 15 apostolic exhortations, and a full corpus of theology of the body. He survived an assassination attempt in 1981. He suffered from Parkinson's disease in his last decade and died on April 2, 2005. One million people came to Rome for his funeral.",
+   "prayer": "O God, who chose John Paul II to strengthen the faith throughout the world: grant through his intercession that we may open wide the doors of our hearts to Christ.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnOfCapistranoPriest": {
+   "name": "St. John of Capistrano",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-23",
+   "bio": "John was a Franciscan friar, a lawyer turned preacher, who at the age of seventy led the crusade that relieved the siege of Belgrade in 1456 -- the Ottoman advance that would have opened central Europe to conquest. He died shortly after the victory, possibly of plague. He is the patron of military chaplains. His preaching missions across Europe in the early fifteenth century produced mass conversions and the establishment of Monte di Pietà -- public loan houses for the poor, precursors of modern credit unions.",
+   "prayer": "O God, who sustained John of Capistrano in his old age with a young man's courage: grant that we may serve you with equal energy in whatever season of life we find ourselves.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAnthonyMaryClaretBishop": {
+   "name": "St. Anthony Mary Claret",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "10-24",
+   "bio": "Anthony Claret was a Spanish Catalan priest who founded the Claretians (Missionary Sons of the Immaculate Heart of Mary) in 1849. He became archbishop of Santiago de Cuba and then confessor to Queen Isabella II, using his proximity to power entirely in the service of the poor. He is said to have preached over 25,000 sermons and confirmed over 100,000 people. He survived eleven assassination attempts. He died in exile in France in 1870.",
+   "prayer": "O God, who endowed Anthony Claret with ardent zeal for the salvation of souls: grant through his intercession that the same fire of charity may burn in us.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintsSimonAndJudeApostles": {
+   "name": "Ss. Simon & Jude",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "10-28",
+   "bio": "Simon the Zealot -- probably a member of the revolutionary nationalist party -- and Jude Thaddaeus (distinguished from Judas Iscariot) are celebrated together because tradition links them in their missionary journey and martyrdom, possibly in Persia. Jude is the patron of hopeless cases -- perhaps because his name was avoided by petitioners who confused him with Judas, so he was available for the desperate causes no one else would take. The brief letter of Jude in the New Testament warns against those who \"pervert the grace of God into licentiousness.\"",
+   "prayer": "O God, who made Simon and Jude worthy to be called to the apostolic dignity: grant through their intercession that we may hold fast to the faith they proclaimed.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "allSaints": {
+   "name": "All Saints",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "11-01",
+   "bio": "All Saints is the feast of the communion of saints in its completeness -- not only those who have been canonized, not only those whose names we know, but the entire multitude that no man can number. The Book of Revelation speaks of a great crowd from every nation, tribe, people, and language, standing before the throne. They have washed their robes in the blood of the Lamb. They are our brothers and sisters who have reached the destination toward which we are still traveling.",
+   "prayer": "Almighty ever-living God, by whose gift we venerate in one celebration the merits of all the Saints: bestow on us, we pray, through the prayers of so many intercessors, an abundance of the reconciliation with you for which we earnestly long.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "allSouls": {
+   "name": "The Commemoration of All the Faithful Departed",
+   "feast": "Commemoration",
+   "rank": "feast",
+   "date": "11-02",
+   "bio": "All Souls Day is the Church's annual act of intercession for the dead. The theology behind it is simple: the Church does not abandon her members at death. The dead who are still being purified -- still in the process of becoming fully what God created them to be -- receive the benefit of the Church's prayer. The practice of praying for the dead is ancient; 2 Maccabees records it. The Council of Florence and the Council of Trent defined it. Every November 2, the Church says to the dead: we have not forgotten you.",
+   "prayer": "O God, the glory of the faithful and the life of the just, by the death and resurrection of whose Son we have been redeemed: look mercifully on the souls of all the faithful departed and grant them a share in the passover of your Son.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCharlesBorromeoBishop": {
+   "name": "St. Charles Borromeo",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-04",
+   "bio": "Charles Borromeo was a Milanese cardinal who could have been a comfortable Renaissance prince-bishop but instead became the architect of the Counter-Reformation in northern Italy. He implemented the Council of Trent in his diocese with extraordinary thoroughness: reforming the liturgy, founding seminaries, visiting every parish, caring personally for the poor during the plague of 1576. He died at forty-six, completely worn out. He is the model of the modern bishop: pastoral, administrative, ascetic, and completely dedicated to the reform of the Church through the reform of himself.",
+   "prayer": "O God, who made Charles Borromeo a great shepherd to renew the face of your Church: grant us shepherds formed in the same school of sacrifice and prayer.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "dedicationOfTheLateranBasilica": {
+   "name": "The Dedication of the Lateran Basilica",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "11-09",
+   "bio": "The Basilica of Saint John Lateran is the cathedral of Rome -- the mother church of all the churches in the world. Its dedication is celebrated as a feast of the universal Church because it symbolizes the unity of the Church with Rome and with the successor of Peter. The inscription on the façade: \"Mother and Head of all the churches of the city and the world.\" The Lateran was given to the Church by Emperor Constantine and has been the site of five ecumenical councils.",
+   "prayer": "O God, who every year bring back the day of this church's consecration: hear the prayers of your people and grant that in your holy house all who seek your grace may find it.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintLeoTheGreatPopeAndDoctor": {
+   "name": "St. Leo the Great",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-10",
+   "bio": "Leo was pope from 440 to 461 -- one of the two popes called \"the Great\" by the tradition (the other being Gregory). He met Attila the Hun outside Rome in 452 and persuaded him to turn back -- an event so improbable that it was remembered for centuries as miraculous. His Tome -- a letter to the Council of Chalcedon -- defined the two natures of Christ with such precision that the Council fathers cried out: \"Peter has spoken through Leo.\" He is a Doctor of the Church.",
+   "prayer": "O God, who never allow your Church to be overcome by the gates of hell: grant through the teaching and intercession of Leo the Great that she may stand firm on the rock of Peter's confession.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMartinOfToursBishop": {
+   "name": "St. Martin of Tours",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-11",
+   "bio": "Martin was a Roman soldier from Pannonia who, at eighteen, meeting a freezing beggar at the gate of Amiens, cut his military cloak in two and gave half to the beggar. That night he dreamed of Christ wearing the half-cloak and saying to his angels: \"Martin, who is still but a catechumen, has covered me with this garment.\" He was baptized. He served two more years in the army, then became a disciple of Hilary of Poitiers, a hermit, and eventually bishop of Tours -- the most popular saint of the Middle Ages in the West.",
+   "prayer": "O God, who saw Martin clothe your Son in the person of a beggar: grant that we may recognize your Son in those who come to us in need.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJosaphatBishopAndMartyr": {
+   "name": "St. Josaphat",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-12",
+   "bio": "John Kuntsevych was a Ukrainian Greek Catholic bishop of Polotsk martyred in 1623 -- the first Eastern Catholic to be canonized by Rome. He was killed by an Orthodox mob that accused him of seizing their churches. His martyrdom was in the cause of union between the Eastern and Western Churches -- a union he pursued with great pastoral zeal and with which he died in peace.",
+   "prayer": "O God, who filled Josaphat with such pastoral charity that he laid down his life for his people: through his intercession, hasten the day when all who share one baptism may be united in one faith.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAlbertTheGreatBishopAndDoctor": {
+   "name": "St. Albert the Great",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "11-15",
+   "bio": "Albert of Cologne was a Dominican friar and the teacher of Thomas Aquinas. He was the first medieval thinker to make a systematic study of Aristotle's natural philosophy and to integrate it with Christian theology -- the project that Thomas completed. He wrote on physics, chemistry, astronomy, biology, geography, and theology. He is the patron of scientists and of students of the natural sciences. He died in 1280 at approximately eighty years of age.",
+   "prayer": "O God, who made Albert great in learning and in holiness: grant that we may follow him in seeking wisdom with open minds and devoted hearts.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintMargaretOfScotlandSaintGertrudeTheGreatVirgin": {
+   "name": "St. Margaret of Scotland",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "11-16",
+   "bio": "Margaret was an Anglo-Saxon princess who fled to Scotland after the Norman Conquest and married the Scottish king Malcolm III. She used her position to reform the Scottish Church, found monasteries, ransom English slaves, and care for the poor. She introduced the practice of saying grace before meals to Scotland and improved the conditions of prisoners. She died in 1093, three days after hearing of her husband's death in battle. She is the patron saint of Scotland and of queens.",
+   "prayer": "O God, who gave Margaret the grace to make her royal power serve the poor: may her intercession sustain those in authority who seek to govern with justice and charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintElizabethOfHungary": {
+   "name": "St. Elizabeth of Hungary",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-17",
+   "bio": "Elizabeth was a princess of Hungary married at fourteen to Ludwig IV of Thuringia, whom she loved deeply and who loved her. He died on crusade in 1227. She was twenty. She was expelled from the palace by her brother-in-law, found a protector in Conrad of Marburg (who was severe to the point of cruelty), founded a hospital in Marburg, and cared personally for the sick until her death at twenty-four. Her life of heroic charity in the brief years after her husband's death has made her one of the most beloved saints in the German and Franciscan traditions.",
+   "prayer": "O God, who transformed Elizabeth into a living image of the suffering Christ: grant that through her intercession we may serve Christ in the poor with the same totality of love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "dedicationOfTheBasilicasOfSaintsPeterAndPaulApostles": {
+   "name": "The Dedication of the Basilicas of Peter & Paul",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "11-18",
+   "bio": "The basilicas of Saint Peter in the Vatican and Saint Paul Outside the Walls -- the burial places of the two great apostles of Rome -- were both consecrated on November 18. Their joint commemoration expresses what their joint feast on June 29 expresses: Peter and Paul are inseparable as the foundation of the Roman Church, the pillars of its faith, the martyrs whose blood planted the Gospel in the capital of the ancient world.",
+   "prayer": "O God, who consecrated these basilicas to the memory of your apostles: grant that through the intercession of Peter and Paul we may always receive your mercy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "presentationOfTheBlessedVirginMary": {
+   "name": "The Presentation of the Blessed Virgin Mary",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-21",
+   "bio": "This feast, celebrated in the East since the sixth century and in the West since the fourteenth, commemorates the presentation of the child Mary in the Temple by her parents Joachim and Anne -- an event recorded in the Protoevangelium of James rather than the canonical Gospels. The theological content is clear: the one who was chosen from the beginning to bear the Word of God was herself offered to God from the beginning. The Temple that received her became the dwelling place of the one who would dwell in her.",
+   "prayer": "O God, who willed that the Blessed Virgin Mary should be presented in the Temple when still a child: through her prayers grant that we too may be presented to you with pure hearts.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCeciliaVirginAndMartyr": {
+   "name": "St. Cecilia",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-22",
+   "bio": "Cecilia was a Roman martyr of the second or third century. She is one of the most venerated martyrs of the early Church, her name in the Roman Canon. The story of her martyrdom -- suffocation in her bath, then a botched decapitation that left her alive for three days, during which she prayed and directed the building of a church -- is legendary but has been told continuously since the fifth century. She is the patron of musicians, based on a passage in her Acts describing her singing to God while the wedding music played.",
+   "prayer": "O God, who gave Cecilia the gift of music and the grace of martyrdom: grant that through her intercession we may praise you always, in life and in death.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintClementIPopeAndMartyrSaintColumbanReligious": {
+   "name": "St. Clement I",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "11-23",
+   "bio": "Clement was the fourth bishop of Rome (or third, depending on the count), serving around 88 to 99 AD. His letter to the Corinthian church -- written to address disorder in that community -- is the earliest Christian document outside the New Testament and the first exercise of Roman pastoral authority outside Rome. It establishes, in practice if not in theory, the principle of Roman intervention in another church's affairs. Tradition records him as a martyr, but this is uncertain.",
+   "prayer": "O God, who guided your Church through the pastoral wisdom of Clement: grant us leaders formed in the same spirit of fraternal correction and deep charity.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAndrewDungLacAndCompanionsMartyrs": {
+   "name": "Ss. Andrew Dũng-Lạc & Companions",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "11-24",
+   "bio": "Andrew Dũng-Lạc was a Vietnamese priest martyred in 1839 under Emperor Minh Mạng. He is one of 117 martyrs of Vietnam -- bishops, priests, and laypeople martyred between 1745 and 1862 -- canonized by John Paul II in 1988. Vietnamese Christianity, planted by Jesuit missionaries in the seventeenth century, has produced one of the most extensive martyrologies in modern Church history. The faith in Vietnam survived centuries of persecution.",
+   "prayer": "O God, who sustained Andrew and his companions in their witness: may the seed of their martyrdom continue to bear fruit in the Church in Vietnam.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintCatherineOfAlexandriaVirginAndMartyr": {
+   "name": "St. Catherine of Alexandria",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "11-25",
+   "bio": "Catherine was a young woman of Alexandria, traditionally of noble or royal birth, martyred under the Emperor Maxentius around 305 AD. She is said to have debated fifty philosophers sent to argue her out of the faith and converted them all; they were subsequently killed. She is one of the fourteen Holy Helpers, among the most widely venerated saints of the Middle Ages, the patron of philosophers, scholars, wheelwrights, and young women. Joan of Arc heard her voice.",
+   "prayer": "O God, who gave Catherine wisdom to confound the wise of this world: grant that we may hold the faith with her confidence and her joy.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAndrewTheApostle": {
+   "name": "St. Andrew",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "11-30",
+   "bio": "Andrew was the first called of the Twelve -- \"the Protoclete\" in Eastern Christianity. He was a fisherman on the Sea of Galilee, a disciple of John the Baptist before following Jesus, and the brother of Simon Peter. It was Andrew who brought Peter to Jesus. According to tradition, he was crucified on an X-shaped cross at Patras in Greece. He is the patron of Scotland, Russia, Greece, and Romania -- as many nations as there are traditions about where he preached.",
+   "prayer": "O God, who willed that Andrew should be the first to recognize and follow your Son: grant that we may follow him without delay, as Andrew followed his Lord.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintFrancisXavierPriest": {
+   "name": "St. Francis Xavier",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "12-03",
+   "bio": "Francis was a Navarrese nobleman, a student of philosophy in Paris, a housemate of Ignatius of Loyola, and one of the founding members of the Society of Jesus. He spent eleven years (1541–1552) in India, the Malay Archipelago, and Japan -- the first sustained Catholic missionary presence in Asia. He baptized tens of thousands. He died on the island of Sancian, off the coast of China, unable to get permission to enter the country he had come to evangelize. He is the patron saint of missionaries and of the Propagation of the Faith.",
+   "prayer": "O God, who inflamed the heart of Francis with apostolic love: grant through his intercession that your Church may reach every nation with the fire of that love.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnDamascenePriestAndDoctor": {
+   "name": "St. John Damascene",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-04",
+   "bio": "John of Damascus was a Christian official in the court of the Umayyad Caliph, living under Islamic rule in Damascus, who became a monk at the monastery of Mar Saba in Palestine. He wrote the Fount of Knowledge -- the first systematic summary of Christian theology -- and led the theological defense of the veneration of images during the Iconoclast controversy. His arguments prevailed at the Second Council of Nicaea in 787. He is the last of the Greek Fathers and a Doctor of the Church.",
+   "prayer": "O God, who filled John of Damascus with heavenly love and gave him the gifts of wisdom and speech: through his intercession, grant us the grace to hold fast to the holy traditions of your Church.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintNicholasBishop": {
+   "name": "St. Nicholas",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-06",
+   "bio": "Nicholas was bishop of Myra in Lycia (modern Turkey) in the fourth century. His biography is almost entirely legendary, but the legends are consistent: he saved three poor girls from prostitution by throwing bags of gold through their window at night; he saved three falsely condemned soldiers by appearing to the Emperor Constantine in a dream; he saved sailors in a storm; he raised three children murdered by a butcher. He is the patron of children, sailors, merchants, the falsely accused, and giving without recognition.",
+   "prayer": "O God, who made Nicholas renowned for his generosity to those in need: grant us through his intercession a spirit of giving that seeks no credit.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintAmbroseBishopAndDoctor": {
+   "name": "St. Ambrose",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "12-07",
+   "bio": "Ambrose was a Roman governor who was elected bishop of Milan by popular acclamation -- he was not yet baptized. He was baptized, ordained, and consecrated bishop in rapid succession in 374. He became the most significant bishop in the West of his generation: he refused to surrender a basilica to the Arian Empress Justina, he compelled the Emperor Theodosius to do public penance for a massacre in Thessaloniki, he baptized Augustine. His hymns are still sung. He established the tradition of episcopal independence from imperial authority.",
+   "prayer": "O God, who raised up Ambrose as a pillar of your Church: grant through his intercession that the Church may always have shepherds who fear you more than kings.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "immaculateConception": {
+   "name": "The Immaculate Conception",
+   "feast": "Solemnity",
+   "rank": "solemnity",
+   "date": "12-08",
+   "bio": "The Immaculate Conception -- that Mary was preserved from original sin from the first moment of her existence -- was defined as dogma by Pius IX in 1854. The theology requires care: it is not that she needed no redemption, but that she was redeemed preemptively, by the merits of her Son applied to her in advance. Four years after the definition, she appeared at Lourdes and identified herself as \"the Immaculate Conception.\" The patronal feast of the United States.",
+   "prayer": "O God, who by the Immaculate Conception of the Blessed Virgin prepared a worthy dwelling for your Son: grant, we pray, that, as you preserved her from every stain by virtue of the death of your Son, which you foresaw, so, through her intercession, we, too, may be cleansed and admitted to your presence.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJuanDiegoCuauhtlatoatzin": {
+   "name": "St. Juan Diego",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-09",
+   "bio": "Juan Diego was an Aztec convert who, on December 9 and 12, 1531, ten years after the Spanish conquest of Mexico, saw apparitions of the Virgin Mary on the hill of Tepeyac outside Mexico City. She left her image on his tilma -- the rough cloak he wore. The image of Our Lady of Guadalupe, venerated in the Basilica of Guadalupe in Mexico City, is the most visited Marian shrine in the world. Nine million people visit annually. Juan Diego is the first indigenous American to be canonized.",
+   "prayer": "O God, who through Our Lady of Guadalupe revealed your tender love for the peoples of America: grant through Juan Diego's intercession that the Gospel may take root in every culture.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintDamasusIPope": {
+   "name": "St. Damasus I",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-11",
+   "bio": "Damasus was pope from 366 to 384, one of the most significant occupants of the Roman see. He commissioned Jerome to revise the Latin biblical translations -- the beginning of the Vulgate. He restored and adorned the Roman catacombs, composing verse inscriptions for the tombs of the martyrs that shaped the Church's memory of her early history. He insisted on the primacy of the Roman see. He held the Council of Rome in 382, which established the biblical canon as the Church has received it.",
+   "prayer": "O God, who guided Damasus to restore the memory of the martyrs and to commission the translation of your word: grant that we may receive that word with the reverence he gave it.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "ourLadyOfGuadalupe": {
+   "name": "Our Lady of Guadalupe",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "12-12",
+   "bio": "On December 12, 1531, the Virgin Mary appeared for the fourth time to Juan Diego on Tepeyac and left her image on his tilma. The image -- an indigenous woman in the iconographic style of an Aztec goddess but with Christian symbols -- spoke directly to the newly conquered people of Mexico in their own visual language. Within ten years of the apparition, nine million Mexicans had converted to Christianity. The image is scientifically inexplicable in its details, has never faded in five centuries, and shows a human figure reflected in the eyes of Mary.",
+   "prayer": "Our Lady of Guadalupe, mystical rose, intercede for the Church, protect the Holy Father, help all those who invoke you in their necessities.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintLucyOfSyracuseVirginAndMartyr": {
+   "name": "St. Lucy",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "12-13",
+   "bio": "Lucy was a Sicilian woman martyred under Diocletian around 304 AD. Her name means light. She is one of the few women mentioned by name in the Roman Canon. According to tradition, she had consecrated her virginity to God and was denounced to the governor by a rejected suitor. She was condemned to a brothel; the soldiers could not move her. She was blinded, or she blinded herself, or she was blinded by her jailers -- the traditions vary. She is the patron of the blind, of writers, and of glaziers.",
+   "prayer": "O God, who gave Lucy the grace to keep the light of faith inviolate through martyrdom: through her intercession, grant us light in our darkness.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnOfTheCrossPriestAndDoctor": {
+   "name": "St. John of the Cross",
+   "feast": "Memorial",
+   "rank": "memorial",
+   "date": "12-14",
+   "bio": "Juan de Yepes was a Castilian Carmelite friar who, with Teresa of Ávila, reformed the Carmelite Order and suffered imprisonment by his own brothers for it. His eight months of solitary confinement in a cell six feet by ten feet in Toledo, where he was beaten regularly and nearly starved, produced the first draft of the Spiritual Canticle -- one of the great poems in the Spanish language. His Dark Night of the Soul and The Ascent of Mount Carmel constitute the most systematic mystical theology in the Christian tradition. He is a Doctor of the Church.",
+   "prayer": "O God, who endowed John of the Cross with a spirit of self-denial and love of the cross: grant that, imitating him constantly, we may come to contemplate eternally your glory.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintPeterCanisiusPriestAndDoctor": {
+   "name": "St. Peter Canisius",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-21",
+   "bio": "Peter Canisius was a Dutch Jesuit who became the principal figure of the Counter-Reformation in German-speaking lands. He founded the first Jesuit college in Germany, taught, preached, and wrote three catechisms -- one for children, one for educated adults, one for scholars -- that were printed in two hundred editions in his lifetime. He preached more than twenty thousand sermons. He is a Doctor of the Church. Without his work, it is difficult to imagine the survival of Catholicism in central Europe.",
+   "prayer": "O God, who strengthened Peter Canisius in his service of your Church: grant through his intercession the same perseverance in teaching and defending the faith.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnOfKantyPriest": {
+   "name": "St. John of Kanty",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-23",
+   "bio": "John was a Polish professor of theology at the University of Kraków, director of the collegiate church of Saint Anne, and a man of extreme personal austerity and charity. He slept on bare boards. He gave away his clothing to beggars. He made four pilgrimages to Rome on foot and one to Jerusalem. He carried a bag of food for the poor in his belt. He was removed from his professorship once and sent to pastor a parish -- he returned to teaching when the authorities recognized their mistake. He died in 1473 at eighty-three.",
+   "prayer": "O God, who gave John of Kanty the grace to combine learning and poverty: grant that those who seek wisdom may always seek it in the service of the poor.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintStephenTheFirstMartyr": {
+   "name": "St. Stephen",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "12-26",
+   "bio": "Stephen was one of the seven deacons chosen by the apostles, \"full of faith and of the Holy Spirit.\" He was seized, tried before the Sanhedrin, and stoned to death outside Jerusalem -- the first martyr of the Christian Church. At his stoning, the witnesses laid their cloaks at the feet of a young man named Saul. As he was dying, Stephen prayed: \"Lord, lay not this sin to their charge.\" Luke notes that Saul consented to his death. The connection between the proto-martyr and the proto-apostle is one of the most significant details in Acts.",
+   "prayer": "O God, who opened the gates of heaven to your first martyr Stephen: grant us the same love for our enemies and the same vision of your glory.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintJohnTheApostleAndEvangelist": {
+   "name": "St. John the Apostle",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "12-27",
+   "bio": "John was the son of Zebedee, brother of James, the Beloved Disciple -- the one who reclined next to Jesus at the Last Supper, who stood at the foot of the cross, who received Mary into his household, who ran to the tomb and believed. He is the author -- in some sense -- of the Fourth Gospel, three letters, and the Book of Revelation. He is the only one of the Twelve who was not martyred, dying peacefully in old age at Ephesus. He was the last surviving eyewitness of the Resurrection.",
+   "prayer": "O God, who revealed the mysteries of your word to John the Apostle: grant that we may understand what he proclaimed and come to share in the eternal life he described.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "holyInnocentsMartyrs": {
+   "name": "The Holy Innocents",
+   "feast": "Feast",
+   "rank": "feast",
+   "date": "12-28",
+   "bio": "Herod, learning from the Magi that a king had been born in Bethlehem, ordered the killing of all male children under two in the district. The Holy Innocents are the first martyrs of the Christian era -- those who died for Christ without knowing him, without choosing him, without any act of their own. Augustine calls them \"flowers before the fruit,\" cut down by the frost before they could bloom. The massacre of innocents has never stopped, which is why this feast has never stopped being read.",
+   "prayer": "O God, whom the Innocents confessed and proclaimed on this day not by speaking but by dying: grant that our lives may bear witness to the faith our lips confess.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintThomasBecketBishopAndMartyr": {
+   "name": "St. Thomas Becket",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-29",
+   "bio": "Thomas Becket was Henry II's friend, his chancellor, and then -- after Henry had him made Archbishop of Canterbury -- his adversary. The issue was whether the Church or the Crown had ultimate jurisdiction over clergy. Thomas held the Church. Henry held the Crown. Thomas was murdered at his altar in Canterbury Cathedral on December 29, 1170, by four knights who thought they were doing the king's will. Henry did public penance at the tomb. Thomas was canonized three years after his death.",
+   "prayer": "O God, who gave Thomas Becket the grace to give his life in defense of your Church's liberty: grant that all who serve your Church may do so without counting the cost.",
+   "practice": "",
+   "practice_source": ""
+  },
+  "saintSylvesterIPope": {
+   "name": "St. Sylvester I",
+   "feast": "Optional Memorial",
+   "rank": "optional",
+   "date": "12-31",
+   "bio": "Sylvester was pope from 314 to 335 -- the entire reign of Constantine I. Under him the Church emerged from persecution into imperial favor: the Council of Nicaea (325), the building of the great Roman basilicas, the Christianization of the empire. He did not attend Nicaea personally, sending legates. The Donation of Constantine -- the forged document claiming Constantine gave Sylvester and his successors temporal authority over the Western Empire -- was written in his name. He presided, quietly, over the most dramatic transformation of Christian history.",
+   "prayer": "O God, who guided Sylvester to shepherd your Church in the sudden transition from persecution to freedom: grant wisdom to your Church in every new season of its history.",
+   "practice": "",
+   "practice_source": ""
+  }
+ }
+}
