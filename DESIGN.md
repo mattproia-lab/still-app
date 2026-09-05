@@ -121,6 +121,7 @@ without it.
 | Spiritual Autobiography | 70,8,152 | purple | .90 | 50% / 36%, behind the text |
 | The Companion | 6,34,98 | navy | .80 | 50% / 36%, behind the text |
 | Deeper | 120,148,200 | softer blue | .55 | 50% / 36%, behind the text |
+| Amma Sophia (the Autobiography's Inspiration tab) | 58,86,150 | dusk blue, `SOPHIA` beside the array | .68 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
 not change with the hue.
@@ -489,6 +490,28 @@ button stops breathing.
   block's `.companion-wrap p` and `#cResponseText`/`#dResponseText` lines
   are gone. The requests, the feature keys, the limits and their display
   logic, the digest, the playback and the saves are unchanged.
+
+- **Amma Sophia**: the third voice, on the same pattern, in place: she stays
+  the Autobiography's Inspiration tab (`#autobio-mystic`, now also
+  `.voice-pane`, the scope the `.voice-*` text rules share with
+  `.voice-screen`). While her tab is in hand the room takes her hue, a dusk
+  blue between the Companion's navy and Deeper's softer blue, `SOPHIA` beside
+  the `W[]` array (she is not a home world, so not a row) and set on the
+  screen by a `:has()` on the pane's `.active`; the framed photograph at
+  the head of the page grades toward it with her. Her portrait stays a
+  `.devotional.graded` frame with her name and line beneath, then the day's
+  quote from the tradition. The opening: her prompt in the serif, in her
+  voice ("Bring a question, or leave it empty and let me speak."), the
+  textarea, Speak to me. The writing: the portrait recedes on the one slow
+  fade (`:has()` on the textarea's focus or content); the page holds still.
+  Once the ask has left the opening (`showMysticState()` hides
+  `#mysticInput` inline, so `#mysticInput[style*="none"]` is the state)
+  the portrait and the quote step aside and her name heads the listening
+  and the answer, which is the reply in the serif at reading measure with
+  Hear response and Ask another beneath; no left rule, no card, no repeated
+  label. The old `.ab-response` card, `.ab-listen` and the mobile block's
+  `#mysticResponseText` line are gone. Her request, feature key, limit,
+  the onboarding-free flag, the playback and the saves are unchanged.
 
 ### Hour palette
 
