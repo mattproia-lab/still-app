@@ -543,6 +543,33 @@ button stops breathing.
   header-wrap rule are retired. Every onclick target and storage key is the
   one it was.
 
+- **Paywall** (`#paywall`): one component for both entry points, the lock
+  (`showPaywall(false)`, the trial over) and the plans preview
+  (`showUpgrade()`, from Settings and the voices' limits); the legacy
+  Premium screen is gone. No card, no border. Sitting's gold behind the text
+  at the Guide's height, the atmosphere fixed under a scrolling column on
+  `--ink-0`, so nothing shows through from home. The wordmark in the serif,
+  the eyebrow beneath in the sans micro ("Your trial has ended" or "Still,
+  without limits" by entry point), the offer as two quiet rows
+  (`.pw-plan`), annual first and selected by default, one mark in the
+  candle on the chosen row, the plan name, its price and the saving; under
+  the annual row the year by the day. What they keep in the serif as plain
+  sentences, the audio note in the sans, one primary action carrying the
+  selected price. Beneath it "Have a code?", which opens a field in place;
+  Redeem hands the code to the Settings field and calls the same
+  `redeemPromoCode()`, whose message is mirrored back. Hidden on the native
+  app, as the Settings field is (Apple 3.1.1). Then the trial line (only on
+  the lock, from the trial constants), Restore purchases, Contact, Not now
+  (only on the preview) and Sign out as ghost links, then Privacy and Terms.
+  Delete account is not here; it lives in Settings. The prices are
+  `PAYWALL_PRICES` beside the trial constants, the one place the paywall
+  reads a price; `pwRender()` writes the rows, the saving (what twelve
+  months would cost against the year, rounded), the per-day line (the annual
+  price over 365, to the nearest cent) and the action, and `pwBill()` moves
+  the selection. `pwSubscribe()` still calls `startCheckout()` with
+  `annual` or `personal`; `restorePurchase()` and `signOut()` are the
+  calls they were.
+
 ### Hour palette
 
 | Hour | `--atmos-rgb` | Strength | Height |

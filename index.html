@@ -1216,29 +1216,6 @@ body.is-mobile #mobileEnterTab { display: block; }
     <p onclick="closeRequireAccount()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em;margin-top:12px">Not now</p>
   </div>
 </div>
-<div id="upgradeScreen" style="display:none;position:fixed;inset:0;background:rgba(4,4,14,.98);z-index:999;overflow-y:auto;padding:40px 24px;box-sizing:border-box;">
-  <div style="max-width:400px;margin:0 auto;text-align:center">
-    <p style="font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:8px">Still</p>
-    <p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(178,200,245,.5);text-transform:uppercase;margin-bottom:40px">Premium</p>
-
-    <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(220,230,255,.8);line-height:1.6;margin-bottom:32px">"You have heard one voice from the desert. There are more waiting."</p>
-
-    <div style="border:1px solid rgba(178,200,245,.12);padding:24px;margin-bottom:24px;text-align:left">
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(178,200,245,.5);text-transform:uppercase;margin-bottom:16px">What opens to you</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(200,215,255,.7);line-height:1.8;margin:0">
-      ✦ Amma Sophia -- 2× daily<br>
-        📖 Deeper -- 2× daily<br>
-        🌿 The Companion -- 3× weekly<br>
-      </p>
-    </div>
-
-    <button onclick="startCheckout()" style="width:100%;padding:16px;background:rgba(178,200,245,.12);border:1px solid rgba(178,200,245,.3);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-bottom:12px">
-      Begin for $9.99 / month ->
-    </button>
-
-    <p onclick="closeUpgrade()" style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.25);cursor:pointer;letter-spacing:.05em">Return to stillness</p>
-  </div>
-</div>
 <div id="phoneVerifyScreen" style="visibility:hidden;position:fixed;inset:0;background:rgba(4,4,14,.98);z-index:1000;display:flex;align-items:center;justify-content:center;padding:40px 24px;box-sizing:border-box;">
   <div style="max-width:360px;width:100%;text-align:center">
     <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:8px">One moment</p>
@@ -1265,69 +1242,144 @@ body.is-mobile #mobileEnterTab { display: block; }
 </div>
 </div>
 <!-- ═══════════════════════════════════════════
-     PAYWALL OVERLAY
-     Triggers after 30 days OR 20 sessions
+     PAYWALL -- one component, on the DESIGN.md tokens
+     Both entry points show this: the lock (showPaywall(false), the trial
+     over) and the plans preview (showUpgrade() -> showPaywall(true), from
+     Settings and the voices' limits). One copy set; only the eyebrow, the
+     trial line and Not now differ by entry point. Prices come from
+     PAYWALL_PRICES beside the trial constants, never from this markup;
+     pwRender() writes them. The purchase (pwSubscribe -> startCheckout),
+     restore (restorePurchase) and redeem (redeemPromoCode, through the
+     Settings field) calls are the ones they were.
 ═══════════════════════════════════════════ -->
-<div id="paywall" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(2,3,12,.94);overflow-y:auto;-webkit-overflow-scrolling:touch">
-  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 20px">
-    <div style="width:100%;max-width:420px">
+<div id="paywall" data-tokens style="display:none">
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
+  </div>
+  <div class="pw-col">
 
-      <div style="text-align:center;margin-bottom:28px">
-        <p id="paywallBadge" style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:rgba(200,146,12,.8);margin:0 0 10px">Your free trial has ended</p>
-        <h1 style="font-family:'Playfair Display',serif;font-size:38px;font-weight:400;font-style:italic;color:#fff;margin:0 0 8px">Still</h1>
-        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.5);margin:0">Continue your practice</p>
-      </div>
+    <div class="pw-wordmark">Still</div>
+    <div class="pw-eyebrow" id="paywallBadge">Your trial has ended</div>
 
-      <div style="max-width:360px;margin:0 auto">
-        <div style="background:rgba(200,146,12,.07);border:2px solid rgba(200,146,12,.5);padding:22px 22px;text-align:center">
-
-          <div style="display:flex;gap:6px;margin:0 0 20px">
-            <button id="pwTabMonthly" onclick="pwBill('monthly')" style="flex:1;padding:9px 4px;border-radius:9px;border:1px solid rgba(200,146,12,.8);background:rgba(200,146,12,.16);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;cursor:pointer">Monthly</button>
-            <button id="pwTabAnnual" onclick="pwBill('annual')" style="flex:1;padding:9px 4px;border-radius:9px;border:1px solid rgba(255,255,255,.16);background:none;color:rgba(255,255,255,.55);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;cursor:pointer">Annual · Save 25%</button>
-          </div>
-
-          <p id="pwPrice" style="font-family:'Playfair Display',serif;font-size:36px;font-style:italic;color:#fff;margin:0;line-height:1">$9.99</p>
-          <p id="pwPeriod" style="font-family:'Heebo',sans-serif;font-size:10px;color:rgba(255,255,255,.35);margin:4px 0 18px">per month</p>
-
-          <div style="border-top:1px solid rgba(200,146,12,.2);padding-top:16px;margin-bottom:20px;text-align:left">
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; All practices &amp; the Office</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; The Companion, Amma Sophia &amp; Deeper</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.6);margin:0 0 8px">✦&nbsp; Your spiritual autobiography</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.45);margin:0">✦&nbsp; Hear any voice aloud with audio credit -- pay only for what you play</p>
-          </div>
-
-          <button onclick="pwSubscribe()" style="width:100%;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.8);color:#e8c860;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:14px 4px;cursor:pointer">Subscribe -></button>
-        </div>
-      </div>
-
-      <p id="paywallTrialInfo" style="text-align:center;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);margin:18px 0 14px">Your trial included 14 days and 20 sessions of full access.</p>
-
-      <div style="text-align:center">
-        <button onclick="restorePurchase()" style="background:none;border:none;font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;text-decoration:underline;padding:4px 8px">Restore purchase</button>
-        <span style="color:rgba(255,255,255,.15);font-size:11px"> · </span>
-        <a href="mailto:info@stillprayer.app" style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);text-decoration:underline">Contact</a>
-      </div>
-
+    <!-- The offer: two quiet rows, annual first. pwRender() writes the prices, the saving and the per-day line. -->
+    <div class="pw-plans" role="group" aria-label="Plan">
+      <button type="button" class="pw-plan" id="pwPlanAnnual" onclick="pwBill('annual')" aria-pressed="true">
+        <span class="pw-plan-mark" aria-hidden="true"></span>
+        <span class="pw-plan-text"><span class="pw-plan-name">Annual</span><span class="pw-plan-note" id="pwSavingAnnual"></span></span>
+        <span class="pw-plan-price" id="pwPriceAnnual"></span>
+      </button>
+      <div class="pw-plan-day" id="pwPerDay"></div>
+      <button type="button" class="pw-plan" id="pwPlanMonthly" onclick="pwBill('monthly')" aria-pressed="false">
+        <span class="pw-plan-mark" aria-hidden="true"></span>
+        <span class="pw-plan-text"><span class="pw-plan-name">Monthly</span></span>
+        <span class="pw-plan-price" id="pwPriceMonthly"></span>
+      </button>
     </div>
+
+    <div class="pw-keep">Every practice and the Office. The Companion, Amma Sophia, and Deeper. Your spiritual autobiography.</div>
+    <div class="pw-audio">Hearing a voice aloud uses audio credit; you pay only for what you play.</div>
+
+    <button class="btn-primary gold btn-begin pw-cta" id="pwCta" onclick="pwSubscribe()">Continue</button>
+
+    <div class="pw-under">
+      <button type="button" class="pw-code-link" id="pwCodeLink" onclick="pwToggleCode()">Have a code?</button>
+      <div class="pw-code" id="pwCode" hidden>
+        <input id="pwCodeInput" class="pw-input" type="text" placeholder="Enter code" autocomplete="off" autocapitalize="characters">
+        <button type="button" class="btn-ghost" onclick="pwRedeem()">Redeem</button>
+      </div>
+      <div class="pw-msg" id="pwCodeMsg"></div>
+      <div class="pw-trial" id="paywallTrialInfo"></div>
+    </div>
+
+    <div class="pw-links">
+      <button type="button" class="btn-ghost" onclick="restorePurchase()">Restore purchases</button>
+      <a class="btn-ghost" href="mailto:info@stillprayer.app">Contact</a>
+      <button type="button" class="btn-ghost" id="pwNotNow" onclick="hidePaywall()">Not now</button>
+      <button type="button" class="btn-ghost" onclick="signOut()">Sign out</button>
+    </div>
+    <!-- Apple 3.1.2: privacy and terms wherever the subscription is offered -->
+    <div class="pw-legal">
+      <a href="https://stillprayer.app/privacy" target="_blank" rel="noopener">Privacy</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Terms</a>
+    </div>
+
   </div>
 </div>
 <script>
-  window._pwBilling = 'monthly';
+  /* The paywall's display logic. Prices are PAYWALL_PRICES (beside the trial
+     constants); nothing here purchases, restores or redeems on its own:
+     pwSubscribe() calls startCheckout(), pwRedeem() hands the code to the
+     Settings field and calls redeemPromoCode(). */
+  window._pwBilling = 'annual';
+  function pwMoney(n){ return '$' + Number(n).toFixed(2); }
   function pwBill(b){
     window._pwBilling = b;
-    var mo = (b === 'monthly');
-    var price = document.getElementById('pwPrice');
-    var period = document.getElementById('pwPeriod');
-    if (price)  price.textContent  = mo ? '$9.99' : '$89.99';
-    if (period) period.textContent = mo ? 'per month' : 'per year · $7.50/month';
-    var on  = {b:'1px solid rgba(200,146,12,.8)', bg:'rgba(200,146,12,.16)', c:'#e8c860'};
-    var off = {b:'1px solid rgba(255,255,255,.16)', bg:'none', c:'rgba(255,255,255,.55)'};
-    function sty(el,s){ if(!el) return; el.style.border=s.b; el.style.background=s.bg; el.style.color=s.c; }
-    sty(document.getElementById('pwTabMonthly'), mo?on:off);
-    sty(document.getElementById('pwTabAnnual'),  mo?off:on);
+    var annual = (b === 'annual');
+    var pa = document.getElementById('pwPlanAnnual'), pm = document.getElementById('pwPlanMonthly');
+    if (pa) pa.setAttribute('aria-pressed', annual ? 'true' : 'false');
+    if (pm) pm.setAttribute('aria-pressed', annual ? 'false' : 'true');
+    var cta = document.getElementById('pwCta');
+    var P = window.PAYWALL_PRICES || (typeof PAYWALL_PRICES !== 'undefined' ? PAYWALL_PRICES : null);
+    if (cta && P) cta.textContent = annual ? ('Continue for ' + pwMoney(P.annual) + ' a year') : ('Continue for ' + pwMoney(P.monthly) + ' a month');
   }
   function pwSubscribe(){
     startCheckout(window._pwBilling === 'annual' ? 'annual' : 'personal');
+  }
+  /* Called by showPaywall(). preview: the plans surface (dismissible); not preview: the lock. */
+  function pwRender(preview){
+    var P = window.PAYWALL_PRICES || (typeof PAYWALL_PRICES !== 'undefined' ? PAYWALL_PRICES : null);
+    if (P) {
+      var el = function(id){ return document.getElementById(id); };
+      if (el('pwPriceAnnual'))  el('pwPriceAnnual').textContent  = pwMoney(P.annual) + ' a year';
+      if (el('pwPriceMonthly')) el('pwPriceMonthly').textContent = pwMoney(P.monthly) + ' a month';
+      // the real saving, from the two prices: what twelve months would cost against the year
+      var pct = Math.round(100 * (1 - P.annual / (12 * P.monthly)));
+      if (el('pwSavingAnnual')) el('pwSavingAnnual').textContent = pct > 0 ? ('Save ' + pct + '%') : '';
+      // the year by the day, from the same price the row shows, to the nearest cent
+      var cents = Math.round(P.annual / 365 * 100);
+      if (el('pwPerDay')) el('pwPerDay').textContent = 'About ' + cents + '\u00A2 a day. Morning and evening prayer, the Office, and every practice, all year.';
+    }
+    pwBill(window._pwBilling === 'monthly' ? 'monthly' : 'annual');
+    var nn = document.getElementById('pwNotNow');
+    if (nn) nn.style.display = preview ? '' : 'none';
+    var ti = document.getElementById('paywallTrialInfo');
+    if (ti) {
+      var days = (typeof PAYWALL_DAYS !== 'undefined') ? PAYWALL_DAYS : null;
+      var sess = (typeof PAYWALL_SESSIONS !== 'undefined') ? PAYWALL_SESSIONS : null;
+      ti.textContent = (!preview && days && sess) ? ('Your trial included ' + days + ' days and ' + sess + ' sessions.') : '';
+    }
+    /* Apple 3.1.1: no code entry on the native app, as Settings hides its promo field there */
+    var native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+    var cl = document.getElementById('pwCodeLink'), cf = document.getElementById('pwCode');
+    if (cl) cl.style.display = native ? 'none' : '';
+    if (native && cf) cf.hidden = true;
+    pwMirrorMsg();
+    var pw = document.getElementById('paywall');
+    if (pw) pw.scrollTop = 0;
+  }
+  function pwToggleCode(){
+    var f = document.getElementById('pwCode'); if (!f) return;
+    f.hidden = !f.hidden;
+    if (!f.hidden) { var i = document.getElementById('pwCodeInput'); if (i) setTimeout(function(){ i.focus(); }, 50); }
+  }
+  /* The one redeem path: the Settings field and redeemPromoCode(), which reads it and
+     writes #promoMsg. The message is mirrored here as it changes. */
+  function pwRedeem(){
+    var src = document.getElementById('pwCodeInput'), dst = document.getElementById('promoCodeInput');
+    if (dst && src) dst.value = src.value;
+    if (typeof redeemPromoCode === 'function') redeemPromoCode();
+  }
+  /* The Settings field is later in the document than this script, so the mirror is hooked on first render. */
+  function pwMirrorMsg(){
+    var from = document.getElementById('promoMsg'), to = document.getElementById('pwCodeMsg');
+    if (!from || !to || from._pwMirrored || !window.MutationObserver) return;
+    from._pwMirrored = true;
+    to.textContent = from.textContent;
+    new MutationObserver(function(){ to.textContent = from.textContent; }).observe(from, { childList: true, characterData: true, subtree: true });
   }
 </script>
 
@@ -4602,6 +4654,68 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #settingsModal .st-delete-btn{background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);}
 #settingsModal .st-delete-btn:hover{color:rgba(255,140,116,1);}
 #settingsModal .st-delete-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-faint);margin-top:var(--s-1);}
+
+/* ═══════════════════════════════════════════
+   PAYWALL -- one component, on the DESIGN.md tokens
+   No card, no border. Sitting's gold behind the text at the Guide's height,
+   the atmosphere fixed under a scrolling column, on --ink-0 so nothing shows
+   through from home. The wordmark in the serif, the eyebrow in the sans
+   micro, two quiet plan rows with one mark in the candle, what they keep in
+   the serif, the audio note in the sans, one primary action carrying the
+   price, the code field and the trial line beneath it, then the ghost links
+   and the legal line.
+═══════════════════════════════════════════ */
+#paywall{position:fixed;inset:0;z-index:9500;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
+  --atmos-rgb:205,155,10;--atmos-a:.92;--atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;}
+#paywall .atmos{position:fixed;}
+#paywall .pw-col{position:relative;z-index:1;max-width:var(--measure-read);margin:0 auto;min-height:100%;box-sizing:border-box;
+  display:flex;flex-direction:column;justify-content:center;text-align:center;
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));}
+#paywall .pw-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;}
+#paywall .pw-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);margin:var(--s-2) 0 var(--s-6);}
+
+/* The offer */
+#paywall .pw-plans{text-align:left;}
+#paywall .pw-plan{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:var(--s-3);width:100%;padding:var(--s-4) 0;
+  background:none;border:0;border-top:1px solid var(--line);cursor:pointer;color:var(--text-mid);text-align:left;transition:color var(--d-base);}
+#paywall .pw-plan:last-child{border-bottom:1px solid var(--line);}
+#paywall .pw-plan-mark{width:8px;height:8px;border-radius:50%;border:1px solid var(--line-strong);transition:background var(--d-base),box-shadow var(--d-base);}
+#paywall .pw-plan[aria-pressed="true"]{color:var(--text-hi);}
+#paywall .pw-plan[aria-pressed="true"] .pw-plan-mark{background:var(--candle);border-color:var(--candle);box-shadow:0 0 10px rgba(242,199,119,.6);}
+#paywall .pw-plan-text{display:flex;flex-direction:column;gap:2px;min-width:0;}
+#paywall .pw-plan-name{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-snug);}
+#paywall .pw-plan-note{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-low);}
+#paywall .pw-plan-note:empty{display:none;}
+#paywall .pw-plan-price{font-family:var(--font-sans);font-size:var(--t-sm);font-variant-numeric:tabular-nums;white-space:nowrap;}
+#paywall .pw-plan-day{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);padding:0 0 var(--s-4) calc(8px + var(--s-3));text-wrap:pretty;}
+#paywall .pw-plan-day:empty{display:none;}
+
+/* What they keep, the audio note, the action */
+#paywall .pw-keep{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);margin:var(--s-6) 0 var(--s-3);text-wrap:pretty;}
+#paywall .pw-audio{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);text-wrap:pretty;}
+#paywall .pw-cta{margin-top:var(--s-6);}
+
+/* Beneath: the code, the trial line */
+#paywall .pw-under{margin-top:var(--s-4);}
+#paywall .pw-code-link{background:none;border:0;padding:6px 0;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-low);text-decoration:underline;text-underline-offset:3px;}
+#paywall .pw-code-link:hover{color:var(--text-mid);}
+#paywall .pw-code{display:flex;align-items:center;gap:var(--s-3);max-width:20rem;margin:var(--s-3) auto 0;}
+#paywall .pw-code[hidden]{display:none;}
+#paywall .pw-input{flex:1 1 auto;min-width:0;box-sizing:border-box;padding:8px 10px;outline:none;text-transform:uppercase;letter-spacing:.06em;
+  background:rgba(255,246,232,.04);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);font-family:var(--font-sans);font-size:var(--t-base);} /* --t-base keeps iOS from zooming */
+#paywall .pw-input::placeholder{color:var(--text-faint);text-transform:none;letter-spacing:0;}
+#paywall .pw-input:focus{border-color:var(--gold-a55);}
+#paywall .pw-msg{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--gold);margin-top:var(--s-2);}
+#paywall .pw-msg:empty{display:none;}
+#paywall .pw-trial{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--s-3);}
+#paywall .pw-trial:empty{display:none;}
+
+/* The links */
+#paywall .pw-links{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--s-2) var(--s-5);margin-top:var(--s-6);}
+#paywall .pw-links .btn-ghost{padding:6px 0;text-decoration:none;}
+#paywall .pw-legal{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-faint);margin-top:var(--s-5);}
+#paywall .pw-legal a{color:var(--text-faint);text-decoration:underline;text-underline-offset:3px;padding:4px 6px;}
+#paywall .pw-legal a:hover{color:var(--text-mid);}
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
@@ -13122,6 +13236,10 @@ function enterFromSacristy() {
 
 const PAYWALL_DAYS     = 14;
 const PAYWALL_SESSIONS = 20;
+// USD, as the plans surface shows them. The one place the paywall reads a price;
+// Stripe and RevenueCat carry their own on their side.
+const PAYWALL_PRICES   = { monthly: 9.99, annual: 89.99 };
+window.PAYWALL_PRICES = PAYWALL_PRICES;
 const PARISH_EMAIL     = 'admin@stillprayer.app';
 
 const PW_START_KEY    = 'still_trial_start';
@@ -13255,52 +13373,9 @@ function hidePaywall() {
 // preview falsy      -> enforced, "ended" wording, no dismiss (the lock)
 function showPaywall(preview) {
   const badge = document.getElementById('paywallBadge');
-  if (badge) {
-    badge.textContent = preview
-      ? ("You're on the free trial \u2014 " + Math.ceil(getTrialDaysLeft()) + " days left")
-      : "Your free trial has ended";
-  }
-
- const pw = document.getElementById('paywall');
-  let dismiss = document.getElementById('pwDismiss');
-  if (!dismiss && pw) {
-    dismiss = document.createElement('button');
-    dismiss.id = 'pwDismiss';
-    dismiss.textContent = 'Keep exploring \u2715';
-    dismiss.onclick = hidePaywall;
-    dismiss.style.cssText = "position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);right:16px;z-index:9600;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);font-family:'Heebo',sans-serif;font-size:12px;padding:10px 16px;border-radius:20px;cursor:pointer";
-    pw.appendChild(dismiss);
-  }
-  if (dismiss) dismiss.style.display = preview ? 'block' : 'none';
-
-  // Legal links: Apple 3.1.2 requires functional Privacy Policy + Terms links
-  // wherever the subscription is offered. Shown in BOTH preview and lock modes.
-  let legal = document.getElementById('pwLegal');
-  if (!legal && pw) {
-    legal = document.createElement('div');
-    legal.id = 'pwLegal';
-    legal.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 48px);left:0;right:0;z-index:9600;text-align:center;font-family:'Heebo',sans-serif;font-size:11px";
-    legal.innerHTML =
-      '<a href="https://stillprayer.app/privacy" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:underline;padding:6px 8px">Privacy Policy</a>' +
-      '<span style="color:rgba(255,255,255,.25)">\u00B7</span>' +
-      '<a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" style="color:rgba(255,255,255,.4);text-decoration:underline;padding:6px 8px">Terms of Use</a>';
-    pw.appendChild(legal);
-  }
-  if (legal) legal.style.display = 'block';
-
-  // Escape hatch: expired-trial users must always be able to sign out or delete their account
-  let escape = document.getElementById('pwEscape');
-  if (!escape && pw) {
-    escape = document.createElement('div');
-    escape.id = 'pwEscape';
-    escape.style.cssText = "position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);left:0;right:0;z-index:9600;text-align:center";
-    escape.innerHTML =
-      '<button onclick="signOut()" style="background:none;border:none;color:rgba(255,255,255,.45);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Sign out</button>' +
-      '<button onclick="paywallOpenSettings()" style="background:none;border:none;color:rgba(255,120,110,.6);font-family:\'Heebo\',sans-serif;font-size:12px;cursor:pointer;padding:8px 12px;text-decoration:underline">Delete my account</button>';
-    pw.appendChild(escape);
-  }
-  if (escape) escape.style.display = preview ? 'none' : 'block';
-
+  if (badge) badge.textContent = preview ? 'Still, without limits' : 'Your trial has ended';
+  if (typeof pwRender === 'function') pwRender(!!preview);
+  const pw = document.getElementById('paywall');
   if (pw) pw.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
@@ -15858,7 +15933,7 @@ function restorePurchases() {
 }
 
 function closeUpgrade() {
-  document.getElementById('upgradeScreen').style.display = 'none';
+  const u = document.getElementById('upgradeScreen'); if (u) u.style.display = 'none'; // the legacy screen is gone; the paywall is the one surface
 }
 
 async function startCheckout(tier) {
