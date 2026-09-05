@@ -119,6 +119,8 @@ without it.
 | Rule of Life | 8,120,32 | forest | .88 | 50% / 36%, behind the text |
 | Rosary Meditations | 192,28,172 | violet | .88 | 50% / 36%, behind the text |
 | Spiritual Autobiography | 70,8,152 | purple | .90 | 50% / 36%, behind the text |
+| The Companion | 6,34,98 | navy | .80 | 50% / 36%, behind the text |
+| Deeper | 120,148,200 | softer blue | .55 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
 not change with the hue.
@@ -455,6 +457,38 @@ button stops breathing.
   attributed), and on a free Saturday in Ordinary Time the memorial of the
   Blessed Virgin Mary. The old "A Day of Ordinary Time" fallback and its
   unattributed quotation are gone.
+
+- **The voices (the Companion, Deeper)**: one pattern, one voice each. No
+  card, no ring; the light sits behind the text at the Guide's height. Three
+  states on the `.companion-state` panels the ask functions already toggle.
+  The opening: the voice's mark (`.voice-mark`, the cross in gold), its name
+  (`.voice-name`, sans micro) and its line (`.voice-line`, serif italic), the
+  prompt in the serif at `--t-md` with no quotation marks (`.voice-prompt`:
+  the voice is speaking), the textarea (`.voice-write`, serif italic at
+  `--t-base`, a hairline frame, `!important`s against the global
+  `.companion-textarea` rule it still carries for the Autobiography's sake),
+  and the action row (`.voice-actions`) with the remaining line beside the
+  button in the sans at micro size, sentence case so it holds to two lines at
+  390px (`.voice-remaining`, the Companion's own weekly count; Deeper keeps
+  no count, so its slot is empty). The writing: the figure recedes. The
+  answer: a reading surface, the source as a gold micro label
+  (`.voice-source`), the reply in the serif at reading measure
+  (`.voice-reply`), the invitation beneath a hairline (`.voice-invitation`),
+  then Hear response and the follow-ups stacked in `.voice-after`. Each
+  voice's photograph is its threshold, kept as the same file: one
+  `.atmos-photo` layer between the flame and the grain, graded toward the
+  hue and quieted, standing in the lower half of the frame (`height:52%`, its
+  top dissolving through a mask) so the input never sits over a face at
+  390px, and shown only while the opening is on screen with nothing yet
+  written: a `:has()` rule on the panel's `.active` and the textarea's
+  `:placeholder-shown:not(:focus)`, so typing or taking up the textarea
+  starts the one slow fade (`--d-veil`) and no logic changed. Both prompts
+  carry their em dash and curled apostrophe in the markup, since no save
+  reads them. The old `.companion-*` stylesheet is retired except the state
+  contract (Sitting's panels use it) and the textarea rule; the mobile
+  block's `.companion-wrap p` and `#cResponseText`/`#dResponseText` lines
+  are gone. The requests, the feature keys, the limits and their display
+  logic, the digest, the playback and the saves are unchanged.
 
 ### Hour palette
 
