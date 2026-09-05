@@ -1243,10 +1243,11 @@ body.is-mobile #mobileEnterTab { display: block; }
 </div>
 <!-- ═══════════════════════════════════════════
      PAYWALL -- one component, on the DESIGN.md tokens
-     Both entry points show this: the lock (showPaywall(false), the trial
-     over) and the plans preview (showUpgrade() -> showPaywall(true), from
-     Settings and the voices' limits). One copy set; only the eyebrow, the
-     trial line and Not now differ by entry point. Prices come from
+     Both entry points show this: the door (enterFeature() -> showPaywall(),
+     a premium practice tapped after the trial) and the plans preview
+     (showUpgrade(), from Settings and the voices' limits). One copy set; only
+     the eyebrow and the trial line follow the trial's state. Not now is
+     always there; nothing shows at launch. Prices come from
      PAYWALL_PRICES beside the trial constants, never from this markup;
      pwRender() writes them. The purchase (pwSubscribe -> startCheckout),
      restore (restorePurchase) and redeem (redeemPromoCode, through the
@@ -1329,8 +1330,8 @@ body.is-mobile #mobileEnterTab { display: block; }
   function pwSubscribe(){
     startCheckout(window._pwBilling === 'annual' ? 'annual' : 'personal');
   }
-  /* Called by showPaywall(). preview: the plans surface (dismissible); not preview: the lock. */
-  function pwRender(preview){
+  /* Called by showPaywall(). over: the trial has ended (the trial line shows). Not now is always there. */
+  function pwRender(over){
     var P = window.PAYWALL_PRICES || (typeof PAYWALL_PRICES !== 'undefined' ? PAYWALL_PRICES : null);
     if (P) {
       var el = function(id){ return document.getElementById(id); };
@@ -1344,12 +1345,10 @@ body.is-mobile #mobileEnterTab { display: block; }
       if (el('pwPerDay')) el('pwPerDay').textContent = 'About ' + cents + '\u00A2 a day. Morning and evening prayer, the Office, and every practice, all year.';
     }
     pwBill(window._pwBilling === 'monthly' ? 'monthly' : 'annual');
-    var nn = document.getElementById('pwNotNow');
-    if (nn) nn.style.display = preview ? '' : 'none';
     var ti = document.getElementById('paywallTrialInfo');
     if (ti) {
       var days = (typeof PAYWALL_DAYS !== 'undefined') ? PAYWALL_DAYS : null;
-      ti.textContent = (!preview && days) ? ('Your trial included ' + days + ' days.') : '';
+      ti.textContent = (over && days) ? ('Your trial included ' + days + ' days.') : '';
     }
     /* Apple 3.1.1: no code entry on the native app, as Settings hides its promo field there */
     var native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
@@ -5974,10 +5973,14 @@ function homeActivate(i){
   if(IS_MOBILE) showDoor(i);
 }
 
+// Open after the trial: these never show the paywall.
+const TRIAL_FREE_SCREENS = ['sitting', 'saint'];
+// The paywall at every premium door after the trial, always dismissable:
+// Not now returns home, where the person never left. Never at launch.
 function enterFeature(i){
-  // Check paywall before entering any feature
-  if (F[i].screen==='witnesses') { showScreen('witnesses', i); initWitnesses(); return; }
-  if (shouldShowPaywall()) { showPaywall(); return; }
+  const screen = F[i].screen;
+  if (shouldShowPaywall() && TRIAL_FREE_SCREENS.indexOf(screen) === -1) { showPaywall(); return; }
+  if (screen==='witnesses') { showScreen('witnesses', i); initWitnesses(); return; }
   if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if (F[i].screen === 'paths') { Paths.open(); return; }
   if (F[i].screen === 'center') { Paths.open(); Paths.centerHome(); return; }
@@ -12420,14 +12423,6 @@ function showNightWatch(){
 }
 // Console access for testing: window.previewNightWatch = showNightWatch
 window.previewNightWatch = showNightWatch;
-window.stillResetTrial = function() {
-  localStorage.removeItem('still_trial_count');
-  localStorage.removeItem('still_subscribed');
-  localStorage.removeItem('still_trial_start');
-  localStorage.removeItem('still_trial_sessions');
-  console.log('Trial reset. Refresh the page.');
-};
-if (location.search.indexOf('resetTrial') !== -1) { stillResetTrial(); location.href = location.pathname; }
 
 
 /* ═══════════════════════════════════════════
@@ -13387,7 +13382,6 @@ const PW_PAID_KEY     = 'still_paid';
 const PW_PLAN_KEY     = 'still_plan';
 const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_status
 const PW_TRIAL_EXT_KEY = 'still_trial_ext';    // cached profiles.trial_extended_until
-const PW_PREVIEW_KEY  = 'still_preview_shown';  // which preview milestones have fired
 const PW_TERMS_KEY    = 'still_trial_terms_shown'; // the trial start the terms screen was shown for
 const PW_REMINDER_KEY = 'still_trial_reminder_shown'; // the trial start the one reminder was shown for
 const PAYWALL_REMIND_DAYS = 3;  // the reminder shows when this many days or fewer remain
@@ -13517,23 +13511,20 @@ function hidePaywall() {
 }
 // preview === true  -> dismissible, trial-day wording (shown DURING the trial)
 // preview falsy      -> enforced, "ended" wording, no dismiss (the lock)
+// One paywall, always dismissable with Not now. The argument is what callers
+// have always passed (showUpgrade sends true); the copy now follows the state:
+// "Your trial has ended" once the trial is over, "Still, without limits" before.
 function showPaywall(preview) {
+  const over = (typeof shouldShowPaywall === 'function') && shouldShowPaywall();
   const badge = document.getElementById('paywallBadge');
-  if (badge) badge.textContent = preview ? 'Still, without limits' : 'Your trial has ended';
-  if (typeof pwRender === 'function') pwRender(!!preview);
+  if (badge) badge.textContent = over ? 'Your trial has ended' : 'Still, without limits';
+  if (typeof pwRender === 'function') pwRender(over);
   const pw = document.getElementById('paywall');
   if (pw) pw.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
 
-
-// Gently show the PREVIEW a few times across the trial -- never on launch one,
-// never twice for the same milestone, never once subscribed or once locked.
-// DISABLED: trial reminders removed -- status shown passively in Settings instead.
-function maybeShowTrialPreview() {
-  return;
-}
 
 /* ---------- restore / parish ---------- */
 
@@ -13641,10 +13632,11 @@ window.stillResetTrial = function() {
   localStorage.removeItem(PW_START_KEY);
   localStorage.removeItem(PW_PAID_KEY);
   localStorage.removeItem(PW_SUB_KEY);
-  localStorage.removeItem(PW_PREVIEW_KEY);
   window._subStatus = null;
   console.log('Trial reset. Refresh the page.');
 };
+// ?resetTrial in the URL resets and reloads (moved here from the Night Watch, beside the one definition)
+if (location.search.indexOf('resetTrial') !== -1) { stillResetTrial(); location.href = location.pathname; }
 
 function checkOnboarding() {
   if (!localStorage.getItem('still_onboarded')) {
@@ -13653,14 +13645,13 @@ function checkOnboarding() {
   }
 }
 
-/* ---------- startup: confirm subscription, then preview-or-enforce ---------- */
+/* ---------- startup: confirm the subscription in the background ----------
+   Nothing is shown at launch. The app opens to home; the paywall waits at the
+   door of a premium practice (enterFeature). */
 (function () {
   function go() {
     if (!localStorage.getItem('still_onboarded')) return; // don't interrupt onboarding
-    refreshSubscription().then(() => {
-      if (shouldShowPaywall()) showPaywall(false);  // trial already over -> lock
-      else maybeShowTrialPreview();                 // still in trial -> maybe a gentle preview
-    });
+    refreshSubscription();   // the cache the gate reads
   }
   let n = 0;
   const t = setInterval(() => {
@@ -13988,87 +13979,6 @@ async function restorePurchases() {
     if (btn) { btn.textContent = 'Restore Purchases'; btn.disabled = false; }
   }
 }
-// ─── Day-30 discount trigger ─────────────────────────────────────────────
-// Call this on app load. If user has been using Still for 30+ days
-// without subscribing, surface the discount offer once.
- 
-function checkDay30Discount() {
-  const onboardedDate = localStorage.getItem('still_onboarded_date');
-  const dismissed = localStorage.getItem('still_discount_dismissed');
-  const subscribed = localStorage.getItem('still_subscribed'); // set this when Stripe confirms
- 
-  if (!onboardedDate || dismissed || subscribed) return;
- 
-  const days = Math.floor((Date.now() - new Date(onboardedDate)) / 86400000);
-  if (days >= 30) {
-    showDiscountOffer();
-  }
-}
- 
-function showDiscountOffer() {
-  // Only show once
-  if (document.getElementById('still-discount-modal')) return;
- 
-  const modal = document.createElement('div');
-  modal.id = 'still-discount-modal';
-  modal.style.cssText = `
-    position:fixed;inset:0;z-index:9500;
-    display:flex;align-items:flex-end;justify-content:center;
-    background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-    animation:fadeIn .3s ease;
-  `;
-  modal.innerHTML = `
-    <style>
-      @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
-      @keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
-    </style>
-    <div style="
-      background:#0a0812;border:1px solid rgba(200,146,12,.25);
-      border-bottom:none;padding:36px 28px max(36px,env(safe-area-inset-bottom));
-      max-width:480px;width:100%;
-      animation:slideUp .4s cubic-bezier(.16,1,.3,1);
-    ">
-      <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:14px;text-align:center">Before you go</p>
-      <h3 style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,28px);font-weight:700;font-style:italic;color:#fff;text-align:center;margin-bottom:10px;line-height:1.1">Thirty days of Still.</h3>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.48);text-align:center;line-height:1.7;margin-bottom:28px">You have prayed, sat in silence, and kept returning. As a welcome, here is a quieter way in.</p>
- 
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px">
-        <button onclick="handleDiscount('premium')" style="padding:16px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:rgba(200,146,12,.1);border:1px solid rgba(200,146,12,.4);color:#f0c040;cursor:pointer;text-align:left;transition:all .2s">
-          <span style="display:block;font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#fff;margin-bottom:3px;letter-spacing:0;text-transform:none">Premium -- 3 months for $14.99</span>
-          <span style="color:rgba(200,146,12,.55)">Then $9.99 / month · Companion, Amma Sophia & Deeper</span>
-        </button>
-        <button onclick="handleDiscount('contemplative')" style="padding:16px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;background:rgba(200,146,12,.06);border:1px solid rgba(200,146,12,.25);color:#f0c040;cursor:pointer;text-align:left;transition:all .2s">
-          <span style="display:block;font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#fff;margin-bottom:3px;letter-spacing:0;text-transform:none">Contemplative -- 3 months for $29.99</span>
-          <span style="color:rgba(200,146,12,.45)">Then $39.99 / month · Everything, including audio</span>
-        </button>
-      </div>
- 
-      <button onclick="dismissDiscount()" style="width:100%;padding:11px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;background:none;border:none;color:rgba(255,255,255,.22);cursor:pointer">
-        Not now
-      </button>
-    </div>
-  `;
-  document.body.appendChild(modal);
-}
- 
-function dismissDiscount() {
-  localStorage.setItem('still_discount_dismissed', '1');
-  const modal = document.getElementById('still-discount-modal');
-  if (modal) modal.remove();
-}
- 
-function handleDiscount(tier) {
-  dismissDiscount();
-  // Route to your Stripe checkout with the discounted price ID
-  // Replace these URLs with your actual Stripe payment links
-  if (tier === 'premium') {
-    window.location.href = '/checkout?plan=premium_3mo_discount';
-  } else {
-    window.location.href = '/checkout?plan=contemplative_3mo_discount';
-  }
-}
- 
-
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- dynamic rendering
 ═══════════════════════════════════════════ */

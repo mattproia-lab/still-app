@@ -597,7 +597,19 @@ button stops breathing.
   in `still_trial_reminder_shown` the moment it shows, so leaving the screen
   is the dismissal; never during a practice, never on home, never while a
   code's extension holds. Set `daysLeft` to 3 and finish a sitting to see
-  it; clear the key to see it again.
+  it; clear the key to see it again. After the trial the app still opens to
+  home with no interstitial: the launch lock is gone and the startup block
+  only refreshes the subscription cache. `enterFeature()` is the one gate:
+  Contemplative Sitting and Saint of the Day (`TRIAL_FREE_SCREENS`) open
+  without a paywall; every other practice and voice shows it at its door,
+  every time, always dismissable. Not now hides it and the person is on
+  home, where they never left; never at launch.
+  `showPaywall()` now reads the state for its copy ("Your trial has ended"
+  once over, "Still, without limits" before) and always offers Not now; the
+  argument callers pass is kept but no longer decides anything. The Day-30
+  discount code and the shadowed trial reset at the Night Watch are deleted;
+  `?resetTrial` in the URL still resets, beside the one definition. Set
+  `daysLeft` to 0 and tap a practice to see the door.
 
 ### Hour palette
 
