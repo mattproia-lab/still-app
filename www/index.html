@@ -13992,8 +13992,23 @@ function escapeHtml(s) {
 ═══════════════════════════════════════════ */
 
 // Get current liturgical season
+/* The Office's five seasons, read from the liturgical calendar when this
+   year's file is in hand (Liturgy, the calendar Saint of the Day reads), and
+   computed from the boundaries below when it is not. The calendar's seven
+   seasons map onto the five the Office texts are keyed by: Holy Week and the
+   Triduum into lent, Christmastide (which runs through the Baptism of the
+   Lord) into christmas, the two blocks of Ordinary Time into ordinary. */
+const SEASON_FROM_CALENDAR = { advent: 'advent', christmas: 'christmas', lent: 'lent', holy_week: 'lent',
+                               triduum: 'lent', easter: 'easter', ordinary_time: 'ordinary' };
 function getLiturgicalSeason() {
   const now = new Date();
+  const day = (typeof Liturgy !== 'undefined') ? Liturgy.dayFor(now) : null;
+  if (day && SEASON_FROM_CALENDAR[day.season]) return SEASON_FROM_CALENDAR[day.season];
+  return computeLiturgicalSeason(now);
+}
+
+function computeLiturgicalSeason(now) {
+  now = now || new Date();
   const y = now.getFullYear();
   // MMDD with a 1-based month. getMonth() is 0-based, so every date compared
   // against the boundaries below has to go through this helper -- comparing a
