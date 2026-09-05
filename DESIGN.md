@@ -570,6 +570,26 @@ button stops breathing.
   `annual` or `personal`; `restorePurchase()` and `signOut()` are the
   calls they were.
 
+- **Trial**: days alone. `PAYWALL_DAYS` (14) from the first open, the start
+  in `still_trial_start`; the session limit and its counter are gone
+  (`PW_SESSIONS_KEY` stays defined only because `redeemPromoCode()` still
+  resets it). `trialIsOver()` is days-left-zero, lifted while a redeemed
+  code's `trial_extended_until` is in the future. The terms are said once
+  (`#trialTerms`): one screen over home on the tokens, the wordmark, the
+  terms in the serif with the number written from `PAYWALL_DAYS`, Begin.
+  Its script shows it the first time home is active for a trial that began
+  within the last day, records the start it was shown for in
+  `still_trial_terms_shown`, and calls nothing. Under Account in Settings
+  one line, "Trial · n days left", "Trial · extended" or "Trial · ended",
+  painted from `getTrialDaysLeft()` and hidden once subscribed. Dev
+  override: `localStorage.still_trial_debug = '{"daysLeft": 3}'` makes
+  `getTrialDaysLeft()` return that number; it is read only when set and
+  never for a subscriber (`trialDebug()` checks `isSubscribed()` first), and
+  a `sittingsLeft` field is ignored. To walk a trial on the preview with a
+  throwaway account: set `daysLeft` to 14 to see the terms (they show for a
+  trial that began within the last day), then lower it; clear
+  `still_trial_terms_shown` to see the terms again.
+
 ### Hour palette
 
 | Hour | `--atmos-rgb` | Strength | Height |

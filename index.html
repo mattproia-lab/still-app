@@ -1349,8 +1349,7 @@ body.is-mobile #mobileEnterTab { display: block; }
     var ti = document.getElementById('paywallTrialInfo');
     if (ti) {
       var days = (typeof PAYWALL_DAYS !== 'undefined') ? PAYWALL_DAYS : null;
-      var sess = (typeof PAYWALL_SESSIONS !== 'undefined') ? PAYWALL_SESSIONS : null;
-      ti.textContent = (!preview && days && sess) ? ('Your trial included ' + days + ' days and ' + sess + ' sessions.') : '';
+      ti.textContent = (!preview && days) ? ('Your trial included ' + days + ' days.') : '';
     }
     /* Apple 3.1.1: no code entry on the native app, as Settings hides its promo field there */
     var native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
@@ -1381,6 +1380,70 @@ body.is-mobile #mobileEnterTab { display: block; }
     to.textContent = from.textContent;
     new MutationObserver(function(){ to.textContent = from.textContent; }).observe(from, { childList: true, characterData: true, subtree: true });
   }
+</script>
+
+<!-- ═══════════════════════════════════════════
+     TRIAL TERMS -- said once, when a trial begins (DESIGN.md, Trial)
+     One screen on the tokens over home: the wordmark, the terms in the
+     serif with the number from PAYWALL_DAYS, one action. The script shows it
+     the first time home is active for a trial that began within the last
+     day, records the trial start it was shown for, and calls nothing else.
+═══════════════════════════════════════════ -->
+<div id="trialTerms" data-tokens hidden>
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
+  </div>
+  <div class="tt-col">
+    <div class="tt-wordmark">Still</div>
+    <div class="tt-eyebrow">Your trial</div>
+    <div class="tt-text" id="trialTermsText"></div>
+    <button class="btn-primary gold btn-begin tt-begin" onclick="trialTermsBegin()">Begin</button>
+  </div>
+</div>
+<script>
+  (function () {
+    var WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty','twenty-one','twenty-two','twenty-three','twenty-four','twenty-five','twenty-six','twenty-seven','twenty-eight','twenty-nine','thirty'];
+    function word(n) { return (n >= 0 && n < WORDS.length && n === Math.floor(n)) ? WORDS[n] : String(n); }
+    var shown = false;
+    function due() {
+      try {
+        if (!localStorage.getItem('still_onboarded')) return false;
+        if (typeof isSubscribed !== 'function' || isSubscribed()) return false;
+        if (typeof trialIsOver !== 'function' || trialIsOver()) return false;
+        var start = localStorage.getItem('still_trial_start') || '';
+        if (localStorage.getItem('still_trial_terms_shown') === start) return false;   // already said, for this trial
+        // a trial that began within the last day: never for someone already days in
+        if (typeof getTrialDaysLeft !== 'function' || getTrialDaysLeft() < PAYWALL_DAYS - 1) return false;
+        var auth = document.getElementById('authOverlay');
+        if (auth && getComputedStyle(auth).display !== 'none') return false;
+        var ob = document.getElementById('screen-onboarding');
+        if (ob && getComputedStyle(ob).display !== 'none') return false;
+        return true;
+      } catch (e) { return false; }
+    }
+    function show() {
+      var el = document.getElementById('trialTerms');
+      if (!el || shown) return;
+      var t = document.getElementById('trialTermsText');
+      if (t) t.textContent = 'Everything is open for ' + word(PAYWALL_DAYS) + ' days. No card, no reminder until it\u2019s nearly over.';
+      shown = true;
+      el.hidden = false;
+      try { localStorage.setItem('still_trial_terms_shown', localStorage.getItem('still_trial_start') || '1'); } catch (e) {}
+    }
+    window.trialTermsBegin = function () { var el = document.getElementById('trialTerms'); if (el) el.hidden = true; };
+    /* home is later in the document than this script, so the watch is armed once the DOM is parsed */
+    function arm() {
+      var home = document.getElementById('home');
+      if (!home || !window.MutationObserver) return;
+      var check = function () { if (home.classList.contains('active')) setTimeout(function () { if (due()) show(); }, 900); };
+      new MutationObserver(check).observe(home, { attributes: true, attributeFilter: ['class'] });
+      check();
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+  })();
 </script>
 
 <!-- ═══════════════════════════════════════════
@@ -3140,6 +3203,11 @@ body.is-mobile #mobileEnterTab { display: block; }
           </div>
         </div>
 
+        <!-- The trial, from the counter the gate reads; hidden once subscribed -->
+        <div class="st-row" id="settingsTrialRow" hidden>
+          <div class="st-value" id="settingsTrial"></div>
+        </div>
+
         <div class="st-row st-row-stack">
           <div class="st-row-text">
             <div class="st-label">Subscription</div>
@@ -3374,6 +3442,20 @@ body.is-mobile #mobileEnterTab { display: block; }
         m.setAttribute('data-signed-in', email ? 'true' : 'false');
         var v = document.getElementById('settingsVersion');
         if (v) v.textContent = VERSION;
+        /* The trial line, read from the same counter the gate reads */
+        var tr = document.getElementById('settingsTrialRow'), tv = document.getElementById('settingsTrial');
+        if (tr && tv) {
+          var text = '';
+          try {
+            if (typeof isSubscribed === 'function' && !isSubscribed() && typeof getTrialDaysLeft === 'function') {
+              if (typeof trialExtensionActive === 'function' && trialExtensionActive()) text = 'Trial \u00B7 extended';
+              else if (typeof trialIsOver === 'function' && trialIsOver()) text = 'Trial \u00B7 ended';
+              else { var n = Math.ceil(getTrialDaysLeft()); text = 'Trial \u00B7 ' + n + (n === 1 ? ' day left' : ' days left'); }
+            }
+          } catch (e) { text = ''; }
+          tv.textContent = text;
+          tr.hidden = !text;
+        }
         var b = document.getElementById('bellOnBtn');
         if (b) b.setAttribute('aria-pressed', bellOn() ? 'true' : 'false');
       }
@@ -4718,6 +4800,21 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #paywall .pw-legal a:hover{color:var(--text-mid);}
 
 /* ═══════════════════════════════════════════
+   TRIAL -- the terms screen (DESIGN.md, Trial)
+   One screen over home when a trial begins: Sitting's gold behind the
+   words, the terms in the serif at reading measure, one action.
+═══════════════════════════════════════════ */
+#trialTerms{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;background:var(--ink-0);
+  --atmos-rgb:205,155,10;--atmos-a:.92;--atmos-x:50%;--atmos-y:40%;--atmos-gy:30%;}
+#trialTerms[hidden]{display:none;}
+#trialTerms .tt-col{position:relative;z-index:1;max-width:var(--measure-read);box-sizing:border-box;padding:0 var(--gutter);text-align:center;}
+#trialTerms .tt-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;}
+#trialTerms .tt-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);margin:var(--s-2) 0 var(--s-7);}
+#trialTerms .tt-text{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:balance;}
+#trialTerms .tt-begin{margin-top:var(--s-7);}
+#settingsModal .st-row[hidden]{display:none;}
+
+/* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
    No card, no ring. The hue is the Church's: the day's liturgical colour,
    set on data-color by initSaintScreen(), mapped here onto --atmos-rgb.
@@ -5835,7 +5932,6 @@ function homeActivate(i){
 
 function enterFeature(i){
   // Check paywall before entering any feature
-  incrementSession();
   if (F[i].screen==='witnesses') { showScreen('witnesses', i); initWitnesses(); return; }
   if (shouldShowPaywall()) { showPaywall(); return; }
   if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
@@ -13234,8 +13330,7 @@ function enterFromSacristy() {
    in place, and SUPA_URL / SUPA_ANON to be defined globally (they are).
 ═══════════════════════════════════════════ */
 
-const PAYWALL_DAYS     = 14;
-const PAYWALL_SESSIONS = 20;
+const PAYWALL_DAYS     = 14;   // the trial: this many days from first open, and nothing else
 // USD, as the plans surface shows them. The one place the paywall reads a price;
 // Stripe and RevenueCat carry their own on their side.
 const PAYWALL_PRICES   = { monthly: 9.99, annual: 89.99 };
@@ -13243,17 +13338,18 @@ window.PAYWALL_PRICES = PAYWALL_PRICES;
 const PARISH_EMAIL     = 'admin@stillprayer.app';
 
 const PW_START_KEY    = 'still_trial_start';
-const PW_SESSIONS_KEY = 'still_trial_sessions';
+const PW_SESSIONS_KEY = 'still_trial_sessions'; // the retired session counter; nothing reads it, redeemPromoCode() still resets it
 const PW_PAID_KEY     = 'still_paid';
 const PW_PLAN_KEY     = 'still_plan';
 const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_status
 const PW_TRIAL_EXT_KEY = 'still_trial_ext';    // cached profiles.trial_extended_until
 const PW_PREVIEW_KEY  = 'still_preview_shown';  // which preview milestones have fired
+const PW_TERMS_KEY    = 'still_trial_terms_shown'; // the trial start the terms screen was shown for
+const PW_DEBUG_KEY    = 'still_trial_debug';     // dev override: JSON {daysLeft}; read only when set, ignored when subscribed (DESIGN.md, Trial)
 
 function initTrial() {
   if (!localStorage.getItem(PW_START_KEY)) {
     localStorage.setItem(PW_START_KEY, Date.now().toString());
-    localStorage.setItem(PW_SESSIONS_KEY, '0');
   }
 }
 
@@ -13324,27 +13420,31 @@ function isPaid() { return isSubscribed(); }
 
 /* ---------- trial counters ---------- */
 
+// Dev override: localStorage.still_trial_debug = '{"daysLeft": 3}'. Read only
+// when set and never for a subscriber, so a shortened trial can be walked on
+// the preview with a throwaway account. sittingsLeft, if present, is ignored:
+// the trial is days alone.
+function trialDebug() {
+  try {
+    if (isSubscribed()) return null;
+    const raw = localStorage.getItem(PW_DEBUG_KEY);
+    if (!raw) return null;
+    const o = JSON.parse(raw);
+    return (o && typeof o.daysLeft === 'number' && isFinite(o.daysLeft)) ? o : null;
+  } catch (e) { return null; }
+}
+
 function getTrialDaysLeft() {
+  const dbg = trialDebug();
+  if (dbg) return Math.max(0, dbg.daysLeft);
   const start = parseInt(localStorage.getItem(PW_START_KEY) || Date.now());
   const elapsed = (Date.now() - start) / 86400000;
   return Math.max(0, PAYWALL_DAYS - elapsed);
 }
 
-function getTrialSessionsLeft() {
-  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
-  return Math.max(0, PAYWALL_SESSIONS - used);
-}
-
-function incrementSession() {
-  if (isSubscribed()) return;
-  const used = parseInt(localStorage.getItem(PW_SESSIONS_KEY) || '0');
-  localStorage.setItem(PW_SESSIONS_KEY, (used + 1).toString());
-}
-
 // A redeemed promo code sets profiles.trial_extended_until. While that instant
-// is in the future it lifts BOTH halves of the trial at once -- the 14-day
-// clock and the 20-session cap -- and because it rides on the profile it
-// follows the user across devices, which a local session reset cannot do.
+// is in the future it lifts the trial's clock, and because it rides on the
+// profile it follows the user across devices, which a local reset cannot do.
 function trialExtensionActive() {
   const ext = window._trialExt || localStorage.getItem(PW_TRIAL_EXT_KEY);
   if (!ext) return false;
@@ -13354,7 +13454,7 @@ function trialExtensionActive() {
 
 function trialIsOver() {
   if (trialExtensionActive()) return false;
-  return getTrialDaysLeft() <= 0 || getTrialSessionsLeft() <= 0;
+  return getTrialDaysLeft() <= 0;
 }
 
 /* ---------- the gate ---------- */
@@ -13493,7 +13593,6 @@ window.stillAdmin = function() {
 // Reset trial for testing
 window.stillResetTrial = function() {
   localStorage.removeItem(PW_START_KEY);
-  localStorage.removeItem(PW_SESSIONS_KEY);
   localStorage.removeItem(PW_PAID_KEY);
   localStorage.removeItem(PW_SUB_KEY);
   localStorage.removeItem(PW_PREVIEW_KEY);
