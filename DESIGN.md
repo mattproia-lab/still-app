@@ -375,6 +375,20 @@ button stops breathing.
   mystery data and the saves are unchanged. There was no bead-arc code to
   remove; only a stale banner line naming it.
 
+- **Sign in / create account** (`#authOverlay`): one screen on the tokens,
+  Sitting's gold behind the fields (`--atmos-rgb` 205,155,10, .92, at 46%),
+  no card. One email field, one password field, two actions always visible
+  with Sign in primary; no toggle between modes. `signIn()` and
+  `createAccount()` set the mode `submitAuth()` reads and call it; the
+  Supabase requests (`/auth/v1/signup`, `/auth/v1/token`, `/auth/v1/recover`)
+  and everything after a successful auth are untouched. Errors show in place
+  through `showAuthError(text, action)`: an unknown email or wrong password
+  on Sign in (GoTrue's `invalid_credentials` covers both) offers "Create this
+  account instead" in one tap; an existing email on Create account says so
+  and moves focus to Sign in. The global `.auth-input` / `.auth-btn` rules
+  stay for the phone-verify screen; this overlay's fields are `.auth-field`
+  and its buttons the shared classes.
+
 ### Hour palette
 
 | Hour | `--atmos-rgb` | Strength | Height |

@@ -1243,17 +1243,33 @@ body.is-mobile #mobileEnterTab { display: block; }
 
 
 <script src="still-mobile/sing-the-hours.js"></script>
-<div id="authOverlay" class="auth-overlay" style="display:none">
+<!-- Sign in and create account on one screen (DESIGN.md). One email, one
+     password, both actions always visible, Sign in primary; no mode toggle.
+     The ids the auth handlers read and write (authOverlay, authEmail,
+     authPassword, authErr, forgotLink, guestLink, authTitle) are unchanged;
+     signIn() and createAccount() set the mode and call submitAuth(). -->
+<div id="authOverlay" class="auth-overlay" data-tokens style="display:none">
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
+  </div>
   <div class="auth-box">
-    <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(220,230,255,.9);margin-bottom:8px;text-align:center">Still</p>
-    <p id="authTitle" style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;color:rgba(178,200,245,.5);text-transform:uppercase;text-align:center;margin-bottom:28px">Create your account</p>
-    <input id="authEmail" class="auth-input" type="email" placeholder="Email address" />
-    <input id="authPassword" class="auth-input" type="password" placeholder="Password" />
-    <button class="auth-btn" onclick="submitAuth()">Continue -></button>
-    <p id="authErr" style="font-size:12px;color:rgba(255,73,64,.7);text-align:center;min-height:18px;margin-bottom:8px"></p>
-    <p class="auth-toggle" id="authToggle" onclick="toggleAuthMode()">Already have an account? <span>Sign in</span></p>
-    <p id="forgotLink" onclick="forgotPassword()" style="text-align:center;font-size:11px;color:rgba(178,200,245,.4);cursor:pointer;margin-top:4px;display:block">Forgot password?</p>
-    <p id="guestLink" onclick="continueAsGuest()" style="text-align:center;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(178,200,245,.55);cursor:pointer;margin-top:20px;letter-spacing:.05em;text-decoration:underline;text-underline-offset:3px">Continue without an account</p>
+    <div class="auth-wordmark">Still</div>
+    <div id="authTitle" class="auth-title">Sign in, or create your account</div>
+    <label class="ui-label auth-label" for="authEmail">Email</label>
+    <input id="authEmail" class="auth-field" type="email" placeholder="you@example.com" autocomplete="email" autocapitalize="off" spellcheck="false" />
+    <label class="ui-label auth-label" for="authPassword">Password</label>
+    <input id="authPassword" class="auth-field" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter'){event.preventDefault();signIn();}" />
+    <div id="authErr" class="auth-err" role="alert" aria-live="polite"></div>
+    <button type="button" id="authErrAction" class="auth-err-action" style="display:none"></button>
+    <div class="auth-actions">
+      <button type="button" id="authSignIn" class="btn-primary gold btn-begin auth-action" onclick="signIn()">Sign in</button>
+      <button type="button" id="authCreate" class="btn-primary btn-begin auth-action" onclick="createAccount()">Create account</button>
+    </div>
+    <button type="button" id="forgotLink" class="auth-link" onclick="forgotPassword()">Forgot password?</button>
+    <button type="button" id="guestLink" class="auth-link auth-guest" onclick="continueAsGuest()">Continue without an account</button>
   </div>
 </div>
 <div id="requireAccountModal" style="display:none;position:fixed;inset:0;background:rgba(4,4,14,.92);z-index:1001;align-items:center;justify-content:center;padding:32px;box-sizing:border-box">
@@ -4585,6 +4601,45 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 @media (prefers-reduced-motion:reduce){
   #screen-witnesses .cow-img-inner{animation:none;}
 }
+
+/* ═══════════════════════════════════════════
+   SIGN IN / CREATE ACCOUNT -- on the DESIGN.md tokens
+   One screen, no card: Sitting's gold behind the fields. The global
+   .auth-overlay / .auth-box rules (the phone-verify screen still uses the
+   old .auth-input / .auth-btn) are overridden here by id; the JS toggles the
+   overlay's inline display between flex and none, so display is left alone.
+═══════════════════════════════════════════ */
+#authOverlay{
+  --atmos-rgb:205,155,10;--atmos-a:.92;
+  --atmos-x:50%;--atmos-y:46%;--atmos-gy:70%;   /* behind the fields */
+  background:var(--ink-0);color:var(--text-mid);font-family:var(--font-sans);
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-6)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));
+}
+#authOverlay .atmos{position:fixed;}
+#authOverlay .auth-box{position:relative;z-index:10;width:100%;max-width:22rem;padding:0;border:0;background:none;}
+#authOverlay .auth-wordmark{font-family:var(--font-serif);font-style:italic;font-size:var(--t-lg);line-height:1;color:var(--text-hi);text-align:center;margin-bottom:var(--s-3);}
+#authOverlay .auth-title{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);
+  text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:var(--s-7);}
+#authOverlay .auth-label{margin:var(--s-4) 0 var(--s-2);}
+#authOverlay .auth-field{width:100%;display:block;box-sizing:border-box;-webkit-appearance:none;appearance:none;
+  background:rgba(255,240,220,.03);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+  padding:var(--s-3) var(--s-4);font-family:var(--font-sans);font-size:var(--t-base);line-height:var(--lh-snug);
+  outline:none;transition:border-color var(--d-base);}
+#authOverlay .auth-field:focus{border-color:var(--gold-a55);}
+#authOverlay .auth-field::placeholder{color:var(--text-faint);}
+/* The error, in place beneath the fields; forgotPassword() writes its own gold colour inline for the sent state */
+#authOverlay .auth-err{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:rgba(255,120,96,.85);
+  text-align:center;min-height:1.6em;margin:var(--s-4) 0 0;}
+#authOverlay .auth-err-action{display:block;width:100%;background:none;border:0;padding:8px 0;margin:var(--s-1) 0 0;cursor:pointer;
+  text-align:center;font-family:var(--font-sans);font-size:var(--t-sm);color:var(--candle);text-decoration:underline;text-underline-offset:3px;}
+#authOverlay .auth-err-action:hover{color:var(--candle-hi);}
+#authOverlay .auth-actions{display:flex;flex-direction:column;gap:var(--s-2);margin-top:var(--s-5);}
+#authOverlay .auth-action{background:none;cursor:pointer;justify-content:center;}
+#authOverlay .auth-action:focus-visible{outline:1px solid var(--gold-a55);outline-offset:3px;}
+#authOverlay .auth-link{display:block;width:100%;background:none;border:0;padding:10px 0;margin-top:var(--s-3);cursor:pointer;text-align:center;
+  font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.04em;color:var(--text-low);transition:color var(--d-fast);}
+#authOverlay .auth-link:hover{color:var(--text-mid);}
+#authOverlay .auth-guest{margin-top:var(--s-6);color:var(--text-faint);text-decoration:underline;text-underline-offset:3px;}
 /* ── Readability mode ── */
 body.readable #cResponseText,
 body.readable #mysticResponseText,
@@ -12962,13 +13017,21 @@ async function forgotPassword() {
   }
 }
 
-function toggleAuthMode() {
-  authMode = authMode === 'signup' ? 'signin' : 'signup';
-  document.getElementById('authTitle').textContent = authMode === 'signup' ? 'Create your account' : 'Welcome back';
-  document.getElementById('authToggle').innerHTML = authMode === 'signup'
-    ? 'Already have an account? <span>Sign in</span>'
-    : 'New here? <span>Create account</span>';
-  document.getElementById('forgotLink').style.display = authMode === 'signin' ? 'block' : 'none';
+/* One screen, two actions. Each sets the mode submitAuth() reads and submits;
+   there is no toggle between modes any more. */
+function signIn() { authMode = 'signin'; submitAuth(); }
+function createAccount() { authMode = 'signup'; submitAuth(); }
+
+/* The error, shown in place beneath the fields. `action` is an optional
+   one-tap follow-up ({ label, run }); without one the action line is hidden. */
+function showAuthError(text, action) {
+  const errEl = document.getElementById('authErr');
+  const act = document.getElementById('authErrAction');
+  if (errEl) { errEl.style.color = ''; errEl.textContent = text || ''; }
+  if (act) {
+    if (action) { act.textContent = action.label; act.onclick = action.run; act.style.display = 'block'; }
+    else { act.style.display = 'none'; act.onclick = null; }
+  }
 }
 
 function continueAsGuest() {
@@ -13000,18 +13063,19 @@ function requireAccountGo() {
   // Note: PW_GUEST stays set until submitAuth succeeds, so backing out
   // of the auth screen leaves the guest exactly where they were.
   authMode = 'signup';
-  document.getElementById('authTitle').textContent = 'Create your account';
-  document.getElementById('authToggle').innerHTML = 'Already have an account? <span>Sign in</span>';
-  document.getElementById('forgotLink').style.display = 'none';
+  showAuthError('');
   var a = document.getElementById('authOverlay');
   if (a) { document.body.appendChild(a); a.style.display = 'flex'; }
+  // The one screen shows both actions; a guest sent here came to create an account
+  var c = document.getElementById('authCreate');
+  if (c) { try { c.focus(); } catch (e) {} }
 }
 async function submitAuth() {
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value.trim();
   const errEl = document.getElementById('authErr');
-  if (!email || !password) { errEl.textContent = 'Email and password required.'; return; }
-  errEl.textContent = '';
+  if (!email || !password) { showAuthError('Email and password required.'); return; }
+  showAuthError('');
   const endpoint = authMode === 'signup' ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
   const res = await fetch(`${SUPA_URL}${endpoint}`, {
     method: 'POST',
@@ -13020,15 +13084,30 @@ async function submitAuth() {
   });
   const data = await res.json();
   console.log('auth response:', JSON.stringify(data));
-  if (data.error || data.error_description) {
-    errEl.textContent = data.error_description || data.error;
+  /* Error display only. GoTrue answers in two shapes ({error, error_description}
+     and {error_code, msg}); both are read. Sign-in does not distinguish an
+     unknown email from a wrong password (invalid_credentials covers both), so
+     that case offers to create the account in one tap. Sign-up on an existing
+     email names it and moves focus to Sign in. */
+  if (data.error || data.error_description || data.error_code || data.msg) {
+    const code = String(data.error_code || data.error || '').toLowerCase();
+    const msg  = String(data.error_description || data.msg || data.error || '');
+    if (authMode === 'signin' && (code === 'invalid_credentials' || code === 'invalid_grant' || /invalid login credentials/i.test(msg))) {
+      showAuthError('No account matched that email and password.', { label: 'Create this account instead', run: createAccount });
+    } else if (authMode === 'signup' && (code === 'user_already_exists' || /already (been )?registered|already exists/i.test(msg))) {
+      showAuthError('This email already has an account.');
+      const b = document.getElementById('authSignIn');
+      if (b) { try { b.focus(); } catch (e) {} }
+    } else {
+      showAuthError(msg || 'Something went wrong. Try again.');
+    }
     return;
   }
   // Token is in different places for signup vs signin
   const token = data.access_token || data.session?.access_token;
   const user = data.user || data.session?.user;
   if (!token) {
-    errEl.textContent = 'Check your email to confirm your account, then sign in.';
+    showAuthError('Check your email to confirm your account, then sign in.');
     return;
   }
   localStorage.setItem('still_access_token', token);
