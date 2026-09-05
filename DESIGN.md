@@ -118,6 +118,7 @@ without it.
 | Breath Prayer | 100,20,200 | deep violet | .82 | 50% / 42%, behind the orb; it breathes |
 | Rule of Life | 8,120,32 | forest | .88 | 50% / 36%, behind the text |
 | Rosary Meditations | 192,28,172 | violet | .88 | 50% / 36%, behind the text |
+| Spiritual Autobiography | 70,8,152 | purple | .90 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
 not change with the hue.
@@ -388,6 +389,25 @@ button stops breathing.
   and moves focus to Sign in. The global `.auth-input` / `.auth-btn` rules
   stay for the phone-verify screen; this overlay's fields are `.auth-field`
   and its buttons the shared classes.
+
+- **Spiritual Autobiography**: a reading surface, no card, no ring. The
+  array's purple (`--atmos-rgb` 70,8,152, strength .90) sits behind the text
+  at the Guide's height. The photograph is content, not backdrop: it heads
+  the page in a `.devotional.graded` frame at reading measure (the `.graded`
+  modifier quiets the image and washes it toward the practice's hue) and
+  scrolls away with the rest; nothing is laid over it. The Inspiration tab's
+  portrait is framed the same way, with its words beneath. Tabs are one row
+  of sans labels (`.autobio-tab`, the one in hand in the candle); each pane
+  enters on `phaseIn`. Entries (`.activity-chip`, `.echo-entry`), the echo
+  from the past, the quote and the narrative (`.journal-narrative`, whose
+  `<p>`s the narrative builders emit and the mobile block would resize, hence
+  the `!important`s) are serif at reading measure; dates, types, counts'
+  labels and tabs are sans. The month counts (`.stat-chip`) are figures with
+  labels, not chips. `renderPracticeCalendar()` paints its cells inline and
+  is untouched. The tab handler had a stray `S` token that threw on every
+  tab switch, so the Echoes, Record and Inspiration renderers never ran; it
+  is removed. The saves, `DB`, the memory digest and the narrative request
+  are unchanged.
 
 ### Hour palette
 
