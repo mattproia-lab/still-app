@@ -534,6 +534,13 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   background:radial-gradient(ellipse 90% 80% at 50% 45%,transparent 46%,rgba(5,3,2,.26) 78%,rgba(5,3,2,.58) 100%),
     linear-gradient(to bottom,rgba(var(--atmos-rgb),.10),transparent 28%,transparent 72%,rgba(var(--atmos-rgb),.10));
   box-shadow:inset 0 0 44px rgba(var(--atmos-rgb),calc(.30 * var(--atmos-a)));}
+/* A photograph graded toward the practice's hue: the wash is heavier and the
+   image itself is quieted, so it reads as part of the room, not a window. */
+[data-tokens] .devotional.graded > img,[data-tokens] .devotional.graded > .devotional-inner{filter:saturate(.6) contrast(.95);}
+[data-tokens] .devotional.graded::after{
+  background:radial-gradient(ellipse 90% 80% at 50% 45%,transparent 40%,rgba(5,3,2,.32) 78%,rgba(5,3,2,.66) 100%),
+    linear-gradient(to bottom,rgba(var(--atmos-rgb),.30),rgba(var(--atmos-rgb),.14) 40%,rgba(var(--atmos-rgb),.26) 100%);
+  box-shadow:inset 0 0 60px rgba(var(--atmos-rgb),calc(.42 * var(--atmos-a)));}
 
 @media (prefers-reduced-motion:reduce){
   .atmos-glow,.atmos-flame,.ring-halo{animation:none;}
@@ -1018,7 +1025,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   #homeInfoBtn { display: block !important; font-size: 20px !important; color: rgba(255,255,255,.55) !important; }
   .night-watch { padding: 20px !important; }
   .nw-quote { font-size: clamp(14px, 4vw, 19px) !important; }
-  .autobio-tab { font-size: 7px !important; letter-spacing: .1em !important; }
 }
 
 /* ── MOBILE ENTER TAB ── */
@@ -2502,162 +2508,167 @@ body.is-mobile #mobileEnterTab { display: block; }
      SPIRITUAL AUTOBIOGRAPHY
      localStorage data layer + Claude narrator
 ═══════════════════════════════════════════ -->
-<div id="screen-autobiography" class="screen">
-  <!-- Thérèse writing Histoire d'une âme -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/autobiography_bg.jpg"
-      style="width:100%;height:100%;object-fit:contain;object-position:center center;opacity:0.92"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,2,14,.90) 0%,rgba(6,2,14,.75) 20%,rgba(6,2,14,.52) 48%,rgba(6,2,14,.78) 100%)"></div>
+<div id="screen-autobiography" class="screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. The photograph (Thérèse writing Histoire d'une
+       âme) is no longer the backdrop: it heads the page as content, in the
+       shared .devotional frame, and scrolls away with the rest. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Spiritual Autobiography</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="padding-top:8px;position:relative;z-index:10;overflow-y:auto">
+  <div class="feature-main">
+    <div class="ab-wrap">
 
-    <!-- TAB BAR -->
-    <div style="display:flex;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:22px;max-width:600px;margin-left:auto;margin-right:auto">
-      <button class="autobio-tab active" id="tab-journal" onclick="autobioTab('journal')">Journal</button>
-      <button class="autobio-tab" id="tab-month" onclick="autobioTab('month')">This Month</button>
-      <button class="autobio-tab" id="tab-echoes" onclick="autobioTab('echoes')">Echoes</button>
-      <button class="autobio-tab" id="tab-calendar" onclick="autobioTab('calendar')">Record</button>
-      <button class="autobio-tab" id="tab-mystic" onclick="autobioTab('mystic')">Inspiration</button>
+      <!-- The photograph, as content: framed, graded toward the purple, nothing laid over it -->
+      <div class="devotional graded ab-hero" aria-hidden="true">
+        <img src="still-mobile/src/image/autobiography_bg.jpg" alt="" />
+      </div>
+
+      <!-- TAB BAR -->
+      <div class="ab-tabs" role="tablist">
+        <button class="autobio-tab active" id="tab-journal" onclick="autobioTab('journal')">Journal</button>
+        <button class="autobio-tab" id="tab-month" onclick="autobioTab('month')">This Month</button>
+        <button class="autobio-tab" id="tab-echoes" onclick="autobioTab('echoes')">Echoes</button>
+        <button class="autobio-tab" id="tab-calendar" onclick="autobioTab('calendar')">Record</button>
+        <button class="autobio-tab" id="tab-mystic" onclick="autobioTab('mystic')">Inspiration</button>
+      </div>
+
+      <!-- ── JOURNAL TAB -- free writing + today's record ── -->
+      <div id="autobio-journal" class="autobio-pane active">
+
+        <!-- An echo from the past, surfaced by surfaceEcho() -->
+        <div id="autobioEchoWrap" class="ab-echo" style="display:none">
+          <div class="ui-label">Echo from the past</div>
+          <div class="ab-echo-date" id="autobioEchoDate"></div>
+          <div class="ab-echo-text" id="autobioEchoText"></div>
+        </div>
+
+        <!-- Free write -->
+        <div class="ui-label ab-label">Write freely</div>
+        <textarea id="autobioFreeWrite" class="companion-textarea ab-write"
+          placeholder="No prompts. No structure. Just write what the practice is doing to you…"
+          rows="6"></textarea>
+        <div class="btn-row left ab-row">
+          <button class="btn-primary gold" onclick="saveJournalEntry()">Save Entry -></button>
+        </div>
+
+        <!-- Today's activity log -->
+        <div class="ui-label ab-label" id="todayLogLabel">Today's Practice</div>
+        <div id="todayLog" class="ab-log"></div>
+      </div>
+
+      <!-- ── MONTH TAB -- compiled journal narrative ── -->
+      <div id="autobio-month" class="autobio-pane" style="display:none">
+        <div class="ab-month-head">
+          <div>
+            <div class="ui-label" id="monthLabel"></div>
+            <div class="heading ab-month-title">Your record</div>
+          </div>
+          <div class="btn-row left ab-month-actions">
+            <button class="btn-primary" onclick="compileMonth()" id="compileBtn">Compile -></button>
+            <button class="btn-primary gold" onclick="copyMonthText()" id="copyBtn" style="display:none">Copy</button>
+            <button class="btn-primary" onclick="downloadPDF()" id="pdfBtn" style="display:none">Download PDF</button>
+          </div>
+        </div>
+
+        <!-- Month counts, painted by renderMonthTab() -->
+        <div id="monthStats" class="ab-stats"></div>
+
+        <!-- Compiled narrative -->
+        <div id="monthNarrativeWrap" style="display:none">
+          <div id="monthNarrative" class="journal-narrative"></div>
+        </div>
+
+        <!-- Compile loading -->
+        <div id="compileLoading" class="ab-state" style="display:none">
+          <div class="ab-state-line">Gathering your month…</div>
+          <div class="ab-state-sub">Reading the record of what you have done.</div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="monthEmpty" class="ab-state">
+          <div class="ab-state-line">No entries yet this month.</div>
+          <div class="ab-state-sub">As you practice, the record will grow here.</div>
+        </div>
+      </div>
+
+      <!-- ── CALENDAR/RECORD TAB -- presence over time ── -->
+      <div id="autobio-calendar" class="autobio-pane" style="display:none">
+        <div class="ui-label ab-label">Your Practice · Presence Over Time</div>
+        <div class="ab-note">No streaks. Days of practice appear as light.</div>
+        <div id="practiceCalendar" class="ab-calendar"></div>
+      </div>
+
+      <!-- ── ECHOES TAB -- all past entries browsable ── -->
+      <div id="autobio-echoes" class="autobio-pane" style="display:none">
+        <div class="ui-label ab-label">All Your Entries</div>
+        <div id="allEchoesList" class="ab-echoes"></div>
+        <div id="echoesEmpty" class="ab-state" style="display:none">
+          <div class="ab-state-line">The record is empty. Begin a practice and it will fill.</div>
+        </div>
+      </div>
+
+      <!-- ── INSPIRATION / THE MYSTIC TAB ── -->
+      <div id="autobio-mystic" class="autobio-pane" style="display:none">
+
+        <!-- Her portrait: framed, the words beneath it, not over it -->
+        <div class="devotional graded ab-portrait" aria-hidden="true">
+          <img src="still-mobile/src/image/saint_bg.jpg" alt="" />
+        </div>
+        <div class="ab-portrait-name">Amma Sophia</div>
+        <div class="ab-portrait-line">She has walked this road a long time.</div>
+
+        <!-- Daily curated quote, written by renderMysticTab() -->
+        <div id="mysticQuoteWrap" class="ab-quote">
+          <div class="ui-label">From the tradition</div>
+          <blockquote class="voice voice-left ab-quote-text" id="mysticQuoteText"></blockquote>
+          <div class="voice-attrib ab-quote-source" id="mysticQuoteSource"></div>
+        </div>
+
+        <!-- Ask or receive -->
+        <div id="mysticInput" class="companion-state active">
+          <div class="ab-note">Bring a question, or leave it empty and let her speak</div>
+          <textarea class="companion-textarea ab-write" id="mysticText"
+            placeholder="Or ask her something…"
+            rows="4"></textarea>
+          <div class="btn-row left ab-row">
+            <button class="btn-primary gold" onclick="askMystic()">Speak to me -></button>
+          </div>
+          <div id="mysticErr" class="ab-err" style="display:none"></div>
+        </div>
+
+        <!-- Loading -->
+        <div id="mysticLoading" class="companion-state ab-state" style="display:none">
+          <div class="ab-state-line">She is listening…</div>
+          <div class="ab-state-sub">From the desert, slowly.</div>
+        </div>
+
+        <!-- Response -->
+        <div id="mysticResponse" class="companion-state" style="display:none">
+          <div class="ab-response">
+            <div class="ui-label">Amma Sophia</div>
+            <div id="mysticResponseText" class="ab-response-text"></div>
+            <div class="share-watermark">stillprayer.app</div>
+          </div>
+          <div class="btn-row left ab-row">
+            <button class="btn-ghost ab-listen" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear Response</button>
+            <button class="btn-primary" onclick="resetMystic()">Ask another -></button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
-
-    <!-- ── JOURNAL TAB -- free writing + today's record ── -->
-    <div id="autobio-journal" class="autobio-pane active" style="max-width:600px;margin:0 auto">
-
-      <!-- Today's echo surfaced randomly -->
-      <div id="autobioEchoWrap" style="display:none;position:relative;padding:20px;background:rgba(255,255,255,.03);border:1px solid rgba(136,145,192,.18);margin-bottom:20px">
-        <p style="position:absolute;top:0;left:16px;transform:translateY(-50%);background:rgba(4,4,10,.95);padding:0 8px;font-family:'Montserrat',sans-serif;font-size:6px;letter-spacing:.28em;color:rgba(136,145,192,.7);text-transform:uppercase">Echo from the past</p>
-        <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:9px" id="autobioEchoDate"></p>
-        <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(160,164,200,.9);line-height:1.65" id="autobioEchoText"></p>
-      </div>
-
-      <!-- Free write -->
-      <p class="feat-eyebrow" style="margin-bottom:8px">Write freely</p>
-      <textarea id="autobioFreeWrite" class="companion-textarea"
-        placeholder="No prompts. No structure. Just write what the practice is doing to you…"
-        rows="6" style="margin-bottom:16px"></textarea>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px">
-        <button class="btn-primary gold" onclick="saveJournalEntry()">Save Entry -></button>
-      </div>
-
-      <!-- Today's activity log -->
-      <p class="feat-eyebrow" style="margin-bottom:12px" id="todayLogLabel">Today's Practice</p>
-      <div id="todayLog" style="display:flex;flex-direction:column;gap:6px"></div>
-    </div>
-
-    <!-- ── MONTH TAB -- compiled journal narrative ── -->
-    <div id="autobio-month" class="autobio-pane" style="max-width:600px;margin:0 auto;display:none">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px">
-        <div>
-          <p class="feat-eyebrow" style="margin-bottom:3px" id="monthLabel">May 2026</p>
-          <p style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:#fff">Your record</p>
-        </div>
-        <div style="display:flex;gap:8px">
-          <button class="btn-primary" onclick="compileMonth()" id="compileBtn">Compile -></button>
-          <button class="btn-primary gold" onclick="copyMonthText()" id="copyBtn" style="display:none">Copy</button>
-          <button class="btn-primary" onclick="downloadPDF()" id="pdfBtn" style="display:none">Download PDF</button>
-        </div>
-      </div>
-
-      <!-- Month stats row -->
-      <div id="monthStats" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
-
-      <!-- Compiled narrative -->
-      <div id="monthNarrativeWrap" style="display:none">
-        <div id="monthNarrative" class="journal-narrative"></div>
-      </div>
-
-      <!-- Compile loading -->
-      <div id="compileLoading" style="display:none;text-align:center;padding:40px 20px">
-        <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.5)">Gathering your month…</p>
-        <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.25);margin-top:6px;font-style:italic">Reading the record of what you have done.</p>
-      </div>
-
-      <!-- Empty state -->
-      <div id="monthEmpty" style="text-align:center;padding:40px 20px">
-        <p style="font-family:'Playfair Display',serif;font-size:18px;font-style:italic;color:rgba(255,255,255,.4)">No entries yet this month.</p>
-        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.25);margin-top:8px">As you practice, the record will grow here.</p>
-      </div>
-    </div>
-
-
-    <!-- ── CALENDAR/RECORD TAB -- pattern-aware presence view ── -->
-    <div id="autobio-calendar" class="autobio-pane" style="max-width:600px;margin:0 auto;display:none">
-      <p class="feat-eyebrow" style="margin-bottom:6px">Your Practice · Presence Over Time</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:20px;font-style:italic">No streaks. Days of practice appear as light.</p>
-      <div id="practiceCalendar" style="width:100%"></div>
-    </div>
-
-    <!-- ── ECHOES TAB -- all past entries browsable ── -->
-    <div id="autobio-echoes" class="autobio-pane" style="max-width:600px;margin:0 auto;display:none">
-      <p class="feat-eyebrow" style="margin-bottom:16px">All Your Entries</p>
-      <div id="allEchoesList" style="display:flex;flex-direction:column;gap:0"></div>
-       <p id="echoesEmpty" style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.35);text-align:center;padding:40px 0;display:none">
-        The record is empty. Begin a practice and it will fill.
-      </p>
-
-    </div> 
-    <!-- ── INSPIRATION / THE MYSTIC TAB ── -->
-    <div id="autobio-mystic" class="autobio-pane" style="max-width:600px;margin:0 auto;display:none">
-
-      <!-- Her portrait -->
-      <div style="position:relative;width:100%;height:220px;overflow:hidden;border-radius:6px;margin-bottom:20px">
-        <img src="still-mobile/src/image/saint_bg.jpg"
-          style="width:100%;height:100%;object-fit:cover;object-position:center 20%"/>
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(4,4,14,.92) 100%)"></div>
-        <div style="position:absolute;bottom:14px;left:18px">
-          <p style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(200,220,255,.7);margin-bottom:3px">Amma Sophia</p>
-          <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(230,235,255,.75)">She has walked this road a long time.</p>
-        </div>
-      </div>
-
-      <!-- Daily curated quote -->
-      <div id="mysticQuoteWrap" style="border:1px solid rgba(178,200,245,.15);padding:18px 18px 16px;margin-bottom:20px;position:relative">
-        <p style="position:absolute;top:0;left:14px;transform:translateY(-50%);background:rgba(4,4,14,.95);padding:0 7px;font-family:'Montserrat',sans-serif;font-size:6px;letter-spacing:.25em;color:rgba(178,200,245,.6);text-transform:uppercase">From the tradition</p>
-        <p id="mysticQuoteText" style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(220,230,255,.88);line-height:1.65;margin-bottom:8px"></p>
-        <p id="mysticQuoteSource" style="font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.15em;color:rgba(178,200,245,.5);text-transform:uppercase"></p>
-      </div>
-
-      <!-- Ask or receive -->
-      <div id="mysticInput" class="companion-state active">
-        <p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(200,215,255,.7);margin-bottom:14px;font-style:italic;text-align:center">Bring a question, or leave it empty and let her speak.</p>
-        <textarea class="companion-textarea" id="mysticText"
-          placeholder="Or ask her something…"
-          rows="4"
-          style="color:#fff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.3);font-size:15px;margin-bottom:14px"></textarea>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.5);color:#fff;background:rgba(30,50,120,.3)" onclick="askMystic()">Speak to me -></button>
-        </div>
-        <div id="mysticErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
-      </div>
-
-      <!-- Loading -->
-      <div id="mysticLoading" class="companion-state" style="display:none;text-align:center;padding:32px 0">
-        <p style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.4)">She is listening…</p>
-        <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.2);margin-top:6px;font-style:italic">From the desert, slowly.</p>
-      </div>
-
-      <!-- Response -->
-      <div id="mysticResponse" class="companion-state" style="display:none">
-        <div style="border:1px solid rgba(178,200,245,.15);padding:20px;margin-bottom:16px;position:relative">
-          <p style="position:absolute;top:0;left:14px;transform:translateY(-50%);background:rgba(4,4,14,.95);padding:0 7px;font-family:'Montserrat',sans-serif;font-size:6px;letter-spacing:.25em;color:rgba(178,200,245,.6);text-transform:uppercase">Amma Sophia</p>
-          <p id="mysticResponseText" style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(220,230,255,.9);line-height:1.75"></p>
-          <p class="share-watermark">stillprayer.app</p>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.4);color:#fff;background:rgba(30,50,120,.25)" onclick="resetMystic()">Ask another -></button>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 </div>
+
 
 <!-- ═══════════════════════════════════════════
      DEEPER (THE CROSS)
@@ -3756,11 +3767,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   #screen-darkness .content-card p { font-size: 20px !important; line-height: 1.9 !important; }
   #cResponseText, #mysticResponseText, #dResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
 }
-#autobio-mystic {
-  position: relative;
-  z-index: 1;
-}
-
 @keyframes flameFlick{
   0%,100%{transform:scaleX(1) scaleY(1) translateY(0);}
   20%{transform:scaleX(1.06) scaleY(.96) translateY(1px);}
@@ -4310,98 +4316,116 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   #screen-rule .rol-input{border-color:#ccc;background:none;color:#111;}
 }
 
-/* ── Autobiography ────────────────────────── */
-.autobio-tab{
-  flex:1;padding:11px 8px;
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.18em;text-transform:uppercase;
-  background:none;border:none;border-bottom:2px solid transparent;
-  color:rgba(255,255,255,.32);cursor:pointer;transition:all .22s;
+/* ═══════════════════════════════════════════
+   SPIRITUAL AUTOBIOGRAPHY -- on the DESIGN.md tokens
+   A reading surface: the array's purple behind the text, no card, no ring.
+   The photograph heads the page as content in the shared .devotional frame
+   and scrolls away with everything else; the atmosphere stays. Entries and
+   the narrative in the serif at reading measure; dates, tabs and labels in
+   the sans. Ids, the tab and pane classes autobioTab() toggles, the classes
+   the renderers emit (.activity-chip, .stat-chip, .echo-entry,
+   .journal-narrative), the saves, the digest and the narrative are unchanged.
+═══════════════════════════════════════════ */
+#screen-autobiography{
+  --atmos-rgb:70,8,152;--atmos-a:.90;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+  --measure-read:30rem;
 }
-.autobio-tab.active{color:#f0c040;border-bottom-color:#f0c040;}
-.autobio-tab:hover:not(.active){color:rgba(255,255,255,.6);}
-.autobio-pane{display:none;}
-.autobio-pane.active{display:block;}
+#screen-autobiography .ab-wrap{max-width:var(--measure);margin:0 auto;}
+#screen-autobiography .ab-hero{aspect-ratio:4/3;margin:0 auto var(--s-6);}
+#screen-autobiography .ab-hero img{object-fit:cover;object-position:center;}
 
-/* Activity log chips */
-.activity-chip{
-  display:flex;align-items:flex-start;gap:12px;
-  padding:12px 14px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  transition:border-color .2s;
-}
-/* A day that was fasted carries a gold thread down its left edge. The chip's
-   own border stays, so it reads as the same entry with a mark on it rather than
-   a different kind of thing. The practice calendar is already gold by intensity,
-   so the thread is deliberately a different axis -- an edge, not a fill -- and
-   the two cannot be confused. padding-left drops 14 -> 12 so the 2px rule
-   replaces the 1px border without shifting the text. */
-.activity-chip.fast-day{
-  border-left:2px solid rgba(240,192,64,.85);
-  padding-left:12px;
-}
-.activity-chip-icon{
-  font-size:16px;flex-shrink:0;margin-top:1px;width:22px;text-align:center;
-}
-.activity-chip-body{flex:1;}
-.activity-chip-title{
-  font-family:'Playfair Display',serif;font-size:15px;font-style:italic;
-  color:rgba(255,255,255,.82);line-height:1.4;margin-bottom:3px;
-}
-.activity-chip-meta{
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:600;
-  letter-spacing:.18em;text-transform:uppercase;color:rgba(200,146,12,.55);
-}
+/* Tabs: one row of sans labels, the one in hand in the candle */
+#screen-autobiography .ab-tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:var(--s-6);max-width:var(--measure-read);margin-left:auto;margin-right:auto;}
+#screen-autobiography .autobio-tab{flex:1 1 0;min-width:0;background:none;border:0;border-bottom:1px solid transparent;margin-bottom:-1px;
+  padding:12px 2px;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-faint);white-space:nowrap;transition:color var(--d-base),border-color var(--d-base);}
+#screen-autobiography .autobio-tab:hover:not(.active){color:var(--text-mid);}
+#screen-autobiography .autobio-tab.active{color:var(--candle);border-bottom-color:var(--candle);}
+#screen-autobiography .autobio-pane{max-width:var(--measure-read);margin:0 auto;}
+#screen-autobiography .autobio-pane.active{animation:phaseIn var(--d-breath) var(--ease-breath) both;}
 
-/* Month stat chips */
-.stat-chip{
-  flex:1;min-width:80px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  padding:12px;text-align:center;
-}
-.stat-chip-num{
-  font-family:'Playfair Display',serif;font-size:24px;font-weight:700;
-  color:rgba(200,146,12,.85);line-height:1;margin-bottom:4px;
-}
-.stat-chip-label{
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.28);
-}
+/* Labels, notes, empty states */
+#screen-autobiography .ab-label{margin:var(--s-5) 0 var(--s-3);}
+#screen-autobiography .ab-note{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-low);margin:0 0 var(--s-4);}
+#screen-autobiography .ab-empty{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);color:var(--text-faint);padding:var(--s-3) 0;}
+#screen-autobiography .ab-state{text-align:center;padding:var(--s-7) 0;}
+#screen-autobiography .ab-state-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-low);text-wrap:balance;}
+#screen-autobiography .ab-state-sub{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-faint);margin-top:var(--s-2);}
+#screen-autobiography .ab-err{font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);text-align:center;margin-top:var(--s-3);}
+#screen-autobiography .ab-row{margin-top:var(--s-3);}
 
-/* Journal narrative -- the compiled month */
-.journal-narrative{
-  font-family:'Playfair Display',serif;font-size:clamp(15px,1.8vw,18px);
-  font-style:italic;color:rgba(230,234,248,.88);line-height:1.82;
-  letter-spacing:.01em;
-}
-.journal-narrative p{margin-bottom:20px;}
-.journal-narrative p:last-child{margin-bottom:0;}
-.journal-narrative .journal-date{
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.6);
-  font-style:normal;display:block;margin-bottom:8px;
-}
+/* The echo from the past: the tradition of one's own record, in the serif */
+#screen-autobiography .ab-echo{border-left:1px solid var(--gold-a55);padding:2px 0 2px var(--s-4);margin:0 0 var(--s-6);}
+#screen-autobiography .ab-echo .ui-label{margin-bottom:var(--s-1);}
+#screen-autobiography .ab-echo-date{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-faint);margin-bottom:var(--s-2);}
+#screen-autobiography .ab-echo-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
 
-/* Echoes list */
-.echo-entry{
-  padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06);
-  cursor:pointer;
+/* Writing: the free write and the question to Amma */
+#screen-autobiography .ab-write{width:100%;display:block;box-sizing:border-box;min-height:8rem;resize:vertical;
+  background:rgba(255,240,220,.03);border:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+  padding:var(--s-3) var(--s-4);font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  outline:none;margin:0;transition:border-color var(--d-base);}
+#screen-autobiography .ab-write:focus{border-color:var(--gold-a55);border-bottom-color:var(--gold-a55);}
+#screen-autobiography .ab-write::placeholder{color:var(--text-faint);font-style:italic;}
+
+/* Today's practice: one entry per line, the practice in the serif, its measure in the sans */
+#screen-autobiography .ab-log{display:flex;flex-direction:column;}
+#screen-autobiography .activity-chip{display:flex;align-items:flex-start;gap:var(--s-3);padding:var(--s-3) 0;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;}
+#screen-autobiography .activity-chip:last-child{border-bottom:1px solid var(--line);}
+#screen-autobiography .activity-chip.fast-day{border-left:2px solid var(--gold-a55);padding-left:var(--s-3);}
+#screen-autobiography .activity-chip-icon{flex:none;width:1.4rem;text-align:center;font-family:var(--font-serif);font-size:var(--t-md);line-height:1.3;color:var(--gold);margin:0;}
+#screen-autobiography .activity-chip-body{flex:1;min-width:0;}
+#screen-autobiography .activity-chip-title{font-family:var(--font-serif);font-style:normal;font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);margin-bottom:2px;}
+#screen-autobiography .activity-chip-meta{font-family:var(--font-sans);font-size:var(--t-xs);font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--text-low);}
+
+/* This month: the label and title, the actions beneath at 390 */
+#screen-autobiography .ab-month-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:var(--s-3) var(--s-4);margin-bottom:var(--s-5);}
+#screen-autobiography .ab-month-title{margin:0;}
+#screen-autobiography .ab-month-actions{margin-top:0;}
+#screen-autobiography .ab-stats{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-5);margin:0 0 var(--s-6);}
+#screen-autobiography .stat-chip{flex:0 0 auto;min-width:0;background:none;border:0;padding:0;text-align:left;}
+#screen-autobiography .stat-chip-num{font-family:var(--font-serif);font-weight:500;font-size:var(--t-lg);line-height:var(--lh-tight);color:var(--candle-hi);margin-bottom:2px;}
+#screen-autobiography .stat-chip-label{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);}
+
+/* The narrative, as buildMonthNarrative() / buildLocalNarrative() emit it: <p> paragraphs.
+   The !importants answer the mobile block's .feature-main p. */
+#screen-autobiography .journal-narrative{font-family:var(--font-serif);font-style:normal;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);letter-spacing:0;}
+#screen-autobiography .journal-narrative p{font-size:var(--t-md)!important;line-height:var(--lh-text)!important;margin:0 0 var(--s-5);text-wrap:pretty;}
+#screen-autobiography .journal-narrative p:last-child{margin-bottom:0;}
+#screen-autobiography .journal-narrative .journal-date{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);font-style:normal;display:block;margin-bottom:var(--s-2);}
+
+/* Echoes: every past entry, newest first */
+#screen-autobiography .ab-echoes{display:flex;flex-direction:column;}
+#screen-autobiography .echo-entry{padding:var(--s-4) 0;border-top:1px solid var(--line);border-bottom:0;cursor:default;}
+#screen-autobiography .echo-entry:last-child{border-bottom:1px solid var(--line);}
+#screen-autobiography .echo-entry-date{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-2);}
+#screen-autobiography .echo-entry-type{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:400;letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-faint);margin-left:var(--s-3);}
+#screen-autobiography .echo-entry-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+#screen-autobiography .echo-entry:hover .echo-entry-text{color:var(--text-hi);}
+
+/* Record: renderPracticeCalendar() paints its own cells inline; only the frame is set here */
+#screen-autobiography .ab-calendar{width:100%;}
+
+/* Inspiration: her portrait framed, her words beneath, the quote as a voice */
+#screen-autobiography .ab-portrait{aspect-ratio:3/2;margin:0 auto var(--s-4);}
+#screen-autobiography .ab-portrait img{object-fit:cover;object-position:center 20%;}
+#screen-autobiography .ab-portrait-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);text-align:center;}
+#screen-autobiography .ab-portrait-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);color:var(--text-mid);text-align:center;margin:var(--s-1) 0 var(--s-6);}
+#screen-autobiography .ab-quote{margin:0 0 var(--s-6);}
+#screen-autobiography .ab-quote .ui-label{margin-bottom:var(--s-2);}
+#screen-autobiography .ab-quote-text{margin:0;max-width:none;text-wrap:pretty;}
+#screen-autobiography .ab-quote-source{margin-top:var(--s-2);}
+#screen-autobiography .ab-response{border-left:1px solid var(--gold-a55);padding:2px 0 2px var(--s-4);margin:0 0 var(--s-4);}
+#screen-autobiography .ab-response .ui-label{margin-bottom:var(--s-2);}
+#screen-autobiography .ab-response-text{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+#screen-autobiography .ab-response .share-watermark{margin-top:var(--s-3);}
+#screen-autobiography .ab-listen{background:none;border:0;padding:8px 0;cursor:pointer;}
+
+@media (prefers-reduced-motion:reduce){
+  #screen-autobiography .autobio-pane.active{--rise:0px;}
 }
-.echo-entry:last-child{border-bottom:none;}
-.echo-entry-date{
-  font-family:'Montserrat',sans-serif;font-size:7px;font-weight:600;
-  letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.5);
-  margin-bottom:5px;
-}
-.echo-entry-type{
-  font-family:'Montserrat',sans-serif;font-size:7px;letter-spacing:.14em;
-  text-transform:uppercase;color:rgba(255,255,255,.25);margin-left:10px;
-}
-.echo-entry-text{
-  font-family:'Playfair Display',serif;font-size:15px;font-style:italic;
-  color:rgba(255,255,255,.65);line-height:1.6;
-}
-.echo-entry:hover .echo-entry-text{color:rgba(255,255,255,.88);}
 
 .info-btn{
   background:none;border:none;cursor:pointer;
@@ -8820,7 +8844,7 @@ function autobioTab(tab) {
       pane.classList.toggle('active', t === tab);
     }
   });
-  if (tab === 'month') renderMonthTab();S
+  if (tab === 'month') renderMonthTab();
   if (tab === 'echoes') renderEchoesTab();
   if (tab === 'journal') renderTodayLog();
   if (tab === 'calendar') renderPracticeCalendar();
@@ -8844,7 +8868,7 @@ function renderTodayLog() {
   if (!container) return;
   const entries = DB.today();
   if (!entries.length) {
-    container.innerHTML = `<p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,.28);padding:10px 0">No practice recorded today yet.</p>`;
+    container.innerHTML = `<div class="ab-empty">No practice recorded today yet.</div>`;
     return;
   }
   if (label) label.textContent = `Today -- ${entries.length} practice${entries.length > 1 ? 's' : ''}`;
