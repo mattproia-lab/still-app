@@ -668,34 +668,14 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 .tap-dim.show{opacity:1;}
 
 /* ═══════════════════════════════════════════
-   THE COMPANION
+   THE COMPANION -- what remains of the old block
+   The Companion and Deeper are styled on the tokens in the VOICES block
+   (search "THE VOICES"). Kept here: the .companion-state contract, which
+   Contemplative Sitting's phase panels also use, and the .companion-textarea
+   rule, which the Autobiography's inputs still carry.
 ═══════════════════════════════════════════ */
-.companion-wrap{max-width:600px;margin:0 auto;}
-
-/* Gold cross icon at top */
-.companion-icon{
-  width:64px;height:64px;border-radius:50%;
-  border:1px solid rgba(200,146,12,.5);
-  display:flex;align-items:center;justify-content:center;
-  margin:0 auto 18px;
-  background:radial-gradient(ellipse at 35% 30%,rgba(240,192,64,.14),rgba(200,146,12,.05),transparent);
-  box-shadow:0 0 28px rgba(240,192,64,.18),0 0 56px rgba(240,192,64,.07);
-  animation:haloBreath 5s ease-in-out infinite;
-}
-@keyframes haloBreath{
-  0%,100%{box-shadow:0 0 28px rgba(240,192,64,.18),0 0 56px rgba(240,192,64,.07);}
-  50%{box-shadow:0 0 38px rgba(240,192,64,.28),0 0 72px rgba(240,192,64,.12);}
-}
-
-/* Companion states */
 .companion-state{display:none;}
 .companion-state.active{display:block;}
-
-/* Input area */
-.companion-prompt-text{
-  font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,20px);font-style:italic;
-  color:rgba(255,255,255,.75);line-height:1.6;text-align:center;margin-bottom:20px;
-}
 .companion-textarea{
   width:100%;background:rgba(255,255,255,.04);
   border:none;border-bottom:1px solid rgba(200,146,12,.25);
@@ -705,44 +685,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 }
 .companion-textarea:focus{border-bottom-color:rgba(200,146,12,.55);}
 .companion-textarea::placeholder{color:rgba(255,255,255,.28);font-style:italic;}
-.companion-meta{display:flex;align-items:center;justify-content:space-between;margin-top:14px;}
-.companion-rate{font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,146,12,.55);}
-
-/* Loading */
-.companion-candle{
-  text-align:center;padding:30px 0 20px;
-}
-.candle-loading{
-  width:32px;height:48px;margin:0 auto 16px;
-}
-.loading-text{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:4px;}
-.loading-sub{font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.3);font-style:italic;}
-
-/* Response */
-.companion-source{
-  font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;
-  letter-spacing:.28em;text-transform:uppercase;color:rgba(200,146,12,.7);margin-bottom:14px;
-}
-.companion-response-card{
-  background:rgba(4,4,10,.75);border:1px solid rgba(200,146,12,.18);padding:22px 20px;
-  position:relative;margin-bottom:16px;
-  
-}
-.companion-response-card::before{
-  content:'"';position:absolute;top:-10px;left:16px;
-  font-family:'Playfair Display',serif;font-size:42px;line-height:1;
-  color:rgba(200,146,12,.22);
-}
-.companion-response-text{
-  font-family:'Playfair Display',serif;font-size:clamp(14px,1.6vw,17px);font-style:italic;
-  color:#d0d4e8;line-height:1.78;letter-spacing:.01em;
-}
-.companion-invitation{
-  font-family:'Playfair Display',serif;font-size:14px;font-style:italic;
-  color:rgba(185,190,215,.85);line-height:1.65;
-  border-top:1px solid rgba(200,146,12,.1);margin-top:14px;padding-top:13px;
-}
-.companion-silence{text-align:center;padding:20px 0 8px;}
 
 /* API key prompt */
 .api-key-prompt{
@@ -2232,89 +2174,74 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      THE COMPANION
 ═══════════════════════════════════════════ -->
-<div id="screen-companion" class="screen">
-  <!-- Desert Father background -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/companion_bg.jpg"
-      style="width:100%;height:100%;object-fit:contain;object-position:center center;opacity:0.95"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,18,.88) 0%,rgba(2,4,18,.55) 25%,rgba(2,4,18,.20) 55%,rgba(2,4,18,.55) 100%);pointer-events:none"></div>
+<div id="screen-companion" class="screen voice-screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. The Desert Father is the threshold: the same
+       photograph, now one layer between the flame and the grain, graded toward
+       the navy, standing in the lower half of the frame so the input never
+       sits over his face, shown at the opening and gone on one slow fade once
+       the person begins to write (a :has() rule; no logic changed). -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-photo"><img src="still-mobile/src/image/companion_bg.jpg" alt=""></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">The Companion</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
 
-  <div class="feature-main" style="position:relative;z-index:10;padding-top:8px">
-    <div class="companion-wrap">
+  <div class="feature-main">
+    <div class="voice-wrap">
 
-      <!-- Gold cross icon -->
-      <div class="companion-icon">
-        <svg width="28" height="34" viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
-          <rect x="11" y="0" width="6" height="34" rx="1.5" fill="none" stroke="rgba(240,192,64,.7)" stroke-width="1.2"/>
-          <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="rgba(240,192,64,.7)" stroke-width="1.2"/>
-          <line x1="14" y1="2"  x2="14" y2="32" stroke="rgba(255,248,160,.35)" stroke-width=".7"/>
-          <line x1="2"  y1="13" x2="26" y2="13" stroke="rgba(255,248,160,.35)" stroke-width=".7"/>
+      <!-- The voice's mark, its name and its line -->
+      <div class="voice-mark" aria-hidden="true">
+        <svg viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
+          <rect x="11" y="0" width="6" height="34" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <line x1="14" y1="2"  x2="14" y2="32" stroke="currentColor" stroke-width=".7" opacity=".5"/>
+          <line x1="2"  y1="13" x2="26" y2="13" stroke="currentColor" stroke-width=".7" opacity=".5"/>
         </svg>
       </div>
+      <div class="voice-name">The Companion</div>
+      <div class="voice-line">A voice from the Desert Fathers</div>
 
-      <p class="feat-eyebrow" style="text-align:center">The Companion</p>
-      <p style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.5);text-align:center;margin-bottom:22px;letter-spacing:.01em">A voice from the Desert Fathers</p>
-
-      <!-- INPUT STATE -->
+      <!-- OPENING and WRITING: the prompt (the voice is speaking, so no
+           quotation marks), the textarea, the action with the remaining line
+           beside it. Ids and hooks unchanged. -->
       <div id="companionInput" class="companion-state active">
-        <p class="companion-prompt-text">"What is it you are actually looking for?"</p>
-        <textarea class="companion-textarea" id="companionText"
+        <div class="voice-prompt">What is it you are actually looking for?</div>
+        <textarea class="companion-textarea voice-write" id="companionText"
           placeholder="Speak it plainly. This is not a place for performance…"
-          rows="5"
-          style="background:rgba(2,4,18,.72);backdrop-filter:blur(4px)"></textarea>
-        <div class="companion-meta">
-          <span class="companion-rate" id="companionRate">3 reflections remaining this week</span>
-          <button class="btn-primary gold" onclick="askCompanion()" id="companionAskBtn">Ask the Fathers -></button>
+          rows="4"></textarea>
+        <div class="voice-actions">
+          <span class="voice-remaining" id="companionRate">3 reflections remaining this week</span>
+          <button class="btn-primary gold" onclick="askCompanion()" id="companionAskBtn">Ask the Fathers →</button>
         </div>
-        <div class="companion-error" id="companionErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
+        <div class="voice-err" id="companionErr" style="display:none"></div>
       </div>
 
-      <!-- LOADING STATE -->
+      <!-- LISTENING -->
       <div id="companionLoading" class="companion-state">
-        <div class="companion-candle">
-          <svg class="candle-loading" viewBox="0 0 32 48" xmlns="http://www.w3.org/2000/svg">
-            <g style="animation:flameFlick 2.2s ease-in-out infinite;transform-origin:center bottom">
-              <ellipse cx="16" cy="12" rx="5" ry="9" fill="rgba(240,192,64,.25)"/>
-              <ellipse cx="16" cy="14" rx="3" ry="6.5" fill="rgba(248,200,64,.5)"/>
-              <ellipse cx="16" cy="16" rx="1.8" ry="4" fill="rgba(255,240,160,.82)"/>
-            </g>
-            <line x1="16" y1="21" x2="16" y2="24" stroke="rgba(100,80,40,.7)" stroke-width="1.2"/>
-            <rect x="11" y="24" width="10" height="22" rx="1.2" fill="rgba(28,18,6,.9)" stroke="rgba(200,146,12,.3)" stroke-width=".8"/>
-            <ellipse cx="16" cy="11" rx="9" ry="7" fill="rgba(240,192,64,.08)"/>
-          </svg>
-          <p class="loading-text">The Fathers are listening…</p>
-          <p class="loading-sub">From the desert, slowly.</p>
-        </div>
+        <div class="voice-listening">The Fathers are listening…</div>
+        <div class="voice-listening-sub">From the desert, slowly.</div>
       </div>
 
-      <!-- RESPONSE STATE -->
+      <!-- ANSWER: a reading surface. The reply at reading measure, then Hear
+           response and the follow-ups beneath it. -->
       <div id="companionResponse" class="companion-state">
-        <div class="companion-source" id="cSource"></div>
-        <div class="companion-response-card">
-          <div class="companion-response-text" id="cResponseText"></div>
-          <div class="companion-invitation" id="cInvitation"></div>
-          <p class="share-watermark">stillprayer.app</p>
+        <div class="voice-answer">
+          <div class="voice-source" id="cSource"></div>
+          <div class="voice-reply" id="cResponseText"></div>
+          <div class="voice-invitation" id="cInvitation"></div>
+          <div class="share-watermark">stillprayer.app</div>
         </div>
-        <div class="companion-silence">
-          <svg width="24" height="36" viewBox="0 0 24 36" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:14px">
-            <g style="animation:flameFlick 2.2s ease-in-out infinite;transform-origin:center bottom">
-              <ellipse cx="12" cy="8" rx="3.5" ry="6" fill="rgba(240,192,64,.22)"/>
-              <ellipse cx="12" cy="10" rx="2.2" ry="4.5" fill="rgba(248,200,64,.45)"/>
-              <ellipse cx="12" cy="12" rx="1.3" ry="2.8" fill="rgba(255,240,160,.75)"/>
-            </g>
-            <line x1="12" y1="15" x2="12" y2="17" stroke="rgba(100,80,40,.6)" stroke-width="1"/>
-            <rect x="8" y="17" width="8" height="17" rx="1" fill="rgba(22,14,4,.9)" stroke="rgba(200,146,12,.25)" stroke-width=".8"/>
-          </svg>
-          <br>
-          <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
-          <button class="btn-primary gold" onclick="returnFromCompanion()" style="margin-top:6px">Return to Stillness</button>
-          <br><button class="btn-ghost" onclick="resetCompanion()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto">Ask Again</button>
+        <div class="voice-after">
+          <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)">◎ Hear response</button>
+          <button class="btn-primary gold" onclick="returnFromCompanion()">Return to stillness</button>
+          <button class="btn-ghost" onclick="resetCompanion()">Ask again</button>
         </div>
       </div>
 
@@ -2682,62 +2609,70 @@ body.is-mobile #mobileEnterTab { display: block; }
 <!-- ═══════════════════════════════════════════
      DEEPER (THE CROSS)
 ═══════════════════════════════════════════ -->
-<div id="screen-deeper" class="screen">
-  <!-- Monk beneath cross in lancet arch -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/deeper_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.88"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,4,14,.92) 0%,rgba(2,4,14,.68) 22%,rgba(2,4,14,.32) 50%,rgba(2,4,14,.72) 100%)"></div>
+<div id="screen-deeper" class="screen voice-screen" data-tokens>
+  <!-- Atmosphere, drawn in CSS. The monk beneath the cross is the threshold:
+       the same photograph as one layer between the flame and the grain, graded
+       toward Deeper's blue, in the lower half of the frame, gone on one slow
+       fade once the person begins to write. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-flame"></div>
+    <div class="atmos-photo"><img src="still-mobile/src/image/deeper_bg.jpg" alt=""></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Deeper</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
+
   <div class="feature-main">
-    <div class="companion-wrap">
-      <div class="companion-icon" style="border-color:rgba(178,200,245,.4);box-shadow:0 0 28px rgba(178,200,245,.12)">
-        <svg width="28" height="34" viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
-          <rect x="11" y="0" width="6" height="34" rx="1.5" fill="none" stroke="rgba(200,220,255,.6)" stroke-width="1.2"/>
-          <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="rgba(200,220,255,.6)" stroke-width="1.2"/>
+    <div class="voice-wrap">
+
+      <div class="voice-mark" aria-hidden="true">
+        <svg viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
+          <rect x="11" y="0" width="6" height="34" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
         </svg>
       </div>
-      <p class="feat-eyebrow" style="text-align:center;color:rgba(200,220,255,.75)">Deeper · The Cross</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;font-weight:400;color:rgba(220,228,255,.85);text-align:center;margin-bottom:22px;letter-spacing:.01em">Theological investigation · Catechism-grounded</p>
+      <div class="voice-name">Deeper</div>
+      <div class="voice-line">Theological investigation · Catechism-grounded</div>
 
+      <!-- OPENING and WRITING. No remaining line: Deeper keeps no count on the
+           device; the function decides, and its answer is shown in the reply. -->
       <div id="deeperInput" class="companion-state active">
-        <p class="companion-prompt-text" style="color:rgba(230,235,255,.9)">"Is there a word of Christ that has quietly frightened you -- one you've returned to, unable to fully set it down?"</p>
-        <textarea class="companion-textarea" id="deeperText"
+        <div class="voice-prompt">Is there a word of Christ that has quietly frightened you — one you’ve returned to, unable to fully set it down?</div>
+        <textarea class="companion-textarea voice-write" id="deeperText"
           placeholder="Bring the question you have been afraid to ask. This is the right place for it."
-          rows="5"
-          style="color:#ffffff;background:rgba(20,24,50,.6);border-bottom-color:rgba(178,200,245,.35);font-size:15px"></textarea>
-        <div class="companion-meta" style="margin-top:14px">
-          <span style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,218,255,.75)">Theological reflection · CCC-grounded</span>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.55);color:#ffffff;background:rgba(30,50,120,.3)" onclick="askDeeper()">Go Deeper -></button>
+          rows="4"></textarea>
+        <div class="voice-actions">
+          <button class="btn-primary gold" onclick="askDeeper()">Go Deeper →</button>
         </div>
-        <div class="companion-error" id="deeperErr" style="display:none;margin-top:10px;font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,73,64,.7);font-style:italic;text-align:center"></div>
+        <div class="voice-err" id="deeperErr" style="display:none"></div>
       </div>
 
+      <!-- LISTENING -->
       <div id="deeperLoading" class="companion-state">
-        <div class="companion-candle" style="padding:30px 0 20px">
-          <p class="loading-text" style="color:rgba(220,228,255,.85)">Searching the tradition…</p>
-          <p class="loading-sub" style="color:rgba(180,200,255,.6)">CCC · Philokalia · Desert Fathers</p>
+        <div class="voice-listening">Searching the tradition…</div>
+        <div class="voice-listening-sub">CCC · Philokalia · Desert Fathers</div>
+      </div>
+
+      <!-- ANSWER -->
+      <div id="deeperResponse" class="companion-state">
+        <div class="voice-answer">
+          <div class="voice-source" id="dSource"></div>
+          <div class="voice-reply" id="dResponseText"></div>
+          <div class="voice-invitation" id="dInvitation"></div>
+          <div class="share-watermark">stillprayer.app</div>
+        </div>
+        <div class="voice-after">
+          <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)">◎ Hear response</button>
+          <button class="btn-primary gold" onclick="resetDeeper()">Ask another →</button>
+          <button class="btn-ghost" onclick="goHome()">Return to Still</button>
         </div>
       </div>
 
-      <div id="deeperResponse" class="companion-state">
-        <div class="companion-source" id="dSource" style="color:rgba(178,200,245,.85);font-size:9px"></div>
-        <div class="companion-response-card" style="border-color:rgba(178,200,245,.25);background:rgba(15,20,50,.75)">
-          <div class="companion-response-text" id="dResponseText" style="color:rgba(230,235,255,.92)"></div>
-          <div class="companion-invitation" id="dInvitation" style="border-top-color:rgba(178,200,245,.2);color:rgba(210,220,255,.85)"></div>
-          <p class="share-watermark">stillprayer.app</p>
-        </div>
-        <div class="companion-silence">
-          <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(178,200,245,.5)">◎ Hear Response</button>
-          <button class="btn-primary" style="border-color:rgba(178,200,245,.45);color:#ffffff;background:rgba(30,50,120,.3);margin-top:6px" onclick="resetDeeper()">Ask Another -></button>
-          <br><button class="btn-ghost" onclick="goHome()" style="margin-top:8px;display:block;margin-left:auto;margin-right:auto;color:rgba(200,215,255,.65)">Return to Still</button>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -3769,12 +3704,11 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   .app-header .screen-title { font-size: 13px !important; }
 
 
-  .companion-wrap p, .deeper-wrap p { font-size: 16px !important; line-height: 1.75 !important; }
 
   .auth-input { font-size: 16px !important; }
   .auth-btn { font-size: 13px !important; }
   #screen-darkness .content-card p { font-size: 20px !important; line-height: 1.9 !important; }
-  #cResponseText, #mysticResponseText, #dResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
+  #mysticResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
 }
 @keyframes flameFlick{
   0%,100%{transform:scaleX(1) scaleY(1) translateY(0);}
@@ -4434,6 +4368,97 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
 @media (prefers-reduced-motion:reduce){
   #screen-autobiography .autobio-pane.active{--rise:0px;}
+}
+
+/* ═══════════════════════════════════════════
+   THE VOICES -- the Companion and Deeper on one pattern
+   Three states on the .companion-state panels the ask functions toggle.
+   Opening: the voice's mark, its name and line, the prompt in the serif (the
+   voice is speaking, so no quotation marks), the textarea, the action with
+   the remaining line beside it in the sans at micro size. Writing: the
+   figure recedes as the person types. Answer: a reading surface, the reply
+   in the serif at reading measure, Hear response and the follow-ups beneath
+   it, the figure gone, the atmosphere carrying the screen.
+   Each voice's photograph is its threshold: one .atmos-photo layer between
+   the flame and the grain, graded toward the voice's hue, standing in the
+   lower half of the frame (so the input never sits over a face), shown only
+   while the opening is on screen with nothing yet written -- a :has() rule
+   on the panel's .active and the textarea's :placeholder-shown, so no logic
+   changed -- and gone on one slow fade (--d-veil). Ids, onclick hooks, the
+   ids the ask functions write to, and the .companion-state contract are
+   unchanged. The Companion's remaining line is the count it already keeps;
+   Deeper keeps none, so its slot is empty.
+═══════════════════════════════════════════ */
+#screen-companion{
+  /* The array's navy, behind the text at the Guide's height */
+  --atmos-rgb:6,34,98;--atmos-a:.80;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+}
+#screen-deeper{
+  /* The array's softer blue, quieter, at the same height */
+  --atmos-rgb:120,148,200;--atmos-a:.55;
+  --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
+}
+.voice-screen{--measure-read:30rem;--d-veil:calc(var(--d-breath) * 1.5);}
+
+/* The figure: the lower half of the frame, its top dissolving into the
+   light, the photograph quieted and washed toward the hue. */
+.voice-screen .atmos-photo{position:absolute;left:50%;bottom:0;width:100%;max-width:520px;height:52%;
+  transform:translateX(-50%);opacity:0;transition:opacity var(--d-veil) var(--ease-breath);
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 36%,#000 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 36%,#000 100%);}
+.voice-screen .atmos-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(.55);}
+#screen-deeper .atmos-photo img{object-position:center center;}
+.voice-screen .atmos-photo::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,rgba(var(--atmos-rgb),.40) 0%,rgba(var(--atmos-rgb),.30) 55%,rgba(5,3,2,.86) 100%);}
+/* Shown at the opening only: the input panel active, nothing written, the
+   textarea not yet taken up. Typing, or the ask, starts the one slow fade. */
+#screen-companion:has(#companionInput.active #companionText:placeholder-shown:not(:focus)) .atmos-photo,
+#screen-deeper:has(#deeperInput.active #deeperText:placeholder-shown:not(:focus)) .atmos-photo{opacity:1;}
+
+/* The opening */
+.voice-screen .voice-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
+.voice-screen .voice-mark{width:22px;height:27px;margin:var(--s-2) auto var(--s-4);color:var(--gold-a55);}
+.voice-screen .voice-mark svg{display:block;width:100%;height:100%;}
+.voice-screen .voice-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);}
+.voice-screen .voice-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);margin:var(--s-1) 0 var(--s-6);}
+.voice-screen .voice-prompt{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+  max-width:var(--measure-read);margin:0 auto var(--s-5);text-wrap:balance;}
+/* The textarea. The !importants answer the global .companion-textarea rule it still carries. */
+.voice-screen .voice-write{display:block;box-sizing:border-box;width:100%;max-width:var(--measure-read);margin:0 auto;min-height:7rem!important;resize:vertical!important;
+  background:rgba(5,3,2,.40)!important;border:1px solid var(--line)!important;border-radius:var(--r-sm);color:var(--text-hi)!important;
+  padding:var(--s-3) var(--s-4)!important;font-family:var(--font-serif)!important;font-style:italic;font-size:var(--t-base)!important;line-height:var(--lh-text)!important;
+  outline:none;transition:border-color var(--d-base);}
+.voice-screen .voice-write:focus{border-color:var(--gold-a55)!important;}
+.voice-screen .voice-write::placeholder{color:var(--text-faint);font-style:italic;}
+.voice-screen .voice-actions{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+  max-width:var(--measure-read);margin:var(--s-4) auto 0;text-align:left;}
+/* The remaining line: the sans at micro size, sentence case so it holds to two lines beside the action at 390px */
+.voice-screen .voice-remaining{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.06em;
+  color:var(--text-low);line-height:1.5;}
+.voice-screen .voice-actions .btn-primary{margin-left:auto;flex:0 0 auto;}
+.voice-screen .voice-err{font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);text-align:center;margin-top:var(--s-3);}
+
+/* Listening */
+.voice-screen .voice-listening{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--text-mid);
+  padding-top:var(--s-7);animation:officeBreath 2.4s ease-in-out infinite;}
+.voice-screen .voice-listening-sub{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-faint);margin-top:var(--s-2);}
+
+/* The answer: a reading surface, no card */
+.voice-screen .voice-answer{max-width:var(--measure-read);margin:0 auto;text-align:left;}
+.voice-screen .voice-source{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-4);}
+.voice-screen .voice-source:empty{display:none;}
+.voice-screen .voice-reply{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+.voice-screen .voice-invitation{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);
+  margin-top:var(--s-5);padding-top:var(--s-4);border-top:1px solid var(--line);}
+.voice-screen .voice-invitation:empty{display:none;}
+.voice-screen .voice-answer .share-watermark{margin-top:var(--s-4);}
+.voice-screen .voice-after{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);margin-top:var(--s-6);}
+.voice-screen .voice-after .btn-ghost{color:var(--text-low);}
+
+@media (prefers-reduced-motion:reduce){
+  .voice-screen .voice-listening{animation:none;}
 }
 
 /* ═══════════════════════════════════════════
