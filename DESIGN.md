@@ -513,6 +513,36 @@ button stops breathing.
   `#mysticResponseText` line are gone. Her request, feature key, limit,
   the onboarding-free flag, the playback and the saves are unchanged.
 
+- **Settings** (`#settingsModal`): chrome, not a practice. No atmosphere;
+  the field alone on `--ink-1`, the sheet keeping its overlay geometry and
+  the iOS max-height rule, the header sticky inside the scrolling panel with
+  Close as the one way out (the Done button is gone). Five groups in this
+  order, each a sans micro heading (`.st-heading`) over hairline rows
+  (`.st-row`), no cards: Practice (Office calendar, anchor prayer, how the
+  voices speak, fasting mode), Bells (the master switch, bell voice, the
+  Hours with their times, your own bells, the notification note), Reading
+  (larger, brighter text), Account (the signed-in email, subscription with
+  View plans and Restore purchases, the promo code, Sign out as a plain
+  ghost), About (version, privacy, support, a colophon). Delete account sits
+  alone past About, plain text with its warning line, the only red. Labels
+  are sentence case in the sans; only the title is serif. One switch
+  (`.st-switch`) wherever on/off is meant, driven by `aria-pressed`, which
+  every setter already writes; the `!important`s beat the inline background
+  and knob transform they also write. The bell's On/Off pair is one switch
+  calling the same `setBell()` with the opposite of `bellEnabled`. A
+  segmented control (`.st-seg`) only for the calendar and the voices, the
+  chosen button read off the inline colour `renderRiteButtons()` and
+  `setDepth()` write. Bell voices are rows with a play control and the
+  chosen one in the candle; the radio the picker's change listener needs is
+  still in the row, visually hidden. The two bell templates emit classes
+  instead of inline styles; their inputs, classes and listeners are what
+  bell-native.js and the save read, unchanged. A small script after the
+  sheet paints the account line, the version and `data-platform` for the
+  note (iPhone, Android, web) on open; it calls nothing. The mobile block's
+  14px-on-every-div rule for the panel, the old modal classes and the
+  header-wrap rule are retired. Every onclick target and storage key is the
+  one it was.
+
 ### Hour palette
 
 | Hour | `--atmos-rgb` | Strength | Height |

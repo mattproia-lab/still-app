@@ -756,8 +756,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 /* ═══════════════════════════════════════════
    SETTINGS MODAL
 ═══════════════════════════════════════════ */
-/* Settings header: never let the row push CLOSE off-screen */
-#settingsModal .modal-panel > div:first-child{ flex-wrap:wrap; row-gap:8px; }
 /* Settings: keep the header below the notch when the sheet reaches full height.
 
    The overlay is bottom-aligned (align-items:flex-end) and already reserves the
@@ -788,12 +786,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   padding:28px 38px 40px;
 }
 .modal-panel::-webkit-scrollbar{width:0;}
-.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;font-weight:700;color:#fff;margin-bottom:22px;}
-.modal-section-label{font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px;display:block;}
-.modal-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;padding:11px 14px;font-family:'Heebo',sans-serif;font-size:13px;outline:none;margin-bottom:18px;transition:border-color .2s;}
-.modal-input:focus{border-color:rgba(200,146,12,.4);}
-.modal-input::placeholder{color:rgba(255,255,255,.28);}
-.modal-note{font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.28);font-style:italic;margin-top:-14px;margin-bottom:18px;}
 
 #settingsModal {
   padding-bottom: calc(140px + env(safe-area-inset-bottom));
@@ -957,10 +949,6 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   .feat-eyebrow { color: rgba(255,255,255,.68) !important; }
   .feat-heading { font-size: clamp(26px,7vw,38px) !important; }
   .modal-overlay { align-items: flex-end !important; }
-  .modal-panel {
-    max-height: 88vh !important;
-    padding: 24px 22px calc(env(safe-area-inset-bottom, 0px) + 28px) !important;
-  }
   .info-panel { width: 92vw !important; }
   .back-btn span:last-child { display: none !important; }
   /* Home info button -- always visible on mobile */
@@ -2966,164 +2954,185 @@ body.is-mobile #mobileEnterTab { display: block; }
 
 <!-- ═══════════════════════════════════════════
      SETTINGS MODAL -- user-facing only
+     On the DESIGN.md tokens (stylesheet: search "SETTINGS -- on the DESIGN.md
+     tokens"). Five groups in hairline rows, no cards, no atmosphere: chrome,
+     not a practice. Every id, onclick, aria-pressed contract and storage key
+     is the one the setters already read; only where the controls sit and how
+     they look has changed. The bell's On/Off pair is one switch calling the
+     same setBell() with the opposite of bellEnabled. The email, the version
+     and the platform note are painted by the small script after the sheet,
+     which calls nothing.
 ═══════════════════════════════════════════ -->
 <div class="modal-overlay" id="settingsModal">
-  <div class="modal-panel" style="background:#0d0d0f;border-radius:16px;padding:0;overflow:hidden;max-width:420px;width:100%;max-height:90vh;display:flex;flex-direction:column">
+  <div class="modal-panel st-panel" data-tokens>
 
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 24px 20px;border-bottom:1px solid rgba(255,255,255,.07)">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:22px">✝</span>
-        <span style="font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(200,146,12,.9)">Settings</span>
-      </div>
-      <div style="display:flex;gap:12px;align-items:center">
-  <button onclick="signOut()" style="padding:6px 12px;background:transparent;border:1px solid rgba(255,73,64,.25);color:rgba(255,73,64,.5);font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:6px">Sign Out</button>
-  <button class="btn-ghost" onclick="closeSettings()" id="settingsCloseBtn" style="color:rgba(255,255,255,.4);font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase">Close ×</button>
-</div>
+    <div class="st-head">
+      <div class="st-title">Settings</div>
+      <button class="btn-ghost st-close" onclick="closeSettings()" id="settingsCloseBtn">Close</button>
     </div>
 
-    <div style="padding:20px 24px;overflow-y:auto;flex:1">
+    <div class="st-body">
 
-      <!-- Bell -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsBellLabel">Bell</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:4px" id="settingsBellNote">Monastery bell rings at sitting and each Office hour.</div>
+      <!-- Practice -->
+      <div class="st-group">
+        <div class="st-heading">Practice</div>
+
+        <div class="st-row st-row-stack" id="rite-settings">
+          <div class="st-row-text">
+            <div class="st-label">Office calendar</div>
+            <div class="st-hint">Traditional follows the 1960 Roman Breviary. Modern uses Ordinary Time.</div>
           </div>
-          <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden;flex-shrink:0;margin-left:16px">
-            <button id="bellOnBtn" onclick="setBell(true)" style="padding:8px 16px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">On</button>
-            <button id="bellOffBtn" onclick="setBell(false)" style="padding:8px 16px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Off</button>
+          <div class="st-seg" role="group" aria-label="Office calendar">
+            <button id="riteTraditionalBtn" class="st-seg-btn" onclick="setLiturgicalRite('traditional')">Traditional</button>
+            <button id="riteModernBtn" class="st-seg-btn" onclick="setLiturgicalRite('modern')">Modern</button>
           </div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-text">
+            <div class="st-label" id="settingsAnchorLabel">Anchor prayer</div>
+            <div class="st-hint" id="settingsAnchorNote">Re-record for Contemplative Sitting.</div>
+          </div>
+          <div class="st-row-actions">
+            <button class="btn-ghost st-action" onclick="toggleRecording('anchor')" id="settingsAnchorBtn">◎ Record</button>
+            <button class="rec-preview st-play" id="settingsAnchorPreview" onclick="previewRecording('anchor')" style="display:none" aria-label="Play the anchor prayer">▶</button>
+          </div>
+        </div>
+
+        <div class="st-row st-row-stack">
+          <div class="st-row-text">
+            <div class="st-label">How the voices speak</div>
+            <div class="st-hint">Adjusts how Amma Sophia and Deeper speak to you.</div>
+          </div>
+          <div class="st-seg" role="group" aria-label="How the voices speak">
+            <button id="depthBeginnerBtn" class="st-seg-btn" onclick="setDepth('beginner')">Beginner</button>
+            <button id="depthChallengeBtn" class="st-seg-btn" onclick="setDepth('challenge')">Challenge me</button>
+          </div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-text"><div class="st-label" id="settingsFastLabel">Fasting mode</div></div>
+          <button id="fastingToggle" class="st-switch" onclick="toggleFastingFromSettings(document.getElementById('fastingToggle').getAttribute('aria-pressed') !== 'true')" aria-pressed="false" aria-label="Fasting mode"><span></span></button>
         </div>
       </div>
 
-      <!-- Fasting Mode -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsFastLabel">Fasting Mode</div>
-          <button id="fastingToggle" onclick="toggleFastingFromSettings(document.getElementById('fastingToggle').getAttribute('aria-pressed') !== 'true')"
-            aria-pressed="false"
-            style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-      </div>
-      <!-- Readability -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)">Larger, Brighter Text</div>
-          <button id="readableToggle" onclick="toggleReadable(document.getElementById('readableToggle').getAttribute('aria-pressed') !== 'true')"
-            aria-pressed="false"
-            style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-      </div>
-      <!-- Office Calendar -->
-      <div id="rite-settings" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Office Calendar</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:12px">Traditional follows the 1960 Roman Breviary. Modern uses Ordinary Time.</div>
-        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
-          <button id="riteTraditionalBtn" onclick="setLiturgicalRite('traditional')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Traditional</button>
-          <button id="riteModernBtn" onclick="setLiturgicalRite('modern')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Modern</button>
-        </div>
-      </div>
+      <!-- Bells -->
+      <div class="st-group" id="bells-settings">
+        <div class="st-heading">Bells</div>
 
-      <!-- Anchor Prayer -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8)" id="settingsAnchorLabel">Anchor Prayer</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-top:4px" id="settingsAnchorNote">Re-record for Contemplative Sitting.</div>
+        <div class="st-row">
+          <div class="st-row-text">
+            <div class="st-label" id="settingsBellLabel">Ring the bell</div>
+            <div class="st-hint" id="settingsBellNote">At sitting and each Office hour.</div>
           </div>
-          <div style="display:flex;gap:8px;flex-shrink:0;margin-left:16px">
-            <button class="btn-primary" onclick="toggleRecording('anchor')" id="settingsAnchorBtn" style="padding:8px 16px;border-radius:8px">◎ Record</button>
-            <button class="rec-preview" id="settingsAnchorPreview" onclick="previewRecording('anchor')" style="display:none;padding:8px 16px;border-radius:8px">▶</button>
-          </div>
+          <button id="bellOnBtn" class="st-switch" onclick="setBell(!bellEnabled)" aria-pressed="true" aria-label="Ring the bell"><span></span></button>
         </div>
-      </div>
 
-      <!-- Spiritual Depth -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Spiritual Depth</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:12px">Adjusts how Amma Sophia and Deeper speak to you.</div>
-        <div style="display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:8px;overflow:hidden">
-          <button id="depthBeginnerBtn" onclick="setDepth('beginner')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:rgba(200,146,12,.25);color:#f0c040">Beginner</button>
-          <button id="depthChallengeBtn" onclick="setDepth('challenge')" style="flex:1;padding:10px;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;background:none;color:rgba(255,255,255,.35)">Challenge Me</button>
+        <!-- Bell voice: rows painted by renderVoicePicker() below, the chosen one in the candle -->
+        <div class="st-sub">
+          <div class="st-sublabel">Bell voice</div>
+          <div id="bellVoiceList" class="st-voices"></div>
         </div>
+
+        <!-- The Hours. bell-native.js reads each row's time from its divs and its state from .bell-toggle[aria-pressed]. -->
+        <div class="bell-row st-row" data-hour="vigils">
+          <div class="st-row-text st-hour"><div class="st-label">Vigils</div><div class="st-time">4:00 AM</div></div>
+          <button class="bell-toggle st-switch" data-hour="vigils" aria-pressed="false" onclick="toggleBell('vigils',this)" aria-label="Vigils bell"><span></span></button>
+        </div>
+        <div class="bell-row st-row" data-hour="lauds">
+          <div class="st-row-text st-hour"><div class="st-label">Lauds</div><div class="st-time">6:00 AM</div></div>
+          <button class="bell-toggle st-switch" data-hour="lauds" aria-pressed="false" onclick="toggleBell('lauds',this)" aria-label="Lauds bell"><span></span></button>
+        </div>
+        <div class="bell-row st-row" data-hour="vespers">
+          <div class="st-row-text st-hour"><div class="st-label">Vespers</div><div class="st-time">6:00 PM</div></div>
+          <button class="bell-toggle st-switch" data-hour="vespers" aria-pressed="false" onclick="toggleBell('vespers',this)" aria-label="Vespers bell"><span></span></button>
+        </div>
+        <div class="bell-row st-row" data-hour="compline">
+          <div class="st-row-text st-hour"><div class="st-label">Compline</div><div class="st-time">9:00 PM</div></div>
+          <button class="bell-toggle st-switch" data-hour="compline" aria-pressed="false" onclick="toggleBell('compline',this)" aria-label="Compline bell"><span></span></button>
+        </div>
+
+        <!-- Your own bells: rows painted by renderCustomRows() below -->
+        <div class="st-sub">
+          <div class="st-sublabel">Your own bells</div>
+          <div class="st-hint">Name them, set their time, choose their voice.</div>
+          <div id="customBellList" class="st-custom"></div>
+        </div>
+
+        <button id="bellsSaveBtn" class="btn-primary gold st-save" onclick="saveBellSettings()" style="display:none">Save bell schedule</button>
+        <div id="bellsSavedMsg" class="st-saved" style="display:none">✓ Bell schedule saved</div>
+
+        <!-- The notification note, one per platform; data-platform on the sheet picks it -->
+        <div class="st-note" data-for="ios">So the bells always reach you: allow notifications for Still in iPhone Settings, and if you use a Sleep or other Focus, add Still to its allowed apps (Settings → Focus → Sleep → Apps).</div>
+        <div class="st-note" data-for="android">So the bells always reach you: allow notifications for Still in Android Settings, and if you use Do Not Disturb or Bedtime mode, add Still to the apps that may interrupt it.</div>
+        <div class="st-note" data-for="web">A browser can’t ring the bells while Still is closed. The Still app can.</div>
       </div>
 
-      <!-- Bell Schedule -->
-      <div id="bells-settings" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Bell Schedule</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(255,255,255,.35);margin-bottom:16px">Ring the monastery bell at the Hours.</div>
-
-        <!-- Bell Voice -->
-        <div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.08)">
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:8px">Bell Voice</div>
-          <div id="bellVoiceList"></div>
+      <!-- Reading -->
+      <div class="st-group">
+        <div class="st-heading">Reading</div>
+        <div class="st-row">
+          <div class="st-row-text"><div class="st-label">Larger, brighter text</div></div>
+          <button id="readableToggle" class="st-switch" onclick="toggleReadable(document.getElementById('readableToggle').getAttribute('aria-pressed') !== 'true')" aria-pressed="false" aria-label="Larger, brighter text"><span></span></button>
         </div>
-
-        <!-- Vigils -->
-        <div class="bell-row" data-hour="vigils" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:16px">
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Vigils</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">4:00 AM</div>
-          </div>
-          <button class="bell-toggle" data-hour="vigils" aria-pressed="false" onclick="toggleBell('vigils',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-
-        <!-- Lauds -->
-        <div class="bell-row" data-hour="lauds" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:16px">
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Lauds</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">6:00 AM</div>
-          </div>
-          <button class="bell-toggle" data-hour="lauds" aria-pressed="false" onclick="toggleBell('lauds',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-
-        <!-- Vespers -->
-        <div class="bell-row" data-hour="vespers" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-          <div style="display:flex;align-items:center;gap:16px">
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Vespers</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">6:00 PM</div>
-          </div>
-          <button class="bell-toggle" data-hour="vespers" aria-pressed="false" onclick="toggleBell('vespers',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-
-        <!-- Compline -->
-        <div class="bell-row" data-hour="compline" style="display:flex;align-items:center;justify-content:space-between;padding:10px 0">
-          <div style="display:flex;align-items:center;gap:16px">
-            <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);width:70px">Compline</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:13px;color:rgba(255,255,255,.4)">9:00 PM</div>
-          </div>
-          <button class="bell-toggle" data-hour="compline" aria-pressed="false" onclick="toggleBell('compline',this)" style="width:46px;height:26px;border-radius:13px;border:none;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:background .2s">
-            <span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block"></span>
-          </button>
-        </div>
-
-        <!-- Your Own Bells -->
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.08)">
-          <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px">Your Own Bells</div>
-          <div style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:10px">Name them, set their time, choose their voice.</div>
-          <div id="customBellList"></div>
-        </div>
-
-        <button id="bellsSaveBtn" onclick="saveBellSettings()" style="display:none;width:100%;margin-top:16px;padding:12px;background:rgba(200,146,12,.2);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Save Bell Schedule</button>
-        <div id="bellsSavedMsg" style="display:none;text-align:center;padding:8px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.7);margin-top:8px">✓ Bell schedule saved</div>
-      <p style="font-family:'Heebo',sans-serif;font-size:11.5px;line-height:1.65;color:rgba(255,255,255,.45);margin-top:14px">
-  So the bells always reach you: allow notifications for Still in iPhone Settings,
-  and if you use a Sleep or other Focus, add Still to its allowed apps
-  (Settings → Focus → Sleep → Apps).
-</p>
       </div>
+
+      <!-- Account -->
+      <div class="st-group">
+        <div class="st-heading">Account</div>
+
+        <div class="st-row">
+          <div class="st-row-text">
+            <div class="st-label" id="settingsAccountLabel">Account</div>
+            <div class="st-value" id="settingsEmail">Not signed in</div>
+          </div>
+        </div>
+
+        <div class="st-row st-row-stack">
+          <div class="st-row-text">
+            <div class="st-label">Subscription</div>
+            <div class="st-value" id="subStatusText">Loading…</div>
+          </div>
+          <div class="st-row-actions">
+            <button class="btn-primary gold" onclick="showUpgrade()">View plans →</button>
+            <button class="btn-ghost st-action" onclick="restorePurchases()" id="restoreBtn">Restore purchases</button>
+          </div>
+          <div id="restoreMsg" class="st-msg" style="display:none"></div>
+        </div>
+
+        <!-- Promo code (web only: hidden on native by the script below, App Store guideline 3.1.1) -->
+        <div class="st-row st-row-stack" id="promoCard">
+          <div class="st-row-text"><div class="st-label">Promo code</div></div>
+          <div class="st-field">
+            <input id="promoCodeInput" type="text" class="st-input" placeholder="Enter code" autocomplete="off"/>
+            <button class="btn-ghost st-action" onclick="redeemPromoCode()">Redeem</button>
+          </div>
+          <div id="promoMsg" class="st-msg" style="display:none"></div>
+        </div>
+
+        <div class="st-row">
+          <button class="btn-ghost st-action" onclick="signOut()">Sign out</button>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="st-group">
+        <div class="st-heading">About</div>
+        <div class="st-row">
+          <div class="st-row-text"><div class="st-label">Version</div><div class="st-value" id="settingsVersion">—</div></div>
+        </div>
+        <div class="st-row"><a class="st-link" href="https://stillprayer.app/privacy" target="_blank" rel="noopener">Privacy policy</a></div>
+        <div class="st-row"><a class="st-link" href="https://stillprayer.app/support" target="_blank" rel="noopener">Support</a></div>
+        <div class="st-colophon">Set in Cormorant Garamond and Instrument Sans. Scripture in the Douay-Rheims.</div>
+      </div>
+
+      <!-- Delete account: alone at the very bottom, the only red on the screen -->
+      <div class="st-delete">
+        <button class="st-delete-btn" onclick="showDeleteAccount()">Delete account</button>
+        <div class="st-delete-note">Permanently removes your account and all your practice history.</div>
+      </div>
+
+    </div><!-- /st-body -->
 
       <script>
       /* ═══════════ Bell voice picker + custom bells (device-local) ═══════════ */
@@ -3208,11 +3217,12 @@ body.is-mobile #mobileEnterTab { display: block; }
           var current = localStorage.getItem(LS_VOICE) || 'bell-call.wav';
           host.innerHTML = VOICES.map(function (v) {
             var sel = v.file === current;
-            return '<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0">' +
-              '<label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-family:\'Cormorant Garamond\',serif;font-size:14px;color:rgba(255,255,255,' + (sel ? '.9' : '.55') + ')">' +
-                '<input type="radio" name="stillBellVoice" value="' + v.file + '"' + (sel ? ' checked' : '') + ' style="accent-color:#c8920c">' + v.name +
+            return '<div class="st-voice-row' + (sel ? ' is-chosen' : '') + '">' +
+              '<label class="st-voice">' +
+                '<input type="radio" name="stillBellVoice" value="' + v.file + '"' + (sel ? ' checked' : '') + ' class="st-voice-radio">' +
+                '<span class="st-voice-name">' + v.name + '</span>' +
               '</label>' +
-              '<button type="button" onclick="stillPreviewBell(\'' + v.file + '\')" aria-label="Preview ' + v.name + '" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:50%;width:26px;height:26px;color:rgba(255,255,255,.6);cursor:pointer;font-size:10px;line-height:1">\u25B6</button>' +
+              '<button type="button" class="st-play" onclick="stillPreviewBell(\'' + v.file + '\')" aria-label="Preview ' + v.name + '">\u25B6</button>' +
             '</div>';
           }).join('');
           host.querySelectorAll('input[name="stillBellVoice"]').forEach(function (r) {
@@ -3229,17 +3239,15 @@ body.is-mobile #mobileEnterTab { display: block; }
           if (!host) return;
           var slots = loadCustom();
           host.innerHTML = slots.map(function (s) {
-            return '<div class="custom-bell-row" data-slot="' + s.slot + '" style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)">' +
-              '<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px">' +
-                '<input class="custom-bell-label" type="text" value="' + s.label.replace(/"/g, '&quot;') + '" maxlength="20" placeholder="Name this bell" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:\'Montserrat\',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:8px 10px;outline:none;border-radius:6px">' +
-                '<button type="button" class="custom-bell-toggle" aria-pressed="' + (s.on ? 'true' : 'false') + '" onclick="stillToggleCustomBell(this)" style="position:relative;flex:0 0 auto;width:46px;height:26px;border-radius:13px;border:none;background:' + (s.on ? 'rgba(200,146,12,.85)' : 'rgba(255,255,255,.15)') + ';cursor:pointer">' +
-                  '<span style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s;display:block;transform:' + (s.on ? 'translateX(20px)' : 'translateX(0)') + '"></span>' +
-                '</button>' +
+            return '<div class="custom-bell-row st-custom-row" data-slot="' + s.slot + '">' +
+              '<div class="st-custom-line">' +
+                '<input class="custom-bell-label st-input" type="text" value="' + s.label.replace(/"/g, '&quot;') + '" maxlength="20" placeholder="Name this bell">' +
+                '<button type="button" class="custom-bell-toggle st-switch" aria-pressed="' + (s.on ? 'true' : 'false') + '" onclick="stillToggleCustomBell(this)" aria-label="Ring this bell"><span></span></button>' +
               '</div>' +
-              '<div style="display:flex;align-items:center;gap:10px">' +
-                '<input class="custom-bell-time" type="time" value="' + s.time + '" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font-family:\'Cormorant Garamond\',serif;font-size:13px;padding:6px 8px;outline:none;border-radius:6px">' +
-                '<select class="custom-bell-voice" style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-family:\'Cormorant Garamond\',serif;font-size:13px;padding:6px 8px;outline:none;border-radius:6px">' + voiceOptions(s.voice) + '</select>' +
-                '<button type="button" onclick="stillPreviewBell(this.parentNode.querySelector(\'.custom-bell-voice\').value)" aria-label="Preview" style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:50%;width:26px;height:26px;color:rgba(255,255,255,.6);cursor:pointer;font-size:10px;flex:0 0 auto;line-height:1">\u25B6</button>' +
+              '<div class="st-custom-line">' +
+                '<input class="custom-bell-time st-input st-input-time" type="time" value="' + s.time + '">' +
+                '<select class="custom-bell-voice st-select">' + voiceOptions(s.voice) + '</select>' +
+                '<button type="button" class="st-play" onclick="stillPreviewBell(this.parentNode.querySelector(\'.custom-bell-voice\').value)" aria-label="Preview">\u25B6</button>' +
               '</div>' +
             '</div>';
           }).join('');
@@ -3269,32 +3277,6 @@ body.is-mobile #mobileEnterTab { display: block; }
       })();
       </script>
       
-      <!-- Subscription -->
-      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:6px">Subscription</div>
-        <div id="subStatusText" style="font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-bottom:14px">Loading…</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <button onclick="showUpgrade()" style="width:100%;padding:10px;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">View Plans</button>
-          <button onclick="restorePurchases()" id="restoreBtn" style="width:100%;padding:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:8px">Restore Purchases</button>
-          <div id="restoreMsg" style="display:none;text-align:center;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8);margin-top:4px"></div>
-        </div>
-        <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08)">
-  <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:10px">Account</p>
-  <button onclick="showDeleteAccount()" style="width:100%;padding:12px;background:none;border:1px solid rgba(255,73,64,.35);color:rgba(255,73,64,.75);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;border-radius:4px">Delete Account</button>
-  <p style="font-family:'Heebo',sans-serif;font-size:11px;color:rgba(255,255,255,.3);line-height:1.6;margin-top:8px">Permanently removes your account and all your practice history.</p>
-</div>
-      </div>
-     
-      <!-- Promo Code (web only — hidden on iOS per App Store guideline 3.1.1) -->
-      <div id="promoCard" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:12px">
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:12px">Promo Code</div>
-        <div style="display:flex;gap:8px">
-          <input id="promoCodeInput" type="text" placeholder="Enter code"
-            style="flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;padding:10px 14px;letter-spacing:.1em;text-transform:uppercase;outline:none"/>
-          <button onclick="redeemPromoCode()" style="padding:10px 16px;background:rgba(200,146,12,.15);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;border-radius:6px">Redeem</button>
-        </div>
-        <div id="promoMsg" style="display:none;margin-top:10px;font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(200,146,12,.8)"></div>
-      </div>
       <script>
       // Apple 3.1.1 / 2.1: web-only surfaces hidden on iOS
       if (window.Capacitor && window.Capacitor.isNativePlatform && Capacitor.isNativePlatform()) {
@@ -3312,10 +3294,45 @@ body.is-mobile #mobileEnterTab { display: block; }
       
       </script>
 
-      <!-- Done -->
-      <button class="btn-primary gold" onclick="closeSettings()" id="settingsDoneBtn" style="width:100%;justify-content:center;margin-bottom:10px;border-radius:10px;padding:14px">Done</button>
+    <script>
+    /* Settings sheet, display only: the platform for the notification note,
+       the account line, the version, and the master switch's aria state.
+       Reads window.currentUser, localStorage.still_bell and the Capacitor
+       platform; writes nothing but text and attributes; calls nothing. */
+    (function () {
+      /* android/app/build.gradle says 1.3.0; ios MARKETING_VERSION says 1.0;
+         still-mobile/package.json says 1.0.0. One number here until they agree. */
+      var VERSION = '1.3.0';
+      var m = document.getElementById('settingsModal');
+      if (!m) return;
+      function platform() {
+        try {
+          if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) return 'web';
+          return (window.Capacitor.getPlatform && window.Capacitor.getPlatform() === 'ios') ? 'ios' : 'android';
+        } catch (e) { return 'web'; }
+      }
+      function bellOn() { try { return localStorage.getItem('still_bell') !== 'off'; } catch (e) { return true; } }
+      function paint() {
+        m.setAttribute('data-platform', platform());
+        var u = window.currentUser, email = u && u.email;
+        var lab = document.getElementById('settingsAccountLabel');
+        var val = document.getElementById('settingsEmail');
+        if (lab) lab.textContent = email ? 'Signed in as' : 'Account';
+        if (val) val.textContent = email ? email : 'Not signed in';
+        m.setAttribute('data-signed-in', email ? 'true' : 'false');
+        var v = document.getElementById('settingsVersion');
+        if (v) v.textContent = VERSION;
+        var b = document.getElementById('bellOnBtn');
+        if (b) b.setAttribute('aria-pressed', bellOn() ? 'true' : 'false');
+      }
+      new MutationObserver(function () { if (m.classList.contains('open')) paint(); })
+        .observe(m, { attributes: true, attributeFilter: ['class'] });
+      var b = document.getElementById('bellOnBtn');
+      if (b) b.addEventListener('click', function () { b.setAttribute('aria-pressed', bellOn() ? 'true' : 'false'); });
+      paint();
+    })();
+    </script>
 
-    </div>
   </div>
 </div>
 
@@ -3697,8 +3714,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   .feat-item.is-near .fn { font-size: 22px !important; }
   .feat-item.is-far .fn { font-size: 15px !important; }
 
-  .modal-panel p, .modal-panel span, .modal-panel div { font-size: 14px !important; }
-  .modal-section-label { font-size: 11px !important; }
 
   .feature-main p { font-size: 15px !important; line-height: 1.7 !important; }
   .feature-main h1, .feature-main h2 { font-size: 22px !important; }
@@ -4470,6 +4485,123 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 @media (prefers-reduced-motion:reduce){
   :is(.voice-screen,.voice-pane) .voice-listening{animation:none;}
 }
+
+/* ═══════════════════════════════════════════
+   SETTINGS -- on the DESIGN.md tokens
+   Chrome, not a practice: no atmosphere, the field alone on --ink-1. Five
+   groups (Practice, Bells, Reading, Account, About) as sans micro headings
+   with hairline rows beneath, Delete account alone at the bottom. One switch
+   (.st-switch, driven by aria-pressed, which every setter already writes;
+   the !importants beat the inline background and knob transform the setters
+   also write), one segmented control (.st-seg, the chosen button read off the
+   inline colour renderRiteButtons()/setDepth() write, as Breath Prayer reads
+   its inline styles), the bell voices as rows with a play control. The mobile
+   block's 14px rule on every div in the panel is retired, so no size here
+   needs !important. The sheet keeps its overlay geometry and the iOS
+   max-height rule above; the header is sticky inside the scrolling panel.
+═══════════════════════════════════════════ */
+#settingsModal .modal-panel.st-panel{
+  padding:0!important; /* the global .modal-panel padding and the iOS padding-top; the head and body carry their own */
+  margin:0 auto;max-width:420px;width:100%;overflow-y:auto;overscroll-behavior:contain;
+  background:var(--ink-1);border-top:1px solid var(--gold-a25);border-radius:var(--r-sm) var(--r-sm) 0 0;
+  font-family:var(--font-sans);color:var(--text-hi);}
+#settingsModal .st-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+  padding:var(--s-4) var(--gutter);background:var(--ink-1);border-bottom:1px solid var(--line);}
+#settingsModal .st-title{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-tight);color:var(--text-hi);}
+#settingsModal .st-close{padding:6px 0;}
+#settingsModal .st-body{padding:0 var(--gutter) var(--s-6);}
+#settingsModal #bells-settings,#settingsModal #rite-settings{scroll-margin-top:64px;} /* revealSettingsSection() scrolls them under the sticky head */
+
+/* Groups and rows */
+#settingsModal .st-group{margin-top:var(--s-6);}
+#settingsModal .st-group:first-child{margin-top:var(--s-4);}
+#settingsModal .st-heading{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-2);}
+#settingsModal .st-row{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);padding:var(--s-4) 0;border-top:1px solid var(--line);}
+#settingsModal .st-row-stack{flex-direction:column;align-items:stretch;gap:var(--s-3);}
+#settingsModal .st-row-text{min-width:0;flex:1 1 auto;}
+#settingsModal .st-label{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-snug);color:var(--text-hi);}
+#settingsModal .st-hint{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);margin-top:2px;text-wrap:pretty;}
+#settingsModal .st-value{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-snug);color:var(--text-mid);margin-top:2px;overflow-wrap:anywhere;}
+#settingsModal .st-sub{padding:var(--s-4) 0;border-top:1px solid var(--line);}
+#settingsModal .st-sublabel{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-hi);margin-bottom:var(--s-2);}
+#settingsModal .st-sub .st-hint{margin:0 0 var(--s-3);}
+#settingsModal .st-hour{display:flex;align-items:baseline;gap:var(--s-3);}
+#settingsModal .st-time{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-low);font-variant-numeric:tabular-nums;}
+
+/* The switch. State is aria-pressed; the setters also write an inline background and knob transform, hence the !importants. */
+#settingsModal .st-switch{position:relative;flex:0 0 auto;width:46px;height:26px;border-radius:13px;padding:0;cursor:pointer;
+  border:1px solid var(--line-strong);background:var(--ink-2)!important; /* the inline background the setters write */
+  transition:background var(--d-base) var(--ease-out),border-color var(--d-base) var(--ease-out);}
+#settingsModal .st-switch span{position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;display:block;background:var(--text-low);
+  transform:translateX(0)!important; /* the inline knob transform the setters write */
+  transition:transform var(--d-base) var(--ease-out),background var(--d-base) var(--ease-out);}
+#settingsModal .st-switch[aria-pressed="true"]{background:var(--gold-a25)!important;border-color:var(--gold-a55);}
+#settingsModal .st-switch[aria-pressed="true"] span{background:var(--candle);transform:translateX(20px)!important;}
+
+/* The segmented control. The chosen button is the one whose inline colour is the candle (#f0c040, serialised rgb(240, 192, 64)). */
+#settingsModal .st-seg{display:flex;width:100%;max-width:22rem;border:1px solid var(--line-strong);border-radius:var(--r-pill);overflow:hidden;}
+#settingsModal .st-seg-btn{flex:1 1 0;min-width:0;padding:10px 8px;border:0;cursor:pointer;white-space:nowrap;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  background:none!important;color:var(--text-low)!important; /* the inline colours renderRiteButtons() and setDepth() write */
+  transition:color var(--d-base),background var(--d-base);}
+#settingsModal .st-seg-btn + .st-seg-btn{border-left:1px solid var(--line-strong);}
+#settingsModal .st-seg-btn[style*="240, 192, 64"],#settingsModal .st-seg-btn[style*="f0c040"]{background:var(--gold-a10)!important;color:var(--candle)!important;}
+
+/* Bell voices and the play control */
+#settingsModal .st-voice-row{display:flex;align-items:center;justify-content:space-between;gap:var(--s-3);padding:var(--s-2) 0;}
+#settingsModal .st-voice{display:flex;align-items:center;cursor:pointer;position:relative;min-width:0;}
+#settingsModal .st-voice-radio{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none;}
+#settingsModal .st-voice-name{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-mid);padding-left:1.4em;position:relative;transition:color var(--d-base);}
+#settingsModal .st-voice-name::before{content:"";position:absolute;left:.2em;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;border:1px solid var(--line-strong);}
+#settingsModal .is-chosen .st-voice-name{color:var(--candle);}
+#settingsModal .is-chosen .st-voice-name::before{background:var(--candle);border-color:var(--candle);box-shadow:0 0 8px rgba(242,199,119,.55);}
+#settingsModal .st-voice:hover .st-voice-name{color:var(--text-hi);}
+#settingsModal .st-play{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border-radius:50%;
+  border:1px solid var(--line-strong);background:none;color:var(--text-low);font-size:10px;line-height:1;cursor:pointer;transition:color var(--d-fast),border-color var(--d-fast);}
+#settingsModal .st-play:hover{color:var(--candle);border-color:var(--candle);}
+
+/* Your own bells */
+#settingsModal .st-custom-row{padding:var(--s-3) 0;border-top:1px solid var(--line);}
+#settingsModal .st-custom-line{display:flex;align-items:center;gap:var(--s-2);}
+#settingsModal .st-custom-line + .st-custom-line{margin-top:var(--s-2);}
+#settingsModal .st-input,#settingsModal .st-select{flex:1 1 auto;min-width:0;box-sizing:border-box;padding:8px 10px;outline:none;
+  background:rgba(255,246,232,.04);border:1px solid var(--line);border-radius:var(--r-sm);color:var(--text-hi);
+  font-family:var(--font-sans);font-size:var(--t-base);line-height:1.3;transition:border-color var(--d-base);} /* --t-base keeps iOS from zooming */
+#settingsModal .st-input:focus,#settingsModal .st-select:focus{border-color:var(--gold-a55);}
+#settingsModal .st-input::placeholder{color:var(--text-faint);}
+#settingsModal .st-input-time{flex:0 0 auto;width:auto;}
+#settingsModal .st-select{color:var(--text-mid);}
+#settingsModal .st-select option{background:var(--ink-1);color:var(--text-hi);}
+#settingsModal .st-save{display:block;width:100%;box-sizing:border-box;text-align:center;margin-top:var(--s-4);}
+#settingsModal .st-saved{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--gold);text-align:center;margin-top:var(--s-2);}
+
+/* The notification note, by platform (data-platform is set by the sheet's script; web until it runs) */
+#settingsModal .st-note{display:none;font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);margin-top:var(--s-4);text-wrap:pretty;}
+#settingsModal[data-platform="ios"] .st-note[data-for="ios"],
+#settingsModal[data-platform="android"] .st-note[data-for="android"],
+#settingsModal[data-platform="web"] .st-note[data-for="web"],
+#settingsModal:not([data-platform]) .st-note[data-for="web"]{display:block;}
+/* initBellSettings() inserts its own web note (#bellsAppNote) before the Save button for signed-in users; the platform note above says it. */
+#settingsModal #bellsAppNote{display:none!important;}
+
+/* Account and About */
+#settingsModal .st-row-actions{display:flex;align-items:center;gap:var(--s-4);flex-wrap:wrap;}
+#settingsModal .st-panel .btn-primary,#settingsModal .btn-primary{padding:10px 18px;}
+#settingsModal .st-action{padding:8px 0;}
+#settingsModal .st-msg{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--gold);line-height:var(--lh-text);}
+#settingsModal .st-field{display:flex;align-items:center;gap:var(--s-3);}
+#settingsModal .st-field .st-input{text-transform:uppercase;letter-spacing:.06em;}
+#settingsModal .st-field .st-input::placeholder{text-transform:none;letter-spacing:0;}
+#settingsModal .st-link{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-mid);text-decoration:none;transition:color var(--d-fast);}
+#settingsModal .st-link::after{content:" →";color:var(--text-faint);}
+#settingsModal .st-link:hover{color:var(--candle);}
+#settingsModal .st-colophon{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-faint);padding:var(--s-4) 0;border-top:1px solid var(--line);text-wrap:pretty;}
+
+/* Delete account: the only red on the screen */
+#settingsModal .st-delete{margin-top:var(--s-7);padding:var(--s-5) 0 var(--s-4);border-top:1px solid var(--line);}
+#settingsModal .st-delete-btn{background:none;border:0;padding:0;cursor:pointer;font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);}
+#settingsModal .st-delete-btn:hover{color:rgba(255,140,116,1);}
+#settingsModal .st-delete-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-faint);margin-top:var(--s-1);}
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
