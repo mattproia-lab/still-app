@@ -2552,9 +2552,12 @@ body.is-mobile #mobileEnterTab { display: block; }
       </div>
 
       <!-- ── INSPIRATION / THE MYSTIC TAB ── -->
-      <div id="autobio-mystic" class="autobio-pane" style="display:none">
+      <!-- Amma Sophia, on the voice pattern in place (DESIGN.md, The voices).
+           Her portrait stays framed; it recedes as the person writes, and steps
+           aside with the day's quote once the ask has left the opening. The
+           ids and the panels showMysticState() toggles are unchanged. -->
+      <div id="autobio-mystic" class="autobio-pane voice-pane" style="display:none">
 
-        <!-- Her portrait: framed, the words beneath it, not over it -->
         <div class="devotional graded ab-portrait" aria-hidden="true">
           <img src="still-mobile/src/image/saint_bg.jpg" alt="" />
         </div>
@@ -2568,34 +2571,33 @@ body.is-mobile #mobileEnterTab { display: block; }
           <div class="voice-attrib ab-quote-source" id="mysticQuoteSource"></div>
         </div>
 
-        <!-- Ask or receive -->
+        <!-- The opening: she speaks, the person writes -->
         <div id="mysticInput" class="companion-state active">
-          <div class="ab-note">Bring a question, or leave it empty and let her speak</div>
-          <textarea class="companion-textarea ab-write" id="mysticText"
-            placeholder="Or ask her something…"
+          <div class="voice-prompt">Bring a question, or leave it empty and let me speak.</div>
+          <textarea class="companion-textarea voice-write" id="mysticText"
+            placeholder="Ask me something…"
             rows="4"></textarea>
-          <div class="btn-row left ab-row">
-            <button class="btn-primary gold" onclick="askMystic()">Speak to me -></button>
+          <div class="voice-actions">
+            <button class="btn-primary gold" onclick="askMystic()">Speak to me →</button>
           </div>
-          <div id="mysticErr" class="ab-err" style="display:none"></div>
+          <div id="mysticErr" class="voice-err" style="display:none"></div>
         </div>
 
-        <!-- Loading -->
-        <div id="mysticLoading" class="companion-state ab-state" style="display:none">
-          <div class="ab-state-line">She is listening…</div>
-          <div class="ab-state-sub">From the desert, slowly.</div>
+        <!-- Listening -->
+        <div id="mysticLoading" class="companion-state" style="display:none">
+          <div class="voice-listening">She is listening…</div>
+          <div class="voice-listening-sub">From the desert, slowly.</div>
         </div>
 
-        <!-- Response -->
+        <!-- The answer: a reading surface under her name -->
         <div id="mysticResponse" class="companion-state" style="display:none">
-          <div class="ab-response">
-            <div class="ui-label">Amma Sophia</div>
-            <div id="mysticResponseText" class="ab-response-text"></div>
+          <div class="voice-answer">
+            <div id="mysticResponseText" class="voice-reply"></div>
             <div class="share-watermark">stillprayer.app</div>
           </div>
-          <div class="btn-row left ab-row">
-            <button class="btn-ghost ab-listen" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear Response</button>
-            <button class="btn-primary" onclick="resetMystic()">Ask another -></button>
+          <div class="voice-after">
+            <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear response</button>
+            <button class="btn-primary gold" onclick="resetMystic()">Ask another →</button>
           </div>
         </div>
 
@@ -3708,7 +3710,6 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   .auth-input { font-size: 16px !important; }
   .auth-btn { font-size: 13px !important; }
   #screen-darkness .content-card p { font-size: 20px !important; line-height: 1.9 !important; }
-  #mysticResponseText { font-size: 18px !important; line-height: 1.8 !important; color: rgba(255,255,255,.94) !important; }
 }
 @keyframes flameFlick{
   0%,100%{transform:scaleX(1) scaleY(1) translateY(0);}
@@ -4351,8 +4352,12 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 /* Record: renderPracticeCalendar() paints its own cells inline; only the frame is set here */
 #screen-autobiography .ab-calendar{width:100%;}
 
-/* Inspiration: her portrait framed, her words beneath, the quote as a voice */
-#screen-autobiography .ab-portrait{aspect-ratio:3/2;margin:0 auto var(--s-4);}
+/* Inspiration: Amma Sophia on the voice pattern (the shared .voice-* rules,
+   scoped to .voice-pane). While her tab is in hand the room takes her hue,
+   SOPHIA beside the W[] array: a dusk blue between the Companion's navy and
+   Deeper's softer blue. Her portrait stays framed, her words beneath it. */
+#screen-autobiography:has(#autobio-mystic.active){--atmos-rgb:58,86,150;--atmos-a:.68;}
+#screen-autobiography .ab-portrait{aspect-ratio:3/2;margin:0 auto var(--s-4);transition:opacity var(--d-veil) var(--ease-breath);}
 #screen-autobiography .ab-portrait img{object-fit:cover;object-position:center 20%;}
 #screen-autobiography .ab-portrait-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);text-align:center;}
 #screen-autobiography .ab-portrait-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);color:var(--text-mid);text-align:center;margin:var(--s-1) 0 var(--s-6);}
@@ -4360,18 +4365,22 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-autobiography .ab-quote .ui-label{margin-bottom:var(--s-2);}
 #screen-autobiography .ab-quote-text{margin:0;max-width:none;text-wrap:pretty;}
 #screen-autobiography .ab-quote-source{margin-top:var(--s-2);}
-#screen-autobiography .ab-response{border-left:1px solid var(--gold-a55);padding:2px 0 2px var(--s-4);margin:0 0 var(--s-4);}
-#screen-autobiography .ab-response .ui-label{margin-bottom:var(--s-2);}
-#screen-autobiography .ab-response-text{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
-#screen-autobiography .ab-response .share-watermark{margin-top:var(--s-3);}
-#screen-autobiography .ab-listen{background:none;border:0;padding:8px 0;cursor:pointer;}
+/* Her figure recedes as the person writes (the frame fades with it, the page holds
+   still). Once the ask has left the opening -- showMysticState() hides #mysticInput
+   inline -- the portrait and the day's quote step aside, and her name heads the
+   listening and the answer. */
+#autobio-mystic:has(#mysticText:focus) .ab-portrait,
+#autobio-mystic:has(#mysticText:not(:placeholder-shown)) .ab-portrait{opacity:0;}
+#autobio-mystic:has(#mysticInput[style*="none"]) .ab-portrait,
+#autobio-mystic:has(#mysticInput[style*="none"]) .ab-quote{display:none;}
 
 @media (prefers-reduced-motion:reduce){
   #screen-autobiography .autobio-pane.active{--rise:0px;}
 }
 
 /* ═══════════════════════════════════════════
-   THE VOICES -- the Companion and Deeper on one pattern
+   THE VOICES -- the Companion and Deeper on one pattern; Amma Sophia's tab
+   (.voice-pane, in the Autobiography) shares the text rules
    Three states on the .companion-state panels the ask functions toggle.
    Opening: the voice's mark, its name and line, the prompt in the serif (the
    voice is speaking, so no quotation marks), the textarea, the action with
@@ -4400,6 +4409,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   --atmos-x:50%;--atmos-y:36%;--atmos-gy:30%;
 }
 .voice-screen{--measure-read:30rem;--d-veil:calc(var(--d-breath) * 1.5);}
+.voice-pane{--d-veil:calc(var(--d-breath) * 1.5);}
 
 /* The figure: the lower half of the frame, its top dissolving into the
    light, the photograph quieted and washed toward the hue. */
@@ -4417,48 +4427,48 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-deeper:has(#deeperInput.active #deeperText:placeholder-shown:not(:focus)) .atmos-photo{opacity:1;}
 
 /* The opening */
-.voice-screen .voice-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
-.voice-screen .voice-mark{width:22px;height:27px;margin:var(--s-2) auto var(--s-4);color:var(--gold-a55);}
-.voice-screen .voice-mark svg{display:block;width:100%;height:100%;}
-.voice-screen .voice-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);}
-.voice-screen .voice-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);margin:var(--s-1) 0 var(--s-6);}
-.voice-screen .voice-prompt{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
+:is(.voice-screen,.voice-pane) .voice-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
+:is(.voice-screen,.voice-pane) .voice-mark{width:22px;height:27px;margin:var(--s-2) auto var(--s-4);color:var(--gold-a55);}
+:is(.voice-screen,.voice-pane) .voice-mark svg{display:block;width:100%;height:100%;}
+:is(.voice-screen,.voice-pane) .voice-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);}
+:is(.voice-screen,.voice-pane) .voice-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);margin:var(--s-1) 0 var(--s-6);}
+:is(.voice-screen,.voice-pane) .voice-prompt{text-align:center;font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);
   max-width:var(--measure-read);margin:0 auto var(--s-5);text-wrap:balance;}
 /* The textarea. The !importants answer the global .companion-textarea rule it still carries. */
-.voice-screen .voice-write{display:block;box-sizing:border-box;width:100%;max-width:var(--measure-read);margin:0 auto;min-height:7rem!important;resize:vertical!important;
+:is(.voice-screen,.voice-pane) .voice-write{display:block;box-sizing:border-box;width:100%;max-width:var(--measure-read);margin:0 auto;min-height:7rem!important;resize:vertical!important;
   background:rgba(5,3,2,.40)!important;border:1px solid var(--line)!important;border-radius:var(--r-sm);color:var(--text-hi)!important;
   padding:var(--s-3) var(--s-4)!important;font-family:var(--font-serif)!important;font-style:italic;font-size:var(--t-base)!important;line-height:var(--lh-text)!important;
   outline:none;transition:border-color var(--d-base);}
-.voice-screen .voice-write:focus{border-color:var(--gold-a55)!important;}
-.voice-screen .voice-write::placeholder{color:var(--text-faint);font-style:italic;}
-.voice-screen .voice-actions{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
+:is(.voice-screen,.voice-pane) .voice-write:focus{border-color:var(--gold-a55)!important;}
+:is(.voice-screen,.voice-pane) .voice-write::placeholder{color:var(--text-faint);font-style:italic;}
+:is(.voice-screen,.voice-pane) .voice-actions{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);
   max-width:var(--measure-read);margin:var(--s-4) auto 0;text-align:left;}
 /* The remaining line: the sans at micro size, sentence case so it holds to two lines beside the action at 390px */
-.voice-screen .voice-remaining{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.06em;
+:is(.voice-screen,.voice-pane) .voice-remaining{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:.06em;
   color:var(--text-low);line-height:1.5;}
-.voice-screen .voice-actions .btn-primary{margin-left:auto;flex:0 0 auto;}
-.voice-screen .voice-err{font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);text-align:center;margin-top:var(--s-3);}
+:is(.voice-screen,.voice-pane) .voice-actions .btn-primary{margin-left:auto;flex:0 0 auto;}
+:is(.voice-screen,.voice-pane) .voice-err{font-family:var(--font-sans);font-size:var(--t-sm);color:rgba(255,120,96,.85);text-align:center;margin-top:var(--s-3);}
 
 /* Listening */
-.voice-screen .voice-listening{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--text-mid);
+:is(.voice-screen,.voice-pane) .voice-listening{text-align:center;font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);color:var(--text-mid);
   padding-top:var(--s-7);animation:officeBreath 2.4s ease-in-out infinite;}
-.voice-screen .voice-listening-sub{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-faint);margin-top:var(--s-2);}
+:is(.voice-screen,.voice-pane) .voice-listening-sub{text-align:center;font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-faint);margin-top:var(--s-2);}
 
 /* The answer: a reading surface, no card */
-.voice-screen .voice-answer{max-width:var(--measure-read);margin:0 auto;text-align:left;}
-.voice-screen .voice-source{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+:is(.voice-screen,.voice-pane) .voice-answer{max-width:var(--measure-read);margin:0 auto;text-align:left;}
+:is(.voice-screen,.voice-pane) .voice-source{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-4);}
-.voice-screen .voice-source:empty{display:none;}
-.voice-screen .voice-reply{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
-.voice-screen .voice-invitation{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);
+:is(.voice-screen,.voice-pane) .voice-source:empty{display:none;}
+:is(.voice-screen,.voice-pane) .voice-reply{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
+:is(.voice-screen,.voice-pane) .voice-invitation{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);
   margin-top:var(--s-5);padding-top:var(--s-4);border-top:1px solid var(--line);}
-.voice-screen .voice-invitation:empty{display:none;}
-.voice-screen .voice-answer .share-watermark{margin-top:var(--s-4);}
-.voice-screen .voice-after{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);margin-top:var(--s-6);}
-.voice-screen .voice-after .btn-ghost{color:var(--text-low);}
+:is(.voice-screen,.voice-pane) .voice-invitation:empty{display:none;}
+:is(.voice-screen,.voice-pane) .voice-answer .share-watermark{margin-top:var(--s-4);}
+:is(.voice-screen,.voice-pane) .voice-after{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);margin-top:var(--s-6);}
+:is(.voice-screen,.voice-pane) .voice-after .btn-ghost{color:var(--text-low);}
 
 @media (prefers-reduced-motion:reduce){
-  .voice-screen .voice-listening{animation:none;}
+  :is(.voice-screen,.voice-pane) .voice-listening{animation:none;}
 }
 
 /* ═══════════════════════════════════════════
@@ -5211,6 +5221,10 @@ const W=[
   {r:12, g:64, b:88, i:.85,base:'#010507'}, // Dialogue Chamber -- deep sea
   {r:70, g:70, b:90, i:.50,base:'#020208'}, // Resources -- muted blue-grey
 ];
+// Amma Sophia -- dusk blue, between the Companion's navy and Deeper's softer blue.
+// She is the Autobiography's Inspiration tab, not a home world, so she is not a row;
+// the stylesheet takes these numbers verbatim (DESIGN.md, The voices).
+const SOPHIA={r:58, g:86, b:150,i:.68,base:'#020309'};
 const HOME={r:82,g:20,b:140,i:.28,base:'#030305'};
 const NIGHTWATCH={r:4,g:4,b:30,i:.12,base:'#010108'};
 
