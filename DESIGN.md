@@ -588,7 +588,16 @@ button stops breathing.
   a `sittingsLeft` field is ignored. To walk a trial on the preview with a
   throwaway account: set `daysLeft` to 14 to see the terms (they show for a
   trial that began within the last day), then lower it; clear
-  `still_trial_terms_shown` to see the terms again.
+  `still_trial_terms_shown` to see the terms again. The one reminder
+  (`#trialReminder`, in Contemplative Sitting's Session Complete panel): when
+  `PAYWALL_REMIND_DAYS` (3) days or fewer remain, one sans line beneath the
+  closing quote, "n days left in your trial. Nothing changes until then.",
+  with "See the offer" as a gold link calling `showUpgrade()`. Painted by a
+  script watching the panel's `.active`; shown once per trial and recorded
+  in `still_trial_reminder_shown` the moment it shows, so leaving the screen
+  is the dismissal; never during a practice, never on home, never while a
+  code's extension holds. Set `daysLeft` to 3 and finish a sitting to see
+  it; clear the key to see it again.
 
 ### Hour palette
 
