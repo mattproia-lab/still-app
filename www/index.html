@@ -1444,6 +1444,40 @@ body.is-mobile #mobileEnterTab { display: block; }
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
   })();
+
+  /* The trial's one reminder: on Session Complete, when three days or fewer
+     remain, one line beneath the quote with a quiet link to the offer. Shown
+     once per trial and recorded at that moment, so leaving the screen is the
+     dismissal; never during a practice, never on home. Reads the trial
+     functions; calls nothing but showUpgrade() from its link. */
+  (function () {
+    function due() {
+      try {
+        if (typeof isSubscribed !== 'function' || isSubscribed()) return false;
+        if (typeof trialIsOver !== 'function' || trialIsOver()) return false;
+        if (typeof trialExtensionActive === 'function' && trialExtensionActive()) return false;
+        var start = localStorage.getItem('still_trial_start') || '';
+        if (localStorage.getItem('still_trial_reminder_shown') === start) return false;
+        var left = Math.ceil(getTrialDaysLeft());
+        return left > 0 && left <= PAYWALL_REMIND_DAYS;
+      } catch (e) { return false; }
+    }
+    function paint(panel) {
+      var box = document.getElementById('trialReminder'), text = document.getElementById('trialReminderText');
+      if (!box || !text) return;
+      if (!panel.classList.contains('active') || !due()) { box.hidden = true; return; }
+      var n = Math.ceil(getTrialDaysLeft());
+      text.textContent = n + (n === 1 ? ' day' : ' days') + ' left in your trial. Nothing changes until then.';
+      box.hidden = false;
+      try { localStorage.setItem('still_trial_reminder_shown', localStorage.getItem('still_trial_start') || '1'); } catch (e) {}
+    }
+    function arm() {
+      var panel = document.getElementById('sitting-complete');
+      if (!panel || !window.MutationObserver) return;
+      new MutationObserver(function () { paint(panel); }).observe(panel, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+  })();
 </script>
 
 <!-- ═══════════════════════════════════════════
@@ -1761,6 +1795,11 @@ body.is-mobile #mobileEnterTab { display: block; }
           “Do not be surprised if you fall every day; do not give up, but stand your ground courageously.”
           <span class="voice-attrib">— St. John Climacus</span>
         </blockquote>
+        <!-- The trial's one reminder, shown once when three days or fewer remain (DESIGN.md, Trial) -->
+        <div class="trial-reminder" id="trialReminder" hidden>
+          <span id="trialReminderText"></span>
+          <button type="button" class="trial-reminder-link" onclick="showUpgrade()">See the offer</button>
+        </div>
         <div class="btn-row">
           <button class="btn-primary" onclick="resetSitting()">Sit Again</button>
           <button class="btn-primary gold" onclick="goHome()">Return to Still</button>
@@ -4813,6 +4852,11 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #trialTerms .tt-text{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:balance;}
 #trialTerms .tt-begin{margin-top:var(--s-7);}
 #settingsModal .st-row[hidden]{display:none;}
+/* The reminder beneath the Session Complete quote: one sans line, the link a ghost */
+#screen-sitting .trial-reminder{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);text-align:center;max-width:var(--measure-read);margin:var(--s-5) auto 0;text-wrap:pretty;}
+#screen-sitting .trial-reminder[hidden]{display:none;}
+#screen-sitting .trial-reminder-link{background:none;border:0;padding:0 0 0 var(--s-2);cursor:pointer;font-family:var(--font-sans);font-size:var(--t-sm);color:var(--gold);text-decoration:underline;text-underline-offset:3px;}
+#screen-sitting .trial-reminder-link:hover{color:var(--candle);}
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
@@ -13345,6 +13389,8 @@ const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_
 const PW_TRIAL_EXT_KEY = 'still_trial_ext';    // cached profiles.trial_extended_until
 const PW_PREVIEW_KEY  = 'still_preview_shown';  // which preview milestones have fired
 const PW_TERMS_KEY    = 'still_trial_terms_shown'; // the trial start the terms screen was shown for
+const PW_REMINDER_KEY = 'still_trial_reminder_shown'; // the trial start the one reminder was shown for
+const PAYWALL_REMIND_DAYS = 3;  // the reminder shows when this many days or fewer remain
 const PW_DEBUG_KEY    = 'still_trial_debug';     // dev override: JSON {daysLeft}; read only when set, ignored when subscribed (DESIGN.md, Trial)
 
 function initTrial() {
