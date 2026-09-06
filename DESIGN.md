@@ -763,7 +763,7 @@ button stops breathing.
   `darknessGoto(i)`, marked done and current. "Next" is a bare sans-micro
   button between texts (`.dark-next`); "Hear Reflection" (`#darknessPlayBtn`)
   and "Speak to the Companion" stay on every text; at the seventh there is
-  no summary, no count, no "complete": one line, "That is the last of them.
+  no summary, no count, no "complete": one line, "There is no more to read.
   Stay as long as you need.", and Return to Still. "Begin Again" is gone;
   the track goes back. Nothing is saved; there is no timer.
 
