@@ -13307,7 +13307,6 @@ async function submitAuth() {
     body: JSON.stringify({ email, password })
   });
   const data = await res.json();
-  console.log('auth response:', JSON.stringify(data));
   /* Error display only. GoTrue answers in two shapes ({error, error_description}
      and {error_code, msg}); both are read. Sign-in does not distinguish an
      unknown email from a wrong password (invalid_credentials covers both), so
