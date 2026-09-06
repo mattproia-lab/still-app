@@ -874,6 +874,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   .feat-list-wrap {
     width: 100% !important;
     height: calc(100vh - env(safe-area-inset-top, 44px) - 52px) !important;
+    height: calc(100dvh - env(safe-area-inset-top, 44px) - 52px) !important; /* the visible height on iOS; the vh line above is the fallback */
     padding: 2px 0 200px 22px !important;
     overflow-y: scroll !important;
     overflow-x: hidden !important;
@@ -1116,7 +1117,7 @@ body.is-mobile #mobileEnterTab { display: block; }
       <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
       <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
       <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
         <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries -- adapted for the interior life you actually have.</p>
         <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
         <button onclick="obNext(2)"
@@ -5195,7 +5196,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .info-overlay.open{display:block;}
 .info-panel{
   position:fixed;top:0;right:-100%;
-  width:min(400px,94vw);height:100vh;
+  width:min(400px,94vw);height:100vh;height:100dvh;
   background:rgba(9,8,16,.97);
   border-left:1px solid rgba(200,146,12,.22);
   z-index:199;transition:right .42s cubic-bezier(.4,0,.2,1);
@@ -14909,6 +14910,7 @@ function enterOfficeHour(hour) {
   officeContent.style.overflowY = 'auto';
   officeContent.style.webkitOverflowScrolling = 'touch';
   officeContent.style.height = 'calc(100vh - 120px)';
+  officeContent.style.height = 'calc(100dvh - 120px)';   // the visible height on iOS; the line above stays as the fallback where dvh is unknown
   officeContent.style.paddingBottom = '80px';
   renderOfficeHour(hour);
   if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 300);
