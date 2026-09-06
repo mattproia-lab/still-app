@@ -343,13 +343,14 @@ html,body{width:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behav
 /* The ⓘ on a first visit: a small pulse in the candle colour until it is tapped
    once, then still_info_seen keeps it still (the script beside the home markup).
    The !important answers the inline colour and the mobile block's own. */
-#homeInfoBtn.info-unseen{color:var(--candle)!important;animation:infoPulse 2.2s ease-in-out infinite;transform-origin:center;}
+/* …and only while a practice is highlighted in the list (initial focus, a scroll, a tap); with nothing highlighted the mark rests */
+#home:has(.feat-item.is-active) #homeInfoBtn.info-unseen{color:var(--candle)!important;animation:infoPulse 2.2s ease-in-out infinite;transform-origin:center;}
 @keyframes infoPulse{
   0%,100%{text-shadow:0 0 0 rgba(242,199,119,0);transform:scale(1);}
   50%{text-shadow:0 0 10px rgba(242,199,119,.85),0 0 2px rgba(242,199,119,.9);transform:scale(1.1);}
 }
 @media (prefers-reduced-motion:reduce){
-  #homeInfoBtn.info-unseen{animation:none;text-shadow:0 0 8px rgba(242,199,119,.7);}
+  #home:has(.feat-item.is-active) #homeInfoBtn.info-unseen{animation:none;text-shadow:0 0 8px rgba(242,199,119,.7);}
 }
 
 /* Bottom dot nav */

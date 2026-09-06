@@ -681,9 +681,11 @@ button stops breathing.
   the eyebrow, the badges, the header's label, the description panel and
   its action and the gallery button in the sans, every size, weight,
   colour and spacing as it was, and so are the mobile Enter tab (serif) and
-  the counter (sans); the dots are drawn, with no type. The ⓘ in the header pulses in the candle on a first visit
-  (`#homeInfoBtn.info-unseen`, a text-shadow and a small scale, still under
-  reduced motion) until it is tapped once; the script beside the home
+  the counter (sans); the dots are drawn, with no type. The ⓘ in the header pulses in the candle on a first visit, and only
+  while a practice is highlighted in the list, by the initial focus, a
+  scroll or a tap (`#home:has(.feat-item.is-active) #homeInfoBtn.info-unseen`,
+  a text-shadow and a small scale, still under reduced motion), until it is
+  tapped once; the script beside the home
   markup then writes `still_info_seen` and it never returns.
   `openHomeInfo()` is untouched.
 
