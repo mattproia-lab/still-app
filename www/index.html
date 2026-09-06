@@ -1179,7 +1179,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           <div class="letter-p">You have arrived at Still. May this place of quiet become for you a true haven of the soul.</div>
           <div class="letter-p">The bells are waiting for you. In the ancient rhythm of our life, they call the community together. Go now to the Settings and choose the hours when you wish to be summoned to prayer. Even when you have stepped away, the bell will sound — drawing you back, as the monastery bell has ever drawn scattered hearts home to God.</div>
           <div class="letter-p">Begin today with one contemplative sitting. Let it be in the gentle light of morning, before the weight of the day presses upon you. In time, may this quiet root grow into two sittings of thirty minutes each. From this hidden place all true transformation slowly unfolds.</div>
-          <div class="letter-p">When you enter the Hours of the Office, you may receive the words as text upon the page or let them come to you as living voice. Try both. Let the Spirit teach you which way best serves your prayer.</div>
+          <div class="letter-p">When you enter the Hours of the Divine Office, you may receive the words as text upon the page or let them come to you as living voice. Try both. Let the Spirit teach you which way best serves your prayer.</div>
           <div class="letter-p">Before the week is out, set your Rule. St Benedict taught us that without a rule, even the holiest intention remains only a passing wish. Choose the practices to which you will bind yourself with gentle fidelity. Every practice bears its own guidance. Look always to the small mark in the upper right corner when something is yet unfamiliar. There you will find understanding.</div>
           <div class="letter-p">You are not here by accident, dear guest. Begin.</div>
           <div class="letter-p letter-signoff">In peace and prayer,<br>Brother Guestmaster</div>
@@ -1400,7 +1400,7 @@ function pinDocument() {
       </button>
     </div>
 
-    <div class="pw-keep">Every practice and the Office. The Companion, Amma Sophia, and Deeper. Your spiritual autobiography.</div>
+    <div class="pw-keep">Every practice and the Divine Office. The Companion, Amma Sophia, and Deeper. Your spiritual autobiography.</div>
     <div class="pw-audio">Hearing a voice aloud uses audio credit; you pay only for what you play.</div>
 
     <button class="btn-primary gold btn-begin pw-cta" id="pwCta" onclick="pwSubscribe()">Continue</button>
@@ -1462,7 +1462,7 @@ function pinDocument() {
       if (el('pwSavingAnnual')) el('pwSavingAnnual').textContent = pct > 0 ? ('Save ' + pct + '%') : '';
       // the year by the day, from the same price the row shows, to the nearest cent
       var cents = Math.round(P.annual / 365 * 100);
-      if (el('pwPerDay')) el('pwPerDay').textContent = 'About ' + cents + '\u00A2 a day. Morning and evening prayer, the Office, and every practice, all year.';
+      if (el('pwPerDay')) el('pwPerDay').textContent = 'About ' + cents + '\u00A2 a day. Morning and evening prayer, the Divine Office, and every practice, all year.';
     }
     pwBill(window._pwBilling === 'monthly' ? 'monthly' : 'annual');
     var ti = document.getElementById('paywallTrialInfo');
@@ -2575,7 +2575,7 @@ function pinDocument() {
   </div>
   <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title" id="officeScreenTitle">The Office</span>
+    <span class="screen-title" id="officeScreenTitle">Divine Office</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
 
@@ -2640,7 +2640,7 @@ function pinDocument() {
 <script>
 /* Office atmosphere by hour -- visual layer only (DESIGN.md).
    enterOfficeHour() writes the hour's name into #officeScreenTitle and
-   officeGoChooser() writes "The Office" back. This mirrors that into data-hour
+   officeGoChooser() writes "Divine Office" back. This mirrors that into data-hour
    on the screen root, which the CSS colours the glow from. On the chooser the
    light is the hour the clock says (window._officeAutoHour, set by
    setOfficeTime()). It calls nothing. */
@@ -3441,10 +3441,10 @@ function pinDocument() {
 
         <div class="st-row st-row-stack" id="rite-settings">
           <div class="st-row-text">
-            <div class="st-label">Office calendar</div>
+            <div class="st-label">Divine Office calendar</div>
             <div class="st-hint">Traditional follows the 1960 Roman Breviary. Modern uses Ordinary Time.</div>
           </div>
-          <div class="st-seg" role="group" aria-label="Office calendar">
+          <div class="st-seg" role="group" aria-label="Divine Office calendar">
             <button id="riteTraditionalBtn" class="st-seg-btn" onclick="setLiturgicalRite('traditional')">Traditional</button>
             <button id="riteModernBtn" class="st-seg-btn" onclick="setLiturgicalRite('modern')">Modern</button>
           </div>
@@ -3485,7 +3485,7 @@ function pinDocument() {
         <div class="st-row">
           <div class="st-row-text">
             <div class="st-label" id="settingsBellLabel">Ring the bell</div>
-            <div class="st-hint" id="settingsBellNote">At sitting and each Office hour.</div>
+            <div class="st-hint" id="settingsBellNote">At sitting and each hour of the Divine Office.</div>
           </div>
           <button id="bellOnBtn" class="st-switch" onclick="setBell(!bellEnabled)" aria-pressed="true" aria-label="Ring the bell"><span></span></button>
         </div>
@@ -5907,7 +5907,7 @@ const F=[
   {name:'Saint of the Day',badge:'The Calendar',screen:'saint',
    h:'The day, as the Church keeps it.',
    b:'Today’s celebration on the Roman calendar, its season and colour, and the saint’s life and prayer where one is written.',cta:'Enter'},
-  {name:'The Office',badge:'Morning + Evening',screen:'office',
+  {name:'Divine Office',badge:'Morning + Evening',screen:'office',
    h:'The prayer monks have said for 1,500 years.',
    b:'Morning and Evening. Three minutes. One psalm. One scripture. One collect.',cta:'Begin'},
   {name:'Rule of Life',badge:'Personal Compass',screen:'rule',
@@ -7873,7 +7873,7 @@ async function initSaintScreen() {
       <div class="sd-meta">${saintEsc(tradDay.rank)}${tradDay.weekday ? ' · ' + saintEsc(tradDay.weekday) : ''}${day && day.color ? ' · ' + SAINT_COLOR_LABEL[day.color] : ''}</div>`;
     if (tradDay.commemorations && tradDay.commemorations.length)
       dayHTML += `<div class="sd-also">Commemoration: ${tradDay.commemorations.map(saintEsc).join('; ')}</div>`;
-    dayHTML += `<div class="sd-rite">Rubrics 1960 · the calendar the Office prays</div>`;
+    dayHTML += `<div class="sd-rite">Rubrics 1960 · the calendar the Divine Office prays</div>`;
   } else if (day) {
     const win = day.celebrations.find(c => c.winner);
     const temporal = win && win.source === 'temporal';
@@ -9192,7 +9192,7 @@ function surfaceEcho() {
   const daysAgo = Math.floor((Date.now() - new Date(echo.date)) / 86400000);
   const typeLabel = { sitting:'Contemplative Sitting', lectio:'Lectio Divina',
     examen:'Examen', journal:'Journal entry', companion:'The Companion',
-    office:'The Office', deeper:'Deeper' };
+    office:'Divine Office', deeper:'Deeper' };
   const dateEl = document.getElementById('autobioEchoDate');
   const textEl = document.getElementById('autobioEchoText');
   if (dateEl) dateEl.textContent = `${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago · ${typeLabel[echo.type] || echo.type}`;
@@ -9398,7 +9398,7 @@ function renderEchoesTab() {
   if (empty) empty.style.display='none';
   const typeLabel = { sitting:'Contemplative Sitting', lectio:'Lectio Divina',
     examen:'Examen', journal:'Journal', companion:'The Companion',
-    office:'The Office', deeper:'Deeper', fast:'Fast day' };
+    office:'Divine Office', deeper:'Deeper', fast:'Fast day' };
   container.innerHTML = entries.map(e => {
     const dt = new Date(e.date).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
     let text = e.word || e.oratio?.slice(0,160) ||
@@ -12912,21 +12912,21 @@ const INFO_CONTENT = {
     body: `
       <p>The communion of saints is not a doctrine to memorize. It is a relationship to inhabit. When the Church declares someone a saint, it is not primarily a moral judgment -- it is an ontological claim: this person is with God, and available. The saints are not historical figures. They are present intercessors who have navigated what you are navigating and arrived somewhere.</p>
       <p>When you know the saints specifically -- not as concepts but as particular people with specific failures, specific friendships with God, specific lines they are remembered by -- prayer becomes less solitary. You are not addressing an abstraction. You are asking for help from someone who has been here.</p>
-      <p>This screen shows the day as the Church keeps it: the celebration on the General Roman Calendar -- or on the 1960 calendar, when the Office is set to the traditional rite -- with its rank, its season and week, and its colour, which the light behind the text takes. Where a life has been written for the day's saint, it appears with a prayer. Where none has, the day still speaks: a verse from the Psalms, and on a free Saturday in Ordinary Time, the memorial of the Mother of God.</p>
+      <p>This screen shows the day as the Church keeps it: the celebration on the General Roman Calendar -- or on the 1960 calendar, when the Divine Office is set to the traditional rite -- with its rank, its season and week, and its colour, which the light behind the text takes. Where a life has been written for the day's saint, it appears with a prayer. Where none has, the day still speaks: a verse from the Psalms, and on a free Saturday in Ordinary Time, the memorial of the Mother of God.</p>
     `
   },
 
   office: {
-    title: 'The Office',
+    title: 'Divine Office',
     body: `
       <p>The Liturgy of the Hours -- the Divine Office -- is the oldest continuous prayer practice in Christianity. It is not a devotional supplement to the Mass. It is the Church's daily participation in the prayer of Christ himself, who prayed the Psalms on the cross. Every monk and nun who prays the Office this morning prays with every monk and nun who prayed it this morning last century, and the century before that, back to Benedict, back to the desert, back to the synagogues of Second Temple Judaism.</p>
       <div class="info-panel-quote">
         <p>"Seven times a day I praise you for your righteous ordinances."</p>
         <span>-- Psalm 119:164 · the verse Benedict built his entire Rule around</span>
       </div>
-      <p>Morning and evening prayer create a frame. Everything else in the day lives inside that frame. When you begin the day with the Office, you have consecrated the morning before it fills with anything else. When you close with it, you have accounted for the day before sleep takes it.</p>
+      <p>Morning and evening prayer create a frame. Everything else in the day lives inside that frame. When you begin the day with the Divine Office, you have consecrated the morning before it fills with anything else. When you close with it, you have accounted for the day before sleep takes it.</p>
       <p>Three minutes is enough. The tradition does not require more. It requires faithfulness -- the steady, continuous thread that Fr. Casey calls more important than intensity. One psalm. One scripture. One collect. No rubrics. No Latin. No intimidation. Just the ancient words, said again, by you, today.</p>
-      <p>The app detects morning and evening automatically and adjusts the Office accordingly. On fast days, the midday Office -- Sext, the prayer of the sixth hour -- appears with its traditional connection to the Passion.</p>
+      <p>The app detects morning and evening automatically and adjusts the Divine Office accordingly. On fast days, the midday Office -- Sext, the prayer of the sixth hour -- appears with its traditional connection to the Passion.</p>
     `
   },
 
@@ -14964,7 +14964,7 @@ function enterOfficeHour(hour) {
   window._officeCurrentHour = hour;
   const hourLabels = { vigils:'Vigils', lauds:'Lauds', vespers:'Vespers', compline:'Compline' };
   const titleEl = document.getElementById('officeScreenTitle');
-  if (titleEl) titleEl.textContent = hourLabels[hour] || 'The Office';
+  if (titleEl) titleEl.textContent = hourLabels[hour] || 'Divine Office';
   document.getElementById('officeChooser').style.display = 'none';
   const officeContent = document.getElementById('officeContent');
   officeContent.style.display = 'block';
@@ -14998,7 +14998,7 @@ function officeGoChooser() {
   window._officeCurrentHour = null;
   releaseOfficeLock();
   const titleEl = document.getElementById('officeScreenTitle');
-  if (titleEl) titleEl.textContent = 'The Office';
+  if (titleEl) titleEl.textContent = 'Divine Office';
   document.getElementById('officeChooser').style.display = 'block';
   document.getElementById('officeContent').style.display = 'none';
 }
