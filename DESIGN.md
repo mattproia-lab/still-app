@@ -82,6 +82,21 @@ tokens and components the same way, not by inventing new values.
 
 The scale is fluid (`clamp()` between 390px and 1200px). Never write a pixel
 font-size inside a token screen; never write an inline `style="font-size"`.
+Each step's clamp lives once as `--t-*-fluid`; the step the screens use,
+`--t-*`, points at it.
+
+**Readable mode** (Settings > Reading, `body.readable`, `still_readable`) is
+one rule beside `:root`: every step re-points at its fluid value times 1.15
+and every text level lifts one step (faint to low, low to mid, mid to hi,
+hi to the full warm white). The measures stay, so lines wrap sooner. Every
+screen on the tokens takes it with no rule of its own; the old per-selector
+rules (the voices' replies, the Rosary, the Divine Office's sizes and
+titles, `.content-card p`) are gone. A screen that still writes pixels or
+literal colours is not reached, which is the test for whether it is on the
+tokens; the mobile block's `.feature-main p` and Darkness's card text were
+pointed at the tokens for that reason. Home's list and its description
+panel, and Resources' inline styles, are the screens the mode does not
+reach.
 
 Both faces load from Google Fonts in `<head>` with `display=swap`. The fallback
 stacks are real: Georgia and system-ui render the layout acceptably offline.
