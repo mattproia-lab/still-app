@@ -121,7 +121,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 }
 .grain{
   position:fixed;inset:0;z-index:41;pointer-events:none;opacity:.46;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.065'/%3E%3C/svg%3E");
+  background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;
 }
 
 /* ═══════════════════════════════════════════
@@ -130,11 +130,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 .screen{
   position:fixed;inset:0;z-index:50;
   opacity:0;pointer-events:none;
-  transition:opacity .4s ease;
+  /* visibility goes with the fade: a hidden screen is not painted, so its
+     atmosphere (glow, flame, grain, vignette, each a compositor layer) costs
+     nothing. Layout stays, so scripts that measure a hidden screen still can. */
+  visibility:hidden;
+  transition:opacity .4s ease,visibility 0s .4s;
   display:flex;flex-direction:column;
   overflow:hidden;
 }
-.screen.active{opacity:1;pointer-events:all;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;transition:opacity .4s ease,visibility 0s;}
 
 /* ═══════════════════════════════════════════
    SHARED HEADER -- all screens
@@ -391,6 +395,10 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 /* Atmosphere -- drawn, not filmed. Four layers; only the two light layers
    animate, and only transform/opacity, so the compositor owns them. */
 .atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  /* Exactly the box it sits in and never more: inset:0 sizes it, and contain
+     keeps its layout and paint from reaching, or being reached by, the page
+     that scrolls over it. Overlays set position:fixed, so the box is the viewport. */
+  contain:strict;
   background:var(--ink-0);
   background:radial-gradient(120% 75% at var(--atmos-x) var(--atmos-gy),var(--atmos-ground) 0%,var(--atmos-mid) 42%,var(--ink-0) 100%);}
 .atmos-glow,.atmos-flame{
@@ -413,7 +421,8 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
     color-mix(in srgb,var(--atmos-core) calc(14% * var(--atmos-a)),transparent) 30%,transparent 60%);
   animation:atmosFlicker 5.3s ease-in-out infinite;}
 .atmos-grain{position:absolute;inset:0;opacity:.7;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
+  /* a 256px raster tile (assets/grain-256.png, the same warm speckle the SVG turbulence drew), repeated by the compositor instead of a filter rasterised across the layer */
+  background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;}
 .atmos-vignette{position:absolute;inset:0;
   background:radial-gradient(ellipse 85% 75% at 50% 42%,transparent 38%,rgba(5,3,2,.5) 78%,rgba(5,3,2,.92) 100%);}
 @keyframes atmosBreath{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.82}50%{transform:translate(-50%,-50%) scale(1.07);opacity:1}}
@@ -540,7 +549,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   box-shadow:0 0 0 1px rgba(var(--atmos-rgb),.05),0 0 48px rgba(var(--atmos-rgb),calc(.22 * var(--atmos-a))),0 18px 40px rgba(0,0,0,.45);}
 [data-tokens] .devotional > img,[data-tokens] .devotional > .devotional-inner{display:block;width:100%;height:100%;}
 [data-tokens] .devotional::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.55;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 .92  0 0 0 0 .8  0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");}
+  background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;}
 [data-tokens] .devotional::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;
   background:radial-gradient(ellipse 90% 80% at 50% 45%,transparent 46%,rgba(5,3,2,.26) 78%,rgba(5,3,2,.58) 100%),
     linear-gradient(to bottom,rgba(var(--atmos-rgb),.10),transparent 28%,transparent 72%,rgba(var(--atmos-rgb),.10));

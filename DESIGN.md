@@ -171,8 +171,21 @@ button stops breathing.
 ## Shared components (`[data-tokens]`)
 
 - **Atmosphere** `.atmos` with `.atmos-glow`, `.atmos-flame`, `.atmos-grain`,
-  `.atmos-vignette`: `position:absolute; inset:0; z-index:0; aria-hidden`.
-  Driven entirely by the atmosphere variables above.
+  `.atmos-vignette`: `position:absolute; inset:0; z-index:0; aria-hidden`,
+  `contain:strict`. Driven entirely by the atmosphere variables above. It is
+  always exactly the box it sits in: a screen's, or the viewport's where an
+  overlay sets `position:fixed` (the Guide, Spiritual Paths, the paywall, the
+  terms, the letter, sign-in); `inset:0` sizes it and `contain` keeps the
+  page that scrolls over it out of its layout and paint. The grain is a
+  256px raster tile, `assets/grain-256.png` (warm white at a noise alpha up
+  to .12, made by a small node script and checked in), repeated by the
+  compositor; the SVG turbulence filter it replaces was rasterised across
+  the whole layer. The same tile is the site-wide `.grain` over home and
+  the `.devotional` frame's grain. Inactive screens are
+  `visibility:hidden` as well as `opacity:0`, switched after the fade, so
+  only the active screen's atmosphere is painted and composited; before
+  this every screen's glow and flame (`will-change`) stayed on the GPU at
+  once, seventeen atmospheres under whichever overlay was open.
 - **Header and frame**: `.app-header`, `.screen-title`, `.back-btn`,
   `.feature-main` are restyled under `[data-tokens]`. The `!important`s there
   answer the mobile blocks, which set the same properties with `!important`.
