@@ -1635,6 +1635,51 @@ function pinDocument() {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
   })();
 
+  /* Over time: on Session Complete, once the journal holds three or more
+     completed sittings, a small line graph of thoughts noticed per sitting,
+     oldest to newest, the last thirty at most. A hairline axis, dots in the
+     candle, the line in the gold; no goal line, no percentage, no
+     comparison, no message about improvement. Read from the entries DB.save
+     already wrote; saves nothing. Painted by a script watching the panel's
+     .active, like the reminder's; below three sittings the section is hidden. */
+  (function () {
+    var MIN = 3, MAX = 30, W = 320, H = 96, PX = 8, PT = 10, PB = 12;
+    function sittings() {
+      var all = (typeof DB !== 'undefined' && DB && typeof DB.all === 'function') ? DB.all() : [];
+      return all.filter(function (e) { return e && e.type === 'sitting'; })
+        .sort(function (a, b) { return Date.parse(a.date) - Date.parse(b.date); })
+        .slice(-MAX)
+        .map(function (e) { var n = Number(e.totalThoughts); return isFinite(n) && n >= 0 ? n : 0; });
+    }
+    function el(name, attrs) {
+      var n = document.createElementNS('http://www.w3.org/2000/svg', name);
+      for (var k in attrs) n.setAttribute(k, attrs[k]);
+      return n;
+    }
+    function paint(panel) {
+      var box = document.getElementById('overTime'), svg = document.getElementById('overTimeSvg');
+      if (!box || !svg) return;
+      var counts = panel.classList.contains('active') ? sittings() : [];
+      if (counts.length < MIN) { box.hidden = true; svg.innerHTML = ''; return; }
+      var max = Math.max.apply(null, counts.concat([1]));
+      var innerW = W - PX * 2, innerH = H - PT - PB, step = innerW / (counts.length - 1);
+      var pts = counts.map(function (c, i) {
+        return [PX + i * step, PT + innerH - (c / max) * innerH];
+      });
+      svg.innerHTML = '';
+      svg.appendChild(el('line', { class: 'ot-axis', x1: PX, y1: H - PB + 4, x2: W - PX, y2: H - PB + 4 }));
+      svg.appendChild(el('polyline', { class: 'ot-line', points: pts.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') }));
+      pts.forEach(function (p) { svg.appendChild(el('circle', { class: 'ot-dot', cx: p[0].toFixed(1), cy: p[1].toFixed(1), r: counts.length > 20 ? 2 : 2.6 })); });
+      box.hidden = false;
+    }
+    function arm() {
+      var panel = document.getElementById('sitting-complete');
+      if (!panel || !window.MutationObserver) return;
+      new MutationObserver(function () { paint(panel); }).observe(panel, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+  })();
+
   /* The one review request: on Session Complete, when the journal holds
      REVIEW_ENTRIES entries or more, once, after the count and the quote are
      on screen. Never at launch, never during a practice, never on a Complete
@@ -2015,6 +2060,12 @@ function pinDocument() {
           “Do not be surprised if you fall every day; do not give up, but stand your ground courageously.”
           <span class="voice-attrib">— St. John Climacus</span>
         </blockquote>
+        <!-- Over time: thoughts noticed per sitting, read from the journal, shown from three sittings (DESIGN.md, Sitting) -->
+        <section class="over-time" id="overTime" hidden>
+          <span class="ui-label">Over time</span>
+          <svg class="over-time-svg" id="overTimeSvg" viewBox="0 0 320 96" aria-hidden="true"></svg>
+          <p class="over-time-note">Thoughts noticed, each sitting. Fewer is not the goal. Noticing is.</p>
+        </section>
         <!-- The trial's one reminder, shown once when three days or fewer remain (DESIGN.md, Trial) -->
         <div class="trial-reminder" id="trialReminder" hidden>
           <span id="trialReminderText"></span>
@@ -5254,6 +5305,14 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-sitting .trial-reminder[hidden]{display:none;}
 #screen-sitting .trial-reminder-link{background:none;border:0;padding:0 0 0 var(--s-2);cursor:pointer;font-family:var(--font-sans);font-size:var(--t-sm);color:var(--gold);text-decoration:underline;text-underline-offset:3px;}
 #screen-sitting .trial-reminder-link:hover{color:var(--candle);}
+/* Over time, beneath the quote: the label, a small line graph, one sans line. No animation of its own. */
+#screen-sitting .over-time{max-width:var(--measure-read);margin:var(--s-6) auto 0;text-align:center;}
+#screen-sitting .over-time[hidden]{display:none;}
+#screen-sitting .over-time-svg{display:block;width:100%;height:auto;margin:var(--s-3) 0;overflow:visible;}
+#screen-sitting .over-time .ot-axis{stroke:var(--line);stroke-width:1;}
+#screen-sitting .over-time .ot-line{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;}
+#screen-sitting .over-time .ot-dot{fill:var(--candle);}
+#screen-sitting .over-time-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);margin:0;text-wrap:pretty;}
 
 /* ═══════════════════════════════════════════
    THE LETTER -- the Guestmaster's letter as text (DESIGN.md, The letter)
