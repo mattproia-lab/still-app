@@ -625,6 +625,24 @@ button stops breathing.
   `?resetTrial` in the URL still resets, beside the one definition. Set
   `daysLeft` to 0 and tap a practice to see the door.
 
+- **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
+  step, once per install, since onboarding shows only while
+  `still_onboarded` is unset and `obFinish()` sets it; and the same step
+  lifted again from Settings > About ("Read the Guestmaster's letter",
+  `showGuestmasterLetter()`), where Begin only closes it
+  (`obLetterBegin()` branches on `window._letterReread`) and nothing is
+  recorded. The letter is text now, transcribed from the photograph with
+  its one typo mended ("let them come to you"): the salutation, the
+  paragraphs and the sign-off in the serif at reading measure, in the
+  candle-hi rather than the white, the gold cross at its head and the wax
+  seal as a small SVG in the seal's red beneath the sign-off. No card, no
+  border; Sitting's gold at full strength with the glow low like a candle
+  on the table (`--atmos-y` 74%, the ground at 100%). "Cell of the Guest"
+  and its line stay above; "Hear the letter read aloud" is the same button
+  and audio; Begin is the one action. The two image classes
+  (`.letter-mobile`, `.letter-desktop`) and the photograph's markup are
+  retired; the file stays, and the Sacristy still shows it.
+
 ### Hour palette
 
 | Hour | `--atmos-rgb` | Strength | Height |
