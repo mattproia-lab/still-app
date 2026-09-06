@@ -2374,13 +2374,17 @@ body.is-mobile #mobileEnterTab { display: block; }
            response and the follow-ups beneath it. -->
       <div id="companionResponse" class="companion-state">
         <div class="voice-answer">
+          <div class="voice-question" id="cQuestion"></div>
           <div class="voice-source" id="cSource"></div>
           <div class="voice-reply" id="cResponseText"></div>
           <div class="voice-invitation" id="cInvitation"></div>
           <div class="share-watermark">stillprayer.app</div>
         </div>
         <div class="voice-after">
-          <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)">◎ Hear response</button>
+          <div class="voice-after-row">
+            <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)">◎ Hear response</button>
+            <button class="btn-ghost" onclick="shareVoiceCard('companion')">Share</button>
+          </div>
           <button class="btn-primary gold" onclick="returnFromCompanion()">Return to stillness</button>
           <button class="btn-ghost" onclick="resetCompanion()">Ask again</button>
         </div>
@@ -2699,7 +2703,7 @@ body.is-mobile #mobileEnterTab { display: block; }
            ids and the panels showMysticState() toggles are unchanged. -->
       <div id="autobio-mystic" class="autobio-pane voice-pane" style="display:none">
 
-        <div class="devotional graded ab-portrait" aria-hidden="true">
+        <div class="devotional ab-portrait" aria-hidden="true">
           <img src="still-mobile/src/image/saint_bg.jpg" alt="" />
         </div>
         <div class="ab-portrait-name">Amma Sophia</div>
@@ -2733,11 +2737,15 @@ body.is-mobile #mobileEnterTab { display: block; }
         <!-- The answer: a reading surface under her name -->
         <div id="mysticResponse" class="companion-state" style="display:none">
           <div class="voice-answer">
+            <div class="voice-question" id="mysticQuestion"></div>
             <div id="mysticResponseText" class="voice-reply"></div>
             <div class="share-watermark">stillprayer.app</div>
           </div>
           <div class="voice-after">
-            <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear response</button>
+            <div class="voice-after-row">
+              <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear response</button>
+              <button class="btn-ghost" onclick="shareVoiceCard('sophia')">Share</button>
+            </div>
             <button class="btn-primary gold" onclick="resetMystic()">Ask another →</button>
           </div>
         </div>
@@ -2748,6 +2756,166 @@ body.is-mobile #mobileEnterTab { display: block; }
   </div>
 </div>
 
+
+<script>
+/* THE VOICES -- the question kept on the answer, and the share card (DESIGN.md,
+   The voices). Display only: when a voice's answer panel shows, the textarea is
+   read into the question line, nothing stored; Share draws the exchange on a
+   1080x1350 canvas in the app's faces on the voice's hue and hands it to the
+   share sheet, or downloads it. No request, no save, no playback is touched. */
+(function () {
+  var VOICES = {
+    companion: { name: 'The Companion', screen: 'screen-companion',     input: 'companionText', response: 'companionResponse', question: 'cQuestion',      reply: 'cResponseText',      watch: 'class' },
+    deeper:    { name: 'Deeper',        screen: 'screen-deeper',        input: 'deeperText',    response: 'deeperResponse',    question: 'dQuestion',      reply: 'dResponseText',      watch: 'class' },
+    sophia:    { name: 'Amma Sophia',   screen: 'screen-autobiography', input: 'mysticText',    response: 'mysticResponse',    question: 'mysticQuestion', reply: 'mysticResponseText', watch: 'style' }
+  };
+  function shown(v, el) { return v.watch === 'class' ? el.classList.contains('active') : el.style.display !== 'none'; }
+  function keepQuestion(v) {
+    var ta = document.getElementById(v.input), q = document.getElementById(v.question);
+    if (ta && q) q.textContent = (ta.value || '').trim();
+  }
+  function arm() {
+    Object.keys(VOICES).forEach(function (k) {
+      var v = VOICES[k], el = document.getElementById(v.response);
+      if (!el || !window.MutationObserver) return;
+      new MutationObserver(function () { if (shown(v, el)) keepQuestion(v); }).observe(el, { attributes: true, attributeFilter: [v.watch] });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+
+  /* ── the card ── */
+  var W = 1080, H = 1350, PAD = 96;
+  var SERIF = '"Cormorant Garamond", Georgia, serif', SANS = '"Instrument Sans", system-ui, sans-serif';
+  function hueOf(v) {
+    var el = document.getElementById(v.screen);
+    var h = el ? getComputedStyle(el).getPropertyValue('--atmos-rgb').trim() : '';
+    return /^\d+\s*,\s*\d+\s*,\s*\d+$/.test(h) ? h : '205,155,10';
+  }
+  function wrap(ctx, text, maxWidth) {
+    var out = [];
+    String(text || '').split(/\n+/).forEach(function (para) {
+      var words = para.split(/\s+/).filter(Boolean), line = '';
+      if (!words.length) return;
+      words.forEach(function (w) {
+        var t = line ? line + ' ' + w : w;
+        if (ctx.measureText(t).width <= maxWidth || !line) line = t; else { out.push(line); line = w; }
+      });
+      out.push(line);
+    });
+    return out;
+  }
+  function tracked(ctx, text, x, y, spacing) {
+    var total = 0, i;
+    for (i = 0; i < text.length; i++) total += ctx.measureText(text[i]).width + (i < text.length - 1 ? spacing : 0);
+    var cx = x - total / 2;
+    for (i = 0; i < text.length; i++) { ctx.fillText(text[i], cx, y); cx += ctx.measureText(text[i]).width + spacing; }
+  }
+  function layout(ctx, question, reply, maxWidth, maxHeight) {
+    // the type scales down together, to a floor; past it the reply ends with an ellipsis
+    var scale, q, r, qh, rh, gap, lh = 1.42;
+    for (scale = 1; scale >= 0.66; scale -= 0.04) {
+      var qs = Math.round(46 * scale), rs = Math.round(48 * scale);
+      ctx.font = 'italic ' + qs + 'px ' + SERIF; q = wrap(ctx, question, maxWidth);
+      ctx.font = rs + 'px ' + SERIF; r = wrap(ctx, reply, maxWidth);
+      qh = q.length ? q.length * qs * lh : 0; gap = q.length ? 72 : 0; rh = r.length * rs * lh;
+      if (qh + gap + rh <= maxHeight) return { qs: qs, rs: rs, q: q, r: r, lh: lh, gap: gap, truncated: false };
+    }
+    var qsMin = Math.round(46 * 0.66), rsMin = Math.round(48 * 0.66);
+    ctx.font = 'italic ' + qsMin + 'px ' + SERIF; q = wrap(ctx, question, maxWidth);
+    qh = q.length ? q.length * qsMin * lh : 0; gap = q.length ? 72 : 0;
+    ctx.font = rsMin + 'px ' + SERIF; r = wrap(ctx, reply, maxWidth);
+    var fit = Math.max(1, Math.floor((maxHeight - qh - gap) / (rsMin * lh)));
+    var truncated = r.length > fit;
+    if (truncated) {
+      r = r.slice(0, fit);
+      var last = r[fit - 1].replace(/[\s.,;:]+$/, '');
+      while (last && ctx.measureText(last + '\u2026').width > maxWidth) last = last.replace(/\s*\S+$/, '');
+      r[fit - 1] = last + '\u2026';
+    }
+    return { qs: qsMin, rs: rsMin, q: q, r: r, lh: lh, gap: gap, truncated: truncated };
+  }
+  function draw(key) {
+    var v = VOICES[key]; if (!v) return Promise.reject(new Error('unknown voice'));
+    var question = (document.getElementById(v.question) || {}).textContent || '';
+    var reply = (document.getElementById(v.reply) || {}).textContent || '';
+    var hue = hueOf(v);
+    var loads = [];
+    try {
+      loads = [document.fonts.load('italic 46px "Cormorant Garamond"'), document.fonts.load('48px "Cormorant Garamond"'), document.fonts.load('500 22px "Instrument Sans"')];
+    } catch (e) {}
+    return Promise.all(loads).catch(function () {}).then(function () {
+      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      var ctx = c.getContext('2d');
+      // the ground: ink, the voice's hue behind the text, the vignette at the edges
+      ctx.fillStyle = '#050302'; ctx.fillRect(0, 0, W, H);
+      var g = ctx.createRadialGradient(W / 2, 520, 40, W / 2, 520, 820);
+      g.addColorStop(0, 'rgba(' + hue + ',.58)'); g.addColorStop(0.45, 'rgba(' + hue + ',.22)'); g.addColorStop(1, 'rgba(' + hue + ',0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      var vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 0.78);
+      vg.addColorStop(0, 'rgba(5,3,2,0)'); vg.addColorStop(1, 'rgba(5,3,2,.62)');
+      ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
+      // the mark: the voices' cross, in the candle
+      ctx.strokeStyle = 'rgba(217,164,65,.85)'; ctx.lineWidth = 2.2; ctx.lineJoin = 'round';
+      var mx = W / 2 - 42, my = 132, k = 3;
+      ctx.beginPath(); ctx.roundRect(mx + 11 * k, my, 6 * k, 34 * k, 4); ctx.stroke();
+      ctx.beginPath(); ctx.roundRect(mx, my + 10 * k, 28 * k, 6 * k, 4); ctx.stroke();
+      // the name: the sans micro, tracked
+      ctx.fillStyle = '#d9a441'; ctx.font = '500 22px ' + SANS; ctx.textBaseline = 'alphabetic';
+      tracked(ctx, v.name.toUpperCase(), W / 2, 296, 7);
+      // the exchange
+      var top = 392, bottom = H - 150, maxWidth = W - PAD * 2;
+      var L = layout(ctx, question, reply, maxWidth, bottom - top);
+      var y = top;
+      ctx.textAlign = 'left';
+      if (L.q.length) {
+        ctx.fillStyle = 'rgba(255,246,232,.70)'; ctx.font = 'italic ' + L.qs + 'px ' + SERIF;
+        L.q.forEach(function (line) { y += L.qs; ctx.fillText(line, PAD, y); y += L.qs * (L.lh - 1); });
+        y += 28; ctx.fillStyle = 'rgba(255,246,232,.14)'; ctx.fillRect(PAD, y, maxWidth, 1); y += L.gap - 28;
+      }
+      ctx.fillStyle = 'rgba(255,246,232,.94)'; ctx.font = L.rs + 'px ' + SERIF;
+      L.r.forEach(function (line) { y += L.rs; ctx.fillText(line, PAD, y); y += L.rs * (L.lh - 1); });
+      // the watermark
+      ctx.fillStyle = 'rgba(255,246,232,.42)'; ctx.font = '500 22px ' + SANS;
+      tracked(ctx, 'STILLPRAYER.APP', W / 2, H - 78, 6);
+      return c;
+    });
+  }
+  function toBlob(c) { return new Promise(function (res) { c.toBlob(function (b) { res(b); }, 'image/png'); }); }
+  function download(blob, name) {
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }
+  function share(key) {
+    var v = VOICES[key]; if (!v) return;
+    var name = 'still-' + key + '.png';
+    draw(key).then(toBlob).then(function (blob) {
+      if (!blob) return;
+      var file = null;
+      try { file = new File([blob], name, { type: 'image/png' }); } catch (e) {}
+      var P = window.Capacitor && window.Capacitor.Plugins;
+      /* on native, a Capacitor Share plugin if one is present (with Filesystem to hand it a file); otherwise the same path as the web */
+      if (P && P.Share && P.Filesystem && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) {
+        var r = new FileReader();
+        r.onload = function () {
+          var b64 = String(r.result).split(',')[1];
+          P.Filesystem.writeFile({ path: name, data: b64, directory: 'CACHE' })
+            .then(function (w) { return P.Share.share({ title: 'Still', url: w.uri }); })
+            .catch(function () { download(blob, name); });
+        };
+        r.readAsDataURL(blob); return;
+      }
+      if (file && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        navigator.share({ files: [file], title: 'Still' }).catch(function () {});
+        return;
+      }
+      download(blob, name);
+    }).catch(function () {});
+  }
+  window.shareVoiceCard = share;
+  window.VoiceCard = { render: draw };
+})();
+</script>
 
 <!-- ═══════════════════════════════════════════
      DEEPER (THE CROSS)
@@ -2804,13 +2972,17 @@ body.is-mobile #mobileEnterTab { display: block; }
       <!-- ANSWER -->
       <div id="deeperResponse" class="companion-state">
         <div class="voice-answer">
+          <div class="voice-question" id="dQuestion"></div>
           <div class="voice-source" id="dSource"></div>
           <div class="voice-reply" id="dResponseText"></div>
           <div class="voice-invitation" id="dInvitation"></div>
           <div class="share-watermark">stillprayer.app</div>
         </div>
         <div class="voice-after">
-          <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)">◎ Hear response</button>
+          <div class="voice-after-row">
+            <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)">◎ Hear response</button>
+            <button class="btn-ghost" onclick="shareVoiceCard('deeper')">Share</button>
+          </div>
           <button class="btn-primary gold" onclick="resetDeeper()">Ask another →</button>
           <button class="btn-ghost" onclick="goHome()">Return to Still</button>
         </div>
@@ -4544,7 +4716,8 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
    SOPHIA beside the W[] array: a dusk blue between the Companion's navy and
    Deeper's softer blue. Her portrait stays framed, her words beneath it. */
 #screen-autobiography:has(#autobio-mystic.active){--atmos-rgb:58,86,150;--atmos-a:.68;}
-#screen-autobiography .ab-portrait{aspect-ratio:3/2;margin:0 auto var(--s-4);transition:opacity var(--d-veil) var(--ease-breath);}
+#screen-autobiography .ab-portrait{aspect-ratio:3/2;margin:0 auto var(--s-4);max-height:480px;
+  transition:opacity var(--d-veil) var(--ease-breath),max-height var(--d-veil) var(--ease-breath),margin var(--d-veil) var(--ease-breath);}
 #screen-autobiography .ab-portrait img{object-fit:cover;object-position:center 20%;}
 #screen-autobiography .ab-portrait-name{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-wide);text-transform:uppercase;color:var(--gold);text-align:center;}
 #screen-autobiography .ab-portrait-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);color:var(--text-mid);text-align:center;margin:var(--s-1) 0 var(--s-6);}
@@ -4552,13 +4725,11 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-autobiography .ab-quote .ui-label{margin-bottom:var(--s-2);}
 #screen-autobiography .ab-quote-text{margin:0;max-width:none;text-wrap:pretty;}
 #screen-autobiography .ab-quote-source{margin-top:var(--s-2);}
-/* Her figure recedes as the person writes (the frame fades with it, the page holds
-   still). Once the ask has left the opening -- showMysticState() hides #mysticInput
-   inline -- the portrait and the day's quote step aside, and her name heads the
-   listening and the answer. */
-#autobio-mystic:has(#mysticText:focus) .ab-portrait,
-#autobio-mystic:has(#mysticText:not(:placeholder-shown)) .ab-portrait{opacity:0;}
-#autobio-mystic:has(#mysticInput[style*="none"]) .ab-portrait,
+/* Her portrait stays through the opening and the writing. Once the ask has left
+   the opening -- showMysticState() hides #mysticInput inline -- it recedes on
+   the one slow fade and closes, the day's quote steps aside, and her name heads
+   the listening and the answer. */
+#autobio-mystic:has(#mysticInput[style*="none"]) .ab-portrait{opacity:0;max-height:0;margin-bottom:0;border-color:transparent;box-shadow:none;}
 #autobio-mystic:has(#mysticInput[style*="none"]) .ab-quote{display:none;}
 
 @media (prefers-reduced-motion:reduce){
@@ -4599,19 +4770,22 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .voice-pane{--d-veil:calc(var(--d-breath) * 1.5);}
 
 /* The figure: the lower half of the frame, its top dissolving into the
-   light, the photograph quieted and washed toward the hue. */
+   light. The photograph reads in its own colours; the hue is a light grade
+   at the edges only, and the band settles into the ink at its foot. The
+   shared grain and vignette lie over it. */
 .voice-screen .atmos-photo{position:absolute;left:50%;bottom:0;width:100%;max-width:520px;height:52%;
   transform:translateX(-50%);opacity:0;transition:opacity var(--d-veil) var(--ease-breath);
   -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 36%,#000 100%);
   mask-image:linear-gradient(to bottom,transparent 0%,#000 36%,#000 100%);}
-.voice-screen .atmos-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;filter:saturate(.55);}
+.voice-screen .atmos-photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;}
 #screen-deeper .atmos-photo img{object-position:center center;}
 .voice-screen .atmos-photo::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(to bottom,rgba(var(--atmos-rgb),.40) 0%,rgba(var(--atmos-rgb),.30) 55%,rgba(5,3,2,.86) 100%);}
-/* Shown at the opening only: the input panel active, nothing written, the
-   textarea not yet taken up. Typing, or the ask, starts the one slow fade. */
-#screen-companion:has(#companionInput.active #companionText:placeholder-shown:not(:focus)) .atmos-photo,
-#screen-deeper:has(#deeperInput.active #deeperText:placeholder-shown:not(:focus)) .atmos-photo{opacity:1;}
+  background:radial-gradient(ellipse 72% 64% at 50% 52%,transparent 0%,transparent 58%,rgba(var(--atmos-rgb),.26) 100%),
+    linear-gradient(to bottom,transparent 62%,rgba(5,3,2,.78) 100%);}
+/* Shown through the opening and the writing; it recedes on the one slow fade
+   when the listening state begins, and stays gone on the answer. */
+#screen-companion:has(#companionInput.active) .atmos-photo,
+#screen-deeper:has(#deeperInput.active) .atmos-photo{opacity:1;}
 
 /* The opening */
 :is(.voice-screen,.voice-pane) .voice-wrap{max-width:var(--measure);margin:0 auto;text-align:center;}
@@ -4643,6 +4817,10 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
 /* The answer: a reading surface, no card */
 :is(.voice-screen,.voice-pane) .voice-answer{max-width:var(--measure-read);margin:0 auto;text-align:left;}
+/* What the person wrote, kept at the top of the answer: the serif italic, a hairline beneath */
+:is(.voice-screen,.voice-pane) .voice-question{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-mid);
+  padding-bottom:var(--s-4);margin-bottom:var(--s-4);border-bottom:1px solid var(--line);text-wrap:pretty;}
+:is(.voice-screen,.voice-pane) .voice-question:empty{display:none;}
 :is(.voice-screen,.voice-pane) .voice-source{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-4);}
 :is(.voice-screen,.voice-pane) .voice-source:empty{display:none;}
@@ -4653,6 +4831,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 :is(.voice-screen,.voice-pane) .voice-answer .share-watermark{margin-top:var(--s-4);}
 :is(.voice-screen,.voice-pane) .voice-after{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);margin-top:var(--s-6);}
 :is(.voice-screen,.voice-pane) .voice-after .btn-ghost{color:var(--text-low);}
+:is(.voice-screen,.voice-pane) .voice-after-row{display:flex;align-items:center;justify-content:center;gap:var(--s-5);}
 
 @media (prefers-reduced-motion:reduce){
   :is(.voice-screen,.voice-pane) .voice-listening{animation:none;}
