@@ -40,6 +40,12 @@ tokens and components the same way, not by inventing new values.
   allowed to widen. Row labels never wrap; connectors flex instead.
 - **Reduced motion is honoured.** Durations shrink and drift animations stop
   under `prefers-reduced-motion`; fades remain because they are not motion.
+- **The viewport is what is visible.** Full-screen layers use `inset: 0`, never
+  a height. Where a height must be written it is `100dvh` with `100vh` on the
+  line before it as the fallback; `100vh` alone is never written, because iOS
+  reports it as the tallest the viewport ever gets and the address bar takes
+  the difference off the bottom. The viewport meta carries `viewport-fit=cover`
+  and every header pads its top with `env(safe-area-inset-top)`.
 
 ## Tokens
 
