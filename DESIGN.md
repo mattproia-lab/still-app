@@ -93,8 +93,8 @@ screen on the tokens takes it with no rule of its own; the old per-selector
 rules (the voices' replies, the Rosary, the Divine Office's sizes and
 titles, `.content-card p`) are gone. A screen that still writes pixels or
 literal colours is not reached, which is the test for whether it is on the
-tokens; the mobile block's `.feature-main p` and Darkness's card text were
-pointed at the tokens for that reason. Home's list and its description
+tokens; the mobile block's `.feature-main p` was pointed at the tokens for
+that reason (Darkness's card rule went with the card). Home's list and its description
 panel, and Resources' inline styles, are the screens the mode does not
 reach.
 
@@ -739,6 +739,33 @@ button stops breathing.
   tapped once; the script beside the home
   markup then writes `still_info_seen` and it never returns.
   `openHomeInfo()` is untouched.
+
+- **Darkness Mode** (`#screen-darkness`): the psalms in the open. Vigils'
+  near-black from the hour palette (`110,110,140`) with the glow at its
+  lowest (`--atmos-a` .18) and slowest (the breath at two and a half times
+  `--d-drift`), no flame layer, grain and vignette only, the vignette
+  deeper than the shared one. No photograph behind the text: the prostrate
+  figure is kept only as a threshold (`#darkThreshold`, the same file),
+  graded to near-black (grayscale, brightness .3, the grain and a heavy
+  vignette over it) and gone on one long breath, a 6s fade started by
+  `darknessThreshold()` from `initDarknessScreen()`, with the first text
+  already beneath it; under reduced motion it is omitted. No card. The
+  seven texts read in the upright serif at reading measure (`.dark-body`,
+  `--t-md`, loose leading, the candle at .8), verse lines as lines and
+  stanza gaps as gaps by `white-space:pre-line`; the title in the serif
+  (`.dark-title`, candle-hi) with the one-line note in the sans beneath
+  (`.dark-sub`); the reflection in the serif italic at `--text-mid`, its
+  words unchanged. The two psalms are headed as the Douay-Rheims numbers
+  them with the Hebrew number in parentheses, "Psalm 87 (88)" and "Psalm
+  21 (22)", by a `heading` field on their entries; `title` is untouched
+  because it is the audio cache key and part of the request. The old dot
+  row is the shared phase track, seven steps numbered I to VII, each still
+  `darknessGoto(i)`, marked done and current. "Next" is a bare sans-micro
+  button between texts (`.dark-next`); "Hear Reflection" (`#darknessPlayBtn`)
+  and "Speak to the Companion" stay on every text; at the seventh there is
+  no summary, no count, no "complete": one line, "That is the last of them.
+  Stay as long as you need.", and Return to Still. "Begin Again" is gone;
+  the track goes back. Nothing is saved; there is no timer.
 
 ### Hour palette
 

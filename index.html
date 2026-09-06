@@ -2480,21 +2480,31 @@ function pinDocument() {
 <!-- ═══════════════════════════════════════════
      DARKNESS MODE
 ═══════════════════════════════════════════ -->
-<div id="screen-darkness" class="screen">
-  <!-- Prostrate monk in darkness -->
-  <div style="position:fixed;inset:0;z-index:0;pointer-events:none">
-    <img src="still-mobile/src/image/darkness_bg.jpg"
-      style="width:100%;height:100%;object-fit:cover;object-position:center center;opacity:0.95"/>
-    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(2,2,6,.90) 0%,rgba(2,2,6,.60) 18%,rgba(2,2,6,.20) 50%,rgba(2,2,6,.55) 100%)"></div>
+<div id="screen-darkness" class="screen" data-tokens>
+  <!-- Vigils' near-black from the hour palette (DESIGN.md), the glow at its
+       lowest and slowest, no flame: grain and vignette only. -->
+  <div class="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-grain"></div>
+    <div class="atmos-vignette"></div>
   </div>
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
+  <!-- The threshold: the prostrate figure, graded to near-black, gone on one
+       long breath before the first psalm. Omitted under reduced motion. The
+       photograph is the same file; it is no longer behind the text. -->
+  <div class="dark-threshold" id="darkThreshold" aria-hidden="true" hidden>
+    <img src="still-mobile/src/image/darkness_bg.jpg" alt="">
+  </div>
+  <header class="app-header">
     <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
     <span class="screen-title">Darkness Mode</span>
     <button class="settings-btn" onclick="openSettings()">⚙</button>
   </header>
-  <div class="feature-main" style="position:relative;z-index:10;overflow-y:auto">
-    <div class="content-card" style="background:rgba(2,2,8,.55);backdrop-filter:blur(2px)">
-      <!-- Rendered by initDarknessScreen() -->
+  <div class="feature-main">
+    <div class="dark-wrap">
+      <!-- Seven steps on the shared phase track; each is the old dot's tap target (darknessGoto) -->
+      <div class="phase-track" id="darkTrack"></div>
+      <!-- Rendered by initDarknessScreen() / renderDarknessText() -->
+      <div class="dark-text" id="darkText"></div>
     </div>
   </div>
 </div>
@@ -4337,7 +4347,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 
   .auth-input { font-size: 16px !important; }
   .auth-btn { font-size: 13px !important; }
-  #screen-darkness .content-card p { font-size: var(--t-md) !important; line-height: var(--lh-loose) !important; }
+
 }
 @keyframes flameFlick{
   0%,100%{transform:scaleX(1) scaleY(1) translateY(0);}
@@ -4345,6 +4355,51 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
   40%{transform:scaleX(.94) scaleY(1.05) translateY(-1px);}
   60%{transform:scaleX(1.04) scaleY(.98) translateY(.5px);}
   80%{transform:scaleX(.97) scaleY(1.02) translateY(-.5px);}
+}
+
+/* ═══════════════════════════════════════════
+   DARKNESS MODE -- the psalms in the open (DESIGN.md)
+   Vigils' near-black, no flame, no card. Ids, onclicks, DARKNESS_TEXTS and
+   playDarknessReflection() are unchanged.
+═══════════════════════════════════════════ */
+#screen-darkness{--atmos-rgb:110,110,140;--atmos-a:.18;--atmos-x:50%;--atmos-y:72%;--atmos-gy:100%;}
+#screen-darkness .atmos-glow{animation-duration:calc(var(--d-drift) * 2.5);}
+#screen-darkness .atmos-vignette{background:radial-gradient(ellipse 85% 75% at 50% 42%,transparent 30%,rgba(5,3,2,.6) 74%,rgba(5,3,2,.96) 100%);}
+/* The threshold over everything, fading on one long breath; pointer-events none so nothing waits on it */
+#screen-darkness .dark-threshold{position:absolute;inset:0;z-index:20;pointer-events:none;overflow:hidden;background:var(--ink-0);
+  opacity:0;transition:opacity 6s var(--ease-out);}
+#screen-darkness .dark-threshold[hidden]{display:none;}
+#screen-darkness.is-threshold .dark-threshold{opacity:1;transition:none;}
+#screen-darkness .dark-threshold img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center;
+  filter:grayscale(.75) brightness(.3) contrast(1.05);}
+#screen-darkness .dark-threshold::before{content:"";position:absolute;inset:0;z-index:2;opacity:.7;
+  background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;}
+#screen-darkness .dark-threshold::after{content:"";position:absolute;inset:0;z-index:3;
+  background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(var(--atmos-rgb),.06) 0%,transparent 50%),
+    radial-gradient(ellipse 85% 75% at 50% 45%,transparent 28%,rgba(5,3,2,.55) 66%,rgba(5,3,2,.97) 100%);}
+/* The reading */
+#screen-darkness .dark-wrap{max-width:var(--measure-read);margin:0 auto;padding-bottom:var(--s-8);}
+#screen-darkness .phase-track{margin-bottom:var(--s-6);}
+#screen-darkness .phase-step{background:none;border:0;padding:0;cursor:pointer;}
+#screen-darkness .dark-text.is-in{animation:phaseIn var(--d-breath) var(--ease-breath) both;}
+#screen-darkness .dark-title{font-family:var(--font-serif);font-weight:500;font-size:var(--t-lg);line-height:var(--lh-tight);
+  color:var(--candle-hi);margin:0 0 var(--s-2);}
+#screen-darkness .dark-sub{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);margin:0 0 var(--s-6);}
+#screen-darkness .dark-body{font-family:var(--font-serif);font-style:normal;font-size:var(--t-md);line-height:var(--lh-loose);
+  color:var(--candle);opacity:.8;white-space:pre-line;text-wrap:pretty;margin:0 0 var(--s-6);}
+#screen-darkness .dark-reflection{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  color:var(--text-mid);margin:0 0 var(--s-5);text-wrap:pretty;}
+#screen-darkness .dark-hear{display:block;margin:0 auto var(--s-6);}
+#screen-darkness .dark-next{display:block;margin:0 auto var(--s-6);background:none;border:0;padding:var(--s-2) var(--s-4);cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--candle);transition:color var(--d-base) var(--ease-out);}
+#screen-darkness .dark-next:hover{color:var(--candle-hi);}
+#screen-darkness .dark-last{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);
+  color:var(--text-low);text-align:center;margin:0 0 var(--s-6);}
+#screen-darkness .dark-actions{flex-direction:column;align-items:center;gap:var(--s-3);}
+@media (prefers-reduced-motion:reduce){
+  #screen-darkness .dark-threshold{transition:none;}
+  #screen-darkness .dark-text.is-in{animation:none;}
 }
 
 /* ═══════════════════════════════════════════
@@ -12684,11 +12739,11 @@ function examenFinish() {
    DARKNESS MODE -- curated contemplative texts
 ═══════════════════════════════════════════ */
 const DARKNESS_TEXTS = [
-  { title:'Psalm 88', sub:'The only psalm with no resolution', label:'Dark Psalms',
+{ title:'Psalm 88', heading:'Psalm 87 (88)', sub:'The only psalm with no resolution', label:'Dark Psalms',
     text:`O Lord, the God of my salvation,\nI have cried before thee in the day,\nand in the night before thee.\n\nFor my soul is filled with evils:\nand my life hath drawn nigh to hell.\nI am counted among them that go down to the pit:\nI am become as a man without help,\nfree among the dead.\n\nLord, why castest thou off my prayer?\nwhy turnest thou away thy face from me?\n\nI am poor, and in labours from my youth:\nthy terrors have troubled me:\nthy wrath hath passed over me,\nand thy terrors have troubled me.\nThey have come round about me like water all the day:\nthey have compassed me about together.\nFriend and neighbour thou hast put far from me:\nand my acquaintance, because of misery.`,
     reflection:'This psalm is the only one that ends without consolation, without a turn toward hope. The tradition kept it because some nights are like this -- the darkness does not lift, the answer does not come, and the only prayer is the cry itself. You are not outside the faith when you pray like this. You are inside it.' },
 
-  { title:'Psalm 22', sub:'Jesus prayed this from the cross', label:'Dark Psalms',
+{ title:'Psalm 22', heading:'Psalm 21 (22)', sub:'Jesus prayed this from the cross', label:'Dark Psalms',
     text:`My God, my God, why hast thou forsaken me?\nfar from my salvation are the words of my sins.\nO my God, I shall cry by day, and thou wilt not hear:\nand by night, and it shall not be reputed as folly in me.\n\nBut I am a worm, and no man:\nthe reproach of men, and the outcast of the people.\n\nBe not thou far from me, for tribulation is very near:\nfor there is none to help me.\n\nI will declare thy name to my brethren:\nin the midst of the church will I praise thee.\nFor he hath not despised nor slighted\nthe supplication of the poor man.\nNeither hath he turned away his face from him:\nbut when he cried to him, he heard him.`,
     reflection:'Jesus died with this psalm on his lips. Whatever abandonment you feel, he felt it first -- and fully, in a body, in real darkness, with real blood. The psalm ends in praise not because the suffering was resolved, but because the cry was heard. Your cry is also heard.' },
 
@@ -12718,42 +12773,55 @@ let darknessIdx = 0;
 function initDarknessScreen() {
   darknessIdx = 0;
   renderDarknessText();
+  darknessThreshold();
+}
+
+/* The threshold: shown at the door, gone on one long breath (6s), the first
+   text already beneath it. Under reduced motion it is omitted. */
+function darknessThreshold() {
+  const th = document.getElementById('darkThreshold'), root = document.getElementById('screen-darkness');
+  if (!th || !root) return;
+  if (window._darkThresholdTimer) clearTimeout(window._darkThresholdTimer);
+  const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  if (reduce) { th.hidden = true; root.classList.remove('is-threshold'); return; }
+  th.hidden = false; root.classList.add('is-threshold');
+  requestAnimationFrame(function () { requestAnimationFrame(function () { root.classList.remove('is-threshold'); }); });
+  window._darkThresholdTimer = setTimeout(function () { th.hidden = true; }, 6400);
 }
 
 function renderDarknessText() {
-  const card = document.querySelector('#screen-darkness .content-card');
-  if (!card) return;
+  const host = document.getElementById('darkText'), track = document.getElementById('darkTrack');
+  if (!host) return;
   const t = DARKNESS_TEXTS[darknessIdx];
   const total = DARKNESS_TEXTS.length;
+  const last = darknessIdx === total - 1;
+  const NUM = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 
-let html = '';
-  html += '<div style="display:flex;gap:5px;margin-bottom:20px;align-items:center">';
-  DARKNESS_TEXTS.forEach(function(_, i) {
-    html += '<div onclick="darknessGoto(' + i + ')" style="width:' + (i===darknessIdx?'20px':'6px') + ';height:6px;border-radius:3px;background:' + (i===darknessIdx?'rgba(255,255,255,.55)':'rgba(255,255,255,.15)') + ';cursor:pointer;transition:all .3s"></div>';
-  });
-  html += '</div>';
-  html += '<p style="font-family:\'Montserrat\',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px">' + t.label + '</p>';
-  html += '<p style="font-family:\'Playfair Display\',serif;font-size:clamp(22px,3.5vw,30px);font-weight:700;font-style:italic;color:#fff;margin-bottom:4px">' + t.title + '</p>';
-  html += '<p style="font-family:\'Heebo\',sans-serif;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:22px">' + t.sub + '</p>';
-  html += '<div style="background:rgba(255,255,255,.02);border-left:2px solid rgba(255,255,255,.08);padding:18px 20px;margin-bottom:20px">';
-  html += '<p style="font-family:\'Playfair Display\',serif;font-size:clamp(15px,1.8vw,18px);font-style:italic;color:rgba(255,255,255,.82);line-height:1.9;white-space:pre-line">' + t.text + '</p>';
-  html += '</div>';
-  html += '<p style="font-family:\'Heebo\',sans-serif;font-size:13px;color:rgba(255,255,255,.48);line-height:1.7;margin-bottom:24px;font-style:italic">' + t.reflection + '</p>';
-  html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost" style="display:block;margin:0 auto 16px;color:rgba(255,255,255,.45)">Hear Reflection</button>';
-  html += '<div style="display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap">';
-  html += '<button class="btn-primary" onclick="darknessNext()" style="flex:1;max-width:200px;justify-content:center">' + (darknessIdx < total-1 ? 'Next ->' : 'Begin Again ↺') + '</button>';
-  html += '<button class="btn-ghost" onclick="activateCompanion()">Speak to the Companion</button>';
-  html += '</div>';
-  html += '<button class="btn-ghost" onclick="goHome()" style="margin-top:12px;display:block;margin-left:auto;margin-right:auto">Return to Still</button>';
-  card.innerHTML = html;
-  // Force larger text on mobile
-  if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-    card.querySelectorAll('p').forEach(p => {
-      const size = parseFloat(window.getComputedStyle(p).fontSize);
-      if (size < 20) p.style.fontSize = '20px';
-    });
+  if (track) {
+    track.innerHTML = DARKNESS_TEXTS.map(function (_, i) {
+      const state = i < darknessIdx ? ' done' : (i === darknessIdx ? ' current' : '');
+      return '<button type="button" class="phase-step' + state + '" onclick="darknessGoto(' + i + ')" aria-label="Text ' + (i + 1) + ' of ' + total + '"' + (i === darknessIdx ? ' aria-current="step"' : '') + '><span class="phase-step-dot"></span>' + (NUM[i] || (i + 1)) + '</button>';
+    }).join('<div class="phase-connector"></div>');
   }
-  if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
+
+  let html = '';
+  html += '<h2 class="dark-title">' + (t.heading || t.title) + '</h2>';
+  html += '<p class="dark-sub">' + t.sub + '</p>';
+  html += '<div class="dark-body">' + t.text + '</div>';
+  html += '<p class="dark-reflection">' + t.reflection + '</p>';
+  html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost dark-hear">Hear Reflection</button>';
+  if (!last) {
+    html += '<button type="button" class="dark-next" onclick="darknessNext()">Next</button>';
+  } else {
+    html += '<p class="dark-last">There is no more to read. Stay as long as you need.</p>';
+  }
+  html += '<div class="btn-row dark-actions">';
+  html += '<button class="btn-ghost" onclick="activateCompanion()">Speak to the Companion</button>';
+  if (last) html += '<button class="btn-primary gold" onclick="goHome()">Return to Still</button>';
+  html += '</div>';
+  host.innerHTML = html;
+  host.classList.remove('is-in'); void host.offsetWidth; host.classList.add('is-in');
+  const main = host.closest('.feature-main'); if (main) main.scrollTop = 0;
 }
 function darknessNext() {
   darknessIdx = (darknessIdx + 1) % DARKNESS_TEXTS.length;
