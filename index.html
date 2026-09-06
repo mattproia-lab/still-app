@@ -254,13 +254,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   padding:26px 38px 0;flex-shrink:0;position:relative;z-index:60;
 }
 .logo{
-  font-family:'Playfair Display',serif;font-size:21px;font-style:italic;
+  font-family:var(--font-serif);font-size:21px;font-style:italic;
   font-weight:400;color:#fff;cursor:pointer;
   text-shadow:0 0 40px rgba(255,255,255,.12);
 }
 .home-header-mid{
   display:flex;align-items:center;gap:9px;
-  font-family:'Heebo',sans-serif;font-size:13px;font-weight:400;
+  font-family:var(--font-sans);font-size:13px;font-weight:400;
   color:rgba(255,255,255,.75);opacity:0;transition:opacity .5s;
 }
 .home-header-mid.show{opacity:1;}
@@ -276,7 +276,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   position:relative;z-index:55;flex-shrink:0;
 }
 .feat-eyebrow-home{
-  font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;
+  font-family:var(--font-sans);font-size:9px;font-weight:700;
   letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.42);
   margin-bottom:clamp(6px,1.5vh,20px);
 }
@@ -286,7 +286,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   transition:all .38s cubic-bezier(.4,0,.2,1);
 }
 .feat-item .fn{
-  font-family:'Playfair Display',serif;font-weight:700;
+  font-family:var(--font-serif);font-weight:700;
   line-height:1.03;display:block;transition:all .38s cubic-bezier(.4,0,.2,1);
   white-space:nowrap;
 }
@@ -294,7 +294,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
 .feat-item.is-near   .fn{font-size:clamp(26px,3.4vw,44px);color:rgba(255,255,255,.58);}
 .feat-item.is-far    .fn{font-size:clamp(21px,2.2vw,28px);color:rgba(255,255,255,.5);}
 .feat-item .fb{
-  font-family:'Montserrat',sans-serif;font-size:7.5px;font-weight:600;
+  font-family:var(--font-sans);font-size:7.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
   flex-shrink:0;min-width:52px;color:rgba(255,255,255,0);transition:color .38s;
 }
@@ -322,15 +322,26 @@ html,body{width:100%;height:100%;overflow:hidden;background:#030305;color:#fff;
   transition:opacity .5s ease .15s,transform .5s ease .15s;pointer-events:none;
 }
 .home-desc.show{opacity:1;transform:translateY(0);pointer-events:auto;}
-.home-desc-h{font-family:'Heebo',sans-serif;font-size:clamp(13px,1.2vw,16px);font-weight:500;line-height:1.55;color:#fff;margin-bottom:7px;}
-.home-desc-b{font-family:'Heebo',sans-serif;font-size:clamp(11px,.95vw,13px);font-weight:300;line-height:1.72;color:rgba(255,255,255,.65);}
+.home-desc-h{font-family:var(--font-sans);font-size:clamp(13px,1.2vw,16px);font-weight:500;line-height:1.55;color:#fff;margin-bottom:7px;}
+.home-desc-b{font-family:var(--font-sans);font-size:clamp(11px,.95vw,13px);font-weight:300;line-height:1.72;color:rgba(255,255,255,.65);}
 .home-desc-cta{
   display:inline-flex;align-items:center;gap:8px;margin-top:13px;
-  font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+  font-family:var(--font-sans);font-size:10px;font-weight:700;
   letter-spacing:.22em;text-transform:uppercase;
   color:#fff;cursor:pointer;background:none;border:none;padding:0;transition:gap .2s;
 }
 .home-desc-cta:hover{gap:13px;}
+/* The ⓘ on a first visit: a small pulse in the candle colour until it is tapped
+   once, then still_info_seen keeps it still (the script beside the home markup).
+   The !important answers the inline colour and the mobile block's own. */
+#homeInfoBtn.info-unseen{color:var(--candle)!important;animation:infoPulse 2.2s ease-in-out infinite;transform-origin:center;}
+@keyframes infoPulse{
+  0%,100%{text-shadow:0 0 0 rgba(242,199,119,0);transform:scale(1);}
+  50%{text-shadow:0 0 10px rgba(242,199,119,.85),0 0 2px rgba(242,199,119,.9);transform:scale(1.1);}
+}
+@media (prefers-reduced-motion:reduce){
+  #homeInfoBtn.info-unseen{animation:none;text-shadow:0 0 8px rgba(242,199,119,.7);}
+}
 
 /* Bottom dot nav */
 .dot-nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;z-index:200;}
@@ -352,7 +363,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
 .dn-item.on .dn-cross::before,.dn-item.on .dn-cross::after{background:#f0c040;box-shadow:0 0 6px rgba(240,192,64,1);}
 
 /* Section counter + fasting */
-.section-ctr{position:fixed;right:38px;bottom:24px;z-index:200;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.4);opacity:0;transition:opacity .4s;}
+.section-ctr{position:fixed;right:38px;bottom:24px;z-index:200;font-family:var(--font-sans);font-size:10px;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.4);opacity:0;transition:opacity .4s;}
 .section-ctr.show{opacity:1;}
 .fasting-btn{position:fixed;left:38px;bottom:22px;z-index:200;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.45);background:rgba(0,0,0,.35);border:none;transition:color .25s;padding:6px 0;}
 .fasting-btn:hover{color:rgba(255,255,255,.75);}
@@ -980,7 +991,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   pointer-events: all;
 }
 #mobileEnterLabel {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-serif);
   font-size: 26px;
   font-weight: 700;
   letter-spacing: .18em;
@@ -1568,7 +1579,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         onclick="openHomeInfo()">ⓘ</button>
       <!-- Gallery button -- opens the Sacristy image gallery -->
       <button id="homeGalleryBtn"
-        style="background:none;border:1px solid rgba(255,255,255,.28);cursor:pointer;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.55);padding:3px 9px 4px;line-height:1;transition:all .2s;border-radius:2px"
+        style="background:none;border:1px solid rgba(255,255,255,.28);cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.55);padding:3px 9px 4px;line-height:1;transition:all .2s;border-radius:2px"
         onmouseover="this.style.color='rgba(200,146,12,.95)';this.style.borderColor='rgba(200,146,12,.6)'"
         onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.28)'"
         title="Gallery"
@@ -1645,6 +1656,22 @@ body.is-mobile #mobileEnterTab { display: block; }
     </div>
   </div>
 </div>
+
+<script>
+  /* The ⓘ on a first visit (display only): the pulse until the mark is tapped
+     once, then still_info_seen and never again. openHomeInfo() is untouched. */
+  (function () {
+    var b = document.getElementById('homeInfoBtn');
+    if (!b) return;
+    var KEY = 'still_info_seen', seen = false;
+    try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+    if (!seen) b.classList.add('info-unseen');
+    b.addEventListener('click', function () {
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      b.classList.remove('info-unseen');
+    });
+  })();
+</script>
 
 <!-- MOBILE ENTER TAB -- fixed at bottom, mobile only -->
 <div id="mobileEnterTab" onclick="enterActiveFeature()">
