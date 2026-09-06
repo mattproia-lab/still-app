@@ -45,7 +45,15 @@ tokens and components the same way, not by inventing new values.
   line before it as the fallback; `100vh` alone is never written, because iOS
   reports it as the tallest the viewport ever gets and the address bar takes
   the difference off the bottom. The viewport meta carries `viewport-fit=cover`
-  and every header pads its top with `env(safe-area-inset-top)`.
+  and every header pads its top with `env(safe-area-inset-top)`. The document
+  itself never scrolls: `html` and `body` are `overflow:hidden` at `100dvh`
+  with `overscroll-behavior:none`, never locked with a negative top, and every
+  screen and overlay is a fixed direct child of `body`. `pinDocument()`, the
+  first script, holds the document at 0 whenever a surface opens
+  (`showScreen`, the Guide, Paths, the paywall, Settings, the letter, the
+  terms, onboarding) and whenever the window or the visual viewport reports a
+  move, except while a field has focus, so a fixed layer is never carried off
+  the top by a toolbar collapsing or a stray scroll.
 
 ## Tokens
 
