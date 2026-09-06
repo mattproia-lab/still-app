@@ -673,6 +673,25 @@ button stops breathing.
   `?resetTrial` in the URL still resets, beside the one definition. Set
   `daysLeft` to 0 and tap a practice to see the door.
 
+- **Review**: one request for an App Store or Play review, and only ever
+  one. It is due on Contemplative Sitting's Session Complete when the
+  journal (`DB.all()`, every practice's entries in `still_entries`) holds
+  fifteen or more, after the count and the quote are on screen: never at
+  launch, never during a practice, never on a Complete that is also showing
+  the trial reminder, never after the trial has ended for someone
+  unsubscribed. A script beside the reminder's watches the panel's
+  `.active` and asks a tick later, so the reminder has painted first; it
+  records `still_review_requested` once the plugin's request resolves and
+  nothing else is saved. It calls the Capacitor in-app review plugin if
+  `Capacitor.Plugins.InAppReview` (or the plugin's global) exists and
+  otherwise does nothing at all: no fallback sheet, no link on the web. The
+  plugin is not on this branch. At the next native build add
+  `@capacitor-community/in-app-review` (`npm i
+  @capacitor-community/in-app-review && npx cap sync`, the major that
+  matches Capacitor 8) and the block wakes; the `[NEEDED: plugin]` comment
+  beside it says the same. The stores decide whether the sheet actually
+  shows; the flag records that we asked, not that it appeared.
+
 - **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
   step, once per install, since onboarding shows only while
   `still_onboarded` is unset and `obFinish()` sets it; and the same step
