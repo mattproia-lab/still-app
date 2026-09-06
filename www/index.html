@@ -1122,39 +1122,80 @@ body.is-mobile #mobileEnterTab { display: block; }
       </div>
     </div>
 
-    <!-- STEP 2 -- Guestmaster Welcome Letter -->
-    <div class="ob-step" id="ob-2" style="display:none;position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow-y:auto;background:#000;-webkit-overflow-scrolling:touch">
-      <div style="min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 20px 90px;box-sizing:border-box">
+    <!-- STEP 2 -- the Guestmaster's letter, as text (DESIGN.md, The letter).
+         Sitting's gold at full strength, the glow low like a candle on the
+         table; the letter in the serif at reading measure in the candle-hi;
+         the cross at its head, the seal beneath the sign-off. The audio and
+         its button are the ones they were. Begin calls obFinish() on the
+         first reading and only closes the letter when it was asked for again
+         from Settings. The image files are not deleted; the Sacristy still
+         shows the letter as a photograph. -->
+    <div class="ob-step" id="ob-2" data-tokens style="display:none">
+      <div class="atmos" aria-hidden="true">
+        <div class="atmos-glow"></div>
+        <div class="atmos-flame"></div>
+        <div class="atmos-grain"></div>
+        <div class="atmos-vignette"></div>
+      </div>
+      <div class="letter-col">
+        <div class="letter-mark" aria-hidden="true">
+          <svg viewBox="0 0 28 34" xmlns="http://www.w3.org/2000/svg">
+            <rect x="11" y="0" width="6" height="34" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            <rect x="0"  y="10" width="28" height="6" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="letter-title">Cell of the Guest</div>
+        <div class="letter-line">A word of welcome from Brother Guestmaster, before you begin.</div>
 
-        <div style="text-align:center;font-size:34px;color:#b8860b;margin-bottom:4px">✝</div>
-        <h1 style="text-align:center;font-family:Georgia,serif;font-size:24px;letter-spacing:1px;color:#f4e9d8;margin:0 0 6px">Cell of the Guest</h1>
-        <p style="text-align:center;font-family:Georgia,serif;font-style:italic;font-size:15px;color:rgba(244,233,216,.6);margin:0 0 24px;max-width:480px">A word of welcome from Brother Guestmaster, before you begin.</p>
+        <div class="letter" id="obLetter">
+          <div class="letter-p">My dear guest,</div>
+          <div class="letter-p">You have arrived at Still. May this place of quiet become for you a true haven of the soul.</div>
+          <div class="letter-p">The bells are waiting for you. In the ancient rhythm of our life, they call the community together. Go now to the Settings and choose the hours when you wish to be summoned to prayer. Even when you have stepped away, the bell will sound — drawing you back, as the monastery bell has ever drawn scattered hearts home to God.</div>
+          <div class="letter-p">Begin today with one contemplative sitting. Let it be in the gentle light of morning, before the weight of the day presses upon you. In time, may this quiet root grow into two sittings of thirty minutes each. From this hidden place all true transformation slowly unfolds.</div>
+          <div class="letter-p">When you enter the Hours of the Office, you may receive the words as text upon the page or let them come to you as living voice. Try both. Let the Spirit teach you which way best serves your prayer.</div>
+          <div class="letter-p">Before the week is out, set your Rule. St Benedict taught us that without a rule, even the holiest intention remains only a passing wish. Choose the practices to which you will bind yourself with gentle fidelity. Every practice bears its own guidance. Look always to the small mark in the upper right corner when something is yet unfamiliar. There you will find understanding.</div>
+          <div class="letter-p">You are not here by accident, dear guest. Begin.</div>
+          <div class="letter-p letter-signoff">In peace and prayer,<br>Brother Guestmaster</div>
+          <!-- The wax seal: a small mark in the seal's red beneath the sign-off -->
+          <svg class="letter-seal" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M24 3.5c2.6 0 4.2 2.4 6.7 3s5.2-.9 7.1 1 .4 4.7 1 7.2 3.3 4 3.3 6.6-2.7 4.1-3.3 6.6.9 5.3-1 7.2-4.6.4-7.1 1-4.1 3-6.7 3-4.2-2.4-6.7-3-5.2.9-7.1-1-.4-4.7-1-7.2S6 26.6 6 24s2.7-4.1 3.3-6.6-.9-5.3 1-7.2 4.6-.4 7.1-1 4.1-3 6.6-3z" fill="#8c1d1d"/>
+            <circle cx="24" cy="24" r="13.5" fill="none" stroke="rgba(255,206,196,.28)" stroke-width="1"/>
+            <path d="M24 15.5v17M17.5 21.5h13" fill="none" stroke="rgba(255,214,204,.72)" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
 
-        <!-- The guestmaster letter, on every platform.
-
-             The welcome film was REMOVED rather than hidden. An iframe inside a
-             display:none parent still loads, so a hidden embed would have gone
-             on calling youtube-nocookie.com during every onboarding for a video
-             nobody could see. It also failed outright in the Capacitor shell
-             (error 153), which is why native was already being given the letter
-             instead. -->
-<div id="obWelcomeLetter" style="width:100%;max-width:560px">
-  <img src="still-mobile/src/image/guestmaster_letter.jpg"
-       alt="A letter of welcome from Brother Guestmaster"
-       style="width:100%;height:auto;border-radius:8px;box-shadow:0 12px 44px rgba(0,0,0,.55)">
-  <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
-  <button id="obGuestmasterBtn" onclick="playGuestmasterAudio()"
-          style="margin-top:14px;width:100%;padding:12px;background:rgba(200,146,12,.1);border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer">
-    ◎ Hear the letter read aloud
-  </button>
-</div>
-        <button onclick="obFinish()"
-          style="margin-top:28px;width:100%;max-width:420px;padding:15px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;background:rgba(200,146,12,.12);border:1px solid rgba(200,146,12,.5);color:#f0c040;cursor:pointer">
-          Begin ->
-        </button>
-
+        <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
+        <button class="btn-ghost letter-hear" id="obGuestmasterBtn" onclick="playGuestmasterAudio()">◎ Hear the letter read aloud</button>
+        <button class="btn-primary gold btn-begin letter-begin" onclick="obLetterBegin()">Begin →</button>
       </div>
     </div>
+
+<script>
+  /* The letter's two doors (display only). On the first reading Begin is
+     obFinish(), as it was. From Settings > About the letter can be read
+     again: showGuestmasterLetter() lifts this step alone over the app, and
+     Begin then only closes it; nothing is recorded, the home screen and the
+     onboarded flag are untouched. */
+  function showGuestmasterLetter() {
+    window._letterReread = true;
+    if (typeof closeSettings === 'function') closeSettings();
+    var root = document.getElementById('screen-onboarding'), step = document.getElementById('ob-2');
+    if (!root || !step) return;
+    document.querySelectorAll('.ob-step').forEach(function (el) { el.style.display = 'none'; });
+    step.style.display = 'block'; step.style.zIndex = '9999'; step.scrollTop = 0;
+    root.style.display = 'block';
+  }
+  function closeGuestmasterLetter() {
+    window._letterReread = false;
+    var a = document.getElementById('obGuestmasterAudio'), b = document.getElementById('obGuestmasterBtn');
+    if (a) { try { a.pause(); } catch (e) {} }
+    if (b) b.textContent = '\u25CE Hear the letter read aloud';
+    var root = document.getElementById('screen-onboarding'), step = document.getElementById('ob-2');
+    if (step) step.style.display = 'none';
+    if (root) root.style.display = 'none';
+  }
+  function obLetterBegin() { if (window._letterReread) closeGuestmasterLetter(); else obFinish(); }
+</script>
 
 <script>
   if (!window.Capacitor?.isNativePlatform?.()) {
@@ -3453,6 +3494,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
         <div class="st-row"><a class="st-link" href="https://stillprayer.app/privacy" target="_blank" rel="noopener">Privacy policy</a></div>
         <div class="st-row"><a class="st-link" href="https://stillprayer.app/support" target="_blank" rel="noopener">Support</a></div>
+        <div class="st-row"><button type="button" class="st-link" id="settingsLetterLink" onclick="showGuestmasterLetter()">Read the Guestmaster’s letter</button></div>
         <div class="st-colophon">Set in Cormorant Garamond and Instrument Sans. Scripture in the Douay-Rheims.</div>
       </div>
 
@@ -4048,11 +4090,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 .dc-fade-slow{animation:dcFadeIn 2.8s ease both;}
 @keyframes dcFadeIn{from{opacity:0}to{opacity:1}}
 
- .letter-mobile { display: none; }
-.letter-desktop { display: block; }
 @media (max-width: 768px) {
-  .letter-mobile { display: block; }
-  .letter-desktop { display: none; }
   /* Larger fonts for mobile readability */
   .feat-item.is-active .fn { font-size: 36px !important; }
   .feat-item.is-near .fn { font-size: 22px !important; }
@@ -4944,6 +4982,7 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #settingsModal .st-field .st-input{text-transform:uppercase;letter-spacing:.06em;}
 #settingsModal .st-field .st-input::placeholder{text-transform:none;letter-spacing:0;}
 #settingsModal .st-link{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-mid);text-decoration:none;transition:color var(--d-fast);}
+#settingsModal button.st-link{background:none;border:0;padding:0;cursor:pointer;text-align:left;}
 #settingsModal .st-link::after{content:" →";color:var(--text-faint);}
 #settingsModal .st-link:hover{color:var(--candle);}
 #settingsModal .st-colophon{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-faint);padding:var(--s-4) 0;border-top:1px solid var(--line);text-wrap:pretty;}
@@ -5035,6 +5074,29 @@ html,body{margin:0;padding:0;background:var(--dc-black);}
 #screen-sitting .trial-reminder[hidden]{display:none;}
 #screen-sitting .trial-reminder-link{background:none;border:0;padding:0 0 0 var(--s-2);cursor:pointer;font-family:var(--font-sans);font-size:var(--t-sm);color:var(--gold);text-decoration:underline;text-underline-offset:3px;}
 #screen-sitting .trial-reminder-link:hover{color:var(--candle);}
+
+/* ═══════════════════════════════════════════
+   THE LETTER -- the Guestmaster's letter as text (DESIGN.md, The letter)
+   Onboarding's second step, and the same step lifted again from Settings.
+   No card, no border: Sitting's gold at full strength with the glow low
+   like a candle on the table, the letter in the serif at reading measure in
+   the candle-hi, the cross at its head, the seal beneath the sign-off.
+═══════════════════════════════════════════ */
+#ob-2{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
+  --atmos-rgb:205,155,10;--atmos-a:.92;--atmos-x:50%;--atmos-y:74%;--atmos-gy:100%;}
+#ob-2 .atmos{position:fixed;}
+#ob-2 .letter-col{position:relative;z-index:1;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-8));}
+#ob-2 .letter-mark{width:22px;height:27px;margin:0 auto var(--s-4);color:var(--gold-a55);}
+#ob-2 .letter-mark svg{display:block;width:100%;height:100%;}
+#ob-2 .letter-title{font-family:var(--font-serif);font-size:var(--t-lg);line-height:var(--lh-tight);color:var(--candle-hi);}
+#ob-2 .letter-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);margin:var(--s-2) 0 var(--s-7);text-wrap:balance;}
+#ob-2 .letter{text-align:left;}
+#ob-2 .letter-p{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--candle-hi);margin:0 0 var(--s-5);text-wrap:pretty;}
+#ob-2 .letter-signoff{margin:var(--s-6) 0 0;}
+#ob-2 .letter-seal{display:block;width:44px;height:44px;margin:var(--s-4) 0 0 2px;}
+#ob-2 .letter-hear{display:block;margin:var(--s-7) auto 0;}
+#ob-2 .letter-begin{margin-top:var(--s-5);}
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
