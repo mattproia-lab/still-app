@@ -1225,7 +1225,26 @@ function pinDocument() {
     if (moved) pinDocument();
   }
   window.addEventListener('scroll', guard, { passive: true });
+  window.addEventListener('resize', guard, { passive: true });
+  window.addEventListener('orientationchange', guard);
   if (vv) { vv.addEventListener('scroll', guard); vv.addEventListener('resize', guard); }
+  /* Home never passes through showScreen(): at boot it is made active in place,
+     so a cold open that begins with the viewport already carried, or a page
+     brought back from the back-forward cache, was never pinned until a refresh.
+     So: no scroll restoration, a pin at every load event, and a pin whenever
+     home becomes active. Layout is pure CSS (dvh and env()), so it needs no
+     relayout of its own; only the offset had to go. */
+  try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+  document.addEventListener('DOMContentLoaded', pinDocument);
+  window.addEventListener('load', pinDocument);
+  window.addEventListener('pageshow', function () { pinDocument(); setTimeout(pinDocument, 250); setTimeout(pinDocument, 1000); });
+  function armHome() {
+    var home = document.getElementById('home');
+    if (!home || !window.MutationObserver) return;
+    new MutationObserver(function () { if (home.classList.contains('active')) pinDocument(); }).observe(home, { attributes: true, attributeFilter: ['class'] });
+    if (home.classList.contains('active')) pinDocument();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', armHome); else armHome();
 })();
 </script>
 <script>

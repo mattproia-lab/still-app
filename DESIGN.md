@@ -51,9 +51,15 @@ tokens and components the same way, not by inventing new values.
   screen and overlay is a fixed direct child of `body`. `pinDocument()`, the
   first script, holds the document at 0 whenever a surface opens
   (`showScreen`, the Guide, Paths, the paywall, Settings, the letter, the
-  terms, onboarding) and whenever the window or the visual viewport reports a
-  move, except while a field has focus, so a fixed layer is never carried off
-  the top by a toolbar collapsing or a stray scroll.
+  terms, onboarding), whenever the window or the visual viewport reports a
+  move or a resize, except while a field has focus, and at every load
+  (`DOMContentLoaded`, `load`, `pageshow` with two short retries) and
+  whenever home becomes active, since home is made active in place at boot
+  and never passes through `showScreen()`; scroll restoration is manual. So
+  a fixed layer is never carried off the top by a toolbar collapsing, a
+  stray scroll, a cold open that begins offset, or a return from the
+  back-forward cache. Home's own layout is pure CSS, `dvh` and `env()`, and
+  relays out on every resize without script.
 
 ## Tokens
 
