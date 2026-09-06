@@ -1634,6 +1634,54 @@ function pinDocument() {
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
   })();
+
+  /* The one review request: on Session Complete, when the journal holds
+     REVIEW_ENTRIES entries or more, once, after the count and the quote are
+     on screen. Never at launch, never during a practice, never on a Complete
+     that is also showing the trial reminder, never after the trial has ended
+     for someone unsubscribed. Recorded in still_review_requested once the
+     request has been made, so it never repeats. Calls the Capacitor in-app
+     review plugin if one is present and otherwise does nothing at all: no
+     fallback, no link on the web.
+     [NEEDED: plugin] Add @capacitor-community/in-app-review at the next
+     native build (npm i @capacitor-community/in-app-review && npx cap sync;
+     take the major that matches Capacitor 8). Until then the plugin is
+     absent everywhere and this block is inert. */
+  (function () {
+    var REVIEW_KEY = 'still_review_requested', REVIEW_ENTRIES = 15;
+    function plugin() {
+      var C = window.Capacitor, P = (C && C.Plugins && C.Plugins.InAppReview) || window.InAppReview || null;
+      return (P && typeof P.requestReview === 'function') ? P : null;
+    }
+    function due() {
+      try {
+        if (localStorage.getItem(REVIEW_KEY)) return false;
+        var reminder = document.getElementById('trialReminder');
+        if (reminder && !reminder.hidden) return false;
+        if (typeof isSubscribed !== 'function' || typeof trialIsOver !== 'function') return false;
+        if (!isSubscribed() && trialIsOver()) return false;
+        var entries = (typeof DB !== 'undefined' && DB && typeof DB.all === 'function') ? DB.all() : [];
+        return entries.length >= REVIEW_ENTRIES;
+      } catch (e) { return false; }
+    }
+    function ask(panel) {
+      if (!panel.classList.contains('active') || !due()) return;
+      var P = plugin();
+      if (!P) return;
+      var done = function () { try { localStorage.setItem(REVIEW_KEY, new Date().toISOString()); } catch (e) {} };
+      try {
+        var r = P.requestReview();
+        if (r && typeof r.then === 'function') r.then(done, function () {}); else done();
+      } catch (e) {}
+    }
+    function arm() {
+      var panel = document.getElementById('sitting-complete');
+      if (!panel || !window.MutationObserver) return;
+      /* A tick after the class changes, so the reminder's own observer has painted first. */
+      new MutationObserver(function () { setTimeout(function () { ask(panel); }, 0); }).observe(panel, { attributes: true, attributeFilter: ['class'] });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+  })();
 </script>
 
 <!-- ═══════════════════════════════════════════
