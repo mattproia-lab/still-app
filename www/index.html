@@ -1220,7 +1220,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           </svg>
         </div>
 
-        <audio id="obGuestmasterAudio" src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
+        <audio id="obGuestmasterAudio" data-src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
         <button class="btn-ghost letter-hear" id="obGuestmasterBtn" onclick="playGuestmasterAudio()">◎ Hear the letter read aloud</button>
         <button class="btn-primary gold btn-begin letter-begin" onclick="obLetterBegin()">Begin →</button>
       </div>
@@ -1293,16 +1293,23 @@ function pinDocument() {
     root.style.display = 'block';
     if (typeof pinDocument === 'function') pinDocument();
   }
+  /* The letter's audio has no source while the letter is off screen. Its
+     button attaches one (playGuestmasterAudio); every way off the letter
+     drops it again, so the media session, a headset button or a stray
+     resume from the browser has nothing of the letter's to play. */
+  function guestmasterAudioDetach() {
+    var a = document.getElementById('obGuestmasterAudio'), b = document.getElementById('obGuestmasterBtn');
+    if (a) { try { a.pause(); a.onended = null; a.removeAttribute('src'); a.load(); } catch (e) {} }
+    if (b) b.textContent = '\u25CE Hear the letter read aloud';
+  }
   function closeGuestmasterLetter() {
     window._letterReread = false;
-    var a = document.getElementById('obGuestmasterAudio'), b = document.getElementById('obGuestmasterBtn');
-    if (a) { try { a.pause(); } catch (e) {} }
-    if (b) b.textContent = '\u25CE Hear the letter read aloud';
+    guestmasterAudioDetach();
     var root = document.getElementById('screen-onboarding'), step = document.getElementById('ob-2');
     if (step) step.style.display = 'none';
     if (root) root.style.display = 'none';
   }
-  function obLetterBegin() { if (window._letterReread) closeGuestmasterLetter(); else obFinish(); }
+  function obLetterBegin() { if (window._letterReread) { closeGuestmasterLetter(); } else { guestmasterAudioDetach(); obFinish(); } }
 </script>
 
 <script>
@@ -6977,7 +6984,8 @@ function playGuestmasterAudio() {
   const a = document.getElementById('obGuestmasterAudio');
   const b = document.getElementById('obGuestmasterBtn');
   if (!a) return;
-  if (a.paused) {
+  if (a.paused || !a.getAttribute('src')) {
+    if (!a.getAttribute('src') && a.dataset.src) a.src = a.dataset.src;
     a.play().catch(e => console.warn('Guestmaster audio failed:', e));
     if (b) b.textContent = '❚❚ Pause';
     a.onended = () => { if (b) b.textContent = '◎ Hear the letter read aloud'; };
