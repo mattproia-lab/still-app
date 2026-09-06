@@ -613,7 +613,8 @@ button stops breathing.
   it; clear the key to see it again. After the trial the app still opens to
   home with no interstitial: the launch lock is gone and the startup block
   only refreshes the subscription cache. `enterFeature()` is the one gate:
-  Contemplative Sitting and Saint of the Day (`TRIAL_FREE_SCREENS`) open
+  Contemplative Sitting, Saint of the Day and Rosary Meditations
+  (`TRIAL_FREE_SCREENS`) open
   without a paywall; every other practice and voice shows it at its door,
   every time, always dismissable. Not now hides it and the person is on
   home, where they never left; never at launch.
