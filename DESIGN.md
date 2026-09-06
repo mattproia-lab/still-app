@@ -480,10 +480,23 @@ button stops breathing.
   `.atmos-photo` layer between the flame and the grain, graded toward the
   hue and quieted, standing in the lower half of the frame (`height:52%`, its
   top dissolving through a mask) so the input never sits over a face at
-  390px, and shown only while the opening is on screen with nothing yet
-  written: a `:has()` rule on the panel's `.active` and the textarea's
-  `:placeholder-shown:not(:focus)`, so typing or taking up the textarea
-  starts the one slow fade (`--d-veil`) and no logic changed. Both prompts
+  390px. The photograph reads in its own colours, no desaturation; the hue
+  is a light grade at the edges only and the band settles into the ink at
+  its foot, under the shared grain and vignette. It stays through the
+  opening and the writing (`:has()` on the input panel's `.active`) and
+  recedes on the one slow fade (`--d-veil`) when the listening state
+  begins, staying gone on the answer; no logic changed. The answer keeps
+  the question: `.voice-question`, the serif italic at reading measure with
+  a hairline beneath, read from the textarea by a watcher on the answer
+  panel the moment it shows, nothing stored. Beside Hear response, Share
+  (`shareVoiceCard()`) draws the exchange on a 1080x1350 canvas in the
+  app's faces: the voice's hue as the ground, the cross and the name, the
+  question in the serif italic, the reply in the serif, stillprayer.app as
+  the watermark. Long replies scale the type down together to two thirds;
+  past that the card ends with an ellipsis and the full text stays in the
+  app. Offered through `navigator.share` with the file where the browser
+  allows, on native through a Capacitor Share plugin with Filesystem if one
+  is present, otherwise as a download. No dependency. Both prompts
   carry their em dash and curled apostrophe in the markup, since no save
   reads them. The old `.companion-*` stylesheet is retired except the state
   contract (Sitting's panels use it) and the textarea rule; the mobile
@@ -499,17 +512,17 @@ button stops breathing.
   the `W[]` array (she is not a home world, so not a row) and set on the
   screen by a `:has()` on the pane's `.active`; the framed photograph at
   the head of the page grades toward it with her. Her portrait stays a
-  `.devotional.graded` frame with her name and line beneath, then the day's
-  quote from the tradition. The opening: her prompt in the serif, in her
+  `.devotional` frame, the light grade only (the `.graded` wash was too
+  heavy on her face), with her name and line beneath, then the day's quote
+  from the tradition. The opening: her prompt in the serif, in her
   voice ("Bring a question, or leave it empty and let me speak."), the
-  textarea, Speak to me. The writing: the portrait recedes on the one slow
-  fade (`:has()` on the textarea's focus or content); the page holds still.
-  Once the ask has left the opening (`showMysticState()` hides
-  `#mysticInput` inline, so `#mysticInput[style*="none"]` is the state)
-  the portrait and the quote step aside and her name heads the listening
-  and the answer, which is the reply in the serif at reading measure with
-  Hear response and Ask another beneath; no left rule, no card, no repeated
-  label. The old `.ab-response` card, `.ab-listen` and the mobile block's
+  textarea, Speak to me. The portrait stays through the writing. Once the
+  ask has left the opening (`showMysticState()` hides `#mysticInput`
+  inline, so `#mysticInput[style*="none"]` is the state) the portrait
+  recedes on the one slow fade and closes, the quote steps aside, and her
+  name heads the listening and the answer, which keeps the question at the
+  top and is the reply in the serif at reading measure with Hear response,
+  Share and Ask another beneath; no left rule, no card, no repeated label. The old `.ab-response` card, `.ab-listen` and the mobile block's
   `#mysticResponseText` line are gone. Her request, feature key, limit,
   the onboarding-free flag, the playback and the saves are unchanged.
 
