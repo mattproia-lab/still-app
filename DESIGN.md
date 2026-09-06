@@ -265,7 +265,19 @@ button stops breathing.
   code gives it); `.anchor-line` under the ring (two `!important`s beat the
   inline style `playAnchor()` writes); `.dur-btn`, `.anchor-pill`, `.rec-*`.
   The fourth step `#ps-watch` is hidden by id because `setSittingPhase()`
-  assigns `className` outright.
+  assigns `className` outright. Session Complete carries **Over time**
+  (`#overTime`) beneath the count and the closing quote, above the trial
+  reminder: the label in the sans, a small line graph of thoughts noticed
+  per sitting, oldest to newest, the last thirty at most, and one sans line,
+  "Thoughts noticed, each sitting. Fewer is not the goal. Noticing is." The
+  graph is an SVG drawn by a script watching the panel's `.active`, from the
+  journal's `sitting` entries (`totalThoughts`, the one `DB.save` in
+  `completeSitting()` already writes, so the sitting just finished is the
+  last point): a hairline axis in `--line`, dots in the candle, the line in
+  the gold, scaled to the highest count shown. No goal line, no percentage,
+  no comparison, no message about improvement, nothing saved. Below three
+  sittings the section is hidden and nothing is drawn. It has no animation
+  of its own; it arrives with the panel.
 - **Lectio**: `.lectio-col` (measure) and `.lectio-col-read` (reading
   measure); `.lectio-prev-phrase` faint above `.lectio-curr-phrase`;
   `.passage-choice` cards with `.is-today`; `.lectio-source-group` as native
