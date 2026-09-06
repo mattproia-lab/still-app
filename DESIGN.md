@@ -687,7 +687,12 @@ button stops breathing.
   border; Sitting's gold at full strength with the glow low like a candle
   on the table (`--atmos-y` 74%, the ground at 100%). "Cell of the Guest"
   and its line stay above; "Hear the letter read aloud" is the same button
-  and audio; Begin is the one action. The two image classes
+  and audio; Begin is the one action. The audio element carries no source
+  while the letter is off screen: the button attaches it before playing
+  (`data-src`), and both ways off the letter, Begin and close, pause it and
+  drop the source again (`guestmasterAudioDetach()`), so nothing outside
+  the letter, a media session, a headset button, a browser resume, can
+  start it. The two image classes
   (`.letter-mobile`, `.letter-desktop`) and the photograph's markup are
   retired; the file stays, and the Sacristy still shows it.
 
