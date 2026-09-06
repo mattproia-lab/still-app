@@ -12132,7 +12132,6 @@ async function submitAuth() {
     body: JSON.stringify({ email, password })
   });
   const data = await res.json();
-  console.log('auth response:', JSON.stringify(data));
   if (data.error || data.error_description) {
     errEl.textContent = data.error_description || data.error;
     return;
