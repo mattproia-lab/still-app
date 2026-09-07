@@ -6,7 +6,7 @@ Master map of the vault. Every new wiki page gets a line here (step 4 of the ing
 - [stack.md](app/stack.md) — platform, backend services, native-vs-web origin. Flags the iOS/Android app-ID split. _(2026-08-22)_
 - [deploy.md](app/deploy.md) — Netlify config, the manual `www/` sync and its drift risk, build environments, git conventions. _(2026-08-22)_
 - [subscription-paths.md](app/subscription-paths.md) — how `isSubscribed()` and `claude.js` decide access. Flags the `'active'` vs `'premium'` mismatch and the unauthenticated TTS function. _(2026-08-22)_
-- [architecture.md](app/architecture.md) — line-region map of `index.html`'s major systems: shell, practices, data layer, subscription flow, bells, Rosary, Netlify functions. _(2026-08-22)_
+- [architecture.md](app/architecture.md) — line-region map of `index.html`'s major systems on the redesign branch: screens and overlays, the two stylesheets, shell, practices, the voices, the liturgical day, data layer, trial and paywall, the Dialogue Chamber, Netlify functions, tools, the assets the app reads, what is gone and new since the last map. _(2026-09-07)_
 
 ## raw/decisions/
 - [2026-08-23-office-rebuild-plan.md](../raw/decisions/2026-08-23-office-rebuild-plan.md) — Divinum Officium cleared as a source (MIT covering software and liturgical texts alike, confirmed by project lead Fr. Albert Marcello 2026-08-24 — licence question closed), the Office rebuilt with real daily propers, a `traditional` / `modern` rite toggle, build sequence, and the pre-Advent target. _(2026-08-24)_
