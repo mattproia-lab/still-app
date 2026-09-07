@@ -156,6 +156,7 @@ without it.
 | Spiritual Autobiography | 70,8,152 | purple | .90 | 50% / 36%, behind the text |
 | The Companion | 6,34,98 | navy | .80 | 50% / 36%, behind the text |
 | Deeper | 120,148,200 | softer blue | .55 | 50% / 36%, behind the text |
+| The Dialogue Chamber | 12,64,88 | deep sea | .85 | 50% / 44%, behind the environments |
 | Amma Sophia (the Autobiography's Inspiration tab) | 58,86,150 | dusk blue, `SOPHIA` beside the array | .68 | 50% / 36%, behind the text |
 
 Put the glow where the eye rests in that practice. Text and gold accents do
@@ -766,6 +767,53 @@ button stops breathing.
   no summary, no count, no "complete": one line, "There is no more to read.
   Stay as long as you need.", and Return to Still. "Begin Again" is gone;
   the track goes back. Nothing is saved; there is no timer.
+
+- **The Dialogue Chamber** (`#screen-dialogue`): the deep sea from `W[]`
+  (`12,64,88` at .85), the glow slowed to twice `--d-drift`. The
+  practice keeps its three environments, the sea, the bridge and the flame
+  (`assets/sea_loop.mp4`, `bridge_loop.mp4`, `candle.mp4`), because
+  the machine changes them at the doors and that is part of the practice:
+  `DC.setEnv()` still builds them into `#dcEnvA`/`#dcEnvB` and
+  crossfades them over 20s, now above the atmosphere's ground and below
+  each layer's own grain and vignette (`.dc-env::before/::after`, like a
+  threshold), the video dimmed to read over by an ink wash and graded
+  toward the hue by a radial wash in `--atmos-rgb`, no filter, since a
+  filter on a playing video is paid every frame. Under
+  reduced motion, or when a video fails, the machine writes the drawn
+  fallbacks instead; they are repainted in the hue and the candle. The scrim,
+  the arrival pulse (`#dcArrival`) and the Colloquy's suffusion
+  (`#dcSuffuse`) stay, in ink, the candle and the gold. The header is the
+  shared header with the Margin (`#dcMarginBtn`, ❧) in the settings slot;
+  the stairs marker is the shared phase track under it, Feet · Heart ·
+  Mouth (`#dcStair1..3`, lit by `.dc-lit`), shown on the phases the
+  machine shows it on. Every text phase is the serif at reading measure
+  with labels in the sans and no cards: the threshold quote and the
+  Chamber's lines in the serif italic at `--t-xl` (`.dc-quote`), the
+  passage line by line at `--t-lg` (`.dc-passage`, the kicker
+  `revealInto()` writes overridden to the sans micro), the accompaniment
+  upright at `--t-base` and `--text-mid` (`.dc-accomp`), the person's
+  echo in the italic at `--t-sm` behind a hairline, the welcome and the
+  blessing's body prayer upright at `--text-mid`, the Margin's lines and
+  the carry list on hairlines, the pastoral room's text byte-identical. The
+  writing fields are a serif field on a hairline (`.dc-textarea`). The
+  four doors are a quiet list, serif title and sans subline with a hairline
+  between. The Cell and the Listening pause are on the shared ring
+  (`#ring-dc-cell`, `#ring-dc-listen`): neither phase writes m:ss, so a
+  script after the markup watches each phase's `.dc-on` and takes the
+  length by the machine's own rule, the Cell 28s for the first three visits
+  then 60s (`dc_visits`), the pause its 10s minimum (4s reduced) after
+  which the ring holds its floor until the Word arrives; it calls nothing.
+  Enter, Offer, Begin and "It has spoken" are `.btn-primary.gold`; every
+  ghost and exit is `.btn-ghost`, with `.dc-ghost`/`.dc-show` kept as
+  the machine's opacity toggle. Phases still fade on the machine's 1.6s
+  (`show()` hides the rest at 1.7s); short phases centre in
+  `.dc-center`, long ones (`.dc-top`) read from the top and scroll. The
+  old stylesheet's `html,body` background is now the Chamber's alone; the
+  root takes `z-index:50` like every `.screen`, so home's lancet window
+  (which `animateTo()` kept painting through it in the deep-sea hue) and
+  the dot nav no longer show through. The
+  module, its ids, timers, transitions, saves and the request to the voice
+  function are unchanged.
 
 ### Hour palette
 
