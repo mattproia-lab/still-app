@@ -1144,26 +1144,48 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
 
-    <!-- STEP 1 -- Video Hero -->
-    <div class="ob-step" id="ob-1" style="position:fixed;inset:0;margin:0;padding:0;max-width:100%;overflow:hidden;z-index:9999">
-      <video id="heroVideo" autoplay muted loop playsinline
-        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0;transition:opacity 1.4s ease"
-        src="still-mobile/src/image/hero.mp4"></video>
-      <div style="position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(80,0,120,.28) 0%,transparent 70%),linear-gradient(to bottom,rgba(3,1,8,.72) 0%,rgba(3,1,8,.45) 35%,rgba(3,1,8,.52) 65%,rgba(3,1,8,.88) 100%)"></div>
-      <div style="position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 110% 100% at 50% 50%,transparent 40%,rgba(2,0,6,.65) 100%)"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;height:180px;z-index:3;background:linear-gradient(to bottom,transparent,#030305)"></div>
-      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;min-height:100dvh;text-align:center;padding:0 28px;padding-bottom:max(48px,env(safe-area-inset-bottom))">
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,19px);font-weight:300;color:rgba(230,220,255,.68);line-height:1.78;margin-bottom:14px;max-width:540px">Still is built on the contemplative practices that Christians have used for seventeen centuries -- adapted for the interior life you actually have.</p>
-        <p style="font-family:'Playfair Display',serif;font-size:clamp(15px,1.6vw,18px);font-style:italic;color:rgba(200,160,255,.55);line-height:1.7;margin-bottom:42px">Not a productivity app. Not a streak counter.<br>A place to be still.</p>
-        <button onclick="obNext(2)"
-          style="display:inline-flex;align-items:center;gap:10px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(180,120,255,.45);padding:15px 36px;cursor:pointer;transition:all .35s"
-          onmouseover="this.style.boxShadow='0 0 28px rgba(160,32,240,.35)';this.style.borderColor='rgba(200,140,255,.8)'"
-          onmouseout="this.style.boxShadow='none';this.style.borderColor='rgba(180,120,255,.45)'">
-          CLICK HERE
-        </button>
-                       <!-- Store badges (web only) -->
-        <div id="storeBadges" style="display:none;margin-top:34px;text-align:center">
-          <p style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(190,140,255,.4);margin-bottom:12px">Or take Still with you</p>
+    <!-- STEP 1 -- the door (DESIGN.md, Onboarding). The hooded figure's video,
+         its scrims and the scroll cue are gone: the shared atmosphere in home's
+         purple, the lancet window drawn in light behind the words as home
+         draws it, the wordmark, the description, one action. obNext() and
+         the flow are unchanged; the store badges are the ones they were. -->
+    <div class="ob-step" id="ob-1" data-tokens>
+      <div class="atmos" aria-hidden="true">
+        <div class="atmos-glow"></div>
+        <div class="atmos-flame"></div>
+        <div class="atmos-grain"></div>
+        <div class="atmos-vignette"></div>
+      </div>
+      <!-- The window: home's lancet, the same path and the same five stops
+           applyColor() writes there (opacity x 1, .72, .26, .06, 0), fixed in
+           home's purple at home's strength. Its own ids, so applyColor() never
+           reaches it. -->
+      <div class="ob-lancet" aria-hidden="true">
+        <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="obwg" cx="200" cy="240" r="280" fx="200" fy="140" gradientUnits="userSpaceOnUse">
+              <stop offset="0%"   stop-color="rgb(82,20,140)" stop-opacity=".28"/>
+              <stop offset="28%"  stop-color="rgb(82,20,140)" stop-opacity=".2016"/>
+              <stop offset="58%"  stop-color="rgb(82,20,140)" stop-opacity=".0728"/>
+              <stop offset="82%"  stop-color="rgb(82,20,140)" stop-opacity=".0168"/>
+              <stop offset="100%" stop-color="rgb(82,20,140)" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="oblc">
+              <path d="M 0 600 L 0 370 A 400 400 0 0 1 200 20 A 400 400 0 0 1 400 370 L 400 600 Z"/>
+            </clipPath>
+          </defs>
+          <rect x="0" y="0" width="400" height="600" fill="url(#obwg)" clip-path="url(#oblc)"/>
+          <path d="M 0 370 A 400 400 0 0 1 200 20 A 400 400 0 0 1 400 370" fill="none" stroke="rgba(255,246,232,.05)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="door-col">
+        <div class="door-wordmark">Still</div>
+        <div class="door-desc">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</div>
+        <div class="door-line">Not a productivity app. Not a streak counter.<br>A place to be still.</div>
+        <div class="btn-row"><button class="btn-primary gold" onclick="obNext(2)">Enter</button></div>
+        <!-- Store badges (web only; the script below shows them) -->
+        <div id="storeBadges" class="door-stores" style="display:none">
+          <span class="ui-label">Or take Still with you</span>
           <a href="https://apps.apple.com/us/app/still-contemplative-prayer/id6780669339?itscg=30200&itsct=apps_box_badge&mttnsubad=6780669339" style="display:inline-block">
             <img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us?releaseDate=1785283200" alt="Download on the App Store" style="height:44px;vertical-align:middle;object-fit:contain;margin:0 6px" />
           </a>
@@ -1171,10 +1193,6 @@ body.is-mobile #mobileEnterTab { display: block; }
             <img src="assets/badge-googleplay.png" alt="Get it on Google Play" style="height:48px;vertical-align:middle;margin:0 6px" />
           </a>
         </div>
-      </div>
-      <div style="position:absolute;bottom:36px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px">
-        <div style="width:1px;height:40px;background:linear-gradient(to bottom,rgba(190,140,255,.5),transparent)"></div>
-        <span style="font-family:'Montserrat',sans-serif;font-size:7px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(190,140,255,.4)">Scroll</span>
       </div>
     </div>
 
@@ -1387,20 +1405,6 @@ function pinDocument() {
   const badges = document.getElementById('storeBadges');
   if (badges) badges.style.display = 'block';
 }
-  const hv = document.getElementById('heroVideo');
-  if (hv) {
-    hv.addEventListener('canplay', () => { hv.style.opacity = '1'; });
-    if (hv.readyState >= 3) hv.style.opacity = '1';
-    // iOS declines autoplay in Low Power Mode and similar states.
-    // Kick playback explicitly; if refused, retry on the first touch anywhere.
-    hv.play().catch(() => {
-      document.addEventListener('touchstart', () => { hv.play().catch(()=>{}); }, { once: true });
-    });
-    // Re-arm after backgrounding: iOS pauses webview media on suspend
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden && hv.paused) hv.play().catch(()=>{});
-    });
-  }
 </script>
 
 
@@ -5539,7 +5543,32 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #screen-sitting .over-time-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);margin:0;text-wrap:pretty;}
 
 /* ═══════════════════════════════════════════
-   THE LETTER -- the Guestmaster's letter as text (DESIGN.md, The letter)
+   ONBOARDING -- the door in light (DESIGN.md, Onboarding)
+   Step one. Home's purple at home's strength, the lancet window drawn in
+   light behind the words, the wordmark and the description in the serif at
+   reading measure, one action. The video, its scrims and the scroll cue
+   are gone; obNext() and the flow are untouched.
+═══════════════════════════════════════════ */
+#ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
+  --atmos-rgb:82,20,140;--atmos-a:.28;--atmos-x:50%;--atmos-y:44%;--atmos-gy:100%;
+  --measure-read:30rem; /* the token is per screen, not on :root */}
+#ob-1 .atmos{position:fixed;}
+#ob-1 .ob-lancet{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;align-items:center;justify-content:center;}
+#ob-1 .ob-lancet svg{width:88vw;height:70vh;height:70dvh;margin-top:-5vh;overflow:visible;}
+@media (min-width:768px){
+  #ob-1 .ob-lancet svg{width:clamp(220px,40%,400px);height:clamp(400px,86%,630px);margin-top:0;}
+}
+#ob-1 .door-col{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-7));}
+#ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--s-7);}
+#ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-4);}
+#ob-1 .door-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);text-wrap:balance;margin:0;}
+#ob-1 .btn-row{margin-top:var(--s-7);}
+#ob-1 .door-stores{margin-top:var(--s-7);text-align:center;}
+#ob-1 .door-stores .ui-label{margin-bottom:var(--s-3);}
+
+
    Onboarding's second step, and the same step lifted again from Settings.
    No card, no border: Sitting's gold at full strength with the glow low
    like a candle on the table, the letter in the serif at reading measure in
