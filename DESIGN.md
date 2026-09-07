@@ -730,36 +730,41 @@ button stops breathing.
   you" as a sans micro label over the two store badges, their links and
   images exactly as they were, shown on the web by the same script.
   `checkOnboarding()`, `obNext()` and `obFinish()` are untouched.
-  A monk stands at the door: `assets/door/monk.svg`, the silhouette traced
-  (one contour, about 1 KB) from a bird-free frame of the source video
-  `assets/source/still_monk_bird_animation.mp4` (the folder is in
-  `.gitignore`; source media never ships and is never synced to `www/`);
-  the figure is what is darker than its own row's background, so the robe
-  follows into the haze, cut where it is still solid; the PNG cut the same
-  way (4.6 KB) was not needed. The image keeps the video's full height so
-  the figure's ground line keeps its place: `.door-monk` is sized to
-  `--door-ground` over `--door-feet` (the ground line's fraction of the
-  image), and the hem dissolves into the ink through a mask over its last
-  rows. The ground line is 60dvh at 390px (48dvh from 768px), so his head
-  is near 22%; the copy begins beneath the ground line and the wordmark
-  sits at the top, so on a short phone the badges fall below the fold and
-  the door scrolls. The sky is the atmosphere and follows the hour on
-  `data-hour`, set once at load by the script after the step from the
-  Office's own rule (`setOfficeTime()`, `window._officeAutoHour`, the
-  same thresholds as the fallback): Vigils before five, Lauds through the
-  day, Vespers from five in the evening, Compline from eight, each the hour
-  palette's triplet, strength and height. The lancet's five stops take the
-  hour's hue from CSS at .3 of its strength (home's own .28 at Lauds). The
-  bird is one small path drawn facing right (`.door-bird`), flown by the
-  same script with the Web Animations API on `transform` and `opacity`
-  only: every 25-35s at a random interval, from a random side, one gentle
-  sine arc in a band from 7% of the height down to the monk's measured
-  head less 5% (so it clears him whichever way it flies)
-  in six seconds, mirrored with `scaleX(-1)` when it enters from the right
-  so it never flies backward, never more than one at a time, only while
-  the door is on screen; `window._doorBird()` flies one now. The source
-  has a single pose, so there is no page turn. Under reduced motion the
-  still alone: the bird is hidden and never flown.
+  The door's image is the dawn from the source video: one bird-free frame
+  at full resolution, `assets/door/monk-dawn.webp` (768x1360, WebP at
+  quality 92, 25 KB, keeping the sky's grey levels so the gradient does
+  not band), from `assets/source/still_monk_bird_animation.mp4`, whose
+  folder is in `.gitignore`: source media never ships and is never
+  synced to `www/`. A traced silhouette was tried first and set aside:
+  the figure cut from the same frame as one SVG contour, stood on a drawn
+  ground line with the lancet behind him and the atmosphere as an hour-lit
+  sky; it read flat beside the video's own dawn, and the traced approach,
+  its extraction scripts and the PNG cut stay in the scratchpad, not the
+  repo. The frame is a threshold (`.door-dawn`), the one place a
+  photograph is allowed: full-bleed at its own aspect behind the top of
+  the screen on a phone, its last rows dissolving into the ink through a
+  mask, its own grain over it, and the hour's grade at its edges only (the
+  Office's palette on `data-hour`, set once at load from
+  `setOfficeTime()` and `window._officeAutoHour`; the same rule lights
+  the atmosphere beneath, at a lower strength than the Office uses). On a
+  wide screen the frame stands at 68dvh in the atmosphere with its sides
+  dissolving into the light around it. The frame's haze at the ground is the ink the
+  copy sits on: the column begins beneath the figure's ground line
+  (`--door-feet`, the ground line's fraction of the frame, times the
+  frame's height), the wordmark heading it, so no text sits over the sky
+  or the figure; the lancet is gone, since the frame carries its own
+  light. On a short phone Enter is near the fold and the badges are below
+  it; the door scrolls. The bird is one small path drawn facing right
+  (`.door-bird`), flown by the script after the step with the Web
+  Animations API on `transform` and `opacity` only: every 25-35s at a
+  random interval, from a random side, one gentle sine arc in a band from
+  7% of the height down to the figure's measured head less 5% (so it
+  clears him whichever way it flies) in six seconds, mirrored with
+  `scaleX(-1)` when it enters from the right so it never flies backward,
+  never more than one at a time, only while the door is on screen;
+  `window._doorBird()` flies one now. The source has a single pose, so
+  there is no page turn. Under reduced motion the frame alone: the bird is
+  hidden and never flown, and nothing else on the door moves.
 - **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
   step, once per install, since onboarding shows only while
   `still_onboarded` is unset and `obFinish()` sets it; and the same step
