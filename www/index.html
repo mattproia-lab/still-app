@@ -92,7 +92,7 @@ body { -webkit-text-size-adjust: 100%; }
   --gold-a10:rgba(217,164,65,.10);--gold-a25:rgba(217,164,65,.25);--gold-a55:rgba(217,164,65,.55);
   /* Space */
   --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;
-  --gutter:clamp(18px,4vw,38px);--measure:34rem;
+  --gutter:clamp(18px,4vw,38px);--measure:34rem;--measure-read:30rem; /* reading measure, about 65 characters of the serif; on the root so every screen has it */
   /* Motion -- a breath, not a bounce */
   --d-fast:.2s;--d-base:.45s;--d-slow:.9s;--d-breath:1.8s;--d-drift:8s;
   --ease-out:cubic-bezier(.2,.7,.2,1);--ease-breath:cubic-bezier(.45,0,.2,1);
@@ -5550,8 +5550,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    are gone; obNext() and the flow are untouched.
 ═══════════════════════════════════════════ */
 #ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
-  --atmos-rgb:82,20,140;--atmos-a:.28;--atmos-x:50%;--atmos-y:44%;--atmos-gy:100%;
-  --measure-read:30rem; /* the token is per screen, not on :root */}
+  --atmos-rgb:82,20,140;--atmos-a:.28;--atmos-x:50%;--atmos-y:44%;--atmos-gy:100%;}
 #ob-1 .atmos{position:fixed;}
 #ob-1 .ob-lancet{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;align-items:center;justify-content:center;}
 #ob-1 .ob-lancet svg{width:88vw;height:70vh;height:70dvh;margin-top:-5vh;overflow:visible;}
