@@ -27,3 +27,5 @@ npm-debug.log*
 android/
 
 ios/
+# source media the app never ships (the monk was traced from a frame of still_monk_bird_animation.mp4 here)
+assets/source/

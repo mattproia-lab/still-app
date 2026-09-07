@@ -732,7 +732,8 @@ button stops breathing.
   `checkOnboarding()`, `obNext()` and `obFinish()` are untouched.
   A monk stands at the door: `assets/door/monk.svg`, the silhouette traced
   (one contour, about 1 KB) from a bird-free frame of the source video
-  `assets/source/still_monk_bird_animation.mp4`, which is not committed;
+  `assets/source/still_monk_bird_animation.mp4` (the folder is in
+  `.gitignore`; source media never ships and is never synced to `www/`);
   the figure is what is darker than its own row's background, so the robe
   follows into the haze, cut where it is still solid; the PNG cut the same
   way (4.6 KB) was not needed. The image keeps the video's full height so
