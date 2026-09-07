@@ -180,9 +180,12 @@ change with the colour.
 ### Space
 
 `--s-1` … `--s-8` = 4, 8, 12, 16, 24, 32, 48, 64px. `--gutter` is the screen's
-side padding (18px at 390, 38px wide). `--measure` (34rem) caps content width.
-Lectio adds `--measure-read` (30rem, about 65 characters of the serif) for the
-phrase being read.
+side padding (18px at 390, 38px wide). `--measure` (34rem) caps content width;
+`--measure-read` (30rem, about 65 characters of the serif) is the reading
+measure for a passage, a letter, a reply. Both are on `:root`; the
+per-screen copies of `--measure-read` that predate this are redundant and
+harmless. Before it was on the root, five screens used it without defining
+it and ran full width on a wide screen.
 
 ### Motion
 
