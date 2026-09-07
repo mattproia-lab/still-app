@@ -1144,11 +1144,13 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
 
-    <!-- STEP 1 -- the door (DESIGN.md, Onboarding). The hooded figure's video,
-         its scrims and the scroll cue are gone: the shared atmosphere in home's
-         purple, the lancet window drawn in light behind the words as home
-         draws it, the wordmark, the description, one action. obNext() and
-         the flow are unchanged; the store badges are the ones they were. -->
+    <!-- STEP 1 -- the door (DESIGN.md, Onboarding). The shared atmosphere is
+         the sky and follows the hour (data-hour, set once at load by the
+         script after this step from the Office's own clock rule); the lancet
+         window is drawn in light behind the monk, who stands on the ground
+         line where the glow meets the ink; a bird crosses the sky now and
+         then. The wordmark, the copy, Enter and the store badges are as they
+         were. obNext() and the flow are unchanged. -->
     <div class="ob-step" id="ob-1" data-tokens>
       <div class="atmos" aria-hidden="true">
         <div class="atmos-glow"></div>
@@ -1163,12 +1165,10 @@ body.is-mobile #mobileEnterTab { display: block; }
       <div class="ob-lancet" aria-hidden="true">
         <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
           <defs>
+            <!-- home's five stops (applyColor() writes them there as opacity x 1, .72, .26, .06, 0);
+                 colour and opacity come from the hour's --atmos-rgb / --atmos-a in the stylesheet -->
             <radialGradient id="obwg" cx="200" cy="240" r="280" fx="200" fy="140" gradientUnits="userSpaceOnUse">
-              <stop offset="0%"   stop-color="rgb(82,20,140)" stop-opacity=".28"/>
-              <stop offset="28%"  stop-color="rgb(82,20,140)" stop-opacity=".2016"/>
-              <stop offset="58%"  stop-color="rgb(82,20,140)" stop-opacity=".0728"/>
-              <stop offset="82%"  stop-color="rgb(82,20,140)" stop-opacity=".0168"/>
-              <stop offset="100%" stop-color="rgb(82,20,140)" stop-opacity="0"/>
+              <stop offset="0%"/><stop offset="28%"/><stop offset="58%"/><stop offset="82%"/><stop offset="100%"/>
             </radialGradient>
             <clipPath id="oblc">
               <path d="M 0 600 L 0 370 A 400 400 0 0 1 200 20 A 400 400 0 0 1 400 370 L 400 600 Z"/>
@@ -1178,6 +1178,15 @@ body.is-mobile #mobileEnterTab { display: block; }
           <path d="M 0 370 A 400 400 0 0 1 200 20 A 400 400 0 0 1 400 370" fill="none" stroke="rgba(255,246,232,.05)" stroke-width="1"/>
         </svg>
       </div>
+      <!-- The monk: assets/door/monk.svg, the silhouette traced from the source
+           video at the video's full height, sized so its ground line sits at
+           --door-ground; the hem dissolves into the ink through a mask. -->
+      <img class="door-monk" src="assets/door/monk.svg" alt="" aria-hidden="true" draggable="false">
+      <!-- The bird: one small silhouette, drawn facing right; the script flies it
+           across the upper sky and mirrors it when it enters from the right. -->
+      <svg class="door-bird" viewBox="0 0 60 30" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 6 C 10 10, 18 14, 26 17 C 28 15, 31 14, 34 15 L 40 14 L 35 16.5 C 38 14, 46 9, 58 4 C 50 12, 42 17, 34 19 C 31 20, 28 20, 25 19 C 18 18, 10 13, 2 6 Z"/>
+      </svg>
       <div class="door-col">
         <div class="door-wordmark">Still</div>
         <div class="door-desc">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</div>
@@ -1195,6 +1204,72 @@ body.is-mobile #mobileEnterTab { display: block; }
         </div>
       </div>
     </div>
+
+    <script>
+      /* The door by the hour, and the bird (DESIGN.md, Onboarding). Display
+         only. At load the sky takes the hour from the Office's own rule
+         (setOfficeTime() -> window._officeAutoHour; the same thresholds are
+         the fallback if it is not defined yet), read once. The bird flies
+         every 25-35s at a random interval, from a random side, across the
+         upper third of the sky on one gentle arc in six seconds, mirrored
+         when it enters from the right so it always faces the way it flies,
+         never more than one at a time, only while the door is on screen.
+         Under reduced motion the still alone. The source video has one pose,
+         so there is no page turn. window._doorBird flies one now (for the
+         capture). It writes data-hour on the door and nothing else. */
+      (function () {
+        var door = document.getElementById('ob-1');
+        if (!door) return;
+        var HOURS = { vigils: 'vigils', lauds: 'lauds', vespers: 'vespers', compline: 'compline' };
+        function hourNow() {
+          var h = null;
+          if (typeof setOfficeTime === 'function') { try { setOfficeTime(); h = window._officeAutoHour; } catch (e) {} }
+          if (!h) { var n = new Date().getHours(); h = n < 5 ? 'vigils' : n < 17 ? 'lauds' : n < 20 ? 'vespers' : 'compline'; }
+          return HOURS[h] || 'lauds';
+        }
+        function onScreen() {
+          var ob = document.getElementById('screen-onboarding');
+          return !!(ob && ob.style.display !== 'none' && door.style.display !== 'none' && door.getClientRects().length); /* the door is fixed, so offsetParent is null */
+        }
+        function arm() {
+          door.setAttribute('data-hour', hourNow());
+          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var bird = door.querySelector('.door-bird');
+          if (!bird || reduce || !bird.animate) return;
+          var flying = false, timer = null;
+          function fly() {
+            if (flying || !onScreen()) return;
+            flying = true;
+            var W = door.clientWidth, H = door.clientHeight;
+            var w = bird.getBoundingClientRect().width || 28;
+            var fromLeft = Math.random() < .5;
+            var x0 = fromLeft ? -w - 12 : W + 12, x1 = fromLeft ? W + 12 : -w - 12;
+            /* the arc stays in the upper third and clears the monk's head by at least
+               5% of the height, whichever way it flies: the band runs from 7% down to
+               the head less that margin, measured on the figure itself */
+            var monk = door.querySelector('.door-monk'), mr = monk ? monk.getBoundingClientRect() : null;
+            var headFrac = parseFloat(getComputedStyle(door).getPropertyValue('--door-head')) || 0.26;
+            var headPx = mr ? mr.top + mr.height * headFrac : H * 0.22;
+            var bh = bird.getBoundingClientRect().height || 14;
+            var top = H * 0.07, bottom = Math.max(top + 10, headPx - H * 0.05 - bh);
+            var yBase = (top + bottom) / 2, amp = Math.min(H * 0.04, (bottom - top) / 2) * (Math.random() < .5 ? 1 : -1);
+            var flip = fromLeft ? '' : ' scaleX(-1)';
+            var N = 30, frames = [];
+            for (var i = 0; i <= N; i++) {
+              var t = i / N, x = x0 + (x1 - x0) * t, y = yBase + amp * Math.sin(Math.PI * t);
+              frames.push({ transform: 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' + flip, opacity: (i === 0 || i === N) ? 0 : 1, offset: t });
+            }
+            bird.style.visibility = 'visible';
+            var a = bird.animate(frames, { duration: 6000, easing: 'ease-in-out', fill: 'forwards' });
+            a.onfinish = function () { bird.style.visibility = 'hidden'; flying = false; schedule(); };
+          }
+          function schedule() { clearTimeout(timer); timer = setTimeout(fly, 25000 + Math.random() * 10000); }
+          schedule();
+          window._doorBird = fly;
+        }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+      })();
+    </script>
 
     <!-- STEP 2 -- the Guestmaster's letter, as text (DESIGN.md, The letter).
          Sitting's gold at full strength, the glow low like a candle on the
@@ -5550,22 +5625,51 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    are gone; obNext() and the flow are untouched.
 ═══════════════════════════════════════════ */
 #ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
-  --atmos-rgb:82,20,140;--atmos-a:.28;--atmos-x:50%;--atmos-y:44%;--atmos-gy:100%;}
+  --atmos-x:50%;--atmos-gy:100%;
+  --door-ground:60vh;--door-ground:60dvh; /* where the monk stands; the copy begins beneath it */
+  --door-feet:0.6985; /* the figure's ground line and head, as fractions of the traced image's height */
+  --door-head:0.261;}
+/* The sky by the hour: the Office's palette (DESIGN.md, Hour palette). Lauds is the day. */
+#ob-1,#ob-1[data-hour="lauds"]{--atmos-rgb:205,155,10;--atmos-a:.95;--atmos-y:62%;}
+#ob-1[data-hour="vigils"]{--atmos-rgb:110,110,140;--atmos-a:.3;--atmos-y:70%;}
+#ob-1[data-hour="vespers"]{--atmos-rgb:162,10,52;--atmos-a:.95;--atmos-y:68%;}
+#ob-1[data-hour="compline"]{--atmos-rgb:120,140,170;--atmos-a:.55;--atmos-y:72%;}
 #ob-1 .atmos{position:fixed;}
+/* The window, in the hour's light: home's five stop opacities at home's relative strength (.3 of the hour's) */
 #ob-1 .ob-lancet{position:fixed;inset:0;z-index:1;pointer-events:none;display:flex;align-items:center;justify-content:center;}
 #ob-1 .ob-lancet svg{width:88vw;height:70vh;height:70dvh;margin-top:-5vh;overflow:visible;}
+#ob-1 .ob-lancet stop{stop-color:rgb(var(--atmos-rgb));}
+#ob-1 .ob-lancet stop:nth-child(1){stop-opacity:calc(var(--atmos-a) * .3);}
+#ob-1 .ob-lancet stop:nth-child(2){stop-opacity:calc(var(--atmos-a) * .216);}
+#ob-1 .ob-lancet stop:nth-child(3){stop-opacity:calc(var(--atmos-a) * .078);}
+#ob-1 .ob-lancet stop:nth-child(4){stop-opacity:calc(var(--atmos-a) * .018);}
+#ob-1 .ob-lancet stop:nth-child(5){stop-opacity:0;}
+/* The monk: the traced image at the height that puts its ground line at --door-ground; the hem dissolves into the ink */
+#ob-1 .door-monk{position:fixed;left:50%;top:0;z-index:1;pointer-events:none;user-select:none;-webkit-user-select:none;
+  height:calc(var(--door-ground) / var(--door-feet));width:auto;transform:translateX(-50%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 64.71%,transparent 69.85%);
+  mask-image:linear-gradient(to bottom,#000 64.71%,transparent 69.85%);}
+/* The bird: a silhouette the script flies; hidden between flights */
+#ob-1 .door-bird{position:fixed;left:0;top:0;z-index:1;width:28px;height:14px;fill:#000;pointer-events:none;visibility:hidden;will-change:transform;}
 @media (min-width:768px){
+  #ob-1{--door-ground:48vh;--door-ground:48dvh;}
   #ob-1 .ob-lancet svg{width:clamp(220px,40%,400px);height:clamp(400px,86%,630px);margin-top:0;}
+  #ob-1 .door-bird{width:34px;height:17px;}
 }
-#ob-1 .door-col{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;
+/* The words: the wordmark at the top, the copy beneath the ground line */
+#ob-1 .door-col{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   min-height:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
-  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-7));}
-#ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--s-7);}
-#ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-4);}
+  padding:calc(var(--door-ground) + var(--s-3)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));}
+#ob-1 .door-wordmark{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--s-7));
+  font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;}
+#ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-3);}
 #ob-1 .door-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);text-wrap:balance;margin:0;}
-#ob-1 .btn-row{margin-top:var(--s-7);}
-#ob-1 .door-stores{margin-top:var(--s-7);text-align:center;}
+#ob-1 .btn-row{margin-top:var(--s-5);}
+#ob-1 .door-stores{margin-top:var(--s-5);text-align:center;}
 #ob-1 .door-stores .ui-label{margin-bottom:var(--s-3);}
+@media (prefers-reduced-motion:reduce){
+  #ob-1 .door-bird{display:none;}
+}
 
 /* ═══════════════════════════════════════════
    THE LETTER -- the Guestmaster's letter as text (DESIGN.md, The letter)
