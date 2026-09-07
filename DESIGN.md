@@ -705,6 +705,28 @@ button stops breathing.
   beside it says the same. The stores decide whether the sheet actually
   shows; the flag records that we asked, not that it appeared.
 
+- **Onboarding, the door** (`#ob-1`): the first screen a new person sees,
+  once per install. The hooded figure is gone with everything that came
+  with it: the hero video (`still-mobile/src/image/hero.mp4`, 28 MB, now
+  referenced by nothing and left on disk), its three scrim gradients, its
+  play-on-load and play-on-first-touch script, and the "Scroll" cue, which
+  pointed at nothing (the step is fixed and clipped, and the letter beneath
+  it is hidden until Enter). In its place the shared atmosphere in home's
+  purple at home's strength (`--atmos-rgb` 82,20,140, `--atmos-a` .28,
+  the `HOME` constant), and the lancet window drawn in light behind the
+  words the way home draws it: the same path and the same five stops
+  `applyColor()` writes there, fixed in the purple at .28 with its own
+  gradient and clip ids (`obwg`, `oblc`) so `applyColor()` never
+  reaches it; 88vw by 70dvh on a phone as the mobile block sizes home's,
+  the desktop clamp above 768px, centred behind the column. The wordmark
+  in the serif at the top (`.door-wordmark`, as the paywall's), the
+  description in the serif at reading measure with its double hyphen set
+  as an em dash in the markup (`.door-desc`; no save reads it), the line
+  beneath in the italic at `--text-mid` (`.door-line`), one primary
+  action, Enter, on the gold, still `obNext(2)`; then "Or take Still with
+  you" as a sans micro label over the two store badges, their links and
+  images exactly as they were, shown on the web by the same script.
+  `checkOnboarding()`, `obNext()` and `obFinish()` are untouched.
 - **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
   step, once per install, since onboarding shows only while
   `still_onboarded` is unset and `obFinish()` sets it; and the same step
