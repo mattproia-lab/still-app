@@ -1144,14 +1144,17 @@ body.is-mobile #mobileEnterTab { display: block; }
 <div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 64px">
 
-    <!-- STEP 1 -- the door (DESIGN.md, Onboarding). The dawn from the source
-         video is the door's image, as a threshold: one bird-free frame,
-         full-bleed behind the top of the screen, its haze at the ground
-         becoming the ink the copy sits on, graded toward the hour at its
-         edges only (data-hour, set once at load by the script after this
-         step from the Office's own clock rule). A bird crosses its sky now
-         and then. The wordmark, the copy, Enter and the store badges are as
-         they were. obNext() and the flow are unchanged. -->
+    <!-- STEP 1 -- the door (DESIGN.md, Onboarding). The monk in his cell is the
+         door's image, as a threshold: full-bleed behind the top of the screen,
+         its dark lower third becoming the ink the copy sits on beneath his
+         hands. An interior: the lantern is the light, so the atmosphere sits
+         low and warm at Lauds' gold whatever the hour, and only a light grade
+         at the frame's edges follows the hour (data-hour, set once at load by
+         the script after this step from the Office's own clock rule). Two
+         motions, both on the light: the lantern's glow and the frame's slow
+         breath; nothing on the figure moves. The wordmark, the copy, Enter
+         and the store badges are as they were. obNext() and the flow are
+         unchanged. -->
     <div class="ob-step" id="ob-1" data-tokens>
       <div class="atmos" aria-hidden="true">
         <div class="atmos-glow"></div>
@@ -1159,17 +1162,20 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="atmos-grain"></div>
         <div class="atmos-vignette"></div>
       </div>
-      <!-- The threshold: the dawn from the source video, one bird-free frame
-           at full resolution (assets/door/monk-dawn.webp, 768x1360), at its own
-           aspect, full-bleed on a phone. Its last rows dissolve into the ink
-           through a mask; its own grain and a light grade toward the hour at
-           the edges sit over it. -->
-      <div class="door-dawn" aria-hidden="true"><img src="assets/door/monk-dawn.webp" alt="" draggable="false"></div>
-      <!-- The bird: one small silhouette, drawn facing right; the script flies it
-           across the upper sky and mirrors it when it enters from the right. -->
-      <svg class="door-bird" viewBox="0 0 60 30" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 6 C 10 10, 18 14, 26 17 C 28 15, 31 14, 34 15 L 40 14 L 35 16.5 C 38 14, 46 9, 58 4 C 50 12, 42 17, 34 19 C 31 20, 28 20, 25 19 C 18 18, 10 13, 2 6 Z"/>
-      </svg>
+      <!-- The threshold: the monk in his cell (assets/door/monk-cell.webp,
+           1145x1374, from assets/source/monk-cell.png), at its own aspect,
+           full-bleed on a phone. The frame breathes (scale 1 to 1.015 over
+           eight seconds and back); over the lantern a glow swells and settles
+           on the flame layer's own timing, its spill reaching the wall and the
+           robe. The last rows dissolve into the ink through a mask; grain and
+           the hour's edge grade sit over it. Under reduced motion, the still. -->
+      <div class="door-cell" aria-hidden="true">
+        <div class="door-cell-frame">
+          <img src="assets/door/monk-cell.webp" alt="" draggable="false">
+        </div>
+        <!-- the glow sits beside the breathing frame, not inside it, so on a wide screen its light escapes the side fade -->
+        <div class="door-lantern"></div>
+      </div>
       <div class="door-col">
         <div class="door-wordmark">Still</div>
         <div class="door-desc">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</div>
@@ -1189,18 +1195,11 @@ body.is-mobile #mobileEnterTab { display: block; }
     </div>
 
     <script>
-      /* The door by the hour, and the bird (DESIGN.md, Onboarding). Display
-         only. At load the grade at the frame's edges and the light beneath
-         it take the hour from the Office's own rule
+      /* The door's hour (DESIGN.md, Onboarding). Display only. At load the
+         grade at the frame's edges takes the hour from the Office's own rule
          (setOfficeTime() -> window._officeAutoHour; the same thresholds are
-         the fallback if it is not defined yet), read once. The bird flies
-         every 25-35s at a random interval, from a random side, across the
-         upper third of the sky on one gentle arc in six seconds, mirrored
-         when it enters from the right so it always faces the way it flies,
-         never more than one at a time, only while the door is on screen.
-         Under reduced motion the still alone. The source video has one pose,
-         so there is no page turn. window._doorBird flies one now (for the
-         capture). It writes data-hour on the door and nothing else. */
+         the fallback if it is not defined yet), read once. It writes data-hour
+         on the door and nothing else. */
       (function () {
         var door = document.getElementById('ob-1');
         if (!door) return;
@@ -1211,46 +1210,7 @@ body.is-mobile #mobileEnterTab { display: block; }
           if (!h) { var n = new Date().getHours(); h = n < 5 ? 'vigils' : n < 17 ? 'lauds' : n < 20 ? 'vespers' : 'compline'; }
           return HOURS[h] || 'lauds';
         }
-        function onScreen() {
-          var ob = document.getElementById('screen-onboarding');
-          return !!(ob && ob.style.display !== 'none' && door.style.display !== 'none' && door.getClientRects().length); /* the door is fixed, so offsetParent is null */
-        }
-        function arm() {
-          door.setAttribute('data-hour', hourNow());
-          var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          var bird = door.querySelector('.door-bird');
-          if (!bird || reduce || !bird.animate) return;
-          var flying = false, timer = null;
-          function fly() {
-            if (flying || !onScreen()) return;
-            flying = true;
-            var W = door.clientWidth, H = door.clientHeight;
-            var w = bird.getBoundingClientRect().width || 28;
-            var fromLeft = Math.random() < .5;
-            var x0 = fromLeft ? -w - 12 : W + 12, x1 = fromLeft ? W + 12 : -w - 12;
-            /* the arc stays in the upper third and clears the monk's head by at least
-               5% of the height, whichever way it flies: the band runs from 7% down to
-               the head less that margin, measured on the figure itself */
-            var dawn = door.querySelector('.door-dawn'), mr = dawn ? dawn.getBoundingClientRect() : null;
-            var headFrac = parseFloat(getComputedStyle(door).getPropertyValue('--door-head')) || 0.26;
-            var headPx = mr ? mr.top + mr.height * headFrac : H * 0.22;
-            var bh = bird.getBoundingClientRect().height || 14;
-            var top = H * 0.07, bottom = Math.max(top + 10, headPx - H * 0.05 - bh);
-            var yBase = (top + bottom) / 2, amp = Math.min(H * 0.04, (bottom - top) / 2) * (Math.random() < .5 ? 1 : -1);
-            var flip = fromLeft ? '' : ' scaleX(-1)';
-            var N = 30, frames = [];
-            for (var i = 0; i <= N; i++) {
-              var t = i / N, x = x0 + (x1 - x0) * t, y = yBase + amp * Math.sin(Math.PI * t);
-              frames.push({ transform: 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' + flip, opacity: (i === 0 || i === N) ? 0 : 1, offset: t });
-            }
-            bird.style.visibility = 'visible';
-            var a = bird.animate(frames, { duration: 6000, easing: 'ease-in-out', fill: 'forwards' });
-            a.onfinish = function () { bird.style.visibility = 'hidden'; flying = false; schedule(); };
-          }
-          function schedule() { clearTimeout(timer); timer = setTimeout(fly, 25000 + Math.random() * 10000); }
-          schedule();
-          window._doorBird = fly;
-        }
+        function arm() { door.setAttribute('data-hour', hourNow()); }
         if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
       })();
     </script>
@@ -5609,40 +5569,52 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    are gone; obNext() and the flow are untouched.
 ═══════════════════════════════════════════ */
 #ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
-  --atmos-x:50%;--atmos-gy:100%;
-  --door-feet:.6985;--door-head:.2610; /* the figure's ground line and head, as fractions of the frame's height */
-  --door-w:100vw; /* the frame's width; its height follows from the frame's aspect */}
-/* The hour, at the edges only: the Office's palette grades the frame's edges and lights the ground beneath it */
-#ob-1,#ob-1[data-hour="lauds"]{--atmos-rgb:205,155,10;--atmos-a:.55;--atmos-y:62%;}
-#ob-1[data-hour="vigils"]{--atmos-rgb:110,110,140;--atmos-a:.3;--atmos-y:70%;}
-#ob-1[data-hour="vespers"]{--atmos-rgb:162,10,52;--atmos-a:.55;--atmos-y:68%;}
-#ob-1[data-hour="compline"]{--atmos-rgb:120,140,170;--atmos-a:.45;--atmos-y:72%;}
+  /* An interior: the lantern is the light, so the atmosphere sits low and warm at Lauds' gold whatever the hour */
+  --atmos-rgb:205,155,10;--atmos-a:.5;--atmos-x:50%;--atmos-y:82%;--atmos-gy:100%;
+  --door-hands:0.72; /* where the copy begins, as a fraction of the frame's height: beneath his hands */
+  --door-w:100vw; /* the frame's width; its height follows from the frame's aspect */
+  --door-edge:205,155,10; /* the hour's grade at the edges only */}
+#ob-1[data-hour="vigils"]{--door-edge:110,110,140;}
+#ob-1[data-hour="vespers"]{--door-edge:162,10,52;}
+#ob-1[data-hour="compline"]{--door-edge:120,140,170;}
 #ob-1 .atmos{position:fixed;}
-/* The threshold: the frame at its own aspect; its last rows dissolve into the ink; grain and the hour's grade over it */
-#ob-1 .door-dawn{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;overflow:hidden;
-  width:var(--door-w);aspect-ratio:768 / 1360;
-  -webkit-mask-image:linear-gradient(to bottom,#000 76%,transparent 97%);mask-image:linear-gradient(to bottom,#000 76%,transparent 97%);}
-#ob-1 .door-dawn img{display:block;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-select:none;}
-#ob-1 .door-dawn::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
+/* The threshold: the frame at its own aspect; its last rows dissolve into the ink; grain and the edge grade over it */
+#ob-1 .door-cell{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;overflow:hidden;
+  width:var(--door-w);aspect-ratio:1145 / 1374;
+  -webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 98%);mask-image:linear-gradient(to bottom,#000 74%,transparent 98%);}
+#ob-1 .door-cell-frame{position:absolute;inset:0;transform-origin:50% 60%;will-change:transform;
+  animation:doorBreath calc(var(--d-drift) * 2) var(--ease-breath) infinite;}
+#ob-1 .door-cell img{display:block;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-select:none;}
+/* The lantern's glow: a warm light over the flame that swells and settles on the flame layer's own timing, its spill on the wall and the robe */
+#ob-1 .door-lantern{position:absolute;left:1.4%;top:59.3%;width:120%;aspect-ratio:1;transform:translate(-50%,-50%);
+  transform-origin:50% 50%;will-change:transform,opacity;mix-blend-mode:screen;
+  background:radial-gradient(circle,rgba(255,214,140,.55) 0%,rgba(242,199,119,.3) 9%,rgba(217,164,65,.14) 24%,rgba(217,164,65,.05) 42%,transparent 60%);
+  animation:doorLantern 5.3s ease-in-out infinite;}
+#ob-1 .door-cell::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
   background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;}
-#ob-1 .door-dawn::after{content:"";position:absolute;inset:0;z-index:3;
-  background:radial-gradient(ellipse 72% 64% at 50% 42%,transparent 56%,rgba(var(--atmos-rgb),.16) 84%,rgba(var(--atmos-rgb),.3) 100%),
-    radial-gradient(ellipse 88% 78% at 50% 44%,transparent 46%,rgba(5,3,2,.3) 82%,rgba(5,3,2,.66) 100%);}
-/* The bird: a silhouette the script flies across the frame's sky; hidden between flights */
-#ob-1 .door-bird{position:fixed;left:0;top:0;z-index:2;width:28px;height:14px;fill:#000;pointer-events:none;visibility:hidden;will-change:transform;}
+#ob-1 .door-cell::after{content:"";position:absolute;inset:0;z-index:3;
+  background:radial-gradient(ellipse 72% 64% at 50% 44%,transparent 56%,rgba(var(--door-edge),.14) 84%,rgba(var(--door-edge),.26) 100%),
+    radial-gradient(ellipse 88% 78% at 50% 44%,transparent 46%,rgba(5,3,2,.28) 82%,rgba(5,3,2,.6) 100%);}
+/* the frame's breath: 1 to 1.015 over eight seconds and back; the lantern: the flame layer's percentages, a little larger and brighter, then settling */
+@keyframes doorBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+@keyframes doorLantern{0%,100%{opacity:.68;transform:translate(-50%,-50%) scale(1)}
+  14%{opacity:.9;transform:translate(-50%,-50%) scale(1.06)}
+  31%{opacity:.6;transform:translate(-50%,-50%) scale(.97)}
+  47%{opacity:.86;transform:translate(-50%,-50%) scale(1.04)}
+  63%{opacity:.72;transform:translate(-50%,-50%) scale(1.01)}
+  80%{opacity:.96;transform:translate(-50%,-50%) scale(1.08)}}
 @media (min-width:768px){
-  #ob-1{--door-w:min(100vw,calc(68vh * .5647));--door-w:min(100vw,calc(68dvh * .5647));}
-  /* on a wide screen the frame stands in the atmosphere: its sides dissolve into the light around it (the image,
+  #ob-1{--door-w:min(100vw,calc(70vh * .8333));--door-w:min(100vw,calc(70dvh * .8333));}
+  /* on a wide screen the frame stands in the atmosphere: its sides dissolve into the light around it (the frame,
      the grain and the grade each masked the same way, since a container can carry only one mask) */
-  #ob-1 .door-dawn img,#ob-1 .door-dawn::before,#ob-1 .door-dawn::after{
+  #ob-1 .door-cell-frame,#ob-1 .door-cell::before,#ob-1 .door-cell::after{
     -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);
     mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);}
-  #ob-1 .door-bird{width:34px;height:17px;}
 }
-/* The words, on the ink beneath the ground line: the wordmark heads the copy; nothing sits over the sky or the figure */
+/* The words, on the ink beneath his hands: the wordmark heads the copy; nothing sits over the figure */
 #ob-1 .door-col{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   min-height:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
-  padding:calc(var(--door-w) * 1360 / 768 * var(--door-feet) + var(--s-4)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));}
+  padding:calc(var(--door-w) * 1374 / 1145 * var(--door-hands) + var(--s-4)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));}
 #ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--s-4);}
 #ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-3);}
 #ob-1 .door-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);text-wrap:balance;margin:0;}
@@ -5650,7 +5622,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #ob-1 .door-stores{margin-top:var(--s-5);text-align:center;}
 #ob-1 .door-stores .ui-label{margin-bottom:var(--s-3);}
 @media (prefers-reduced-motion:reduce){
-  #ob-1 .door-bird{display:none;}
+  #ob-1 .door-cell-frame,#ob-1 .door-lantern{animation:none;}
 }
 
 /* ═══════════════════════════════════════════
