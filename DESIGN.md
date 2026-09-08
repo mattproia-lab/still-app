@@ -730,41 +730,43 @@ button stops breathing.
   you" as a sans micro label over the two store badges, their links and
   images exactly as they were, shown on the web by the same script.
   `checkOnboarding()`, `obNext()` and `obFinish()` are untouched.
-  The door's image is the dawn from the source video: one bird-free frame
-  at full resolution, `assets/door/monk-dawn.webp` (768x1360, WebP at
-  quality 92, 25 KB, keeping the sky's grey levels so the gradient does
-  not band), from `assets/source/still_monk_bird_animation.mp4`, whose
-  folder is in `.gitignore`: source media never ships and is never
-  synced to `www/`. A traced silhouette was tried first and set aside:
-  the figure cut from the same frame as one SVG contour, stood on a drawn
-  ground line with the lancet behind him and the atmosphere as an hour-lit
-  sky; it read flat beside the video's own dawn, and the traced approach,
-  its extraction scripts and the PNG cut stay in the scratchpad, not the
-  repo. The frame is a threshold (`.door-dawn`), the one place a
-  photograph is allowed: full-bleed at its own aspect behind the top of
-  the screen on a phone, its last rows dissolving into the ink through a
-  mask, its own grain over it, and the hour's grade at its edges only (the
-  Office's palette on `data-hour`, set once at load from
-  `setOfficeTime()` and `window._officeAutoHour`; the same rule lights
-  the atmosphere beneath, at a lower strength than the Office uses). On a
-  wide screen the frame stands at 68dvh in the atmosphere with its sides
-  dissolving into the light around it. The frame's haze at the ground is the ink the
-  copy sits on: the column begins beneath the figure's ground line
-  (`--door-feet`, the ground line's fraction of the frame, times the
-  frame's height), the wordmark heading it, so no text sits over the sky
-  or the figure; the lancet is gone, since the frame carries its own
-  light. On a short phone Enter is near the fold and the badges are below
-  it; the door scrolls. The bird is one small path drawn facing right
-  (`.door-bird`), flown by the script after the step with the Web
-  Animations API on `transform` and `opacity` only: every 25-35s at a
-  random interval, from a random side, one gentle sine arc in a band from
-  7% of the height down to the figure's measured head less 5% (so it
-  clears him whichever way it flies) in six seconds, mirrored with
-  `scaleX(-1)` when it enters from the right so it never flies backward,
-  never more than one at a time, only while the door is on screen;
-  `window._doorBird()` flies one now. The source has a single pose, so
-  there is no page turn. Under reduced motion the frame alone: the bird is
-  hidden and never flown, and nothing else on the door moves.
+  The door's image is the monk in his cell: `assets/door/monk-cell.webp`
+  (1145x1374, WebP at quality 92, about 170 KB, keeping the wall's and the
+  robe's tones so nothing bands), exported from
+  `assets/source/monk-cell.png`, whose folder is in `.gitignore`: source
+  media never ships and is never synced to `www/`. Two images came
+  before it and were set aside: a silhouette traced from a frame of
+  `still_monk_bird_animation.mp4` as one SVG contour, stood on a drawn
+  ground line with the lancet behind him and an hour-lit sky, which read
+  flat; then that video's own dawn frame as a threshold, with a bird
+  crossing its sky. The tracing scripts, the PNG cut and the dawn export
+  stay in the scratchpad, not the repo. The cell is a threshold
+  (`.door-cell`), the one place a photograph is allowed: full-bleed at its
+  own aspect behind the top of the screen on a phone, its last rows
+  dissolving into the ink through a mask, its own grain over it. It is an
+  interior, and the hour does not reach it: the lantern is the light, so
+  the atmosphere beneath sits low and warm at Lauds' gold whatever the
+  clock says (`--atmos-y` 82%), and only a light grade at the frame's
+  edges follows the hour (`--door-edge`, the palette's triplet on
+  `data-hour`, set once at load from `setOfficeTime()` and
+  `window._officeAutoHour`). No bird: he is indoors. On a wide screen
+  the frame stands at 70dvh in the atmosphere with its sides dissolving
+  into the light around it. Its dark lower third is the ink the copy sits
+  on: the column begins beneath his hands (`--door-hands`, .72 of the
+  frame's height, times the frame's height), the wordmark heading it, so
+  no text sits over the figure. Two motions, both on the light and both
+  on `transform` and `opacity` only: over the lantern's flame a glow
+  (`.door-lantern`, a warm radial in the candle and the gold, blended as
+  light, its spill reaching the wall and the robe) swells and settles on
+  the flame layer's own timing, the same 5.3s and the same percentages as
+  `atmosFlicker`, with a little scale beside the opacity so the light
+  breathes rather than blinks; and the whole frame on a slow breath,
+  scale 1 to 1.015 over eight seconds and back (`doorBreath`, twice
+  `--d-drift`); the glow sits beside the breathing frame rather than inside
+  it, so on a wide screen its light escapes the side fade and the lantern,
+  which stands at the frame's very edge, keeps its presence. Nothing on
+  the figure moves.
+  Under reduced motion both animations are off: the still.
 - **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
   step, once per install, since onboarding shows only while
   `still_onboarded` is unset and `obFinish()` sets it; and the same step
