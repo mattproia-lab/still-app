@@ -87,8 +87,8 @@ Each step's clamp lives once as `--t-*-fluid`; the step the screens use,
 
 **Readable mode** (Settings > Reading, `body.readable`, `still_readable`) is
 one rule beside `:root`: every step re-points at its fluid value times 1.15
-and every text level lifts one step (faint to low, low to mid, mid to hi,
-hi to the full warm white). The measures stay, so lines wrap sooner. Every
+and every text level lifts one step from the base (faint to low, low to mid,
+mid and hi to the full warm white). The measures stay, so lines wrap sooner. Every
 screen on the tokens takes it with no rule of its own; the old per-selector
 rules (the voices' replies, the Rosary, the Divine Office's sizes and
 titles, `.content-card p`) are gone. A screen that still writes pixels or
@@ -111,7 +111,7 @@ stacks are real: Georgia and system-ui render the layout acceptably offline.
 | `--gold` | #d9a441 | Attributions, saved states, secondary accents |
 | `--gold-deep` | #8c5d12 | Reserved for shadows under gold |
 | `--ember` `--ember-hi` | #ff9448 / #ffd7a8 | A tapped thought |
-| `--text-hi` `--text-mid` `--text-low` `--text-faint` | warm white at .94 / .68 / .42 / .24 | Four text levels; there is no fifth |
+| `--text-hi` `--text-mid` `--text-low` `--text-faint` | warm white at 1 / .94 / .68 / .42 | Four text levels; there is no fifth. Raised one step 2026-09-08 (from .94 / .68 / .42 / .24) because the base read too dim on a phone |
 | `--line` `--line-strong` | warm white at .12 / .24 | Hairlines, borders |
 | `--gold-a10` `--gold-a25` `--gold-a55` | gold at .10 / .25 / .55 | Fills, borders, done-states |
 

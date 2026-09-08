@@ -86,8 +86,8 @@ body { -webkit-text-size-adjust: 100%; }
   --ink-0:#050302;--ink-1:#0b0705;--ink-2:#140d08;
   --candle:#f2c777;--candle-hi:#fff1cf;--gold:#d9a441;--gold-deep:#8c5d12;
   --ember:#ff9448;--ember-hi:#ffd7a8;
-  --text-hi:rgba(255,246,232,.94);--text-mid:rgba(255,240,220,.68);
-  --text-low:rgba(255,236,214,.42);--text-faint:rgba(255,232,206,.24);
+  --text-hi:rgba(255,246,232,1);--text-mid:rgba(255,246,232,.94);
+  --text-low:rgba(255,240,220,.68);--text-faint:rgba(255,236,214,.42);
   --line:rgba(255,226,190,.12);--line-strong:rgba(255,226,190,.24);
   --gold-a10:rgba(217,164,65,.10);--gold-a25:rgba(217,164,65,.25);--gold-a55:rgba(217,164,65,.55);
   /* Space */
@@ -102,7 +102,7 @@ body { -webkit-text-size-adjust: 100%; }
 
 /* Readable mode, from the tokens (Settings > Reading > Larger, brighter text).
    With body.readable on, every step of the fluid scale rises by 15% and every
-   text level lifts one step: faint to low, low to mid, mid to hi, hi to the
+   text level lifts one step: faint to low, low to mid, mid and hi to the
    full warm white. The measures stay, so lines wrap sooner and nothing is
    laid out again. Every screen on the tokens takes it with no rule of its
    own; a screen that still writes pixels or literal colours does not, which
@@ -116,8 +116,8 @@ body.readable{
   --t-lg:calc(var(--t-lg-fluid) * 1.15);
   --t-xl:calc(var(--t-xl-fluid) * 1.15);
   --t-2xl:calc(var(--t-2xl-fluid) * 1.15);
-  --text-hi:rgba(255,246,232,1);--text-mid:rgba(255,246,232,.94);
-  --text-low:rgba(255,240,220,.68);--text-faint:rgba(255,236,214,.42);
+  --text-hi:rgba(255,246,232,1);--text-mid:rgba(255,246,232,1);
+  --text-low:rgba(255,246,232,.94);--text-faint:rgba(255,240,220,.68);
 }
 @media (prefers-reduced-motion:reduce){
   :root{--d-fast:.01s;--d-base:.2s;--d-slow:.3s;--d-breath:.3s;--d-drift:0s;}
