@@ -6011,17 +6011,66 @@ async function prepareVoiceResponse(text, character) {
     _taggedResponses[character] = text;
   }
 }
+/* ── The screen lock around a voice fetch ──────────────────────────────
+   A voice is a long request: the TTS service generates the clip while the
+   phone waits, and if the screen goes dark in that time the OS suspends the
+   page and the fetch dies with it -- the Office, whose clips take longest,
+   was the usual casualty, its button left on "Preparing". So every voice and
+   Office fetch holds a screen wake lock from the moment it goes out until the
+   audio is in hand or the request fails; playback holds nothing. If the
+   screen went dark anyway and comes back with a request still unanswered,
+   the request goes out once more, and the answer to the first, should it ever
+   arrive, is discarded by the sequence number each caller keeps. */
+const AudioFetch = (() => {
+  let lock = null, inflight = null, retryNext = false;
+  async function acquire(rec) {
+    if (!('wakeLock' in navigator)) return;
+    let l = null;
+    try { l = await navigator.wakeLock.request('screen'); } catch (e) { return; }
+    if (inflight !== rec) { try { l.release(); } catch (e) {} return; }   // finished before the lock arrived
+    lock = l;
+  }
+  function release() { if (lock) { try { lock.release(); } catch (e) {} lock = null; } }
+  function start(retry) {
+    const rec = { retry, retried: retryNext };
+    retryNext = false;
+    inflight = rec;
+    acquire(rec);
+    return rec;
+  }
+  function done(rec) {
+    if (rec !== inflight) return;   // a stale request; the lock belongs to a newer one
+    inflight = null;
+    release();
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !inflight || inflight.retried) return;
+    const rec = inflight;
+    inflight = null; release();
+    retryNext = true;   // the retry registers itself as the once
+    rec.retry();
+  });
+  return { start, done };
+})();
+let _voiceSeq = 0, _officeSeq = 0, _darknessSeq = 0;
+
 // Called when user taps Hear Response button
 async function requestVoice(text, character, buttonEl) {
   if (!text || !text.trim()) return;
 
-  const originalHtml = buttonEl.innerHTML;
+  // The label to restore is the button's own, remembered the first time; a
+  // retry finds "Preparing" on the button and must not take that for it.
+  if (buttonEl.innerHTML !== '◌ Preparing…') buttonEl.dataset.voiceLabel = buttonEl.innerHTML;
+  const originalHtml = buttonEl.dataset.voiceLabel;
   buttonEl.innerHTML = '◌ Preparing…';
   buttonEl.disabled = true;
+  const seq = ++_voiceSeq;
+  const guard = AudioFetch.start(() => requestVoice(text, character, buttonEl));
 
   try {
      const voiceText = _taggedResponses[character] || text.trim();
     const token = await getValidToken();
+    if (seq !== _voiceSeq) return;
 
     const res = await fetch('https://still-tts.onrender.com/tts', {
       method: 'POST',
@@ -6032,17 +6081,21 @@ async function requestVoice(text, character, buttonEl) {
         access_token: token   // ← fresh, refreshed if needed
       })
     });
+    if (seq !== _voiceSeq) return;
 
     const data = await res.json();
+    if (seq !== _voiceSeq) return;
 
     // Out of credit -- invite a top-up, gently. The text reply is still on screen.
     if (res.status === 402 || data.error === 'insufficient_balance') {
+      AudioFetch.done(guard);
       buttonEl.innerHTML = '✦ Add audio credit';
       buttonEl.disabled = false;
       buttonEl.onclick = () => { if (typeof showVoiceTopUp === 'function') showVoiceTopUp(); };
       return;
     }
     if (res.status === 401 || data.error === 'auth_required') {
+      AudioFetch.done(guard);
       buttonEl.innerHTML = originalHtml;
       buttonEl.disabled = false;
       return;
@@ -6063,9 +6116,12 @@ async function requestVoice(text, character, buttonEl) {
     }
 
     _currentAudioUrl = audioUrl;
+    AudioFetch.done(guard);
     playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
 
   } catch (err) {
+    if (seq !== _voiceSeq) return;
+    AudioFetch.done(guard);
     console.error('Voice error:', err.message);
     buttonEl.innerHTML = originalHtml;
     buttonEl.disabled = false;
@@ -6274,6 +6330,8 @@ async function fetchOfficeClip(text, cacheKey) {
 async function requestOfficeAudio(text, cacheKey, btnId, btnLabel) {
   const btn = document.getElementById(btnId);
   if (btn) { btn.textContent = '\u25CC Preparing\u2026'; btn.disabled = true; }
+  const seq = ++_officeSeq;
+  const guard = AudioFetch.start(() => requestOfficeAudio(text, cacheKey, btnId, btnLabel));
   try {
     const chunks = splitOfficeText(text);
     if (!chunks.length) throw new Error('nothing to speak');
@@ -6283,12 +6341,17 @@ async function requestOfficeAudio(text, cacheKey, btnId, btnLabel) {
       if (btn && chunks.length > 1) {
         btn.textContent = `\u25CC Preparing\u2026 ${i + 1}/${chunks.length}`;
       }
-      urls.push(await fetchOfficeClip(
+      const clip = await fetchOfficeClip(
         chunks[i],
-        chunks.length > 1 ? `${cacheKey}-${i + 1}of${chunks.length}` : cacheKey));
+        chunks.length > 1 ? `${cacheKey}-${i + 1}of${chunks.length}` : cacheKey);
+      if (seq !== _officeSeq) return;   // a retry has taken over; this answer is stale
+      urls.push(clip);
     }
+    AudioFetch.done(guard);
     playVoiceUrl(urls, btn, btnLabel, 'office');
   } catch (err) {
+    if (seq !== _officeSeq) return;
+    AudioFetch.done(guard);
     console.error('Office audio error:', err.message);
     if (btn) { btn.textContent = btnLabel; btn.disabled = false; }
   }
@@ -7671,6 +7734,7 @@ const CoW = (() => {
   async function speak(med){
     stopAudio();
     const seq = ++speakSeq;
+    const guard = AudioFetch.start(() => speak(med));
     const btn = document.getElementById('cowListen');
     if (btn) btn.innerHTML = '&#8230; Preparing';
     try {
@@ -7689,6 +7753,7 @@ const CoW = (() => {
       // say nothing about payment. Fail gently and leave the retry in place:
       // onclick is untouched, so tapping Listen tries again.
       if (res.status === 402 || data.error === 'insufficient_balance') {
+        AudioFetch.done(guard);
         const bc = document.getElementById('cowListen');
         if (bc) bc.innerHTML = 'Audio unavailable right now &mdash; try again in a moment';
         setTimeout(() => {
@@ -7698,13 +7763,14 @@ const CoW = (() => {
         }, 4000);
         return;
       }
-      if (!res.ok){ if (btn) btn.innerHTML = '&#9654; Listen'; return; }
+      if (!res.ok){ AudioFetch.done(guard); if (btn) btn.innerHTML = '&#9654; Listen'; return; }
+      AudioFetch.done(guard);
       audioEl = new Audio(data.url ? data.url : 'data:audio/mpeg;base64,' + data.audio);
       audioEl.onended = () => { const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; };
       audioEl.play().catch(()=>{});
       const b2 = document.getElementById('cowListen');
       if (b2) b2.innerHTML = '&#9632; Stop';
-    } catch { const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; }
+    } catch { if (seq !== speakSeq) return; AudioFetch.done(guard); const b = document.getElementById('cowListen'); if (b) b.innerHTML = '&#9654; Listen'; }
   }
 
   function stopAudio(){
@@ -13896,6 +13962,8 @@ async function playDarknessReflection(idx) {
   const cacheKey = hashText(`darkness-${t.title}`);
   const btn = document.getElementById('darknessPlayBtn');
   if (btn) { btn.textContent = '◌ Preparing…'; btn.disabled = true; }
+  const seq = ++_darknessSeq;
+  const guard = AudioFetch.start(() => playDarknessReflection(idx));
 
   // Tag the reflection text for dark mode delivery
   let taggedText = `${t.text}\n\n${t.reflection}`;
@@ -13908,6 +13976,7 @@ async function playDarknessReflection(idx) {
     const tagData = await tagRes.json();
     if (tagData.taggedText) taggedText = tagData.taggedText;
   } catch(e) {}
+  if (seq !== _darknessSeq) return;
 
   try {
     const res = await fetch('https://still-tts.onrender.com/office-tts', {
@@ -13915,7 +13984,9 @@ async function playDarknessReflection(idx) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: taggedText, cacheKey })
     });
+    if (seq !== _darknessSeq) return;
     const data = await res.json();
+    if (seq !== _darknessSeq) return;
     if (!res.ok) throw new Error(data.error);
 
     let audioUrl;
@@ -13929,9 +14000,12 @@ async function playDarknessReflection(idx) {
       audioUrl = URL.createObjectURL(blob);
     }
 
+    AudioFetch.done(guard);
     playVoiceUrl(audioUrl, btn, '◎ Hear Reflection', 'ammaSophia');
 
   } catch(err) {
+    if (seq !== _darknessSeq) return;
+    AudioFetch.done(guard);
     console.error('Darkness audio error:', err.message);
     if (btn) { btn.textContent = '◎ Hear Reflection'; btn.disabled = false; }
   }
