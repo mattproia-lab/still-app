@@ -18,6 +18,7 @@ Master map of the vault. Every new wiki page gets a line here (step 4 of the ing
 
 ## content/
 - [scripture-douay-rheims.md](content/scripture-douay-rheims.md) — the Douay-Rheims Bible, Challoner revision (Gutenberg #1581): edition, public-domain basis, the Douay book names and psalm numbering, the app-readable copy under `corpus/scripture/dr/` and `assets/scripture/dr/`, the two numbering notes, the five-verse verification. _(2026-09-08)_
+- [lectionary.md](content/lectionary.md) — the Lectionary for Mass as a readings table, 2026–2030: `corpus/readings/<year>.json` (citations only, Sunday A/B/C and weekday I/II cycles, the proper of saints, a Douay-Rheims block), built from the app's romcal calendar, Felix Just's index tables (cited) and the MIT cpbjr dataset (licence filed under raw/external); the sample-week and API verification; open items on verse numbering. _(2026-09-08)_
 
 ## ops/
 _(store submissions, RevenueCat/Stripe, Supabase, builds — no pages yet)_
