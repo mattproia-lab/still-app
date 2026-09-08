@@ -13945,6 +13945,18 @@ async function playDarknessReflection(idx) {
    ANALYTICS -- anonymous event tracking
    Fires on practice completion, silent on failure
 ═══════════════════════════════════════════ */
+// A stable anonymous device id for the events table: read from still_device_id,
+// made once if absent. It used to live with the Community code and left with it,
+// which silenced every event; trackEvent needs it here.
+function getDeviceId() {
+  let id = localStorage.getItem('still_device_id');
+  if (!id) {
+    id = 'anon_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem('still_device_id', id);
+  }
+  return id;
+}
+
 async function trackEvent(eventType, metadata={}) {
   try {
     await fetch(SUPA_URL + '/rest/v1/events', {
