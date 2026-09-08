@@ -1163,21 +1163,21 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="atmos-vignette"></div>
       </div>
       <!-- The threshold: the monk in his cell (assets/door/monk-cell.webp,
-           1145x1374, from assets/source/monk-cell.png). The frame takes the
-           height the copy leaves it, down to 40dvh, and shows the image's top
-           four fifths, so the copy always begins beneath his hands; on a tall
-           phone the width binds and the image is full-bleed. The frame
+           1145x1374, from assets/source/monk-cell.png), full-bleed at the
+           width and 62dvh tall at every size, anchored to its top so the
+           face and the lantern stay in view; the copy column overlaps its
+           lower part behind an ink scrim rising from the bottom. The frame
            breathes (scale 1 to 1.015 over eight seconds and back); over the
            lantern a glow swells and settles on the flame layer's own timing,
-           its spill reaching the wall and the robe. The last rows dissolve
-           into the ink through a mask; grain and the hour's edge grade sit
-           over it. Under reduced motion, the still. -->
+           its spill reaching the wall and the robe. Grain and the hour's
+           edge grade sit over it. Under reduced motion, the still. -->
       <div class="door-cell" aria-hidden="true">
         <div class="door-cell-frame">
           <img src="assets/door/monk-cell.webp" alt="" draggable="false">
           <div class="door-lantern"></div>
         </div>
       </div>
+      <div class="door-scrim" aria-hidden="true"></div>
       <div class="door-col">
         <div class="door-wordmark">Still</div>
         <div class="door-desc">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</div>
@@ -5571,23 +5571,24 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    are gone; obNext() and the flow are untouched.
 ═══════════════════════════════════════════ */
 #ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow:hidden;background:var(--ink-0);
-  display:flex;flex-direction:column;container:door / size; /* one visible viewport, never scrolled; the parts size to its height */
+  display:flex;flex-direction:column;justify-content:flex-end;container:door / size; /* one visible viewport, never scrolled */
   /* An interior: the lantern is the light, so the atmosphere sits low and warm at Lauds' gold whatever the hour */
   --atmos-rgb:205,155,10;--atmos-a:.5;--atmos-x:50%;--atmos-y:82%;--atmos-gy:100%;
   --door-edge:205,155,10; /* the hour's grade at the edges only */
-  --door-gap:var(--s-4);--door-gap-lg:var(--s-5); /* the column's spacing; tightened on a short door */}
+  --door-gap:var(--s-4);--door-gap-lg:var(--s-5); /* the column's spacing; tightened on a short door */
+  --door-side:max(var(--gutter),11vw); /* the column's side padding: keeps its lines off the lantern at the frame's left edge */}
 #ob-1[data-hour="vigils"]{--door-edge:110,110,140;}
 #ob-1[data-hour="vespers"]{--door-edge:162,10,52;}
 #ob-1[data-hour="compline"]{--door-edge:120,140,170;}
 #ob-1 .atmos{position:fixed;}
-/* The threshold: the frame is the height the copy leaves it, at least 40dvh; it shows the image's top four fifths,
-   sized from its own height (the width binds on a tall phone and the image is full-bleed, its sides cropped a little);
-   the last rows above the copy dissolve into the ink */
-#ob-1 .door-cell{position:relative;z-index:1;flex:1 1 0;min-height:40vh;min-height:40dvh;overflow:hidden;pointer-events:none;
-  container:cell / size;
-  -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);}
-#ob-1 .door-cell-frame{position:absolute;top:0;left:50%;transform:translateX(-50%);transform-origin:50% 48%;will-change:transform;
-  height:calc(100cqh / 0.8);width:min(100cqw,calc(100cqh / 0.8 * 0.8333));
+/* The threshold: full-bleed at the width, 62dvh tall, the image covering it from its top so the face and the lantern
+   stay in view (a short door crops the lower robe, a tall one the sides); the frame is the image's own rendered box,
+   so the glow's coordinates are the image's */
+#ob-1 .door-cell{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;overflow:hidden;
+  width:100vw;height:62vh;height:62dvh;container:cell / size;
+  -webkit-mask-image:linear-gradient(to bottom,#000 84%,transparent 100%);mask-image:linear-gradient(to bottom,#000 84%,transparent 100%);}
+#ob-1 .door-cell-frame{position:absolute;top:0;left:50%;transform:translateX(-50%);transform-origin:50% 40%;will-change:transform;
+  width:max(100cqw,calc(100cqh * 0.8333));height:max(100cqh,calc(100cqw * 1.2));
   animation:doorBreath calc(var(--d-drift) * 2) var(--ease-breath) infinite;}
 #ob-1 .door-cell img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;user-select:none;-webkit-user-select:none;}
 /* The lantern's glow: a warm light over the flame that swells and settles on the flame layer's own timing, its spill on the wall and the robe */
@@ -5600,6 +5601,9 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #ob-1 .door-cell-frame::after{content:"";position:absolute;inset:0;z-index:3;
   background:radial-gradient(ellipse 72% 64% at 50% 44%,transparent 56%,rgba(var(--door-edge),.14) 84%,rgba(var(--door-edge),.26) 100%),
     radial-gradient(ellipse 88% 78% at 50% 44%,transparent 46%,rgba(5,3,2,.28) 82%,rgba(5,3,2,.6) 100%);}
+/* The scrim behind the copy: ink fading up from the bottom, so contrast holds at any exposure */
+#ob-1 .door-scrim{position:fixed;left:0;right:0;bottom:0;height:72vh;height:72dvh;z-index:2;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 0%,rgba(5,3,2,.42) 30%,rgba(5,3,2,.8) 58%,var(--ink-0) 100%);}
 /* the frame's breath: 1 to 1.015 over eight seconds and back; the lantern: the flame layer's percentages, a little larger and brighter, then settling */
 @keyframes doorBreath{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.015)}}
 @keyframes doorLantern{0%,100%{opacity:.68;transform:translate(-50%,-50%) scale(1)}
@@ -5609,26 +5613,33 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
   63%{opacity:.72;transform:translate(-50%,-50%) scale(1.01)}
   80%{opacity:.96;transform:translate(-50%,-50%) scale(1.08)}}
 @media (min-width:768px){
-  /* on a wide screen the frame stands in the atmosphere: its sides dissolve into the light around it (the image,
-     the grain and the grade each masked the same way; the glow is not, so the lantern at the frame's edge keeps its light) */
+  /* on a wide screen the frame is the whole image at 62dvh, standing in the atmosphere with its sides dissolving into the
+     light around it (the image, the grain and the grade each masked the same way; the glow is not) */
+  #ob-1 .door-cell{width:min(100vw,calc(62vh * .8333));width:min(100vw,calc(62dvh * .8333));}
   #ob-1 .door-cell img,#ob-1 .door-cell-frame::before,#ob-1 .door-cell-frame::after{
     -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);
     mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);}
 }
-/* The words, on the ink beneath his hands: the column takes its own height and never grows over the frame's minimum;
-   if a height exists where it still cannot fit, it scrolls inside itself rather than clipping */
+/* The words, anchored to the bottom and rising over the robe and the ink: the wordmark may sit over his hands, never
+   the face or the lantern (the side padding keeps the lines off the lantern at the frame's left edge); if a height
+   existed where the column could not fit, it scrolls inside itself rather than clipping */
 #ob-1 .door-col{position:relative;z-index:3;flex:0 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   width:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
-  padding:var(--door-gap) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--door-gap-lg));}
+  padding:var(--door-gap) var(--door-side) calc(env(safe-area-inset-bottom,0px) + var(--door-gap-lg));}
 #ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--door-gap);}
 #ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-3);}
 #ob-1 .door-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);text-wrap:balance;margin:0;}
 #ob-1 .btn-row{margin-top:var(--door-gap-lg);}
-#ob-1 .door-stores{margin-top:var(--door-gap-lg);text-align:center;}
+#ob-1 .door-stores{margin:var(--door-gap-lg) calc(var(--gutter) - var(--door-side)) 0;text-align:center;} /* the badges' row sits below the lantern, so it reaches back out to the gutter and both fit on one line */
 #ob-1 .door-stores .ui-label{margin-bottom:var(--s-3);}
-/* The fit, in order: the frame gives way first (down to its 40dvh), then the spacing, then the copy's type by one step */
-@container door (max-height:800px){
+@media (min-width:768px){
+  /* the lantern sits inside the centred frame, away from the column's lines, so the phone's side padding is not needed */
+  #ob-1{--door-side:var(--gutter);}
+}
+/* The fit on a short door: the spacing tightens and the copy's type steps down together, so the column rises no
+   higher than the chest; the image never shrinks */
+@container door (max-height:700px){
   #ob-1{--door-gap:var(--s-2);--door-gap-lg:var(--s-3);}
   #ob-1 .door-desc{margin-bottom:var(--s-2);}
   #ob-1 .door-stores .ui-label{margin-bottom:var(--s-2);}
@@ -5638,8 +5649,11 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
   #ob-1 .door-desc{font-size:var(--t-base);}
   #ob-1 .door-line{font-size:var(--t-sm);}
 }
-/* a wide screen sets larger type, so its step comes sooner */
-@container door (max-height:820px) and (min-width:768px){
+/* a wide screen sets larger type, so its steps come sooner */
+@container door (max-height:860px) and (min-width:768px){
+  #ob-1{--door-gap:var(--s-2);--door-gap-lg:var(--s-3);}
+}
+@container door (max-height:760px) and (min-width:768px){
   #ob-1 .door-wordmark{font-size:var(--t-lg);}
   #ob-1 .door-desc{font-size:var(--t-base);}
   #ob-1 .door-line{font-size:var(--t-sm);}
