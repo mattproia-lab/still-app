@@ -1163,18 +1163,20 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="atmos-vignette"></div>
       </div>
       <!-- The threshold: the monk in his cell (assets/door/monk-cell.webp,
-           1145x1374, from assets/source/monk-cell.png), at its own aspect,
-           full-bleed on a phone. The frame breathes (scale 1 to 1.015 over
-           eight seconds and back); over the lantern a glow swells and settles
-           on the flame layer's own timing, its spill reaching the wall and the
-           robe. The last rows dissolve into the ink through a mask; grain and
-           the hour's edge grade sit over it. Under reduced motion, the still. -->
+           1145x1374, from assets/source/monk-cell.png). The frame takes the
+           height the copy leaves it, down to 40dvh, and shows the image's top
+           four fifths, so the copy always begins beneath his hands; on a tall
+           phone the width binds and the image is full-bleed. The frame
+           breathes (scale 1 to 1.015 over eight seconds and back); over the
+           lantern a glow swells and settles on the flame layer's own timing,
+           its spill reaching the wall and the robe. The last rows dissolve
+           into the ink through a mask; grain and the hour's edge grade sit
+           over it. Under reduced motion, the still. -->
       <div class="door-cell" aria-hidden="true">
         <div class="door-cell-frame">
           <img src="assets/door/monk-cell.webp" alt="" draggable="false">
+          <div class="door-lantern"></div>
         </div>
-        <!-- the glow sits beside the breathing frame, not inside it, so on a wide screen its light escapes the side fade -->
-        <div class="door-lantern"></div>
       </div>
       <div class="door-col">
         <div class="door-wordmark">Still</div>
@@ -5568,35 +5570,38 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    reading measure, one action. The video, its scrims and the scroll cue
    are gone; obNext() and the flow are untouched.
 ═══════════════════════════════════════════ */
-#ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);
+#ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow:hidden;background:var(--ink-0);
+  display:flex;flex-direction:column;container:door / size; /* one visible viewport, never scrolled; the parts size to its height */
   /* An interior: the lantern is the light, so the atmosphere sits low and warm at Lauds' gold whatever the hour */
   --atmos-rgb:205,155,10;--atmos-a:.5;--atmos-x:50%;--atmos-y:82%;--atmos-gy:100%;
-  --door-hands:0.72; /* where the copy begins, as a fraction of the frame's height: beneath his hands */
-  --door-w:100vw; /* the frame's width; its height follows from the frame's aspect */
-  --door-edge:205,155,10; /* the hour's grade at the edges only */}
+  --door-edge:205,155,10; /* the hour's grade at the edges only */
+  --door-gap:var(--s-4);--door-gap-lg:var(--s-5); /* the column's spacing; tightened on a short door */}
 #ob-1[data-hour="vigils"]{--door-edge:110,110,140;}
 #ob-1[data-hour="vespers"]{--door-edge:162,10,52;}
 #ob-1[data-hour="compline"]{--door-edge:120,140,170;}
 #ob-1 .atmos{position:fixed;}
-/* The threshold: the frame at its own aspect; its last rows dissolve into the ink; grain and the edge grade over it */
-#ob-1 .door-cell{position:fixed;top:0;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;overflow:hidden;
-  width:var(--door-w);aspect-ratio:1145 / 1374;
-  -webkit-mask-image:linear-gradient(to bottom,#000 74%,transparent 98%);mask-image:linear-gradient(to bottom,#000 74%,transparent 98%);}
-#ob-1 .door-cell-frame{position:absolute;inset:0;transform-origin:50% 60%;will-change:transform;
+/* The threshold: the frame is the height the copy leaves it, at least 40dvh; it shows the image's top four fifths,
+   sized from its own height (the width binds on a tall phone and the image is full-bleed, its sides cropped a little);
+   the last rows above the copy dissolve into the ink */
+#ob-1 .door-cell{position:relative;z-index:1;flex:1 1 0;min-height:40vh;min-height:40dvh;overflow:hidden;pointer-events:none;
+  container:cell / size;
+  -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);}
+#ob-1 .door-cell-frame{position:absolute;top:0;left:50%;transform:translateX(-50%);transform-origin:50% 48%;will-change:transform;
+  height:calc(100cqh / 0.8);width:min(100cqw,calc(100cqh / 0.8 * 0.8333));
   animation:doorBreath calc(var(--d-drift) * 2) var(--ease-breath) infinite;}
-#ob-1 .door-cell img{display:block;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-select:none;}
+#ob-1 .door-cell img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;user-select:none;-webkit-user-select:none;}
 /* The lantern's glow: a warm light over the flame that swells and settles on the flame layer's own timing, its spill on the wall and the robe */
 #ob-1 .door-lantern{position:absolute;left:1.4%;top:59.3%;width:120%;aspect-ratio:1;transform:translate(-50%,-50%);
   transform-origin:50% 50%;will-change:transform,opacity;mix-blend-mode:screen;
   background:radial-gradient(circle,rgba(255,214,140,.55) 0%,rgba(242,199,119,.3) 9%,rgba(217,164,65,.14) 24%,rgba(217,164,65,.05) 42%,transparent 60%);
   animation:doorLantern 5.3s ease-in-out infinite;}
-#ob-1 .door-cell::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
+#ob-1 .door-cell-frame::before{content:"";position:absolute;inset:0;z-index:2;opacity:.5;
   background-image:url("assets/grain-256.png");background-size:256px 256px;background-repeat:repeat;}
-#ob-1 .door-cell::after{content:"";position:absolute;inset:0;z-index:3;
+#ob-1 .door-cell-frame::after{content:"";position:absolute;inset:0;z-index:3;
   background:radial-gradient(ellipse 72% 64% at 50% 44%,transparent 56%,rgba(var(--door-edge),.14) 84%,rgba(var(--door-edge),.26) 100%),
     radial-gradient(ellipse 88% 78% at 50% 44%,transparent 46%,rgba(5,3,2,.28) 82%,rgba(5,3,2,.6) 100%);}
 /* the frame's breath: 1 to 1.015 over eight seconds and back; the lantern: the flame layer's percentages, a little larger and brighter, then settling */
-@keyframes doorBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+@keyframes doorBreath{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.015)}}
 @keyframes doorLantern{0%,100%{opacity:.68;transform:translate(-50%,-50%) scale(1)}
   14%{opacity:.9;transform:translate(-50%,-50%) scale(1.06)}
   31%{opacity:.6;transform:translate(-50%,-50%) scale(.97)}
@@ -5604,23 +5609,41 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
   63%{opacity:.72;transform:translate(-50%,-50%) scale(1.01)}
   80%{opacity:.96;transform:translate(-50%,-50%) scale(1.08)}}
 @media (min-width:768px){
-  #ob-1{--door-w:min(100vw,calc(70vh * .8333));--door-w:min(100vw,calc(70dvh * .8333));}
-  /* on a wide screen the frame stands in the atmosphere: its sides dissolve into the light around it (the frame,
-     the grain and the grade each masked the same way, since a container can carry only one mask) */
-  #ob-1 .door-cell-frame,#ob-1 .door-cell::before,#ob-1 .door-cell::after{
+  /* on a wide screen the frame stands in the atmosphere: its sides dissolve into the light around it (the image,
+     the grain and the grade each masked the same way; the glow is not, so the lantern at the frame's edge keeps its light) */
+  #ob-1 .door-cell img,#ob-1 .door-cell-frame::before,#ob-1 .door-cell-frame::after{
     -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);
     mask-image:linear-gradient(to right,transparent 0%,#000 22%,#000 78%,transparent 100%);}
 }
-/* The words, on the ink beneath his hands: the wordmark heads the copy; nothing sits over the figure */
-#ob-1 .door-col{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  min-height:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
-  padding:calc(var(--door-w) * 1374 / 1145 * var(--door-hands) + var(--s-4)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-6));}
-#ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--s-4);}
+/* The words, on the ink beneath his hands: the column takes its own height and never grows over the frame's minimum;
+   if a height exists where it still cannot fit, it scrolls inside itself rather than clipping */
+#ob-1 .door-col{position:relative;z-index:3;flex:0 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  width:100%;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
+  padding:var(--door-gap) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--door-gap-lg));}
+#ob-1 .door-wordmark{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);letter-spacing:.02em;margin-bottom:var(--door-gap);}
 #ob-1 .door-desc{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;margin:0 0 var(--s-3);}
 #ob-1 .door-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);text-wrap:balance;margin:0;}
-#ob-1 .btn-row{margin-top:var(--s-5);}
-#ob-1 .door-stores{margin-top:var(--s-5);text-align:center;}
+#ob-1 .btn-row{margin-top:var(--door-gap-lg);}
+#ob-1 .door-stores{margin-top:var(--door-gap-lg);text-align:center;}
 #ob-1 .door-stores .ui-label{margin-bottom:var(--s-3);}
+/* The fit, in order: the frame gives way first (down to its 40dvh), then the spacing, then the copy's type by one step */
+@container door (max-height:800px){
+  #ob-1{--door-gap:var(--s-2);--door-gap-lg:var(--s-3);}
+  #ob-1 .door-desc{margin-bottom:var(--s-2);}
+  #ob-1 .door-stores .ui-label{margin-bottom:var(--s-2);}
+}
+@container door (max-height:700px){
+  #ob-1 .door-wordmark{font-size:var(--t-lg);}
+  #ob-1 .door-desc{font-size:var(--t-base);}
+  #ob-1 .door-line{font-size:var(--t-sm);}
+}
+/* a wide screen sets larger type, so its step comes sooner */
+@container door (max-height:820px) and (min-width:768px){
+  #ob-1 .door-wordmark{font-size:var(--t-lg);}
+  #ob-1 .door-desc{font-size:var(--t-base);}
+  #ob-1 .door-line{font-size:var(--t-sm);}
+}
 @media (prefers-reduced-motion:reduce){
   #ob-1 .door-cell-frame,#ob-1 .door-lantern{animation:none;}
 }
