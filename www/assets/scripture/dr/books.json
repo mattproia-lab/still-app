@@ -1,0 +1,522 @@
+{
+ "translation": "Douay-Rheims, Challoner revision",
+ "source": "Project Gutenberg eBook #1581",
+ "notes": [
+  "Psalms 113: the numbering restarts at 1; the second series is chapter 113b",
+  "Proverbs 12: the source labels the second sentence of verse 11 as a second 12:12; the copy carries it in verse 11, as printed Douay editions do, and keys the true verse 12 as 12"
+ ],
+ "raw": "vault/raw/theology/scripture/2026-09-08-douay-rheims-bible-challoner.md",
+ "books": [
+  {
+   "name": "Genesis",
+   "slug": "genesis",
+   "testament": "OT",
+   "chapters": 50,
+   "verses": 1530
+  },
+  {
+   "name": "Exodus",
+   "slug": "exodus",
+   "testament": "OT",
+   "chapters": 40,
+   "verses": 1211
+  },
+  {
+   "name": "Leviticus",
+   "slug": "leviticus",
+   "testament": "OT",
+   "chapters": 27,
+   "verses": 858
+  },
+  {
+   "name": "Numbers",
+   "slug": "numbers",
+   "testament": "OT",
+   "chapters": 36,
+   "verses": 1288
+  },
+  {
+   "name": "Deuteronomy",
+   "slug": "deuteronomy",
+   "testament": "OT",
+   "chapters": 34,
+   "verses": 959
+  },
+  {
+   "name": "Josue",
+   "slug": "josue",
+   "testament": "OT",
+   "chapters": 24,
+   "verses": 658
+  },
+  {
+   "name": "Judges",
+   "slug": "judges",
+   "testament": "OT",
+   "chapters": 21,
+   "verses": 618
+  },
+  {
+   "name": "Ruth",
+   "slug": "ruth",
+   "testament": "OT",
+   "chapters": 4,
+   "verses": 85
+  },
+  {
+   "name": "1 Kings",
+   "slug": "1-kings",
+   "testament": "OT",
+   "chapters": 31,
+   "verses": 811
+  },
+  {
+   "name": "2 Kings",
+   "slug": "2-kings",
+   "testament": "OT",
+   "chapters": 24,
+   "verses": 694
+  },
+  {
+   "name": "3 Kings",
+   "slug": "3-kings",
+   "testament": "OT",
+   "chapters": 22,
+   "verses": 817
+  },
+  {
+   "name": "4 Kings",
+   "slug": "4-kings",
+   "testament": "OT",
+   "chapters": 25,
+   "verses": 719
+  },
+  {
+   "name": "1 Paralipomenon",
+   "slug": "1-paralipomenon",
+   "testament": "OT",
+   "chapters": 29,
+   "verses": 940
+  },
+  {
+   "name": "2 Paralipomenon",
+   "slug": "2-paralipomenon",
+   "testament": "OT",
+   "chapters": 36,
+   "verses": 822
+  },
+  {
+   "name": "1 Esdras",
+   "slug": "1-esdras",
+   "testament": "OT",
+   "chapters": 10,
+   "verses": 280
+  },
+  {
+   "name": "2 Esdras",
+   "slug": "2-esdras",
+   "testament": "OT",
+   "chapters": 13,
+   "verses": 404
+  },
+  {
+   "name": "Tobias",
+   "slug": "tobias",
+   "testament": "OT",
+   "chapters": 14,
+   "verses": 298
+  },
+  {
+   "name": "Judith",
+   "slug": "judith",
+   "testament": "OT",
+   "chapters": 16,
+   "verses": 345
+  },
+  {
+   "name": "Esther",
+   "slug": "esther",
+   "testament": "OT",
+   "chapters": 16,
+   "verses": 275
+  },
+  {
+   "name": "Job",
+   "slug": "job",
+   "testament": "OT",
+   "chapters": 42,
+   "verses": 1070
+  },
+  {
+   "name": "Psalms",
+   "slug": "psalms",
+   "testament": "OT",
+   "chapters": 151,
+   "verses": 2510
+  },
+  {
+   "name": "Proverbs",
+   "slug": "proverbs",
+   "testament": "OT",
+   "chapters": 31,
+   "verses": 915
+  },
+  {
+   "name": "Ecclesiastes",
+   "slug": "ecclesiastes",
+   "testament": "OT",
+   "chapters": 12,
+   "verses": 222
+  },
+  {
+   "name": "Canticle of Canticles",
+   "slug": "canticle-of-canticles",
+   "testament": "OT",
+   "chapters": 8,
+   "verses": 116
+  },
+  {
+   "name": "Wisdom",
+   "slug": "wisdom",
+   "testament": "OT",
+   "chapters": 19,
+   "verses": 439
+  },
+  {
+   "name": "Ecclesiasticus",
+   "slug": "ecclesiasticus",
+   "testament": "OT",
+   "chapters": 51,
+   "verses": 1591
+  },
+  {
+   "name": "Isaias",
+   "slug": "isaias",
+   "testament": "OT",
+   "chapters": 66,
+   "verses": 1292
+  },
+  {
+   "name": "Jeremias",
+   "slug": "jeremias",
+   "testament": "OT",
+   "chapters": 52,
+   "verses": 1363
+  },
+  {
+   "name": "Lamentations",
+   "slug": "lamentations",
+   "testament": "OT",
+   "chapters": 5,
+   "verses": 154
+  },
+  {
+   "name": "Baruch",
+   "slug": "baruch",
+   "testament": "OT",
+   "chapters": 6,
+   "verses": 213
+  },
+  {
+   "name": "Ezechiel",
+   "slug": "ezechiel",
+   "testament": "OT",
+   "chapters": 48,
+   "verses": 1272
+  },
+  {
+   "name": "Daniel",
+   "slug": "daniel",
+   "testament": "OT",
+   "chapters": 14,
+   "verses": 531
+  },
+  {
+   "name": "Osee",
+   "slug": "osee",
+   "testament": "OT",
+   "chapters": 14,
+   "verses": 198
+  },
+  {
+   "name": "Joel",
+   "slug": "joel",
+   "testament": "OT",
+   "chapters": 3,
+   "verses": 73
+  },
+  {
+   "name": "Amos",
+   "slug": "amos",
+   "testament": "OT",
+   "chapters": 9,
+   "verses": 146
+  },
+  {
+   "name": "Abdias",
+   "slug": "abdias",
+   "testament": "OT",
+   "chapters": 1,
+   "verses": 21
+  },
+  {
+   "name": "Jonas",
+   "slug": "jonas",
+   "testament": "OT",
+   "chapters": 4,
+   "verses": 48
+  },
+  {
+   "name": "Micheas",
+   "slug": "micheas",
+   "testament": "OT",
+   "chapters": 7,
+   "verses": 104
+  },
+  {
+   "name": "Nahum",
+   "slug": "nahum",
+   "testament": "OT",
+   "chapters": 3,
+   "verses": 47
+  },
+  {
+   "name": "Habacuc",
+   "slug": "habacuc",
+   "testament": "OT",
+   "chapters": 3,
+   "verses": 56
+  },
+  {
+   "name": "Sophonias",
+   "slug": "sophonias",
+   "testament": "OT",
+   "chapters": 3,
+   "verses": 53
+  },
+  {
+   "name": "Aggeus",
+   "slug": "aggeus",
+   "testament": "OT",
+   "chapters": 2,
+   "verses": 38
+  },
+  {
+   "name": "Zacharias",
+   "slug": "zacharias",
+   "testament": "OT",
+   "chapters": 14,
+   "verses": 211
+  },
+  {
+   "name": "Malachias",
+   "slug": "malachias",
+   "testament": "OT",
+   "chapters": 4,
+   "verses": 55
+  },
+  {
+   "name": "1 Machabees",
+   "slug": "1-machabees",
+   "testament": "OT",
+   "chapters": 16,
+   "verses": 929
+  },
+  {
+   "name": "2 Machabees",
+   "slug": "2-machabees",
+   "testament": "OT",
+   "chapters": 15,
+   "verses": 558
+  },
+  {
+   "name": "Matthew",
+   "slug": "matthew",
+   "testament": "NT",
+   "chapters": 28,
+   "verses": 1070
+  },
+  {
+   "name": "Mark",
+   "slug": "mark",
+   "testament": "NT",
+   "chapters": 16,
+   "verses": 677
+  },
+  {
+   "name": "Luke",
+   "slug": "luke",
+   "testament": "NT",
+   "chapters": 24,
+   "verses": 1151
+  },
+  {
+   "name": "John",
+   "slug": "john",
+   "testament": "NT",
+   "chapters": 21,
+   "verses": 879
+  },
+  {
+   "name": "Acts",
+   "slug": "acts",
+   "testament": "NT",
+   "chapters": 28,
+   "verses": 1004
+  },
+  {
+   "name": "Romans",
+   "slug": "romans",
+   "testament": "NT",
+   "chapters": 16,
+   "verses": 433
+  },
+  {
+   "name": "1 Corinthians",
+   "slug": "1-corinthians",
+   "testament": "NT",
+   "chapters": 16,
+   "verses": 437
+  },
+  {
+   "name": "2 Corinthians",
+   "slug": "2-corinthians",
+   "testament": "NT",
+   "chapters": 13,
+   "verses": 255
+  },
+  {
+   "name": "Galatians",
+   "slug": "galatians",
+   "testament": "NT",
+   "chapters": 6,
+   "verses": 149
+  },
+  {
+   "name": "Ephesians",
+   "slug": "ephesians",
+   "testament": "NT",
+   "chapters": 6,
+   "verses": 155
+  },
+  {
+   "name": "Philippians",
+   "slug": "philippians",
+   "testament": "NT",
+   "chapters": 4,
+   "verses": 104
+  },
+  {
+   "name": "Colossians",
+   "slug": "colossians",
+   "testament": "NT",
+   "chapters": 4,
+   "verses": 95
+  },
+  {
+   "name": "1 Thessalonians",
+   "slug": "1-thessalonians",
+   "testament": "NT",
+   "chapters": 5,
+   "verses": 88
+  },
+  {
+   "name": "2 Thessalonians",
+   "slug": "2-thessalonians",
+   "testament": "NT",
+   "chapters": 3,
+   "verses": 46
+  },
+  {
+   "name": "1 Timothy",
+   "slug": "1-timothy",
+   "testament": "NT",
+   "chapters": 6,
+   "verses": 113
+  },
+  {
+   "name": "2 Timothy",
+   "slug": "2-timothy",
+   "testament": "NT",
+   "chapters": 4,
+   "verses": 83
+  },
+  {
+   "name": "Titus",
+   "slug": "titus",
+   "testament": "NT",
+   "chapters": 3,
+   "verses": 46
+  },
+  {
+   "name": "Philemon",
+   "slug": "philemon",
+   "testament": "NT",
+   "chapters": 1,
+   "verses": 25
+  },
+  {
+   "name": "Hebrews",
+   "slug": "hebrews",
+   "testament": "NT",
+   "chapters": 13,
+   "verses": 303
+  },
+  {
+   "name": "James",
+   "slug": "james",
+   "testament": "NT",
+   "chapters": 5,
+   "verses": 108
+  },
+  {
+   "name": "1 Peter",
+   "slug": "1-peter",
+   "testament": "NT",
+   "chapters": 5,
+   "verses": 105
+  },
+  {
+   "name": "2 Peter",
+   "slug": "2-peter",
+   "testament": "NT",
+   "chapters": 3,
+   "verses": 61
+  },
+  {
+   "name": "1 John",
+   "slug": "1-john",
+   "testament": "NT",
+   "chapters": 5,
+   "verses": 105
+  },
+  {
+   "name": "2 John",
+   "slug": "2-john",
+   "testament": "NT",
+   "chapters": 1,
+   "verses": 13
+  },
+  {
+   "name": "3 John",
+   "slug": "3-john",
+   "testament": "NT",
+   "chapters": 1,
+   "verses": 14
+  },
+  {
+   "name": "Jude",
+   "slug": "jude",
+   "testament": "NT",
+   "chapters": 1,
+   "verses": 25
+  },
+  {
+   "name": "Apocalypse",
+   "slug": "apocalypse",
+   "testament": "NT",
+   "chapters": 22,
+   "verses": 405
+  }
+ ]
+}

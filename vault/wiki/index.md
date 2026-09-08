@@ -17,7 +17,7 @@ Master map of the vault. Every new wiki page gets a line here (step 4 of the ing
 - [office-vespers.md](features/office-vespers.md) — how the Vespers text is produced. Originally four known issues, none fixed: no daily proper, `getLiturgicalSeason()` month off-by-one (Christmas returns `'advent'`), `getPsalmWeek()` mid-week rollover that drifts with DST, and Vespers reusing the Lauds antiphon. **All four now fixed**, plus a fifth date bug found while testing (Stage 2, 2026-08-24). The no-daily-proper gap is closed for the **traditional** rite by the corpus rebuild (**Stage 3 complete, 2026-08-25** — corpus, bilingual renderer, and a rite toggle on the Office screen; 516 checks) and remains true of the **modern** rite, which is still the default. Traditional Compline is still the modern text, disclosed on the card, and is a post-Advent item. _(2026-08-23, updated 2026-08-25)_
 
 ## content/
-_(meditation corpus, sources, taxonomy, validation rules — no pages yet)_
+- [scripture-douay-rheims.md](content/scripture-douay-rheims.md) — the Douay-Rheims Bible, Challoner revision (Gutenberg #1581): edition, public-domain basis, the Douay book names and psalm numbering, the app-readable copy under `corpus/scripture/dr/` and `assets/scripture/dr/`, the two numbering notes, the five-verse verification. _(2026-09-08)_
 
 ## ops/
 _(store submissions, RevenueCat/Stripe, Supabase, builds — no pages yet)_
