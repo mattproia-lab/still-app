@@ -749,23 +749,29 @@ button stops breathing.
   clock says (`--atmos-y` 82%), and only a light grade at the frame's
   edges follows the hour (`--door-edge`, the palette's triplet on
   `data-hour`, set once at load from `setOfficeTime()` and
-  `window._officeAutoHour`). No bird: he is indoors. The door fits one
-  visible viewport and never scrolls, down to 390 by 640: the door is a
-  flex column and a size container, the frame (`.door-cell`) takes the
-  height the copy leaves it and never less than 40dvh, and shows the
-  image's top four fifths, sized from its own height (`cqh`), so the
-  copy always begins beneath his hands, at every height; on a tall phone
-  the width binds and the image is full-bleed with its sides cropped a
-  little. The last rows above the copy dissolve into the ink through a
-  mask. As the door shortens the frame gives way first, then the spacing
-  (`@container door (max-height:800px)`), then the copy's type by one
-  step (700px, or 820px on a wide screen whose type is larger: the
-  wordmark to `--t-lg`, the copy to `--t-base`, the line to `--t-sm`);
-  the wordmark, the copy, Enter and both badges stay
-  above the bottom inset. If a height existed where that still could not
-  fit, the column (`.door-col`) scrolls inside itself rather than
-  clipping. On a wide screen the frame stands in the atmosphere with its
-  sides dissolving into the light around it. Two motions, both on the light and both
+  `window._officeAutoHour`). No bird: he is indoors. The monk stays
+  large: the frame (`.door-cell`) is full-bleed at the width and 62dvh
+  tall at every size, the image covering it from its top so the face and
+  the lantern stay in view (a short door crops the lower robe, a tall one
+  the sides); on a wide screen it is the whole image at 62dvh standing in
+  the atmosphere with its sides dissolving into the light around it. The
+  frame is the image's own rendered box (`cqw`/`cqh`), so the glow's
+  coordinates are the image's. The door fits one visible viewport and
+  never scrolls, down to 390 by 640, because the copy column overlaps the
+  frame's lower part instead of stacking beneath it: the door is a flex
+  column with the column anchored to the bottom, rising over the robe and
+  the ink behind a scrim (`.door-scrim`, ink fading up from the bottom
+  over 72dvh) so contrast holds at any exposure. The wordmark may sit
+  over his hands and the robe, the copy over the robe and the ink, never
+  the face or the lantern: the column's side padding (11vw at least)
+  keeps its lines off the lantern at the frame's left edge (the badges'
+  row sits below the lantern, so it reaches back out to the gutter and
+  both badges stay on one line), and on a short door the spacing tightens
+  and the copy's type steps down together (`@container door
+  (max-height:700px)`; on a wide screen, whose type is larger, the
+  spacing at 860px and the type at 760px), so the column rises no higher
+  than the chest. The image never shrinks. If a height existed where the column still could not fit, it
+  scrolls inside itself rather than clipping. Two motions, both on the light and both
   on `transform` and `opacity` only: over the lantern's flame a glow
   (`.door-lantern`, a warm radial in the candle and the gold, blended as
   light, its spill reaching the wall and the robe) swells and settles on
