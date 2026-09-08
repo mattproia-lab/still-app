@@ -2223,6 +2223,13 @@ function pinDocument() {
     <div class="lectio-phase active" id="lp-prep">
       <div class="lectio-col lectio-center">
         <span class="ui-label">Sacred Reading · Lectio Divina</span>
+        <!-- Today's Gospel, from the Lectionary table and the Douay-Rheims copy under assets/;
+             painted by lectioSeedGospel() on entry, hidden when the day has none -->
+        <div class="lectio-gospel" id="lectioGospel" hidden>
+          <span class="lectio-gospel-label" id="lectioGospelRef"></span>
+          <div class="lectio-gospel-line" id="lectioGospelLine"></div>
+          <button type="button" class="btn-ghost lectio-gospel-go" onclick="lectioPrayGospel()">Pray with today’s Gospel</button>
+        </div>
         <div class="heading">Before we open the text.</div>
         <div class="voice-card">
           <blockquote class="voice voice-left">
@@ -4567,6 +4574,18 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #screen-lectio:has(#lp-contemplate.active) :is(#lt-lectio,#lt-meditatio,#lt-oratio) .phase-step-dot,
 #screen-lectio:has(#lp-complete.active) .phase-step-dot{background:var(--gold-a55);}
 
+/* Today's Gospel at the door: a quiet card in the serif, the citation as its
+   label, the first line of the passage, one ghost action. Hidden until the
+   readings table and the Douay text are in hand; never shown without a Gospel. */
+#screen-lectio .lectio-gospel{width:100%;text-align:left;border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:var(--s-4);margin:0 0 var(--s-6);}
+#screen-lectio .lectio-gospel[hidden]{display:none;}
+#screen-lectio .lectio-gospel-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:var(--s-2);}
+#screen-lectio .lectio-gospel-line{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-snug);
+  color:var(--text-hi);text-wrap:pretty;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:var(--s-3);}
+#screen-lectio .lectio-gospel-go{display:inline-block;}
+
 /* Passage choice */
 #screen-lectio .lectio-section-label{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
   letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);margin:0 0 var(--s-2);}
@@ -4611,6 +4630,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
   transition:background var(--d-base),transform var(--d-base),box-shadow var(--d-base);}
 #screen-lectio .lp-dot.past{background:var(--gold-a55);}
 #screen-lectio .lp-dot.current{background:var(--candle);box-shadow:0 0 6px rgba(242,199,119,.8);transform:scale(1.5);}
+#screen-lectio .lp-count{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.08em;color:var(--text-low);margin-left:var(--s-2);font-variant-numeric:tabular-nums;}
 #screen-lectio .lectio-nav{display:flex;gap:var(--s-3);justify-content:center;align-items:center;margin-top:var(--s-6);flex-wrap:wrap;}
 #screen-lectio #lectioPrevBtn{transition:opacity var(--d-base);}
 #screen-lectio .pass-banner{display:none;margin-top:var(--s-6);padding:var(--s-5);border:1px solid var(--gold-a25);
@@ -8176,8 +8196,11 @@ function showError(id,msg){const el=document.getElementById(id);el.textContent=m
 const lState = {
   passageIndex:0, phraseIndex:0, readPass:1,
   word:'', echoMind:'', echoConscience:'', echoSpirit:'',
-  oratio:'', claudeQ:'', closingPrayer:''
+  oratio:'', claudeQ:'', closingPrayer:'',
+  gospel:null   // today's Gospel as a passage object, when the person chose it (passageIndex -1)
 };
+/* The passage in hand: one of the library's, or today's Gospel from the vault. */
+function lectioPassage() { return lState.passageIndex === -1 && lState.gospel ? lState.gospel : PASSAGES[lState.passageIndex]; }
 
 // Passage library -- RSV-CE, Gospels-first per Fr. Casey
 
@@ -8228,6 +8251,27 @@ const Liturgy = (() => {
     if (!livesPend) livesPend = get('assets/saints/lives.json').then(j => { lives = (j && j.entries) ? j.entries : {}; return lives; });
     return livesPend;
   }
+  /* The Lectionary table (assets/readings/<year>.json, citations only) and the
+     Douay-Rheims copy (assets/scripture/dr/), fetched the same way, once each,
+     the first time something asks: Lectio's Gospel seed does. */
+  const readings = {}, readPend = {}, books = {}, bookPend = {};
+  let bookList = null, bookListPend = null;
+  function loadReadings(y) {
+    if (readings[y] !== undefined) return Promise.resolve(readings[y]);
+    if (!readPend[y]) readPend[y] = get(`assets/readings/${y}.json`).then(j => { readings[y] = (j && j.days) ? j.days : null; return readings[y]; });
+    return readPend[y];
+  }
+  const readingsFor = d => { const y = readings[d.getFullYear()]; return y ? (y[isoDay(d)] || null) : null; };
+  function loadBooks() {
+    if (bookList) return Promise.resolve(bookList);
+    if (!bookListPend) bookListPend = get('assets/scripture/dr/books.json').then(j => { bookList = (j && j.books) ? j.books : []; return bookList; });
+    return bookListPend;
+  }
+  function loadBook(slug) {
+    if (books[slug] !== undefined) return Promise.resolve(books[slug]);
+    if (!bookPend[slug]) bookPend[slug] = get(`assets/scripture/dr/${slug}.json`).then(j => { books[slug] = (j && j.chapters) ? j : null; return books[slug]; });
+    return bookPend[slug];
+  }
   const dayFor = d => { const y = years[d.getFullYear()]; return y ? (y[isoDay(d)] || null) : null; };
   const traditionalFor = d => { const y = trad[d.getFullYear()]; return y ? (y[isoDay(d)] || null) : null; };
 
@@ -8253,7 +8297,8 @@ const Liturgy = (() => {
      the year is in hand the smaller the window in which it answers null.
      renderOfficeHour() waits on the same promise while the fetch is in flight. */
   try { preload(); } catch (e) {}
-  return { loadYear, loadTraditional, loadLives, dayFor, traditionalFor, lifeFor, preload, isoDay, mmdd, get lives() { return lives; } };
+  return { loadYear, loadTraditional, loadLives, dayFor, traditionalFor, lifeFor, preload, isoDay, mmdd, get lives() { return lives; },
+           loadReadings, readingsFor, loadBooks, loadBook };
 })();
 
 /* The day's principal celebration, synchronously, from the loaded calendar.
@@ -8825,7 +8870,7 @@ function buildPassageList() {
 }
 
 function chooseLectioPassage(i) {
-  lState.passageIndex = i;
+  lState.passageIndex = i;   // a library passage; -1 would be today's Gospel
   lState.phraseIndex  = 0;
   lState.readPass     = 1;
   lectioGoTo('read');
@@ -8862,7 +8907,7 @@ function lectioGoTo(phase) {
     const ref = document.getElementById('summaryRef');
     const word = document.getElementById('summaryWord');
     const passes = document.getElementById('summaryPasses');
-    if (ref)    ref.textContent    = PASSAGES[lState.passageIndex].ref;
+    if (ref)    ref.textContent    = lectioPassage().ref;
     if (word)   word.textContent   = lState.word || '--';
     if (passes) passes.textContent = lState.readPass;
     generateClosingPrayer();
@@ -8871,7 +8916,7 @@ function lectioGoTo(phase) {
 
 // Phrase rendering
 function renderLectioPhrase() {
-  const passage = PASSAGES[lState.passageIndex];
+  const passage = lectioPassage();
   const phrases = passage.phrases;
   const idx     = lState.phraseIndex;
 
@@ -8887,11 +8932,19 @@ function renderLectioPhrase() {
   const prog = document.getElementById('lectioProgress');
   if (prog) {
     prog.innerHTML = '';
-    phrases.forEach((_, i) => {
+    // At most twenty dots; a long passage (a Gospel from the Lectionary) is
+    // scaled onto them and counted beside them, so progress never looks like a test.
+    const N = phrases.length, shown = Math.min(N, 20), at = N > 20 ? Math.round(idx / Math.max(1, N - 1) * (shown - 1)) : idx;
+    for (let i = 0; i < shown; i++) {
       const d = document.createElement('div');
-      d.className = 'lp-dot' + (i < idx ? ' past' : i === idx ? ' current' : '');
+      d.className = 'lp-dot' + (i < at ? ' past' : i === at ? ' current' : '');
       prog.appendChild(d);
-    });
+    }
+    if (N > 20) {
+      const c = document.createElement('span');
+      c.className = 'lp-count'; c.textContent = (idx + 1) + ' / ' + N;
+      prog.appendChild(c);
+    }
   }
 
   // Pass dots
@@ -8919,7 +8972,7 @@ function renderLectioPhrase() {
 }
 
 function lectioPhraseNext() {
-  const phrases = PASSAGES[lState.passageIndex].phrases;
+  const phrases = lectioPassage().phrases;
   if (lState.phraseIndex < phrases.length - 1) {
     lState.phraseIndex++;
     renderLectioPhrase();
@@ -8985,7 +9038,7 @@ function checkOratioReady() {
 
 // Claude: generate ONE contemplative question -- never two
 async function generateLectioQ() {
-  const passage = PASSAGES[lState.passageIndex];
+  const passage = lectioPassage();
   const prompt = `Scripture passage (${passage.ref}): "${passage.phrases.join(' ')}"
 The word that found the reader: "${lState.word || '(none recorded)'}"
 Echo in the mind: "${lState.echoMind || '(none)'}"
@@ -9065,7 +9118,7 @@ async function generateClosingPrayer() {
   const defaultPrayer = `Lord, you have spoken and we have tried to listen. What we received today -- however small -- we offer back to you. Let the word that found us continue its work in the hours ahead, in the way you know best. We return now to the ordinary, carrying what you have given. Amen.`;
 
 
-  const passage = PASSAGES[lState.passageIndex];
+  const passage = lectioPassage();
   const prompt = `Session summary:
 - Passage: ${passage.ref}
 - Word received: "${lState.word || 'none'}"
@@ -9095,7 +9148,7 @@ Write a short closing collect prayer (4–5 sentences). First person singular. I
 }
 
 function saveLectioSession() {
-  const passage = PASSAGES[lState.passageIndex];
+  const passage = lectioPassage();
   trackEvent('lectio');
   DB.save('lectio', {
     passage: passage.ref,
@@ -9990,8 +10043,113 @@ function loadScript(src){
     document.head.appendChild(s);
   });
 }
+/* ── Today's Gospel as a seed ────────────────────────────────────────────
+   The citation comes from the Lectionary table for today (the gospel field;
+   the first of any alternatives), the words from the Douay-Rheims copy for
+   that book, chapter and verses; a psalm is shown whole. Both files are
+   fetched through Liturgy on first use and kept. Nothing is saved and no
+   function is called: it reads two static files. */
+function lectioParseCitation(cite) {
+  // "Matthew 18:15-20", "Matthew 1:1-16, 18-23", "Exodus 14:15-15:1", "Acts 10:34a, 37-43"; verse letters are dropped
+  const first = String(cite || '').split(' or ')[0].trim();
+  const m = first.match(/^((?:[1-4] )?[A-Za-z]+(?: of [A-Za-z]+)?) (\d+)(?::(.*))?$/);
+  if (!m) return null;
+  const book = m[1], chapter = parseInt(m[2], 10), spans = [];
+  if (!m[3]) return { book, chapter, spans: null };   // a whole chapter
+  let cur = chapter;   // the chapter a token starts in: the last token's end chapter
+  m[3].split(',').forEach(tok => {
+    tok = tok.replace(/[a-z]/g, '').trim(); if (!tok) return;
+    const r = tok.match(/^(\d+)(?:-(?:(\d+):)?(\d+))?$/);
+    if (!r) return;
+    const a = parseInt(r[1], 10), endCh = r[2] ? parseInt(r[2], 10) : cur, b = r[3] ? parseInt(r[3], 10) : a;
+    spans.push({ fromCh: cur, from: a, toCh: endCh, to: b });
+    cur = endCh;
+  });
+  return { book, chapter, spans };
+}
+function lectioVersesFor(bookJson, parsed) {
+  const out = [];
+  const chap = n => bookJson.chapters[String(n)] || {};
+  const pushRange = (ch, a, b) => { const c = chap(ch); Object.keys(c).map(Number).filter(v => v >= a && v <= b).sort((x, y) => x - y).forEach(v => out.push({ ch, v, text: c[String(v)] })); };
+  if (!parsed.spans) { pushRange(parsed.chapter, 1, 999); return out; }
+  parsed.spans.forEach(sp => {
+    if (sp.toCh === sp.fromCh) pushRange(sp.fromCh, sp.from, sp.to);
+    else { pushRange(sp.fromCh, sp.from, 999); for (let ch = sp.fromCh + 1; ch < sp.toCh; ch++) pushRange(ch, 1, 999); pushRange(sp.toCh, 1, sp.to); }
+  });
+  return out;
+}
+function lectioPhrasesFrom(verses) {
+  // the library's passages read in short phrases; a verse is split after its sentence and clause ends
+  const phrases = [];
+  verses.forEach(v => {
+    const parts = [];
+    String(v.text).split(/([.;:?!])\s+/).forEach((piece, i, arr) => {
+      if (i % 2 === 1) return;                       // the captured punctuation is joined below
+      const t = (piece + (arr[i + 1] || '')).trim();
+      if (t) parts.push(t);
+    });
+    parts.forEach(p => {
+      while (p.length > 140) {
+        const cut = p.lastIndexOf(', ', 120);
+        if (cut < 40) break;
+        phrases.push(p.slice(0, cut + 1)); p = p.slice(cut + 2);
+      }
+      phrases.push(p);
+    });
+  });
+  return phrases.length ? phrases : verses.map(v => v.text);
+}
+async function lectioTodaysGospel() {
+  if (typeof Liturgy === 'undefined' || !Liturgy.loadReadings) return null;
+  const now = new Date();
+  const days = await Liturgy.loadReadings(now.getFullYear());
+  const day = days ? days[Liturgy.isoDay(now)] : null;
+  if (!day || !day.readings || !day.readings.gospel || !day.dr || !day.dr.gospel) return null;
+  const parsed = lectioParseCitation(day.dr.gospel);
+  if (!parsed) return null;
+  if (parsed.book === 'Psalms') parsed.spans = null;    // a psalm is prayed whole
+  const books = await Liturgy.loadBooks();
+  const entry = (books || []).find(b => (b.name || b.book) === parsed.book);   // books.json names each book by `name`
+  if (!entry) return null;
+  const bookJson = await Liturgy.loadBook(entry.slug);
+  if (!bookJson) return null;
+  const verses = lectioVersesFor(bookJson, parsed);
+  if (!verses.length) return null;
+  const ref = String(day.readings.gospel).split(' or ')[0].trim();
+  return {
+    ref, ctx: 'Today\u2019s Gospel', source: 'Gospels',
+    day: day.name || '', text: verses.map(v => v.text).join(' '),
+    phrases: lectioPhrasesFrom(verses)
+  };
+}
+function lectioSeedGospel() {
+  const card = document.getElementById('lectioGospel');
+  if (!card) return;
+  card.hidden = true; lState.gospel = null;
+  const seq = (lectioSeedGospel._seq = (lectioSeedGospel._seq || 0) + 1);
+  lectioTodaysGospel().then(g => {
+    if (seq !== lectioSeedGospel._seq || !g) return;
+    lState.gospel = g;
+    const ref = document.getElementById('lectioGospelRef'), line = document.getElementById('lectioGospelLine');
+    if (ref) ref.textContent = 'Today\u2019s Gospel \u00B7 ' + g.ref;
+    if (line) line.textContent = g.phrases[0] + (g.phrases.length > 1 ? '\u2026' : '');
+    card.hidden = false;
+  }).catch(() => {});
+}
+/* The seed's action: the Gospel becomes the passage in hand, exactly as a
+   chosen passage does, and the reading begins. */
+function lectioPrayGospel() {
+  if (!lState.gospel) return;
+  lState.passageIndex = -1;
+  lState.phraseIndex  = 0;
+  lState.readPass     = 1;
+  lectioGoTo('read');
+  renderLectioPhrase();
+}
+
 function initLectio() {
   buildPassageList();
+  lectioSeedGospel();
   lectioGoTo('prep');
   // Reset state
   lState.phraseIndex = 0; lState.readPass = 1;

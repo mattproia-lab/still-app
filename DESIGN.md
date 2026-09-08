@@ -289,7 +289,22 @@ button stops breathing.
   `.lectio-carry` for the word carried into Oratio; `.claude-q-card` and
   `.closing-prayer-card` share a floating label; `.lectio-chip` summary. The
   passage list is built by `buildPassageList()`; its template now emits classes
-  only, no inline presentation.
+  only, no inline presentation. **Today's Gospel** heads the door
+  (`#lectioGospel`, above "Before we open the text"): a quiet card in the
+  serif, the citation as a gold micro label, the first phrase of the passage
+  in the italic (two lines at most), and one ghost action, "Pray with today's
+  Gospel". `lectioSeedGospel()` paints it on entry from two static files
+  fetched through `Liturgy` on first use and kept: the Lectionary table
+  (`assets/readings/<year>.json`, the day's `gospel` citation, the first of
+  any alternatives) and the Douay-Rheims copy (`assets/scripture/dr/`, the
+  book named by the `dr` citation, the verses in its ranges; a psalm whole).
+  The card stays hidden until both are in hand and never shows on a day
+  without a Gospel. Tapping it makes the Gospel the passage in hand exactly
+  as a chosen passage would be, `lState.passageIndex` -1 with the passage on
+  `lState.gospel` and every reader going through `lectioPassage()`, and
+  begins the reading; the verses are cut into phrases after sentence and
+  clause ends. The save, the two model requests and the library are
+  unchanged.
 
 - **The Office**: no timer, so no ring. The glow takes the colour of the
   canonical hour through `#screen-office[data-hour]`, one variable set per
