@@ -749,12 +749,23 @@ button stops breathing.
   clock says (`--atmos-y` 82%), and only a light grade at the frame's
   edges follows the hour (`--door-edge`, the palette's triplet on
   `data-hour`, set once at load from `setOfficeTime()` and
-  `window._officeAutoHour`). No bird: he is indoors. On a wide screen
-  the frame stands at 70dvh in the atmosphere with its sides dissolving
-  into the light around it. Its dark lower third is the ink the copy sits
-  on: the column begins beneath his hands (`--door-hands`, .72 of the
-  frame's height, times the frame's height), the wordmark heading it, so
-  no text sits over the figure. Two motions, both on the light and both
+  `window._officeAutoHour`). No bird: he is indoors. The door fits one
+  visible viewport and never scrolls, down to 390 by 640: the door is a
+  flex column and a size container, the frame (`.door-cell`) takes the
+  height the copy leaves it and never less than 40dvh, and shows the
+  image's top four fifths, sized from its own height (`cqh`), so the
+  copy always begins beneath his hands, at every height; on a tall phone
+  the width binds and the image is full-bleed with its sides cropped a
+  little. The last rows above the copy dissolve into the ink through a
+  mask. As the door shortens the frame gives way first, then the spacing
+  (`@container door (max-height:800px)`), then the copy's type by one
+  step (700px, or 820px on a wide screen whose type is larger: the
+  wordmark to `--t-lg`, the copy to `--t-base`, the line to `--t-sm`);
+  the wordmark, the copy, Enter and both badges stay
+  above the bottom inset. If a height existed where that still could not
+  fit, the column (`.door-col`) scrolls inside itself rather than
+  clipping. On a wide screen the frame stands in the atmosphere with its
+  sides dissolving into the light around it. Two motions, both on the light and both
   on `transform` and `opacity` only: over the lantern's flame a glow
   (`.door-lantern`, a warm radial in the candle and the gold, blended as
   light, its spill reaching the wall and the robe) swells and settles on
@@ -762,10 +773,10 @@ button stops breathing.
   `atmosFlicker`, with a little scale beside the opacity so the light
   breathes rather than blinks; and the whole frame on a slow breath,
   scale 1 to 1.015 over eight seconds and back (`doorBreath`, twice
-  `--d-drift`); the glow sits beside the breathing frame rather than inside
-  it, so on a wide screen its light escapes the side fade and the lantern,
-  which stands at the frame's very edge, keeps its presence. Nothing on
-  the figure moves.
+  `--d-drift`), the glow riding inside it; on a wide screen the side fade
+  is on the image, the grain and the grade, not on the glow, so the
+  lantern, which stands at the frame's very edge, keeps its light.
+  Nothing on the figure moves.
   Under reduced motion both animations are off: the still.
 - **The letter** (`#ob-2`, the Guestmaster's letter): onboarding's second
   step, once per install, since onboarding shows only while
