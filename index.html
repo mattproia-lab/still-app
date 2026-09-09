@@ -3589,6 +3589,7 @@ function pinDocument() {
         <div class="st-row"><a class="st-link" href="https://stillprayer.app/privacy" target="_blank" rel="noopener">Privacy policy</a></div>
         <div class="st-row"><a class="st-link" href="https://stillprayer.app/support" target="_blank" rel="noopener">Support</a></div>
         <div class="st-row"><button type="button" class="st-link" id="settingsLetterLink" onclick="showGuestmasterLetter()">Read the Guestmaster’s letter</button></div>
+        <div class="st-row"><button type="button" class="st-link" onclick="openPartners()">Partners</button></div>
         <div class="st-colophon">Set in Cormorant Garamond and Instrument Sans. Scripture in the Douay-Rheims.</div>
       </div>
 
@@ -5726,6 +5727,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
   letter-spacing:var(--track-label);text-transform:uppercase;margin-top:var(--s-2);}
 #screen-library .lib-open{color:var(--gold);}
 #screen-library .lib-soon{color:var(--text-faint);}
+#screen-library .lib-section-head{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-low);padding:var(--s-5) 0 var(--s-2);border-top:1px solid var(--line);margin-top:var(--s-3);}
 /* The reader */
 #screen-library .lib-reader[hidden],#screen-library .lib-shelf[hidden],#screen-library .lib-nav[hidden],#screen-library .lib-pills[hidden]{display:none;}
 #screen-library .lib-reader-head{margin-bottom:var(--s-5);}
@@ -6244,7 +6246,29 @@ const LIBRARY_SHELF = [
     desc:'Fourteen articles on what is to be thought on and how, with the soul\u2019s exchange with the Bridegroom; finished in 1469, in his sixty-seventh year.',
     note:'Rendered into English for Still from the Latin. Not a published translation.' },
   { slug:'denis-fonte-lucis', author:'Denis the Carthusian', title:'De Fonte Lucis',
-    desc:'On the fountain of light and the paths of life.', note:'Rendered into English for Still from the Latin. Not a published translation.' }
+    desc:'On the fountain of light and the paths of life.', note:'Rendered into English for Still from the Latin. Not a published translation.' },
+  { header:'Recommended' },
+  { slug:'rec-fully-human', author:'Michael Casey', title:'Fully Human, Fully Divine',
+    desc:'Masterfully weaves theology and contemplative spirituality into an interactive guide that reveals how embracing Christ as both fully human and fully divine transforms our own journey toward union with God.',
+    note:'Deeper · Christology', href:'#', cta:'Available' },
+  { slug:'rec-sacred-reading', author:'Michael Casey', title:'Sacred Reading',
+    desc:'The clearest modern guide to Lectio Divina — what it is, why it works, and how to let Scripture read you.',
+    note:'Lectio Divina', href:'#', cta:'Available' },
+  { slug:'rec-underhill', author:'Evelyn Underhill', title:'Evelyn Underhill: The Best Works',
+    desc:'The woman who introduced a generation to mysticism — Practical Mysticism alone is worth the price.',
+    note:'Amma Sophia · Mysticism', href:'#', cta:'Available' },
+  { slug:'rec-faustina', author:'St. Faustina Kowalska', title:'Diary of Saint Maria Faustina Kowalska',
+    desc:'One of the most intimate records of interior prayer ever written — raw, honest, and quietly devastating.',
+    note:'Spiritual Autobiography', href:'#', cta:'Available' },
+  { slug:'rec-interior-castle', author:'St. Teresa of Avila', title:'The Interior Castle',
+    desc:'The map of the soul’s journey toward God, drawn by someone who made the journey herself.',
+    note:'Contemplative Sitting · Deeper', href:'#', cta:'Available' },
+  { slug:'rec-thoughts-matter', author:'Mary Margaret Funk', title:'Thoughts Matter',
+    desc:'A Benedictine abbess on the thoughts that derail prayer — and how the Desert Fathers learned to handle them.',
+    note:'Contemplative Sitting', href:'#', cta:'Available' },
+  { slug:'rec-sinners-guide', author:'Venerable Louis of Granada, O.P.', title:"The Sinner's Guide",
+    desc:'With unflinching honesty, Louis of Granada lays bare the misery of a life enslaved to sin — and the incomparable joy, peace, and freedom of living for God.',
+    note:'The Examen · The Guide', href:'#', cta:'Available' }
 ];
 const Library = (() => {
   const cache = {};
@@ -6266,16 +6290,18 @@ const Library = (() => {
   function shelf() {
     const rows = $('libRows'); rows.innerHTML = '';
     LIBRARY_SHELF.forEach(t => {
-      const r = el(t.soon ? 'div' : 'button', 'lib-row' + (t.soon ? ' is-soon' : ''));
-      if (!t.soon) { r.type = 'button'; r.onclick = () => open(t.slug); }
+      if (t.header) { const h = el('div', 'lib-section-head'); h.textContent = t.header; rows.appendChild(h); return; }
+      const r = el(t.soon ? 'div' : t.href ? 'a' : 'button', 'lib-row' + (t.soon ? ' is-soon' : ''));
+      if (t.href) { r.href = t.href; r.target = '_blank'; r.rel = 'noopener'; }
+      else if (!t.soon) { r.type = 'button'; r.onclick = () => open(t.slug); }
       else r.setAttribute('aria-disabled', 'true');
       r.appendChild(el('span', 'lib-author', t.author));
       r.appendChild(el('span', 'lib-title', t.title));
       r.appendChild(el('span', 'lib-desc', t.desc));
       if (t.note) r.appendChild(el('span', 'lib-note', t.note));
       let where = '';
-      try { const bm = JSON.parse(localStorage.getItem('still_library_' + t.slug) || 'null'); if (bm && (bm.chapter || bm.book)) where = 'Continue'; } catch (e) {}
-      r.appendChild(el('span', t.soon ? 'lib-soon' : 'lib-open', t.soon ? 'Coming soon' : (where || 'Open')));
+      if (!t.href) try { const bm = JSON.parse(localStorage.getItem('still_library_' + t.slug) || 'null'); if (bm && (bm.chapter || bm.book)) where = 'Continue'; } catch (e) {}
+      r.appendChild(el('span', t.soon ? 'lib-soon' : 'lib-open', t.soon ? 'Coming soon' : t.href ? (t.cta || 'Available') : (where || 'Open')));
       rows.appendChild(r);
     });
     $('libShelf').hidden = false; $('libReader').hidden = true; $('libraryTitle').textContent = 'The Library';
@@ -17040,6 +17066,10 @@ function openSettings(section) {
 function closeSettings() {
   const m = document.getElementById('settingsModal');
   if (m) m.classList.remove('open');
+}
+function openPartners() {
+  closeSettings();
+  window.open('https://stillprayer.app/partners', '_blank', 'noopener');
 }
 
 /* ═══════════════════════════════════════════
