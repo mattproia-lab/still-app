@@ -4,6 +4,8 @@ _Index into the raw texts, not a replacement for them. Ingested 2026-09-09._
 
 **The Latin of all three is filed, from the 1912 Tournai edition; no public-domain English translation exists for any of them.** The one modern English version, Íde M. Ní Riain's *The Spiritual Writings of Denis the Carthusian* (Dublin, Four Courts, 2005), is in copyright and is not filed. The English renderings made for Still, as they land, sit beside the Latin under `[REVIEW NEEDED]`, as the Guigo rendering does ([guigo-ii-ladder-of-monks.md](guigo-ii-ladder-of-monks.md)).
 
+**Rendering, 2026-09-09:** *De meditatione* has been rendered into English for Still, the proemium and all fourteen articles, under `[REVIEW NEEDED]`: [`raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md`](../../raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md). The reading order of the two printed columns was reconstructed by sense from the interleaved OCR; the column breaks that fall mid-sentence (pp. 73–75, 79–81, 85–87) are the places to check first against the scan. Quoted Scripture is given in the Douay-Rheims wording where the Latin is the Vulgate's, with the edition's marginal references. *De fonte lucis* and *De contemplatione* are not yet rendered.
+
 **Raw files:**
 
 - [`raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-opera-omnia-41.md`](../../raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-opera-omnia-41.md) — 70,798 bytes, 1,819 lines, 10,121 words: *De meditatione*, printed pages 69–90.
