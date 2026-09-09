@@ -6939,6 +6939,12 @@ function resumeAudioCtx(){
   let p; try{ p=audioCtx.resume(); }catch(e){ return Promise.resolve(); }
   return Promise.race([Promise.resolve(p).catch(()=>{}), new Promise(r=>setTimeout(r,1500))]);
 }
+// On every return to the foreground, wake the context before any timer callback
+// tries to ring. Its own listener: the wake-lock one only exists where the Wake
+// Lock API does, and only while a Sitting holds the lock.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && audioCtx) resumeAudioCtx();
+});
 
 function playBell(cb){
   if(!bellEnabled){ if(cb) setTimeout(cb,300); return; }
@@ -7226,8 +7232,6 @@ async function requestWakeLock() {
 }
 
 async function reacquireWakeLock() {
-  // Wake the audio context first, so a timer callback that rings finds it live
-  if (document.visibilityState === 'visible') resumeAudioCtx();
   if (wakeLock !== null && document.visibilityState === 'visible' && sPhase !== 'idle' && sPhase !== 'complete') {
     try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
   }
