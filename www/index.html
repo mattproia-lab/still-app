@@ -3397,238 +3397,6 @@ function pinDocument() {
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     RESOURCES SCREEN -- Dogstudio design system
-═══════════════════════════════════════════ -->
-<div id="screen-resources" class="screen" style="background:#030305">
-  <header class="app-header" style="position:relative;z-index:10;background:transparent">
-    <button class="back-btn" onclick="goHome()"><span class="back-arrow">←</span><span>Still</span></button>
-    <span class="screen-title">Resources</span>
-    <button class="settings-btn" onclick="openSettings()">⚙</button>
-  </header>
-
-  <div class="feature-main" style="overflow-y:auto;padding:24px 28px 80px;max-width:600px;margin:0 auto">
-
-    <!-- Church Posters -->
-     <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:#767ca2;margin-bottom:14px">For Your Parish</p>
-    <div style="background:#1a1b22;border:1px solid #454856;padding:20px;margin-bottom:36px">
-      <p style="font-family:'Playfair Display',serif;font-size:20px;font-style:italic;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.1">Church Posters</p>
-      <p style="font-family:'Heebo',sans-serif;font-size:14px;font-weight:300;color:#c8cad6;line-height:1.7;letter-spacing:-.02em;margin-bottom:16px">Help others find Still. Print and post in your parish bulletin board, narthex, or chapel.</p>
-      <img src="still-mobile/src/image/churchposter.png" style="width:100%;display:block;margin-bottom:16px;border:1px solid #454856"/>
-      <a href="still-mobile/src/image/churchposter.png" download="still-church-poster.png"
-         onclick="return downloadPoster(event, 'still-mobile/src/image/churchposter.png', 'still-church-poster.png')"
-        style="display:inline-block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#f0c040;border:1px solid rgba(200,146,12,.4);padding:10px 20px;text-decoration:none">
-        ↓ Download Poster
-      </a>
-    </div>
-
-    <!-- Monastery Retreats -->
-    <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:#767ca2;margin-bottom:14px">Retreat & Monastery</p>
-    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:36px">
-
-      <a href="https://www.monks.org" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2">Abbey of Gethsemani -- Trappist, KY</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em;margin-bottom:7px">Home of Thomas Merton. One of the most storied monasteries in America, offering silent retreats in the Cistercian tradition.</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:12px;font-style:italic;color:#848ab5">I've made retreat here.</p>
-        </div>
-      </a>
-
-      <a href="https://www.mepkinabbey.org" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2">Mepkin Abbey -- Moncks Corner, SC</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em;margin-bottom:7px">A Trappist monastery on the Cooper River offering retreats in a setting of extraordinary beauty and quiet.</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:12px;font-style:italic;color:#848ab5">In the span of five years I spent time at this monastery discerning monastic life. I've also been on retreats here since.</p>
-        </div>
-      </a>
-
-      <a href="https://www.christdesert.org" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2">Monastery of Christ in the Desert -- Abiquiú, NM</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">Benedictine monastery set in a remote canyon -- one of the most beautiful retreat settings in America.</p>
-        </div>
-      </a>
-
-    </div>
-
-    <!-- Books -->
-    <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:#767ca2;margin-bottom:14px">Recommended Reading</p>
-    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:40px">
-
-      <!-- Fully Human Fully Divine -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Deeper · Christology</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">Fully Human, Fully Divine</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Michael Casey</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">Masterfully weaves theology and contemplative spirituality into an interactive guide that reveals how embracing Christ as both fully human and fully divine transforms our own journey toward union with God.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Sacred Reading -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Lectio Divina</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">Sacred Reading</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Michael Casey</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">The clearest modern guide to Lectio Divina -- what it is, why it works, and how to let Scripture read you.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Evelyn Underhill -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Amma Sophia · Mysticism</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">Evelyn Underhill: The Best Works</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Evelyn Underhill</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">The woman who introduced a generation to mysticism -- Practical Mysticism alone is worth the price.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Diary of St Faustina -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Spiritual Autobiography</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">Diary of Saint Maria Faustina Kowalska</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">St. Faustina Kowalska</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">One of the most intimate records of interior prayer ever written -- raw, honest, and quietly devastating.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Interior Castle -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Contemplative Sitting · Deeper</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">The Interior Castle</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">St. Teresa of Avila</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">The map of the soul's journey toward God, drawn by someone who made the journey herself.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- Thoughts Matter -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">Contemplative Sitting</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">Thoughts Matter</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Mary Margaret Funk</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">A Benedictine abbess on the thoughts that derail prayer -- and how the Desert Fathers learned to handle them.</p>
-          </div>
-        </div>
-      </a>
-
-      <!-- The Sinner's Guide -->
-      <a href="#" target="_blank" style="text-decoration:none">
-        <div style="background:#1a1b22;border:1px solid #454856;padding:18px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s"
-          onmouseover="this.style.borderColor='#767ca2'"
-          onmouseout="this.style.borderColor='#454856'">
-          <div style="flex-shrink:0;width:3px;align-self:stretch;background:#767ca2"></div>
-          <div>
-            <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:6px">The Examen, The Guide</p>
-            <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:3px;line-height:1.2">The Sinner's Guide</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:12px;font-weight:400;color:#565a6b;margin-bottom:8px;letter-spacing:-.02em">Venerable Louis of Granada, O.P.</p>
-            <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">With unflinching honesty, Louis of Granada lays bare the misery of a life enslaved to sin -- and the incomparable joy, peace, and freedom of living for God. He meditates on the Four Last Things and the beauty of the virtues, making it an ideal companion for honest self-examination and deeper contemplative prayer. Perfect for anyone seeking real conversion of heart.</p>
-          </div>
-        </div>
-      </a>
-
-    </div>
-    <!-- Follow Us -->
-    <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:#767ca2;margin-bottom:14px">Community</p>
-    <a href="https://x.com/stillcommunity" target="_blank" style="text-decoration:none">
-      <div style="background:#1a1b22;border:1px solid #454856;padding:20px;margin-bottom:36px;display:flex;align-items:center;gap:16px;transition:border-color .2s"
-        onmouseover="this.style.borderColor='#767ca2'"
-        onmouseout="this.style.borderColor='#454856'">
-        <div style="font-size:24px;color:#fff">𝕏</div>
-        <div>
-          <p style="font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;color:#fff;margin-bottom:4px">Follow @stillcommunity</p>
-          <p style="font-family:'Heebo',sans-serif;font-size:13px;font-weight:300;color:#c8cad6;line-height:1.65;letter-spacing:-.02em">Join the Still community on X -- reflections, updates, and conversations on the contemplative life.</p>
-        </div>
-      </div>
-    </a>
-
-    <!-- Meet the Guides -->
-    <p style="font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.36em;text-transform:uppercase;color:#767ca2;margin-bottom:14px">Meet the Guides</p>
-
-    <!-- Amma Sophia -->
-    <div style="background:#1a1b22;border:1px solid #454856;padding:20px;margin-bottom:6px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:8px">Amma Sophia</p>
-      <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin-bottom:16px">Amma Sophia, when I first contemplated a life with God alone, it felt as if I stepped into eternity itself. Everything shifted. How can I return to that hearing? How do I open myself so His voice becomes constant again?</p>
-      <div style="background:rgba(30,18,50,.60);border:1px solid rgba(200,146,12,.15);padding:18px;margin-bottom:16px;max-height:180px;overflow-y:auto">
-        <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.85;margin:0">Ah, beloved, you have not lost what you think you have lost. The silence you now meet is not God's absence -- it is God's deeper presence, beyond the sweetness that first drew you to prayer. The mystics call this the dark night, and it comes not as punishment but as invitation. Your soul is being prepared for a love that needs no feelings to sustain it. Can you trust that this silence, too, is holy ground?</p>
-      </div>
-      <button onclick="playDemoAudio('ammaSophia','still-mobile/assets/ammaSophia_demo.mp3',0)"
-        style="background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">
-        ▶ Hear Her Speak
-      </button>
-    </div>
-
-    <!-- Deeper -->
-    <div style="background:#1a1b22;border:1px solid #454856;padding:20px;margin-bottom:6px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:8px">Deeper</p>
-      <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin-bottom:16px">What is the single most important inner gesture that allows me to consent to this stripping and remain faithful in the barrenness -- not just enduring it, but truly cooperating with what God is doing in the depths?</p>
-      <div style="background:rgba(4,8,25,.60);border:1px solid rgba(200,146,12,.15);padding:18px;margin-bottom:16px;max-height:180px;overflow-y:auto">
-        <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.85;margin:0">You are asking the question that has torn at human hearts since Job sat in his ash heap. The Church teaches that God permits evil not because He lacks power to prevent it, but because He can draw greater good even from the worst evil (CCC 312). The Cross is not God's explanation for suffering -- it is His entrance into it. Rest here: the God who allows suffering is not distant from it -- He has taken it into His own heart.</p>
-      </div>
-      <button onclick="playDemoAudio('deeper','still-mobile/assets/deeper_demo.mp3',0)"
-        style="background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">
-        ▶ Hear Him Speak
-      </button>
-    </div>
-
-    <!-- The Companion -->
-    <div style="background:#1a1b22;border:1px solid #454856;padding:20px;margin-bottom:36px">
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:#848ab5;margin-bottom:8px">The Companion</p>
-      <p style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:rgba(255,255,255,.88);line-height:1.78;margin-bottom:16px">Father, I have found something beautiful and I ache for others to know it. Should I speak of it loudly so many may find it, or keep it hidden as the desert teaches?</p>
-      <div style="background:rgba(12,8,22,.60);border:1px solid rgba(200,146,12,.15);padding:18px;margin-bottom:16px;max-height:180px;overflow-y:auto">
-        <p style="font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:rgba(255,255,255,.75);line-height:1.85;margin:0">A brother once came to Abba Poemen saying he had received a great grace in prayer and wished to tell others. The old man replied: A tree heavy with fruit bows its branches low and speaks not of its sweetness. But the barren tree stretches high and makes much noise in the wind. Let your prayer be like the deep well -- drawing others not by speaking of its depths, but by the sweet water that flows quietly from your transformed countenance.</p>
-      </div>
-      <button onclick="playDemoAudio('companion','still-mobile/assets/companion_demo.mp3',0)"
-        style="background:none;border:1px solid rgba(200,146,12,.4);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;padding:10px 20px;cursor:pointer">
-        ▶ Hear Him Speak
-      </button>
-    </div>
-
-    <!-- Audio Credits -->
-    <p style="font-family:'Heebo',sans-serif;font-size:11px;font-weight:300;color:#454856;line-height:1.65;letter-spacing:-.02em;margin-bottom:40px">
-      Audio ambience: kevp888 / freesound.org (CC BY 4.0) · CRAFTCREST.com / freesound.org (CC BY 4.0)
-    </p>
-
-  </div>
 </div>
 
 <!-- ═══════════════════════════════════════════
@@ -6678,7 +6446,6 @@ const F=[
   {name:'The Dialogue Chamber',badge:'The Two Catherines',screen:'dialogue',
    h:'Speak, and be still.',
    b:'A dialogue in the school of Catherine of Siena and Catherine of Genoa. The tradition answers, never pretends to be God. Three exchanges, then silence.',cta:'Enter the Chamber'},
-  {name:'Resources', badge:'Books · Retreats · Parish', screen:'resources', h:'Books, monasteries, and tools for going deeper.', b:'Recommended reading, retreat houses, and resources for your parish.', cta:'Explore'}
 ];
 
 const W=[
@@ -6699,7 +6466,6 @@ const W=[
   {r:70, g:8,  b:152,i:.90,base:'#040007'}, // Autobiography -- purple
   {r:120,g:148,b:200,i:.55,base:'#020308'}, // Deeper -- softer blue
   {r:12, g:64, b:88, i:.85,base:'#010507'}, // Dialogue Chamber -- deep sea
-  {r:70, g:70, b:90, i:.50,base:'#020208'}, // Resources -- muted blue-grey
 ];
 // Amma Sophia -- dusk blue, between the Companion's navy and Deeper's softer blue.
 // She is the Autobiography's Inspiration tab, not a home world, so she is not a row;
@@ -10364,24 +10130,6 @@ async function downloadPDF() {
     if(btn){btn.textContent='Download PDF';btn.disabled=false;}
     alert('PDF generation failed. Use your browser\'s Print function and choose Save as PDF.');
   }
-}
-async function downloadPoster(ev, url, filename) {
-  // Desktop: let the normal download attribute do its job
-  if (!/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) return true;
-  ev.preventDefault();
-  try {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const file = new File([blob], filename, { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'Still — Church Poster' });
-    } else {
-      window.open(url, '_blank'); // fallback: press-and-hold to save
-    }
-  } catch (e) {
-    window.open(url, '_blank');
-  }
-  return false;
 }
 function loadScript(src){
   return new Promise((resolve,reject)=>{
