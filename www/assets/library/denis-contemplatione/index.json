@@ -1,0 +1,296 @@
+{
+ "title": "On Contemplation (Book I)",
+ "author": "Denis the Carthusian",
+ "source": "vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-primus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)",
+ "slug": "denis-contemplatione",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Proemium",
+   "file": "c1.json",
+   "words": 754
+  },
+  {
+   "n": 2,
+   "title": "Article I · The intention of the present work",
+   "file": "c2.json",
+   "words": 180
+  },
+  {
+   "n": 3,
+   "title": "Article II · On the manifold kinds of wisdom",
+   "file": "c3.json",
+   "words": 812
+  },
+  {
+   "n": 4,
+   "title": "Article III · What contemplation is · Contemplation, taken in its proper sense, is the affectionate, prompt and sincere knowledge of the superessential Deity and of what is referred to it.",
+   "file": "c4.json",
+   "words": 546
+  },
+  {
+   "n": 5,
+   "title": "Article IV · Why it is expedient to bring in the sayings of the chief philosophers for a fuller knowledge of contemplation",
+   "file": "c5.json",
+   "words": 244
+  },
+  {
+   "n": 6,
+   "title": "Article V · On the nature of the rational soul, and the powers by which it is capable of the grace of contemplation · Since contemplation is a certain accident and action of the rational soul, and accident is known through its subject; that what is to be said of contemplation may be more clearly apparent, I think it necessary to speak briefly of the nature of the rational soul and the powers by which it is capable of contemplation.",
+   "file": "c6.json",
+   "words": 599
+  },
+  {
+   "n": 7,
+   "title": "Article VI · What synderesis and the spark of understanding are · Since the highest species of contemplation possible to this life — namely the unitive vision of mystical theology — pertains to the contact of synderesis and the spark of understanding, according to the anagogic doctors, as will be shown below by God's grace; it is fitting to make clear what synderesis itself and the spark of understanding are.",
+   "file": "c7.json",
+   "words": 523
+  },
+  {
+   "n": 8,
+   "title": "Article VII · On the subject of contemplation; and whether the intellect is the most worthy power of the soul",
+   "file": "c8.json",
+   "words": 373
+  },
+  {
+   "n": 9,
+   "title": "Article VIII · How between the human mind and God there is no medium, such that God alone is said to be better than our mind · That the angelic spirits surpass human minds in nature, power and action, wisdom, happiness and glory, and are intermediaries in the order of things between God and human minds, holy canonical Scripture teaches sufficiently; as does that most sacred prince of theologians, Dionysius, in the works On the Angelic Hierarchy.",
+   "file": "c9.json",
+   "words": 212
+  },
+  {
+   "n": 10,
+   "title": "Article IX · What the chief philosophers have said of contemplation",
+   "file": "c10.json",
+   "words": 475
+  },
+  {
+   "n": 11,
+   "title": "Article X · Whether the philosophical knowledge of divine things deserves to be called contemplation",
+   "file": "c11.json",
+   "words": 281
+  },
+  {
+   "n": 12,
+   "title": "Article XI · On the division of life into the contemplative and the active · As the holy Gregory testifies, there are two lives in which almighty God teaches us through the sacred Scriptures. One is the contemplative: whose end is not an external work, but the sincere and formed knowledge of truth itself. Which, since it is the beatitude and end of the rational creature, is not referred to another — especially since it also includes the love of God virtually and as its formative complement. The other is the active: whose immediate and first end is the outer work or action itself.",
+   "file": "c12.json",
+   "words": 621
+  },
+  {
+   "n": 13,
+   "title": "Article XII · On the acts that are required for, concur with and belong to the contemplative life; in which it is shown how the contemplative life consists in one act",
+   "file": "c13.json",
+   "words": 933
+  },
+  {
+   "n": 14,
+   "title": "Article XIII · On the wealth, beauty, loveableness, dignity and sweetness or delight of contemplation and the contemplative life · Since contemplation is the act of wisdom — not any wisdom, but chiefly that which is the gift of the Holy Spirit, which no one who is subject to mortal sin possesses — therefore what Scripture says of the property and eminence of wisdom is rightly applied to contemplation, especially since the perfection is to be placed in the act rather than in the habit.",
+   "file": "c14.json",
+   "words": 1105
+  },
+  {
+   "n": 15,
+   "title": "Article XIV · Whether the contemplative life is more worthy and more meritorious than the active",
+   "file": "c15.json",
+   "words": 744
+  },
+  {
+   "n": 16,
+   "title": "Article XV · Which life is more lasting and more continuous",
+   "file": "c16.json",
+   "words": 360
+  },
+  {
+   "n": 17,
+   "title": "Article XVI · On the weakness of the human mind for stable contemplation",
+   "file": "c17.json",
+   "words": 219
+  },
+  {
+   "n": 18,
+   "title": "Article XVII · On the causes of weakness and instability of the human mind for contemplation",
+   "file": "c18.json",
+   "words": 314
+  },
+  {
+   "n": 19,
+   "title": "Article XVIII · Whether the active life continues in the homeland, and whether it befits God and the angels",
+   "file": "c19.json",
+   "words": 339
+  },
+  {
+   "n": 20,
+   "title": "Article XIX · How we are led to contemplation by the threefold way",
+   "file": "c20.json",
+   "words": 785
+  },
+  {
+   "n": 21,
+   "title": "Article XX · That the active or ethical must precede the theoretical; and how the moral virtues pertain to the contemplative life",
+   "file": "c21.json",
+   "words": 699
+  },
+  {
+   "n": 22,
+   "title": "Article XXI · On the exercise of the soul in the purgative way",
+   "file": "c22.json",
+   "words": 784
+  },
+  {
+   "n": 23,
+   "title": "Article XXII · How those who aspire to the summit of contemplation ought to exercise themselves daily; and on what is especially necessary for them",
+   "file": "c23.json",
+   "words": 849
+  },
+  {
+   "n": 24,
+   "title": "Article XXIII · Confirmation of what has been said from the words of St Gregory; where it is shown that not all are fit for contemplation, and that a salutary fear sometimes arises from contemplation",
+   "file": "c24.json",
+   "words": 773
+  },
+  {
+   "n": 25,
+   "title": "Article XXIV · On the praiseworthy industries by which the soul is disposed toward the theoretical summit of contemplation",
+   "file": "c25.json",
+   "words": 1547
+  },
+  {
+   "n": 26,
+   "title": "Article XXV · That prayer, memory of the Lord's Passion, and psalmody or divine praise are the best paths to attaining the summit of contemplation",
+   "file": "c26.json",
+   "words": 897
+  },
+  {
+   "n": 27,
+   "title": "Article XXVI · On the species of contemplation",
+   "file": "c27.json",
+   "words": 525
+  },
+  {
+   "n": 28,
+   "title": "Article XXVII · On the first species of contemplation — namely the supernatural contemplation of the most blessed Trinity",
+   "file": "c28.json",
+   "words": 646
+  },
+  {
+   "n": 29,
+   "title": "Article XXVIII · Fuller treatment of this first and most worthy species of contemplation",
+   "file": "c29.json",
+   "words": 474
+  },
+  {
+   "n": 30,
+   "title": "Article XXIX · That in the contemplation of the most holy Trinity wise and humble moderation is to be observed on account of the sublimity of the object",
+   "file": "c30.json",
+   "words": 327
+  },
+  {
+   "n": 31,
+   "title": "Article XXX · On the incomprehensible things in the contemplation of the most adorable Trinity",
+   "file": "c31.json",
+   "words": 319
+  },
+  {
+   "n": 32,
+   "title": "Article XXXI · That notwithstanding the incomprehensibility of what pertains to the first species of contemplation, we must always strive for fuller knowledge of them",
+   "file": "c32.json",
+   "words": 253
+  },
+  {
+   "n": 33,
+   "title": "Articles XXXII–XXXVII · On further aspects of the first species: the Trinity's perfections, the processions, and practice of this contemplation",
+   "file": "c33.json",
+   "words": 129
+  },
+  {
+   "n": 34,
+   "title": "Articles XXXVIII–XLIV · On the second species of contemplation — natural contemplation of the superessential and simple Deity",
+   "file": "c34.json",
+   "words": 411
+  },
+  {
+   "n": 35,
+   "title": "Article XLV · On the third species of contemplation",
+   "file": "c35.json",
+   "words": 735
+  },
+  {
+   "n": 36,
+   "title": "Article XLVI · Speculation on the beauty, excellence and loveableness of the human nature assumed by the Word",
+   "file": "c36.json",
+   "words": 483
+  },
+  {
+   "n": 37,
+   "title": "Article XLVII · That in Christ's Incarnation and Passion, God's goodness, mercy, wisdom, justice, love and power can be evidently and eminently considered and contemplated",
+   "file": "c37.json",
+   "words": 634
+  },
+  {
+   "n": 38,
+   "title": "Article XLVIII · On the marvels around Christ's Incarnation; and why the Incarnation was most fitting for the Son",
+   "file": "c38.json",
+   "words": 438
+  },
+  {
+   "n": 39,
+   "title": "Article XLIX · On the life, virtues and examples of Christ, as a most fruitful subject of contemplation",
+   "file": "c39.json",
+   "words": 284
+  },
+  {
+   "n": 40,
+   "title": "Articles L–LV · On remaining aspects of the third species — Christ as teacher, intercessor and head of the Church; and on the contemplation of Mary and the saints",
+   "file": "c40.json",
+   "words": 91
+  },
+  {
+   "n": 41,
+   "title": "Articles LVI–LIX · On the fourth species of contemplation — the goods of glory and of the heavenly homeland",
+   "file": "c41.json",
+   "words": 311
+  },
+  {
+   "n": 42,
+   "title": "Article LX · Contemplation of the goods of sanctifying grace · The munificent goodwill and most kindly love of our God, who as he created man for supernatural beatitude, so gave him supernatural means for attaining this happiness — namely the most loving and most powerful helps of divine power: supernatural created habits, immediately infused by the Holy Spirit.",
+   "file": "c42.json",
+   "words": 528
+  },
+  {
+   "n": 43,
+   "title": "Article LXI · How through sanctifying grace, the theological and infused virtues and gifts, the mind is supernaturally assimilated to God",
+   "file": "c43.json",
+   "words": 380
+  },
+  {
+   "n": 44,
+   "title": "Article LXII · Contemplation of the foundations of the Catholic faith",
+   "file": "c44.json",
+   "words": 380
+  },
+  {
+   "n": 45,
+   "title": "Articles LXIII–LXVIII · On the fifth species of contemplation — the goods of nature and the consideration of the created universe",
+   "file": "c45.json",
+   "words": 129
+  },
+  {
+   "n": 46,
+   "title": "Article LXIX · Contemplation of the most high God from the disposition of the world, according to the Scriptures",
+   "file": "c46.json",
+   "words": 894
+  },
+  {
+   "n": 47,
+   "title": "Article LXX · Contemplation of the most high God from his natural image in man",
+   "file": "c47.json",
+   "words": 799
+  },
+  {
+   "n": 48,
+   "title": "Article LXXI · Contemplation of God from the natural consideration of the angelic spirits",
+   "file": "c48.json",
+   "words": 767
+  }
+ ]
+}
