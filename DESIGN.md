@@ -833,7 +833,12 @@ button stops breathing.
   `clamp(24px, 5vw, 36px)`, the rest at `clamp(16px, 3.5vw, 24px)`,
   interpolated between those marks and eased over `--d-base`, so on a phone
   a scroll slides a name through the scale instead of stepping it.
-  `breatheList()` writes `--k`: on a phone from the scroll position, which
+  `breatheList()` writes `--k`, and writes the same scale inline as well
+  (`font-size` on `.fn`; `opacity`, `max-height` and `margin-top` on `.fh`),
+  because a phone's Safari did not resolve the stylesheet's `min()`/`max()`
+  calc over `--k` and left every name at the far size; the stylesheet's calc
+  is the fallback until the script runs. Home is not a token screen, so
+  this is the one place an inline font-size is written. `--k` comes on a phone from the scroll position, which
   maps onto the list, the first row at the top of the travel and the last at
   the bottom, the travel measured with every row at rest so a row's own
   growth does not move the map; the highlighted row (the scroll watcher, and

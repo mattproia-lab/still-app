@@ -17091,11 +17091,31 @@ function listFocus() {
   const t = max > 0 ? Math.min(1, Math.max(0, wrap.scrollTop / max)) : 0;
   return { pos: t * (n - 1), wrap, max, n };
 }
+/* The sizes are computed here and written inline as well as carried by --k.
+   On a phone's Safari the stylesheet's font-size calc (min()/max() over --k)
+   did not resolve and every name sat at the far size; Playwright's WebKit
+   resolves it, so it is a version of Safari, not WebKit as such. The inline
+   values are the same three-segment scale from the same marks (the clamps in
+   the stylesheet, vw read from innerWidth); the stylesheet's calc is the
+   fallback until the script has run. */
+const clampPx = (lo, v, hi) => Math.min(hi, Math.max(lo, v));
 function breatheList() {
   const f = listFocus(), items = document.querySelectorAll('.feat-item');
-  items.forEach((it, j) => { const k = f.pos < 0 ? 0 : Math.max(0, 2 - Math.abs(j - f.pos)); it.style.setProperty('--k', k.toFixed(3)); });
+  const w = window.innerWidth || 390;
+  const far = clampPx(16, .035 * w, 24), near = clampPx(24, .05 * w, 36), focus = clampPx(40, .08 * w, 56);
+  const fh0 = items[0] && items[0].querySelector('.fh');
+  const em = fh0 ? (parseFloat(getComputedStyle(fh0).fontSize) || 14) : 14;   // the preview's own size, for its room
+  items.forEach((it, j) => {
+    const k = f.pos < 0 ? 0 : Math.max(0, 2 - Math.abs(j - f.pos));
+    it.style.setProperty('--k', k.toFixed(3));
+    const a = Math.min(k, 1), b = Math.max(k - 1, 0);
+    const fn = it.querySelector('.fn'), fh = it.querySelector('.fh');
+    if (fn) fn.style.fontSize = (far + (near - far) * a + (focus - near) * b).toFixed(2) + 'px';
+    if (fh) { fh.style.opacity = b.toFixed(3); fh.style.maxHeight = (b * 3.2 * em).toFixed(1) + 'px'; fh.style.marginTop = (b * 6).toFixed(1) + 'px'; }
+  });
   return f.pos;
 }
+window.addEventListener('resize', () => { breatheList(); });   // the marks are in vw
 // scroll the list so the map rests on row i (a tap on a phone)
 function scrollListTo(i) {
   const f = listFocus(); if (!f.wrap) return;
