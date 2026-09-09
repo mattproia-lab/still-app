@@ -6927,9 +6927,25 @@ function loadBellFile(input){
   // Can't sync file inputs, that's fine
 }
 
+/* iOS suspends the AudioContext on screen lock, backgrounding or an interruption
+   (a call, Siri) and never brings it back on its own; a BufferSource started on a
+   suspended context is silent and its onended never fires, which at the start of
+   a Sitting leaves the session stalled at idle. resume() is a no-op on a running
+   context, so this costs nothing on the web. Raced against a short timeout
+   because a resume() made while the app is still interrupted can stay pending. */
+function resumeAudioCtx(){
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='running')return Promise.resolve();
+  let p; try{ p=audioCtx.resume(); }catch(e){ return Promise.resolve(); }
+  return Promise.race([Promise.resolve(p).catch(()=>{}), new Promise(r=>setTimeout(r,1500))]);
+}
+
 function playBell(cb){
   if(!bellEnabled){ if(cb) setTimeout(cb,300); return; }
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  resumeAudioCtx().then(()=>ringBell(cb));
+}
+
+function ringBell(cb){
   if(bellBuffer){
     const src=audioCtx.createBufferSource();
     src.buffer=bellBuffer;src.connect(audioCtx.destination);src.start();
@@ -7210,6 +7226,8 @@ async function requestWakeLock() {
 }
 
 async function reacquireWakeLock() {
+  // Wake the audio context first, so a timer callback that rings finds it live
+  if (document.visibilityState === 'visible') resumeAudioCtx();
   if (wakeLock !== null && document.visibilityState === 'visible' && sPhase !== 'idle' && sPhase !== 'complete') {
     try { wakeLock = await navigator.wakeLock.request('screen'); } catch(e) {}
   }
