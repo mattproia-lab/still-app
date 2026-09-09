@@ -7548,16 +7548,34 @@ function beginSettle() {
   startTimer('settle', 15, () => advanceSitting());
 }
 
+/* The tick is a one-second setInterval, which iOS freezes while the app is
+   backgrounded or the screen is locked; the countdown would resume where it
+   stopped and end late by the whole absence. So the phase also keeps its
+   wall-clock deadline: every tick, and the return to the foreground, compare
+   real time against it and end the phase at once if it has passed. The tick
+   and the display are unchanged. */
+let sTimerDeadline = 0, sTimerDone = null;
 function startTimer(phase, seconds, onDone) {
   if (sTimer) clearInterval(sTimer);
   sTimeLeft = seconds;
+  sTimerDeadline = Date.now() + seconds * 1000;
+  sTimerDone = onDone;
   updateTimerDisplay(phase, seconds);
   sTimer = setInterval(() => {
     sTimeLeft--;
     updateTimerDisplay(phase, sTimeLeft);
-    if (sTimeLeft <= 0) { clearInterval(sTimer); sTimer = null; onDone(); }
+    if (sTimeLeft <= 0 || Date.now() >= sTimerDeadline) finishTimer();
   }, 1000);
 }
+function finishTimer() {
+  if (!sTimer) return;
+  clearInterval(sTimer); sTimer = null;
+  const done = sTimerDone; sTimerDone = null;
+  if (done) done();
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && sTimer && Date.now() >= sTimerDeadline) finishTimer();
+});
 
 function updateTimerDisplay(phase, secs) {
   const m = Math.floor(secs/60), s = secs % 60;
