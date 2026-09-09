@@ -326,7 +326,7 @@ html,body{width:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behav
    slide. The three sizes are the scale's marks: focused, neighbour, the rest. */
 .feat-item{
   --k:0;
-  --fs-focus:clamp(40px,8vw,56px);--fs-near:clamp(24px,5vw,36px);--fs-far:clamp(16px,3.5vw,24px);
+  --fs-focus:clamp(48px,10vw,64px);--fs-near:clamp(28px,6vw,40px);--fs-far:clamp(18px,4vw,26px);
   cursor:pointer;padding:clamp(1px,.3vh,4px) 0;
   display:flex;flex-wrap:wrap;align-items:baseline;gap:0 11px;
   transition:all .38s cubic-bezier(.4,0,.2,1);
@@ -1328,76 +1328,6 @@ function pinDocument() {
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', armHome); else armHome();
 })();
-</script>
-<script>
-  /* TEMPORARY -- viewport readout behind ?vv=1, for the cold-open offset that
-     only a real phone reproduces. With ?vv=1 in the URL a small fixed overlay in
-     the top-right corner shows the viewport numbers and updates on every
-     scroll, resize and visualViewport event; the same values are logged to the
-     console at DOMContentLoaded, load and pageshow, and 1s and 3s after each.
-     Without ?vv=1 nothing here runs. Remove once the offset is understood. */
-  (function () {
-    if (!/[?&]vv=1(&|$)/.test(location.search)) return;
-    var box = null, probe = null;
-    function num(v) { return (typeof v === 'number' && isFinite(v)) ? Math.round(v * 100) / 100 : String(v); }
-    function read() {
-      var vv = window.visualViewport, home = document.getElementById('home');
-      var hr = home ? home.getBoundingClientRect() : null;
-      if (!probe && document.body) {
-        probe = document.createElement('div');
-        probe.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:env(safe-area-inset-top,0px);pointer-events:none;visibility:hidden;';
-        document.body.appendChild(probe);
-      }
-      return {
-        innerHeight: num(window.innerHeight),
-        vvHeight: vv ? num(vv.height) : 'n/a',
-        vvOffsetTop: vv ? num(vv.offsetTop) : 'n/a',
-        vvScale: vv ? num(vv.scale) : 'n/a',
-        scrollY: num(window.scrollY),
-        scrollingElTop: document.scrollingElement ? num(document.scrollingElement.scrollTop) : 'n/a',
-        docClientHeight: num(document.documentElement.clientHeight),
-        bodyTop: document.body ? num(document.body.getBoundingClientRect().top) : 'n/a',
-        homeTop: hr ? num(hr.top) : 'n/a',
-        homeHeight: hr ? num(hr.height) : 'n/a',
-        safeTop: probe ? getComputedStyle(probe).height : 'n/a',
-        homeActive: home ? home.classList.contains('active') : 'n/a'
-      };
-    }
-    function paint() {
-      var r = read();
-      if (!box && document.body) {
-        box = document.createElement('pre');
-        box.id = 'vvReadout';
-        box.style.cssText = 'position:fixed;top:0;right:0;z-index:2147483647;margin:0;padding:6px 8px;max-width:60vw;' +
-          'font:11px/1.35 ui-monospace,Menlo,monospace;color:#fff;background:rgba(0,0,0,.72);' +
-          'pointer-events:none;white-space:pre;text-align:left;border-bottom-left-radius:6px;';
-        document.body.appendChild(box);
-      }
-      if (box) box.textContent = Object.keys(r).map(function (k) { return k + ' ' + r[k]; }).join('\n');
-      return r;
-    }
-    function log(label) {
-      var r = paint();
-      try { console.log('[vv] ' + label + ' ' + JSON.stringify(r)); } catch (e) {}
-    }
-    function logSeries(label) {
-      log(label);
-      setTimeout(function () { log(label + ' +1s'); }, 1000);
-      setTimeout(function () { log(label + ' +3s'); }, 3000);
-    }
-    window.addEventListener('scroll', function () { paint(); }, true);
-    window.addEventListener('resize', function () { paint(); });
-    window.addEventListener('orientationchange', function () { paint(); });
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', function () { paint(); });
-      window.visualViewport.addEventListener('scroll', function () { paint(); });
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { logSeries('DOMContentLoaded'); });
-    else logSeries('DOMContentLoaded(late)');
-    window.addEventListener('load', function () { logSeries('load'); });
-    window.addEventListener('pageshow', function (e) { logSeries('pageshow' + (e.persisted ? ' (bfcache)' : '')); });
-    paint();
-  })();
 </script>
 <script>
   /* The letter's two doors (display only). On the first reading Begin is
@@ -17102,7 +17032,7 @@ const clampPx = (lo, v, hi) => Math.min(hi, Math.max(lo, v));
 function breatheList() {
   const f = listFocus(), items = document.querySelectorAll('.feat-item');
   const w = window.innerWidth || 390;
-  const far = clampPx(16, .035 * w, 24), near = clampPx(24, .05 * w, 36), focus = clampPx(40, .08 * w, 56);
+  const far = clampPx(18, .04 * w, 26), near = clampPx(28, .06 * w, 40), focus = clampPx(48, .10 * w, 64);
   const fh0 = items[0] && items[0].querySelector('.fh');
   const em = fh0 ? (parseFloat(getComputedStyle(fh0).fontSize) || 14) : 14;   // the preview's own size, for its room
   items.forEach((it, j) => {

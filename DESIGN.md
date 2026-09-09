@@ -829,8 +829,8 @@ button stops breathing.
   Enter tab (serif) and the counter (sans) as they were; the dots are drawn,
   with no type. The names' sizes are one scale read off each row's closeness
   to the focus (`--k` on `.feat-item`: 2 at the focus, 1 one row away, 0
-  beyond): the focused name at `clamp(40px, 8vw, 56px)`, its neighbours at
-  `clamp(24px, 5vw, 36px)`, the rest at `clamp(16px, 3.5vw, 24px)`,
+  beyond): the focused name at `clamp(48px, 10vw, 64px)`, its neighbours at
+  `clamp(28px, 6vw, 40px)`, the rest at `clamp(18px, 4vw, 26px)`,
   interpolated between those marks and eased over `--d-base`, so on a phone
   a scroll slides a name through the scale instead of stepping it.
   `breatheList()` writes `--k`, and writes the same scale inline as well
