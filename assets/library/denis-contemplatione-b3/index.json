@@ -1,0 +1,170 @@
+{
+ "title": "On Contemplation (Book III)",
+ "author": "Denis the Carthusian",
+ "source": "vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-tertius-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)",
+ "slug": "denis-contemplatione-b3",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Proemium",
+   "file": "c1.json",
+   "words": 35
+  },
+  {
+   "n": 2,
+   "title": "Article I. That in this Third Book we are to treat of the Contemplation of God through Negation, as pertaining to Unitive Wisdom and Mystical Theology",
+   "file": "c2.json",
+   "words": 464
+  },
+  {
+   "n": 3,
+   "title": "Article II. What Unitive Wisdom and Mystical Theology Are",
+   "file": "c3.json",
+   "words": 601
+  },
+  {
+   "n": 4,
+   "title": "Article III. On the Differences between Speculative and Mystical Theology",
+   "file": "c4.json",
+   "words": 527
+  },
+  {
+   "n": 5,
+   "title": "Article IV. On the Fourfold Way of Ascending to the Contemplation of God from Creatures, and the Double Contemplation",
+   "file": "c5.json",
+   "words": 390
+  },
+  {
+   "n": 6,
+   "title": "Article V. That Contemplation of God through Negation is more Perfect, and stands midway between the Beatific Vision and Affirmative Contemplation",
+   "file": "c6.json",
+   "words": 515
+  },
+  {
+   "n": 7,
+   "title": "Article VI. Whether the Contemplation of Unitive Mystic Wisdom is Lasting or Momentary",
+   "file": "c7.json",
+   "words": 621
+  },
+  {
+   "n": 8,
+   "title": "Article VII. How Certain Eminent Philosophers Approached Mystical Theology",
+   "file": "c8.json",
+   "words": 616
+  },
+  {
+   "n": 9,
+   "title": "Article VIII. On the Abstraction and Simplification of Mind Necessary for this Contemplation; and What the Divine Darkness Is",
+   "file": "c9.json",
+   "words": 548
+  },
+  {
+   "n": 10,
+   "title": "Article IX. How the Interior Word is Progressively Abbreviated as the Soul Ascends, until it Reaches Total Deprivation of Speech",
+   "file": "c10.json",
+   "words": 394
+  },
+  {
+   "n": 11,
+   "title": "Article X. Whether Mystical Theology is Really the Same as the Gift of Wisdom; and How this Mystic Contemplation is given more to the Simple than to the Learned",
+   "file": "c11.json",
+   "words": 583
+  },
+  {
+   "n": 12,
+   "title": "Article XI. Whether the Contemplative Anagogic Ascent toward God is More Laborious or Sweet",
+   "file": "c12.json",
+   "words": 665
+  },
+  {
+   "n": 13,
+   "title": "Article XII. The Seven Steps by which One Arrives at the Tranquil Entry into the Divine Darkness",
+   "file": "c13.json",
+   "words": 772
+  },
+  {
+   "n": 14,
+   "title": "Article XIII. Why Unitive Wisdom is called Irrational, Senseless, and Foolish",
+   "file": "c14.json",
+   "words": 324
+  },
+  {
+   "n": 15,
+   "title": "Article XIV. Whether Mystical Theology is Essentially Love or Knowledge; and on its Subject and Object",
+   "file": "c15.json",
+   "words": 535
+  },
+  {
+   "n": 16,
+   "title": "Article XV. Whether the Affective Apex can tend toward God without any Prior or Concomitant Knowledge of the Intellect",
+   "file": "c16.json",
+   "words": 341
+  },
+  {
+   "n": 17,
+   "title": "Article XVI. On the Divine Deifying Love and its Fiery Fervor; and the Signs of Ecstatic Love",
+   "file": "c17.json",
+   "words": 642
+  },
+  {
+   "n": 18,
+   "title": "Signs of Ecstatic Love",
+   "file": "c18.json",
+   "words": 434
+  },
+  {
+   "n": 19,
+   "title": "Article XVII. On Rapture and Ecstasy, what they are and how they differ",
+   "file": "c19.json",
+   "words": 494
+  },
+  {
+   "n": 20,
+   "title": "Article XVIII. In which Powers of the Soul Rapture and Ecstasy are found; and the Three Modes of Ecstatic Alienation",
+   "file": "c20.json",
+   "words": 557
+  },
+  {
+   "n": 21,
+   "title": "Article XIX. On the Contemplation, Rapture, and Ecstasy of Certain Saints",
+   "file": "c21.json",
+   "words": 841
+  },
+  {
+   "n": 22,
+   "title": "Article XX. A Disputation for the Catholic Faith, from the Experience of Mystical Theology, against Porphyry, Averroes, and the Other Scorners of Christian Wisdom",
+   "file": "c22.json",
+   "words": 314
+  },
+  {
+   "n": 23,
+   "title": "Article XXI. On Prayer as it Pertains to the Theoretic Illuminations of Mystical Wisdom",
+   "file": "c23.json",
+   "words": 568
+  },
+  {
+   "n": 24,
+   "title": "Article XXII. On Devotion and its Grades, especially on the Devotion pertaining to Unitive Wisdom",
+   "file": "c24.json",
+   "words": 447
+  },
+  {
+   "n": 25,
+   "title": "Article XXIII. That Mystical Theology belongs to the Hidden Sons of God; and the Distinction between Hirelings, Faithful Servants, Secret Friends, and Hidden Sons of God",
+   "file": "c25.json",
+   "words": 500
+  },
+  {
+   "n": 26,
+   "title": "Article XXIV. Whether the Contemplation of the Present Life can ascend to the Vision of God in his Essence",
+   "file": "c26.json",
+   "words": 556
+  },
+  {
+   "n": 27,
+   "title": "Article XXV. On the Divine, Deiform, Deifying, Deificatory, and Deified Life",
+   "file": "c27.json",
+   "words": 1091
+  }
+ ]
+}

@@ -1,0 +1,254 @@
+{
+ "title": "On Contemplation (Book II)",
+ "author": "Denis the Carthusian",
+ "source": "vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-secundus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)",
+ "slug": "denis-contemplatione-b2",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Proemium",
+   "file": "c1.json",
+   "words": 363
+  },
+  {
+   "n": 2,
+   "title": "Article I. On the Species of Contemplation according to the Divine Dionysius",
+   "file": "c2.json",
+   "words": 70
+  },
+  {
+   "n": 3,
+   "title": "The Circular Motion",
+   "file": "c3.json",
+   "words": 293
+  },
+  {
+   "n": 4,
+   "title": "The Straight Motion",
+   "file": "c4.json",
+   "words": 169
+  },
+  {
+   "n": 5,
+   "title": "The Oblique Motion",
+   "file": "c5.json",
+   "words": 140
+  },
+  {
+   "n": 6,
+   "title": "The Three Motions in the Rational Soul",
+   "file": "c6.json",
+   "words": 234
+  },
+  {
+   "n": 7,
+   "title": "Article II. On Contemplation according to Origen",
+   "file": "c7.json",
+   "words": 285
+  },
+  {
+   "n": 8,
+   "title": "Article III. On Contemplation according to Augustine",
+   "file": "c8.json",
+   "words": 38
+  },
+  {
+   "n": 9,
+   "title": "The Triple Knowledge",
+   "file": "c9.json",
+   "words": 133
+  },
+  {
+   "n": 10,
+   "title": "Superior and Inferior Reason",
+   "file": "c10.json",
+   "words": 56
+  },
+  {
+   "n": 11,
+   "title": "The Triple Vision",
+   "file": "c11.json",
+   "words": 102
+  },
+  {
+   "n": 12,
+   "title": "Article IV. On Contemplation according to Bernard",
+   "file": "c12.json",
+   "words": 31
+  },
+  {
+   "n": 13,
+   "title": "The Four Species of Contemplation",
+   "file": "c13.json",
+   "words": 100
+  },
+  {
+   "n": 14,
+   "title": "The Ladder of the Cloister",
+   "file": "c14.json",
+   "words": 112
+  },
+  {
+   "n": 15,
+   "title": "Seven Requirements",
+   "file": "c15.json",
+   "words": 64
+  },
+  {
+   "n": 16,
+   "title": "The Garden of Contemplation",
+   "file": "c16.json",
+   "words": 59
+  },
+  {
+   "n": 17,
+   "title": "The Epistle to the Brothers of Mont-Dieu",
+   "file": "c17.json",
+   "words": 261
+  },
+  {
+   "n": 18,
+   "title": "The Withdrawal and Return of the Spouse",
+   "file": "c18.json",
+   "words": 250
+  },
+  {
+   "n": 19,
+   "title": "On the Inscrutable Judgments of God",
+   "file": "c19.json",
+   "words": 236
+  },
+  {
+   "n": 20,
+   "title": "Article V. On Contemplation according to Hugo of Saint Victor",
+   "file": "c20.json",
+   "words": 259
+  },
+  {
+   "n": 21,
+   "title": "The Five Digressions of Thought",
+   "file": "c21.json",
+   "words": 597
+  },
+  {
+   "n": 22,
+   "title": "Article VI. On Contemplation and the Ascent of the Soul through the Degrees of Intelligence",
+   "file": "c22.json",
+   "words": 280
+  },
+  {
+   "n": 23,
+   "title": "Article VII. On Contemplation according to the Holy Doctor [Thomas Aquinas]",
+   "file": "c23.json",
+   "words": 373
+  },
+  {
+   "n": 24,
+   "title": "Article VIII. On Contemplation and its Species according to the Devout Doctor [Bonaventure]",
+   "file": "c24.json",
+   "words": 68
+  },
+  {
+   "n": 25,
+   "title": "The Seven Grades from the Itinerarium",
+   "file": "c25.json",
+   "words": 244
+  },
+  {
+   "n": 26,
+   "title": "The Seven Grades from the Contemplativorum Aquilinos Obtutus",
+   "file": "c26.json",
+   "words": 464
+  },
+  {
+   "n": 27,
+   "title": "Denis's Explanation of the Distinction of Grades",
+   "file": "c27.json",
+   "words": 281
+  },
+  {
+   "n": 28,
+   "title": "Article IX. On Contemplation according to the Mystical John Ruysbroeck",
+   "file": "c28.json",
+   "words": 23
+  },
+  {
+   "n": 29,
+   "title": "Three Requirements for Each State",
+   "file": "c29.json",
+   "words": 234
+  },
+  {
+   "n": 30,
+   "title": "The Foundation of Being",
+   "file": "c30.json",
+   "words": 235
+  },
+  {
+   "n": 31,
+   "title": "The Vision of God's Immensity",
+   "file": "c31.json",
+   "words": 68
+  },
+  {
+   "n": 32,
+   "title": "Exercise Without Mode",
+   "file": "c32.json",
+   "words": 217
+  },
+  {
+   "n": 33,
+   "title": "The Divine Unity",
+   "file": "c33.json",
+   "words": 392
+  },
+  {
+   "n": 34,
+   "title": "The Eternal Embrace of the Trinity",
+   "file": "c34.json",
+   "words": 206
+  },
+  {
+   "n": 35,
+   "title": "Article X. On Contemplation according to the Abbot of Vercelli",
+   "file": "c35.json",
+   "words": 22
+  },
+  {
+   "n": 36,
+   "title": "The Kiss of the Mouth",
+   "file": "c36.json",
+   "words": 701
+  },
+  {
+   "n": 37,
+   "title": "Four Things Required",
+   "file": "c37.json",
+   "words": 59
+  },
+  {
+   "n": 38,
+   "title": "Article XI. On Contemplation according to a Devout Man, namely Brother Guigo de Ponte, Monk of the Charterhouse",
+   "file": "c38.json",
+   "words": 30
+  },
+  {
+   "n": 39,
+   "title": "The Twelve Grades",
+   "file": "c39.json",
+   "words": 311
+  },
+  {
+   "n": 40,
+   "title": "The Five Dispositive and the Rest",
+   "file": "c40.json",
+   "words": 74
+  },
+  {
+   "n": 41,
+   "title": "Three Species of Speculative Contemplation",
+   "file": "c41.json",
+   "words": 238
+  }
+ ]
+}

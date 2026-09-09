@@ -88,6 +88,10 @@ def rendering(rel):
 
 def guigo(): return rendering('saints/2026-09-08-guigo-scala-claustralium-english-rendering.md')
 def denis_meditatione(): return rendering('saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md')
+def denis_fonte_lucis(): return rendering('saints/2026-09-09-denis-the-carthusian-de-fonte-lucis-ac-semitis-vitae-english-rendering.md')
+def denis_contemplatione(): return rendering('saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-primus-english-rendering.md')
+def denis_contemplatione_b2(): return rendering('saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-secundus-english-rendering.md')
+def denis_contemplatione_b3(): return rendering('saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-tertius-english-rendering.md')
 
 # ── The Cloud of Unknowing ───────────────────────────────────────────────
 def cloud():
@@ -319,3 +323,7 @@ if __name__ == '__main__':
     write_text('expositions', {'title': 'Expositions on the Psalms', 'author': 'Augustine of Hippo', 'source': 'vault/raw/theology/doctors/2026-09-08-augustine-expositions-on-the-psalms-npnf1-08.md (Coxe, 1888)'}, expositions())
     write_text('ladder', {'title': 'The Ladder of Monks', 'author': 'Guigo II', 'source': 'vault/raw/theology/saints/2026-09-08-guigo-scala-claustralium-english-rendering.md (rendering for Still, 2026)'}, guigo())
     write_text('denis-meditatione', {'title': 'On Meditation', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_meditatione())
+    write_text('denis-fonte-lucis', {'title': 'On the Fountain of Light', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-fonte-lucis-ac-semitis-vitae-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_fonte_lucis())
+    write_text('denis-contemplatione', {'title': 'On Contemplation (Book I)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-primus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione())
+    write_text('denis-contemplatione-b2', {'title': 'On Contemplation (Book II)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-secundus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione_b2())
+    write_text('denis-contemplatione-b3', {'title': 'On Contemplation (Book III)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-tertius-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione_b3())
