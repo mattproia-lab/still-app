@@ -1,6 +1,6 @@
 # index.html — Architecture Map
 
-_Table of contents for [`index.html`](../../../index.html), not a copy of it. Refreshed 2026-09-08 by re-finding every pointer in the `redesign/practices` branch at `a520a7c` (18,090 lines; 134 commits ahead of `main`); the structural pass was 2026-09-07 at `8362db1`. Every region below is a pointer into the live file — **read the code, not this page, for what anything does.** Line numbers drift with every edit; treat them as ±50 and refresh this page when structure changes ([CLAUDE.md](../../CLAUDE.md)). The previous map (2026-08-22, 15,773 lines) predates the redesign; what it described that no longer exists is listed at the end._
+_Table of contents for [`index.html`](../../../index.html), not a copy of it. Refreshed 2026-09-08 by re-finding every pointer in the `redesign/practices` branch at `a520a7c` (18,090 lines; 134 commits ahead of `main`); the structural pass was 2026-09-07 at `8362db1`. Every region below is a pointer into the live file — **read the code, not this page, for what anything does.** Line numbers drift with every edit; treat them as ±50 (about +300 for everything after 3344 since the Library landed on 2026-09-09; the Library's own pointers are current) and refresh this page when structure changes ([CLAUDE.md](../../CLAUDE.md)). The previous map (2026-08-22, 15,773 lines) predates the redesign; what it described that no longer exists is listed at the end._
 
 Companion pages: [stack.md](stack.md) (services, platforms) · [deploy.md](deploy.md) (Netlify, `www/` sync) · [subscription-paths.md](subscription-paths.md) (how access is decided). The visual system itself is documented in [DESIGN.md](../../../DESIGN.md) at the repo root, not here.
 
@@ -54,7 +54,8 @@ Every practice is one `<div id="screen-…" class="screen">`, shown by `showScre
 | Spiritual Autobiography (Amma Sophia's tab `#autobio-mystic` 3011) | 2899 | yes | `initAutobio` 9553, `renderMysticTab` 7978 |
 | Deeper | 3230 | yes (`.voice-screen`) | `askDeeper` 8093 |
 | Night Watch | 3305 | no | `checkNightWatch` 13167 (2–4am only) |
-| Resources | 3343 | no (inline styles) | static |
+| The Library (`#screen-library`) | 3353 | yes | `initLibrary` 6599 → `Library.init`; `Library` IIFE 6466 |
+| Resources | 3393 | no (inline styles) | static |
 | The Dialogue Chamber | 4000 | yes (own `.dc-screen`, not `.screen`) | `DC.init` 17061+ |
 
 Overlays that are not screens: the Guide (built by JS, `Guide` 11990), Spiritual Paths (built by JS, `Paths` 10340), Settings 3598, Info panel 3578, the Crisis card (built by JS, `Crisis` 9365), the Sacristy 1115, the paywall 1437, sign-in 1368, onboarding 1147.
@@ -82,11 +83,12 @@ Overlays that are not screens: the Guide (built by JS, `Guide` 11990), Spiritual
 
 | Practice | Region | Notes |
 |---|---|---|
+| **The Library** | 6437–6602 | `LIBRARY_SHELF` 6437 (thirteen rows in the vault's order, the Douay-Rheims first; the three Denis the Carthusian rows are "Coming soon" until their renderings land); `Library` IIFE 6466: `shelf`, `open`, `showChapter` → `assets/library/<slug>/c<n>.json`, `showBook` → `Liturgy.loadBook`, `step`, `toggleNav`; the bookmark `still_library_<slug>` = `{chapter, scroll}` (`{book, chapter, scroll}` for the Bible) is the one save, on this device only, no `Sync`. Spec: DESIGN.md, The Library |
 | Contemplative Sitting | 7099–7445 | machine 7099, wake lock 7197, `tapThought` 7283, `drawThoughtGraph` 7328; Over time and the review request read its save from the body script at 1586 |
 | The Guestmaster's letter | 7431 | `playGuestmasterAudio`; the source is detached whenever the letter is off screen (`data-src` at 1262) |
 | Rosary Meditations | 7446–7776 | `CoW` IIFE: `DAY_SET`, `PRAYERS`, `loadSet` → `assets/rosary/<set>.json` 7470, `drawPool`, rosary TTS 7671, the Madonna close 7722 |
 | **The voices** | 7777–8166 | one pattern: `COMPANION_SYSTEM` 7779, `DEEPER_SYSTEM` 7799, `askCompanion` 7890, `askMystic` 8017 (Amma Sophia, `MYSTIC_SYSTEM` 7998), `askDeeper` 8093. Each writes to its `.companion-state` panels; the photograph is a threshold shown only while the opening is on screen (stylesheet 5188). Rate limit for the Companion 14781–14807 |
-| **The liturgical day** | 8191–8275 | `Liturgy` IIFE 8208: `assets/calendar/general/<year>.json` 8218, `assets/calendar/traditional/<year>.json` 8223, `assets/saints/lives.json` 8228; `getTodaysSaint` 8263 answers synchronously once the year and the lives have loaded |
+| **The liturgical day** | 8191–8275 | `Liturgy` IIFE 8208: `assets/calendar/general/<year>.json` 8218, `assets/calendar/traditional/<year>.json` 8223, `assets/saints/lives.json` 8228; `getTodaysSaint` 8263 answers synchronously once the year and the lives have loaded; since 632d591 also `loadReadings` → `assets/readings/<year>.json` (Lectio's Gospel seed), `loadBooks` → `assets/scripture/dr/books.json`, `loadBook` → `assets/scripture/dr/<book>.json` (Lectio and the Library), live at 8543–8558 |
 | **Saint of the Day** | 8276–8375 | `initSaintScreen` 8291 sets `data-color` from the day's liturgical colour; the 183 lives are data, not code |
 | Lectio Divina | 8376–9136 | `LP1`–`LP8` 8376+ → `PASSAGES` 8768; fast-day passages 8781; `lectioGoTo` 8836; `generateLectioQ` 8987, `generateClosingPrayer` 9061 (both through `claude.js`) |
 | Spiritual Autobiography | 9533–10010 | `saveJournalEntry` 9638, `buildMonthNarrative` 9702 (`claude.js`), `buildLocalNarrative` 9785 (works with no AI) |
@@ -165,6 +167,7 @@ TTS is not a Netlify function: `still-tts.onrender.com` (`/tts` 6005, `/office-t
 [`tools/`](../../../tools):
 
 - `lectionary/` — Python, standard library; `build.py` writes `corpus/readings/2026…2030.json` (the Mass readings as citations, Sunday A/B/C and weekday I/II cycles, the proper of saints, a Douay-Rheims block) from the calendar, Felix Just's index tables and the cpbjr observations kept under `inputs/`; `verify.py` cross-checks. README in the folder; vault page [`lectionary.md`](../content/lectionary.md).
+- `library/` — Python, standard library; `build.py` reads the vault's raw theology texts (`vault/raw/theology/`, never edited) and writes `assets/library/<slug>/index.json` plus one `c<n>.json` per chapter, with page markers, running heads and transcriber notes dropped; the Paradise is cut into numbered parts of about 2,400 words where the OCR has no headings. Vault pages under [`content/`](../content/).
 - `liturgical-calendar/` — romcal 1.3.0 devDependency; `npm run build` writes `assets/calendar/general/2026…2030.json`; `extract-lives.js` writes `assets/saints/lives.json`. README in the folder.
 - `office-corpus/` — Python; drives Divinum Officium's own renderer per date and hour and parses its HTML into `corpus/traditional/` (calendar index, propers, psalms, hymn and canticle maps; `assert_*.py` tests). Decision record: [`2026-08-24-office-corpus-json-shape.md`](../../raw/decisions/2026-08-24-office-corpus-json-shape.md).
 - `validate-dr.py` and `dr-bible.json` — Douay-Rheims validation of quoted Scripture.
@@ -187,6 +190,9 @@ Paths are relative to the repo root and to `www/` after a sync. Anything not lis
 | `assets/badge-googleplay.png` | store badges 1193 |
 | `assets/calendar/general/<year>.json` (2026–2030), `assets/calendar/traditional/<year>.json` (2026–2028) | `Liturgy` 8218–8223 |
 | `assets/saints/lives.json` | `Liturgy` 8228 |
+| `assets/readings/<year>.json` (2026–2030) | `Liturgy.loadReadings` 8543, Lectio's Gospel of the day |
+| `assets/scripture/dr/books.json`, `assets/scripture/dr/<book>.json` (73 books, 5 MB) | `Liturgy.loadBooks` / `loadBook` 8549–8558; Lectio and the Library |
+| `assets/library/<slug>/index.json`, `assets/library/<slug>/c<n>.json` (nine texts, 11 MB) | `Library` 6466, a chapter at a time |
 | `assets/rosary/{joyful,sorrowful,glorious,luminous}.json` | `CoW.loadSet` 7470 (307 meditations) |
 | `assets/rosary/cloud-of-witnesses.jpg`, `assets/rosary/madonna.jpg` | the Rosary screen 2183 and its close 7722; the Sacristy 14015 |
 | `assets/rosary/*.jpg` (103) | the Sacristy gallery |
@@ -199,7 +205,7 @@ Paths are relative to the repo root and to `www/` after a sync. Anything not lis
 | `still-mobile/src/image/churchposter.png` | Resources 3357 |
 | `still-mobile/src/image/{splash_bg,still_bg,guestmaster_letter,amma-sophia}.jpg` | the Sacristy 13985–13995 |
 
-On disk but not read by `index.html` on this branch: `still-mobile/src/image/hero.mp4` (the door's former video), `assets/readings/<year>.json` (the Lectionary table, 2026–2030, generated by `tools/lectionary/`; no reader yet), `assets/incense.mp4`, `assets/candlelauds.jpg`, `assets/guide-bg.webp`, `assets/icon.png`, and the retired backgrounds `still-mobile/src/image/{lectio,examen,breath,rule,bedtime,community,night}_bg.jpg` and the `*_question.jpg` set. `corpus/` (26 MB) is read only by the `office-corpus` function; `/corpus/*` is a forced 404 on the site. `practices/` is the web-only SEO folder, never synced to `www/`.
+On disk but not read by `index.html` on this branch: `still-mobile/src/image/hero.mp4` (the door's former video), `assets/incense.mp4`, `assets/candlelauds.jpg`, `assets/guide-bg.webp`, `assets/icon.png`, and the retired backgrounds `still-mobile/src/image/{lectio,examen,breath,rule,bedtime,community,night}_bg.jpg` and the `*_question.jpg` set. `corpus/` (26 MB) is read only by the `office-corpus` function; `/corpus/*` is a forced 404 on the site. `practices/` is the web-only SEO folder, never synced to `www/`.
 
 ## Gone since the 2026-08-22 map
 
@@ -216,3 +222,4 @@ On disk but not read by `index.html` on this branch: `still-mobile/src/image/her
 - The traditional Office corpus and its Netlify function.
 - Readable mode (`body.readable`), Over time, the trial's one reminder, the review request, the Chamber on the tokens.
 - Since the structural pass (2026-09-08): the base text levels one step brighter (tokens 89–90, readable mode 119–120); the onboarding door as the monk in his cell (1158–1230); `AudioFetch` 5954; the `?vv=1` viewport readout removed; the theology corpus under `vault/raw/theology/` and the Lectionary table under `corpus/readings/` and `assets/readings/` (data, not code).
+- Since 2026-09-09: Lectio's Gospel of the day from the Lectionary table and the Douay-Rheims copy under `assets/scripture/dr/` (632d591); **The Library** (`#screen-library`, `Library` 6466), the reading room for the vault's texts, shipped as JSON under `assets/library/` by `tools/library/build.py`.

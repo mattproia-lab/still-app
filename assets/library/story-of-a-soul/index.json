@@ -1,0 +1,116 @@
+{
+ "title": "The Story of a Soul",
+ "author": "Thérèse of Lisieux",
+ "source": "vault/raw/theology/doctors/2026-09-08-therese-of-lisieux-story-of-a-soul-taylor.md (Taylor, 1912)",
+ "slug": "story-of-a-soul",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Preface, by Cardinal Bourne",
+   "file": "c1.json",
+   "words": 552
+  },
+  {
+   "n": 2,
+   "title": "Prologue · her parentage and birth",
+   "file": "c2.json",
+   "words": 3122
+  },
+  {
+   "n": 3,
+   "title": "Chapter I",
+   "file": "c3.json",
+   "words": 4372
+  },
+  {
+   "n": 4,
+   "title": "Chapter II",
+   "file": "c4.json",
+   "words": 4924
+  },
+  {
+   "n": 5,
+   "title": "Chapter III",
+   "file": "c5.json",
+   "words": 4039
+  },
+  {
+   "n": 6,
+   "title": "Chapter IV",
+   "file": "c6.json",
+   "words": 5621
+  },
+  {
+   "n": 7,
+   "title": "Chapter V · Vocation Of Therese",
+   "file": "c7.json",
+   "words": 5648
+  },
+  {
+   "n": 8,
+   "title": "Chapter VI",
+   "file": "c8.json",
+   "words": 6150
+  },
+  {
+   "n": 9,
+   "title": "Chapter VII",
+   "file": "c9.json",
+   "words": 4073
+  },
+  {
+   "n": 10,
+   "title": "Chapter VIII · Profession Of Soeur Therese",
+   "file": "c10.json",
+   "words": 5510
+  },
+  {
+   "n": 11,
+   "title": "Chapter IX",
+   "file": "c11.json",
+   "words": 7237
+  },
+  {
+   "n": 12,
+   "title": "Chapter X",
+   "file": "c12.json",
+   "words": 5904
+  },
+  {
+   "n": 13,
+   "title": "Chapter XI · A Canticle Of Love",
+   "file": "c13.json",
+   "words": 6698
+  },
+  {
+   "n": 14,
+   "title": "Epilogue · a victim of Divine Love",
+   "file": "c14.json",
+   "words": 10287
+  },
+  {
+   "n": 15,
+   "title": "Counsels and Reminiscences",
+   "file": "c15.json",
+   "words": 12051
+  },
+  {
+   "n": 16,
+   "title": "Letters",
+   "file": "c16.json",
+   "words": 16246
+  },
+  {
+   "n": 17,
+   "title": "Prayers",
+   "file": "c17.json",
+   "words": 2657
+  },
+  {
+   "n": 18,
+   "title": "Selected poems",
+   "file": "c18.json",
+   "words": 1356
+  }
+ ]
+}

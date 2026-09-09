@@ -1,0 +1,692 @@
+{
+ "title": "The Imitation of Christ",
+ "author": "Thomas à Kempis",
+ "source": "vault/raw/theology/saints/2026-09-08-thomas-a-kempis-following-of-christ-challoner.md (Challoner, 1819)",
+ "slug": "imitation",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Book I · I. Of following Christ, and despising all the vanities of the world",
+   "file": "c1.json",
+   "words": 415
+  },
+  {
+   "n": 2,
+   "title": "Book I · II. Of having an humble sentiment of one's self",
+   "file": "c2.json",
+   "words": 392
+  },
+  {
+   "n": 3,
+   "title": "Book I · III. Of the doctrine of truth ",
+   "file": "c3.json",
+   "words": 782
+  },
+  {
+   "n": 4,
+   "title": "Book I · IV. Of prudence in our doings ",
+   "file": "c4.json",
+   "words": 184
+  },
+  {
+   "n": 5,
+   "title": "Book I · V. Of reading the holy Scriptures",
+   "file": "c5.json",
+   "words": 193
+  },
+  {
+   "n": 6,
+   "title": "Book I · VI. Of inordinate affection ",
+   "file": "c6.json",
+   "words": 187
+  },
+  {
+   "n": 7,
+   "title": "Book I · VII. Of flying vain hope and pride ",
+   "file": "c7.json",
+   "words": 277
+  },
+  {
+   "n": 8,
+   "title": "Book I · VIII. Of shunning too much familiarity",
+   "file": "c8.json",
+   "words": 162
+  },
+  {
+   "n": 9,
+   "title": "Book I · IX. Of obedience and subjection",
+   "file": "c9.json",
+   "words": 266
+  },
+  {
+   "n": 10,
+   "title": "Book I · X. Of avoiding superfluity of words",
+   "file": "c10.json",
+   "words": 233
+  },
+  {
+   "n": 11,
+   "title": "Book I · XI. Of acquiring peace and zeal of spiritual progress ",
+   "file": "c11.json",
+   "words": 509
+  },
+  {
+   "n": 12,
+   "title": "Book I · XII. Of the advantage of adversity ",
+   "file": "c12.json",
+   "words": 219
+  },
+  {
+   "n": 13,
+   "title": "Book I · XIII. Of resisting temptation",
+   "file": "c13.json",
+   "words": 757
+  },
+  {
+   "n": 14,
+   "title": "Book I · XIV. Of avoiding rash judgment ",
+   "file": "c14.json",
+   "words": 239
+  },
+  {
+   "n": 15,
+   "title": "Book I · XV. Of works done out of charity ",
+   "file": "c15.json",
+   "words": 281
+  },
+  {
+   "n": 16,
+   "title": "Book I · XVI. Of bearing the defects of others ",
+   "file": "c16.json",
+   "words": 336
+  },
+  {
+   "n": 17,
+   "title": "Book I · XVII. Of a monastic life",
+   "file": "c17.json",
+   "words": 225
+  },
+  {
+   "n": 18,
+   "title": "Book I · XVIII. Of the example of the holy fathers ",
+   "file": "c18.json",
+   "words": 568
+  },
+  {
+   "n": 19,
+   "title": "Book I · XIX. Of the exercises of a good religious man ",
+   "file": "c19.json",
+   "words": 787
+  },
+  {
+   "n": 20,
+   "title": "Book I · XX. Of the love of solitude and silence ",
+   "file": "c20.json",
+   "words": 904
+  },
+  {
+   "n": 21,
+   "title": "Book I · XXI. Of compunction of heart ",
+   "file": "c21.json",
+   "words": 562
+  },
+  {
+   "n": 22,
+   "title": "Book I · XXII. Of the consideration of the misery of man ",
+   "file": "c22.json",
+   "words": 792
+  },
+  {
+   "n": 23,
+   "title": "Book I · XXIII. Of the thoughts of death ",
+   "file": "c23.json",
+   "words": 968
+  },
+  {
+   "n": 24,
+   "title": "Book I · XXIV. Of judgment and the punishment of sins ",
+   "file": "c24.json",
+   "words": 912
+  },
+  {
+   "n": 25,
+   "title": "Book I · XXV. Of the fervent amendment of our whole life ",
+   "file": "c25.json",
+   "words": 1233
+  },
+  {
+   "n": 26,
+   "title": "Book II · I. Of interior conversation ",
+   "file": "c26.json",
+   "words": 928
+  },
+  {
+   "n": 27,
+   "title": "Book II · II. Of humble submission ",
+   "file": "c27.json",
+   "words": 233
+  },
+  {
+   "n": 28,
+   "title": "Book II · III. Of a good peaceable man ",
+   "file": "c28.json",
+   "words": 398
+  },
+  {
+   "n": 29,
+   "title": "Book II · IV. Of a pure mind and simple intention ",
+   "file": "c29.json",
+   "words": 269
+  },
+  {
+   "n": 30,
+   "title": "Book II · V. Of the consideration of one's self ",
+   "file": "c30.json",
+   "words": 340
+  },
+  {
+   "n": 31,
+   "title": "Book II · VI. Of the joy of a good conscience",
+   "file": "c31.json",
+   "words": 455
+  },
+  {
+   "n": 32,
+   "title": "Book II · VII. Of the love of Jesus above all things ",
+   "file": "c32.json",
+   "words": 315
+  },
+  {
+   "n": 33,
+   "title": "Book II · VIII. Of familiar friendship with Jesus",
+   "file": "c33.json",
+   "words": 625
+  },
+  {
+   "n": 34,
+   "title": "Book II · IX. Of the want of all comfort ",
+   "file": "c34.json",
+   "words": 906
+  },
+  {
+   "n": 35,
+   "title": "Book II · X. Of gratitude for the grace of God ",
+   "file": "c35.json",
+   "words": 632
+  },
+  {
+   "n": 36,
+   "title": "Book II · XI. Of the small number of the lovers of the Cross of Jesus ",
+   "file": "c36.json",
+   "words": 524
+  },
+  {
+   "n": 37,
+   "title": "Book II · XII. Of the king's highway of the holy cross ",
+   "file": "c37.json",
+   "words": 1704
+  },
+  {
+   "n": 38,
+   "title": "Book III · I. Of the internal speech of Christ to a faithful soul ",
+   "file": "c38.json",
+   "words": 230
+  },
+  {
+   "n": 39,
+   "title": "Book III · II. That truth speaks within us without noise of words ",
+   "file": "c39.json",
+   "words": 355
+  },
+  {
+   "n": 40,
+   "title": "Book III · III. That the words of God are to be heard with humility, and that many weigh",
+   "file": "c40.json",
+   "words": 710
+  },
+  {
+   "n": 41,
+   "title": "Book III · IV. That we ought to walk in truth and humility in God's presence ",
+   "file": "c41.json",
+   "words": 506
+  },
+  {
+   "n": 42,
+   "title": "Book III · V. Of the wonderful effect of divine love ",
+   "file": "c42.json",
+   "words": 824
+  },
+  {
+   "n": 43,
+   "title": "Book III · VI. Of the proof of a true lover ",
+   "file": "c43.json",
+   "words": 624
+  },
+  {
+   "n": 44,
+   "title": "Book III · VII. That grace is to be hid under the guardianship of humility ",
+   "file": "c44.json",
+   "words": 760
+  },
+  {
+   "n": 45,
+   "title": "Book III · VIII. Of the mean esteem of one's self in the sight of God ",
+   "file": "c45.json",
+   "words": 356
+  },
+  {
+   "n": 46,
+   "title": "Book III · IX. That all things are to be referred to God, as to our last end ",
+   "file": "c46.json",
+   "words": 310
+  },
+  {
+   "n": 47,
+   "title": "Book III · X. That it is meet to serve God, despising this world ",
+   "file": "c47.json",
+   "words": 617
+  },
+  {
+   "n": 48,
+   "title": "Book III · XI. That the desires of our",
+   "file": "c48.json",
+   "words": 331
+  },
+  {
+   "n": 49,
+   "title": "Book III · XII. Of learning patience, and of fighting against concupiscence ",
+   "file": "c49.json",
+   "words": 525
+  },
+  {
+   "n": 50,
+   "title": "Book III · XIII. Of the obedience of an humble subject after the example of Jesus",
+   "file": "c50.json",
+   "words": 392
+  },
+  {
+   "n": 51,
+   "title": "Book III · XIV. Of considering the secret judgments of God, lest we be puffed up by",
+   "file": "c51.json",
+   "words": 422
+  },
+  {
+   "n": 52,
+   "title": "Book III · XV. How we are to be disposed, and what we are to say when we desire any",
+   "file": "c52.json",
+   "words": 522
+  },
+  {
+   "n": 53,
+   "title": "Book III · XVI. That true comfort is to be sought in God alone ",
+   "file": "c53.json",
+   "words": 322
+  },
+  {
+   "n": 54,
+   "title": "Book III · XVII. That we ought to cast all our care upon God ",
+   "file": "c54.json",
+   "words": 277
+  },
+  {
+   "n": 55,
+   "title": "Book III · XVIII. That temporal miseries are to be borne with patience after the example",
+   "file": "c55.json",
+   "words": 375
+  },
+  {
+   "n": 56,
+   "title": "Book III · XIX. Of supporting injuries; and who is proved to be truly patient ",
+   "file": "c56.json",
+   "words": 486
+  },
+  {
+   "n": 57,
+   "title": "Book III · XX. Of the confession of our infirmity, and of the miseries of this",
+   "file": "c57.json",
+   "words": 554
+  },
+  {
+   "n": 58,
+   "title": "Book III · XXI. That we are to rest in God above all goods and gifts ",
+   "file": "c58.json",
+   "words": 796
+  },
+  {
+   "n": 59,
+   "title": "Book III · XXII. Of the rememberance of the manifold benefits of God",
+   "file": "c59.json",
+   "words": 610
+  },
+  {
+   "n": 60,
+   "title": "Book III · XXIII. Of four things which bring much peace ",
+   "file": "c60.json",
+   "words": 585
+  },
+  {
+   "n": 61,
+   "title": "Book III · XXIV. That we are not to be curious in enquiring into the life of",
+   "file": "c61.json",
+   "words": 228
+  },
+  {
+   "n": 62,
+   "title": "Book III · XXV. In what things the firm peace of the heart and true progress doth",
+   "file": "c62.json",
+   "words": 456
+  },
+  {
+   "n": 63,
+   "title": "Book III · XXVI. Of the eminence of a free mind, which humble prayer better procures",
+   "file": "c63.json",
+   "words": 395
+  },
+  {
+   "n": 64,
+   "title": "Book III · XXVII. That self-love chiefly keeps a person back from the Sovereign",
+   "file": "c64.json",
+   "words": 550
+  },
+  {
+   "n": 65,
+   "title": "Book III · XXVIII. Against the tongues of detractors ",
+   "file": "c65.json",
+   "words": 156
+  },
+  {
+   "n": 66,
+   "title": "Book III · XXIX. How in the time of tribulation God is to be invoked and",
+   "file": "c66.json",
+   "words": 279
+  },
+  {
+   "n": 67,
+   "title": "Book III · XXX. Of asking the divine assistance, and of confidence of recovering",
+   "file": "c67.json",
+   "words": 768
+  },
+  {
+   "n": 68,
+   "title": "Book III · XXXI. Of disregarding all things created, that so we may find the",
+   "file": "c68.json",
+   "words": 615
+  },
+  {
+   "n": 69,
+   "title": "Book III · XXXII. Of the denying ourselves, and renouncing all cupidity ",
+   "file": "c69.json",
+   "words": 381
+  },
+  {
+   "n": 70,
+   "title": "Book III · XXXIII. Of the inconstancy of our heart, and of directing our final intention",
+   "file": "c70.json",
+   "words": 253
+  },
+  {
+   "n": 71,
+   "title": "Book III · XXXIV. That he that loves God relishes him above all things, and in all",
+   "file": "c71.json",
+   "words": 491
+  },
+  {
+   "n": 72,
+   "title": "Book III · XXXV. That there is no being secure from temptation in this life ",
+   "file": "c72.json",
+   "words": 368
+  },
+  {
+   "n": 73,
+   "title": "Book III · XXXVI. Against the vain judgments of men ",
+   "file": "c73.json",
+   "words": 337
+  },
+  {
+   "n": 74,
+   "title": "Book III · XXXVII. Of a pure and full resignation of ourselves, for the obtaining",
+   "file": "c74.json",
+   "words": 369
+  },
+  {
+   "n": 75,
+   "title": "Book III · XXXVIII. Of the good government of ourselves in outward things, and of",
+   "file": "c75.json",
+   "words": 318
+  },
+  {
+   "n": 76,
+   "title": "Book III · XXXIX. That a man must not be over eager in his affairs",
+   "file": "c76.json",
+   "words": 202
+  },
+  {
+   "n": 77,
+   "title": "Book III · XL. That man hath no good of himself, and that he cannot glory in any",
+   "file": "c77.json",
+   "words": 559
+  },
+  {
+   "n": 78,
+   "title": "Book III · XLI. Of the contempt of all temporal honour",
+   "file": "c78.json",
+   "words": 156
+  },
+  {
+   "n": 79,
+   "title": "Book III · XLII. That our peace is not to be placed in men",
+   "file": "c79.json",
+   "words": 306
+  },
+  {
+   "n": 80,
+   "title": "Book III · XLIII. Against vain and worldly learning ",
+   "file": "c80.json",
+   "words": 406
+  },
+  {
+   "n": 81,
+   "title": "Book III · XLIV. Of not drawing to ourselves exterior things ",
+   "file": "c81.json",
+   "words": 189
+  },
+  {
+   "n": 82,
+   "title": "Book III · XLV. That credit is not to be given to all men; and that men are prone to",
+   "file": "c82.json",
+   "words": 728
+  },
+  {
+   "n": 83,
+   "title": "Book III · XLVI. Of having confidence in God, when words arise against us ",
+   "file": "c83.json",
+   "words": 651
+  },
+  {
+   "n": 84,
+   "title": "Book III · XLVII. That all grievious things are to be endured for life everlasting",
+   "file": "c84.json",
+   "words": 430
+  },
+  {
+   "n": 85,
+   "title": "Book III · XLVIII. Of the day of eternity, and of the miseries of this life ",
+   "file": "c85.json",
+   "words": 829
+  },
+  {
+   "n": 86,
+   "title": "Book III · XLIX. Of the desire of eternal life: and how great things are promised to",
+   "file": "c86.json",
+   "words": 1013
+  },
+  {
+   "n": 87,
+   "title": "Book III · L. How a desolate person ought to offer himself into the hands of God ",
+   "file": "c87.json",
+   "words": 983
+  },
+  {
+   "n": 88,
+   "title": "Book III · LI. That we must practise ourselves in humble works, when we cannot",
+   "file": "c88.json",
+   "words": 236
+  },
+  {
+   "n": 89,
+   "title": "Book III · LII. That a man ought not to esteem himself worthy of consolation; but",
+   "file": "c89.json",
+   "words": 493
+  },
+  {
+   "n": 90,
+   "title": "Book III · LIII. That the grace of God is not communicated to the earthly minded ",
+   "file": "c90.json",
+   "words": 451
+  },
+  {
+   "n": 91,
+   "title": "Book III · LIV. Of the different motions of nature and grace ",
+   "file": "c91.json",
+   "words": 1053
+  },
+  {
+   "n": 92,
+   "title": "Book III · LV. Of the corruption of nature, and of the efficacy of divine grace",
+   "file": "c92.json",
+   "words": 777
+  },
+  {
+   "n": 93,
+   "title": "Book III · LVI. That we ought to deny ourselves, and to imitate Christ by the",
+   "file": "c93.json",
+   "words": 575
+  },
+  {
+   "n": 94,
+   "title": "Book III · LVII. That a man should not be too much dejected when he falls into some",
+   "file": "c94.json",
+   "words": 459
+  },
+  {
+   "n": 95,
+   "title": "Book III · LVIII. Of not searching into high matters, nor into the secret",
+   "file": "c95.json",
+   "words": 1230
+  },
+  {
+   "n": 96,
+   "title": "Book III · LIX. That all hope and confidence is to be fixed in God alone ",
+   "file": "c96.json",
+   "words": 640
+  },
+  {
+   "n": 97,
+   "title": "Book IV · I. With how great reverence Christ is to be received ",
+   "file": "c97.json",
+   "words": 1500
+  },
+  {
+   "n": 98,
+   "title": "Book IV · II. That the great goodness and charity of God is shewed to man in this",
+   "file": "c98.json",
+   "words": 769
+  },
+  {
+   "n": 99,
+   "title": "Book IV · III. That it is profitable to communicate often",
+   "file": "c99.json",
+   "words": 666
+  },
+  {
+   "n": 100,
+   "title": "Book IV · IV. That many benefits are bestowed on them who communicate",
+   "file": "c100.json",
+   "words": 818
+  },
+  {
+   "n": 101,
+   "title": "Book IV · V. Of the dignity of the sacrament, and of the priestly state ",
+   "file": "c101.json",
+   "words": 513
+  },
+  {
+   "n": 102,
+   "title": "Book IV · VI. A Petition concerning the exercise proper before Communion ",
+   "file": "c102.json",
+   "words": 115
+  },
+  {
+   "n": 103,
+   "title": "Book IV · VII. Of the discussion of one's own conscience, and of a resolution of",
+   "file": "c103.json",
+   "words": 567
+  },
+  {
+   "n": 104,
+   "title": "Book IV · VIII. Of the oblation of Christ on the cross, and of the resignation of",
+   "file": "c104.json",
+   "words": 306
+  },
+  {
+   "n": 105,
+   "title": "Book IV · IX. That we must offer ourselves, and all that is ours, to God, and pray for",
+   "file": "c105.json",
+   "words": 674
+  },
+  {
+   "n": 106,
+   "title": "Book IV · X. That the holy communion is not lightly to be forborne ",
+   "file": "c106.json",
+   "words": 835
+  },
+  {
+   "n": 107,
+   "title": "Book IV · XI. That the body of Christ and the holy scripture are most necessary to a",
+   "file": "c107.json",
+   "words": 1080
+  },
+  {
+   "n": 108,
+   "title": "Book IV · XII. That he who is to communicate ought to prepare himself for",
+   "file": "c108.json",
+   "words": 534
+  },
+  {
+   "n": 109,
+   "title": "Book IV · XIII. That a devout soul ought to desire with her whole heart to be united to",
+   "file": "c109.json",
+   "words": 478
+  },
+  {
+   "n": 110,
+   "title": "Book IV · XIV. Of the ardent desire of some devout persons to receive the body of",
+   "file": "c110.json",
+   "words": 392
+  },
+  {
+   "n": 111,
+   "title": "Book IV · XV. That the grace of devotion is obtained by humility and self-denial",
+   "file": "c111.json",
+   "words": 479
+  },
+  {
+   "n": 112,
+   "title": "Book IV · XVI. That we ought to lay open our necessities to Christ, and crave his",
+   "file": "c112.json",
+   "words": 313
+  },
+  {
+   "n": 113,
+   "title": "Book IV · XVII. Of fervent love and vehement desire to receive Christ ",
+   "file": "c113.json",
+   "words": 587
+  },
+  {
+   "n": 114,
+   "title": "Book IV · XVIII. That a man be not a curious searcher into this sacrament, but a",
+   "file": "c114.json",
+   "words": 486
+  }
+ ]
+}

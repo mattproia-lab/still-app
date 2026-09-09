@@ -1,0 +1,86 @@
+{
+ "title": "The Confessions",
+ "author": "Augustine of Hippo",
+ "source": "vault/raw/theology/doctors/2026-09-08-augustine-confessions-pusey.md (Pusey, 1838)",
+ "slug": "confessions",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Book I",
+   "file": "c1.json",
+   "words": 7054
+  },
+  {
+   "n": 2,
+   "title": "Book II",
+   "file": "c2.json",
+   "words": 3781
+  },
+  {
+   "n": 3,
+   "title": "Book III",
+   "file": "c3.json",
+   "words": 5465
+  },
+  {
+   "n": 4,
+   "title": "Book IV",
+   "file": "c4.json",
+   "words": 6973
+  },
+  {
+   "n": 5,
+   "title": "Book V",
+   "file": "c5.json",
+   "words": 6695
+  },
+  {
+   "n": 6,
+   "title": "Book VI",
+   "file": "c6.json",
+   "words": 7838
+  },
+  {
+   "n": 7,
+   "title": "Book VII",
+   "file": "c7.json",
+   "words": 8409
+  },
+  {
+   "n": 8,
+   "title": "Book VIII",
+   "file": "c8.json",
+   "words": 8123
+  },
+  {
+   "n": 9,
+   "title": "Book IX",
+   "file": "c9.json",
+   "words": 8819
+  },
+  {
+   "n": 10,
+   "title": "Book X",
+   "file": "c10.json",
+   "words": 16315
+  },
+  {
+   "n": 11,
+   "title": "Book XI",
+   "file": "c11.json",
+   "words": 9501
+  },
+  {
+   "n": 12,
+   "title": "Book XII",
+   "file": "c12.json",
+   "words": 10205
+  },
+  {
+   "n": 13,
+   "title": "Book XIII",
+   "file": "c13.json",
+   "words": 12594
+  }
+ ]
+}

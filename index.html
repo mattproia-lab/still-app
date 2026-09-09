@@ -3345,6 +3345,46 @@ function pinDocument() {
 </div>
 
 <!-- ═══════════════════════════════════════════
+     THE LIBRARY -- the reading room (DESIGN.md, The Library)
+     A shelf of the vault's texts, each read chapter by chapter from
+     assets/library/<slug>/ (the Douay-Rheims from assets/scripture/dr/),
+     with a bookmark per text in still_library_<slug>. Nothing else is saved.
+═══════════════════════════════════════════ -->
+<div id="screen-library" class="screen" data-tokens style="--atmos-rgb:70,70,90;--atmos-a:.50;--atmos-x:50%;--atmos-y:36%;--atmos-gy:30%">
+  <div class="atmos" aria-hidden="true"><div class="atmos-glow"></div><div class="atmos-flame"></div><div class="atmos-grain"></div><div class="atmos-vignette"></div></div>
+  <header class="app-header">
+    <button class="back-btn" onclick="libraryBack()"><span class="back-arrow">←</span><span>Still</span></button>
+    <span class="screen-title" id="libraryTitle">The Library</span>
+    <button class="settings-btn" onclick="openSettings()" aria-label="Settings">⚙</button>
+  </header>
+  <div class="feature-main" id="libScroller">
+    <div class="lib-shelf" id="libShelf">
+      <span class="ui-label">The reading room</span>
+      <div class="lib-intro">The books the tradition kept, read as they were written: a chapter at a time, at your own pace. Where you stop is where you begin again.</div>
+      <div id="libRows"></div>
+    </div>
+    <div class="lib-reader" id="libReader" hidden>
+      <div class="lib-reader-head">
+        <span class="ui-label" id="libReaderAuthor"></span>
+        <div class="heading" id="libReaderTitle"></div>
+        <div class="lib-reader-tools">
+          <button type="button" class="btn-ghost lib-nav-btn" id="libNavBtn" onclick="libraryToggleNav()" aria-expanded="false" aria-controls="libNav">Chapters</button>
+          <span class="lib-where" id="libWhere"></span>
+        </div>
+      </div>
+      <div class="lib-nav" id="libNav" hidden role="list"></div>
+      <div class="lib-pills" id="libPills" hidden></div>
+      <div class="lib-chapter-title" id="libChapterTitle"></div>
+      <div class="lib-body" id="libBody"></div>
+      <div class="btn-row lib-foot">
+        <button type="button" class="btn-ghost" id="libPrev" onclick="libraryStep(-1)">← Previous</button>
+        <button type="button" class="btn-ghost" id="libNext" onclick="libraryStep(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
      RESOURCES SCREEN -- Dogstudio design system
 ═══════════════════════════════════════════ -->
 <div id="screen-resources" class="screen" style="background:#030305">
@@ -5884,6 +5924,68 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 }
 
 /* ═══════════════════════════════════════════
+   THE LIBRARY -- on the DESIGN.md tokens (DESIGN.md, The Library)
+   A reading surface: no card, no ring. The muted blue-grey of the array
+   (70,70,90 at .50) sits behind the text at the Guide's height. The shelf
+   is a list of hairline rows; the reader is the serif at reading measure
+   with a quiet chapter list above it.
+═══════════════════════════════════════════ */
+#screen-library .feature-main{max-width:none;}
+#screen-library .lib-shelf,#screen-library .lib-reader{max-width:var(--measure-read);margin:0 auto;}
+#screen-library .lib-intro{font-family:var(--font-serif);font-style:italic;font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-mid);
+  margin:var(--s-3) 0 var(--s-6);text-wrap:pretty;}
+#screen-library .lib-row{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+  padding:var(--s-4) 0;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background var(--d-base);}
+#screen-library .lib-row:first-child{border-top:1px solid var(--line);}
+#screen-library .lib-row:hover:not(.is-soon),#screen-library .lib-row:focus-visible{background:rgba(255,240,220,.03);outline:none;}
+#screen-library .lib-row.is-soon{cursor:default;opacity:.55;}
+#screen-library .lib-author{display:block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-low);margin-bottom:var(--s-1);}
+#screen-library .lib-title{display:block;font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-snug);color:var(--text-hi);text-wrap:balance;}
+#screen-library .lib-desc{display:block;font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);margin-top:var(--s-1);}
+#screen-library .lib-note{display:block;font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-faint);margin-top:var(--s-1);}
+#screen-library .lib-open,#screen-library .lib-soon{display:inline-block;font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;margin-top:var(--s-2);}
+#screen-library .lib-open{color:var(--gold);}
+#screen-library .lib-soon{color:var(--text-faint);}
+/* The reader */
+#screen-library .lib-reader[hidden],#screen-library .lib-shelf[hidden],#screen-library .lib-nav[hidden],#screen-library .lib-pills[hidden]{display:none;}
+#screen-library .lib-reader-head{margin-bottom:var(--s-5);}
+#screen-library .lib-reader-head .heading{margin:var(--s-1) 0 var(--s-3);}
+#screen-library .lib-reader-tools{display:flex;align-items:center;gap:var(--s-3);flex-wrap:wrap;}
+#screen-library .lib-where{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.06em;color:var(--text-low);font-variant-numeric:tabular-nums;}
+#screen-library .lib-nav{display:flex;flex-direction:column;border-top:1px solid var(--line);margin:0 0 var(--s-5);max-height:52dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#screen-library .lib-nav-item{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);
+  padding:var(--s-3) 0;cursor:pointer;font-family:var(--font-serif);font-size:var(--t-base);line-height:var(--lh-snug);color:var(--text-mid);text-wrap:pretty;
+  transition:color var(--d-fast);-webkit-tap-highlight-color:transparent;}
+#screen-library .lib-nav-item:hover,#screen-library .lib-nav-item:focus-visible{color:var(--text-hi);outline:none;}
+#screen-library .lib-nav-item.is-current{color:var(--candle);}
+#screen-library .lib-nav-item .lib-nav-n{font-family:var(--font-sans);font-size:var(--t-micro);letter-spacing:.08em;color:var(--text-faint);margin-right:var(--s-2);font-variant-numeric:tabular-nums;}
+/* One strip of chapter pills, scrolled sideways, the chapter in hand brought into view; a book of
+   150 psalms would otherwise put a screenful of numbers between the title and the text. */
+#screen-library .lib-pills{display:flex;flex-wrap:nowrap;gap:var(--s-2);margin:0 0 var(--s-5);overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding:2px 0 var(--s-2);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+#screen-library .lib-pills::-webkit-scrollbar{display:none;}
+#screen-library .lib-pill{flex:0 0 auto;}
+#screen-library .lib-pill{background:none;border:1px solid var(--line);border-radius:var(--r-pill);color:var(--text-mid);padding:6px 12px;cursor:pointer;
+  font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.04em;font-variant-numeric:tabular-nums;transition:border-color var(--d-base),color var(--d-base);}
+#screen-library .lib-pill.is-current{border-color:var(--gold-a55);color:var(--candle);background:var(--gold-a10);}
+#screen-library .lib-chapter-title{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--gold);margin-bottom:var(--s-5);}
+#screen-library .lib-body{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);}
+#screen-library .lib-p{margin:0 0 var(--s-4);text-wrap:pretty;}
+#screen-library .lib-h{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-low);margin:var(--s-6) 0 var(--s-3);}
+#screen-library .lib-v{margin:0 0 var(--s-3);text-wrap:pretty;}
+#screen-library .lib-vn{font-family:var(--font-sans);font-size:var(--t-micro);color:var(--text-low);margin-right:var(--s-2);vertical-align:.35em;font-variant-numeric:tabular-nums;}
+#screen-library .lib-loading{font-family:var(--font-sans);font-size:var(--t-sm);color:var(--text-low);animation:officeBreath 1.9s ease-in-out infinite;}
+#screen-library .lib-foot{margin-top:var(--s-7);padding-bottom:var(--s-6);}
+@media (prefers-reduced-motion:reduce){
+  #screen-library .lib-loading{animation:none;}
+}
+
+/* ═══════════════════════════════════════════
    SIGN IN / CREATE ACCOUNT -- on the DESIGN.md tokens
    One screen, no card: Sitting's gold behind the fields. The global
    .auth-overlay / .auth-box rules (the phone-verify screen still uses the
@@ -6323,6 +6425,183 @@ async function playComplineAudio() {
 }
 
 /* ═══════════════════════════════════════════
+   THE LIBRARY -- the reading room
+   The shelf, in the order the vault keeps: Scripture first, then the texts.
+   A text is read from assets/library/<slug>/index.json (its chapters) and
+   assets/library/<slug>/c<n>.json (one chapter), written by tools/library/
+   from the vault's raw files; the Douay-Rheims is read from
+   assets/scripture/dr/ through Liturgy's loader. The bookmark is the one
+   save: still_library_<slug> = {chapter, scroll} ({book, chapter, scroll}
+   for the Bible), on this device only.
+═══════════════════════════════════════════ */
+const LIBRARY_SHELF = [
+  { slug:'douay-rheims', kind:'scripture', author:'The Holy Bible', title:'Douay-Rheims, Challoner revision',
+    desc:'The Scriptures in the Church\u2019s English, translated from the Vulgate; seventy-three books, the psalms in the Vulgate\u2019s numbering.' },
+  { slug:'devout-life', author:'Francis de Sales', title:'Introduction to the Devout Life',
+    desc:'A bishop\u2019s letters to a laywoman on living devoutly in the world, 1609; Allan Ross\u2019s translation of 1924.' },
+  { slug:'imitation', author:'Thomas \u00e0 Kempis', title:'The Imitation of Christ',
+    desc:'Four books on following Christ, in Challoner\u2019s English; the most read book after the Bible.' },
+  { slug:'paradise', author:'E. A. Wallis Budge, translator', title:'The Paradise of the Holy Fathers',
+    desc:'The lives and sayings of the desert monks of Egypt, from the Syriac Paradise of Anan-Isho, 1907.' },
+  { slug:'conferences', author:'John Cassian', title:'The Conferences',
+    desc:'Twenty-four conversations with the abbots of the Egyptian desert on the goal of the monk; Gibson\u2019s translation.' },
+  { slug:'cloud', author:'Anonymous, fourteenth century', title:'The Cloud of Unknowing',
+    desc:'An English priest on the prayer that goes beyond thought; Evelyn Underhill\u2019s edition of 1922.' },
+  { slug:'story-of-a-soul', author:'Th\u00e9r\u00e8se of Lisieux', title:'The Story of a Soul',
+    desc:'Her own story, written under obedience, with her counsels, letters, prayers and poems; Taylor\u2019s translation of 1912.' },
+  { slug:'confessions', author:'Augustine of Hippo', title:'The Confessions',
+    desc:'Augustine\u2019s account of his life, told to God, in thirteen books; Pusey\u2019s English of 1838.' },
+  { slug:'expositions', author:'Augustine of Hippo', title:'Expositions on the Psalms',
+    desc:'Augustine preaching on every psalm, condensed from the Oxford translation; the psalms numbered as the English Bible numbers them.' },
+  { slug:'ladder', author:'Guigo II', title:'Scala Claustralium, the Ladder of Monks',
+    desc:'The ladder of reading, meditation, prayer and contemplation, in a letter to a brother.',
+    note:'Rendered into English for Still from the Latin. Not a published translation.' },
+  { slug:'denis-contemplatione', soon:true, author:'Denis the Carthusian', title:'De Contemplatione',
+    desc:'On contemplation, in three books.', note:'Rendered into English for Still from the Latin. Not a published translation.' },
+  { slug:'denis-meditatione', soon:true, author:'Denis the Carthusian', title:'De Meditatione',
+    desc:'On meditation.', note:'Rendered into English for Still from the Latin. Not a published translation.' },
+  { slug:'denis-fonte-lucis', soon:true, author:'Denis the Carthusian', title:'De Fonte Lucis',
+    desc:'On the fountain of light and the paths of life.', note:'Rendered into English for Still from the Latin. Not a published translation.' }
+];
+const Library = (() => {
+  const cache = {};
+  let S = { slug: null, index: null, chapter: 0, book: null, saveTimer: null };
+  const $ = id => document.getElementById(id);
+  const get = async url => { try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; } };
+  const load = url => cache[url] || (cache[url] = get(url).then(j => { if (!j) delete cache[url]; return j; }));
+  const key = () => 'still_library_' + S.slug;
+  const bookmark = () => { try { return JSON.parse(localStorage.getItem(key()) || 'null') || {}; } catch (e) { return {}; } };
+  const scroller = () => $('libScroller');
+  function remember(extra) {
+    if (!S.slug) return;
+    const b = Object.assign(bookmark(), { chapter: S.chapter, scroll: Math.round(scroller().scrollTop) }, S.book ? { book: S.book } : {}, extra || {});
+    try { localStorage.setItem(key(), JSON.stringify(b)); } catch (e) {}
+  }
+  function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  /* The shelf */
+  function shelf() {
+    const rows = $('libRows'); rows.innerHTML = '';
+    LIBRARY_SHELF.forEach(t => {
+      const r = el(t.soon ? 'div' : 'button', 'lib-row' + (t.soon ? ' is-soon' : ''));
+      if (!t.soon) { r.type = 'button'; r.onclick = () => open(t.slug); }
+      else r.setAttribute('aria-disabled', 'true');
+      r.appendChild(el('span', 'lib-author', t.author));
+      r.appendChild(el('span', 'lib-title', t.title));
+      r.appendChild(el('span', 'lib-desc', t.desc));
+      if (t.note) r.appendChild(el('span', 'lib-note', t.note));
+      let where = '';
+      try { const bm = JSON.parse(localStorage.getItem('still_library_' + t.slug) || 'null'); if (bm && (bm.chapter || bm.book)) where = 'Continue'; } catch (e) {}
+      r.appendChild(el('span', t.soon ? 'lib-soon' : 'lib-open', t.soon ? 'Coming soon' : (where || 'Open')));
+      rows.appendChild(r);
+    });
+    $('libShelf').hidden = false; $('libReader').hidden = true; $('libraryTitle').textContent = 'The Library';
+    S = { slug: null, index: null, chapter: 0, book: null, saveTimer: null };
+    scroller().scrollTop = 0;
+  }
+
+  /* A text */
+  async function open(slug) {
+    const t = LIBRARY_SHELF.find(x => x.slug === slug); if (!t || t.soon) return;
+    S = { slug, index: null, chapter: 0, book: null, saveTimer: null, kind: t.kind || 'text' };
+    $('libShelf').hidden = true; $('libReader').hidden = false;
+    $('libReaderAuthor').textContent = t.author; $('libReaderTitle').textContent = t.title; $('libraryTitle').textContent = t.title;
+    $('libNav').hidden = true; $('libNavBtn').setAttribute('aria-expanded', 'false'); $('libPills').hidden = true;
+    $('libChapterTitle').textContent = ''; $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
+    const bm = bookmark();
+    if (S.kind === 'scripture') {
+      const books = await Liturgy.loadBooks(); if (!books) { $('libBody').textContent = 'The text could not be opened.'; return; }
+      S.index = { chapters: books.map((b, i) => ({ n: i + 1, title: b.name, slug: b.slug, count: b.chapters })) };
+      S.book = bm.book || books[0].slug;
+      nav();
+      await showBook(S.book, bm.chapter || 1, bm.scroll || 0);
+    } else {
+      const idx = await load(`assets/library/${slug}/index.json`); if (!idx) { $('libBody').textContent = 'The text could not be opened.'; return; }
+      S.index = idx; nav();
+      await showChapter(bm.chapter || 1, bm.scroll || 0);
+    }
+  }
+  function nav() {
+    const n = $('libNav'); n.innerHTML = '';
+    S.index.chapters.forEach(c => {
+      const b = el('button', 'lib-nav-item'); b.type = 'button'; b.setAttribute('role', 'listitem');
+      b.appendChild(el('span', 'lib-nav-n', String(c.n))); b.appendChild(document.createTextNode(c.title));
+      b.onclick = () => { n.hidden = true; $('libNavBtn').setAttribute('aria-expanded', 'false'); S.kind === 'scripture' ? showBook(c.slug, 1, 0) : showChapter(c.n, 0); };
+      n.appendChild(b);
+    });
+  }
+  function markNav() {
+    const cur = S.kind === 'scripture' ? S.index.chapters.findIndex(c => c.slug === S.book) + 1 : S.chapter;
+    [...$('libNav').children].forEach((b, i) => b.classList.toggle('is-current', i + 1 === cur));
+    $('libWhere').textContent = S.kind === 'scripture' ? `${cur} / ${S.index.chapters.length} \u00B7 ch. ${S.chapter}` : `${S.chapter} / ${S.index.chapters.length}`;
+    $('libPrev').disabled = S.kind === 'scripture' ? (cur === 1 && String(S.chapter) === '1') : S.chapter <= 1;
+    const last = S.index.chapters.length;
+    $('libNext').disabled = S.kind === 'scripture' ? (cur === last && parseInt(S.chapter, 10) >= (S.index.chapters[last - 1].count || 1)) : S.chapter >= last;
+  }
+  function render(blocks) {
+    const body = $('libBody'); body.innerHTML = '';
+    blocks.forEach(b => {
+      if (b.t === 'h') body.appendChild(el('div', 'lib-h', b.s));
+      else if (b.t === 'v') { const d = el('div', 'lib-v'); d.appendChild(el('span', 'lib-vn', b.n)); d.appendChild(document.createTextNode(b.s)); body.appendChild(d); }
+      else body.appendChild(el('div', 'lib-p', b.s));
+    });
+  }
+  async function showChapter(n, scroll) {
+    const c = S.index.chapters.find(x => x.n === n); if (!c) return;
+    S.chapter = n; markNav(); $('libChapterTitle').textContent = c.title;
+    $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
+    const ch = await load(`assets/library/${S.slug}/${c.file}`);
+    if (S.chapter !== n) return;   // the person moved on while it loaded
+    if (!ch) { $('libBody').textContent = 'This chapter could not be opened.'; return; }
+    render(ch.blocks);
+    scroller().scrollTop = scroll || 0; remember();
+  }
+  // a book's chapters as the copy keys them: numbers, and '113b' for the second series of Psalm 113
+  const chapterKeys = book => Object.keys(book.chapters).sort((a, b) => parseInt(a, 10) - parseInt(b, 10) || a.localeCompare(b));
+  async function showBook(slug, chapter, scroll) {
+    const b = S.index.chapters.find(x => x.slug === slug); if (!b) return;
+    chapter = String(chapter);
+    S.book = slug; S.chapter = chapter; markNav();
+    $('libChapterTitle').textContent = `${b.title} ${chapter}`;
+    $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
+    const book = await Liturgy.loadBook(slug);
+    if (S.book !== slug || S.chapter !== chapter) return;
+    const keys = book ? chapterKeys(book) : [];
+    const pills = $('libPills'); pills.innerHTML = ''; pills.hidden = false;
+    keys.forEach(k => { const p = el('button', 'lib-pill' + (k === chapter ? ' is-current' : ''), k); p.type = 'button'; p.onclick = () => showBook(slug, k, 0); pills.appendChild(p); });
+    S.keys = keys;
+    const cur = pills.querySelector('.is-current'); if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ inline: 'center', block: 'nearest' }); } catch (e) {} }
+    const verses = book && book.chapters[chapter];
+    if (!verses) { $('libBody').textContent = 'This chapter could not be opened.'; return; }
+    render(Object.keys(verses).map(Number).sort((x, y) => x - y).map(v => ({ t: 'v', n: String(v), s: verses[String(v)] })));
+    scroller().scrollTop = scroll || 0; remember();
+  }
+  function step(d) {
+    if (!S.index) return;
+    if (S.kind === 'scripture') {
+      const i = S.index.chapters.findIndex(c => c.slug === S.book); const keys = S.keys || []; const k = keys.indexOf(String(S.chapter));
+      if (d > 0) { if (k >= 0 && k + 1 < keys.length) showBook(S.book, keys[k + 1], 0); else if (S.index.chapters[i + 1]) showBook(S.index.chapters[i + 1].slug, 1, 0); }
+      else { if (k > 0) showBook(S.book, keys[k - 1], 0); else if (S.index.chapters[i - 1]) showBook(S.index.chapters[i - 1].slug, S.index.chapters[i - 1].count, 0); }
+      return;
+    }
+    const n = S.chapter + d; if (n >= 1 && n <= S.index.chapters.length) showChapter(n, 0);
+  }
+  function toggleNav() { const n = $('libNav'); n.hidden = !n.hidden; $('libNavBtn').setAttribute('aria-expanded', n.hidden ? 'false' : 'true'); if (!n.hidden) { const c = n.querySelector('.is-current'); if (c && c.scrollIntoView) c.scrollIntoView({ block: 'center' }); } }
+  function back() { if (S.slug) { remember(); shelf(); } else goHome(); }
+  function init() { shelf(); }
+  // the bookmark follows the reader's scroll, a moment after it settles
+  document.addEventListener('DOMContentLoaded', () => {
+    const sc = scroller(); if (!sc) return;
+    sc.addEventListener('scroll', () => { if (!S.slug) return; clearTimeout(S.saveTimer); S.saveTimer = setTimeout(() => remember(), 400); }, { passive: true });
+  });
+  return { init, open, step, toggleNav, back, get state() { return S; } };
+})();
+function initLibrary() { Library.init(); }
+function libraryBack() { Library.back(); }
+function libraryStep(d) { Library.step(d); }
+function libraryToggleNav() { Library.toggleNav(); }
+
+/* ═══════════════════════════════════════════
    FEATURE + COLOR DATA
 ═══════════════════════════════════════════ */
 const F=[
@@ -6356,6 +6635,9 @@ const F=[
   {name:'Reading Toward the Center',badge:'Revelation',screen:'center',
    h:'The most feared book, read from its heart.',
    b:'Twenty-six days through Revelation\u2019s mirror, pair by pair, to the room where the accuser has already lost. Ends each day in silence.',cta:'Descend'},
+  {name:'The Library',badge:'The Reading Room',screen:'library',
+   h:'The books the tradition kept.',
+   b:'The Douay-Rheims, de Sales, the Imitation, the desert fathers, Cassian, the Cloud, Th\u00e9r\u00e8se, Augustine, Guigo -- read a chapter at a time, your place kept.',cta:'Open'},
   {name:'Saint of the Day',badge:'The Calendar',screen:'saint',
    h:'The day, as the Church keeps it.',
    b:'Today’s celebration on the Roman calendar, its season and colour, and the saint’s life and prayer where one is written.',cta:'Enter'},
@@ -6388,6 +6670,7 @@ const W=[
   {r:100,g:20, b:200,i:.82,base:'#040007'}, // Breath Prayer -- deep violet
   {r:64, g:52, b:150,i:.74,base:'#030214'}, // Guided Journeys- a twilight indigo
   {r:235,g:215,b:170, i:.62,base:'#070604'}, // Reading Toward the Center -- center flame
+  {r:70, g:70, b:90,  i:.50,base:'#020208'}, // The Library -- muted blue-grey, the reading room
   {r:188,g:110,b:12, i:.90,base:'#070400'}, // Saint -- amber
   {r:162,g:10, b:52, i:.88,base:'#060002'}, // Office -- rose
   {r:8,  g:120,b:32, i:.88,base:'#010600'}, // Rule -- forest
@@ -6779,6 +7062,7 @@ function enterFeature(i){
   if(F[i].screen==='autobiography') initAutobio();
   if(F[i].screen==='office') initOfficeScreen();
   if(F[i].screen==='saint') initSaintScreen();
+  if(F[i].screen==='library') initLibrary();
   if(F[i].screen==='examen') initExamen();
   if(F[i].screen==='darkness') initDarknessScreen();
   if(F[i].screen==='rule') { restoreRuleFromCloud(); loadRuleItems(); }

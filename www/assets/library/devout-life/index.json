@@ -1,0 +1,632 @@
+{
+ "title": "Introduction to the Devout Life",
+ "author": "Francis de Sales",
+ "source": "vault/raw/theology/doctors/2026-09-08-francis-de-sales-introduction-to-the-devout-life.md (Ross, 1924; OCR)",
+ "slug": "devout-life",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Notice to the Reader, and the Author's Preface",
+   "file": "c1.json",
+   "words": 4544
+  },
+  {
+   "n": 2,
+   "title": "Part 1 · Chapter 2 · The Nature And Excellence Of Devotion",
+   "file": "c2.json",
+   "words": 797
+  },
+  {
+   "n": 3,
+   "title": "Part 1 · Chapter 3 · That Devotion Is Suited To All Vocations And Professions",
+   "file": "c3.json",
+   "words": 1549
+  },
+  {
+   "n": 4,
+   "title": "Chapter 6 · That A Beginning Must Be Made By The Purgation Of The Soul",
+   "file": "c4.json",
+   "words": 741
+  },
+  {
+   "n": 5,
+   "title": "Chapter · Of The First Purgation, Which Is That Of Mortal Sins",
+   "file": "c5.json",
+   "words": 441
+  },
+  {
+   "n": 6,
+   "title": "Part 1 · Chapter 7 · Of The Second Purgation, Which Is That Of The Affection To Sin",
+   "file": "c6.json",
+   "words": 543
+  },
+  {
+   "n": 7,
+   "title": "Part 1 · Chapter 9 · Of The Means Of Making This Second Purgation",
+   "file": "c7.json",
+   "words": 1057
+  },
+  {
+   "n": 8,
+   "title": "Part 1 · Chapter 11 · Meditation Ii Of The End For Which We Are Created",
+   "file": "c8.json",
+   "words": 1213
+  },
+  {
+   "n": 9,
+   "title": "Part 1 · Chapter 12 · Meditation Iv Of Sin",
+   "file": "c9.json",
+   "words": 592
+  },
+  {
+   "n": 10,
+   "title": "Part 1 · Chapter 13 · Meditation V Of Death",
+   "file": "c10.json",
+   "words": 628
+  },
+  {
+   "n": 11,
+   "title": "Chapter 14 · Meditation Vi Of The Judgement",
+   "file": "c11.json",
+   "words": 645
+  },
+  {
+   "n": 12,
+   "title": "Part 1 · Chapter 15 · Meditation Vii Of Hell",
+   "file": "c12.json",
+   "words": 402
+  },
+  {
+   "n": 13,
+   "title": "Chapter 16 · Meditation Viii Of Paradise",
+   "file": "c13.json",
+   "words": 586
+  },
+  {
+   "n": 14,
+   "title": "Part 1 · Chapter 17 · Meditation Ix",
+   "file": "c14.json",
+   "words": 630
+  },
+  {
+   "n": 15,
+   "title": "Part 1 · Chapter · Meditation X",
+   "file": "c15.json",
+   "words": 764
+  },
+  {
+   "n": 16,
+   "title": "Chapter 19 · How To Make The General Confession",
+   "file": "c16.json",
+   "words": 433
+  },
+  {
+   "n": 17,
+   "title": "Chapter · Solemn Protestation, To Engrave On The Soul The Resolution To Serve God And To Conclude The Acts Of Repentance",
+   "file": "c17.json",
+   "words": 755
+  },
+  {
+   "n": 18,
+   "title": "Chapter · Conclusion Of This First Purgation",
+   "file": "c18.json",
+   "words": 345
+  },
+  {
+   "n": 19,
+   "title": "Chapter 23 · That We Must Purify Ourselves From The Affections Which We Have To Venial Sins",
+   "file": "c19.json",
+   "words": 805
+  },
+  {
+   "n": 20,
+   "title": "Chapter 24 · That We Must Purify Ourselves From Affection To Useless And Danger- Ous Things",
+   "file": "c20.json",
+   "words": 434
+  },
+  {
+   "n": 21,
+   "title": "Part 1 · Chapter · That We Must Purify Ourselves From Evil Inclinations",
+   "file": "c21.json",
+   "words": 386
+  },
+  {
+   "n": 22,
+   "title": "Chapter · Of The Necessity Of Prayer",
+   "file": "c22.json",
+   "words": 1111
+  },
+  {
+   "n": 23,
+   "title": "Part 2 · Chapter 2 · First, Of The Presence Of God, Which Is The First Point Of The Preparation",
+   "file": "c23.json",
+   "words": 958
+  },
+  {
+   "n": 24,
+   "title": "Part 2 · Chapter · Of The Invocation Which Is The Second Point Of The Preparation",
+   "file": "c24.json",
+   "words": 271
+  },
+  {
+   "n": 25,
+   "title": "Chapter 5 · Of The Setting Forth Of The Mystery,",
+   "file": "c25.json",
+   "words": 423
+  },
+  {
+   "n": 26,
+   "title": "Chapter · Of The Considerations, Which Are The Second Part Of The Meditation",
+   "file": "c26.json",
+   "words": 248
+  },
+  {
+   "n": 27,
+   "title": "Chapter 7 · Of The Affections And Resolutions, Which Are The Third Part Of The Meditation",
+   "file": "c27.json",
+   "words": 343
+  },
+  {
+   "n": 28,
+   "title": "Chapter · Of The Conclusion And Spiritual Nosegay",
+   "file": "c28.json",
+   "words": 341
+  },
+  {
+   "n": 29,
+   "title": "Part 2 · Chapter 9 · Some Very Profitable Counsels Upon",
+   "file": "c29.json",
+   "words": 1329
+  },
+  {
+   "n": 30,
+   "title": "Part 2 · Chapter 10 · Exercise For The Morning",
+   "file": "c30.json",
+   "words": 951
+  },
+  {
+   "n": 31,
+   "title": "Chapter 12 · Of Spiritual Retirement",
+   "file": "c31.json",
+   "words": 880
+  },
+  {
+   "n": 32,
+   "title": "Part 2 · Chapter 13 · Of Aspirations, Ejaculatory Prayers, And Good Thoughts",
+   "file": "c32.json",
+   "words": 1878
+  },
+  {
+   "n": 33,
+   "title": "Part 2 · Chapter 14 · Of The Most Holy Mass And How We Ought To Hear It",
+   "file": "c33.json",
+   "words": 775
+  },
+  {
+   "n": 34,
+   "title": "Chapter 16 · Of Other Exercises Which Are Public And Made In Common",
+   "file": "c34.json",
+   "words": 358
+  },
+  {
+   "n": 35,
+   "title": "Chapter 17 · That We Should Honour And Invoke The Saints",
+   "file": "c35.json",
+   "words": 988
+  },
+  {
+   "n": 36,
+   "title": "Chapter 18 · How We Should Receive Inspirations",
+   "file": "c36.json",
+   "words": 999
+  },
+  {
+   "n": 37,
+   "title": "Chapter 19 · Of- Holy Confession",
+   "file": "c37.json",
+   "words": 1293
+  },
+  {
+   "n": 38,
+   "title": "Part 2 · Chapter · Of Frequent Communion",
+   "file": "c38.json",
+   "words": 1176
+  },
+  {
+   "n": 39,
+   "title": "Part 2 · Chapter 21 · How We Ought To Communicate",
+   "file": "c39.json",
+   "words": 797
+  },
+  {
+   "n": 40,
+   "title": "Part 3 · Chapter 1 · Of The Choice Which We Ought To Make In Regard To The Exercise Of Virtues",
+   "file": "c40.json",
+   "words": 1610
+  },
+  {
+   "n": 41,
+   "title": "Part 3 · Chapter 3 · Continuation Of The Same Discourse On The Choice Of Virtues",
+   "file": "c41.json",
+   "words": 1262
+  },
+  {
+   "n": 42,
+   "title": "Part 3 · Chapter 3 · Of Patience",
+   "file": "c42.json",
+   "words": 1626
+  },
+  {
+   "n": 43,
+   "title": "Part 3 · Chapter 4 · Of Humility For The Exterior",
+   "file": "c43.json",
+   "words": 1044
+  },
+  {
+   "n": 44,
+   "title": "Part 3 · Chapter 5 · Of Humility Which Is More Interior",
+   "file": "c44.json",
+   "words": 1847
+  },
+  {
+   "n": 45,
+   "title": "Part 3 · Chapter 6 · That Humility Makes Us Love Our Own Abjection",
+   "file": "c45.json",
+   "words": 1296
+  },
+  {
+   "n": 46,
+   "title": "Part 3 · Chapter 7 · How We Should Preserve Dur Good Name While Practising Humility",
+   "file": "c46.json",
+   "words": 1393
+  },
+  {
+   "n": 47,
+   "title": "Part 3 · Chapter 8 · Of Gentleness Towards Our Neighbour And How To Remedy Anger",
+   "file": "c47.json",
+   "words": 1535
+  },
+  {
+   "n": 48,
+   "title": "Part 3 · Chapter 10 · Of Gentleness Towards Ourselves",
+   "file": "c48.json",
+   "words": 860
+  },
+  {
+   "n": 49,
+   "title": "Part 3 · Chapter 13 · That We Must Manage Our Affairs With Care, But Without Eagerness Or Anxiety",
+   "file": "c49.json",
+   "words": 1705
+  },
+  {
+   "n": 50,
+   "title": "Part 3 · Chapter 12 · Of The Necessity Of Chastity",
+   "file": "c50.json",
+   "words": 1270
+  },
+  {
+   "n": 51,
+   "title": "Part 3 · Chapter 13 · Counsels For Preserving Chastity",
+   "file": "c51.json",
+   "words": 1930
+  },
+  {
+   "n": 52,
+   "title": "Part 3 · Chapter 15 · How To Practise Real Poverty, Remain- Ing Notwithstanding Actually Rich",
+   "file": "c52.json",
+   "words": 1463
+  },
+  {
+   "n": 53,
+   "title": "Part 3 · Chapter 16 · How To Practise Richness Of Spirit In Real Poverty ;",
+   "file": "c53.json",
+   "words": 587
+  },
+  {
+   "n": 54,
+   "title": "Chapter 17 · Of Friendship, And First Of That Which Is Bad And Frivolous",
+   "file": "c54.json",
+   "words": 684
+  },
+  {
+   "n": 55,
+   "title": "Part 3 · Chapter 18 · Of Flirtations",
+   "file": "c55.json",
+   "words": 1299
+  },
+  {
+   "n": 56,
+   "title": "Part 3 · Chapter 20 · Of True Friendships",
+   "file": "c56.json",
+   "words": 992
+  },
+  {
+   "n": 57,
+   "title": "Part 3 · Chapter · Of The Difference Between True Friendships And Vain",
+   "file": "c57.json",
+   "words": 797
+  },
+  {
+   "n": 58,
+   "title": "Part 3 · Chapter · Counsels And Remedies Against Evil Friendships",
+   "file": "c58.json",
+   "words": 1223
+  },
+  {
+   "n": 59,
+   "title": "Chapter 23 · Some Further Counsels On The",
+   "file": "c59.json",
+   "words": 790
+  },
+  {
+   "n": 60,
+   "title": "Part 3 · Chapter 23 · Of The Exercises Of Exterior Mortification",
+   "file": "c60.json",
+   "words": 2121
+  },
+  {
+   "n": 61,
+   "title": "Part 3 · Chapter 24 · Of Society And Of Solitude",
+   "file": "c61.json",
+   "words": 1026
+  },
+  {
+   "n": 62,
+   "title": "Part 3 · Chapter 25 · Of Propriety In Attire",
+   "file": "c62.json",
+   "words": 672
+  },
+  {
+   "n": 63,
+   "title": "Chapter 26 · Of Speech; And First, How To Speak Of God",
+   "file": "c63.json",
+   "words": 450
+  },
+  {
+   "n": 64,
+   "title": "Part 3 · Chapter 27 · Of Propriety In Words, And Of The Respect Which We Owe To Others",
+   "file": "c64.json",
+   "words": 779
+  },
+  {
+   "n": 65,
+   "title": "Part 3 · Chapter 28 · Of Rash Judgements",
+   "file": "c65.json",
+   "words": 1801
+  },
+  {
+   "n": 66,
+   "title": "Part 3 · Chapter 29 · Of Detraction",
+   "file": "c66.json",
+   "words": 2004
+  },
+  {
+   "n": 67,
+   "title": "Chapter 31 · Some Further Counsels In Regard To Speech",
+   "file": "c67.json",
+   "words": 669
+  },
+  {
+   "n": 68,
+   "title": "Chapter 32 · Of Pastimes And  Recreations; And First, Of Such As Are Lawful And Praiseworthy",
+   "file": "c68.json",
+   "words": 522
+  },
+  {
+   "n": 69,
+   "title": "Chapter · Of Forbidden Games",
+   "file": "c69.json",
+   "words": 390
+  },
+  {
+   "n": 70,
+   "title": "Part 3 · Chapter 33 · Of Balls And Pastimes Which Are Permissible But Dangerous",
+   "file": "c70.json",
+   "words": 799
+  },
+  {
+   "n": 71,
+   "title": "Chapter 35 · When We May Play Or Dance",
+   "file": "c71.json",
+   "words": 323
+  },
+  {
+   "n": 72,
+   "title": "Part 3 · Chapter 35 · That We Must Be Faithful Both On Great And On Small Occasions",
+   "file": "c72.json",
+   "words": 964
+  },
+  {
+   "n": 73,
+   "title": "Part 3 · Chapter 36 · That We Must Have A Just And Reasonable Spirit",
+   "file": "c73.json",
+   "words": 811
+  },
+  {
+   "n": 74,
+   "title": "Part 3 · Chapter 38 · Of Desires",
+   "file": "c74.json",
+   "words": 900
+  },
+  {
+   "n": 75,
+   "title": "Part 3 · Chapter 38 · Counsels For Married Persons",
+   "file": "c75.json",
+   "words": 2784
+  },
+  {
+   "n": 76,
+   "title": "Part 3 · Chapter 39 · Of The Honourableness Of The Marriage Bed",
+   "file": "c76.json",
+   "words": 3305
+  },
+  {
+   "n": 77,
+   "title": "Part 3 · Chapter · A Word To Virgins",
+   "file": "c77.json",
+   "words": 174
+  },
+  {
+   "n": 78,
+   "title": "Part 4 · Chapter 1 · That We Must Pay No Heed To What The Children Of The World Say",
+   "file": "c78.json",
+   "words": 980
+  },
+  {
+   "n": 79,
+   "title": "Chapter 3 · That We Must Have Great Courage",
+   "file": "c79.json",
+   "words": 506
+  },
+  {
+   "n": 80,
+   "title": "Part 4 · Chapter 3 · Of The Nature Of Temptations And Of The Difference That There Is Between Feeling Temptation And Consenting To It",
+   "file": "c80.json",
+   "words": 948
+  },
+  {
+   "n": 81,
+   "title": "Chapter · Two Good Examples On This Subject",
+   "file": "c81.json",
+   "words": 778
+  },
+  {
+   "n": 82,
+   "title": "Part 4 · Chapter 5 · Encouragement To The Soul In Temptation",
+   "file": "c82.json",
+   "words": 412
+  },
+  {
+   "n": 83,
+   "title": "Chapter 6 · May Be Sin",
+   "file": "c83.json",
+   "words": 838
+  },
+  {
+   "n": 84,
+   "title": "Chapter",
+   "file": "c84.json",
+   "words": 542
+  },
+  {
+   "n": 85,
+   "title": "Chapter 9 · That We Must Resist Small",
+   "file": "c85.json",
+   "words": 426
+  },
+  {
+   "n": 86,
+   "title": "Part 4 · Chapter · Of Remedies Against Small Temptations",
+   "file": "c86.json",
+   "words": 410
+  },
+  {
+   "n": 87,
+   "title": "Part 4 · Chapter 10 · How We Must Strengthen Our Hearts Against Temptations",
+   "file": "c87.json",
+   "words": 453
+  },
+  {
+   "n": 88,
+   "title": "Part 4 · Chapter 11 · Of Disquietude",
+   "file": "c88.json",
+   "words": 972
+  },
+  {
+   "n": 89,
+   "title": "Chapter 13 · Of Sadness",
+   "file": "c89.json",
+   "words": 811
+  },
+  {
+   "n": 90,
+   "title": "Part 4 · Chapter 13 · Of Spiritual And Sensible Consola- Tions, And How We Should Behave In Them",
+   "file": "c90.json",
+   "words": 2640
+  },
+  {
+   "n": 91,
+   "title": "Part 4 · Chapter 14 · Of Spiritual Dryness And Barrenness",
+   "file": "c91.json",
+   "words": 2064
+  },
+  {
+   "n": 92,
+   "title": "Part 4 · Chapter 15 · Confirmation And Illustration Of What Has Been Said By A Notable Example",
+   "file": "c92.json",
+   "words": 1367
+  },
+  {
+   "n": 93,
+   "title": "Chapter 2 · That We Must Renew Our Good Reso-",
+   "file": "c93.json",
+   "words": 540
+  },
+  {
+   "n": 94,
+   "title": "Part 5 · Chapter 3 · Consideration On The Favour Which God Shows Us In Calling Us To His Holy Service, According To The",
+   "file": "c94.json",
+   "words": 1423
+  },
+  {
+   "n": 95,
+   "title": "Chapter 5 · Examination Of The State Of Our",
+   "file": "c95.json",
+   "words": 1118
+  },
+  {
+   "n": 96,
+   "title": "Chapter 7 · Examination Of The State Of Our Soul In Regard To Our Neighbour",
+   "file": "c96.json",
+   "words": 205
+  },
+  {
+   "n": 97,
+   "title": "Part 5 · Chapter · Examination Of The Affections Of Our Soul",
+   "file": "c97.json",
+   "words": 405
+  },
+  {
+   "n": 98,
+   "title": "Chapter · Affections Which We Must Exercise",
+   "file": "c98.json",
+   "words": 209
+  },
+  {
+   "n": 99,
+   "title": "Part 5 · Chapter · Of Considerations Suitable To The Renewal Of Our Good Purposes",
+   "file": "c99.json",
+   "words": 100
+  },
+  {
+   "n": 100,
+   "title": "Chapter 33 · First Consideration: Of The Excel- Lence Of Our Souls",
+   "file": "c100.json",
+   "words": 411
+  },
+  {
+   "n": 101,
+   "title": "Chapter · Second Consideration: Of The Excellence Of The Virtues",
+   "file": "c101.json",
+   "words": 238
+  },
+  {
+   "n": 102,
+   "title": "Chapter 13 · Third Consideration: Of The Example Of The Saints",
+   "file": "c102.json",
+   "words": 317
+  },
+  {
+   "n": 103,
+   "title": "Chapter · Fourth Consideration: Of The Love That Jesus Christ Bears Us",
+   "file": "c103.json",
+   "words": 610
+  },
+  {
+   "n": 104,
+   "title": "Part 5 · Chapter 16 · Fifth Consideration: Of The Eternal Love Of God For Us",
+   "file": "c104.json",
+   "words": 1993
+  }
+ ]
+}
