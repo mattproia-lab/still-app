@@ -3372,7 +3372,7 @@ function pinDocument() {
           <span class="lib-where" id="libWhere"></span>
         </div>
       </div>
-      <div class="lib-nav" id="libNav" hidden role="list"></div>
+      <div class="lib-nav" id="libNav" hidden></div>
       <div class="lib-pills" id="libPills" hidden></div>
       <div class="lib-chapter-title" id="libChapterTitle"></div>
       <div class="lib-body" id="libBody"></div>
@@ -6440,7 +6440,7 @@ const LIBRARY_SHELF = [
   { slug:'devout-life', author:'Francis de Sales', title:'Introduction to the Devout Life',
     desc:'A bishop\u2019s letters to a laywoman on living devoutly in the world, 1609; Allan Ross\u2019s translation of 1924.' },
   { slug:'imitation', author:'Thomas \u00e0 Kempis', title:'The Imitation of Christ',
-    desc:'Four books on following Christ, in Challoner\u2019s English; the most read book after the Bible.' },
+    desc:'Four books on following Christ, in Challoner\u2019s English; among the most read books in the Christian tradition.' },
   { slug:'paradise', author:'E. A. Wallis Budge, translator', title:'The Paradise of the Holy Fathers',
     desc:'The lives and sayings of the desert monks of Egypt, from the Syriac Paradise of Anan-Isho, 1907.' },
   { slug:'conferences', author:'John Cassian', title:'The Conferences',
@@ -6510,9 +6510,9 @@ const Library = (() => {
     $('libChapterTitle').textContent = ''; $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
     const bm = bookmark();
     if (S.kind === 'scripture') {
-      const books = await Liturgy.loadBooks(); if (!books) { $('libBody').textContent = 'The text could not be opened.'; return; }
+      const books = await Liturgy.loadBooks(); if (!books || !books.length) { $('libBody').textContent = 'The text could not be opened.'; return; }
       S.index = { chapters: books.map((b, i) => ({ n: i + 1, title: b.name, slug: b.slug, count: b.chapters })) };
-      S.book = bm.book || books[0].slug;
+      S.book = books.some(b => b.slug === bm.book) ? bm.book : books[0].slug;
       nav();
       await showBook(S.book, bm.chapter || 1, bm.scroll || 0);
     } else {
@@ -6524,7 +6524,7 @@ const Library = (() => {
   function nav() {
     const n = $('libNav'); n.innerHTML = '';
     S.index.chapters.forEach(c => {
-      const b = el('button', 'lib-nav-item'); b.type = 'button'; b.setAttribute('role', 'listitem');
+      const b = el('button', 'lib-nav-item'); b.type = 'button';
       b.appendChild(el('span', 'lib-nav-n', String(c.n))); b.appendChild(document.createTextNode(c.title));
       b.onclick = () => { n.hidden = true; $('libNavBtn').setAttribute('aria-expanded', 'false'); S.kind === 'scripture' ? showBook(c.slug, 1, 0) : showChapter(c.n, 0); };
       n.appendChild(b);
@@ -6547,7 +6547,8 @@ const Library = (() => {
     });
   }
   async function showChapter(n, scroll) {
-    const c = S.index.chapters.find(x => x.n === n); if (!c) return;
+    const c = S.index.chapters.find(x => x.n === n) || S.index.chapters[0]; if (!c) return;
+    n = c.n;   // a bookmark past the end of a rebuilt text opens at the first chapter
     S.chapter = n; markNav(); $('libChapterTitle').textContent = c.title;
     $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
     const ch = await load(`assets/library/${S.slug}/${c.file}`);
@@ -6562,11 +6563,17 @@ const Library = (() => {
     const b = S.index.chapters.find(x => x.slug === slug); if (!b) return;
     chapter = String(chapter);
     S.book = slug; S.chapter = chapter; markNav();
-    $('libChapterTitle').textContent = `${b.title} ${chapter}`;
+    $('libChapterTitle').textContent = chapter === 'last' ? b.title : `${b.title} ${chapter}`;
     $('libBody').innerHTML = ''; $('libBody').appendChild(el('div', 'lib-loading', 'Opening\u2026'));
     const book = await Liturgy.loadBook(slug);
     if (S.book !== slug || S.chapter !== chapter) return;
     const keys = book ? chapterKeys(book) : [];
+    // 'last' is how stepping back arrives (Psalms counts 151 but its last key is 150); a bookmark
+    // whose chapter the copy no longer has falls back to the first
+    if (keys.length && (chapter === 'last' || !keys.includes(chapter))) {
+      chapter = chapter === 'last' ? keys[keys.length - 1] : keys[0];
+      S.chapter = chapter; markNav(); $('libChapterTitle').textContent = `${b.title} ${chapter}`;
+    }
     const pills = $('libPills'); pills.innerHTML = ''; pills.hidden = false;
     keys.forEach(k => { const p = el('button', 'lib-pill' + (k === chapter ? ' is-current' : ''), k); p.type = 'button'; p.onclick = () => showBook(slug, k, 0); pills.appendChild(p); });
     S.keys = keys;
@@ -6581,7 +6588,7 @@ const Library = (() => {
     if (S.kind === 'scripture') {
       const i = S.index.chapters.findIndex(c => c.slug === S.book); const keys = S.keys || []; const k = keys.indexOf(String(S.chapter));
       if (d > 0) { if (k >= 0 && k + 1 < keys.length) showBook(S.book, keys[k + 1], 0); else if (S.index.chapters[i + 1]) showBook(S.index.chapters[i + 1].slug, 1, 0); }
-      else { if (k > 0) showBook(S.book, keys[k - 1], 0); else if (S.index.chapters[i - 1]) showBook(S.index.chapters[i - 1].slug, S.index.chapters[i - 1].count, 0); }
+      else { if (k > 0) showBook(S.book, keys[k - 1], 0); else if (S.index.chapters[i - 1]) showBook(S.index.chapters[i - 1].slug, 'last', 0); }
       return;
     }
     const n = S.chapter + d; if (n >= 1 && n <= S.index.chapters.length) showChapter(n, 0);
