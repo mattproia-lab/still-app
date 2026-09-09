@@ -1,8 +1,10 @@
-# Guigo II — Scala claustralium, the Ladder of Monks (Latin only)
+# Guigo II — Scala claustralium, the Ladder of Monks
 
 _Index into the raw text, not a replacement for it. Ingested 2026-09-08._
 
-**No public-domain English translation was found; the Latin is filed and the page is marked `[NEEDED: translation]`.** Nothing here is translated.
+**No public-domain English translation was found; the Latin is filed, and beside it a working English rendering made for Still.** The rendering is not a published or scholarly translation: it carries `[REVIEW NEEDED]` in its frontmatter, and any quotation from it should be checked against the Latin before it is shown as the author's words.
+
+- [`raw/theology/saints/2026-09-08-guigo-scala-claustralium-english-rendering.md`](../../raw/theology/saints/2026-09-08-guigo-scala-claustralium-english-rendering.md) — the English rendering for Still, 2026, from the Migne Latin, chapter by chapter with Migne's paragraph numbers and Scripture references (Vulgate numbering); made from the transcription file below, with the OCR slice at hand.
 
 **Raw files:**
 
@@ -26,7 +28,7 @@ _Index into the raw text, not a replacement for it. Ingested 2026-09-08._
 - Project Gutenberg and CCEL: no record of the work under any of its titles.
 - The Middle English version, "A Ladder of Foure Ronges", was first printed in the twentieth century: at Stanbrook Abbey in 1953 and in Phyllis Hodgson's Early English Text Society edition of 1955, both after 1929 (Encyclopedia.com, <https://www.encyclopedia.com/religion/encyclopedias-almanacs-transcripts-and-maps/guigo-ii>, and the search results of 2026-09-08). The manuscript text itself is medieval, but no pre-1929 printing of it was found.
 - The modern English translations — Colledge and Walsh, *The Ladder of Monks* (1978, Cistercian Publications 1981) — are in copyright; the online English versions (umilta.net's modernisation of the Middle English, the fisheaters.com text, ecatholic2000.com) name no translator, edition or licence and could not be verified as public domain.
-- No English translation of the "Scala Paradisi" from the Augustine spuria, of any date before 1929, was found in this search. If Matt knows of one, it can replace the `[NEEDED: translation]` mark.
+- No English translation of the "Scala Paradisi" from the Augustine spuria, of any date before 1929, was found in this search. The working rendering above stands in until a public-domain translation is found; if one is, it should be filed beside it.
 
 ## Caveats
 

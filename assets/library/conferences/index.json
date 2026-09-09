@@ -1,0 +1,152 @@
+{
+ "title": "The Conferences",
+ "author": "John Cassian",
+ "source": "vault/raw/theology/saints/2026-09-08-cassian-conferences-gibson-npnf2-11.md (Gibson, 1894)",
+ "slug": "conferences",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "I. First Conference of Abbot Moses.",
+   "file": "c1.json",
+   "words": 11625
+  },
+  {
+   "n": 2,
+   "title": "II. Second Conference of Abbot Moses.",
+   "file": "c2.json",
+   "words": 10012
+  },
+  {
+   "n": 3,
+   "title": "III. Conference of Abbot Paphnutius.",
+   "file": "c3.json",
+   "words": 10430
+  },
+  {
+   "n": 4,
+   "title": "IV. Conference of Abbot Daniel.",
+   "file": "c4.json",
+   "words": 7818
+  },
+  {
+   "n": 5,
+   "title": "V. Conference of Abbot Serapion.",
+   "file": "c5.json",
+   "words": 10793
+  },
+  {
+   "n": 6,
+   "title": "VI. Conference of Abbot Theodore.",
+   "file": "c6.json",
+   "words": 8985
+  },
+  {
+   "n": 7,
+   "title": "VII. First Conference of Abbot Serenus.",
+   "file": "c7.json",
+   "words": 12135
+  },
+  {
+   "n": 8,
+   "title": "VIII. The Second Conference of Abbot Serenus.",
+   "file": "c8.json",
+   "words": 10529
+  },
+  {
+   "n": 9,
+   "title": "IX. The First Conference of Abbot Isaac.",
+   "file": "c9.json",
+   "words": 12118
+  },
+  {
+   "n": 10,
+   "title": "X. The Second Conference of Abbot Isaac.",
+   "file": "c10.json",
+   "words": 8866
+  },
+  {
+   "n": 11,
+   "title": "XI. The First Conference of Abbot Chæremon.",
+   "file": "c11.json",
+   "words": 6769
+  },
+  {
+   "n": 12,
+   "title": "XII. The Second Conference of Abbot Chæremon.",
+   "file": "c12.json",
+   "words": 5
+  },
+  {
+   "n": 13,
+   "title": "XIII. The Third Conference of Abbot Chæremon.",
+   "file": "c13.json",
+   "words": 11864
+  },
+  {
+   "n": 14,
+   "title": "XIV. The First Conference of Abbot Nesteros.",
+   "file": "c14.json",
+   "words": 9400
+  },
+  {
+   "n": 15,
+   "title": "XV. The Second Conference of Abbot Nesteros.",
+   "file": "c15.json",
+   "words": 4011
+  },
+  {
+   "n": 16,
+   "title": "XVI. The First Conference of Abbot Joseph.",
+   "file": "c16.json",
+   "words": 8834
+  },
+  {
+   "n": 17,
+   "title": "XVII. The Second Conference of Abbot Joseph.",
+   "file": "c17.json",
+   "words": 12870
+  },
+  {
+   "n": 18,
+   "title": "XVIII. Conference of Abbot Piamun.",
+   "file": "c18.json",
+   "words": 9429
+  },
+  {
+   "n": 19,
+   "title": "XIX. Conference of Abbot John.",
+   "file": "c19.json",
+   "words": 6342
+  },
+  {
+   "n": 20,
+   "title": "XX. Conference of Abbot Pinufius.",
+   "file": "c20.json",
+   "words": 5492
+  },
+  {
+   "n": 21,
+   "title": "XXI. The First Conference of Abbot Theonas.",
+   "file": "c21.json",
+   "words": 14698
+  },
+  {
+   "n": 22,
+   "title": "XXII. The Second Conference of Abbot Theonas.",
+   "file": "c22.json",
+   "words": 8
+  },
+  {
+   "n": 23,
+   "title": "XXIII. The Third Conference of Abbot Theonas.",
+   "file": "c23.json",
+   "words": 11268
+  },
+  {
+   "n": 24,
+   "title": "XXIV. Conference of Abbot Abraham.",
+   "file": "c24.json",
+   "words": 13030
+  }
+ ]
+}

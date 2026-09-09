@@ -1,0 +1,92 @@
+{
+ "title": "The Ladder of Monks",
+ "author": "Guigo II",
+ "source": "vault/raw/theology/saints/2026-09-08-guigo-scala-claustralium-english-rendering.md (rendering for Still, 2026)",
+ "slug": "ladder",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "The letter of Dom Guigo the Carthusian",
+   "file": "c1.json",
+   "words": 180
+  },
+  {
+   "n": 2,
+   "title": "Chapter I",
+   "file": "c2.json",
+   "words": 239
+  },
+  {
+   "n": 3,
+   "title": "Chapter II",
+   "file": "c3.json",
+   "words": 319
+  },
+  {
+   "n": 4,
+   "title": "Chapter III",
+   "file": "c4.json",
+   "words": 829
+  },
+  {
+   "n": 5,
+   "title": "Chapter IV",
+   "file": "c5.json",
+   "words": 252
+  },
+  {
+   "n": 6,
+   "title": "Chapter V",
+   "file": "c6.json",
+   "words": 199
+  },
+  {
+   "n": 7,
+   "title": "Chapter VI",
+   "file": "c7.json",
+   "words": 391
+  },
+  {
+   "n": 8,
+   "title": "Chapter VII",
+   "file": "c8.json",
+   "words": 152
+  },
+  {
+   "n": 9,
+   "title": "Chapter VIII",
+   "file": "c9.json",
+   "words": 389
+  },
+  {
+   "n": 10,
+   "title": "Chapter IX",
+   "file": "c10.json",
+   "words": 236
+  },
+  {
+   "n": 11,
+   "title": "Chapter X",
+   "file": "c11.json",
+   "words": 200
+  },
+  {
+   "n": 12,
+   "title": "Chapter XI",
+   "file": "c12.json",
+   "words": 537
+  },
+  {
+   "n": 13,
+   "title": "Chapter XII",
+   "file": "c13.json",
+   "words": 614
+  },
+  {
+   "n": 14,
+   "title": "Chapter XIII",
+   "file": "c14.json",
+   "words": 634
+  }
+ ]
+}

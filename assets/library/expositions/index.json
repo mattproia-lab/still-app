@@ -1,0 +1,908 @@
+{
+ "title": "Expositions on the Psalms",
+ "author": "Augustine of Hippo",
+ "source": "vault/raw/theology/doctors/2026-09-08-augustine-expositions-on-the-psalms-npnf1-08.md (Coxe, 1888)",
+ "slug": "expositions",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Psalm 1",
+   "file": "c1.json",
+   "words": 1691
+  },
+  {
+   "n": 2,
+   "title": "Psalm 2",
+   "file": "c2.json",
+   "words": 1723
+  },
+  {
+   "n": 3,
+   "title": "Psalm 3",
+   "file": "c3.json",
+   "words": 3892
+  },
+  {
+   "n": 4,
+   "title": "Psalm 4",
+   "file": "c4.json",
+   "words": 3088
+  },
+  {
+   "n": 5,
+   "title": "Psalm 5",
+   "file": "c5.json",
+   "words": 4530
+  },
+  {
+   "n": 6,
+   "title": "Psalm 6",
+   "file": "c6.json",
+   "words": 4853
+  },
+  {
+   "n": 7,
+   "title": "Psalm 7",
+   "file": "c7.json",
+   "words": 7809
+  },
+  {
+   "n": 8,
+   "title": "Psalm 8",
+   "file": "c8.json",
+   "words": 4773
+  },
+  {
+   "n": 9,
+   "title": "Psalm 9",
+   "file": "c9.json",
+   "words": 5377
+  },
+  {
+   "n": 10,
+   "title": "Psalm 10 (Vulgate 9)",
+   "file": "c10.json",
+   "words": 3365
+  },
+  {
+   "n": 11,
+   "title": "Psalm 11 (Vulgate 10)",
+   "file": "c11.json",
+   "words": 3829
+  },
+  {
+   "n": 12,
+   "title": "Psalm 12 (Vulgate 11)",
+   "file": "c12.json",
+   "words": 1130
+  },
+  {
+   "n": 13,
+   "title": "Psalm 13 (Vulgate 12)",
+   "file": "c13.json",
+   "words": 660
+  },
+  {
+   "n": 14,
+   "title": "Psalm 14 (Vulgate 13)",
+   "file": "c14.json",
+   "words": 1379
+  },
+  {
+   "n": 15,
+   "title": "Psalm 15 (Vulgate 14)",
+   "file": "c15.json",
+   "words": 757
+  },
+  {
+   "n": 16,
+   "title": "Psalm 16 (Vulgate 15)",
+   "file": "c16.json",
+   "words": 970
+  },
+  {
+   "n": 17,
+   "title": "Psalm 17 (Vulgate 16)",
+   "file": "c17.json",
+   "words": 1185
+  },
+  {
+   "n": 18,
+   "title": "Psalm 18 (Vulgate 17)",
+   "file": "c18.json",
+   "words": 3771
+  },
+  {
+   "n": 19,
+   "title": "Psalm 19 (Vulgate 18)",
+   "file": "c19.json",
+   "words": 1627
+  },
+  {
+   "n": 20,
+   "title": "Psalm 20 (Vulgate 19)",
+   "file": "c20.json",
+   "words": 898
+  },
+  {
+   "n": 21,
+   "title": "Psalm 21 (Vulgate 20)",
+   "file": "c21.json",
+   "words": 898
+  },
+  {
+   "n": 22,
+   "title": "Psalm 22 (Vulgate 21)",
+   "file": "c22.json",
+   "words": 2352
+  },
+  {
+   "n": 23,
+   "title": "Psalm 23 (Vulgate 22)",
+   "file": "c23.json",
+   "words": 512
+  },
+  {
+   "n": 24,
+   "title": "Psalm 24 (Vulgate 23)",
+   "file": "c24.json",
+   "words": 922
+  },
+  {
+   "n": 25,
+   "title": "Psalm 25 (Vulgate 24)",
+   "file": "c25.json",
+   "words": 1572
+  },
+  {
+   "n": 26,
+   "title": "Psalm 26 (Vulgate 25)",
+   "file": "c26.json",
+   "words": 731
+  },
+  {
+   "n": 27,
+   "title": "Psalm 27 (Vulgate 26)",
+   "file": "c27.json",
+   "words": 1384
+  },
+  {
+   "n": 28,
+   "title": "Psalm 28 (Vulgate 27)",
+   "file": "c28.json",
+   "words": 858
+  },
+  {
+   "n": 29,
+   "title": "Psalm 29 (Vulgate 28)",
+   "file": "c29.json",
+   "words": 953
+  },
+  {
+   "n": 30,
+   "title": "Psalm 30 (Vulgate 29)",
+   "file": "c30.json",
+   "words": 953
+  },
+  {
+   "n": 31,
+   "title": "Psalm 31 (Vulgate 30)",
+   "file": "c31.json",
+   "words": 2009
+  },
+  {
+   "n": 32,
+   "title": "Psalm 32 (Vulgate 31)",
+   "file": "c32.json",
+   "words": 717
+  },
+  {
+   "n": 33,
+   "title": "Psalm 33 (Vulgate 32)",
+   "file": "c33.json",
+   "words": 1228
+  },
+  {
+   "n": 34,
+   "title": "Psalm 34 (Vulgate 33)",
+   "file": "c34.json",
+   "words": 6557
+  },
+  {
+   "n": 35,
+   "title": "Psalm 35 (Vulgate 34)",
+   "file": "c35.json",
+   "words": 7330
+  },
+  {
+   "n": 36,
+   "title": "Psalm 36 (Vulgate 35)",
+   "file": "c36.json",
+   "words": 4836
+  },
+  {
+   "n": 37,
+   "title": "Psalm 37 (Vulgate 36)",
+   "file": "c37.json",
+   "words": 11996
+  },
+  {
+   "n": 38,
+   "title": "Psalm 38 (Vulgate 37)",
+   "file": "c38.json",
+   "words": 9240
+  },
+  {
+   "n": 39,
+   "title": "Psalm 39 (Vulgate 38)",
+   "file": "c39.json",
+   "words": 7689
+  },
+  {
+   "n": 40,
+   "title": "Psalm 40 (Vulgate 39)",
+   "file": "c40.json",
+   "words": 8987
+  },
+  {
+   "n": 41,
+   "title": "Psalm 41 (Vulgate 40)",
+   "file": "c41.json",
+   "words": 4258
+  },
+  {
+   "n": 42,
+   "title": "Psalm 42 (Vulgate 41)",
+   "file": "c42.json",
+   "words": 5982
+  },
+  {
+   "n": 43,
+   "title": "Psalm 43 (Vulgate 42)",
+   "file": "c43.json",
+   "words": 2735
+  },
+  {
+   "n": 44,
+   "title": "Psalm 44 (Vulgate 43)",
+   "file": "c44.json",
+   "words": 5037
+  },
+  {
+   "n": 45,
+   "title": "Psalm 45 (Vulgate 44)",
+   "file": "c45.json",
+   "words": 10049
+  },
+  {
+   "n": 46,
+   "title": "Psalm 46 (Vulgate 45)",
+   "file": "c46.json",
+   "words": 5082
+  },
+  {
+   "n": 47,
+   "title": "Psalm 47 (Vulgate 46)",
+   "file": "c47.json",
+   "words": 3778
+  },
+  {
+   "n": 48,
+   "title": "Psalm 48 (Vulgate 47)",
+   "file": "c48.json",
+   "words": 4760
+  },
+  {
+   "n": 49,
+   "title": "Psalm 49 (Vulgate 48)",
+   "file": "c49.json",
+   "words": 9016
+  },
+  {
+   "n": 50,
+   "title": "Psalm 50 (Vulgate 49)",
+   "file": "c50.json",
+   "words": 12100
+  },
+  {
+   "n": 51,
+   "title": "Psalm 51 (Vulgate 50)",
+   "file": "c51.json",
+   "words": 7739
+  },
+  {
+   "n": 52,
+   "title": "Psalm 52 (Vulgate 51)",
+   "file": "c52.json",
+   "words": 5490
+  },
+  {
+   "n": 53,
+   "title": "Psalm 53 (Vulgate 52)",
+   "file": "c53.json",
+   "words": 3090
+  },
+  {
+   "n": 54,
+   "title": "Psalm 54 (Vulgate 53)",
+   "file": "c54.json",
+   "words": 3800
+  },
+  {
+   "n": 55,
+   "title": "Psalm 55 (Vulgate 54)",
+   "file": "c55.json",
+   "words": 9532
+  },
+  {
+   "n": 56,
+   "title": "Psalm 56 (Vulgate 55)",
+   "file": "c56.json",
+   "words": 6762
+  },
+  {
+   "n": 57,
+   "title": "Psalm 57 (Vulgate 56)",
+   "file": "c57.json",
+   "words": 4528
+  },
+  {
+   "n": 58,
+   "title": "Psalm 58 (Vulgate 57)",
+   "file": "c58.json",
+   "words": 6946
+  },
+  {
+   "n": 59,
+   "title": "Psalm 59 (Vulgate 58)",
+   "file": "c59.json",
+   "words": 7765
+  },
+  {
+   "n": 60,
+   "title": "Psalm 60 (Vulgate 59)",
+   "file": "c60.json",
+   "words": 4657
+  },
+  {
+   "n": 61,
+   "title": "Psalm 61 (Vulgate 60)",
+   "file": "c61.json",
+   "words": 2556
+  },
+  {
+   "n": 62,
+   "title": "Psalm 62 (Vulgate 61)",
+   "file": "c62.json",
+   "words": 7826
+  },
+  {
+   "n": 63,
+   "title": "Psalm 63 (Vulgate 62)",
+   "file": "c63.json",
+   "words": 4838
+  },
+  {
+   "n": 64,
+   "title": "Psalm 64 (Vulgate 63)",
+   "file": "c64.json",
+   "words": 4419
+  },
+  {
+   "n": 65,
+   "title": "Psalm 65 (Vulgate 64)",
+   "file": "c65.json",
+   "words": 6254
+  },
+  {
+   "n": 66,
+   "title": "Psalm 66 (Vulgate 65)",
+   "file": "c66.json",
+   "words": 7169
+  },
+  {
+   "n": 67,
+   "title": "Psalm 67 (Vulgate 66)",
+   "file": "c67.json",
+   "words": 5007
+  },
+  {
+   "n": 68,
+   "title": "Psalm 68 (Vulgate 67)",
+   "file": "c68.json",
+   "words": 14048
+  },
+  {
+   "n": 69,
+   "title": "Psalm 69 (Vulgate 68)",
+   "file": "c69.json",
+   "words": 12259
+  },
+  {
+   "n": 70,
+   "title": "Psalm 70 (Vulgate 69)",
+   "file": "c70.json",
+   "words": 3830
+  },
+  {
+   "n": 71,
+   "title": "Psalm 71 (Vulgate 70)",
+   "file": "c71.json",
+   "words": 11738
+  },
+  {
+   "n": 72,
+   "title": "Psalm 72 (Vulgate 71)",
+   "file": "c72.json",
+   "words": 7266
+  },
+  {
+   "n": 73,
+   "title": "Psalm 73 (Vulgate 72)",
+   "file": "c73.json",
+   "words": 8535
+  },
+  {
+   "n": 74,
+   "title": "Psalm 74 (Vulgate 73)",
+   "file": "c74.json",
+   "words": 7922
+  },
+  {
+   "n": 75,
+   "title": "Psalm 75 (Vulgate 74)",
+   "file": "c75.json",
+   "words": 4827
+  },
+  {
+   "n": 76,
+   "title": "Psalm 76 (Vulgate 75)",
+   "file": "c76.json",
+   "words": 5647
+  },
+  {
+   "n": 77,
+   "title": "Psalm 77 (Vulgate 76)",
+   "file": "c77.json",
+   "words": 5738
+  },
+  {
+   "n": 78,
+   "title": "Psalm 78 (Vulgate 77)",
+   "file": "c78.json",
+   "words": 14425
+  },
+  {
+   "n": 79,
+   "title": "Psalm 79 (Vulgate 78)",
+   "file": "c79.json",
+   "words": 5984
+  },
+  {
+   "n": 80,
+   "title": "Psalm 80 (Vulgate 79)",
+   "file": "c80.json",
+   "words": 3888
+  },
+  {
+   "n": 81,
+   "title": "Psalm 81 (Vulgate 80)",
+   "file": "c81.json",
+   "words": 5508
+  },
+  {
+   "n": 82,
+   "title": "Psalm 82 (Vulgate 81)",
+   "file": "c82.json",
+   "words": 1959
+  },
+  {
+   "n": 83,
+   "title": "Psalm 83 (Vulgate 82)",
+   "file": "c83.json",
+   "words": 2773
+  },
+  {
+   "n": 84,
+   "title": "Psalm 84 (Vulgate 83)",
+   "file": "c84.json",
+   "words": 5146
+  },
+  {
+   "n": 85,
+   "title": "Psalm 85 (Vulgate 84)",
+   "file": "c85.json",
+   "words": 4762
+  },
+  {
+   "n": 86,
+   "title": "Psalm 86 (Vulgate 85)",
+   "file": "c86.json",
+   "words": 10266
+  },
+  {
+   "n": 87,
+   "title": "Psalm 87 (Vulgate 86)",
+   "file": "c87.json",
+   "words": 4349
+  },
+  {
+   "n": 88,
+   "title": "Psalm 88 (Vulgate 87)",
+   "file": "c88.json",
+   "words": 5853
+  },
+  {
+   "n": 89,
+   "title": "Psalm 89 (Vulgate 88)",
+   "file": "c89.json",
+   "words": 11903
+  },
+  {
+   "n": 90,
+   "title": "Psalm 90 (Vulgate 89)",
+   "file": "c90.json",
+   "words": 5008
+  },
+  {
+   "n": 91,
+   "title": "Psalm 91 (Vulgate 90)",
+   "file": "c91.json",
+   "words": 6848
+  },
+  {
+   "n": 92,
+   "title": "Psalm 92 (Vulgate 91)",
+   "file": "c92.json",
+   "words": 3930
+  },
+  {
+   "n": 93,
+   "title": "Psalm 93 (Vulgate 92)",
+   "file": "c93.json",
+   "words": 2592
+  },
+  {
+   "n": 94,
+   "title": "Psalm 94 (Vulgate 93)",
+   "file": "c94.json",
+   "words": 8093
+  },
+  {
+   "n": 95,
+   "title": "Psalm 95 (Vulgate 94)",
+   "file": "c95.json",
+   "words": 2939
+  },
+  {
+   "n": 96,
+   "title": "Psalm 96 (Vulgate 95)",
+   "file": "c96.json",
+   "words": 4829
+  },
+  {
+   "n": 97,
+   "title": "Psalm 97 (Vulgate 96)",
+   "file": "c97.json",
+   "words": 5569
+  },
+  {
+   "n": 98,
+   "title": "Psalm 98 (Vulgate 97)",
+   "file": "c98.json",
+   "words": 2332
+  },
+  {
+   "n": 99,
+   "title": "Psalm 99 (Vulgate 98)",
+   "file": "c99.json",
+   "words": 4772
+  },
+  {
+   "n": 100,
+   "title": "Psalm 100 (Vulgate 99)",
+   "file": "c100.json",
+   "words": 3530
+  },
+  {
+   "n": 101,
+   "title": "Psalm 101 (Vulgate 100)",
+   "file": "c101.json",
+   "words": 3370
+  },
+  {
+   "n": 102,
+   "title": "Psalm 102 (Vulgate 101)",
+   "file": "c102.json",
+   "words": 8690
+  },
+  {
+   "n": 103,
+   "title": "Psalm 103 (Vulgate 102)",
+   "file": "c103.json",
+   "words": 6632
+  },
+  {
+   "n": 104,
+   "title": "Psalm 104 (Vulgate 103)",
+   "file": "c104.json",
+   "words": 10432
+  },
+  {
+   "n": 105,
+   "title": "Psalm 105 (Vulgate 104)",
+   "file": "c105.json",
+   "words": 5371
+  },
+  {
+   "n": 106,
+   "title": "Psalm 106 (Vulgate 105)",
+   "file": "c106.json",
+   "words": 6767
+  },
+  {
+   "n": 107,
+   "title": "Psalm 107 (Vulgate 106)",
+   "file": "c107.json",
+   "words": 3370
+  },
+  {
+   "n": 108,
+   "title": "Psalm 108 (Vulgate 107)",
+   "file": "c108.json",
+   "words": 670
+  },
+  {
+   "n": 109,
+   "title": "Psalm 109 (Vulgate 108)",
+   "file": "c109.json",
+   "words": 4811
+  },
+  {
+   "n": 110,
+   "title": "Psalm 110 (Vulgate 109)",
+   "file": "c110.json",
+   "words": 3599
+  },
+  {
+   "n": 111,
+   "title": "Psalm 111 (Vulgate 110)",
+   "file": "c111.json",
+   "words": 1916
+  },
+  {
+   "n": 112,
+   "title": "Psalm 112 (Vulgate 111)",
+   "file": "c112.json",
+   "words": 1583
+  },
+  {
+   "n": 113,
+   "title": "Psalm 113 (Vulgate 112)",
+   "file": "c113.json",
+   "words": 1378
+  },
+  {
+   "n": 114,
+   "title": "Psalm 114 (Vulgate 113)",
+   "file": "c114.json",
+   "words": 1903
+  },
+  {
+   "n": 115,
+   "title": "Psalm 115 (Vulgate 114)",
+   "file": "c115.json",
+   "words": 2439
+  },
+  {
+   "n": 116,
+   "title": "Psalm 116 (Vulgate 115)",
+   "file": "c116.json",
+   "words": 2731
+  },
+  {
+   "n": 117,
+   "title": "Psalm 117 (Vulgate 116)",
+   "file": "c117.json",
+   "words": 174
+  },
+  {
+   "n": 118,
+   "title": "Psalm 118 (Vulgate 117)",
+   "file": "c118.json",
+   "words": 3086
+  },
+  {
+   "n": 119,
+   "title": "Psalm 119 (Vulgate 118)",
+   "file": "c119.json",
+   "words": 29046
+  },
+  {
+   "n": 120,
+   "title": "Psalm 120 (Vulgate 119)",
+   "file": "c120.json",
+   "words": 2028
+  },
+  {
+   "n": 121,
+   "title": "Psalm 121 (Vulgate 120)",
+   "file": "c121.json",
+   "words": 2342
+  },
+  {
+   "n": 122,
+   "title": "Psalm 122 (Vulgate 121)",
+   "file": "c122.json",
+   "words": 3107
+  },
+  {
+   "n": 123,
+   "title": "Psalm 123 (Vulgate 122)",
+   "file": "c123.json",
+   "words": 2531
+  },
+  {
+   "n": 124,
+   "title": "Psalm 124 (Vulgate 123)",
+   "file": "c124.json",
+   "words": 2170
+  },
+  {
+   "n": 125,
+   "title": "Psalm 125 (Vulgate 124)",
+   "file": "c125.json",
+   "words": 2765
+  },
+  {
+   "n": 126,
+   "title": "Psalm 126 (Vulgate 125)",
+   "file": "c126.json",
+   "words": 2366
+  },
+  {
+   "n": 127,
+   "title": "Psalm 127 (Vulgate 126)",
+   "file": "c127.json",
+   "words": 2854
+  },
+  {
+   "n": 128,
+   "title": "Psalm 128 (Vulgate 127)",
+   "file": "c128.json",
+   "words": 1946
+  },
+  {
+   "n": 129,
+   "title": "Psalm 129 (Vulgate 128)",
+   "file": "c129.json",
+   "words": 2193
+  },
+  {
+   "n": 130,
+   "title": "Psalm 130 (Vulgate 129)",
+   "file": "c130.json",
+   "words": 1759
+  },
+  {
+   "n": 131,
+   "title": "Psalm 131 (Vulgate 130)",
+   "file": "c131.json",
+   "words": 1607
+  },
+  {
+   "n": 132,
+   "title": "Psalm 132 (Vulgate 131)",
+   "file": "c132.json",
+   "words": 6129
+  },
+  {
+   "n": 133,
+   "title": "Psalm 133 (Vulgate 132)",
+   "file": "c133.json",
+   "words": 1727
+  },
+  {
+   "n": 134,
+   "title": "Psalm 134 (Vulgate 133)",
+   "file": "c134.json",
+   "words": 413
+  },
+  {
+   "n": 135,
+   "title": "Psalm 135 (Vulgate 134)",
+   "file": "c135.json",
+   "words": 3316
+  },
+  {
+   "n": 136,
+   "title": "Psalm 136 (Vulgate 135)",
+   "file": "c136.json",
+   "words": 2886
+  },
+  {
+   "n": 137,
+   "title": "Psalm 137 (Vulgate 136)",
+   "file": "c137.json",
+   "words": 2287
+  },
+  {
+   "n": 138,
+   "title": "Psalm 138 (Vulgate 137)",
+   "file": "c138.json",
+   "words": 2848
+  },
+  {
+   "n": 139,
+   "title": "Psalm 139 (Vulgate 138)",
+   "file": "c139.json",
+   "words": 5376
+  },
+  {
+   "n": 140,
+   "title": "Psalm 140 (Vulgate 139)",
+   "file": "c140.json",
+   "words": 3673
+  },
+  {
+   "n": 141,
+   "title": "Psalm 141 (Vulgate 140)",
+   "file": "c141.json",
+   "words": 4024
+  },
+  {
+   "n": 142,
+   "title": "Psalm 142 (Vulgate 141)",
+   "file": "c142.json",
+   "words": 2916
+  },
+  {
+   "n": 143,
+   "title": "Psalm 143 (Vulgate 142)",
+   "file": "c143.json",
+   "words": 2885
+  },
+  {
+   "n": 144,
+   "title": "Psalm 144 (Vulgate 143)",
+   "file": "c144.json",
+   "words": 2568
+  },
+  {
+   "n": 145,
+   "title": "Psalm 145 (Vulgate 144)",
+   "file": "c145.json",
+   "words": 4537
+  },
+  {
+   "n": 146,
+   "title": "Psalm 146 (Vulgate 145)",
+   "file": "c146.json",
+   "words": 3618
+  },
+  {
+   "n": 147,
+   "title": "Psalm 147",
+   "file": "c147.json",
+   "words": 8229
+  },
+  {
+   "n": 148,
+   "title": "Psalm 148",
+   "file": "c148.json",
+   "words": 4092
+  },
+  {
+   "n": 149,
+   "title": "Psalm 149",
+   "file": "c149.json",
+   "words": 3932
+  },
+  {
+   "n": 150,
+   "title": "Psalm 150",
+   "file": "c150.json",
+   "words": 7242
+  }
+ ]
+}

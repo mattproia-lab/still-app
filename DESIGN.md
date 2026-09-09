@@ -289,7 +289,22 @@ button stops breathing.
   `.lectio-carry` for the word carried into Oratio; `.claude-q-card` and
   `.closing-prayer-card` share a floating label; `.lectio-chip` summary. The
   passage list is built by `buildPassageList()`; its template now emits classes
-  only, no inline presentation.
+  only, no inline presentation. **Today's Gospel** heads the door
+  (`#lectioGospel`, above "Before we open the text"): a quiet card in the
+  serif, the citation as a gold micro label, the first phrase of the passage
+  in the italic (two lines at most), and one ghost action, "Pray with today's
+  Gospel". `lectioSeedGospel()` paints it on entry from two static files
+  fetched through `Liturgy` on first use and kept: the Lectionary table
+  (`assets/readings/<year>.json`, the day's `gospel` citation, the first of
+  any alternatives) and the Douay-Rheims copy (`assets/scripture/dr/`, the
+  book named by the `dr` citation, the verses in its ranges; a psalm whole).
+  The card stays hidden until both are in hand and never shows on a day
+  without a Gospel. Tapping it makes the Gospel the passage in hand exactly
+  as a chosen passage would be, `lState.passageIndex` -1 with the passage on
+  `lState.gospel` and every reader going through `lectioPassage()`, and
+  begins the reading; the verses are cut into phrases after sentence and
+  clause ends. The save, the two model requests and the library are
+  unchanged.
 
 - **The Office**: no timer, so no ring. The glow takes the colour of the
   canonical hour through `#screen-office[data-hour]`, one variable set per
@@ -847,6 +862,36 @@ button stops breathing.
   Stay as long as you need.", and Return to Still. "Begin Again" is gone;
   the track goes back. Nothing is saved; there is no timer.
 
+- **The Library** (`#screen-library`): the reading room, a screen on the
+  tokens reached from home beside Reading Toward the Center (Resources
+  stays; it has content of its own). No card, no ring, no photograph; the
+  array's muted blue-grey (`--atmos-rgb` 70,70,90 at .50, the same triplet
+  Resources carries) sits behind the text at the Guide's height. The shelf
+  is `LIBRARY_SHELF`, in the vault's order: the Douay-Rheims first, then
+  de Sales, the Imitation, the Paradise of the Holy Fathers, Cassian's
+  Conferences, the Cloud, Thérèse, the Confessions, the Expositions on the
+  Psalms, Guigo's Ladder, and three rows for Denis the Carthusian that
+  show "Coming soon" in place of Open, greyed and not tappable, until their
+  renderings land. Each row is author (sans micro), title (serif), a
+  one-line description (sans) and, for the renderings made for Still, the
+  note "Rendered into English for Still from the Latin. Not a published
+  translation." The texts are read from `assets/library/<slug>/`, written
+  by `tools/library/build.py` from the vault's raw files: an `index.json`
+  of chapters and one JSON file per chapter, so a text loads a chapter at
+  a time (the Expositions' 150 psalms, Cassian's 24 conferences, the
+  Paradise in numbered parts of about 2,400 words where the OCR has no
+  headings to cut on). The Douay-Rheims is read from
+  `assets/scripture/dr/` through `Liturgy`'s loader: the nav lists the 73
+  books, a row of pills the book's chapters as the copy keys them (`113b`
+  included), verse numbers in the sans beside each verse. The reader is
+  the serif at reading measure, the chapter list a quiet hairline list
+  toggled by "Chapters" with the chapter in hand in the candle, Previous
+  and Next beneath. The bookmark is the one save: `still_library_<slug>`
+  holds the chapter and the scroll position (the book too for the Bible),
+  written a moment after the scroll settles and on every chapter change,
+  read back when the text is opened; a row whose text has a bookmark says
+  "Continue" instead of "Open". No server sync; nothing else is saved.
+  `assets/library/` is about 11 MB and ships with the app.
 - **The Dialogue Chamber** (`#screen-dialogue`): the deep sea from `W[]`
   (`12,64,88` at .85), the glow slowed to twice `--d-drift`. The
   practice keeps its three environments, the sea, the bridge and the flame

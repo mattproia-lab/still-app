@@ -305,9 +305,21 @@
 
       if (toSchedule.length) {
         await LN.schedule({ notifications: toSchedule });
+        /* What we asked the OS for. verifyPending() below reports what the OS
+           actually kept -- the two disagreeing is the interesting case, so log
+           the request in the same detail: id, time and the sound file, since a
+           sound the bundle is missing fails silently to the default tone. */
+        console.log('[bell-native] scheduled ' + toSchedule.length + ' bell(s): ' +
+          toSchedule.map(function (n) {
+            return n.id + ' "' + n.title + '" @ ' +
+                   ('0' + n.schedule.on.hour).slice(-2) + ':' +
+                   ('0' + n.schedule.on.minute).slice(-2) +
+                   ' sound=' + (n.sound || '(default)');
+          }).join(' | '));
         try { localStorage.setItem('bellsScheduled', '1'); } catch (e) {}
         try { localStorage.setItem('bellsCount', String(toSchedule.length)); } catch (e) {}
       } else {
+        console.log('[bell-native] nothing to schedule -- every bell toggle is off');
         try { localStorage.removeItem('bellsScheduled'); } catch (e) {}
         try { localStorage.removeItem('bellsCount'); } catch (e) {}
       }
