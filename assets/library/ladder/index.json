@@ -6,87 +6,87 @@
  "chapters": [
   {
    "n": 1,
-   "title": "The letter of Dom Guigo the Carthusian",
+   "title": "The letter of Dom Guigo the Carthusian · To brother Gervase, on the contemplative life",
    "file": "c1.json",
-   "words": 180
+   "words": 173
   },
   {
    "n": 2,
-   "title": "Chapter I",
+   "title": "Chapter I · A description of the four rungs of the spiritual exercises",
    "file": "c2.json",
-   "words": 239
+   "words": 229
   },
   {
    "n": 3,
-   "title": "Chapter II",
+   "title": "Chapter II · A description of the offices of the four rungs",
    "file": "c3.json",
-   "words": 319
+   "words": 310
   },
   {
    "n": 4,
-   "title": "Chapter III",
+   "title": "Chapter III · The office of meditation",
    "file": "c4.json",
-   "words": 829
+   "words": 825
   },
   {
    "n": 5,
-   "title": "Chapter IV",
+   "title": "Chapter IV · The office of prayer",
    "file": "c5.json",
-   "words": 252
+   "words": 248
   },
   {
    "n": 6,
-   "title": "Chapter V",
+   "title": "Chapter V · The office of contemplation",
    "file": "c6.json",
-   "words": 199
+   "words": 195
   },
   {
    "n": 7,
-   "title": "Chapter VI",
+   "title": "Chapter VI · The signs of the Holy Spirit's coming to the soul",
    "file": "c7.json",
-   "words": 391
+   "words": 381
   },
   {
    "n": 8,
-   "title": "Chapter VII",
+   "title": "Chapter VII · On the hiding of grace",
    "file": "c8.json",
-   "words": 152
+   "words": 147
   },
   {
    "n": 9,
-   "title": "Chapter VIII",
+   "title": "Chapter VIII · That the hiding of grace for a time works together for our good",
    "file": "c9.json",
-   "words": 389
+   "words": 376
   },
   {
    "n": 10,
-   "title": "Chapter IX",
+   "title": "Chapter IX · How carefully the soul must bear itself after the visitation of grace",
    "file": "c10.json",
-   "words": 236
+   "words": 224
   },
   {
    "n": 11,
-   "title": "Chapter X",
+   "title": "Chapter X · A recapitulation of what has been said",
    "file": "c11.json",
-   "words": 200
+   "words": 193
   },
   {
    "n": 12,
-   "title": "Chapter XI",
+   "title": "Chapter XI · Neither reading without meditation nor meditation without prayer profits",
    "file": "c12.json",
-   "words": 537
+   "words": 528
   },
   {
    "n": 13,
-   "title": "Chapter XII",
+   "title": "Chapter XII · How the rungs already named are linked one to another",
    "file": "c13.json",
-   "words": 614
+   "words": 604
   },
   {
    "n": 14,
-   "title": "Chapter XIII",
+   "title": "Chapter XIII · Four causes that draw us back from these four rungs",
    "file": "c14.json",
-   "words": 634
+   "words": 624
   }
  ]
 }

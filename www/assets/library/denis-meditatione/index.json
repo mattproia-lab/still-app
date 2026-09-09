@@ -1,0 +1,98 @@
+{
+ "title": "On Meditation",
+ "author": "Denis the Carthusian",
+ "source": "vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)",
+ "slug": "denis-meditatione",
+ "chapters": [
+  {
+   "n": 1,
+   "title": "Proemium",
+   "file": "c1.json",
+   "words": 285
+  },
+  {
+   "n": 2,
+   "title": "Article I · Of the harm of evil thoughts",
+   "file": "c2.json",
+   "words": 387
+  },
+  {
+   "n": 3,
+   "title": "Article II · Of the things which are wholesomely and continually to be meditated and considered",
+   "file": "c3.json",
+   "words": 250
+  },
+  {
+   "n": 4,
+   "title": "Article III · A rebuke of the sloth, negligence and irreverence of our wretched and unhappy souls before the Most High",
+   "file": "c4.json",
+   "words": 892
+  },
+  {
+   "n": 5,
+   "title": "Article IV · That an order is to be kept in meditations",
+   "file": "c5.json",
+   "words": 1322
+  },
+  {
+   "n": 6,
+   "title": "Article V · Of man's advance in saving knowledge and in virtues and in divine charity",
+   "file": "c6.json",
+   "words": 1258
+  },
+  {
+   "n": 7,
+   "title": "Article VI · Of the shortest and best manner and means of obtaining saving wisdom and truly wholesome knowledge",
+   "file": "c7.json",
+   "words": 1127
+  },
+  {
+   "n": 8,
+   "title": "Article VII · Of the unceasing fixing of the mind on God",
+   "file": "c8.json",
+   "words": 1146
+  },
+  {
+   "n": 9,
+   "title": "Article VIII · A continuation of this matter",
+   "file": "c9.json",
+   "words": 1523
+  },
+  {
+   "n": 10,
+   "title": "Article IX · Of the continual and earnest examination of oneself",
+   "file": "c10.json",
+   "words": 650
+  },
+  {
+   "n": 11,
+   "title": "Article X · Of the things to be meditated concerning the incarnation of the only-begotten Son of God and his other mysteries",
+   "file": "c11.json",
+   "words": 522
+  },
+  {
+   "n": 12,
+   "title": "Article XI · Of meditating on Christ's way of living",
+   "file": "c12.json",
+   "words": 1314
+  },
+  {
+   "n": 13,
+   "title": "Article XII · Of Christ's passion",
+   "file": "c13.json",
+   "words": 499
+  },
+  {
+   "n": 14,
+   "title": "Article XIII · Of the excellence and greatness of the grace distributed by Christ to the faithful",
+   "file": "c14.json",
+   "words": 723
+  },
+  {
+   "n": 15,
+   "title": "Article XIV · A lament over the evils of the Church",
+   "file": "c15.json",
+   "words": 797
+  }
+ ]
+}

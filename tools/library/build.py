@@ -61,9 +61,11 @@ def parts_of(blocks, words_per=2400, label='Part'):
     if cur: parts.append(cur)
     return [('%s %d' % (label, i + 1), p) for i, p in enumerate(parts)]
 
-# ── Guigo II, the rendering ──────────────────────────────────────────────
-def guigo():
-    s = read('saints/2026-09-08-guigo-scala-claustralium-english-rendering.md')
+# ── The renderings made for Still (Guigo II, Denis) ─────────────────────
+# One shape: an H1 (skipped), H2/H3 headings as chapters, an italic line straight under a heading
+# as the chapter's subtitle, *emphasis* flattened, review markers dropped from the reading text.
+def rendering(rel):
+    s = read(rel)
     lines = s.split('\n')
     chapters, cur, title, buf = [], None, None, []
     def flush():
@@ -78,11 +80,14 @@ def guigo():
             continue
         if title is None: continue
         it = re.match(r'^\*(.+)\*\s*$', l.strip())
-        if it and not buf:   # the chapter's own subtitle line
+        if it and not any(x.strip() for x in buf):   # the chapter's own subtitle line (blank lines before it do not count)
             title = title + ' · ' + it.group(1).strip(); continue
         buf.append(re.sub(r'\*([^*]+)\*', r'\1', l).replace('[REVIEW NEEDED] ', ''))
     flush()
     return chapters
+
+def guigo(): return rendering('saints/2026-09-08-guigo-scala-claustralium-english-rendering.md')
+def denis_meditatione(): return rendering('saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md')
 
 # ── The Cloud of Unknowing ───────────────────────────────────────────────
 def cloud():
@@ -313,3 +318,4 @@ if __name__ == '__main__':
     write_text('confessions', {'title': 'The Confessions', 'author': 'Augustine of Hippo', 'source': 'vault/raw/theology/doctors/2026-09-08-augustine-confessions-pusey.md (Pusey, 1838)'}, confessions())
     write_text('expositions', {'title': 'Expositions on the Psalms', 'author': 'Augustine of Hippo', 'source': 'vault/raw/theology/doctors/2026-09-08-augustine-expositions-on-the-psalms-npnf1-08.md (Coxe, 1888)'}, expositions())
     write_text('ladder', {'title': 'The Ladder of Monks', 'author': 'Guigo II', 'source': 'vault/raw/theology/saints/2026-09-08-guigo-scala-claustralium-english-rendering.md (rendering for Still, 2026)'}, guigo())
+    write_text('denis-meditatione', {'title': 'On Meditation', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-meditatione-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_meditatione())
