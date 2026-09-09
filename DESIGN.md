@@ -822,12 +822,27 @@ button stops breathing.
   (`.letter-mobile`, `.letter-desktop`) and the photograph's markup are
   retired; the file stays, and the Sacristy still shows it.
 
-- **Home** (`#home`): not redesigned. Two things only. The list's type is
-  on the loaded faces: the practice names and the wordmark in the serif,
-  the eyebrow, the badges, the header's label, the description panel and
-  its action and the gallery button in the sans, every size, weight,
-  colour and spacing as it was, and so are the mobile Enter tab (serif) and
-  the counter (sans); the dots are drawn, with no type. The ⓘ in the header pulses in the candle on a first visit, and only
+- **Home** (`#home`): the list breathes; the rest is not redesigned. The
+  list's type is on the loaded faces: the practice names and the wordmark in
+  the serif, the eyebrow, the badges, the header's label, the description
+  panel and its action and the gallery button in the sans, and the mobile
+  Enter tab (serif) and the counter (sans) as they were; the dots are drawn,
+  with no type. The names' sizes are one scale read off each row's closeness
+  to the focus (`--k` on `.feat-item`: 2 at the focus, 1 one row away, 0
+  beyond): the focused name at `clamp(40px, 8vw, 56px)`, its neighbours at
+  `clamp(24px, 5vw, 36px)`, the rest at `clamp(16px, 3.5vw, 24px)`,
+  interpolated between those marks and eased over `--d-base`, so on a phone
+  a scroll slides a name through the scale instead of stepping it.
+  `breatheList()` writes `--k`: on a phone from the scroll position, which
+  maps onto the list, the first row at the top of the travel and the last at
+  the bottom, the travel measured with every row at rest so a row's own
+  growth does not move the map; the highlighted row (the scroll watcher, and
+  a tap through `scrollListTo()`) follows the same map. On a wider screen
+  `--k` follows the highlighted index. Beneath the focused name only, the
+  feature's one-line `h` in the sans at `--t-sm` (`.fh`), its opacity and
+  its room following `--k` past 1, so it fades in as the row reaches the
+  focus and out as it leaves; the description panel at the side keeps the
+  full text. Readable mode still does not reach the list. The ⓘ in the header pulses in the candle on a first visit, and only
   while a practice is highlighted in the list, by the initial focus, a
   scroll or a tap (`#home:has(.feat-item.is-active) #homeInfoBtn.info-unseen`,
   a text-shadow and a small scale, still under reduced motion), until it is

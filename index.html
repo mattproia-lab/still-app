@@ -318,19 +318,39 @@ html,body{width:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behav
   letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.42);
   margin-bottom:clamp(6px,1.5vh,20px);
 }
+/* The list breathes (DESIGN.md, Home). Each row carries --k, its closeness to
+   the focus: 2 at the centre, 1 one row away, 0 beyond, written by
+   breatheList() from the scroll position on a phone and from the highlighted
+   index elsewhere. The name's size is read off that number, so a scroll slides
+   it through the scale instead of stepping, and the transition smooths the
+   slide. The three sizes are the scale's marks: focused, neighbour, the rest. */
 .feat-item{
+  --k:0;
+  --fs-focus:clamp(40px,8vw,56px);--fs-near:clamp(24px,5vw,36px);--fs-far:clamp(16px,3.5vw,24px);
   cursor:pointer;padding:clamp(1px,.3vh,4px) 0;
-  display:flex;align-items:baseline;gap:11px;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:0 11px;
   transition:all .38s cubic-bezier(.4,0,.2,1);
 }
 .feat-item .fn{
   font-family:var(--font-serif);font-weight:700;
-  line-height:1.03;display:block;transition:all .38s cubic-bezier(.4,0,.2,1);
-  white-space:nowrap;
+  line-height:1.03;display:block;white-space:nowrap;
+  font-size:calc(var(--fs-far) + (var(--fs-near) - var(--fs-far)) * min(var(--k),1) + (var(--fs-focus) - var(--fs-near)) * max(var(--k) - 1,0));
+  color:rgba(255,255,255,.5);
+  transition:font-size var(--d-base) var(--ease-out),color var(--d-base) var(--ease-out),text-shadow var(--d-base) var(--ease-out);
 }
-.feat-item.is-active .fn{font-size:clamp(42px,5.8vw,72px);color:#fff;text-shadow:0 0 30px rgba(255,255,255,.1);}
-.feat-item.is-near   .fn{font-size:clamp(26px,3.4vw,44px);color:rgba(255,255,255,.58);}
-.feat-item.is-far    .fn{font-size:clamp(21px,2.2vw,28px);color:rgba(255,255,255,.5);}
+.feat-item.is-active .fn{color:#fff;text-shadow:0 0 30px rgba(255,255,255,.1);}
+.feat-item.is-near   .fn{color:rgba(255,255,255,.58);}
+/* The one-line preview beneath the focused name: the feature's h, in the sans.
+   Its opacity and its room both follow --k past 1, so it is present only as the
+   row reaches the centre and gone as the row leaves. The side panel keeps the
+   full text. */
+.feat-item .fh{
+  flex-basis:100%;font-family:var(--font-sans);font-size:var(--t-sm);font-weight:400;line-height:1.45;
+  color:rgba(255,255,255,.62);white-space:normal;text-wrap:pretty;
+  opacity:max(var(--k) - 1,0);max-height:calc(max(var(--k) - 1,0) * 3.2em);overflow:hidden;
+  margin-top:calc(max(var(--k) - 1,0) * 6px);
+  transition:opacity var(--d-base) var(--ease-out),max-height var(--d-base) var(--ease-out),margin-top var(--d-base) var(--ease-out);
+}
 .feat-item .fb{
   font-family:var(--font-sans);font-size:7.5px;font-weight:600;
   letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;
@@ -910,7 +930,7 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
     width: 100% !important;
     height: calc(100vh - env(safe-area-inset-top, 44px) - 52px) !important;
     height: calc(100dvh - env(safe-area-inset-top, 44px) - 52px) !important; /* the visible height on iOS; the vh line above is the fallback */
-    padding: 2px 0 200px 22px !important;
+    padding: 2px 0 75vh 22px !important; padding-bottom: 75dvh !important; /* travel for the breathing list, about two rows a finger-width; the vh value is the fallback */
     overflow-y: scroll !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
@@ -938,28 +958,21 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
     padding: 1px 0 !important;
     min-height: 32px !important;
     align-items: baseline !important;
-    gap: 8px !important;
+    gap: 0 8px !important;
   }
   .feat-item .fb { display: none !important; }
+  .feat-item .fh { max-width: calc(100vw - 44px) !important; }
 
+  /* sizes come from --k (see the base rules); only colour and wrapping here */
+  .feat-item .fn { line-height: 1.06 !important; }
   .feat-item.is-active .fn {
-    font-size: clamp(32px, 9vw, 44px) !important;
     color: #ffffff !important;
-    line-height: 1.04 !important;
     white-space: normal !important;
     word-break: break-word !important;
     max-width: calc(100vw - 44px) !important;
   }
-  .feat-item.is-near .fn {
-    font-size: clamp(20px, 6vw, 28px) !important;
-    color: rgba(255,255,255,.65) !important;
-    line-height: 1.1 !important;
-  }
-  .feat-item.is-far .fn {
-    font-size: clamp(16px, 4.5vw, 20px) !important;
-    color: rgba(255,255,255,.48) !important;
-    line-height: 1.1 !important;
-  }
+  .feat-item.is-near .fn { color: rgba(255,255,255,.65) !important; }
+  .feat-item.is-far .fn { color: rgba(255,255,255,.48) !important; }
 
   /* Divider before Deeper -- minimal */
   .feat-divider-line {
@@ -4503,10 +4516,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 }
 
 @media (max-width: 768px) {
-  /* Larger fonts for mobile readability */
-  .feat-item.is-active .fn { font-size: 36px !important; }
-  .feat-item.is-near .fn { font-size: 22px !important; }
-  .feat-item.is-far .fn { font-size: 15px !important; }
+  /* the list's sizes are on --k in the base rules; nothing pins them here */
 
 
   .feature-main p { font-size: var(--t-base) !important; line-height: var(--lh-text) !important; }
@@ -6973,7 +6983,7 @@ function buildFeatList(){
     if(i===10){const d=document.createElement('div');d.className='feat-divider-line';list.appendChild(d);}
     const item=document.createElement('div');
     item.className='feat-item is-far';item.dataset.i=i;
-    item.innerHTML=`<span class="fb">${f.badge}</span><span class="fn">${f.name}</span>`;
+    item.innerHTML=`<span class="fb">${f.badge}</span><span class="fn">${f.name}</span><span class="fh">${f.h}</span>`;
     item.addEventListener('click',()=>{
       if(IS_MOBILE){
         // Suppress the scroll-watcher briefly so it doesn't override our tap,
@@ -6982,7 +6992,7 @@ function buildFeatList(){
         clearTimeout(_suppressScrollTimer);
         _suppressScrollTimer = setTimeout(()=>{ _suppressScrollActivate = false; }, 700);
         homeActivate(i);
-        try { item.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch(e) {}
+        scrollListTo(i);
       } else {
         enterFeature(i);
       }
@@ -7031,6 +7041,7 @@ function homeActivate(i){
     const dist=Math.abs(j-i);
     item.className='feat-item '+(j===i?'is-active':dist===1?'is-near':'is-far');
   });
+  breatheList();
   document.getElementById('homeDescH').textContent=f.h;
   document.getElementById('homeDescB').textContent=f.b;
   document.getElementById('homeCtaLabel').textContent=f.cta;
@@ -7087,6 +7098,7 @@ function homeReset(){
   const homeInfoBtn = document.getElementById('homeInfoBtn');
   if (homeInfoBtn) homeInfoBtn.style.display = 'none';
   document.querySelectorAll('.feat-item').forEach(item=>item.className='feat-item is-far');
+  breatheList();
   document.getElementById('homeDesc').classList.remove('show');
   document.getElementById('sectionCtr').classList.remove('show');
   BY.forEach((_,j)=>{
@@ -16985,24 +16997,58 @@ function enterActiveFeature() {
 let _suppressScrollActivate = false;
 let _suppressScrollTimer = null;
 
+/* The list breathes (stylesheet: .feat-item --k). On a phone the list scrolls
+   and the scroll position maps onto the list: the first row at the top of the
+   travel, the last at the bottom, a position in rows in between, and --k is
+   each row's closeness to that position (2 at it, 1 one row away, 0 beyond).
+   The travel is measured with every row at rest, the grown rows' extra height
+   taken off the live scroll height, so a row growing under the focus does not
+   move the map and a tap lands where it aimed. The list has no padding above
+   and little below, so the viewport's centre itself could never reach the end
+   rows; this map reaches every row. The highlighted row (the watcher below,
+   a tap through scrollListTo) follows the same map. Elsewhere --k follows the
+   highlighted index. Returns the position in rows, or -1. */
+function listFocus() {
+  const wrap = document.querySelector('.feat-list-wrap'), items = document.querySelectorAll('.feat-item');
+  if (!wrap || !items.length) return { pos: -1 };
+  const scrolls = IS_MOBILE && wrap.scrollHeight > wrap.clientHeight + 4;
+  if (!scrolls) return { pos: homeActive };
+  const n = items.length;
+  const hs = Array.from(items, it => it.getBoundingClientRect().height);
+  const h0 = Math.min.apply(null, hs);                         // a row at rest
+  const extra = hs.reduce((a, h) => a + (h - h0), 0);          // the room the grown rows take
+  const max = wrap.scrollHeight - extra - wrap.clientHeight;   // the travel with every row at rest
+  const t = max > 0 ? Math.min(1, Math.max(0, wrap.scrollTop / max)) : 0;
+  return { pos: t * (n - 1), wrap, max, n };
+}
+function breatheList() {
+  const f = listFocus(), items = document.querySelectorAll('.feat-item');
+  items.forEach((it, j) => { const k = f.pos < 0 ? 0 : Math.max(0, 2 - Math.abs(j - f.pos)); it.style.setProperty('--k', k.toFixed(3)); });
+  return f.pos;
+}
+// scroll the list so the map rests on row i (a tap on a phone)
+function scrollListTo(i) {
+  const f = listFocus(); if (!f.wrap) return;
+  const top = f.n > 1 ? i / (f.n - 1) * f.max : 0;
+  try { f.wrap.scrollTo({ top, behavior: 'smooth' }); } catch (e) { f.wrap.scrollTop = top; }
+}
+
 function initMobileScroll() {
   if (!IS_MOBILE) return;
-  const list = document.getElementById('featList');
+  // the scroller is .feat-list-wrap (overflow-y in the mobile block); #featList never scrolls
+  const list = document.querySelector('.feat-list-wrap');
   if (!list) return;
+  let raf = 0;
   list.addEventListener('scroll', () => {
-    // Honor the brief tap suppression so taps don't get overridden
-    if (_suppressScrollActivate) return;
-    const items = list.querySelectorAll('.feat-item');
-    const listRect = list.getBoundingClientRect();
-    const centerY = listRect.top + listRect.height / 2;
-    let closest = -1, closestDist = Infinity;
-    items.forEach((item, idx) => {
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.top + rect.height / 2;
-      const dist = Math.abs(itemCenter - centerY);
-      if (dist < closestDist) { closestDist = dist; closest = idx; }
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const pos = breatheList();          // the sizes, and the focus line they follow
+      // Honor the brief tap suppression so taps don't get overridden
+      if (_suppressScrollActivate || pos < 0) return;
+      const closest = Math.round(pos);    // the highlighted row is the one nearest the line
+      if (closest !== homeActive) homeActivate(closest);
     });
-    if (closest >= 0 && closest !== homeActive) homeActivate(closest);
   }, { passive: true });
 }
 
