@@ -15,6 +15,16 @@
   for = "/still-mobile/src/audio/*.mp4"
   [headers.values]
     Content-Type = "audio/mp4"
+
+# assets/candle.mp4 is a 72×108px decorative candle-flame loop used in the
+# Night Watch screen. Google Search Console flagged it as a video with no
+# thumbnail URL. X-Robots-Tag: noindex suppresses it from video indexing
+# without touching the page itself — equivalent to meta robots="noindex" on
+# just this resource.
+[[headers]]
+  for = "/assets/candle.mp4"
+  [headers.values]
+    X-Robots-Tag = "noindex"
     
 [functions]
   directory = "netlify/functions"
