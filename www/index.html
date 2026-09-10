@@ -920,23 +920,28 @@ body:has(.screen.active:not(#home)) .dot-nav{display:none;}
   .home-main {
     flex-direction: column !important;
     position: relative !important;
+    overflow: hidden !important;
   }
 
   /* ── Rope area -- HIDE the vertical rope on mobile ── */
   .home-rope-area { display: none !important; }
 
-  /* ── Feature list -- scrollable, tight spacing so all fit ── */
+  /* ── Feature list -- fills whatever height .home-main actually has, then
+     scrolls within that box. Using flex:1/min-height:0 instead of a calc()
+     so the list never overflows its parent (which would be clipped by
+     .screen's overflow:hidden and silently break scrolling). The large
+     padding-bottom gives the breathing list its travel: last item can scroll
+     to centre. The vh line is the fallback for browsers without dvh. ── */
   .feat-list-wrap {
     width: 100% !important;
-    height: calc(100vh - env(safe-area-inset-top, 44px) - 52px) !important;
-    height: calc(100dvh - env(safe-area-inset-top, 44px) - 52px) !important; /* the visible height on iOS; the vh line above is the fallback */
-    padding: 2px 0 75vh 22px !important; padding-bottom: 75dvh !important; /* travel for the breathing list, about two rows a finger-width; the vh value is the fallback */
+    flex: 1 !important;
+    min-height: 0 !important;
+    padding: 2px 0 75vh 22px !important; padding-bottom: 75dvh !important;
     overflow-y: scroll !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     justify-content: flex-start !important;
     flex-direction: column !important;
-    flex-shrink: 0 !important;
     position: relative !important;
     z-index: 55 !important;
   }
