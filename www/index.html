@@ -5508,6 +5508,13 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #screen-saint .sd-return{max-width:var(--measure-read);margin:var(--s-6) auto 0;}
 #screen-saint .sd-return .btn-ghost{background:none;border:0;padding:8px 0;cursor:pointer;}
 
+/* Martyrology */
+#screen-saint .sd-martyrology{max-width:var(--measure-read);margin:0 auto var(--s-6);padding-top:var(--s-5);border-top:1px solid var(--line);}
+#screen-saint .sd-martyrology-head{margin-bottom:var(--s-3);}
+#screen-saint .sd-martyrology-list{display:flex;flex-direction:column;gap:var(--s-2);}
+#screen-saint .sd-martyrology-name{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-hi);}
+#screen-saint .sd-martyrology-desc{font-family:var(--font-sans);font-size:var(--t-xs);color:var(--text-low);margin-left:var(--s-2);}
+
 .info-btn{
   background:none;border:none;cursor:pointer;
   font-size:17px;color:rgba(255,255,255,.38);
@@ -8486,6 +8493,14 @@ async function initSaintScreen() {
   const rite = (typeof getLiturgicalRite === 'function') ? getLiturgicalRite() : 'modern';
   if (rite === 'traditional') await Liturgy.loadTraditional(y);
 
+  /* ── martyrology ── */
+  let martyrologyEntries = [];
+  try {
+    const mmdd = String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    const mr = await fetch('corpus/saints/martyrology.json');
+    if (mr.ok) { const md = await mr.json(); martyrologyEntries = (md[mmdd] || []).filter(e => e && e.name && e.name.length > 2); }
+  } catch(e) {}
+
   const day = Liturgy.dayFor(now);
   const tradDay = rite === 'traditional' ? Liturgy.traditionalFor(now) : null;
   const screen = document.getElementById('screen-saint');
@@ -8530,7 +8545,21 @@ async function initSaintScreen() {
         <div class="sd-feast">Optional Memorial · Saturday</div>
         <div class="sd-note">On a Saturday in Ordinary Time with no other celebration, the Church keeps the memorial of the Mother of God.</div>`;
     }
-    saintHTML += `<blockquote class="voice voice-left sd-verse">${saintEsc(SAINT_DAY_VERSE.text)}<span class="voice-attrib">— ${saintEsc(SAINT_DAY_VERSE.source)}</span></blockquote>`;
+    if (!martyrologyEntries.length)
+      saintHTML += `<blockquote class="voice voice-left sd-verse">${saintEsc(SAINT_DAY_VERSE.text)}<span class="voice-attrib">— ${saintEsc(SAINT_DAY_VERSE.source)}</span></blockquote>`;
+  }
+
+  /* ── the martyrology ── */
+  let martyrologyHTML = '';
+  if (martyrologyEntries.length) {
+    const items = martyrologyEntries.slice(0, 20).map(e => {
+      const nd = e.desc ? ` <span class="sd-martyrology-desc">${saintEsc(e.desc)}</span>` : '';
+      return `<div class="sd-martyrology-item"><span class="sd-martyrology-name">${saintEsc(e.name)}</span>${nd}</div>`;
+    }).join('');
+    martyrologyHTML = `<div class="sd-martyrology">
+      <div class="ui-label sd-martyrology-head">Saints remembered today</div>
+      <div class="sd-martyrology-list">${items}</div>
+    </div>`;
   }
 
   /* ── the practice ── */
@@ -8548,6 +8577,7 @@ async function initSaintScreen() {
   card.innerHTML = `<div class="sd-part sd-part-day">${dayHTML}</div>
     <div class="sd-part sd-part-saint">${saintHTML}</div>
     ${practiceHTML}
+    ${martyrologyHTML}
     <div class="btn-row left sd-return"><button class="btn-ghost" onclick="goHome()">Return to Still</button></div>`;
 }
 
