@@ -311,6 +311,29 @@ def budge():
             out.extend(parts)
     return out
 
+# ── Louis of Granada, The Sinner's Guide (OCR, 1883 McKenna trans.) ─────
+def granada():
+    L = read('doctors/2026-09-11-louis-of-granada-sinners-guide.md').split('\n')
+    chapters = []
+    book = 'Book I'
+    cur_title, buf = None, []
+    def flush():
+        if cur_title is not None:
+            blocks = paragraphs(buf)
+            if blocks: chapters.append((cur_title, blocks))
+    for l in L:
+        bm = re.match(r'^# (Book [I]+)', l)
+        if bm: flush(); book = bm.group(1); cur_title = None; buf = []; continue
+        cm = re.match(r'^## Chapter (\d+) — (.+)$', l)
+        if cm:
+            flush()
+            cur_title = '%s · Chapter %s · %s' % (book, cm.group(1), cm.group(2))
+            buf = []; continue
+        if cur_title is None: continue
+        buf.append(re.sub(r'\[SECTION [IVX]+\]', '', l))
+    flush()
+    return chapters
+
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)
     write_text('devout-life', {'title': 'Introduction to the Devout Life', 'author': 'Francis de Sales', 'source': 'vault/raw/theology/doctors/2026-09-08-francis-de-sales-introduction-to-the-devout-life.md (Ross, 1924; OCR)'}, desales())
@@ -327,3 +350,4 @@ if __name__ == '__main__':
     write_text('denis-contemplatione', {'title': 'On Contemplation (Book I)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-primus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione())
     write_text('denis-contemplatione-b2', {'title': 'On Contemplation (Book II)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-secundus-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione_b2())
     write_text('denis-contemplatione-b3', {'title': 'On Contemplation (Book III)', 'author': 'Denis the Carthusian', 'source': 'vault/raw/theology/saints/2026-09-09-denis-the-carthusian-de-contemplatione-liber-tertius-english-rendering.md (rendering for Still, 2026, from Opera omnia XLI, 1912)'}, denis_contemplatione_b3())
+    write_text('granada-sinners-guide', {'title': "The Sinner's Guide", 'author': 'Louis of Granada, O.P.', 'source': 'vault/raw/theology/doctors/2026-09-11-louis-of-granada-sinners-guide.md (McKenna, 1883; OCR)'}, granada())
