@@ -8497,7 +8497,7 @@ async function initSaintScreen() {
   let martyrologyEntries = [];
   try {
     const mmdd = String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
-    const mr = await fetch('corpus/saints/martyrology.json');
+    const mr = await fetch('assets/saints/martyrology.json');
     if (mr.ok) { const md = await mr.json(); martyrologyEntries = (md[mmdd] || []).filter(e => e && e.name && e.name.length > 2); }
   } catch(e) {}
 
