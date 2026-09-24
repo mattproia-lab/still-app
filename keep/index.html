@@ -84,6 +84,13 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 .txt::placeholder{color:var(--muted);opacity:.7}
 .txt:focus{outline:none;border-color:var(--try)}
 .actions .wide{grid-column:1/-1}
+.sugg-hint{font-size:.82rem;color:var(--muted);margin:8px 2px 0}
+.sugg{display:grid;gap:6px;margin-top:8px}
+.sugg:empty{display:none}
+.sugg button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1.5px solid var(--line);background:var(--tile);border-radius:14px;padding:8px 12px;cursor:pointer;font-weight:600}
+.sugg button[aria-pressed="true"]{border-color:var(--use);box-shadow:0 0 0 2px var(--use-soft)}
+.sheet .sugg img,.sugg .ph{width:36px;height:36px;border-radius:9px;flex:0 0 36px;background:var(--paper-2);border:0;display:block}
+.sugg span:not(.ph){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .actions [hidden]{display:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hint{font-size:.85rem;color:var(--muted);margin:18px 0 0}
@@ -153,7 +160,9 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
     <label class="field" for="jobInput">Job</label>
     <input id="jobInput" class="txt" maxlength="20" autocomplete="off" autocapitalize="words" enterkeyhint="next">
     <label class="field" for="swapInput">App</label>
-    <input id="swapInput" class="txt" maxlength="24" autocomplete="off" autocapitalize="words" enterkeyhint="done">
+    <input id="swapInput" class="txt" maxlength="24" autocomplete="off" autocapitalize="words" enterkeyhint="done" aria-describedby="suggHint">
+    <p class="sugg-hint" id="suggHint">Pick a match from the App Store to show its icon.</p>
+    <div class="sugg" id="sugg"></div>
     <div class="actions">
       <button class="primary" id="swapSave">Save</button>
       <button id="swapReset" class="wide">Put back</button>
@@ -168,32 +177,52 @@ const SHARE_URL = "stillprayer.app/keep";
 const STILL_ICON = "data:image/webp;base64,UklGRpwKAABXRUJQVlA4IJAKAABwPwCdASoAAQABPkkkjkWioiER2nzgKASEsrduf7YD683/UtpvvczFJTm9kQkr+EngA9UtOnzzvMN2gH7Oelr6qfQA/V3rW/QT/bzrd8iPaF/p66/8N8VszsyJ/mfDH1TbyDjlZlP9m9An6E9J30B6OHWn9FUKf3iUBnyVos3/VcX8exC0MvrHdgm5MU6adfUxipjyVri7IZ2OnzdRlT8sj0L85dMZ68be7uz4a6z9JC+8qgAot9KJScoc0CMqwSroZpFBmsUXJ3SHBJT2Na47NhhR7KunwLTSElpscHEz+OW47JDOOq//XtCyC3mlkznIA83GJcLmfQ193FIUMN+ivyCCl/+4x/JGwcRhONYo4JnI22ZepfK0WFDn5F5LWxcN0WtfjyFht8RB1edgq2Kd7FT38SyTDmfDIsVnzdHnZ/SuKp3qO/acnQMdqHAV1T12SCpd6BOId+olIyHjcgvxaiP7aX3PTB3H8DW3GqrnFJk3gfYPwQ8xUGgSTIvwqwgDTx59MoZQ5WTFH8mTA314qxbVwVqDQgSCK6WmdU9Eq3OuigR7eTM6xJoZL1dcYpfCUChLJQwpJOr4wwr4PUsmiMEtDW3MdddLOAs2129KPil3eLhgD+NVtslH7iVHKKajwzocI14Naw32iYjp5WvB0DdMuqOBOGacGS8jjD1QcIpydkAA/u717//8K16MPg1XV/bbbtboTAjllvhn78SX82NBs90ek4rsQfrALKfuZOGoBYEhtUkGfLPnhyOHN8mWLy6u8F3NsOSNjtqWHLrE9OXwgAqkplHt7jfME8pi/g1s+Jq8Mb6UFxw00jimuejvVq5cXzSV3gLX0wQZm/THABLmfdmX/VfYWwGVsMq1MV/RWM6lECPmavuCpg8GCVywp9VFRCCGN9BL77Ok/9p3ubYTH3/8Sxnf0V0LhP9ayicyTb1zKShz4QSW92dF71jMGzo69hpwxxWsPN+VIy6qOJt8+3NcBbPvkWZTwsgStwRVQpLGx3BraVozremvdGr55caTfERf2seh9G+aZdokb2H1HdEZGYfeC6nrYK9+E1iu8BOJHUK8DZtw4nJqUsOxP9aw5uQMLpnMa1O6xb95ugSI3wGkFfAjCZmK2rQZcXcdzbPGvMeb+H6BsPaLVitfPnQ0FRzvqXXiSZn++D7UonfUK3Rs5ULU9sMeONeKfvhqqv5ky29S3EwqOZOrXU9JvRtorX1NHNh8bLsctmu82I/mFYtUazlUFwb5Fafo8GQaC+c2R3yd+WOd6PTvt/rFlgLBm2KnSpCNG3oW0uVn64o23M0RZ9bQ/1EgeCEMXYLcippuGzq0pPQlcg20MPYdC1jvhaXWM1fqhVH2TvoBm/lPcPYEKe2xepok7+fOL4zhOhwnvyZUkK5BGhma+BW9scRiIVXprziyq6nAKlxMCPX8sJN5ldkIt7VOhkzZ0mMKiJm5GVPUpjbhE6H0rLeVZG4JlgMpCMhimAXnieUWv5ThPT2MUX+JdV700xe8AYGss312Q0w8Du4n73otbGbRtWOpTekCuEYLPhyNQ4e+3h/34K3fZO6H4bxz6w4j/jOCJ91GrMz75Ui2EXvpuT9UPZLsfxJuReLEOPiCSju4RHya0DGG/yFWK2vrfMBho8TqBC1X0+FxUO4V9CTUyRW5PvXpO2nongk/KcA9a3vrY6BS+3Gx3nZRLnF6rITHknPz3Cg5sdSp7XtJ+lo+eJFSm4CU9yA2G5s1U0nLVqK03MmPE/AVc7Iw4sJ+t6vULZtIEgz4NvOcMQireZLOwJc8T+ZCAtRMVY0i1drNa5JlEJ48eA1+h9UgyD5OZq2f+btwQQnJdbpVv81UiL8YPBDhSGJyvUMzllnpfko29YbRcocS4B1nB/ZVNevPjcGF04X/0d5w7RezmVGh3DTnrVizF9QMjA4P6RofLfK3dUn+trzNu49a1YGsTDfyC72PZbeA1vwxH30jNWG6Lf1nixs0e6RH9/8UC92xl2m7PyJG/cTrYmRV6/qrAyj/6b9d/cFaW683NuZn6Ni2vaPc2SwvkrdY/M7NrWxSraNGWmmgTQ23YAXl8Rzvt0ifog/EfNfMc25Isat2LpS40Ihz43I3x3rFWlSwreK3Evv/8LS1KViit4jGG/yL+L+x/zKwzHxuw2UCQ65ZqQeihmufx+7y6w7DTM1DYCO/Mido/nPgEn1MF9UuxnB6wn0f7EECZQIf8uLYHj2hoKxcvxdUEbXyjCH3A5wKatBxaGkIYiAX7EMtXeMTq1WNZ0zJeyK258EE+jSPf7aecLR67Xoj39dNOcwWhGJv3uj35Av8vyBzCH+oDr+Lfu0EMVhZQoFKSvU2tJDhhtGFa5r84k4obutqir1iu9KvyjccKvlmtmA05GJOKi/ep1/cO1GqO+POjlfu8dUMyu0N/RzNbduyH4lr55Op0w43+c1YvtBDwYmdjFgKeEJsg1HYme+XWZu8/UlYMoE+ihbp0eOZ+7qwlCZmG60r2PBPeRy9XLPNxq/oCSpBGOEERRF1EeQid6CpFOSnB2lMWc0Cp6VzPxLdn7j62rr6gV//KHljPJFzBVuu35mJHXWzg3cIoAEFMB0uMoK0ilNrnavocrxraIVP7cM+/jxabxao4q80DPwKUJF6EZGx47+JqtL56OIbsE43QwX2sRli+LTzRWmdZI0XtVqTLcEP97Vn7w+1w0/h299jCiMpRn5vVZHaO/h7l1BQYd/GCIf6iS2if09bVdhMQmtc8q+tKvMi/d3BmLZDaCB71mQHqo38RWCN+UDWlnqgXW/07rTroX0+RXfORsQNfF184fibZZGcE+v9RoH4PEwkKH5TnfcbKHpO31IBQurAzMBwrjKfWcMwEBr194GoME6RCXQPgveOCU5ZG8iZbWOdLTCP/ztRg6Y7kqafUe9rr5TXzm3EOETb6azzn16uZxAXfYmyGmiw7ZhByBZUyAUF6OBnwzU/dW1DGTHyCP1lZuaLykOXkAaV7CNaVA9BqxJJPZqwmHOKB0psnZdU+aCGIbmEX1fHdr+1d5e7PW89pCwXjsAUuuvpOcmSeKKAJZCEHV57vS5KYlqvFy24ASlWTOAR449u+YcNePWU9p6yIIeRFxoDv2EIRUec5vs2rF7Dx+nEZUCczmQ+r9ubjCQyjyP+YcyLkAnyhhPEJJ8kpR7abUNkkNrRQRo+VPJOUW64PkAF/eiRLJbjWB3Qu7btT0gjkJr6HAYWa8hcTJm5cd7jV1SF8FXO9XnC4uQq5jxwlUIW4oAGN8I5L9hrFCnk57dBozNrAxMHm6/TgYI2p1kvFeFd3pdtUeTThDkjJa7Io1fenzFjZIBuEKnwH/3RMl9VKSDQne6idU0sDdEo58YDsgrJJqpxub/TJXvmD/zELQkKLTQG+mJ8Je2o8taNoIuU5ITMnYxeJnRxepqyHXw679la2rlda5dBM6SPDjMoefr7si+49J2X60a+6tVE2dR082d9cFqL36mQG5cIShUXR/wMY75B21tb7xzKtbam4F17R/JsW/r1sDw796n1GgBGfGsL+PP7kLtGMBbSoHEBDWung8JODFpvqN3aQ9Vym+AiZYl2YHMky2NKAAAA";
 const stillImg = new Image(); stillImg.src = STILL_ICON;
 
+/* Official icons: put square PNGs (256x256 or larger) in /keep/icons/, named as in each app's icon field
+   (opal.png, obsidian.png, ...). Any icon that's missing falls back to the lettered tile. */
+const ICON_BASE = "/keep/icons/";
+
 const APPS = [
   {job:"Prayer", name:"Stillprayer.app", links:[{"t": "Stillprayer.app", "u": "https://stillprayer.app"}], bg:"#3A2A12", fg:"#F3E7C9", img:STILL_ICON},
-  {job:"Focus", name:"Opal", links:[{"t": "Opal", "u": "https://www.opal.so"}], bg:"#121214", fg:"#F4F4F4", l:"O"},
-  {job:"Notes", name:"Obsidian", links:[{"t": "Obsidian", "u": "https://obsidian.md"}], bg:"#6C31E3", fg:"#FFFFFF", l:"Ob"},
-  {job:"Reading", name:"Readwise Reader", links:[{"t": "Readwise Reader", "u": "https://readwise.io/read"}], bg:"#F3C94B", fg:"#1C1C1C", l:"R"},
-  {job:"Tasks", name:"Things", links:[{"t": "Things", "u": "https://culturedcode.com/things/"}], bg:"#2B7DF6", fg:"#FFFFFF", l:"T"},
-  {job:"Calendar", name:"Fantastical", links:[{"t": "Fantastical", "u": "https://flexibits.com/fantastical"}], bg:"#D93A34", fg:"#FFFFFF", l:"F"},
-  {job:"Email", name:"Superhuman", links:[{"t": "Superhuman", "u": "https://superhuman.com"}], bg:"#2F2A55", fg:"#FFFFFF", l:"S"},
-  {job:"Private chat", name:"Signal", links:[{"t": "Signal", "u": "https://signal.org"}], bg:"#3A76F0", fg:"#FFFFFF", l:"Si"},
-  {job:"Browser", name:"Arc", links:[{"t": "Arc", "u": "https://arc.net"}], bg:"#F4725B", fg:"#FFFFFF", l:"A"},
-  {job:"Writing", name:"iA Writer", links:[{"t": "iA Writer", "u": "https://ia.net/writer"}], bg:"#E9E9E6", fg:"#141414", l:"iA"},
-  {job:"Photos", name:"Halide", links:[{"t": "Halide", "u": "https://halide.cam"}], bg:"#F2B01E", fg:"#1C1C1C", l:"H"},
-  {job:"Music", name:"Apple Music", links:[{"t": "Apple Music", "u": "https://www.apple.com/apple-music/"}], bg:"#FA2D48", fg:"#FFFFFF", l:"♪"},
-  {job:"Training", name:"Strong", links:[{"t": "Strong", "u": "https://www.strong.app"}], bg:"#1F3A5F", fg:"#FFFFFF", l:"St"},
-  {job:"Sleep", name:"AutoSleep", links:[{"t": "AutoSleep", "u": "https://apps.apple.com/us/app/1164801111"}], bg:"#3D2C8D", fg:"#FFFFFF", l:"Z"},
-  {job:"Money", name:"Copilot", links:[{"t": "Copilot", "u": "https://www.copilot.money"}], bg:"#0E7A5F", fg:"#FFFFFF", l:"C"},
-  {job:"Passwords", name:"1Password", links:[{"t": "1Password", "u": "https://1password.com"}], bg:"#1A6FE0", fg:"#FFFFFF", l:"1"},
-  {job:"Files", name:"iCloud Drive", links:[{"t": "iCloud Drive", "u": "https://www.apple.com/icloud/"}], bg:"#5AB0F7", fg:"#FFFFFF", l:"i"},
-  {job:"Maps", name:"Organic Maps", links:[{"t": "Organic Maps", "u": "https://organicmaps.app"}], bg:"#3D9A4A", fg:"#FFFFFF", l:"M"},
-  {job:"Weather", name:"Carrot", links:[{"t": "Carrot", "u": "https://www.meetcarrot.com"}], bg:"#1BA39C", fg:"#FFFFFF", l:"Ca"},
-  {job:"Thinking & the public square", jobShort:"Thinking / X", name:"Grok + X", links:[{"t": "Grok", "u": "https://grok.com"}, {"t": "X", "u": "https://x.com"}], bg:"#222222", fg:"#FFFFFF", l:"G/X"}
+  {job:"Focus", name:"Opal", icon:"opal", links:[{"t": "Opal", "u": "https://www.opal.so"}], bg:"#121214", fg:"#F4F4F4", l:"O"},
+  {job:"Notes", name:"Obsidian", icon:"obsidian", links:[{"t": "Obsidian", "u": "https://obsidian.md"}], bg:"#6C31E3", fg:"#FFFFFF", l:"Ob"},
+  {job:"Reading", name:"Readwise Reader", icon:"readwise-reader", links:[{"t": "Readwise Reader", "u": "https://readwise.io/read"}], bg:"#F3C94B", fg:"#1C1C1C", l:"R"},
+  {job:"Tasks", name:"Things", icon:"things", links:[{"t": "Things", "u": "https://culturedcode.com/things/"}], bg:"#2B7DF6", fg:"#FFFFFF", l:"T"},
+  {job:"Calendar", name:"Fantastical", icon:"fantastical", links:[{"t": "Fantastical", "u": "https://flexibits.com/fantastical"}], bg:"#D93A34", fg:"#FFFFFF", l:"F"},
+  {job:"Email", name:"Superhuman", icon:"superhuman", links:[{"t": "Superhuman", "u": "https://superhuman.com"}], bg:"#2F2A55", fg:"#FFFFFF", l:"S"},
+  {job:"Private chat", name:"Signal", icon:"signal", links:[{"t": "Signal", "u": "https://signal.org"}], bg:"#3A76F0", fg:"#FFFFFF", l:"Si"},
+  {job:"Browser", name:"Arc", icon:"arc", links:[{"t": "Arc", "u": "https://arc.net"}], bg:"#F4725B", fg:"#FFFFFF", l:"A"},
+  {job:"Writing", name:"iA Writer", icon:"ia-writer", links:[{"t": "iA Writer", "u": "https://ia.net/writer"}], bg:"#E9E9E6", fg:"#141414", l:"iA"},
+  {job:"Photos", name:"Halide", icon:"halide", links:[{"t": "Halide", "u": "https://halide.cam"}], bg:"#F2B01E", fg:"#1C1C1C", l:"H"},
+  {job:"Music", name:"Apple Music", icon:"apple-music", links:[{"t": "Apple Music", "u": "https://www.apple.com/apple-music/"}], bg:"#FA2D48", fg:"#FFFFFF", l:"♪"},
+  {job:"Training", name:"Strong", icon:"strong", links:[{"t": "Strong", "u": "https://www.strong.app"}], bg:"#1F3A5F", fg:"#FFFFFF", l:"St"},
+  {job:"Sleep", name:"AutoSleep", icon:"autosleep", links:[{"t": "AutoSleep", "u": "https://apps.apple.com/us/app/1164801111"}], bg:"#3D2C8D", fg:"#FFFFFF", l:"Z"},
+  {job:"Money", name:"Copilot", icon:"copilot", links:[{"t": "Copilot", "u": "https://www.copilot.money"}], bg:"#0E7A5F", fg:"#FFFFFF", l:"C"},
+  {job:"Passwords", name:"1Password", icon:"1password", links:[{"t": "1Password", "u": "https://1password.com"}], bg:"#1A6FE0", fg:"#FFFFFF", l:"1"},
+  {job:"Files", name:"iCloud Drive", icon:"icloud-drive", links:[{"t": "iCloud Drive", "u": "https://www.apple.com/icloud/"}], bg:"#5AB0F7", fg:"#FFFFFF", l:"i"},
+  {job:"Maps", name:"Organic Maps", icon:"organic-maps", links:[{"t": "Organic Maps", "u": "https://organicmaps.app"}], bg:"#3D9A4A", fg:"#FFFFFF", l:"M"},
+  {job:"Weather", name:"Carrot", icon:"carrot", links:[{"t": "Carrot", "u": "https://www.meetcarrot.com"}], bg:"#1BA39C", fg:"#FFFFFF", l:"Ca"},
+  {job:"Thinking & the public square", jobShort:"Thinking / X", name:"Grok + X", icon:"grok-x", links:[{"t": "Grok", "u": "https://grok.com"}, {"t": "X", "u": "https://x.com"}], bg:"#222222", fg:"#FFFFFF", l:"G/X"}
 ];
 
 const state = APPS.map(()=>null);
 const custom = APPS.map(()=>null);   // a person's own pick for a job (never for Prayer)
 const customJob = APPS.map(()=>null);// a person's own name for a job (never for Prayer)
+const customIcon = APPS.map(()=>null);// App Store id of a swapped-in app, when picked from the suggestions
+const ICON_FN = "/.netlify/functions/app-icon";
+const storeIcons = {};                // App Store id -> loaded Image (data URL, safe to draw on the card)
+function loadStoreIcon(id, src){
+  return new Promise(res=>{
+    if(storeIcons[id]) return res(storeIcons[id]);
+    const im=new Image(); im.onload=()=>{ storeIcons[id]=im; res(im); }; im.onerror=()=>res(null); im.src=src;
+  });
+}
+async function fetchIconById(id){
+  try{
+    const r = await fetch(`${ICON_FN}?id=${encodeURIComponent(id)}`); if(!r.ok) return null;
+    const hit = ((await r.json()).results||[])[0];
+    return hit && hit.icon ? loadStoreIcon(id, hit.icon) : null;
+  }catch(e){ return null; }
+}
 const LOCKED = 0;                    // index of the job that can't be swapped
 let brush = "use";
 const CODE_VALUES = [null,"use","try"];
@@ -220,6 +249,7 @@ function encode(){
   let out = n.toString(36);
   custom.forEach((c,i)=>{ if(c) out += "~" + i.toString(36) + encodeURIComponent(c); });
   customJob.forEach((j,i)=>{ if(j) out += "~*" + i.toString(36) + encodeURIComponent(j); });
+  customIcon.forEach((id,i)=>{ if(id && custom[i]) out += "~!" + i.toString(36) + id; });
   return out;
 }
 function decode(raw){
@@ -228,6 +258,11 @@ function decode(raw){
   let n=parseInt(code,36); if(!Number.isFinite(n) || n>=Math.pow(3,APPS.length)) return false;
   for(let i=0;i<APPS.length;i++){ state[i]=CODE_VALUES[n%3]; n=Math.floor(n/3); }
   parts.slice(1).forEach(p=>{
+    if(p[0]==="!"){
+      const i = parseInt(p[1],36), id = p.slice(2);
+      if(i>=0 && i<APPS.length && i!==LOCKED && /^\d{5,12}$/.test(id)) customIcon[i]=id;
+      return;
+    }
     const isJob = p[0]==="*"; if(isJob) p = p.slice(1);
     const i = parseInt(p[0],36);
     if(!(i>=0 && i<APPS.length) || i===LOCKED) return;
@@ -240,6 +275,15 @@ function decode(raw){
 const myLink = () => `https://${SHARE_URL}#${encode()}`;
 const grid = document.getElementById("grid");
 const cells = [];
+const iconImgs = APPS.map(a=>{
+  if(!a.icon) return null;
+  const im = new Image();
+  im.onload = ()=>{ im.ok = true; const i = APPS.indexOf(a); if(cells[i]) paint(i); };
+  im.src = ICON_BASE + a.icon + ".png";
+  return im;
+});
+const hasIcon = i => !custom[i] && iconImgs[i] && iconImgs[i].ok;
+const pickedIcon = i => (custom[i] && customIcon[i] && storeIcons[customIcon[i]]) || null;
 
 APPS.forEach((a,i)=>{
   const li = document.createElement("li"); li.className="cell";
@@ -265,7 +309,8 @@ APPS.forEach((a,i)=>{
 function paint(i){
   const v = view(i), c = cells[i];
   c.icon.textContent = ""; c.icon.style.background = v.bg; c.icon.style.color = v.fg;
-  if (v.img){ const im=document.createElement("img"); im.src=v.img; im.alt=""; c.icon.appendChild(im); }
+  const src = v.img || (pickedIcon(i) ? pickedIcon(i).src : null) || (hasIcon(i) ? iconImgs[i].src : null);
+  if (src){ const im=document.createElement("img"); im.src=src; im.alt=""; c.icon.appendChild(im); }
   else c.icon.append(v.l);
   c.icon.appendChild(c.badge);
   c.name.textContent = "";
@@ -311,9 +356,10 @@ const incoming = location.hash.slice(1);
 if (incoming && decode(incoming) && (state.some(Boolean) || custom.some(Boolean) || customJob.some(Boolean))){
   document.getElementById("shared").hidden = false;
   refreshAll();
+  customIcon.forEach((id,i)=>{ if(id) fetchIconById(id).then(im=>{ if(im) paint(i); }); });
 }
 document.getElementById("startOwn").addEventListener("click",()=>{
-  state.fill(null); custom.fill(null); customJob.fill(null); refreshAll();
+  state.fill(null); custom.fill(null); customJob.fill(null); customIcon.fill(null); refreshAll();
   document.getElementById("shared").hidden = true;
   try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
   cells[0].b.focus();
@@ -325,7 +371,40 @@ document.querySelectorAll(".brush button").forEach(btn=>btn.addEventListener("cl
 
 /* ---------- swap ---------- */
 const swapSheet=document.getElementById("swapSheet"), swapInput=document.getElementById("swapInput"), jobInput=document.getElementById("jobInput");
-let swapping=-1;
+let swapping=-1, picked=null, suggTimer=0, suggSeq=0;
+const suggBox=document.getElementById("sugg");
+function shortName(n){ return clean(String(n).split(/\s[-–—:|]\s|:\s/)[0], 24); }
+function renderSugg(results){
+  suggBox.textContent="";
+  results.forEach(r=>{
+    const b=document.createElement("button"); b.type="button";
+    b.setAttribute("aria-pressed", String(!!picked && picked.id===r.id));
+    if(r.icon){ const im=document.createElement("img"); im.src=r.icon; im.alt=""; b.append(im); }
+    else { const ph=document.createElement("span"); ph.className="ph"; b.append(ph); }
+    const t=document.createElement("span"); t.textContent=r.name; b.append(t);
+    b.addEventListener("click",async ()=>{
+      picked={id:r.id, name:shortName(r.name)};
+      swapInput.value=picked.name;
+      if(r.icon) await loadStoreIcon(r.id, r.icon);
+      suggBox.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    });
+    suggBox.append(b);
+  });
+}
+swapInput.addEventListener("input",()=>{
+  if(picked && swapInput.value!==picked.name) picked=null;
+  clearTimeout(suggTimer);
+  const q=swapInput.value.trim();
+  if(q.length<2){ suggBox.textContent=""; return; }
+  const seq=++suggSeq;
+  suggTimer=setTimeout(async ()=>{
+    try{
+      const r=await fetch(`${ICON_FN}?term=${encodeURIComponent(q)}`); if(!r.ok) return;
+      const data=await r.json(); if(seq!==suggSeq) return;
+      renderSugg((data.results||[]).slice(0,4));
+    }catch(e){ /* no lookup available here; typing a name still works */ }
+  },300);
+});
 function openSwap(i){
   swapping=i;
   const a=APPS[i];
@@ -335,6 +414,8 @@ function openSwap(i){
   reset.textContent = `Put back ${a.job}: ${a.name}`; reset.hidden = !(custom[i] || customJob[i]);
   jobInput.value = customJob[i] || ""; jobInput.placeholder = a.job;
   swapInput.value = custom[i] || ""; swapInput.placeholder = a.name;
+  picked = custom[i] && customIcon[i] ? {id:customIcon[i], name:custom[i]} : null;
+  suggBox.textContent = "";
   swapSheet.classList.add("open");
   jobInput.focus();
 }
@@ -344,6 +425,7 @@ function saveSwap(){
   const v=clean(swapInput.value), j=clean(jobInput.value,20);
   const was=custom[i];
   custom[i] = (!v || v.toLowerCase()===APPS[i].name.toLowerCase()) ? null : v;
+  customIcon[i] = (custom[i] && picked && picked.name===v) ? picked.id : null;
   customJob[i] = (!j || j.toLowerCase()===APPS[i].job.toLowerCase()) ? null : j;
   if(custom[i] && custom[i]!==was && !state[i]) state[i]=brush;
   paint(i); tally(); closeSwap();
@@ -351,7 +433,7 @@ function saveSwap(){
 document.getElementById("swapSave").addEventListener("click",saveSwap);
 swapInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); saveSwap(); } });
 jobInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); swapInput.focus(); } });
-document.getElementById("swapReset").addEventListener("click",()=>{ const i=swapping; custom[i]=null; customJob[i]=null; paint(i); tally(); closeSwap(); });
+document.getElementById("swapReset").addEventListener("click",()=>{ const i=swapping; custom[i]=null; customJob[i]=null; customIcon[i]=null; paint(i); tally(); closeSwap(); });
 document.getElementById("swapClose").addEventListener("click",closeSwap);
 swapSheet.addEventListener("click",e=>{ if(e.target===swapSheet) closeSwap(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && swapSheet.classList.contains("open")) closeSwap(); });
@@ -401,7 +483,8 @@ async function renderCard(){
     x.globalAlpha = s ? 1 : .28;
     if(s){ x.strokeStyle = s==="use"?USE:TRY; x.lineWidth=6; if(s==="try") x.setLineDash([12,9]); rr(x,cx-ic/2-12,iy-12,ic+24,ic+24,34); x.stroke(); x.setLineDash([]); }
     x.fillStyle=a.bg; rr(x,cx-ic/2,iy,ic,ic,28); x.fill();
-    if(a.img){ x.save(); rr(x,cx-ic/2,iy,ic,ic,28); x.clip(); x.drawImage(stillImg,cx-ic/2,iy,ic,ic); x.restore(); }
+    const pic = a.img ? stillImg : (pickedIcon(i) || (hasIcon(i) ? iconImgs[i] : null));
+    if(pic){ x.save(); rr(x,cx-ic/2,iy,ic,ic,28); x.clip(); x.drawImage(pic,cx-ic/2,iy,ic,ic); x.restore(); }
     else{ x.fillStyle=a.fg; x.font=`800 ${a.l.length>2?32:42}px ${F}`; x.textAlign="center"; x.textBaseline="middle"; x.fillText(a.l,cx,iy+ic/2+2); }
     x.textAlign="center"; x.textBaseline="alphabetic";
     x.fillStyle=INK; x.fillText(fit(a.name,cw-16,24,600),cx,iy+ic+36);
