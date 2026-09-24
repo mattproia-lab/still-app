@@ -40,9 +40,9 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 .tally b{font-weight:600}
 .tally .u{color:var(--use)} .tally .t{color:var(--try)}
 
-.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:22px 12px}
-@media (min-width:640px){.grid{grid-template-columns:repeat(5,1fr);gap:30px 18px}}
-.cell{display:flex;flex-direction:column;align-items:center;gap:6px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 8px}
+@media (min-width:640px){.grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:30px 18px}}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
 .app{display:flex;justify-content:center;width:100%;background:none;border:0;padding:6px 2px;cursor:pointer;border-radius:16px;-webkit-tap-highlight-color:transparent}
 .icon{position:relative;width:100%;max-width:92px;aspect-ratio:1;border-radius:24%;display:grid;place-items:center;font-weight:800;font-size:clamp(1.5rem,6vw,2.3rem);letter-spacing:-.04em;box-shadow:0 1px 0 rgba(0,0,0,.08) inset;transition:transform .18s ease, box-shadow .18s ease}
 .icon img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
@@ -54,7 +54,9 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 .app[data-s="try"] .badge{display:grid;background:var(--try)}
 .stamp .icon{animation:stamp .28s cubic-bezier(.3,1.6,.5,1)}
 @keyframes stamp{0%{transform:scale(.86)}100%{transform:scale(1)}}
-.name{font-weight:600;font-size:.95rem;line-height:1.15;text-align:center}
+.name{font-weight:600;font-size:.82rem;line-height:1.15;text-align:center;overflow-wrap:break-word;max-width:100%;letter-spacing:-.01em}
+@media (max-width:420px){.name{font-size:.76rem}}
+@media (min-width:480px){.name{font-size:.95rem}}
 .name a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-decoration-thickness:2px;text-underline-offset:3px}
 .name a:hover{text-decoration-color:currentColor}
 .cell:has(.app[data-s="use"]) .name a{text-decoration-color:var(--use)}
@@ -77,8 +79,10 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 .swap{border:0;background:none;color:var(--muted);font-size:.78rem;cursor:pointer;padding:4px 6px;border-radius:8px;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
 .swap:hover{color:var(--ink)}
 .swap-sub{color:var(--muted);margin:0 0 14px;line-height:1.4}
-#swapInput{width:100%;font:inherit;font-size:1.1rem;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--tile);color:var(--ink)}
-#swapInput:focus{outline:none;border-color:var(--try)}
+.field{display:block;font-weight:600;font-size:.9rem;margin:12px 2px 6px}
+.txt{width:100%;font:inherit;font-size:1.1rem;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--tile);color:var(--ink)}
+.txt::placeholder{color:var(--muted);opacity:.7}
+.txt:focus{outline:none;border-color:var(--try)}
 .actions .wide{grid-column:1/-1}
 .actions [hidden]{display:none}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -105,14 +109,14 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 <body>
 <main class="wrap">
   <h1><span class="n">20</span>apps<br>I'll keep.</h1>
-  <p class="lede">One app for every job, and nothing else on the phone. Mark what you already use and what you want to try, swap in your own pick for any job, then make your card.</p>
+  <p class="lede">One app for every job, and nothing else on the phone. Mark what you already use and what you want to try, make any slot your own, then make your card.</p>
   <div class="shared" id="shared" hidden>
     <p>You're looking at someone's 20. Tap any name to visit that app.</p>
     <button id="startOwn">Start my own</button>
   </div>
   <p class="tally" id="tally" aria-live="polite">Nothing marked yet. Tap an icon to start.</p>
   <ul class="grid" id="grid"></ul>
-  <p class="hint">Tap an icon to mark it, and tap again to clear it. Tap a name to visit the app, or tap Swap app to put in your own pick.</p>
+  <p class="hint">Tap an icon to mark it, and tap again to clear it. Tap a name to visit the app, or tap Swap to change the job or the app.</p>
 </main>
 
 <div class="bar">
@@ -146,10 +150,12 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
     <button class="close" id="swapClose" aria-label="Close">×</button>
     <h2 id="swapTitle">Your pick</h2>
     <p class="swap-sub" id="swapSub"></p>
-    <label class="sr" for="swapInput">App name</label>
-    <input id="swapInput" maxlength="24" autocomplete="off" autocapitalize="words" enterkeyhint="done" placeholder="App name">
+    <label class="field" for="jobInput">Job</label>
+    <input id="jobInput" class="txt" maxlength="20" autocomplete="off" autocapitalize="words" enterkeyhint="next">
+    <label class="field" for="swapInput">App</label>
+    <input id="swapInput" class="txt" maxlength="24" autocomplete="off" autocapitalize="words" enterkeyhint="done">
     <div class="actions">
-      <button class="primary" id="swapSave">Use this app</button>
+      <button class="primary" id="swapSave">Save</button>
       <button id="swapReset" class="wide">Put back</button>
     </div>
   </div>
@@ -187,12 +193,13 @@ const APPS = [
 
 const state = APPS.map(()=>null);
 const custom = APPS.map(()=>null);   // a person's own pick for a job (never for Prayer)
+const customJob = APPS.map(()=>null);// a person's own name for a job (never for Prayer)
 const LOCKED = 0;                    // index of the job that can't be swapped
 let brush = "use";
 const CODE_VALUES = [null,"use","try"];
 const TINTS = ["#5B4B8A","#2E6F73","#8A4B3A","#3F5E8C","#6B6B2E","#7A3E63","#35634A","#4A4A55"];
 
-function clean(v){ return String(v||"").replace(/[\u0000-\u001F\u007F~#]/g,"").replace(/\s+/g," ").trim().slice(0,24); }
+function clean(v,max=24){ return String(v||"").replace(/[\u0000-\u001F\u007F~#]/g,"").replace(/\s+/g," ").trim().slice(0,max); }
 function initials(n){
   const w = n.split(" ").filter(Boolean);
   const first = Array.from(w[0]||"?");
@@ -201,15 +208,18 @@ function initials(n){
 }
 function tint(n){ let h=0; for(const ch of n.toLowerCase()) h=(h*31+ch.codePointAt(0))>>>0; return TINTS[h%TINTS.length]; }
 function view(i){
-  const a=APPS[i], c=custom[i];
-  if(!c) return a;
-  return {...a, name:c, links:null, img:null, l:initials(c), bg:tint(c), fg:"#FFFFFF", mine:true};
+  const a=APPS[i], c=custom[i], j=customJob[i];
+  let v = a;
+  if(c) v = {...v, name:c, links:null, img:null, l:initials(c), bg:tint(c), fg:"#FFFFFF", mine:true};
+  if(j) v = {...v, job:j, jobShort:null, mineJob:true};
+  return v;
 }
 
 function encode(){
   let n=0; for(let i=APPS.length-1;i>=0;i--) n = n*3 + CODE_VALUES.indexOf(state[i]);
   let out = n.toString(36);
   custom.forEach((c,i)=>{ if(c) out += "~" + i.toString(36) + encodeURIComponent(c); });
+  customJob.forEach((j,i)=>{ if(j) out += "~*" + i.toString(36) + encodeURIComponent(j); });
   return out;
 }
 function decode(raw){
@@ -218,10 +228,12 @@ function decode(raw){
   let n=parseInt(code,36); if(!Number.isFinite(n) || n>=Math.pow(3,APPS.length)) return false;
   for(let i=0;i<APPS.length;i++){ state[i]=CODE_VALUES[n%3]; n=Math.floor(n/3); }
   parts.slice(1).forEach(p=>{
+    const isJob = p[0]==="*"; if(isJob) p = p.slice(1);
     const i = parseInt(p[0],36);
     if(!(i>=0 && i<APPS.length) || i===LOCKED) return;
-    let name=""; try{ name = clean(decodeURIComponent(p.slice(1))); }catch(e){ return; }
-    if(name) custom[i]=name;
+    let name=""; try{ name = clean(decodeURIComponent(p.slice(1)), isJob?20:24); }catch(e){ return; }
+    if(!name) return;
+    if(isJob) customJob[i]=name; else custom[i]=name;
   });
   return true;
 }
@@ -246,7 +258,7 @@ APPS.forEach((a,i)=>{
     li.append(swap);
   }
   grid.appendChild(li);
-  cells[i] = {b,icon,badge,name,swap};
+  cells[i] = {b,icon,badge,name,job,swap};
   paint(i);
 });
 
@@ -265,9 +277,10 @@ function paint(i){
       c.name.append(link);
     });
   } else c.name.textContent = v.name;
+  c.job.textContent = v.jobShort || v.job;
   if (c.swap){
-    c.swap.textContent = v.mine ? "Change my pick" : "Swap app";
-    c.swap.setAttribute("aria-label", `${v.mine?"Change":"Swap"} the app for ${APPS[i].job}`);
+    c.swap.textContent = (v.mine || v.mineJob) ? "Edit" : "Swap";
+    c.swap.setAttribute("aria-label", `Change the job or the app for ${v.job}`);
   }
   label(i);
 }
@@ -295,12 +308,12 @@ function tally(){
 function refreshAll(){ APPS.forEach((_,i)=>paint(i)); tally(); }
 
 const incoming = location.hash.slice(1);
-if (incoming && decode(incoming) && (state.some(Boolean) || custom.some(Boolean))){
+if (incoming && decode(incoming) && (state.some(Boolean) || custom.some(Boolean) || customJob.some(Boolean))){
   document.getElementById("shared").hidden = false;
   refreshAll();
 }
 document.getElementById("startOwn").addEventListener("click",()=>{
-  state.fill(null); custom.fill(null); refreshAll();
+  state.fill(null); custom.fill(null); customJob.fill(null); refreshAll();
   document.getElementById("shared").hidden = true;
   try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
   cells[0].b.focus();
@@ -311,30 +324,34 @@ document.querySelectorAll(".brush button").forEach(btn=>btn.addEventListener("cl
 }));
 
 /* ---------- swap ---------- */
-const swapSheet=document.getElementById("swapSheet"), swapInput=document.getElementById("swapInput");
+const swapSheet=document.getElementById("swapSheet"), swapInput=document.getElementById("swapInput"), jobInput=document.getElementById("jobInput");
 let swapping=-1;
 function openSwap(i){
   swapping=i;
   const a=APPS[i];
-  document.getElementById("swapTitle").textContent = `Your pick for ${a.job}`;
-  document.getElementById("swapSub").textContent = `Keep something other than ${a.name}? Type the app you'd keep instead.`;
+  document.getElementById("swapTitle").textContent = `Make slot ${i+1} yours`;
+  document.getElementById("swapSub").textContent = `Change the job, the app, or both. Leave a box empty to keep ${a.job} or ${a.name}.`;
   const reset=document.getElementById("swapReset");
-  reset.textContent = `Put back ${a.name}`; reset.hidden = !custom[i];
-  swapInput.value = custom[i] || "";
+  reset.textContent = `Put back ${a.job}: ${a.name}`; reset.hidden = !(custom[i] || customJob[i]);
+  jobInput.value = customJob[i] || ""; jobInput.placeholder = a.job;
+  swapInput.value = custom[i] || ""; swapInput.placeholder = a.name;
   swapSheet.classList.add("open");
-  swapInput.focus();
+  jobInput.focus();
 }
 function closeSwap(){ swapSheet.classList.remove("open"); if(swapping>=0) cells[swapping].swap.focus(); swapping=-1; }
 function saveSwap(){
   const i=swapping; if(i<0) return;
-  const v=clean(swapInput.value);
-  if(!v || v.toLowerCase()===APPS[i].name.toLowerCase()) custom[i]=null;
-  else { custom[i]=v; if(!state[i]) state[i]=brush; }
+  const v=clean(swapInput.value), j=clean(jobInput.value,20);
+  const was=custom[i];
+  custom[i] = (!v || v.toLowerCase()===APPS[i].name.toLowerCase()) ? null : v;
+  customJob[i] = (!j || j.toLowerCase()===APPS[i].job.toLowerCase()) ? null : j;
+  if(custom[i] && custom[i]!==was && !state[i]) state[i]=brush;
   paint(i); tally(); closeSwap();
 }
 document.getElementById("swapSave").addEventListener("click",saveSwap);
 swapInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); saveSwap(); } });
-document.getElementById("swapReset").addEventListener("click",()=>{ const i=swapping; custom[i]=null; paint(i); tally(); closeSwap(); });
+jobInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); swapInput.focus(); } });
+document.getElementById("swapReset").addEventListener("click",()=>{ const i=swapping; custom[i]=null; customJob[i]=null; paint(i); tally(); closeSwap(); });
 document.getElementById("swapClose").addEventListener("click",closeSwap);
 swapSheet.addEventListener("click",e=>{ if(e.target===swapSheet) closeSwap(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && swapSheet.classList.contains("open")) closeSwap(); });
@@ -389,7 +406,7 @@ async function renderCard(){
     x.textAlign="center"; x.textBaseline="alphabetic";
     x.fillStyle=INK; x.fillText(fit(a.name,cw-16,24,600),cx,iy+ic+36);
     x.globalAlpha = s ? 1 : .6;
-    x.fillStyle=MUTED; x.font=`400 20px ${F}`; x.fillText(a.jobShort || a.job,cx,iy+ic+62);
+    x.fillStyle=MUTED; x.font=`400 20px ${F}`; x.fillText(fit(a.jobShort || a.job,cw-16,20,400),cx,iy+ic+62);
     x.globalAlpha=1;
     if(s){ x.fillStyle=s==="use"?USE:TRY; x.beginPath(); x.arc(cx+ic/2+2,iy+2,21,0,Math.PI*2); x.fill();
       x.strokeStyle=PAPER; x.lineWidth=5; x.stroke();
