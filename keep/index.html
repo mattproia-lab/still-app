@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The 20 I'll keep</title>
+<meta name="description" content="One app for every job. Mark what's on your phone, what you want to try, and make your card.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF0EC; --paper-2:#E3E7E1; --ink:#1C2426; --muted:#5E6A66; --line:#CDD3CC;
+  --use:#2F6B4F; --use-soft:#D6E6DC; --try:#2A5DB0; --try-soft:#D9E3F4; --tile:#FFFFFF;
+  --font:"Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#151B1C; --paper-2:#1D2526; --ink:#E9EDE8; --muted:#9AA7A2; --line:#2F3A3A;
+    --use:#6FBF97; --use-soft:#1F3A2E; --try:#7FA6EA; --try-soft:#1E2B45; --tile:#222B2C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#151B1C; --paper-2:#1D2526; --ink:#E9EDE8; --muted:#9AA7A2; --line:#2F3A3A;
+  --use:#6FBF97; --use-soft:#1F3A2E; --try:#7FA6EA; --try-soft:#1E2B45; --tile:#222B2C;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--try);outline-offset:3px;border-radius:12px}
+
+.wrap{max-width:960px;margin:0 auto;padding:40px 20px 150px}
+h1{font-size:clamp(3.2rem,13vw,7.5rem);line-height:.86;letter-spacing:-.045em;font-weight:800;margin:0 0 22px;font-variation-settings:"opsz" 96}
+h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radius:.18em;padding:0 .12em;margin-right:.06em}
+.lede{font-size:1.15rem;line-height:1.45;max-width:36ch;color:var(--muted);margin:0 0 28px}
+.tally{font-size:1.05rem;min-height:1.5em;margin:0 0 26px}
+.tally b{font-weight:600}
+.tally .u{color:var(--use)} .tally .t{color:var(--try)}
+
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:22px 12px}
+@media (min-width:640px){.grid{grid-template-columns:repeat(5,1fr);gap:30px 18px}}
+.cell{display:flex;flex-direction:column;align-items:center;gap:6px}
+.app{display:flex;justify-content:center;width:100%;background:none;border:0;padding:6px 2px;cursor:pointer;border-radius:16px;-webkit-tap-highlight-color:transparent}
+.icon{position:relative;width:100%;max-width:92px;aspect-ratio:1;border-radius:24%;display:grid;place-items:center;font-weight:800;font-size:clamp(1.5rem,6vw,2.3rem);letter-spacing:-.04em;box-shadow:0 1px 0 rgba(0,0,0,.08) inset;transition:transform .18s ease, box-shadow .18s ease}
+.icon img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.app[data-s="use"] .icon{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--use)}
+.app[data-s="try"] .icon{box-shadow:0 0 0 3px var(--paper),0 0 0 6px var(--try)}
+.app[data-s="try"] .icon::after{content:"";position:absolute;inset:-9px;border-radius:30%;border:2px dashed var(--try);opacity:.0}
+.badge{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;display:none;place-items:center;color:#fff;font-size:15px;font-weight:800;border:3px solid var(--paper)}
+.app[data-s="use"] .badge{display:grid;background:var(--use)}
+.app[data-s="try"] .badge{display:grid;background:var(--try)}
+.stamp .icon{animation:stamp .28s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stamp{0%{transform:scale(.86)}100%{transform:scale(1)}}
+.name{font-weight:600;font-size:.95rem;line-height:1.15;text-align:center}
+.name a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-decoration-thickness:2px;text-underline-offset:3px}
+.name a:hover{text-decoration-color:currentColor}
+.cell:has(.app[data-s="use"]) .name a{text-decoration-color:var(--use)}
+.cell:has(.app[data-s="try"]) .name a{text-decoration-color:var(--try)}
+.job{font-size:.8rem;color:var(--muted);line-height:1.1;text-align:center;margin-top:-2px}
+
+.bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.bar-in{max-width:960px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.brush{display:flex;background:var(--paper-2);border-radius:999px;padding:4px;flex:1 1 280px}
+.brush button{flex:1;border:0;background:none;border-radius:999px;padding:11px 12px;font-weight:600;font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted)}
+.brush .dot{width:12px;height:12px;border-radius:50%}
+.brush [data-b="use"] .dot{background:var(--use)} .brush [data-b="try"] .dot{background:var(--try)}
+.brush button[aria-pressed="true"]{background:var(--tile);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.make{border:0;background:var(--ink);color:var(--paper);font-weight:600;border-radius:999px;padding:14px 22px;cursor:pointer;font-size:1rem;flex:0 0 auto}
+.make:disabled{opacity:.35;cursor:default}
+.shared{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--paper-2);border-radius:16px;padding:14px 16px;margin:0 0 22px}
+.shared[hidden]{display:none}
+.shared p{margin:0;font-size:1rem;flex:1 1 220px}
+.shared button{border:0;background:var(--ink);color:var(--paper);border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer}
+.hint{font-size:.85rem;color:var(--muted);margin:18px 0 0}
+
+/* card sheet */
+.sheet{position:fixed;inset:0;background:rgba(10,14,15,.6);display:none;align-items:flex-end;justify-content:center;padding:env(safe-area-inset-top,0px) 0 0;z-index:10}
+.sheet.open{display:flex}
+.sheet-in{background:var(--paper);width:100%;max-width:560px;max-height:100%;overflow:auto;border-radius:22px 22px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom,0px))}
+@media (min-width:640px){.sheet{align-items:center}.sheet-in{border-radius:22px}}
+.sheet img{width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line)}
+.sheet h2{font-size:1.35rem;margin:4px 0 12px;letter-spacing:-.02em}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.actions button{border:1px solid var(--line);background:var(--tile);border-radius:14px;padding:13px;font-weight:600;cursor:pointer}
+.actions .primary{background:var(--ink);color:var(--paper);border-color:var(--ink);grid-column:1/-1}
+#share{grid-column:1/-1}
+.mylink{margin:12px 2px 0;font-size:.9rem;color:var(--muted);word-break:break-all}
+.mylink span{color:var(--ink);font-weight:600}
+.note{font-size:.85rem;color:var(--muted);min-height:1.3em;margin:10px 2px 0}
+.close{float:right;border:0;background:var(--paper-2);border-radius:999px;width:36px;height:36px;cursor:pointer;font-size:1.1rem}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1><span class="n">20</span>apps<br>I'll keep.</h1>
+  <p class="lede">One app for every job, and nothing else on the phone. Mark what you already use and what you want to try, then make your card.</p>
+  <div class="shared" id="shared" hidden>
+    <p>You're looking at someone's 20. Tap any name to visit that app.</p>
+    <button id="startOwn">Start my own</button>
+  </div>
+  <p class="tally" id="tally" aria-live="polite">Nothing marked yet. Tap an icon to start.</p>
+  <ul class="grid" id="grid"></ul>
+  <p class="hint">Tap an icon to mark it, and tap again to clear it. Tap a name to visit the app.</p>
+</main>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="brush" role="group" aria-label="What tapping marks">
+      <button data-b="use" aria-pressed="true"><span class="dot"></span>On my phone</button>
+      <button data-b="try" aria-pressed="false"><span class="dot"></span>Want to try</button>
+    </div>
+    <button class="make" id="make" disabled>Make my card</button>
+  </div>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-in">
+    <button class="close" id="close" aria-label="Close">×</button>
+    <h2 id="sheetTitle">Your card</h2>
+    <img id="cardImg" alt="Your 20 apps card">
+    <p class="mylink">Your link, with every app clickable: <span id="myLink"></span></p>
+    <div class="actions">
+      <button class="primary" id="save">Save image</button>
+      <button id="copyLink">Copy my link</button>
+      <button id="copy">Copy as text</button>
+      <button id="share">Share</button>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+</div>
+
+<script>
+/* Where this page lives. It prints on the card and in the copied text. */
+const SHARE_URL = "stillprayer.app/keep";
+
+const STILL_ICON = "data:image/webp;base64,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";
+const stillImg = new Image(); stillImg.src = STILL_ICON;
+
+const APPS = [
+  {job:"Prayer", name:"Stillprayer.app", links:[{"t": "Stillprayer.app", "u": "https://stillprayer.app"}], bg:"#3A2A12", fg:"#F3E7C9", img:STILL_ICON},
+  {job:"Focus", name:"Opal", links:[{"t": "Opal", "u": "https://www.opal.so"}], bg:"#121214", fg:"#F4F4F4", l:"O"},
+  {job:"Notes", name:"Obsidian", links:[{"t": "Obsidian", "u": "https://obsidian.md"}], bg:"#6C31E3", fg:"#FFFFFF", l:"Ob"},
+  {job:"Reading", name:"Readwise Reader", links:[{"t": "Readwise Reader", "u": "https://readwise.io/read"}], bg:"#F3C94B", fg:"#1C1C1C", l:"R"},
+  {job:"Tasks", name:"Things", links:[{"t": "Things", "u": "https://culturedcode.com/things/"}], bg:"#2B7DF6", fg:"#FFFFFF", l:"T"},
+  {job:"Calendar", name:"Fantastical", links:[{"t": "Fantastical", "u": "https://flexibits.com/fantastical"}], bg:"#D93A34", fg:"#FFFFFF", l:"F"},
+  {job:"Email", name:"Superhuman", links:[{"t": "Superhuman", "u": "https://superhuman.com"}], bg:"#2F2A55", fg:"#FFFFFF", l:"S"},
+  {job:"Private chat", name:"Signal", links:[{"t": "Signal", "u": "https://signal.org"}], bg:"#3A76F0", fg:"#FFFFFF", l:"Si"},
+  {job:"Browser", name:"Arc", links:[{"t": "Arc", "u": "https://arc.net"}], bg:"#F4725B", fg:"#FFFFFF", l:"A"},
+  {job:"Writing", name:"iA Writer", links:[{"t": "iA Writer", "u": "https://ia.net/writer"}], bg:"#E9E9E6", fg:"#141414", l:"iA"},
+  {job:"Photos", name:"Halide", links:[{"t": "Halide", "u": "https://halide.cam"}], bg:"#F2B01E", fg:"#1C1C1C", l:"H"},
+  {job:"Music", name:"Apple Music", links:[{"t": "Apple Music", "u": "https://www.apple.com/apple-music/"}], bg:"#FA2D48", fg:"#FFFFFF", l:"♪"},
+  {job:"Training", name:"Strong", links:[{"t": "Strong", "u": "https://www.strong.app"}], bg:"#1F3A5F", fg:"#FFFFFF", l:"St"},
+  {job:"Sleep", name:"AutoSleep", links:[{"t": "AutoSleep", "u": "https://apps.apple.com/us/app/1164801111"}], bg:"#3D2C8D", fg:"#FFFFFF", l:"Z"},
+  {job:"Money", name:"Copilot", links:[{"t": "Copilot", "u": "https://www.copilot.money"}], bg:"#0E7A5F", fg:"#FFFFFF", l:"C"},
+  {job:"Passwords", name:"1Password", links:[{"t": "1Password", "u": "https://1password.com"}], bg:"#1A6FE0", fg:"#FFFFFF", l:"1"},
+  {job:"Files", name:"iCloud Drive", links:[{"t": "iCloud Drive", "u": "https://www.apple.com/icloud/"}], bg:"#5AB0F7", fg:"#FFFFFF", l:"i"},
+  {job:"Maps", name:"Organic Maps", links:[{"t": "Organic Maps", "u": "https://organicmaps.app"}], bg:"#3D9A4A", fg:"#FFFFFF", l:"M"},
+  {job:"Weather", name:"Carrot", links:[{"t": "Carrot", "u": "https://www.meetcarrot.com"}], bg:"#1BA39C", fg:"#FFFFFF", l:"Ca"},
+  {job:"Thinking & the public square", jobShort:"Thinking / X", name:"Grok + X", links:[{"t": "Grok", "u": "https://grok.com"}, {"t": "X", "u": "https://x.com"}], bg:"#222222", fg:"#FFFFFF", l:"G/X"}
+];
+
+const ARCH_SVG = `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 36V19C9 11.5 14 6 20 3c6 3 11 8.5 11 16v17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M15 36V21c0-4 2.2-7.3 5-9 2.8 1.7 5 5 5 9v15" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55" stroke-linecap="round"/><circle cx="20" cy="26" r="2.2" fill="currentColor"/></svg>`;
+
+const state = APPS.map(()=>null);
+let brush = "use";
+const CODE_VALUES = [null,"use","try"];
+function encode(){ let n=0; for(let i=APPS.length-1;i>=0;i--) n = n*3 + CODE_VALUES.indexOf(state[i]); return n.toString(36); }
+function decode(str){
+  if(!/^[0-9a-z]{1,8}$/.test(str)) return false;
+  let n=parseInt(str,36); if(!Number.isFinite(n) || n>=Math.pow(3,APPS.length)) return false;
+  for(let i=0;i<APPS.length;i++){ state[i]=CODE_VALUES[n%3]; n=Math.floor(n/3); }
+  return true;
+}
+const myLink = () => `https://${SHARE_URL}#${encode()}`;
+const grid = document.getElementById("grid");
+
+APPS.forEach((a,i)=>{
+  const li = document.createElement("li");
+  const b = document.createElement("button");
+  b.className = "app"; b.dataset.i = i;
+  const icon = document.createElement("span");
+  icon.className = "icon"; icon.style.background = a.bg; icon.style.color = a.fg;
+  if (a.img){ const im=document.createElement("img"); im.src=a.img; im.alt=""; icon.appendChild(im); }
+  else icon.textContent = a.l;
+  const badge = document.createElement("span"); badge.className = "badge"; badge.setAttribute("aria-hidden","true");
+  icon.appendChild(badge);
+  const job = document.createElement("span"); job.className="job"; job.textContent=a.jobShort || a.job;
+  b.append(icon);
+  b.addEventListener("click",()=>toggle(i,b));
+  const name = document.createElement("span"); name.className="name";
+  a.links.forEach((l,k)=>{
+    if(k) name.append(" + ");
+    const link=document.createElement("a"); link.href=l.u; link.textContent=l.t;
+    link.target="_blank"; link.rel="noopener"; link.setAttribute("aria-label",`${l.t} website (opens in a new tab)`);
+    name.append(link);
+  });
+  li.className="cell"; li.append(b,name,job); grid.appendChild(li);
+  label(b,i);
+});
+
+function label(b,i){
+  const s = state[i], a = APPS[i];
+  b.dataset.s = s || "";
+  b.querySelector(".badge").textContent = s==="use" ? "✓" : s==="try" ? "+" : "";
+  b.setAttribute("aria-label", `${a.name}, ${a.job}${s==="use"?", on my phone":s==="try"?", want to try":""}`);
+}
+function toggle(i,b){
+  state[i] = state[i]===brush ? null : brush;
+  label(b,i);
+  if (state[i]){ b.classList.remove("stamp"); void b.offsetWidth; b.classList.add("stamp"); }
+  tally();
+}
+function counts(){ return {u:state.filter(s=>s==="use").length, t:state.filter(s=>s==="try").length}; }
+function tally(){
+  const {u,t} = counts();
+  const el = document.getElementById("tally");
+  document.getElementById("make").disabled = !(u||t);
+  if(!u && !t){ el.textContent = "Nothing marked yet. Tap an icon to start."; return; }
+  el.innerHTML = `You use <b class="u">${u} of 20</b>${t?`, and want to try <b class="t">${t}</b>`:""}.`;
+}
+function refreshAll(){ document.querySelectorAll(".app").forEach(b=>label(b,+b.dataset.i)); tally(); }
+const incoming = decodeURIComponent(location.hash.slice(1));
+if (incoming && decode(incoming) && state.some(Boolean)){
+  document.getElementById("shared").hidden = false;
+  refreshAll();
+}
+document.getElementById("startOwn").addEventListener("click",()=>{
+  state.fill(null); refreshAll();
+  document.getElementById("shared").hidden = true;
+  try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
+  document.querySelector(".app").focus();
+});
+document.querySelectorAll(".brush button").forEach(btn=>btn.addEventListener("click",()=>{
+  brush = btn.dataset.b;
+  document.querySelectorAll(".brush button").forEach(x=>x.setAttribute("aria-pressed", String(x===btn)));
+}));
+
+/* ---------- card ---------- */
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function drawArch(ctx,cx,cy,s,color){
+  ctx.save(); ctx.translate(cx-s/2,cy-s/2); ctx.scale(s/40,s/40);
+  ctx.strokeStyle=color; ctx.lineCap="round";
+  ctx.lineWidth=2.6; ctx.stroke(new Path2D("M9 36V19C9 11.5 14 6 20 3c6 3 11 8.5 11 16v17"));
+  ctx.globalAlpha=.55; ctx.lineWidth=1.6; ctx.stroke(new Path2D("M15 36V21c0-4 2.2-7.3 5-9 2.8 1.7 5 5 5 9v15"));
+  ctx.globalAlpha=1; ctx.fillStyle=color; ctx.beginPath(); ctx.arc(20,26,2.2,0,Math.PI*2); ctx.fill();
+  ctx.restore();
+}
+async function renderCard(){
+  try{ await Promise.all([document.fonts.load('800 80px "Bricolage Grotesque"'),document.fonts.load('600 30px "Bricolage Grotesque"'),document.fonts.load('400 30px "Bricolage Grotesque"')]); }catch(e){}
+  try{ await stillImg.decode(); }catch(e){}
+  const W=1080,H=1350, c=document.createElement("canvas"); c.width=W; c.height=H;
+  const x=c.getContext("2d"), F='"Bricolage Grotesque", system-ui, sans-serif';
+  const PAPER="#EEF0EC", INK="#1C2426", MUTED="#5E6A66", USE="#2F6B4F", TRY="#2A5DB0";
+  x.fillStyle=PAPER; x.fillRect(0,0,W,H);
+  // title
+  x.fillStyle=INK; rr(x,70,72,150,118,22); x.fill();
+  x.fillStyle=PAPER; x.font=`800 104px ${F}`; x.textBaseline="alphabetic"; x.fillText("20",88,170);
+  x.fillStyle=INK; x.fillText("apps I'll keep.",240,170);
+  const {u,t}=counts();
+  x.font=`400 34px ${F}`; x.fillStyle=MUTED;
+  x.fillText(`I use ${u} of 20${t?`. ${t} to try next`:""}.`,72,236);
+  // grid
+  const cols=4, cw=(W-140)/cols, top=292, rowH=196, ic=100;
+  APPS.forEach((a,i)=>{
+    const col=i%cols, row=Math.floor(i/cols);
+    const cx=70+cw*col+cw/2, iy=top+row*rowH;
+    const s=state[i];
+    x.globalAlpha = s ? 1 : .28;
+    if(s){ x.strokeStyle = s==="use"?USE:TRY; x.lineWidth=6; if(s==="try") x.setLineDash([12,9]); rr(x,cx-ic/2-12,iy-12,ic+24,ic+24,34); x.stroke(); x.setLineDash([]); }
+    x.fillStyle=a.bg; rr(x,cx-ic/2,iy,ic,ic,28); x.fill();
+    if(a.img){ x.save(); rr(x,cx-ic/2,iy,ic,ic,28); x.clip(); x.drawImage(stillImg,cx-ic/2,iy,ic,ic); x.restore(); }
+    else{ x.fillStyle=a.fg; x.font=`800 ${a.l.length>2?32:42}px ${F}`; x.textAlign="center"; x.textBaseline="middle"; x.fillText(a.l,cx,iy+ic/2+2); }
+    x.textAlign="center"; x.textBaseline="alphabetic";
+    x.fillStyle=INK; x.font=`600 24px ${F}`; x.fillText(a.name.length>15?a.name.replace("Readwise ",""):a.name,cx,iy+ic+36);
+    x.globalAlpha = s ? 1 : .6;
+    x.fillStyle=MUTED; x.font=`400 20px ${F}`; x.fillText(a.jobShort || a.job,cx,iy+ic+62);
+    x.globalAlpha=1;
+    if(s){ x.fillStyle=s==="use"?USE:TRY; x.beginPath(); x.arc(cx+ic/2+2,iy+2,21,0,Math.PI*2); x.fill();
+      x.strokeStyle=PAPER; x.lineWidth=5; x.stroke();
+      x.fillStyle="#fff"; x.font=`800 24px ${F}`; x.textBaseline="middle"; x.fillText(s==="use"?"✓":"+",cx+ic/2+2,iy+3); x.textBaseline="alphabetic"; }
+    x.textAlign="left";
+  });
+  // legend + url
+  const ly=H-70;
+  x.fillStyle=USE; x.beginPath(); x.arc(84,ly-10,11,0,Math.PI*2); x.fill();
+  x.fillStyle=INK; x.font=`400 28px ${F}`; x.fillText("On my phone",104,ly);
+  x.fillStyle=TRY; x.beginPath(); x.arc(312,ly-10,11,0,Math.PI*2); x.fill();
+  x.fillStyle=INK; x.fillText("Want to try",332,ly);
+  x.fillStyle=MUTED; x.textAlign="right"; x.fillText(`Links to all 20 · ${SHARE_URL}`,W-70,ly); x.textAlign="left";
+  return new Promise(r=>c.toBlob(r,"image/png"));
+}
+function asText(){
+  const lines = APPS.map((a,i)=>`${state[i]==="use"?"✅":state[i]==="try"?"👀":"▫️"} ${a.job} — ${a.name}`);
+  const {u,t}=counts();
+  return `The 20 apps I'll keep\n\n${lines.join("\n")}\n\n✅ on my phone (${u})  👀 want to try (${t})\nMy list, with a link to every app: ${myLink()}`;
+}
+
+let blob=null, blobUrl=null;
+const sheet=document.getElementById("sheet"), note=document.getElementById("note");
+document.getElementById("make").addEventListener("click", async ()=>{
+  blob = await renderCard();
+  if(blobUrl) URL.revokeObjectURL(blobUrl);
+  blobUrl = URL.createObjectURL(blob);
+  document.getElementById("cardImg").src = blobUrl;
+  document.getElementById("myLink").textContent = myLink();
+  note.textContent = "";
+  sheet.classList.add("open");
+  document.getElementById("save").focus();
+});
+function closeSheet(){ sheet.classList.remove("open"); document.getElementById("make").focus(); }
+document.getElementById("close").addEventListener("click",closeSheet);
+sheet.addEventListener("click",e=>{ if(e.target===sheet) closeSheet(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && sheet.classList.contains("open")) closeSheet(); });
+
+let downloads=null;
+if (window.claude && typeof window.claude.use==="function"){
+  window.claude.use("downloads").then(d=>{downloads=d;}).catch(()=>{});
+}
+document.getElementById("save").addEventListener("click", async ()=>{
+  if(!blob) return;
+  if(downloads){
+    try{ await downloads.save({filename:"my-20-apps.png", data:blob}); note.textContent="Saved."; return; }
+    catch(e){ if(e && e.code==="declined"){ note.textContent=""; return; } }
+  }
+  try{
+    const a=document.createElement("a"); a.href=blobUrl; a.download="my-20-apps.png";
+    document.body.appendChild(a); a.click(); a.remove();
+    note.textContent="On a phone, you can also press and hold the image to save it.";
+  }catch(e){ note.textContent="Press and hold the image to save it."; }
+});
+async function copy(text,done){
+  try{ await navigator.clipboard.writeText(text); note.textContent=done; }
+  catch(e){
+    const ta=document.createElement("textarea"); ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    let ok=false; try{ ok=document.execCommand("copy"); }catch(_){}
+    note.textContent = ok ? done : "Copy didn't work here. Press and hold the link above to copy it.";
+    ta.remove();
+  }
+}
+document.getElementById("copy").addEventListener("click",()=>copy(asText(),"Copied. Paste it into your post."));
+document.getElementById("copyLink").addEventListener("click",()=>copy(myLink(),"Link copied. Paste it in your reply."));
+const shareBtn=document.getElementById("share");
+shareBtn.addEventListener("click", async ()=>{
+  const file = blob ? new File([blob],"my-20-apps.png",{type:"image/png"}) : null;
+  try{
+    if(file && navigator.canShare && navigator.canShare({files:[file]})) await navigator.share({files:[file], text:`My 20 apps. Every one linked here: ${myLink()}`});
+    else if(navigator.share) await navigator.share({text:asText(), url:myLink()});
+    else { note.textContent="Sharing isn't available here. Save the image or copy the text."; }
+  }catch(e){ if(e && e.name!=="AbortError") note.textContent="Sharing isn't available here. Save the image or copy the text."; }
+});
+</script>
+</body>
+</html>
