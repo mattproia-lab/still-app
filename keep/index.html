@@ -509,7 +509,8 @@ async function renderCard(){
     const col=i%cols, row=Math.floor(i/cols);
     const cx=70+cw*col+cw/2, iy=top+row*rowH;
     const s=state[i];
-    x.globalAlpha = s ? 1 : .28;
+    const full = s || i===LOCKED;          // Still stays at full strength, marked or not
+    x.globalAlpha = full ? 1 : .28;
     if(s){ x.strokeStyle = s==="use"?USE:TRY; x.lineWidth=6; if(s==="try") x.setLineDash([12,9]); rr(x,cx-ic/2-12,iy-12,ic+24,ic+24,34); x.stroke(); x.setLineDash([]); }
     x.fillStyle=a.bg; rr(x,cx-ic/2,iy,ic,ic,28); x.fill();
     const pic = a.img ? stillImg : (pickedIcon(i) || (hasIcon(i) ? iconImgs[i] : null) || defaultStore(i));
@@ -517,7 +518,7 @@ async function renderCard(){
     else{ x.fillStyle=a.fg; x.font=`800 ${a.l.length>2?32:42}px ${F}`; x.textAlign="center"; x.textBaseline="middle"; x.fillText(a.l,cx,iy+ic/2+2); }
     x.textAlign="center"; x.textBaseline="alphabetic";
     x.fillStyle=INK; x.fillText(fit(a.name,cw-16,24,600),cx,iy+ic+36);
-    x.globalAlpha = s ? 1 : .6;
+    x.globalAlpha = full ? 1 : .6;
     x.fillStyle=MUTED; x.font=`400 20px ${F}`; x.fillText(fit(a.jobShort || a.job,cw-16,20,400),cx,iy+ic+62);
     x.globalAlpha=1;
     if(s){ x.fillStyle=s==="use"?USE:TRY; x.beginPath(); x.arc(cx+ic/2+2,iy+2,21,0,Math.PI*2); x.fill();
