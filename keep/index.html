@@ -74,6 +74,14 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 .shared[hidden]{display:none}
 .shared p{margin:0;font-size:1rem;flex:1 1 220px}
 .shared button{border:0;background:var(--ink);color:var(--paper);border-radius:999px;padding:10px 16px;font-weight:600;cursor:pointer}
+.swap{border:0;background:none;color:var(--muted);font-size:.78rem;cursor:pointer;padding:4px 6px;border-radius:8px;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.swap:hover{color:var(--ink)}
+.swap-sub{color:var(--muted);margin:0 0 14px;line-height:1.4}
+#swapInput{width:100%;font:inherit;font-size:1.1rem;padding:14px 16px;border:1.5px solid var(--line);border-radius:14px;background:var(--tile);color:var(--ink)}
+#swapInput:focus{outline:none;border-color:var(--try)}
+.actions .wide{grid-column:1/-1}
+.actions [hidden]{display:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .hint{font-size:.85rem;color:var(--muted);margin:18px 0 0}
 
 /* card sheet */
@@ -97,14 +105,14 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
 <body>
 <main class="wrap">
   <h1><span class="n">20</span>apps<br>I'll keep.</h1>
-  <p class="lede">One app for every job, and nothing else on the phone. Mark what you already use and what you want to try, then make your card.</p>
+  <p class="lede">One app for every job, and nothing else on the phone. Mark what you already use and what you want to try, swap in your own pick for any job, then make your card.</p>
   <div class="shared" id="shared" hidden>
     <p>You're looking at someone's 20. Tap any name to visit that app.</p>
     <button id="startOwn">Start my own</button>
   </div>
   <p class="tally" id="tally" aria-live="polite">Nothing marked yet. Tap an icon to start.</p>
   <ul class="grid" id="grid"></ul>
-  <p class="hint">Tap an icon to mark it, and tap again to clear it. Tap a name to visit the app.</p>
+  <p class="hint">Tap an icon to mark it, and tap again to clear it. Tap a name to visit the app, or tap Swap app to put in your own pick.</p>
 </main>
 
 <div class="bar">
@@ -130,6 +138,20 @@ h1 .n{display:inline-block;color:var(--paper);background:var(--ink);border-radiu
       <button id="share">Share</button>
     </div>
     <p class="note" id="note"></p>
+  </div>
+</div>
+
+<div class="sheet" id="swapSheet" role="dialog" aria-modal="true" aria-labelledby="swapTitle">
+  <div class="sheet-in">
+    <button class="close" id="swapClose" aria-label="Close">×</button>
+    <h2 id="swapTitle">Your pick</h2>
+    <p class="swap-sub" id="swapSub"></p>
+    <label class="sr" for="swapInput">App name</label>
+    <input id="swapInput" maxlength="24" autocomplete="off" autocapitalize="words" enterkeyhint="done" placeholder="App name">
+    <div class="actions">
+      <button class="primary" id="swapSave">Use this app</button>
+      <button id="swapReset" class="wide">Put back</button>
+    </div>
   </div>
 </div>
 
@@ -163,54 +185,102 @@ const APPS = [
   {job:"Thinking & the public square", jobShort:"Thinking / X", name:"Grok + X", links:[{"t": "Grok", "u": "https://grok.com"}, {"t": "X", "u": "https://x.com"}], bg:"#222222", fg:"#FFFFFF", l:"G/X"}
 ];
 
-const ARCH_SVG = `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 36V19C9 11.5 14 6 20 3c6 3 11 8.5 11 16v17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M15 36V21c0-4 2.2-7.3 5-9 2.8 1.7 5 5 5 9v15" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55" stroke-linecap="round"/><circle cx="20" cy="26" r="2.2" fill="currentColor"/></svg>`;
-
 const state = APPS.map(()=>null);
+const custom = APPS.map(()=>null);   // a person's own pick for a job (never for Prayer)
+const LOCKED = 0;                    // index of the job that can't be swapped
 let brush = "use";
 const CODE_VALUES = [null,"use","try"];
-function encode(){ let n=0; for(let i=APPS.length-1;i>=0;i--) n = n*3 + CODE_VALUES.indexOf(state[i]); return n.toString(36); }
-function decode(str){
-  if(!/^[0-9a-z]{1,8}$/.test(str)) return false;
-  let n=parseInt(str,36); if(!Number.isFinite(n) || n>=Math.pow(3,APPS.length)) return false;
+const TINTS = ["#5B4B8A","#2E6F73","#8A4B3A","#3F5E8C","#6B6B2E","#7A3E63","#35634A","#4A4A55"];
+
+function clean(v){ return String(v||"").replace(/[\u0000-\u001F\u007F~#]/g,"").replace(/\s+/g," ").trim().slice(0,24); }
+function initials(n){
+  const w = n.split(" ").filter(Boolean);
+  const first = Array.from(w[0]||"?");
+  if (w.length>1) return (first[0] + Array.from(w[1])[0]).toUpperCase();
+  return first[0].toUpperCase() + (first[1]||"").toLowerCase();
+}
+function tint(n){ let h=0; for(const ch of n.toLowerCase()) h=(h*31+ch.codePointAt(0))>>>0; return TINTS[h%TINTS.length]; }
+function view(i){
+  const a=APPS[i], c=custom[i];
+  if(!c) return a;
+  return {...a, name:c, links:null, img:null, l:initials(c), bg:tint(c), fg:"#FFFFFF", mine:true};
+}
+
+function encode(){
+  let n=0; for(let i=APPS.length-1;i>=0;i--) n = n*3 + CODE_VALUES.indexOf(state[i]);
+  let out = n.toString(36);
+  custom.forEach((c,i)=>{ if(c) out += "~" + i.toString(36) + encodeURIComponent(c); });
+  return out;
+}
+function decode(raw){
+  const parts = raw.split("~"), code = parts[0];
+  if(!/^[0-9a-z]{1,8}$/.test(code)) return false;
+  let n=parseInt(code,36); if(!Number.isFinite(n) || n>=Math.pow(3,APPS.length)) return false;
   for(let i=0;i<APPS.length;i++){ state[i]=CODE_VALUES[n%3]; n=Math.floor(n/3); }
+  parts.slice(1).forEach(p=>{
+    const i = parseInt(p[0],36);
+    if(!(i>=0 && i<APPS.length) || i===LOCKED) return;
+    let name=""; try{ name = clean(decodeURIComponent(p.slice(1))); }catch(e){ return; }
+    if(name) custom[i]=name;
+  });
   return true;
 }
 const myLink = () => `https://${SHARE_URL}#${encode()}`;
 const grid = document.getElementById("grid");
+const cells = [];
 
 APPS.forEach((a,i)=>{
-  const li = document.createElement("li");
-  const b = document.createElement("button");
-  b.className = "app"; b.dataset.i = i;
-  const icon = document.createElement("span");
-  icon.className = "icon"; icon.style.background = a.bg; icon.style.color = a.fg;
-  if (a.img){ const im=document.createElement("img"); im.src=a.img; im.alt=""; icon.appendChild(im); }
-  else icon.textContent = a.l;
+  const li = document.createElement("li"); li.className="cell";
+  const b = document.createElement("button"); b.className = "app"; b.dataset.i = i;
+  const icon = document.createElement("span"); icon.className = "icon";
   const badge = document.createElement("span"); badge.className = "badge"; badge.setAttribute("aria-hidden","true");
-  icon.appendChild(badge);
-  const job = document.createElement("span"); job.className="job"; job.textContent=a.jobShort || a.job;
   b.append(icon);
-  b.addEventListener("click",()=>toggle(i,b));
+  b.addEventListener("click",()=>toggle(i));
   const name = document.createElement("span"); name.className="name";
-  a.links.forEach((l,k)=>{
-    if(k) name.append(" + ");
-    const link=document.createElement("a"); link.href=l.u; link.textContent=l.t;
-    link.target="_blank"; link.rel="noopener"; link.setAttribute("aria-label",`${l.t} website (opens in a new tab)`);
-    name.append(link);
-  });
-  li.className="cell"; li.append(b,name,job); grid.appendChild(li);
-  label(b,i);
+  const job = document.createElement("span"); job.className="job"; job.textContent=a.jobShort || a.job;
+  li.append(b,name,job);
+  let swap=null;
+  if(i!==LOCKED){
+    swap = document.createElement("button"); swap.className="swap";
+    swap.addEventListener("click",()=>openSwap(i));
+    li.append(swap);
+  }
+  grid.appendChild(li);
+  cells[i] = {b,icon,badge,name,swap};
+  paint(i);
 });
 
-function label(b,i){
-  const s = state[i], a = APPS[i];
-  b.dataset.s = s || "";
-  b.querySelector(".badge").textContent = s==="use" ? "✓" : s==="try" ? "+" : "";
-  b.setAttribute("aria-label", `${a.name}, ${a.job}${s==="use"?", on my phone":s==="try"?", want to try":""}`);
+function paint(i){
+  const v = view(i), c = cells[i];
+  c.icon.textContent = ""; c.icon.style.background = v.bg; c.icon.style.color = v.fg;
+  if (v.img){ const im=document.createElement("img"); im.src=v.img; im.alt=""; c.icon.appendChild(im); }
+  else c.icon.append(v.l);
+  c.icon.appendChild(c.badge);
+  c.name.textContent = "";
+  if (v.links){
+    v.links.forEach((l,k)=>{
+      if(k) c.name.append(" + ");
+      const link=document.createElement("a"); link.href=l.u; link.textContent=l.t;
+      link.target="_blank"; link.rel="noopener"; link.setAttribute("aria-label",`${l.t} website (opens in a new tab)`);
+      c.name.append(link);
+    });
+  } else c.name.textContent = v.name;
+  if (c.swap){
+    c.swap.textContent = v.mine ? "Change my pick" : "Swap app";
+    c.swap.setAttribute("aria-label", `${v.mine?"Change":"Swap"} the app for ${APPS[i].job}`);
+  }
+  label(i);
 }
-function toggle(i,b){
+function label(i){
+  const s = state[i], v = view(i), b = cells[i].b;
+  b.dataset.s = s || "";
+  cells[i].badge.textContent = s==="use" ? "✓" : s==="try" ? "+" : "";
+  b.setAttribute("aria-label", `${v.name}, ${v.job}${s==="use"?", on my phone":s==="try"?", want to try":""}`);
+}
+function toggle(i){
+  const b = cells[i].b;
   state[i] = state[i]===brush ? null : brush;
-  label(b,i);
+  label(i);
   if (state[i]){ b.classList.remove("stamp"); void b.offsetWidth; b.classList.add("stamp"); }
   tally();
 }
@@ -222,22 +292,52 @@ function tally(){
   if(!u && !t){ el.textContent = "Nothing marked yet. Tap an icon to start."; return; }
   el.innerHTML = `You use <b class="u">${u} of 20</b>${t?`, and want to try <b class="t">${t}</b>`:""}.`;
 }
-function refreshAll(){ document.querySelectorAll(".app").forEach(b=>label(b,+b.dataset.i)); tally(); }
-const incoming = decodeURIComponent(location.hash.slice(1));
-if (incoming && decode(incoming) && state.some(Boolean)){
+function refreshAll(){ APPS.forEach((_,i)=>paint(i)); tally(); }
+
+const incoming = location.hash.slice(1);
+if (incoming && decode(incoming) && (state.some(Boolean) || custom.some(Boolean))){
   document.getElementById("shared").hidden = false;
   refreshAll();
 }
 document.getElementById("startOwn").addEventListener("click",()=>{
-  state.fill(null); refreshAll();
+  state.fill(null); custom.fill(null); refreshAll();
   document.getElementById("shared").hidden = true;
   try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){}
-  document.querySelector(".app").focus();
+  cells[0].b.focus();
 });
 document.querySelectorAll(".brush button").forEach(btn=>btn.addEventListener("click",()=>{
   brush = btn.dataset.b;
   document.querySelectorAll(".brush button").forEach(x=>x.setAttribute("aria-pressed", String(x===btn)));
 }));
+
+/* ---------- swap ---------- */
+const swapSheet=document.getElementById("swapSheet"), swapInput=document.getElementById("swapInput");
+let swapping=-1;
+function openSwap(i){
+  swapping=i;
+  const a=APPS[i];
+  document.getElementById("swapTitle").textContent = `Your pick for ${a.job}`;
+  document.getElementById("swapSub").textContent = `Keep something other than ${a.name}? Type the app you'd keep instead.`;
+  const reset=document.getElementById("swapReset");
+  reset.textContent = `Put back ${a.name}`; reset.hidden = !custom[i];
+  swapInput.value = custom[i] || "";
+  swapSheet.classList.add("open");
+  swapInput.focus();
+}
+function closeSwap(){ swapSheet.classList.remove("open"); if(swapping>=0) cells[swapping].swap.focus(); swapping=-1; }
+function saveSwap(){
+  const i=swapping; if(i<0) return;
+  const v=clean(swapInput.value);
+  if(!v || v.toLowerCase()===APPS[i].name.toLowerCase()) custom[i]=null;
+  else { custom[i]=v; if(!state[i]) state[i]=brush; }
+  paint(i); tally(); closeSwap();
+}
+document.getElementById("swapSave").addEventListener("click",saveSwap);
+swapInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); saveSwap(); } });
+document.getElementById("swapReset").addEventListener("click",()=>{ const i=swapping; custom[i]=null; paint(i); tally(); closeSwap(); });
+document.getElementById("swapClose").addEventListener("click",closeSwap);
+swapSheet.addEventListener("click",e=>{ if(e.target===swapSheet) closeSwap(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && swapSheet.classList.contains("open")) closeSwap(); });
 
 /* ---------- card ---------- */
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
@@ -258,15 +358,26 @@ async function renderCard(){
   const PAPER="#EEF0EC", INK="#1C2426", MUTED="#5E6A66", USE="#2F6B4F", TRY="#2A5DB0";
   x.fillStyle=PAPER; x.fillRect(0,0,W,H);
   // title
-  x.fillStyle=INK; rr(x,70,72,150,118,22); x.fill();
-  x.fillStyle=PAPER; x.font=`800 104px ${F}`; x.textBaseline="alphabetic"; x.fillText("20",88,170);
-  x.fillStyle=INK; x.fillText("apps I'll keep.",240,170);
+  let ts=104; x.font=`800 ${ts}px ${F}`;
+  while(ts>60 && x.measureText("20").width + x.measureText("apps I'll keep.").width + 70 > W-140){ ts-=2; x.font=`800 ${ts}px ${F}`; }
+  const nw=x.measureText("20").width, pad=ts*.17;
+  x.fillStyle=INK; rr(x,70,170-ts*.9,nw+pad*2,ts*1.13,ts*.2); x.fill();
+  x.fillStyle=PAPER; x.textBaseline="alphabetic"; x.fillText("20",70+pad,170);
+  x.fillStyle=INK; x.fillText("apps I'll keep.",70+nw+pad*2+ts*.22,170);
   const {u,t}=counts();
   x.font=`400 34px ${F}`; x.fillStyle=MUTED;
   x.fillText(`I use ${u} of 20${t?`. ${t} to try next`:""}.`,72,236);
   // grid
-  const cols=4, cw=(W-140)/cols, top=292, rowH=196, ic=100;
-  APPS.forEach((a,i)=>{
+  const cols=4, cw=(W-140)/cols, top=286, rowH=194, ic=100;
+  function fit(t,max,size,weight){
+    let z=size; x.font=`${weight} ${z}px ${F}`;
+    while(x.measureText(t).width>max && z>16){ z--; x.font=`${weight} ${z}px ${F}`; }
+    if(x.measureText(t).width<=max) return t;
+    let s2=t; while(s2.length>1 && x.measureText(s2+"…").width>max) s2=s2.slice(0,-1);
+    return s2+"…";
+  }
+  APPS.forEach((_,i)=>{
+    const a=view(i);
     const col=i%cols, row=Math.floor(i/cols);
     const cx=70+cw*col+cw/2, iy=top+row*rowH;
     const s=state[i];
@@ -276,7 +387,7 @@ async function renderCard(){
     if(a.img){ x.save(); rr(x,cx-ic/2,iy,ic,ic,28); x.clip(); x.drawImage(stillImg,cx-ic/2,iy,ic,ic); x.restore(); }
     else{ x.fillStyle=a.fg; x.font=`800 ${a.l.length>2?32:42}px ${F}`; x.textAlign="center"; x.textBaseline="middle"; x.fillText(a.l,cx,iy+ic/2+2); }
     x.textAlign="center"; x.textBaseline="alphabetic";
-    x.fillStyle=INK; x.font=`600 24px ${F}`; x.fillText(a.name.length>15?a.name.replace("Readwise ",""):a.name,cx,iy+ic+36);
+    x.fillStyle=INK; x.fillText(fit(a.name,cw-16,24,600),cx,iy+ic+36);
     x.globalAlpha = s ? 1 : .6;
     x.fillStyle=MUTED; x.font=`400 20px ${F}`; x.fillText(a.jobShort || a.job,cx,iy+ic+62);
     x.globalAlpha=1;
@@ -286,16 +397,16 @@ async function renderCard(){
     x.textAlign="left";
   });
   // legend + url
-  const ly=H-70;
+  const ly=H-40;
   x.fillStyle=USE; x.beginPath(); x.arc(84,ly-10,11,0,Math.PI*2); x.fill();
   x.fillStyle=INK; x.font=`400 28px ${F}`; x.fillText("On my phone",104,ly);
   x.fillStyle=TRY; x.beginPath(); x.arc(312,ly-10,11,0,Math.PI*2); x.fill();
   x.fillStyle=INK; x.fillText("Want to try",332,ly);
-  x.fillStyle=MUTED; x.textAlign="right"; x.fillText(`Links to all 20 · ${SHARE_URL}`,W-70,ly); x.textAlign="left";
+  x.fillStyle=MUTED; x.textAlign="right"; x.fillText(fit(`Links to all 20 · ${SHARE_URL}`,W-70-500,28,400),W-70,ly); x.textAlign="left";
   return new Promise(r=>c.toBlob(r,"image/png"));
 }
 function asText(){
-  const lines = APPS.map((a,i)=>`${state[i]==="use"?"✅":state[i]==="try"?"👀":"▫️"} ${a.job} — ${a.name}`);
+  const lines = APPS.map((_,i)=>{ const a=view(i); return `${state[i]==="use"?"✅":state[i]==="try"?"👀":"▫️"} ${a.job} — ${a.name}`; });
   const {u,t}=counts();
   return `The 20 apps I'll keep\n\n${lines.join("\n")}\n\n✅ on my phone (${u})  👀 want to try (${t})\nMy list, with a link to every app: ${myLink()}`;
 }
