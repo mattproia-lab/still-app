@@ -2,6 +2,7 @@
 // Looks up apps on the App Store for the /keep page.
 //   ?term=notion  -> up to 4 matches
 //   ?id=123456789 -> one app by App Store id (used when a shared link is opened)
+//   ?ids=1,2,3    -> up to 25 apps in one call (the page's default apps, smaller icons)
 // Icons come back as data URLs so the page can draw them onto the share card
 // without the canvas being blocked by cross-origin rules.
 
@@ -28,8 +29,14 @@ async function toDataUrl(url) {
 exports.handler = async (event) => {
   const q = event.queryStringParameters || {};
   let url;
+  let limit = 4;
+  let size = 256;
 
-  if (q.id && /^\d{5,12}$/.test(q.id)) {
+  if (q.ids && /^\d{5,12}(,\d{5,12}){0,24}$/.test(q.ids)) {
+    url = `https://itunes.apple.com/lookup?id=${q.ids}&entity=software&country=us`;
+    limit = 25;
+    size = 128;
+  } else if (q.id && /^\d{5,12}$/.test(q.id)) {
     url = `https://itunes.apple.com/lookup?id=${q.id}&entity=software&country=us`;
   } else if (q.term && q.term.trim().length >= 2 && q.term.length <= 40) {
     url = `https://itunes.apple.com/search?term=${encodeURIComponent(q.term.trim())}&entity=software&country=us&limit=4`;
@@ -43,13 +50,13 @@ exports.handler = async (event) => {
     const data = await r.json();
     const apps = (data.results || [])
       .filter((a) => a.trackId && (a.artworkUrl512 || a.artworkUrl100))
-      .slice(0, 4);
+      .slice(0, limit);
 
     const results = await Promise.all(
       apps.map(async (a) => {
         const art = (a.artworkUrl512 || a.artworkUrl100).replace(
           /\/\d+x\d+bb\.(jpg|png|webp)$/,
-          "/256x256bb.jpg"
+          `/${size}x${size}bb.jpg`
         );
         return { id: String(a.trackId), name: a.trackName, icon: await toDataUrl(art) };
       })
