@@ -3329,7 +3329,7 @@ function pinDocument() {
         </svg>
       </div>
       <div class="voice-name">Deeper</div>
-      <div class="voice-line">Theological investigation · Catechism-grounded</div>
+      <div class="voice-line">Scripture · Catechism · Fathers · Doctors · Mystics</div>
 
       <!-- OPENING and WRITING. No remaining line: Deeper keeps no count on the
            device; the function decides, and its answer is shown in the reply. -->
@@ -3347,7 +3347,7 @@ function pinDocument() {
       <!-- LISTENING -->
       <div id="deeperLoading" class="companion-state">
         <div class="voice-listening">Searching the tradition…</div>
-        <div class="voice-listening-sub">CCC · Philokalia · Desert Fathers</div>
+        <div class="voice-listening-sub">Scripture · Catechism · Fathers · Doctors · Mystics</div>
       </div>
 
       <!-- ANSWER -->
@@ -3357,6 +3357,11 @@ function pinDocument() {
           <div class="voice-source" id="dSource"></div>
           <div class="voice-reply" id="dResponseText"></div>
           <div class="voice-invitation" id="dInvitation"></div>
+          <!-- The apparatus: the Douay-Rheims Still verified for every reference
+               Deeper named, then what it cited. Both painted by askDeeper, both
+               hidden when there is nothing to show. -->
+          <div class="voice-scripture" id="dScripture" hidden></div>
+          <div class="voice-citations" id="dCitations" hidden></div>
           <div class="share-watermark">stillprayer.app</div>
         </div>
         <div class="voice-after">
@@ -5181,6 +5186,25 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 :is(.voice-screen,.voice-pane) .voice-source{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-4);}
 :is(.voice-screen,.voice-pane) .voice-source:empty{display:none;}
+
+/* Deeper's apparatus: the Scripture Still checked, and what was cited. Quieter
+   than the reply throughout -- it is there to be verified, not read first. */
+:is(.voice-screen,.voice-pane) .voice-scripture[hidden],
+:is(.voice-screen,.voice-pane) .voice-citations[hidden]{display:none;}
+:is(.voice-screen,.voice-pane) .voice-cite-label{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-faint);margin:var(--s-6) 0 var(--s-3);}
+:is(.voice-screen,.voice-pane) .voice-verse{max-width:var(--measure-read);margin:0 auto var(--s-4);text-align:left;}
+:is(.voice-screen,.voice-pane) .voice-verse-ref{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--gold);opacity:.85;margin-bottom:var(--s-2);}
+:is(.voice-screen,.voice-pane) .voice-verse-text{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);
+  line-height:var(--lh-text);color:var(--text-mid);text-wrap:pretty;}
+:is(.voice-screen,.voice-pane) .voice-verse-missing{font-family:var(--font-sans);font-size:var(--t-xs);
+  line-height:var(--lh-text);color:var(--text-faint);text-wrap:pretty;}
+:is(.voice-screen,.voice-pane) .voice-cite-row{display:flex;flex-wrap:wrap;gap:var(--s-2) var(--s-3);justify-content:center;}
+:is(.voice-screen,.voice-pane) .voice-cite{font-family:var(--font-sans);font-size:var(--t-xs);letter-spacing:.04em;
+  color:var(--gold);opacity:.9;text-decoration:none;border-bottom:1px solid var(--gold-a25);padding-bottom:1px;}
+:is(.voice-screen,.voice-pane) .voice-cite:hover{opacity:1;border-bottom-color:var(--candle);}
+:is(.voice-screen,.voice-pane) .voice-cite.is-plain{color:var(--text-faint);border-bottom:0;}
 :is(.voice-screen,.voice-pane) .voice-reply{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--text-hi);text-wrap:pretty;}
 :is(.voice-screen,.voice-pane) .voice-invitation{font-family:var(--font-serif);font-style:italic;font-size:var(--t-base);line-height:var(--lh-text);color:var(--text-mid);
   margin-top:var(--s-5);padding-top:var(--s-4);border-top:1px solid var(--line);}
@@ -6511,7 +6535,7 @@ const F=[
    b:'Every Lectio word. Every Examen answer. An Echoes section that returns what you wrote a year ago.',cta:'Open'},
   {name:'Deeper',badge:'The Cross',screen:'deeper',
    h:'Where all of it leads.',
-   b:'AI-assisted investigation into the mysteries of Christ. Catechism-grounded. Always ends in silence.',cta:'Go Deeper'},
+   b:'AI-assisted investigation into the mysteries of Christ, drawn from Scripture, the Catechism, the Church Fathers, the Doctors of the Church and the approved mystics. Always ends in silence.',cta:'Go Deeper'},
   {name:'The Dialogue Chamber',badge:'The Two Catherines',screen:'dialogue',
    h:'Speak, and be still.',
    b:'A dialogue in the school of Catherine of Siena and Catherine of Genoa. The tradition answers, never pretends to be God. Three exchanges, then silence.',cta:'Enter the Chamber'},
@@ -8009,7 +8033,10 @@ const DEEPER_SYSTEM=`You are a spiritual father and theological companion for a 
 ON A SOUL IN REAL AND PRESENT DANGER -- this comes before everything else in these instructions, including all you will be told below about despair, presumption, and the sins against the Holy Spirit:
 There is a vast difference between the theological condition of despair and a person telling you they want to die. The first you may treat within the tradition. The second is not a matter for doctrine. If someone speaks of taking their own life, of harming themselves or another, or of a danger that is real and near, you abandon the six movements at once. You do not cite the Catechism. You do not name despair as a sin. You do not correct, diagnose, or instruct. You do not deliver an anchor or a benediction. Every one of those would be a knife handed to a wound. A father who saw his child standing in the road would not teach -- he would move. So you move. Speak plainly, briefly, with the whole warmth of one who loves them: tell them that what they carry is too much to hold alone, that you are a voice and not a person, and that they need someone living and present with them now. Urge them -- directly, as a command from love -- to reach a person they trust this hour, and to call emergency help or a crisis line immediately if the danger is close. Stay with them in plain words until they have somewhere real to turn. The theology can wait. The person cannot.
 
-Your responses draw exclusively from the Catechism of the Catholic Church, Sacred Scripture (RSV-CE), the Church Fathers, the approved writings of the Catholic mystics, and the Doctors of the Church.
+Your responses draw exclusively from five sources, and you say which of them you are drawing on: Sacred Scripture (Douay-Rheims), the Catechism of the Catholic Church, the Church Fathers, the Doctors of the Church, and the approved writings of the Catholic mystics. Claim nothing from outside those five.
+
+ON QUOTING SCRIPTURE -- GIVE THE REFERENCE, NEVER THE WORDS:
+Still carries the Douay-Rheims and sets the verse beneath your reflection itself, from its own text. So name the place and do not write the verse out: "as Isaias says of the scarlet and the snow", not the sentence in quotation marks. A verse remembered imperfectly and presented as a quotation is a false witness, and the reference is what lets Still show the true words instead. Use Douay-Rheims names and Douay-Rheims numbering for every reference -- Isaias not Isaiah, Apocalypse not Revelation, Ecclesiasticus not Sirach, Osee not Hosea, and the psalms as the Vulgate numbers them.
 
 THE VOICE YOU ALWAYS SPEAK IN:
 Begin close to the person's heart, not to the doctrine. Name what they are carrying before you name what the Church teaches. A spiritual father does not open with a lecture -- he opens with recognition. Then he gives the truth. Then he gives the question. Then he gives the benediction.
@@ -8066,7 +8093,8 @@ RULES YOU NEVER BREAK:
 -- Never address the soul as "Scrupulous soul." Use "Beloved," or no direct address.
 -- Never end with more than one question. Never invite more conversation.
 -- Begin with: SOURCE: [specific CCC paragraph or Magisterial document]
--- The SOURCE line is metadata only -- never speak it aloud or include it in the body of the response.-- Tone: Tender. Precise. Unhurried. Truthful. The voice of someone who has studied for decades and prayed for longer -- and loves this person too much to give them anything less than the full truth, delivered with the full warmth of a father who has never stopped believing in their return.`;
+-- Then, on its own line: SCRIPTURE: [every Douay-Rheims reference you have drawn on, comma separated, or the single word none]
+-- Both the SOURCE and SCRIPTURE lines are metadata only -- never speak them aloud or include them in the body of the response.-- Tone: Tender. Precise. Unhurried. Truthful. The voice of someone who has studied for decades and prayed for longer -- and loves this person too much to give them anything less than the full truth, delivered with the full warmth of a father who has never stopped believing in their return.`;
 
 let companionUses=3;
 
@@ -8296,6 +8324,160 @@ function showDeeperState(id){
 }
 function resetDeeper(){showDeeperState('deeperInput');document.getElementById('deeperText').value='';}
 
+/* ── Deeper's apparatus: the citations and the Scripture ────────────────
+   Deeper is told to cite a CCC paragraph and to name the Scripture it draws
+   on, and its prose is then cleaned of those citations so a reflection reads
+   as a letter rather than as a footnoted paper. The citations used to be
+   deleted outright: the paragraph number survived only on the SOURCE line, the
+   journal kept none of it, and a reader was asked to take "the Catechism
+   teaches" purely on trust. They are harvested now and set beneath the reply,
+   where they can be checked.
+
+   vatican.va publishes the Catechism as about 250 page files (__P1.HTM through
+   __PAE.HTM). It offers no per-paragraph URL and no index mapping a paragraph
+   to its page -- checked against _INDEX.HTM, whose links carry section names
+   only. Deriving a page from the paragraph number would hand the reader the
+   wrong text, which is worse than handing them none, so the link opens the
+   Catechism's own table of contents on vatican.va and the paragraph number
+   travels in the label and the tooltip. */
+const CCC_VATICAN_INDEX = 'https://www.vatican.va/archive/ENG0015/_INDEX.HTM';
+const DR_VERSE_CAP = 8;          // a reference to a whole chapter is trimmed, not dumped
+
+function deeperEsc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* Every CCC paragraph and every Summa citation in the reply, in the order they
+   appear, de-duplicated. Read off the body BEFORE it is cleaned. */
+function deeperHarvestCitations(text) {
+  const ccc = [], other = [], seen = {};
+  const t = String(text || '');
+  (t.match(/CCC\s*\d+(?:\s*[-\u2013]\s*\d+)?/g) || []).forEach(function (hit) {
+    const label = hit.replace(/\s+/g, ' ').trim();
+    const para = (label.match(/\d+/) || [])[0];
+    if (!para || seen['c' + label]) return;
+    seen['c' + label] = 1;
+    ccc.push({ label: label, para: para });
+  });
+  (t.match(/\(ST\s+[^)]+\)/g) || []).forEach(function (hit) {
+    const label = hit.replace(/^\(|\)$/g, '').replace(/\s+/g, ' ').trim();
+    if (seen['o' + label]) return;
+    seen['o' + label] = 1;
+    other.push(label);
+  });
+  return { ccc: ccc, other: other };
+}
+
+/* Both panels emptied: the limit and expired-session replies carry no
+   citations and no Scripture, and last answer's must not sit under them. */
+function deeperClearApparatus() {
+  ['dScripture', 'dCitations'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) { el.innerHTML = ''; el.hidden = true; }
+  });
+}
+
+function deeperRenderCitations(bodyWithCitations) {
+  const host = document.getElementById('dCitations');
+  if (!host) return;
+  const found = deeperHarvestCitations(bodyWithCitations);
+  if (!found.ccc.length && !found.other.length) { host.innerHTML = ''; host.hidden = true; return; }
+  let html = '<div class="voice-cite-label">Cited</div><div class="voice-cite-row">';
+  found.ccc.forEach(function (c) {
+    html += '<a class="voice-cite" href="' + CCC_VATICAN_INDEX + '" target="_blank" rel="noopener"'
+         +  ' title="Catechism of the Catholic Church, paragraph ' + deeperEsc(c.para)
+         +  ' \u2014 opens the Catechism on vatican.va">' + deeperEsc(c.label) + '</a>';
+  });
+  found.other.forEach(function (o) {
+    html += '<span class="voice-cite is-plain">' + deeperEsc(o) + '</span>';
+  });
+  host.innerHTML = html + '</div>';
+  host.hidden = false;
+}
+
+/* Douay-Rheims names for the books a reference may arrive under. The DR keeps
+   the Septuagint and Vulgate names, so most modern names have to be translated
+   before assets/scripture/dr/ can be searched for them.
+
+   1 and 2 Kings are deliberately NOT aliased. In the Douay-Rheims those are
+   1 and 2 Samuel, and what a modern reference calls 1 and 2 Kings the DR calls
+   3 and 4 Kings -- so an alias either way would silently redirect a reference
+   that was already correct. They resolve as the DR names them, which is what
+   the prompt asks Deeper to use. */
+const DR_BOOK_ALIAS = {
+  'joshua': 'Josue', 'tobit': 'Tobias', 'ezra': '1 Esdras', 'nehemiah': '2 Esdras',
+  '1 chronicles': '1 Paralipomenon', '2 chronicles': '2 Paralipomenon',
+  'song of songs': 'Canticle of Canticles', 'song of solomon': 'Canticle of Canticles',
+  'canticles': 'Canticle of Canticles', 'sirach': 'Ecclesiasticus',
+  'isaiah': 'Isaias', 'jeremiah': 'Jeremias', 'ezekiel': 'Ezechiel',
+  'hosea': 'Osee', 'obadiah': 'Abdias', 'jonah': 'Jonas', 'micah': 'Micheas',
+  'habakkuk': 'Habacuc', 'zephaniah': 'Sophonias', 'haggai': 'Aggeus',
+  'zechariah': 'Zacharias', 'malachi': 'Malachias',
+  '1 maccabees': '1 Machabees', '2 maccabees': '2 Machabees',
+  'revelation': 'Apocalypse', 'psalm': 'Psalms'
+};
+
+/* One reference, checked against Still's own Douay-Rheims. Returns the verses
+   actually found there, or null. It never guesses and never partially fills:
+   a reference that does not resolve gets no text at all.
+   lectioParseCitation and lectioVersesFor are the Lectio citation reader --
+   the same two functions the Gospel of the day goes through. */
+async function deeperLookupDR(ref) {
+  const parsed = lectioParseCitation(ref);
+  if (!parsed) return null;
+  const key = String(parsed.book).toLowerCase().replace(/\.$/, '');
+  const name = DR_BOOK_ALIAS[key] || parsed.book;
+  const books = await Liturgy.loadBooks();
+  const entry = (books || []).find(function (b) {
+    return String(b.name || b.book).toLowerCase() === String(name).toLowerCase();
+  });
+  if (!entry) return null;
+  const json = await Liturgy.loadBook(entry.slug);
+  if (!json) return null;
+  const verses = lectioVersesFor(json, parsed);
+  return verses.length ? { name: entry.name, verses: verses } : null;
+}
+
+/* The SCRIPTURE metadata line, resolved. Every reference either carries the
+   real Douay-Rheims words or stands alone -- an unverified quotation is never
+   shown, which is the whole point of reading the text out of our own files
+   rather than out of the reply. */
+async function deeperRenderScripture(raw) {
+  const host = document.getElementById('dScripture');
+  if (!host) return;
+  host.innerHTML = ''; host.hidden = true;
+  const line = String(raw || '').trim();
+  if (!line || /^none[.]?$/i.test(line)) return;
+
+  const refs = line.split(/[,;]|\sand\s/).map(function (s) {
+    return s.replace(/^\(|\)$/g, '').trim();
+  }).filter(Boolean).slice(0, 4);
+  if (!refs.length) return;
+
+  const blocks = [];
+  for (let i = 0; i < refs.length; i++) {
+    const ref = refs[i];
+    let hit = null;
+    try { hit = await deeperLookupDR(ref); } catch (e) { hit = null; }
+    if (hit) {
+      const shown = hit.verses.slice(0, DR_VERSE_CAP);
+      const text = shown.map(function (v) { return v.text; }).join(' ')
+                 + (hit.verses.length > shown.length ? '\u2026' : '');
+      blocks.push('<div class="voice-verse">'
+        + '<div class="voice-verse-ref">' + deeperEsc(ref) + ' \u00b7 Douay-Rheims</div>'
+        + '<div class="voice-verse-text">' + deeperEsc(text) + '</div></div>');
+    } else {
+      blocks.push('<div class="voice-verse">'
+        + '<div class="voice-verse-ref">' + deeperEsc(ref) + '</div>'
+        + '<div class="voice-verse-missing">Still could not find this reference in its '
+        + 'Douay-Rheims, so no text is shown for it.</div></div>');
+    }
+  }
+  host.innerHTML = '<div class="voice-cite-label">Scripture</div>' + blocks.join('');
+  host.hidden = false;
+}
+
 async function askDeeper(){
   trackEvent('deeper');
 
@@ -8321,6 +8503,7 @@ async function askDeeper(){
         'Your session has expired. Sign out and back in, and we will continue.';
       document.getElementById('dSource').textContent = '';
       document.getElementById('dInvitation').textContent = '';
+      deeperClearApparatus();
       showDeeperState('deeperResponse');
       return;
     }
@@ -8330,6 +8513,7 @@ async function askDeeper(){
           'You have received all of these words for now. They return with the new day.';
         document.getElementById('dSource').textContent = '';
         document.getElementById('dInvitation').textContent = '';
+        deeperClearApparatus();
         showDeeperState('deeperResponse');
       } else {
         showDeeperState('deeperInput');
@@ -8341,7 +8525,9 @@ async function askDeeper(){
     const full=data.content?.[0]?.text||'';
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
     const src=srcMatch?srcMatch[1].trim():'Catechism of the Catholic Church';
-    const body=full.replace(/^SOURCE:\s*.+$/m,'').trim();
+    const scriptureMatch=full.match(/^SCRIPTURE:\s*(.+)$/m);
+    const scriptureRaw=scriptureMatch?scriptureMatch[1].trim():'';
+    const body=full.replace(/^SOURCE:\s*.+$/m,'').replace(/^SCRIPTURE:\s*.+$/m,'').trim();
     const sentences=body.match(/[^.!?]+[.!?]+/g)||[body];
     let inv='',main=[];let foundInv=false;
     for(let i=sentences.length-1;i>=0;i--){
@@ -8349,14 +8535,21 @@ async function askDeeper(){
       else main.unshift(sentences[i]);
     }
     document.getElementById('dSource').textContent=src;
-    const cleanBody = (main.join(' ').trim()||body)
+    /* The reply as written, citations and all. The prose shown is cleaned of
+       them, but they are harvested from this first and the journal keeps this
+       one -- the citation is part of what was said, and stripping it from the
+       record left the journal unable to show what any claim rested on. */
+    const rawBody = main.join(' ').trim()||body;
+    const cleanBody = rawBody
   .replace(/\(CCC\s*\d+[\d\-–]*\)/g,'')
   .replace(/CCC\s*\d+[\d\-–]*/g,'')
   .replace(/\(ST\s+[^)]+\)/g,'')
   .replace(/Rest here\./gi,'')
   .trim();
 document.getElementById('dResponseText').textContent=cleanBody;
-Memory.record('deeper', input, cleanBody, src);   // ← save this exchange into the journey
+deeperRenderCitations(rawBody);
+deeperRenderScripture(scriptureRaw);
+Memory.record('deeper', input, rawBody, src);   // ← save this exchange into the journey
 if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 
     const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
@@ -13689,6 +13882,7 @@ const INFO_CONTENT = {
         <p>"The soul that is attached to anything, however much good there may be in it, will not arrive at the liberty of divine union."</p>
         <span>-- St. John of the Cross, Ascent of Mount Carmel</span>
       </div>
+      <p>Deeper draws on five sources and nothing else: Sacred Scripture in the Douay-Rheims, the Catechism of the Catholic Church, the Church Fathers, the Doctors of the Church, and the approved writings of the Catholic mystics. Where it cites a paragraph of the Catechism, the paragraph is named beneath the reflection and links to the Catechism on vatican.va, so you can read it for yourself. Where it draws on Scripture, Still sets the verse beneath the reflection from its own Douay-Rheims rather than from the reply -- and where a reference cannot be found there, the reference is shown with no text rather than words we cannot vouch for.</p>
       <p>The Catechism of the Catholic Church is the anchor. Every theological claim made in this feature is consistent with the Magisterium. When a question touches something beyond what the tradition has settled, the feature says so honestly and directs you to a confessor or spiritual director. Theological accuracy is not pedantry -- it is an act of charity toward a person who deserves the truth.</p>
       <p>If your reflection contains a theological error -- even a subtle one -- this feature will correct it. Gently. Precisely. Without condescension. The way a good confessor corrects: with warmth and without hesitation. Most people have never had anyone gently correct their theology. They have absorbed half-truths from culture and never had a trusted voice say: that is not quite what the tradition teaches, and here is why the difference matters.</p>
       <p>This is where the rope leads. The ten beads are the practice. The cross is where the practice is oriented. Every session of contemplative sitting, every Lectio word, every Examen answer -- they are all preparation for this: the direct encounter with the mysteries at the center of the faith.</p>
