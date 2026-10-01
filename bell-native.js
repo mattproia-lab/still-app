@@ -170,11 +170,20 @@
       var toggle = row.querySelector('.bell-toggle');
       var on = !!toggle && toggle.getAttribute('aria-pressed') === 'true';
 
+      /* The time is an <input type="time"> now, painted from
+         still_hour_times by renderHourTimes() in index.html. The div scan
+         below is kept for markup that still carries the time as literal text,
+         which is what these rows held before. */
       var time = null;
-      var divs = row.querySelectorAll('div');
-      for (var i = 0; i < divs.length; i++) {
-        var t = parseTime((divs[i].textContent || '').trim());
-        if (t) { time = t; break; }
+      var inp = row.querySelector('.bell-hour-time');
+      var im = inp && (inp.value || '').match(/^(\d{1,2}):(\d{2})/);
+      if (im) time = { hour: parseInt(im[1], 10), minute: parseInt(im[2], 10) };
+      if (!time) {
+        var divs = row.querySelectorAll('div');
+        for (var i = 0; i < divs.length; i++) {
+          var t = parseTime((divs[i].textContent || '').trim());
+          if (t) { time = t; break; }
+        }
       }
       if (!time) time = FALLBACK_TIMES[hour];
 
@@ -243,6 +252,9 @@
   }
 
   function showBellToast(msg) {
+    /* The first session says its own gentle line about the outcome, so it
+       silences this one rather than saying the same thing twice. */
+    if (window.stillBellsQuiet) return;
     try {
       var t = document.createElement('div');
       t.textContent = msg;

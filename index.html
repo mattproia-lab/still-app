@@ -1171,8 +1171,8 @@ body.is-mobile #mobileEnterTab { display: block; }
          the script after this step from the Office's own clock rule). Two
          motions, both on the light: the lantern's glow and the frame's slow
          breath; nothing on the figure moves. The wordmark, the copy, Enter
-         and the store badges are as they were. obNext() and the flow are
-         unchanged. -->
+         and the store badges are as they were. Enter now opens the Hour
+         (obGoHour), not the letter. -->
     <div class="ob-step" id="ob-1" data-tokens>
       <div class="atmos" aria-hidden="true">
         <div class="atmos-glow"></div>
@@ -1200,7 +1200,7 @@ body.is-mobile #mobileEnterTab { display: block; }
         <div class="door-wordmark">Still</div>
         <div class="door-desc">Still is built on the contemplative practices that Christians have used for seventeen centuries — adapted for the interior life you actually have.</div>
         <div class="door-line">Not a productivity app. Not a streak counter.<br>A place to be still.</div>
-        <div class="btn-row"><button class="btn-primary gold" onclick="obNext(2)">Enter</button></div>
+        <div class="btn-row"><button class="btn-primary gold" onclick="obGoHour()">Enter</button></div>
         <!-- Store badges (web only; the script below shows them) -->
         <div id="storeBadges" class="door-stores" style="display:none">
           <span class="ui-label">Or take Still with you</span>
@@ -1280,6 +1280,58 @@ body.is-mobile #mobileEnterTab { display: block; }
         <audio id="obGuestmasterAudio" data-src="still-mobile/assets/Guestmaster_audio.mp3" preload="none"></audio>
         <button class="btn-ghost letter-hear" id="obGuestmasterBtn" onclick="playGuestmasterAudio()">◎ Hear the letter read aloud</button>
         <button class="btn-primary gold btn-begin letter-begin" onclick="obLetterBegin()">Begin →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -- one short Hour, by the clock (DESIGN.md, Onboarding).
+         The spine of today's real Office: the opening versicle, the first
+         psalm cut to its first strophe, the short reading, the collect. Every
+         word comes from buildOffice(), the same doc the Office screen
+         renders, so this is not a second copy of the texts and nothing here is
+         invented. The screen says plainly that it is a short form. Painted by
+         obGoHour(). -->
+    <div class="ob-step" id="ob-hour" data-tokens style="display:none">
+      <div class="atmos" aria-hidden="true">
+        <div class="atmos-glow"></div>
+        <div class="atmos-flame"></div>
+        <div class="atmos-grain"></div>
+        <div class="atmos-vignette"></div>
+      </div>
+      <div class="obh-col">
+        <div class="ui-label" id="obhBadge"></div>
+        <div class="obh-title" id="obhTitle"></div>
+        <div class="obh-day" id="obhDay"></div>
+        <div class="obh-body" id="obhBody"></div>
+        <div class="obh-note" id="obhNote"></div>
+        <button class="btn-primary gold btn-begin obh-amen" onclick="obHourAmen()">Amen &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -- the bell (DESIGN.md, Onboarding).
+         The bell is heard in the app before anything is asked of the system:
+         Hear the bell plays the chosen voice file, the same one the
+         notification carries. Only then does Ring it each morning reach
+         bell-native.js's scheduleBells(), which is the one path allowed to
+         raise the permission prompt. Not now is a real option and writes
+         nothing. -->
+    <div class="ob-step" id="ob-bell" data-tokens style="display:none">
+      <div class="atmos" aria-hidden="true">
+        <div class="atmos-glow"></div>
+        <div class="atmos-flame"></div>
+        <div class="atmos-grain"></div>
+        <div class="atmos-vignette"></div>
+      </div>
+      <div class="obb-col">
+        <div class="obb-mark" aria-hidden="true">&#10022;</div>
+        <div class="ui-label">The bell</div>
+        <div class="obb-text" id="obbText">Still will ring once a day for Lauds at 7:00&nbsp;am. Change or turn off anytime.</div>
+        <button type="button" class="btn-ghost obb-hear" id="obbHear" onclick="obBellHear()">&#9678; Hear the bell</button>
+        <div class="obb-actions" id="obbActions">
+          <button class="btn-primary gold btn-begin" id="obbArm" onclick="obBellArm()">Ring it each morning</button>
+          <button type="button" class="btn-ghost obb-skip" id="obbSkip" onclick="obBellSkip()">Not now</button>
+        </div>
+        <div class="obb-outcome" id="obbOutcome" hidden></div>
+        <button class="btn-primary gold btn-begin obb-done" id="obbDone" onclick="obFinish()" hidden>Enter Still &rarr;</button>
       </div>
     </div>
 
@@ -3499,21 +3551,28 @@ function pinDocument() {
           <div id="bellVoiceList" class="st-voices"></div>
         </div>
 
-        <!-- The Hours. bell-native.js reads each row's time from its divs and its state from .bell-toggle[aria-pressed]. -->
+        <!-- The Hours. Each row's time is an <input type="time"> painted from
+             still_hour_times by renderHourTimes(); bell-native.js reads that
+             input (and falls back to a literal time in a div, which is what
+             these rows used to carry). State is .bell-toggle[aria-pressed]. -->
         <div class="bell-row st-row" data-hour="vigils">
-          <div class="st-row-text st-hour"><div class="st-label">Vigils</div><div class="st-time">4:00 AM</div></div>
+          <div class="st-row-text st-hour"><div class="st-label">Vigils</div></div>
+          <input class="bell-hour-time st-input st-input-time" type="time" data-hour="vigils" aria-label="Vigils bell time">
           <button class="bell-toggle st-switch" data-hour="vigils" aria-pressed="false" onclick="toggleBell('vigils',this)" aria-label="Vigils bell"><span></span></button>
         </div>
         <div class="bell-row st-row" data-hour="lauds">
-          <div class="st-row-text st-hour"><div class="st-label">Lauds</div><div class="st-time">6:00 AM</div></div>
+          <div class="st-row-text st-hour"><div class="st-label">Lauds</div></div>
+          <input class="bell-hour-time st-input st-input-time" type="time" data-hour="lauds" aria-label="Lauds bell time">
           <button class="bell-toggle st-switch" data-hour="lauds" aria-pressed="false" onclick="toggleBell('lauds',this)" aria-label="Lauds bell"><span></span></button>
         </div>
         <div class="bell-row st-row" data-hour="vespers">
-          <div class="st-row-text st-hour"><div class="st-label">Vespers</div><div class="st-time">6:00 PM</div></div>
+          <div class="st-row-text st-hour"><div class="st-label">Vespers</div></div>
+          <input class="bell-hour-time st-input st-input-time" type="time" data-hour="vespers" aria-label="Vespers bell time">
           <button class="bell-toggle st-switch" data-hour="vespers" aria-pressed="false" onclick="toggleBell('vespers',this)" aria-label="Vespers bell"><span></span></button>
         </div>
         <div class="bell-row st-row" data-hour="compline">
-          <div class="st-row-text st-hour"><div class="st-label">Compline</div><div class="st-time">9:00 PM</div></div>
+          <div class="st-row-text st-hour"><div class="st-label">Compline</div></div>
+          <input class="bell-hour-time st-input st-input-time" type="time" data-hour="compline" aria-label="Compline bell time">
           <button class="bell-toggle st-switch" data-hour="compline" aria-pressed="false" onclick="toggleBell('compline',this)" aria-label="Compline bell"><span></span></button>
         </div>
 
@@ -3741,6 +3800,15 @@ function pinDocument() {
           renderVoicePicker();
           renderCustomRows();
           hookSavePersist();
+          /* The four Hours' times. renderHourTimes() lives in the main script,
+             which is later in the document than this block -- by the time
+             DOMContentLoaded calls init() it has run, and the guard covers the
+             case where it has not. */
+          if (typeof renderHourTimes === 'function') renderHourTimes();
+          document.querySelectorAll('.bell-hour-time').forEach(function (inp) {
+            inp.addEventListener('change', showSaveBtn);
+            inp.addEventListener('input', showSaveBtn);
+          });
           setInterval(hookSavePersist, 2000);
         }
 
@@ -5342,7 +5410,7 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    Step one. Home's purple at home's strength, the lancet window drawn in
    light behind the words, the wordmark and the description in the serif at
    reading measure, one action. The video, its scrims and the scroll cue
-   are gone; obNext() and the flow are untouched.
+   are gone; Enter opens the Hour (obGoHour).
 ═══════════════════════════════════════════ */
 #ob-1{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;overflow:hidden;background:var(--ink-0);
   display:flex;flex-direction:column;justify-content:flex-end;container:door / size; /* one visible viewport, never scrolled */
@@ -5458,6 +5526,55 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 #ob-2 .letter-seal{display:block;width:44px;height:44px;margin:var(--s-4) 0 0 2px;}
 #ob-2 .letter-hear{display:block;margin:var(--s-7) auto 0;}
 #ob-2 .letter-begin{margin-top:var(--s-5);}
+
+/* ═══════════════════════════════════════════
+   THE FIRST SESSION -- the Hour and the bell (DESIGN.md, Onboarding)
+   Two steps between the door and home, on the shared tokens. The Hour takes
+   the Office's gold with the light high, as morning; the bell screen keeps
+   the letter's low warm glow, a candle on the table. One motion on each, the
+   atmosphere's own, which the reduced-motion overrides at the top of the
+   first stylesheet already still.
+═══════════════════════════════════════════ */
+#ob-hour,#ob-bell{position:fixed;inset:0;margin:0;padding:0;max-width:100%;z-index:9999;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--ink-0);}
+#ob-hour .atmos,#ob-bell .atmos{position:fixed;}
+
+#ob-hour{--atmos-rgb:205,155,10;--atmos-a:.90;--atmos-x:50%;--atmos-y:30%;--atmos-gy:26%;}
+#ob-hour .obh-col{position:relative;z-index:1;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-8));}
+#ob-hour .obh-title{font-family:var(--font-serif);font-size:var(--t-xl);line-height:var(--lh-tight);color:var(--candle-hi);margin:var(--s-2) 0 0;}
+#ob-hour .obh-day{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);margin:var(--s-1) 0 var(--s-6);}
+#ob-hour .obh-body{text-align:left;}
+#ob-hour .obh-eyebrow{font-family:var(--font-sans);font-size:var(--t-micro);font-weight:500;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--gold);margin:var(--s-6) 0 var(--s-3);}
+#ob-hour .obh-body .obh-eyebrow:first-child{margin-top:0;}
+#ob-hour .obh-p{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--candle-hi);
+  margin:0 0 var(--s-4);text-wrap:pretty;}
+#ob-hour .obh-note{font-family:var(--font-sans);font-size:var(--t-xs);line-height:var(--lh-text);color:var(--text-low);
+  margin:var(--s-7) 0 0;padding-top:var(--s-5);border-top:1px solid var(--line);text-wrap:balance;}
+#ob-hour .obh-amen{margin-top:var(--s-6);}
+
+#ob-bell{--atmos-rgb:205,155,10;--atmos-a:.92;--atmos-x:50%;--atmos-y:74%;--atmos-gy:100%;}
+#ob-bell .obb-col{position:relative;z-index:1;max-width:var(--measure-read);margin:0 auto;box-sizing:border-box;text-align:center;
+  min-height:100dvh;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + var(--s-7)) var(--gutter) calc(env(safe-area-inset-bottom,0px) + var(--s-8));}
+#ob-bell .obb-mark{font-size:var(--t-lg);line-height:1;color:var(--gold);margin-bottom:var(--s-5);}
+#ob-bell .obb-text{font-family:var(--font-serif);font-size:var(--t-md);line-height:var(--lh-text);color:var(--candle-hi);
+  margin:var(--s-3) 0 var(--s-7);text-wrap:pretty;}
+#ob-bell .obb-hear{display:block;margin:0 auto var(--s-7);}
+#ob-bell .obb-actions{display:flex;flex-direction:column;gap:var(--s-4);align-items:stretch;}
+#ob-bell .obb-skip{align-self:center;}
+#ob-bell .obb-outcome{font-family:var(--font-sans);font-size:var(--t-sm);line-height:var(--lh-text);color:var(--text-mid);
+  margin:0 0 var(--s-6);text-wrap:pretty;}
+
+/* The four Hours' time inputs sit between the label and the switch */
+.bell-row .st-input-time{margin-left:auto;margin-right:var(--s-3);flex:0 0 auto;}
+
+@media (max-width:390px){
+  #ob-hour .obh-title{font-size:var(--t-lg);}
+  #ob-hour .obh-p,#ob-bell .obb-text{font-size:var(--t-base);}
+  #ob-hour .obh-col,#ob-bell .obb-col{padding-left:var(--gutter);padding-right:var(--gutter);}
+}
 
 /* ═══════════════════════════════════════════
    SAINT OF THE DAY -- on the DESIGN.md tokens
@@ -6960,6 +7077,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       const ob = document.getElementById('screen-onboarding');
       if (ob) ob.style.display = 'block';
+      trackEvent('first_run_start');
       return;
     }
 
@@ -14964,27 +15082,283 @@ function stopDemoAudio() {
  
 // ─── Finish onboarding ───────────────────────────────────────────────────
  
-function obFinish() {
-  // Mark onboarding complete
-  localStorage.setItem('still_onboarded', '1');
-  localStorage.setItem('still_onboarded_date', new Date().toISOString());
+/* ═══════════════════════════════════════════
+   THE FIRST SESSION (DESIGN.md, Onboarding)
 
-  // Hide onboarding screen
-  const ob = document.getElementById('screen-onboarding');
-  if (ob) {
-    ob.style.opacity = '0';
-    ob.style.transition = 'opacity .4s ease';
-    setTimeout(() => { ob.style.display = 'none'; ob.style.opacity = '1'; }, 400);
+   Three steps, under ninety seconds: the door, one short Hour by the clock,
+   and the bell. It ends at home, as a guest.
+
+   What it no longer does: end on the sign-in overlay, and read the
+   Guestmaster's letter. The letter is read from Settings > About, where its
+   link (#settingsLetterLink) and its audio already live; the sequence no
+   longer tells someone to go and set their bells, because it sets one for
+   them. obNext() and playDemoAudio() are left in place and are no longer
+   reached by the flow.
+═══════════════════════════════════════════ */
+
+const OB_HOUR_LABEL = { vigils: 'Vigils', lauds: 'Lauds', vespers: 'Vespers', compline: 'Compline' };
+const OB_HOUR_SUB   = { vigils: 'Night prayer', lauds: 'Morning prayer', vespers: 'Evening prayer', compline: 'Night prayer' };
+
+function obHideSteps() {
+  document.querySelectorAll('.ob-step').forEach(function (s) { s.style.display = 'none'; });
+}
+
+function obShowStep(id) {
+  obHideSteps();
+  document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = 'block';
+  el.style.zIndex = '9999';
+  el.scrollTop = 0;
+  if (typeof pinDocument === 'function') pinDocument();
+}
+
+/* The bell they will actually hear at seven: the chosen voice file, which is
+   what the notification carries. playBell() is a different bell -- Sitting's,
+   synthesized or from an uploaded file, and gated on bellEnabled -- so it is
+   not the one to preview here. */
+function obRingBellVoice() {
+  let file = 'bell-call.wav';
+  try { file = localStorage.getItem('still_bell_voice') || file; } catch (e) {}
+  try {
+    if (typeof window.stillPreviewBell === 'function') { window.stillPreviewBell(file); return; }
+    new Audio('assets/' + file).play().catch(function () {});
+  } catch (e) {}
+}
+
+// The hour the clock is in, by the Office's own rule -- the same one the door
+// reads for its edge grade.
+function obHourNow() {
+  let h = null;
+  if (typeof setOfficeTime === 'function') { try { setOfficeTime(); h = window._officeAutoHour; } catch (e) {} }
+  if (!h) { const n = new Date().getHours(); h = n < 5 ? 'vigils' : n < 17 ? 'lauds' : n < 20 ? 'vespers' : 'compline'; }
+  return OB_HOUR_LABEL[h] ? h : 'lauds';
+}
+
+function obEsc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/* The first strophe, which is where a psalm already rests: everything up to
+   the first blank line, and at most four lines of it. */
+function obFirstStrophe(text) {
+  const first = (text.split(/\n\s*\n/)[0] || text).trim();
+  return first.split('\n').slice(0, 4).join('\n');
+}
+
+/* The spine of today's real Hour, out of the doc the Office screen renders.
+   The rite is forced to modern: a first-run device has no traditional corpus
+   cached and buildOffice() would hand back a "still loading" office. Modern is
+   the default for everyone anyway, so a new install can only be on it. */
+function obBuildShortHour(hour) {
+  let doc;
+  try { doc = buildOffice(hour, 'modern', new Date()); } catch (e) { return null; }
+  if (!doc || !doc.parts) return null;
+
+  // Group the parts into sections, each headed by its eyebrow.
+  const sections = [];
+  let cur = { label: '', parts: [] };
+  doc.parts.forEach(function (p) {
+    if (p.type === 'eyebrow') { sections.push(cur); cur = { label: p.text || '', parts: [] }; }
+    else cur.parts.push(p);
+  });
+  sections.push(cur);
+
+  const pick = function (re) {
+    for (let i = 0; i < sections.length; i++) if (re.test(sections[i].label)) return sections[i];
+    return null;
+  };
+  const body = function (sec, strophe) {
+    if (!sec) return '';
+    let out = '';
+    sec.parts.forEach(function (p) {
+      if (p.type === 'divider' || p.type === 'button' || p.type === 'badge' || p.type === 'title') return;
+      let t = (p.text || '').trim();
+      if (!t) return;
+      if (strophe) t = obFirstStrophe(t);
+      out += '<div class="obh-p">' + obEsc(t).replace(/\n/g, '<br>') + '</div>';
+    });
+    return out;
+  };
+
+  const opening = pick(/^Opening$/),
+        psalm   = pick(/Psalm|Canticle/),
+        reading = pick(/Reading/),
+        collect = pick(/^Collect$/);
+
+  let html = '';
+  if (opening) html += body(opening);
+  if (psalm)   html += '<div class="obh-eyebrow">' + obEsc(psalm.label) + '</div>' + body(psalm, true);
+  if (reading) html += '<div class="obh-eyebrow">' + obEsc(reading.label) + '</div>' + body(reading);
+  if (collect) html += '<div class="obh-eyebrow">Collect</div>' + body(collect);
+  return html || null;
+}
+
+function obGoHour() {
+  const hour = obHourNow();
+  window._obHour = hour;
+  const label = OB_HOUR_LABEL[hour];
+
+  const set = function (id, text) { const el = document.getElementById(id); if (el) el.textContent = text; };
+  set('obhBadge', OB_HOUR_SUB[hour] || '');
+  set('obhTitle', label);
+  set('obhDay', new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }));
+
+  const html = obBuildShortHour(hour);
+  const bodyEl = document.getElementById('obhBody');
+  if (bodyEl) {
+    if (html) {
+      bodyEl.innerHTML = html;
+      set('obhNote', 'A short form of ' + label + '. Pray the full Hour anytime.');
+    } else {
+      /* The Office could not be built. The first session is never blocked on
+         it: the opening versicle is fixed liturgical text and stands alone. */
+      bodyEl.innerHTML = '<div class="obh-p">O God, come to my assistance.<br>O Lord, make haste to help me.</div>';
+      set('obhNote', 'Pray the full Hour anytime.');
+    }
   }
 
-  // Send them straight to sign-up / sign-in.
-  setTimeout(() => {
-    const a = document.getElementById('authOverlay');
-    if (a) {
-      a.style.display = 'flex';
+  obShowStep('ob-hour');
+  // On the tap that opened it: iOS will not start audio without a gesture.
+  obRingBellVoice();
+}
+
+function obHourAmen() {
+  trackEvent('first_run_hour_complete', { hour: window._obHour || obHourNow() });
+  obShowStep('ob-bell');
+}
+
+function obBellHear() {
+  obRingBellVoice();
+  const b = document.getElementById('obbHear');
+  if (b) b.innerHTML = '\u25CE Hear it again';
+}
+
+/* New installs only, and both gates have to hold: still_onboarded absent (we
+   are inside the first session) and still_bells never written (this device has
+   never saved a schedule). Someone re-reading the letter from Settings cannot
+   reach this, and no Hour but Lauds is ever touched. */
+function obFirstRunBellAllowed() {
+  try { return !localStorage.getItem('still_onboarded') && !localStorage.getItem('still_bells'); }
+  catch (e) { return false; }
+}
+
+function obSetToggle(btn, on) {
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  btn.style.background = on ? 'rgba(200,146,12,.5)' : 'rgba(255,255,255,.1)';
+  const span = btn.querySelector('span');
+  if (span) span.style.transform = on ? 'translateX(20px)' : 'none';
+}
+
+function obWriteLaudsBell() {
+  setHourTime('lauds', '07:00');
+  const settings = { vigils: false, lauds: true, vespers: false, compline: false };
+  try { localStorage.setItem('still_bells', JSON.stringify(settings)); } catch (e) {}
+
+  /* bell-native.js reads the schedule off the Settings rows, so the rows are
+     brought into line before it is asked to schedule. They are in the document
+     already: the Settings sheet is always built, just not open. */
+  renderHourTimes();
+  Object.keys(settings).forEach(function (h) {
+    const t = document.querySelector('.bell-toggle[data-hour="' + h + '"]');
+    if (t) obSetToggle(t, settings[h]);
+  });
+
+  let bell = 'bell-call.wav';
+  try { bell = localStorage.getItem('still_bell_voice') || bell; } catch (e) {}
+  trackEvent('bell_armed', { hour: 'lauds', bell: bell });
+}
+
+async function obNotifGranted() {
+  try {
+    const LN = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
+    if (!LN) return false;
+    const p = await LN.checkPermissions();
+    return !!(p && p.display === 'granted');
+  } catch (e) { return false; }
+}
+
+const OB_BELL_OUTCOME = {
+  armed:  'The bell is set for 7:00\u00A0am. If your phone is on silent it will arrive quietly \u2014 the bell will be waiting for you either way.',
+  denied: 'Notifications are off for Still, so the bell cannot reach you from outside the app. You can turn them on whenever you like. Still works just the same without them.',
+  /* Honest about the browser: there is no web scheduler, and localStorage does
+     not travel to the installed app, so this promises nothing it cannot keep.
+     The Settings bells section carries the same note (#bellsAppNote). */
+  web:    'Scheduled bells come with the Still app — a browser cannot ring them when Still is closed. For now, keep Lauds in your own rhythm; the Hour is always here.'
+};
+
+function obBellOutcome(result) {
+  const hide = function (id) { const el = document.getElementById(id); if (el) el.hidden = true; };
+  hide('obbActions');
+  hide('obbHear');
+  const out = document.getElementById('obbOutcome');
+  if (out) { out.textContent = OB_BELL_OUTCOME[result] || ''; out.hidden = !out.textContent; }
+  const done = document.getElementById('obbDone');
+  if (done) done.hidden = false;
+}
+
+async function obBellArm() {
+  const btn = document.getElementById('obbArm');
+  if (btn) { btn.disabled = true; btn.textContent = 'Setting the bell\u2026'; }
+
+  let result = 'web';
+  try {
+    if (obFirstRunBellAllowed()) obWriteLaudsBell();
+
+    const native = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+    if (native) {
+      /* bell-native.js owns the prompt: scheduleBells() is the one path
+         allowed to raise it and the authoritative scheduler. Its own denial
+         toast is silenced here so the line below is the only thing said. */
+      window.stillBellsQuiet = true;
+      try { if (window.scheduleBells) await window.scheduleBells(); } catch (e) {}
+      window.stillBellsQuiet = false;
+      result = (await obNotifGranted()) ? 'armed' : 'denied';
     }
-    if (typeof initAuth === 'function') initAuth();
-  }, 450);
+  } catch (e) {
+    window.stillBellsQuiet = false;
+    result = 'denied';
+  }
+
+  trackEvent('first_run_bell', { result: result });
+  obBellOutcome(result);
+}
+
+function obBellSkip() {
+  trackEvent('first_run_bell', { result: 'not_now' });
+  obFinish();
+}
+
+function obFinish() {
+  localStorage.setItem('still_onboarded', '1');
+  localStorage.setItem('still_onboarded_date', new Date().toISOString());
+  /* A guest from here. The first session used to end on the sign-in overlay;
+     it no longer appears at all. PW_GUEST is what boot reads when there is no
+     token, so without it the next cold launch would wall them at the auth
+     overlay -- the sign-in would simply have moved a day later. submitAuth()
+     sets it back to '0' when they do make an account. */
+  try { localStorage.setItem('PW_GUEST', '1'); } catch (e) {}
+  trackEvent('first_run_complete');
+
+  const ob = document.getElementById('screen-onboarding');
+  const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  const land = function () {
+    if (ob) { ob.style.display = 'none'; ob.style.opacity = '1'; ob.style.transition = ''; }
+    obHideSteps();
+    document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
+    const home = document.getElementById('home');
+    if (home) home.classList.add('active');
+    currentScreen = 'home';
+    if (typeof homeActivate === 'function') homeActivate(0);
+    if (typeof pinDocument === 'function') pinDocument();
+  };
+
+  if (reduce || !ob) { land(); return; }
+  ob.style.transition = 'opacity .4s ease';
+  ob.style.opacity = '0';
+  setTimeout(land, 420);
 }
  
 // ─── Settings deep link ───────────────────────────────────────────────────
@@ -15029,6 +15403,58 @@ async function initBellSettings() {
     }
   }
 }
+/* ── The four Hours' times ─────────────────────────────────────────────
+   They used to be literal text in the Settings markup, which bell-native.js
+   parsed back out of the DOM, so they could not be changed -- and editing
+   that text would have moved the bell for everyone who had already armed it,
+   because the launch re-arm (checkAndRescheduleBells) reads the same rows.
+   They are per-device data now.
+
+   The defaults are exactly the times the markup carried, so a device with no
+   still_hour_times behaves bit-for-bit as it did: Vigils 4:00, Lauds 6:00,
+   Vespers 18:00, Compline 21:00. The first session writes one different
+   value, Lauds at 07:00, and only on a device that has never saved a
+   schedule. */
+const HOUR_TIMES_KEY = 'still_hour_times';
+const HOUR_TIME_DEFAULTS = { vigils: '04:00', lauds: '06:00', vespers: '18:00', compline: '21:00' };
+
+function getHourTimes() {
+  const out = Object.assign({}, HOUR_TIME_DEFAULTS);
+  try {
+    const raw = localStorage.getItem(HOUR_TIMES_KEY);
+    if (raw) {
+      const o = JSON.parse(raw) || {};
+      Object.keys(HOUR_TIME_DEFAULTS).forEach(function (h) {
+        if (/^\d{2}:\d{2}$/.test(o[h])) out[h] = o[h];
+      });
+    }
+  } catch (e) {}
+  return out;
+}
+
+function setHourTime(hour, hhmm) {
+  if (!HOUR_TIME_DEFAULTS[hour] || !/^\d{2}:\d{2}$/.test(hhmm)) return;
+  const t = getHourTimes();
+  t[hour] = hhmm;
+  try { localStorage.setItem(HOUR_TIMES_KEY, JSON.stringify(t)); } catch (e) {}
+}
+
+// Paint the Settings inputs from the stored times.
+function renderHourTimes() {
+  const t = getHourTimes();
+  document.querySelectorAll('.bell-hour-time').forEach(function (inp) {
+    const h = inp.getAttribute('data-hour');
+    if (t[h]) inp.value = t[h];
+  });
+}
+
+// Read them back off the rows. Called by saveBellSettings, beside the toggles.
+function saveHourTimesFromRows() {
+  document.querySelectorAll('.bell-hour-time').forEach(function (inp) {
+    if (/^\d{2}:\d{2}$/.test(inp.value || '')) setHourTime(inp.getAttribute('data-hour'), inp.value);
+  });
+}
+
 function toggleBell(hour, btn) {
   const isOn = btn.getAttribute('aria-pressed') === 'true';
   btn.setAttribute('aria-pressed', !isOn);
@@ -15095,6 +15521,7 @@ function saveBellSettings() {
     settings[btn.dataset.hour] = btn.getAttribute('aria-pressed') === 'true';
   });
   localStorage.setItem('still_bells', JSON.stringify(settings));
+  saveHourTimesFromRows();   // the times live beside the toggles now
   /* One row per Hour that is on at save time -- every one of them, not only
      the ones just turned on, so re-saving an unchanged schedule logs them
      again. The bell is the chosen voice, the same file the Hour will ring. */
