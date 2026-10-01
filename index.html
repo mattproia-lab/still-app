@@ -2112,7 +2112,7 @@ function pinDocument() {
         <!-- The trial's one reminder, shown once when three days or fewer remain (DESIGN.md, Trial) -->
         <div class="trial-reminder" id="trialReminder" hidden>
           <span id="trialReminderText"></span>
-          <button type="button" class="trial-reminder-link" onclick="showUpgrade()">See the offer</button>
+          <button type="button" class="trial-reminder-link" onclick="showUpgrade('trial_reminder')">See the offer</button>
         </div>
         <div class="btn-row">
           <button class="btn-primary" onclick="resetSitting()">Sit Again</button>
@@ -3564,7 +3564,7 @@ function pinDocument() {
             <div class="st-value" id="subStatusText">Loading…</div>
           </div>
           <div class="st-row-actions">
-            <button class="btn-primary gold" onclick="showUpgrade()">View plans →</button>
+            <button class="btn-primary gold" onclick="showUpgrade('settings')">View plans →</button>
             <button class="btn-ghost st-action" onclick="restorePurchases()" id="restoreBtn">Restore purchases</button>
           </div>
           <div id="restoreMsg" class="st-msg" style="display:none"></div>
@@ -6877,7 +6877,7 @@ const TRIAL_FREE_SCREENS = ['sitting', 'saint', 'witnesses', 'breath'];
 // Not now returns home, where the person never left. Never at launch.
 function enterFeature(i){
   const screen = F[i].screen;
-  if (shouldShowPaywall() && TRIAL_FREE_SCREENS.indexOf(screen) === -1) { showPaywall(); return; }
+  if (shouldShowPaywall() && TRIAL_FREE_SCREENS.indexOf(screen) === -1) { showPaywall(false, screen); return; }
   if (screen==='witnesses') { showScreen('witnesses', i); initWitnesses(); return; }
   if (F[i].screen === 'theguide') { Guide.open({dark:false}); return; }
   if (F[i].screen === 'paths') { Paths.open(); return; }
@@ -7277,6 +7277,7 @@ function setSittingPhase(phase) {
 }
 
 function startSitting() {
+  trackEvent('sitting', { phase: 'open' });
   sThoughts = []; sPhase = 'settle';
   watchThoughtCount = 0; sitThoughtCount = 0;
   sFastPrayerDone = false;
@@ -7754,6 +7755,7 @@ const CoW = (() => {
         mysteries: json.mysteries,
         pools: json.mysteries.map(m => drawPool(m, countToday))
       };
+      trackEvent('rosary', { mystery: chosen });
       host.style.display='none';
       document.getElementById('cowPray').style.display='block';
       renderOpening();
@@ -8063,10 +8065,10 @@ async function askCompanion(){
   if(!input){showError('companionErr','Speak first. Then the Fathers will answer.');return;}
   if(!currentUser){
     if(typeof isSubscribed==='function'&&isSubscribed()){requireAccount('Your subscription is active on this device. A free account lets the Fathers hold your journey and unlocks them everywhere you sign in.');}
-    else{showUpgrade();}
+    else{showUpgrade('companion');}
     return;
   }
-  if(companionUses<=0){showUpgrade();return;}
+  if(companionUses<=0){showUpgrade('companion_limit');return;}
   showCompanionState('companionLoading');
   document.getElementById('companionErr').style.display='none';
   try{
@@ -8076,7 +8078,7 @@ async function askCompanion(){
       body:JSON.stringify({feature:'companion',access_token:await getValidToken(),model:'claude-sonnet-4-6',max_tokens:300,system:COMPANION_SYSTEM + Memory.context(input,'companion'),messages:[{role:'user',content:input}]})
     });
     const data=await res.json();
-    if(data.error==='upgrade_required'||data.error==='limit_reached'){showCompanionState('companionInput');showUpgrade();return;}
+    if(data.error==='upgrade_required'||data.error==='limit_reached'){showCompanionState('companionInput');showUpgrade('companion_limit');return;}
     if(data.error){throw new Error(data.error.message);}
   
     const full=data.content?.[0]?.text||'';
@@ -8188,7 +8190,7 @@ RULES YOU NEVER BREAK:
 async function askMystic() {
   if(!currentUser){
     if(typeof isSubscribed==='function'&&isSubscribed()){requireAccount('Your subscription is active on this device. A free account lets Amma remember you and speak with you on any device.');}
-    else{showUpgrade();}
+    else{showUpgrade('amma');}
     return;
   }
   const input = (document.getElementById('mysticText').value || '').trim();
@@ -8232,7 +8234,7 @@ async function askMystic() {
         showMysticState('mysticResponse');
       } else {
         showMysticState('mysticInput');
-        showUpgrade();
+        showUpgrade('amma_limit');
       }
       return;
     }
@@ -8268,7 +8270,7 @@ async function askDeeper(){
   if(!input){showError('deeperErr','Bring your question first.');return;}
   if(!currentUser){
     if(typeof isSubscribed==='function'&&isSubscribed()){requireAccount('Your subscription is active on this device. A free account carries it to every device and lets Deeper remember your questions.');}
-    else{showUpgrade();}
+    else{showUpgrade('deeper');}
     return;
   }
   showDeeperState('deeperLoading');
@@ -8298,7 +8300,7 @@ async function askDeeper(){
         showDeeperState('deeperResponse');
       } else {
         showDeeperState('deeperInput');
-        showUpgrade();
+        showUpgrade('deeper_limit');
       }
       return;
     }
@@ -9323,7 +9325,7 @@ Write a short closing collect prayer (4–5 sentences). First person singular. I
 
 function saveLectioSession() {
   const passage = lectioPassage();
-  trackEvent('lectio');
+  trackEvent('lectio', { phase: 'complete' });
   DB.save('lectio', {
     passage: passage.ref,
     word: lState.word,
@@ -9578,7 +9580,7 @@ function completeSitting() {
   const sitOnly = sThoughts.filter(t => t.phase === 'sit');
   document.getElementById('completeTotalCount').textContent = sitOnly.length;
   drawThoughtGraph();
-  trackEvent('sitting', { duration: sDuration });
+  trackEvent('sitting', { duration: sDuration, phase: 'complete' });
   DB.save('sitting', {
     duration: sDuration,
     totalThoughts: sitOnly.length,
@@ -9754,7 +9756,10 @@ function showVoiceTopUp() { VoiceCredit.open(); }
 
 // Returning from a successful top-up -- reopen showing the new balance
 if (typeof location !== 'undefined' && location.search.indexOf('credit=added') !== -1) {
-  setTimeout(() => { try { VoiceCredit.open(); } catch (e) {} }, 600);
+  setTimeout(() => {
+    try { if (typeof pwLogPendingPurchase === 'function') pwLogPendingPurchase('still_audio_credit'); } catch (e) {}
+    try { VoiceCredit.open(); } catch (e) {}
+  }, 600);
 }
 /* ═══════════════════════════════════════════
    SPIRITUAL AUTOBIOGRAPHY -- UI + Compiler
@@ -10304,6 +10309,7 @@ function lectioPrayGospel() {
 }
 
 function initLectio() {
+  trackEvent('lectio', { phase: 'open' });
   buildPassageList();
   lectioSeedGospel();
   lectioGoTo('prep');
@@ -13253,6 +13259,7 @@ let examenActiveQuestions = [];
 let examenAnswers = [];
 
 function initExamen() {
+  trackEvent('examen', { phase: 'open' });
   examenStep = 0;
   // Fasting Mode: append the fasting question for this session
   examenActiveQuestions = fasting
@@ -13320,7 +13327,7 @@ function examenFinish() {
   if (ta) examenAnswers[examenStep] = ta.value.trim();
   const answered = examenAnswers.filter(a => a.length > 0);
   if (!answered.length) { goHome(); return; }
-  trackEvent('examen');
+  trackEvent('examen', { phase: 'complete' });
   DB.save('examen', {
     answers: examenActiveQuestions.map((q,i) => ({q:q.prompt, a:examenAnswers[i]||''})).filter(e => e.a)
   });
@@ -14271,23 +14278,56 @@ function getDeviceId() {
   return id;
 }
 
+/* The events row names the account when there is one, and stays anonymous
+   when there is not. The insert policy accepts `user_id is null or user_id =
+   auth.uid()`, and auth.uid() is read from the bearer token -- so a row
+   carrying a user_id has to travel on that user's JWT, never on the anon key
+   this used to send for everyone. If the token cannot be had, the event still
+   goes out, just anonymously: analytics is never a reason to interrupt a
+   practice, and never a reason to lose one either.
+
+   user_id is omitted rather than sent as null when there is no user, so this
+   keeps logging against a table that has not had the column added yet. */
 async function trackEvent(eventType, metadata={}) {
   try {
+    let userId = (window.currentUser && window.currentUser.id) || null;
+    let bearer = SUPA_ANON;
+    if (userId) {
+      const token = (typeof getValidToken === 'function') ? await getValidToken() : null;
+      if (token) bearer = token;
+      else userId = null;              // identity unprovable -- log it anonymously
+    }
+    const row = {
+      device_id: getDeviceId(),
+      event_type: eventType,
+      metadata: metadata
+    };
+    if (userId) row.user_id = userId;
     await fetch(SUPA_URL + '/rest/v1/events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'apikey': SUPA_ANON,
-        'Authorization': 'Bearer ' + SUPA_ANON,
+        'Authorization': 'Bearer ' + bearer,
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify({
-        device_id: getDeviceId(),
-        event_type: eventType,
-        metadata: metadata
-      })
+      body: JSON.stringify(row)
     });
   } catch(e) { /* silent -- never interrupt the user */ }
+}
+
+/* Stripe's return leg. A web purchase cannot be logged where it is tapped --
+   the checkout page takes the browser away first -- so the product is parked
+   at tap time and read back here. The fallback covers a return with nothing
+   parked: an older build's checkout, or storage cleared in between. */
+function pwLogPendingPurchase(fallbackProduct) {
+  let product = fallbackProduct;
+  try {
+    const parked = localStorage.getItem('still_pending_product');
+    if (parked) product = parked;
+    localStorage.removeItem('still_pending_product');
+  } catch (e) {}
+  trackEvent('purchase_complete', { product: product, platform: 'web' });
 }
 
 async function initSingTheHours() {
@@ -14517,21 +14557,12 @@ function initTrial() {
 
 // Reads the cached status synchronously. refreshSubscription() keeps it fresh.
 function isSubscribed() {
-  // Reviewer / parish / clergy accounts are always premium
-  const email = (window.currentUser && currentUser.email || '').toLowerCase();
-  const COMP_EMAILS = [
-    PARISH_EMAIL,
-    'gwilson@charlestondiocese.org',
-    'guerricheckel@gmail.com',
-    'matt@proiadigitalllc.com',
-    'frjoetedesco@gmail.com',
-    'frpatrick@subi.org'  ,
-    'm.p.schneider.lc@hotmail.com',
-    'monsignorrichardson@gmail.com', // <-- replace with his actual signup email
-    'mariamilagros16@gmail.com'
-  ];
-  if (COMP_EMAILS.indexOf(email) !== -1) return true;
-
+  /* The comped reviewer, parish and clergy accounts used to be a list of nine
+     email addresses right here, which meant a comp could only be granted or
+     withdrawn by shipping a release. They now carry subscription_status =
+     'premium' on their own profile row, read by the same line every other
+     premium account is read by.
+     See supabase/migrations/2026-10-01-comped-accounts-to-profiles.sql. */
   const s = window._subStatus || localStorage.getItem(PW_SUB_KEY);
   if (s === 'premium' || s === 'active') return true;
   if (localStorage.getItem(PW_PAID_KEY) === '1') return true; // legacy / admin bypass
@@ -14635,7 +14666,11 @@ function hidePaywall() {
 // One paywall, always dismissable with Not now. The argument is what callers
 // have always passed (showUpgrade sends true); the copy now follows the state:
 // "Your trial has ended" once the trial is over, "Still, without limits" before.
-function showPaywall(preview) {
+/* `door` names where the paywall was opened from, and is the one thing
+   paywall_view carries. enterFeature passes the practice's screen name; every
+   showUpgrade() caller passes its own label. */
+function showPaywall(preview, door) {
+  trackEvent('paywall_view', { door: door || 'unknown' });
   const over = (typeof shouldShowPaywall === 'function') && shouldShowPaywall();
   const badge = document.getElementById('paywallBadge');
   if (badge) badge.textContent = over ? 'Your trial has ended' : 'Still, without limits';
@@ -14688,6 +14723,7 @@ function checkStripeReturn() {
   const params = new URLSearchParams(window.location.search);
 
   if (params.get('upgraded') === 'true') {
+    if (typeof pwLogPendingPurchase === 'function') pwLogPendingPurchase('still_monthly');
     // Optimistically unlock immediately; the webhook is the real source,
     // and refreshSubscription() below confirms it in the background.
     window._subStatus = 'premium';
@@ -14749,16 +14785,13 @@ window.stillAdmin = function() {
   console.log('Paywall bypassed');
 };
 
-// Reset trial for testing
-window.stillResetTrial = function() {
-  localStorage.removeItem(PW_START_KEY);
-  localStorage.removeItem(PW_PAID_KEY);
-  localStorage.removeItem(PW_SUB_KEY);
-  window._subStatus = null;
-  console.log('Trial reset. Refresh the page.');
-};
-// ?resetTrial in the URL resets and reloads (moved here from the Night Watch, beside the one definition)
-if (location.search.indexOf('resetTrial') !== -1) { stillResetTrial(); location.href = location.pathname; }
+/* The trial reset is gone. window.stillResetTrial() and the ?resetTrial URL
+   both shipped to production, and the URL was the live one: anyone could type
+   ?resetTrial on stillprayer.app and begin the fourteen days again, as often
+   as they liked. To reset a trial while testing, clear the keys by hand in
+   the console:
+     ['still_trial_start','still_paid','still_sub_status']
+       .forEach(function (k) { localStorage.removeItem(k); }); */
 
 function checkOnboarding() {
   if (!localStorage.getItem('still_onboarded')) {
@@ -15029,6 +15062,13 @@ function saveBellSettings() {
     settings[btn.dataset.hour] = btn.getAttribute('aria-pressed') === 'true';
   });
   localStorage.setItem('still_bells', JSON.stringify(settings));
+  /* One row per Hour that is on at save time -- every one of them, not only
+     the ones just turned on, so re-saving an unchanged schedule logs them
+     again. The bell is the chosen voice, the same file the Hour will ring. */
+  const armedBell = localStorage.getItem('still_bell_voice') || 'bell-call.wav';
+  Object.keys(settings).forEach(function (h) {
+    if (settings[h]) trackEvent('bell_armed', { hour: h, bell: armedBell });
+  });
   const saveBtn = document.getElementById('bellsSaveBtn');
   const savedMsg = document.getElementById('bellsSavedMsg');
   if (saveBtn) saveBtn.style.display = 'none';
@@ -15760,7 +15800,7 @@ function enterOfficeHour(hour) {
   renderOfficeHour(hour);
   if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 300);
   const season = getLiturgicalSeason();
-  trackEvent('office', { hour });
+  trackEvent('office', { hour, phase: 'open' });
   // Only save once per hour per day
   const today = new Date().toDateString();
   const alreadySaved = DB.all().some(e => 
@@ -17142,7 +17182,7 @@ document.getElementById('screen-companion').addEventListener('transitionend',() 
   loadCompanionUses();
   checkApiKey();
 });
-function showUpgrade() {
+function showUpgrade(door) {
   // Retired the legacy upgradeScreen: the paywall is the single plans surface
   var m = document.getElementById('settingsModal');
   if (m) {
@@ -17151,7 +17191,7 @@ function showUpgrade() {
     m.style.display = '';   // clear any inline state so openSettings works again
     m.style.zIndex = '';
   }
-  showPaywall(true);
+  showPaywall(true, door || 'settings');
   var badge = document.getElementById('paywallBadge');
   if (badge && typeof isSubscribed === 'function' && isSubscribed()) {
     badge.textContent = 'Your plan \u2014 Premium';
@@ -17175,9 +17215,14 @@ function closeUpgrade() {
 
 async function startCheckout(tier) {
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+  /* One product vocabulary for both stores: RevenueCat's identifiers, which
+     the native path already uses. Logged above the guards below, so a tap
+     that bounces off the no-account wall still counts as a tap. */
+  const pwProduct = (tier === 'annual') ? 'still_yearly' : 'still_monthly';
+  trackEvent('purchase_tap', { product: pwProduct, platform: isNative ? 'native' : 'web' });
 
   // Web (Stripe) still needs an account for billing email
-  if (!isNative && !currentUser) { showUpgrade(); return; }
+  if (!isNative && !currentUser) { showUpgrade('checkout_no_account'); return; }
 
   // Web guard: never double-subscribe
   if (!isNative && typeof isSubscribed === 'function' && isSubscribed()) {
@@ -17227,6 +17272,7 @@ async function startCheckout(tier) {
       const result = await Purchases.purchasePackage({ aPackage: pkg });
       const isPro = result.customerInfo?.entitlements?.active?.['premium'];
       if (isPro) {
+        trackEvent('purchase_complete', { product: targetProductId, platform: 'native' });
         localStorage.setItem(PW_SUB_KEY, 'active');
         window._subStatus = 'active';
         if (typeof closeUpgrade === 'function') closeUpgrade();
@@ -17259,14 +17305,19 @@ async function startCheckout(tier) {
       })
     });
     const data = await res.json();
-    if (data.url) window.location.href = data.url;
+    if (data.url) {
+      try { localStorage.setItem('still_pending_product', pwProduct); } catch (e) {}
+      window.location.href = data.url;
+    }
   } catch(err) {
     console.error('Checkout error:', err);
   }
 }
 
 async function buyAudioCredits() {
-  if (!currentUser) { showUpgrade(); return; }
+  const _vcNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  trackEvent('purchase_tap', { product: 'still_audio_credit', platform: _vcNative ? 'native' : 'web' });
+  if (!currentUser) { showUpgrade('audio_credit_no_account'); return; }
 
   const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
 
@@ -17280,6 +17331,7 @@ async function buyAudioCredits() {
       );
       if (!pkg) { console.log('Audio credit product not found'); alert('Unable to load audio credit options. Please check your connection and try again.'); return; }
       await Purchases.purchasePackage({ aPackage: pkg });
+      trackEvent('purchase_complete', { product: 'still_audio_credit', platform: 'native' });
       console.log('Audio credit purchase complete');
       // refresh the displayed wallet balance here if you have a function for it
     } catch (e) {
@@ -17298,7 +17350,10 @@ async function buyAudioCredits() {
         })
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        try { localStorage.setItem('still_pending_product', 'still_audio_credit'); } catch (e) {}
+        window.location.href = data.url;
+      }
     } catch(err) { console.error('Audio credit error:', err); }
   }
 }
@@ -17955,7 +18010,7 @@ function lightStairs(){
   S.stair = 3;
   renderWord(passage, msg, userText);
   if (!premium && typeof showUpgrade === 'function') {
-    setTimeout(function(){ showUpgrade(); }, 1800);
+    setTimeout(function(){ showUpgrade('chamber_limit'); }, 1800);
   }
 }
 function renderWord(passage, accomp, userText){
