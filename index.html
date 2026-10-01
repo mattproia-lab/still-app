@@ -1532,7 +1532,6 @@ function pinDocument() {
     </div>
 
     <div class="pw-keep">Every practice and the Divine Office. The Companion, Amma Sophia, and Deeper. Your spiritual autobiography.</div>
-    <div class="pw-audio">Hearing a voice aloud uses audio credit; you pay only for what you play.</div>
 
     <button class="btn-primary gold btn-begin pw-cta" id="pwCta" onclick="pwSubscribe()">Continue</button>
 
@@ -2766,7 +2765,6 @@ function pinDocument() {
         </div>
         <div class="voice-after">
           <div class="voice-after-row">
-            <button class="btn-ghost" onclick="requestVoice(document.getElementById('cResponseText').textContent, 'companion', this)">◎ Hear response</button>
             <button class="btn-ghost" onclick="shareVoiceCard('companion')">Share</button>
           </div>
           <button class="btn-primary gold" onclick="returnFromCompanion()">Return to stillness</button>
@@ -3127,7 +3125,6 @@ function pinDocument() {
           </div>
           <div class="voice-after">
             <div class="voice-after-row">
-              <button class="btn-ghost" onclick="requestVoice(document.getElementById('mysticResponseText').textContent, 'ammaSophia', this)">◎ Hear response</button>
               <button class="btn-ghost" onclick="shareVoiceCard('sophia')">Share</button>
             </div>
             <button class="btn-primary gold" onclick="resetMystic()">Ask another →</button>
@@ -3364,7 +3361,6 @@ function pinDocument() {
         </div>
         <div class="voice-after">
           <div class="voice-after-row">
-            <button class="btn-ghost" onclick="requestVoice(document.getElementById('dResponseText').textContent, 'deeper', this)">◎ Hear response</button>
             <button class="btn-ghost" onclick="shareVoiceCard('deeper')">Share</button>
           </div>
           <button class="btn-primary gold" onclick="resetDeeper()">Ask another →</button>
@@ -5104,8 +5100,9 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
    voice is speaking, so no quotation marks), the textarea, the action with
    the remaining line beside it in the sans at micro size. Writing: the
    figure recedes as the person types. Answer: a reading surface, the reply
-   in the serif at reading measure, Hear response and the follow-ups beneath
-   it, the figure gone, the atmosphere carrying the screen.
+   in the serif at reading measure, Share and the follow-ups beneath it, the
+   figure gone, the atmosphere carrying the screen. (These voices are read,
+   not heard: the Hear response button that used to sit in that row is gone.)
    Each voice's photograph is its threshold: one .atmos-photo layer between
    the flame and the grain, graded toward the voice's hue, standing in the
    lower half of the frame (so the input never sits over a face), shown only
@@ -5946,32 +5943,19 @@ body:has(#screen-dialogue.active:not(.dc-hidden)) .dot-nav{display:none;}
 let _currentAudio = null;
 let _currentAudioUrl = null;
 
-// Stores tagged text per character while user reads
-const _taggedResponses = {
-  companion: null,
-  ammaSophia: null,
-  deeper: null
-};
+/* The three character voices -- the Companion, Amma Sophia and Deeper -- are
+   read, not heard. Their "Hear response" buttons, requestVoice(), the
+   pre-tagging that prepared their text for ElevenLabs (_taggedResponses and
+   prepareVoiceResponse, which called tag-response.js), and the audio-credit
+   wallet that paid for them are all gone. The replies themselves are
+   unchanged.
 
-// Called immediately after AI response is displayed
-// Runs in background -- user never waits for this
-async function prepareVoiceResponse(text, character) {
-  if (!text || !text.trim()) return;
-  _taggedResponses[character] = null;
-  try {
-    const res = await fetch(window.FN_BASE + '/.netlify/functions/tag-response', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text.trim(), character })
-    });
-    const data = await res.json();
-    if (data.taggedText) {
-      _taggedResponses[character] = data.taggedText;
-    }
-  } catch (err) {
-    _taggedResponses[character] = text;
-  }
-}
+   What stays, because the Office, Darkness Mode and the Rosary still speak:
+   AudioFetch below, playVoiceUrl(), and CHARACTER_AMBIENCE -- Darkness passes
+   'ammaSophia' as its character and plays that ambience bed under its
+   reflection. still-tts.onrender.com keeps serving /office-tts and
+   /rosary-tts; only /tts is retired, and it answers 200 with no audio so a
+   build already installed on a phone falls back to the text in silence. */
 /* ── The screen lock around a voice fetch ──────────────────────────────
    A voice is a long request: the TTS service generates the clip while the
    phone waits, and if the screen goes dark in that time the OS suspends the
@@ -6013,81 +5997,8 @@ const AudioFetch = (() => {
   });
   return { start, done };
 })();
-let _voiceSeq = 0, _officeSeq = 0, _darknessSeq = 0;
+let _officeSeq = 0, _darknessSeq = 0;
 
-// Called when user taps Hear Response button
-async function requestVoice(text, character, buttonEl) {
-  if (!text || !text.trim()) return;
-
-  // The label to restore is the button's own, remembered the first time; a
-  // retry finds "Preparing" on the button and must not take that for it.
-  if (buttonEl.innerHTML !== '◌ Preparing…') buttonEl.dataset.voiceLabel = buttonEl.innerHTML;
-  const originalHtml = buttonEl.dataset.voiceLabel;
-  buttonEl.innerHTML = '◌ Preparing…';
-  buttonEl.disabled = true;
-  const seq = ++_voiceSeq;
-  const guard = AudioFetch.start(() => requestVoice(text, character, buttonEl));
-
-  try {
-     const voiceText = _taggedResponses[character] || text.trim();
-    const token = await getValidToken();
-    if (seq !== _voiceSeq) return;
-
-    const res = await fetch('https://still-tts.onrender.com/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        text: voiceText,
-        character,
-        access_token: token   // ← fresh, refreshed if needed
-      })
-    });
-    if (seq !== _voiceSeq) return;
-
-    const data = await res.json();
-    if (seq !== _voiceSeq) return;
-
-    // Out of credit -- invite a top-up, gently. The text reply is still on screen.
-    if (res.status === 402 || data.error === 'insufficient_balance') {
-      AudioFetch.done(guard);
-      buttonEl.innerHTML = '✦ Add audio credit';
-      buttonEl.disabled = false;
-      buttonEl.onclick = () => { if (typeof showVoiceTopUp === 'function') showVoiceTopUp(); };
-      return;
-    }
-    if (res.status === 401 || data.error === 'auth_required') {
-      AudioFetch.done(guard);
-      buttonEl.innerHTML = originalHtml;
-      buttonEl.disabled = false;
-      return;
-    }
-    if (!res.ok) throw new Error(data.error || 'Could not generate audio');
-
-    let audioUrl;
-    if (data.cached && data.url) {
-      audioUrl = data.url;
-    } else if (data.audio) {
-      const binary = atob(data.audio);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: 'audio/mpeg' });
-      audioUrl = URL.createObjectURL(blob);
-    } else {
-      throw new Error('No audio returned');
-    }
-
-    _currentAudioUrl = audioUrl;
-    AudioFetch.done(guard);
-    playVoiceUrl(audioUrl, buttonEl, originalHtml, character);
-
-  } catch (err) {
-    if (seq !== _voiceSeq) return;
-    AudioFetch.done(guard);
-    console.error('Voice error:', err.message);
-    buttonEl.innerHTML = originalHtml;
-    buttonEl.disabled = false;
-  }
-}
 // Play audio with pause/resume/replay
 const CHARACTER_AMBIENCE = {
   companion: 'still-mobile/src/audio/nature_sounds.mp3',
@@ -6768,7 +6679,7 @@ function showDeleteAccount() {
     <div style="max-width:380px;width:100%;background:#0a0812;border:1px solid rgba(255,73,64,.25);padding:32px 26px;border-radius:6px">
       <p style="font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#fff;margin-bottom:14px">Delete your account?</p>
       <p style="font-family:'Heebo',sans-serif;font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:18px">
-        This permanently deletes your account, your practice history, your spiritual autobiography, and any remaining audio credit. This cannot be undone.
+        This permanently deletes your account, your practice history, and your spiritual autobiography. This cannot be undone.
       </p>
       <p style="font-family:'Heebo',sans-serif;font-size:12px;color:rgba(255,255,255,.4);margin-bottom:8px">Type <strong style="color:rgba(255,73,64,.8)">DELETE</strong> to confirm:</p>
       <input id="deleteConfirmInput" type="text" autocomplete="off" style="width:100%;padding:11px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.15);color:#fff;font-family:'Heebo',sans-serif;font-size:14px;border-radius:4px;margin-bottom:8px;box-sizing:border-box">
@@ -8219,7 +8130,6 @@ async function askCompanion(){
     document.getElementById('cInvitation').textContent=inv||(sentences[sentences.length-1]||'');
     document.getElementById('companionRate').textContent=`${companionUses} reflection${companionUses!==1?'s':''} remaining this week`;
     showCompanionState('companionResponse');
-    prepareVoiceResponse(document.getElementById('cResponseText').textContent, 'companion');
   }catch(err){
     showCompanionState('companionInput');
     showError('companionErr','Something stirred in the silence -- try once more.');
@@ -8363,7 +8273,6 @@ async function askMystic() {
     if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
     showMysticState('mysticResponse');
     localStorage.removeItem('still_sophia_onboarding_free');
-    prepareVoiceResponse(document.getElementById('mysticResponseText').textContent, 'ammaSophia');
   } catch(err) {
     showMysticState('mysticInput');
     const errEl = document.getElementById('mysticErr');
@@ -8447,7 +8356,6 @@ if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
     const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
 document.getElementById('dInvitation').textContent=cleanInv;
    showDeeperState('deeperResponse');
-prepareVoiceResponse(document.getElementById('dResponseText').textContent, 'deeper');
   }catch(err){
     showDeeperState('deeperInput');
     showError('deeperErr','Something stirred -- try once more.');
@@ -9783,102 +9691,20 @@ const Crisis = {
     document.body.appendChild(el);
   }
 };
-/* ═══════════════════════════════════════════
-   STILL -- VOICE CREDIT (audio top-up + balance)
+/* The audio-credit wallet is gone: the VoiceCredit modal, its balance read,
+   showVoiceTopUp(), and the ?credit=added return that reopened it. It only
+   ever paid for the three character voices -- /tts was the one TTS endpoint
+   the client sent an access_token to, so it was the only one that could be
+   billed to a person. The Office, Darkness and the Rosary send no token and
+   were always our cost, and they are untouched.
 
-   The top-up modal that requestVoice() opens when someone is out
-   of audio credit, plus a balance display. Buying credit reuses
-   your existing Stripe checkout function with tier:'audio_credit',
-   and the webhook (type:'audio_topup') adds it to the voice_wallet.
+   still_audio_credit comes off sale in RevenueCat and both stores, and the
+   Stripe audio-credit price is archived. The server side is deliberately left
+   in place -- stripe-checkout.js's tier:'audio_credit' branch,
+   revenuecat-webhook.js's still_audio_credit branch, the add_voice_credit RPC
+   and the voice_wallet table -- so a purchase already in flight still lands
+   somewhere rather than vanishing. delete-account.js still clears the row. */
 
-   ─────────── INTEGRATION ───────────
-   1) Paste this whole block into your big file as CODE (no <script>
-      tag), below your other modules.
-   2) Set CHECKOUT_FN below to the SAME Netlify function your app
-      already calls for subscription upgrades.
-   3) Confirm SUPA_ANON is the name of your front-end anon-key
-      constant (used to read the balance). Adjust if it differs.
-   ──────────────────────────────────── */
-
-const VoiceCredit = {
-  CHECKOUT_FN: '/.netlify/functions/stripe-checkout',   // your checkout function
-
-  _fmt(cents) { return '$' + (Math.max(0, cents) / 100).toFixed(2); },
-
-  async balanceCents() {
-    try {
-      const token = localStorage.getItem('still_access_token');
-      const uid = window.currentUser && window.currentUser.id;
-      if (!token || !uid) return 0;
-      const res = await fetch(`${SUPA_URL}/rest/v1/voice_wallet?user_id=eq.${uid}&select=balance_cents`, {
-        headers: { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token }
-      });
-      if (!res.ok) return 0;
-      const d = await res.json();
-      return (d && d[0] && d[0].balance_cents) || 0;
-    } catch (e) { return 0; }
-  },
-
-  async open() {
-    this._ensure();
-    document.getElementById('vcOverlay').style.display = 'flex';
-    this._render('…');
-    const bal = await this.balanceCents();
-    this._render(this._fmt(bal));
-  },
-
-  close() { const o = document.getElementById('vcOverlay'); if (o) o.style.display = 'none'; },
-
-  _ensure() {
-    if (document.getElementById('vcOverlay')) return;
-    const el = document.createElement('div');
-    el.id = 'vcOverlay';
-    el.style.cssText = 'display:none;position:fixed;inset:0;z-index:9996;background:rgba(3,3,8,.94);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px';
-    el.innerHTML = '<div id="vcPanel" style="max-width:420px;width:100%;background:#0a0a12;border:1px solid rgba(200,146,12,.25);border-radius:16px;padding:28px 24px"></div>';
-    document.body.appendChild(el);
-  },
-
-  _render(balanceStr) {
-    const p = document.getElementById('vcPanel');
-    if (!p) return;
-    p.innerHTML =
-      `<p style="font-family:'Playfair Display',serif;font-size:23px;font-style:italic;color:#fff;margin:0 0 6px">Audio credit</p>` +
-      `<p style="font-family:'Heebo',sans-serif;font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;margin:0 0 18px">Reading the voices is always free. Hearing them spoken aloud draws from your audio credit, charged at our cost.</p>` +
-      `<div style="background:rgba(200,146,12,.08);border-radius:10px;padding:14px 16px;margin-bottom:18px">
-         <span style="font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:.04em;color:rgba(255,255,255,.55)">Balance</span>
-         <div style="font-family:'Playfair Display',serif;font-size:28px;color:#f0c040;margin-top:2px">${balanceStr}</div>
-       </div>` +
-      `<button onclick="VoiceCredit.buy()" style="width:100%;padding:15px;background:rgba(200,146,12,.14);border:1px solid rgba(200,146,12,.55);border-radius:11px;color:#f0c040;font-family:'Heebo',sans-serif;font-size:15px;font-weight:600;cursor:pointer">Add $14.99 of audio credit</button>` +
-      `<p style="font-family:'Heebo',sans-serif;font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.5;margin:12px 2px 0">Roughly 40–80 spoken replies, depending on length. You only ever pay for audio you choose to hear.</p>` +
-      `<button onclick="VoiceCredit.close()" style="margin-top:16px;width:100%;background:none;border:1px solid rgba(255,255,255,.16);border-radius:10px;color:rgba(255,255,255,.6);font-family:'Heebo',sans-serif;font-size:14px;padding:11px;cursor:pointer">Close</button>`;
-  },
-
-  async buy() {
-    const uid = window.currentUser && window.currentUser.id;
-    const email = window.currentUser && window.currentUser.email;
-    if (!uid || !email) { alert('Please sign in first.'); return; }
-    try {
-      const res = await fetch(this.CHECKOUT_FN, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: uid, email, tier: 'audio_credit' })
-      });
-      const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else alert('Could not start checkout. Please try again.');
-    } catch (e) { alert('Could not start checkout. Please try again.'); }
-  }
-};
-
-function showVoiceTopUp() { VoiceCredit.open(); }
-
-// Returning from a successful top-up -- reopen showing the new balance
-if (typeof location !== 'undefined' && location.search.indexOf('credit=added') !== -1) {
-  setTimeout(() => {
-    try { if (typeof pwLogPendingPurchase === 'function') pwLogPendingPurchase('still_audio_credit'); } catch (e) {}
-    try { VoiceCredit.open(); } catch (e) {}
-  }, 600);
-}
 /* ═══════════════════════════════════════════
    SPIRITUAL AUTOBIOGRAPHY -- UI + Compiler
 ═══════════════════════════════════════════ */
@@ -17774,49 +17600,10 @@ async function startCheckout(tier) {
   }
 }
 
-async function buyAudioCredits() {
-  const _vcNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
-  trackEvent('purchase_tap', { product: 'still_audio_credit', platform: _vcNative ? 'native' : 'web' });
-  if (!currentUser) { showUpgrade('audio_credit_no_account'); return; }
-
-  const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
-
-  if (isNative) {
-    // iOS -> RevenueCat consumable. The RevenueCat WEBHOOK credits the wallet server-side.
-    try {
-      const Purchases = window.Capacitor.Plugins.Purchases;
-      const offerings = await Purchases.getOfferings();
-     const pkg = offerings.current?.availablePackages?.find(p =>
-        p.product.identifier.split(':')[0] === 'still_audio_credit'
-      );
-      if (!pkg) { console.log('Audio credit product not found'); alert('Unable to load audio credit options. Please check your connection and try again.'); return; }
-      await Purchases.purchasePackage({ aPackage: pkg });
-      trackEvent('purchase_complete', { product: 'still_audio_credit', platform: 'native' });
-      console.log('Audio credit purchase complete');
-      // refresh the displayed wallet balance here if you have a function for it
-    } catch (e) {
-      if (!e.userCancelled) console.error('IAP error:', e);
-    }
-  } else {
-    // WEB -> existing Stripe flow (verified keys)
-    try {
-      const res = await fetch(window.FN_BASE + '/.netlify/functions/stripe-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: currentUser.id,
-          email: currentUser.email,
-          tier: 'audio_credit'
-        })
-      });
-      const data = await res.json();
-      if (data.url) {
-        try { localStorage.setItem('still_pending_product', 'still_audio_credit'); } catch (e) {}
-        window.location.href = data.url;
-      }
-    } catch(err) { console.error('Audio credit error:', err); }
-  }
-}
+/* buyAudioCredits() is gone with the wallet. It had no caller even before
+   this: nothing in the markup or the scripts invoked it, so the native
+   RevenueCat path for still_audio_credit was never reachable from the UI --
+   the only live route was VoiceCredit.buy() through Stripe. */
 
 async function initRevenueCat() {
   // Only runs inside the native iOS app -- skips harmlessly in a web browser
