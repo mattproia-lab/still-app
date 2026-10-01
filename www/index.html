@@ -7825,12 +7825,14 @@ const CoW = (() => {
         <div class="cow-img devotional" id="cowImg"><div class="cow-img-inner devotional-inner" style="background-image:url('assets/rosary/${med.image}.jpg')"></div></div>
         <div class="cow-mystery">${['I','II','III','IV','V'][S.mIdx]} &middot; ${mystery.title}</div>
         ${mystery.fruit ? `<div class="cow-fruit">Fruit of this mystery: ${mystery.fruit}</div>` : ''}
-        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
-        <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
         <div class="cow-controls">
           <button type="button" class="cow-listen" id="cowListen">&#9654; Listen</button>
-          ${med.fathers ? `<button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>` : ''}
         </div>
+        <div class="cow-scripture">${med.scripture.text}<span class="cow-ref">${med.scripture.ref}</span></div>
+        <div class="cow-body">${med.body.split('\n').join('<br>')}</div>
+        ${med.fathers ? `<div class="cow-controls">
+          <button type="button" class="cow-credit" id="cowCredit">after ${med.fathers.join(' &middot; ')}</button>
+        </div>` : ''}
         ${S.showPrayers ? prayersHTML() : ''}
         ${S.intentions ? `<div class="cow-int-echo">${S.intentions}</div>` : ''}
         <div class="cow-hint">${S.medIdx===0 && S.mIdx===0 ? 'tap the image for another meditation' : ''}</div>
@@ -13361,9 +13363,12 @@ function renderDarknessText() {
   let html = '';
   html += '<h2 class="dark-title">' + (t.heading || t.title) + '</h2>';
   html += '<p class="dark-sub">' + t.sub + '</p>';
+  /* Hear Reflection sits under the heading, not at the foot: it reads the text
+     and the reflection together, so it belongs where it is seen before the
+     reading starts rather than after it has finished. */
+  html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost dark-hear">Hear Reflection</button>';
   html += '<div class="dark-body">' + t.text + '</div>';
   html += '<p class="dark-reflection">' + t.reflection + '</p>';
-  html += '<button id="darknessPlayBtn" onclick="playDarknessReflection(' + darknessIdx + ')" class="btn-ghost dark-hear">Hear Reflection</button>';
   if (!last) {
     html += '<button type="button" class="dark-next" onclick="darknessNext()">Next</button>';
   } else {
@@ -16390,6 +16395,22 @@ function buildTraditionalOffice(corpus, hour, today, rite) {
     add('text', 'Commemoration: ' + office.commemorations.join('; '), null,
         'font-size:12px;font-style:normal;color:rgba(255,255,255,.42)');
   }
+
+  /* The Hear button sits with the title, above the divider that opens the
+     office -- the same placement as the modern rite.
+
+     Matins is the long hour: some 26,000 spoken characters, five times what
+     the voice service takes in one request and a dozen requests before the
+     first word is heard. It stays silent until that is worth building, and
+     says so where the button would be. Lauds and Vespers are a couple of
+     pieces each and chunk cleanly. */
+  if (hour === 'vigils') {
+    add('note', 'Audio for Vigils coming soon.');
+  } else {
+    parts.push({ type: 'button', audio: 'skip', id: `${hour}PlayBtn`,
+                 onclick: `play${hourTitle}Audio()`,
+                 text: `◎ Hear ${hourTitle}` });
+  }
   divider();
 
   let nocturn = null;
@@ -16521,17 +16542,6 @@ function buildTraditionalOffice(corpus, hour, today, rite) {
     }
   });
 
-  // Matins is the long hour: some 26,000 spoken characters, five times what
-  // the voice service takes in one request and a dozen requests before the
-  // first word is heard. It stays silent until that is worth building. Lauds
-  // and Vespers are a couple of pieces each and chunk cleanly.
-  if (hour === 'vigils') {
-    add('note', 'Audio for Vigils coming soon.');
-  } else {
-    parts.push({ type: 'button', audio: 'skip', id: `${hour}PlayBtn`,
-                 onclick: `play${hourTitle}Audio()`,
-                 text: `◎ Hear ${hourTitle}` });
-  }
   add('nav');
 
   return {
@@ -16672,6 +16682,10 @@ function buildOffice(hour, rite, date) {
     parts.push(part);
   };
   const divider    = () => add('divider');
+  /* The Hear button is pushed directly after the title, so it is the first
+     thing on the Hour rather than something found by scrolling past the whole
+     office. audio:'skip' keeps it out of renderOfficeText(), so where it sits
+     changes the screen and never the spoken text. */
   const playButton = (id, onclick, label) =>
     parts.push({ type: 'button', audio: 'skip', id, onclick, text: label });
 
@@ -16679,8 +16693,13 @@ function buildOffice(hour, rite, date) {
 
   if (hour === 'vigils') {
     title = 'Vigils';
-    pace  = false;   // Vigils has never been sent through paceOfficeText(); kept as it was
-    cacheKey = hashText(`vigils- paced3-${today}-${season}-${psalmWeek}`);
+    /* Vigils used to be the one Hour that skipped paceOfficeText(), so its
+       spoken text carried no break tags at all and nothing rested between its
+       three psalms. It is paced like the others now: every section seam is a
+       2.0s break, which Eleven v4 reads as [long pause]. The cache key moves
+       with the change so a clip made under the old, unpaced text can never be
+       served for the new one. */
+    cacheKey = hashText(`vigils- paced4-${today}-${season}-${psalmWeek}`);
 
     const vigilsPsalms = [
       [PSALMS.ps1, PSALMS.ps22, PSALMS.ps130],
@@ -16698,6 +16717,7 @@ function buildOffice(hour, rite, date) {
 
     add('badge', sData.label);
     add('title', 'Vigils', 'Vigils.');
+    playButton('vigilsPlayBtn', 'playVigilsAudio()', '◎ Hear Vigils');
     add('eyebrow', 'Opening');
     add('versicle', 'V. O Lord, open thou my lips.\nR. And my mouth shall shew forth thy praise.',
                     'O Lord, open thou my lips.\nAnd my mouth shall shew forth thy praise.');
@@ -16734,7 +16754,6 @@ function buildOffice(hour, rite, date) {
     add('eyebrow', 'Collect', 'Collect.');
     add('text', collect, `${collect}\nAmen.`);
     add('versicle', 'Amen.');
-    playButton('vigilsPlayBtn', 'playVigilsAudio()', '◎ Hear Vigils');
 
   } else if (hour === 'lauds') {
     title = 'Lauds';
@@ -16749,6 +16768,7 @@ function buildOffice(hour, rite, date) {
 
     add('badge', sData.label);
     add('title', 'Lauds', 'Lauds. Morning Prayer.');
+    playButton('laudsPlayBtn', 'playLaudsAudio()', '◎ Hear Lauds');
     add('eyebrow', 'Opening');
     add('versicle', `O God, come to my assistance.\n O Lord, make haste to help me.\n${GLORIA_SEEN}`,
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
@@ -16780,7 +16800,6 @@ function buildOffice(hour, rite, date) {
     divider();
     add('versicle', ' Let us bless the Lord.\n Thanks be to God.',
                     'Let us bless the Lord.\nThanks be to God.');
-    playButton('laudsPlayBtn', 'playLaudsAudio()', '◎ Hear Lauds');
 
   } else if (hour === 'vespers') {
     title = 'Vespers';
@@ -16793,6 +16812,7 @@ function buildOffice(hour, rite, date) {
 
     add('badge', sData.label);
     add('title', 'Vespers', 'Vespers. Evening Prayer.');
+    playButton('vespersPlayBtn', 'playVespersAudio()', '◎ Hear Vespers');
     add('eyebrow', 'Opening');
     add('versicle', ` O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_SEEN}`,
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
@@ -16844,7 +16864,6 @@ function buildOffice(hour, rite, date) {
     divider();
     add('versicle', 'Let us bless the Lord.\n Thanks be to God.',
                     'Let us bless the Lord.\nThanks be to God.');
-    playButton('vespersPlayBtn', 'playVespersAudio()', '◎ Hear Vespers');
 
   } else if (hour === 'compline') {
     title = 'Compline';
@@ -16860,6 +16879,7 @@ function buildOffice(hour, rite, date) {
 
     add('badge', sData.label);
     add('title', 'Compline', 'Compline.');
+    playButton('complinePlayBtn', 'playComplineAudio()', '◎ Hear Compline');
 
     add('eyebrow', 'Examination of Conscience', 'Examination of Conscience.');
     add('text', 'Pause briefly. Call to mind the faults of this day.', true,
@@ -16909,7 +16929,6 @@ function buildOffice(hour, rite, date) {
     add('eyebrow', 'Blessing');
     add('versicle', 'May the all-powerful Lord grant us a restful night and a peaceful death.\nR. Amen.',
                     'May the all-powerful Lord grant us a restful night and a peaceful death.\nAmen.');
-    playButton('complinePlayBtn', 'playComplineAudio()', '◎ Hear Compline');
   }
 
   // The same condition the `fallback` marker below records. The corpus has no
