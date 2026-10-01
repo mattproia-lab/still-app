@@ -13942,6 +13942,17 @@ async function signOut() {
   localStorage.removeItem('still_refresh_token');
   localStorage.removeItem('still_phone_verified');
   localStorage.removeItem('PW_GUEST');   // signing out ends guest mode too
+  /* The subscription caches belong to the account that just left. They were
+     kept before, so the next person to sign in on this device read whatever
+     the last one had until refreshSubscription() overwrote it a second or so
+     later -- and a comp, which nothing but a refresh clears, would have been
+     read as theirs at every cold launch. */
+  localStorage.removeItem(PW_SUB_KEY);
+  localStorage.removeItem(PW_COMPED_KEY);
+  localStorage.removeItem(PW_TRIAL_EXT_KEY);
+  window._subStatus = null;
+  window._comped = false;
+  window._trialExt = '';
   currentUser = null;
   window.currentUser = null;   //
   closeSettings();
@@ -14541,6 +14552,7 @@ const PW_SESSIONS_KEY = 'still_trial_sessions'; // the retired session counter; 
 const PW_PAID_KEY     = 'still_paid';
 const PW_PLAN_KEY     = 'still_plan';
 const PW_SUB_KEY      = 'still_sub_status';     // cached Supabase subscription_status
+const PW_COMPED_KEY   = 'still_comped';        // cached profiles.comped
 const PW_TRIAL_EXT_KEY = 'still_trial_ext';    // cached profiles.trial_extended_until
 const PW_TERMS_KEY    = 'still_trial_terms_shown'; // the trial start the terms screen was shown for
 const PW_REMINDER_KEY = 'still_trial_reminder_shown'; // the trial start the one reminder was shown for
@@ -14557,12 +14569,20 @@ function initTrial() {
 
 // Reads the cached status synchronously. refreshSubscription() keeps it fresh.
 function isSubscribed() {
-  /* The comped reviewer, parish and clergy accounts used to be a list of nine
-     email addresses right here, which meant a comp could only be granted or
-     withdrawn by shipping a release. They now carry subscription_status =
-     'premium' on their own profile row, read by the same line every other
-     premium account is read by.
+  /* The comp. The reviewer, parish and clergy accounts used to be a list of
+     nine email addresses right here, which meant a comp could only be granted
+     or withdrawn by shipping a release. They now carry comped = true on their
+     own profile row.
+
+     It is its own column rather than a subscription_status value because
+     stripe-webhook.js and revenuecat-webhook.js both write that column: a
+     CANCELLATION or EXPIRATION on a real subscription the same person once
+     held would set it to 'free' and silently revoke the comp. Neither webhook
+     writes profiles.comped, so nothing can revoke it but a deliberate change
+     in the database -- which is what the hardcoded list guaranteed.
      See supabase/migrations/2026-10-01-comped-accounts-to-profiles.sql. */
+  if (window._comped === true || localStorage.getItem(PW_COMPED_KEY) === '1') return true;
+
   const s = window._subStatus || localStorage.getItem(PW_SUB_KEY);
   if (s === 'premium' || s === 'active') return true;
   if (localStorage.getItem(PW_PAID_KEY) === '1') return true; // legacy / admin bypass
@@ -14578,14 +14598,20 @@ async function refreshSubscription() {
     const headers = { 'apikey': SUPA_ANON, 'Authorization': 'Bearer ' + token };
     const profileUrl = sel => `${SUPA_URL}/rest/v1/profiles?id=eq.${uid}&select=${sel}`;
 
-    // If trial_extended_until is unreadable -- column-scoped grants, or the
-    // migration not yet run against this environment -- the whole select
-    // fails. Fall back to the status alone: a promo column must never be able
-    // to stop a paying user's subscription from refreshing.
-    let res = await fetch(profileUrl('subscription_status,trial_extended_until'), { headers });
-    let hasExt = true;
+    /* One unreadable column fails the whole select -- column-scoped grants, or
+       a migration not yet run against this environment -- so the select walks
+       down a ladder, widest first, and each rung records what it actually got.
+       A promo or comp column must never be able to stop a paying user's
+       subscription from refreshing. */
+    let hasExt = true, hasComped = true;
+    let res = await fetch(profileUrl('subscription_status,trial_extended_until,comped'), { headers });
     if (!res.ok) {
-      console.warn('refreshSubscription full select failed:', res.status, '- retrying without trial_extended_until');
+      console.warn('refreshSubscription full select failed:', res.status, '- retrying without comped');
+      hasComped = false;
+      res = await fetch(profileUrl('subscription_status,trial_extended_until'), { headers });
+    }
+    if (!res.ok) {
+      console.warn('refreshSubscription failed:', res.status, '- retrying without trial_extended_until');
       hasExt = false;
       res = await fetch(profileUrl('subscription_status'), { headers });
     }
@@ -14603,6 +14629,16 @@ async function refreshSubscription() {
       window._trialExt = ext;
       if (ext) localStorage.setItem(PW_TRIAL_EXT_KEY, ext);
       else localStorage.removeItem(PW_TRIAL_EXT_KEY);
+    }
+    /* The comp, cached like the two above so the gate can read it
+       synchronously at cold launch -- and cleared when the column reads false,
+       so a comp withdrawn in the database is withdrawn on the device at the
+       next refresh. Untouched on a fallback rung, where it was not read. */
+    if (hasComped) {
+      const comped = !!(data && data[0] && data[0].comped);
+      window._comped = comped;
+      if (comped) localStorage.setItem(PW_COMPED_KEY, '1');
+      else localStorage.removeItem(PW_COMPED_KEY);
     }
   } catch (e) { /* keep last-known status */ }
 }
@@ -14776,16 +14812,13 @@ function showWelcomePremium() {
 
 /* ---------- testing helpers ---------- */
 
-// Admin bypass -- type stillAdmin() in console
-window.stillAdmin = function() {
-  localStorage.setItem(PW_PAID_KEY, '1');
-  window._subStatus = 'premium';
-  localStorage.setItem(PW_SUB_KEY, 'premium');
-  hidePaywall();
-  console.log('Paywall bypassed');
-};
+/* Both console bypasses are gone. window.stillAdmin() wrote still_paid = '1',
+   which isSubscribed() still honours as a legacy flag and which nothing in the
+   app clears -- so one call granted that device premium permanently, past any
+   trial, sign-out or account change. A premium account for testing is granted
+   in the database now: set profiles.comped = true on it.
 
-/* The trial reset is gone. window.stillResetTrial() and the ?resetTrial URL
+   The trial reset is gone too. window.stillResetTrial() and the ?resetTrial URL
    both shipped to production, and the URL was the live one: anyone could type
    ?resetTrial on stillprayer.app and begin the fourteen days again, as often
    as they liked. To reset a trial while testing, clear the keys by hand in
