@@ -6110,8 +6110,12 @@ function hashText(text) {
 function paceOfficeText(text) {
   const BR_HALF = ' <break time="0.7s"/> ';
   const BR_SECTION = '\n<break time="2.0s"/>\n';
-  // Major rests: two stacked in-range breaks, separated so they both register
-  const BR_MAJOR = '\n<break time="3.0s"/> . <break time="2.0s"/>\n';
+  /* The major rest. It used to be two stacked breaks with a period between
+     them -- a v3 workaround, where something had to sit between the pair for
+     both to register. On v4 the tag is read as [long pause] on its own, and
+     that separator became a literal period floating between two pauses, in
+     line to be spoken aloud. One break now. */
+  const BR_MAJOR = '\n<break time="3.0s"/>\n';
   const BR_AMEN = ' <break time="2.5s"/>';
 
   let t = text
@@ -16560,10 +16564,16 @@ function buildTraditionalOffice(corpus, hour, today, rite) {
        loaded office would hash to the SAME key as the finished one. Speaking it
        would cache a truncated office under the full office's key, permanently.
        A partial doc therefore carries no key at all. Vigils shows no audio
-       button today, so this is a guard for when it does. */
+       button today, so this is a guard for when it does.
+
+       paced4 is the pacing generation, as on the modern keys. This rite is
+       pace:true below, so it goes through paceOfficeText() and its spoken text
+       changed with BR_MAJOR -- and this key had carried no pacing marker at
+       all, so a clip made under the old text would have gone on being served
+       for the new one for the rest of the day. */
     cacheKey: corpus._partial
       ? ''
-      : hashText(`trad-${today}-${hour}-${(corpus.office && corpus.office.key) || ''}`),
+      : hashText(`trad- paced4-${today}-${hour}-${(corpus.office && corpus.office.key) || ''}`),
     parts,
   };
 }
@@ -16757,7 +16767,7 @@ function buildOffice(hour, rite, date) {
 
   } else if (hour === 'lauds') {
     title = 'Lauds';
-    cacheKey = hashText(`lauds- paced3-${today}-${season}-${psalmWeek}-full`);
+    cacheKey = hashText(`lauds- paced4-${today}-${season}-${psalmWeek}-full`);
 
     // Mirrors the screen: ONE morning psalm, rotating by week
     const laudsPsalms = [PSALMS.ps63, PSALMS.ps5, PSALMS.ps100, PSALMS.ps63];
@@ -16803,7 +16813,7 @@ function buildOffice(hour, rite, date) {
 
   } else if (hour === 'vespers') {
     title = 'Vespers';
-    cacheKey = hashText(`vespers- paced3-${today}-${season}-${psalmWeek}-full`);
+    cacheKey = hashText(`vespers- paced4-${today}-${season}-${psalmWeek}-full`);
 
     // Mirrors the screen: VESPERS_PSALMS by week, all three psalms
     const todayVPsalms = VESPERS_PSALMS[(psalmWeek - 1) % 4 + 1] || VESPERS_PSALMS[1];
@@ -16869,7 +16879,7 @@ function buildOffice(hour, rite, date) {
     title = 'Compline';
     // Night psalm -- alternates Ps 91 / Ps 4
     const nightPsalm = d.getDay() % 2 === 0 ? PSALMS.ps91 : PSALMS.ps4;
-    cacheKey = hashText(`compline- paced3-${today}-${season}-full-${nightPsalm.ref}`);
+    cacheKey = hashText(`compline- paced4-${today}-${season}-full-${nightPsalm.ref}`);
 
     const reading = OFFICE_READINGS.compline[season];
     const collect = OFFICE_COLLECTS.compline[season];
