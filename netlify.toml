@@ -1,18 +1,50 @@
 [build]
   publish = "."
 
+# A splat only matches at the END of a path, so "/still-mobile/assets/*.mp3"
+# never matched anything and these three rules did nothing at all. They are
+# named file by file now.
+#
+# A directory-wide splat is not an option here: still-mobile/assets holds seven
+# PNGs beside its four MP3s, and still-mobile/src/audio mixes mp3 and mp4, so
+# "/still-mobile/assets/*" with audio/mpeg would mislabel every image.
+#
+# nature_sounds.MP3 is the one that genuinely needs this: the extension is
+# upper case on disk, and an explicit header removes any question of how it is
+# typed. (See docs/still-phases.md -- index.html also references it in lower
+# case in one place, which cannot resolve on case-sensitive hosting.)
 [[headers]]
-  for = "/still-mobile/assets/*.mp3"
+  for = "/still-mobile/assets/Guestmaster_audio.mp3"
   [headers.values]
     Content-Type = "audio/mpeg"
 
 [[headers]]
-  for = "/still-mobile/src/audio/*.mp3"
+  for = "/still-mobile/assets/ammaSophia_demo.mp3"
   [headers.values]
     Content-Type = "audio/mpeg"
 
 [[headers]]
-  for = "/still-mobile/src/audio/*.mp4"
+  for = "/still-mobile/assets/companion_demo.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/assets/deeper_demo.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/src/audio/deeper_music.mp3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/src/audio/nature_sounds.MP3"
+  [headers.values]
+    Content-Type = "audio/mpeg"
+
+[[headers]]
+  for = "/still-mobile/src/audio/amma_ambient.mp4"
   [headers.values]
     Content-Type = "audio/mp4"
 
@@ -67,10 +99,10 @@
   to = "/still-mobile/:splat"
   status = 200
 
-[[redirects]]
-  from = "/*.js"
-  to = "/:splat.js"
-  status = 200
+# A "/*.js" rewrite used to sit here. It never fired -- the splat was not at the
+# end of the path -- and even if it had, "/*.js" -> "/:splat.js" is an identity
+# rewrite that changes nothing. Root-level .js files exist on disk and are
+# served directly, which is why its absence makes no difference.
 
 # The partner commission portal. A passthrough, NOT a block: this is a real
 # page that has to be served. It is gated in the browser, not here -- a forced
@@ -144,10 +176,22 @@
   status = 404
   force = true
 
-# Every markdown file, wherever it sits: CLAUDE.md, DESIGN.md, and anything
-# under a directory not already blocked. The splat crosses slashes.
+# Markdown. "/*.md" was wrong and silently matched nothing: a splat is only
+# honoured at the END of a path, so CLAUDE.md and DESIGN.md were served in full.
+#
+# Of the 61 tracked .md files in the repo, these two are the only ones at the
+# root. Every other one already falls under a directory rule whose splat IS
+# terminal and therefore works: 48 under /vault/*, 5 under /tools/*, 2 each
+# under /docs/* and /node_modules/*, and one each under /corpus/* and /ios/*.
+# Listing those 59 again would add rules that duplicate a working one.
 [[redirects]]
-  from = "/*.md"
+  from = "/CLAUDE.md"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/DESIGN.md"
   to = "/404"
   status = 404
   force = true

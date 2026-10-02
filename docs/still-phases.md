@@ -469,6 +469,23 @@ Four of seven entries carry `[NEEDED: source]` and are injected with the
 - `community-submit.js` and `community-report.js` have no caller — Community is
   gone from the app.
 - `requestOfficeLock` is defined and never called.
+- **`nature_sounds` is referenced in two different cases.** The file on disk is
+  `still-mobile/src/audio/nature_sounds.MP3`. `CHARACTER_AMBIENCE` names it
+  `nature_sounds.mp3` in lower case; the dead `playDemoAudio()` copy names it
+  `.MP3` correctly. Netlify is case-sensitive, so the lower-case reference
+  cannot resolve on the web. It is not reached today — that entry is the
+  Companion's ambience bed, and the Companion's spoken audio went in Phase 4,
+  leaving `playVoiceUrl` to be called only with `'office'` (no ambience entry)
+  and `'ammaSophia'` — but it will bite whoever next wires a voice to that map.
+  Fix the case at `CHARACTER_AMBIENCE`, or rename the file to lower case and
+  update both references plus the explicit header in `netlify.toml`.
+- **`netlify.toml` had four rules that silently did nothing**, all for the same
+  reason: a splat is only honoured at the END of a path. `/*.md` (so `CLAUDE.md`
+  and `DESIGN.md` were served in full), `/*.js` (an identity rewrite that was a
+  no-op regardless), and the three `*.mp3` / `*.mp4` `Content-Type` headers. All
+  four are fixed; the file now has no non-terminal splat anywhere. **Worth
+  re-checking after any future edit** — a wrong pattern here fails open and
+  silently.
 
 ---
 
