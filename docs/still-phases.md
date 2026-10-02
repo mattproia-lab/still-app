@@ -189,6 +189,15 @@ and deploy steps were handed over separately.
   marker at all**. The Darkness key is untouched — it never goes through
   `paceOfficeText()`.
 
+  **Superseded 2026-10-02: the cache is content-keyed now.** The `still-tts`
+  service was redeployed to hash the full spoken text (sha256, prefixed
+  `office-v4t` / `rosary-v4t`) and to **ignore the client's `cacheKey`
+  entirely**. Any change to the spoken text therefore produces fresh audio by
+  itself, and the generation markers in the client keys no longer carry weight
+  — they are harmless history, not a mechanism. Darkness is covered too: it
+  posts to `/office-tts`. **No key bump is needed for a text change from here
+  on.**
+
 ## Deeper accuracy · **pushed through `d5bebe8`**
 
 `54f2652`, `76a713f`, `d5bebe8`
@@ -386,7 +395,17 @@ Test on a real device, because none of it can be seen in a browser:
 - Vigils audio — first time that Hour runs through the paced/split path.
 - Deeper under `DEEPER_MODE='a'` — a reply arrives and is not blank.
 
-### 5. `/office-tts` and `/rosary-tts` cache poisoning · **open, unfixed**
+### 5. `/office-tts` and `/rosary-tts` cache poisoning · **RESOLVED 2026-10-02**
+
+Closed by the content-keyed redeploy recorded under Phase 4b, and worth
+spelling out because it was the sharpest security item on this list. The service
+now derives the cache key from a sha256 of the spoken text and ignores the
+client's `cacheKey`. An attacker can still POST arbitrary text, but it caches
+under **that text's own hash** — there is no key left for them to choose, so
+there is no key the app will later read. The exposure is structurally gone
+rather than patched.
+
+The original finding, kept for the record:
 
 Both endpoints take a **client-supplied `cacheKey` with no authentication** —
 unlike `/tts`, which at least carried an `access_token`. Anyone can POST
@@ -469,6 +488,8 @@ Four of seven entries carry `[NEEDED: source]` and are injected with the
 - `community-submit.js` and `community-report.js` have no caller — Community is
   gone from the app.
 - `requestOfficeLock` is defined and never called.
+- `PSALMS.ps141` ("Psalm 141 (142)") is defined and used by no Hour. It is a
+  lament, so it would take the quieter tone if it were ever wired in.
 - **`nature_sounds` is referenced in two different cases.** The file on disk is
   `still-mobile/src/audio/nature_sounds.MP3`. `CHARACTER_AMBIENCE` names it
   `nature_sounds.mp3` in lower case; the dead `playDemoAudio()` copy names it

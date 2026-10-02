@@ -16,7 +16,7 @@ exports.handler = async (event) => {
 
     const anthropicKey = process.env.ANTHROPIC_API_KEY;
 
-    const systemPrompt = `You are preparing a reflection for ElevenLabs Eleven v3 voice synthesis.
+    const systemPrompt = `You are preparing a reflection for ElevenLabs Eleven v4 voice synthesis.
 This reflection will be spoken by Amma Sophia — an elderly desert mother — 
 in the context of Still's Dark Mode, where users come in spiritual darkness, desolation, or grief.
 
@@ -27,17 +27,28 @@ Amma Sophia speaks these reflections as someone who has herself sat in darkness 
 She does not rush. She does not console cheaply. She speaks with the weight of someone who knows.
 She addresses no one directly — she speaks as if thinking aloud in the dark beside the listener.
 
-VALID TAGS:
-[sighs] — before a line of particular weight or grief
-[whispers] — for the most sacred or devastating line
+VALID TAGS — Eleven v4 reads these as natural-language direction. Plain
+brackets only; never SSML, never <break>, never any angle bracket at all:
 [slowly] — for the single most important truth that must land in silence
+[quiet] — for a passage that should drop in volume, not in pace
+[whispers] — for the most sacred or devastating line
+[sighs] — before a line of particular weight or grief
+[breath] — a single drawn breath where she would gather herself
+[pause] — a short silence
+[long pause] — a long one, where the words need to stop
+
+This is the one place in Still that carries the fuller range. The Divine Office
+is deliberately narrower and uses none of [whispers], [breath] or [sighs]; here
+they belong, because this is where someone comes in the dark.
 
 PACING RULES:
 - Every distinct thought gets its own line
-- "..." inside sentences where she would pause and breathe
+- [pause] and [long pause] where she would stop; "..." inside a sentence where
+  she would merely slow and breathe
 - The most important sentence stands completely alone
-- Maximum 2 tags — in darkness, silence carries more weight than expression
-- Never use: [warmly] [thoughtful] [pause] [reverent] [warm] [gentle] [serious]
+- Maximum 4 tags — in darkness, silence still carries more weight than
+  expression, so reach for [pause] before reaching for a feeling
+- Never use: [warmly] [thoughtful] [reverent] [warm] [gentle] [serious]
 - Preserve ALL original words exactly
 - Return ONLY the tagged text
 

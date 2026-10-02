@@ -6171,6 +6171,52 @@ function hashText(text) {
  * If ElevenLabs speaks the <break> tags aloud instead of pausing,
  * tell Claude — there is an ellipsis-dialect fallback.
  */
+/* ── The quieter tone, for lament and penitential psalms ────────────────
+   The voice service already prefixes every Office request with
+   "[slow] [reverent]". These sit inline instead, immediately around a listed
+   psalm's text, and the reset restores the Office's ordinary voice for
+   whatever follows it.
+
+   [sorrowful] never appears on its own -- tested by ear on Eleven v4, it reads
+   wrong alone and only works behind [slow] [reverent] [quiet]. No [whispers]
+   and no [breath] anywhere in the Office: that fuller range belongs to
+   Darkness Mode, where tag-darkness.js owns it. */
+const OFFICE_TONE_LAMENT = '[slow] [reverent] [quiet] [sorrowful]';
+const OFFICE_TONE_RESET  = '[slow] [reverent]';
+
+/* The seven penitential psalms -- 6, 31, 37, 50, 101, 129, 142 -- plus 21, the
+   psalm of the Passion, and 141, which stands beside 142 and is the same kind
+   of prayer. BY VULGATE NUMBER, which is the number the Office's refs lead
+   with: "Psalm 129 (130)" is 129 here, not 130.
+
+   Deliberately excluded: 41 and 42, "as the hart panteth". That is longing
+   rather than lament, and tagging it would turn much of Vespers sorrowful. */
+const OFFICE_LAMENT_PSALMS = [6, 21, 31, 37, 50, 101, 129, 141, 142];
+
+/* The Vulgate number a ref leads with, ignoring the Hebrew number in
+   parentheses and any verse range: "Psalm 50 (51):1-12" -> 50, "Psalm 6" -> 6.
+   A letter suffix is refused rather than guessed at: "Psalm 9B (10):1-4" and
+   "Psalm 113B (115)" are their own psalms and neither is a lament, so null is
+   the right answer where a number would be the wrong one. */
+function officePsalmNumber(ref) {
+  const m = String(ref || '').match(/^\s*Psalm\s+(\d+)(?![\dAB])/i);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function officeIsLament(ref) {
+  const num = officePsalmNumber(ref);
+  return num !== null && OFFICE_LAMENT_PSALMS.indexOf(num) !== -1;
+}
+
+/* What add() should be given as a psalm's spoken form: the tone around the
+   text for a lament, or `true` -- speak the screen text as it stands -- for
+   everything else. A verse range of a penitential psalm still carries the
+   tone; the Miserere is the Miserere at any length. */
+function officePsalmSpeak(ps) {
+  if (!ps || !officeIsLament(ps.ref)) return true;
+  return OFFICE_TONE_LAMENT + '\n' + (ps.text || '') + '\n' + OFFICE_TONE_RESET;
+}
+
 function paceOfficeText(text) {
   const BR_HALF = ' <break time="0.7s"/> ';
   const BR_SECTION = '\n<break time="2.0s"/>\n';
@@ -17175,18 +17221,40 @@ function buildOffice(hour, rite, date) {
                     'O Lord, open thou my lips.\nAnd my mouth shall shew forth thy praise.');
     add('versicle', 'V. O God, come to my assistance.\nR. O Lord, make haste to help me.',
                     'O God, come to my assistance.\nO Lord, make haste to help me.');
-    add('versicle', GLORIA_SEEN);
+    /* Spoken now. Vigils was the one Hour that added the doxology with no
+       spoken form, so add() marked it audio:'skip' and it was on screen and
+       never heard. Lauds, Vespers and Compline all pass GLORIA_HEARD, whose
+       only difference is that it runs the second half on rather than breaking
+       the line after "Holy Ghost:". */
+    add('versicle', GLORIA_SEEN, GLORIA_HEARD);
     divider();
 
+    /* The hymn stanza that stood here is gone. It began "O Brightness of the
+       Father's face" and read "Immortal Light of Light begone" -- which means
+       "be gone" where it should confess Light from Light, and which cannot be
+       repaired by one word because the verse rhymes ABAB on begone/dawn.
+
+       It had no source. Nowhere in this repo or the vault, and no hymn begins
+       that way in Hymnary; the phrase appears only as the SECOND line of
+       "O Savior of our fallen race" by Gilbert E. Doan, a twentieth-century
+       translation still in copyright. The stanza recombined two phrases from
+       it and added two of its own, so it reads as composed for the app rather
+       than transcribed from a hymnal.
+
+       CLAUDE.md: never invent quotes or attributions. So it is removed rather
+       than left standing while a replacement is found -- a verified
+       public-domain Vigils hymn goes here, most likely Gregory the Great's
+       "Nocte surgentes" in Dearmer's 1906 English, once it has been checked
+       against a scan. The section keeps its shape and its spoken form so that
+       dropping a sourced stanza in is one edit. [NEEDED: source] */
     add('eyebrow', 'Hymn');
-    add('text', `${sData.vigils}\n\nO Brightness of the Father's face,\nImmortal Light of Light begone,\nO Jesus, Saviour of our race,\nHear us as we come to thee at dawn.`,
-                sData.vigils);
+    add('text', sData.vigils, true);
     divider();
 
     todayPsalms.forEach((ps, i) => {
       add('eyebrow', `Psalm ${i + 1} · ` + ps.ref, ps.ref);
       if (i === 0) add('versicle', sData.vigils);
-      add('text', ps.text, true);
+      add('text', ps.text, officePsalmSpeak(ps));
     });
 
     divider();
@@ -17230,7 +17298,7 @@ function buildOffice(hour, rite, date) {
     add('versicle', sData.laudsAntiphon, true);
 
     add('eyebrow', 'Morning Psalm · ' + mainPs.ref, mainPs.ref);
-    add('text', mainPs.text, true);
+    add('text', mainPs.text, officePsalmSpeak(mainPs));
 
     add('eyebrow', 'Canticle · Benedictus · Zechariah 1:68-79', 'The Benedictus. The Canticle of Zechariah.');
     add('versicle', sData.laudsAntiphon);
@@ -17280,7 +17348,7 @@ function buildOffice(hour, rite, date) {
 
     todayVPsalms.forEach((ps, i) => {
       add('eyebrow', `Psalm ${i + 1} · ` + ps.ref, ps.ref);
-      add('text', ps.text, true);
+      add('text', ps.text, officePsalmSpeak(ps));
     });
 
     add('versicle', sData.vespersAntiphon, true);
@@ -17348,9 +17416,9 @@ function buildOffice(hour, rite, date) {
     add('eyebrow', 'Antiphon');
     add('versicle', sData.complineAntiphon, true);
     add('eyebrow', 'Night Psalm · ' + nightPsalm.ref, nightPsalm.ref);
-    add('text', nightPsalm.text, true);
+    add('text', nightPsalm.text, officePsalmSpeak(nightPsalm));
     add('eyebrow', 'Psalm 133 (134) · Night Praise', 'Psalm 133.');
-    add('text', PSALMS.ps134.text, true);
+    add('text', PSALMS.ps134.text, officePsalmSpeak(PSALMS.ps134));
     add('versicle', sData.complineAntiphon, true);
 
     divider();
