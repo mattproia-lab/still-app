@@ -6149,33 +6149,32 @@ function hashText(text) {
 const OFFICE_TONE_LAMENT = '[slow] [reverent] [quiet] [sorrowful]';
 const OFFICE_TONE_RESET  = '[slow] [reverent]';
 
-/* ── Hymns, intoned ────────────────────────────────────────────────────
-   A hymn is sung, not read, so it is handed to the voice as singing and the
-   voice is handed back afterwards. The sequence is exact and was tested by ear
-   on Eleven v4 -- the long pause is what makes the transition land, in both
-   directions:
+/* ── Hymns ─────────────────────────────────────────────────────────────
+   A hymn is read in the same voice and the same tone as the rest of the Hour.
+   It was briefly handed to the voice as singing -- "[intones, like a monastic
+   hymn]", with "[slowly and reverent]" to hand the voice back -- and that is
+   gone: the service already prefixes every Office request with
+   "[slow] [reverent]", and the hymn wants no more than the rest of the office
+   gets. What it keeps is the rest on either side, so a hymn is set apart by
+   silence rather than by a different voice.
 
-     [long pause]
-     [intones, like a monastic hymn]
-     <the hymn>
-     [long pause]
-     [slowly and reverent]
+   NOTE: paceOfficeText() already turns the blank line between two spoken parts
+   into a 2.0s break, so in the text that actually goes out a hymn carries TWO
+   long pauses on each side -- that one and this one. Dropping this pair would
+   leave exactly one, from the seam alone, and make this function a no-op.
 
-   ONLY for a hymn whose text has a verified public-domain source. A hymn still
-   awaiting one is not intoned and is not spoken at all: an unattributed text is
-   not improved by being sung. Vigils is in that state now -- its stanza was
-   removed for want of a source, and its section carries the seasonal line
-   alone.
+   ONLY for a hymn whose text has a verified public-domain source. All four are
+   sourced now, to The English Hymnal (1906); see each Hour. A hymn awaiting a
+   source is not spoken at all.
 
    Still to come, deliberately not done here: the traditional rite's Latin
-   hymns, chanted with "[chants softly]". They arrive from the Divinum Officium
-   corpus rather than from this file, and the English renderings travelling with
-   them have not been sourced, so neither half is intoned yet. */
-const OFFICE_HYMN_OPEN  = '[long pause]\n[intones, like a monastic hymn]';
-const OFFICE_HYMN_CLOSE = '[long pause]\n[slowly and reverent]';
+   hymns. They arrive from the Divinum Officium corpus rather than from this
+   file, and the English renderings travelling with them have not been sourced,
+   so neither half is spoken yet. */
+const OFFICE_HYMN_REST = '[long pause]';
 
 function officeHymnSpeak(text) {
-  return OFFICE_HYMN_OPEN + '\n' + String(text || '') + '\n' + OFFICE_HYMN_CLOSE;
+  return OFFICE_HYMN_REST + '\n' + String(text || '') + '\n' + OFFICE_HYMN_REST;
 }
 
 /* The seven penitential psalms -- 6, 31, 37, 50, 101, 129, 142 -- plus 21, the

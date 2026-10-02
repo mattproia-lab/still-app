@@ -433,10 +433,23 @@ new content, not a repair.
 | Vespers | "O blest Creator of the light" | **Lucis Creator optime**, attributed to Gregory I (540-604); English by **J. M. Neale, 1851**. Public domain (Neale d. 1866); thirteen hymnals, meter LM, tune BROMLEY. |
 | Compline | — | no hymn section |
 
-Vespers' hymn is **intoned** — `[long pause]`, `[intones, like a monastic hymn]`,
-the hymn, `[long pause]`, `[slowly and reverent]`. Only a hymn with a verified
-public-domain source is intoned; one still awaiting a source is not spoken at
-all, which is where Vigils stands.
+**All four Hours now have a sourced hymn** (see the commit "Four Office hymns
+from The English Hymnal (1906)"): Vigils EH 165 *Nocte surgentes* (Tr. P. D.),
+Lauds EH 52 *Splendor paternae gloriae* (Tr. T. H.), Vespers EH 51 *Lucis
+Creator optime* (Tr. J. M. Neale), Compline EH 264 *Te lucis ante terminum*
+(Tr. J. M. Neale). EH's own headings decide which Hour each belongs to. Only a
+hymn with a verified public-domain source is spoken at all.
+
+**Hymns are read, not intoned — reversed 2026-10-02.** They were briefly handed
+to the voice as singing, with `[intones, like a monastic hymn]` and
+`[slowly and reverent]` to hand it back. That is gone: a hymn is read in the
+same voice and tone as the rest of the Hour, set apart by silence rather than by
+a different voice. `officeHymnSpeak()` keeps one `[long pause]` on each side.
+
+**Future: sung hymns.** Matt may record himself singing the EH plainsong
+melodies (monastic style) and convert them with ElevenLabs Voice Changer into
+the Office voice. If that works, each hymn becomes a saved audio file played in
+place of the spoken hymn.
 
 Three things still open here:
 
@@ -449,22 +462,24 @@ Three things still open here:
 - **A verified Vigils hymn.** Most likely Gregory the Great's *Nocte surgentes*
   in Dearmer's 1906 English (Dearmer d. 1936), checked against a scan before it
   goes in.
-- **The traditional rite's Latin hymns, chanted with `[chants softly]`.**
-  Deliberately deferred. They arrive from the Divinum Officium corpus rather
-  than from `index.html`, and the English renderings travelling with them have
-  not been sourced, so neither half is intoned yet.
+- **The traditional rite's Latin hymns.** Deliberately deferred, and now a
+  sourcing job before it is a voice job: they arrive from the Divinum Officium
+  corpus rather than from `index.html`, and the English renderings travelling
+  with them have not been sourced, so neither half is spoken yet.
 
 **Two pacing interactions to judge by ear**, both visible in the rendered text
 and neither obviously wrong:
 
-- The hymn ends up bracketed by **two** `[long pause]`s on each side — one from
-  the wrapper, one from the section seam `paceOfficeText` already inserts. It
-  may simply read as a longer silence before singing, which would be right.
+- A hymn is bracketed by **two** `[long pause]`s on each side — one from
+  `officeHymnSpeak`, one from the section seam `paceOfficeText` already inserts.
+  Removing the wrapper's pair would leave exactly one and make the function a
+  no-op; it is kept because a hymn set apart by silence is the whole of what
+  distinguishes it now.
 - `paceOfficeText` inserts a short `[pause]` after a colon or semicolon followed
-  by a capital, and those fire **inside** the sung text ("first of all: [pause]
-  Whose wisdom..."). They fall at the verse's own line ends, so they may help
-  the intonation or may fight it. Exempting the intoned block from that
-  substitution is a two-line change if it sounds wrong.
+  by a capital, and those fire **inside** the hymn ("first of all: [pause] Whose
+  wisdom..."). They fall at the verse's own line ends, so they may read as the
+  verse breathing or may chop it. Exempting the hymn from that substitution is a
+  two-line change if it sounds wrong.
 
 ### 7. Verify share cards end at a complete sentence · **open, untested**
 
