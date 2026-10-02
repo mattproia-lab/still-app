@@ -173,7 +173,24 @@ exports.handler = async function(event) {
 
   const onboardingFree = body.onboarding_free === true && feature === 'sophia';
 
-  if (!onboardingFree) {
+  /* Comped accounts -- reviewers, parish and clergy comps, and the accounts used
+     to run the Deeper test set -- are exempt from every voice's limit.
+
+     This was a live bug, not only a convenience. Phase 2 moved comps onto
+     profiles.comped and deliberately left subscription_status alone, but this
+     function only ever read subscription_status. So a comped account read
+     premium on the client, where isSubscribed() checks profiles.comped, and
+     landed on LIMITS.free here -- falling through to the non-premium lifetime
+     trial allowance of four Deeper questions for the life of the account, then
+     limit_reached for ever. Comped clergy hit that wall, not just the test set.
+
+     Usage is still logged. Dropping comped activity from usage_tracking would
+     skew the analytics; only the refusal is skipped. */
+  const comped = profile?.comped === true;
+
+  if (!onboardingFree && comped) {
+    await logUsage(user.id, feature);
+  } else if (!onboardingFree) {
     if (limit === 0 && credits <= 0) {
       return { statusCode: 403, headers: CORS, body: JSON.stringify({ error: 'upgrade_required' }) };
     }

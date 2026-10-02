@@ -1124,39 +1124,12 @@ body.is-mobile #mobileEnterTab { display: block; }
 </script>
 </head>
 <body>
-<!-- ═══════════════════════════════════════════
-     THE SACRISTY 
-═══════════════════════════════════════════ -->
-<div id="screen-sacristy" style="display:none;position:fixed;inset:0;z-index:8000;background:#000;overflow:hidden">
-
-  <!-- Full-bleed image -->
-  <img id="sacristyImg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;transition:opacity .5s ease;background:#000" src="" alt=""/>
-
-  <!-- Minimal top bar -->
-  <div style="position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:48px 28px 20px">
-    <button onclick="closeSacristy()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.45);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;transition:color .2s" onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.45)'">← Close</button>
-    <span id="sacristyLabel" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.22)"></span>
-    <button onclick="openSacristyInfo()" style="background:none;border:none;cursor:pointer;font-size:17px;color:rgba(255,255,255,.35);padding:4px;transition:color .2s" onmouseover="this.style.color='rgba(200,146,12,.8)'" onmouseout="this.style.color='rgba(255,255,255,.35)'">ⓘ</button>
-  </div>
-
-  <!-- Swipe / tap navigation areas -->
-  <div onclick="sacristyPrev()" style="position:absolute;left:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
-  <div onclick="sacristyNext()" style="position:absolute;right:0;top:0;bottom:0;width:40%;z-index:5;cursor:pointer"></div>
-
-  <!-- Dot indicators -->
-  <div id="sacristyDots" style="position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:10"></div>
-
- <!-- Shop button -- under gallery images (web only; hidden on iOS) -->
-  <button id="shopBtn" onclick="openShop()" style="position:absolute;bottom:64px;left:50%;transform:translateX(-50%);z-index:10;background:rgba(0,0,0,.55);border:1px solid rgba(200,146,12,.55);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;padding:10px 26px;cursor:pointer;transition:all .2s" onmouseover="this.style.background='rgba(200,146,12,.18)'" onmouseout="this.style.background='rgba(0,0,0,.55)'">Shop -></button>
- 
-  <!-- Info overlay -->
-  <div id="sacristyInfoOverlay" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.82);display:none;flex-direction:column;justify-content:flex-end;padding:48px 32px">
-    <button onclick="closeSacristyInfo()" style="position:absolute;top:52px;right:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.5);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em">Close ×</button>
-    <p id="sacristyInfoFeature" style="font-family:'Montserrat',sans-serif;font-size:8px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.8);margin-bottom:10px"></p>
-    <p id="sacristyInfoText" style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.2vw,20px);font-style:italic;color:rgba(255,255,255,.88);line-height:1.75;margin-bottom:24px"></p>
-    <button id="sacristyInfoEnter" onclick="enterFromSacristy()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:14px 24px;cursor:pointer;align-self:flex-start;transition:all .2s">Enter This Practice -></button>
-  </div>
-
+<!-- The Sacristy, the hidden image gallery, stood here, with the Shop button
+     inside it. Both are gone. It was reached by a 3-second long-press on the
+     wordmark and by a "G" in the home header, and four of its fourteen slides
+     had already stopped resolving: they pulled their image by querying a screen
+     for an <img>, and the redesign replaced those backgrounds with CSS
+     atmospheres. The images themselves are untouched on disk. -->
 </div>
 
 <div id="screen-onboarding" style="display:none;position:fixed;inset:0;z-index:99999;background:#030305;overflow-y:auto">
@@ -1241,8 +1214,9 @@ body.is-mobile #mobileEnterTab { display: block; }
          the cross at its head, the seal beneath the sign-off. The audio and
          its button are the ones they were. Begin calls obFinish() on the
          first reading and only closes the letter when it was asked for again
-         from Settings. The image files are not deleted; the Sacristy still
-         shows the letter as a photograph. -->
+         from Settings. The image files are not deleted, though nothing shows
+         them now: guestmaster_letter.jpg was the Sacristy's, and the Sacristy
+         is gone. -->
     <div class="ob-step" id="ob-2" data-tokens style="display:none">
       <div class="atmos" aria-hidden="true">
         <div class="atmos-glow"></div>
@@ -1869,13 +1843,6 @@ function pinDocument() {
         onmouseover="this.style.color='rgba(200,146,12,.8)'"
         onmouseout="this.style.color='rgba(255,255,255,.38)'"
         onclick="openHomeInfo()">ⓘ</button>
-      <!-- Gallery button -- opens the Sacristy image gallery -->
-      <button id="homeGalleryBtn"
-        style="background:none;border:1px solid rgba(255,255,255,.28);cursor:pointer;font-family:var(--font-sans);font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.55);padding:3px 9px 4px;line-height:1;transition:all .2s;border-radius:2px"
-        onmouseover="this.style.color='rgba(200,146,12,.95)';this.style.borderColor='rgba(200,146,12,.6)'"
-        onmouseout="this.style.color='rgba(255,255,255,.55)';this.style.borderColor='rgba(255,255,255,.28)'"
-        title="Gallery"
-        onclick="openSacristy(0)">G</button>
       <div class="hamburger" onclick="openSettings()"><span></span><span></span></div>
     </div>
   </header>
@@ -3865,8 +3832,6 @@ function pinDocument() {
           var hideNativeUnlocks = function () {
             var pc = document.getElementById('promoCard');
             if (pc) pc.style.display = 'none';
-            var sb = document.getElementById('shopBtn');
-            if (sb) sb.style.display = 'none';
           };
           hideNativeUnlocks();
           document.addEventListener('DOMContentLoaded', hideNativeUnlocks);
@@ -14824,171 +14789,14 @@ async function initSingTheHours() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initSingTheHours);
-/* ═══════════════════════════════════════════
-   THE SACRISTY -- hidden image gallery
-   Hold "Still" wordmark 3 seconds to enter
-═══════════════════════════════════════════ */
-const SPLASH_IMG_SRC = 'still-mobile/src/image/splash_bg.jpg';
-
-function buildSacristyImages() {
-  return [
-    { src: SPLASH_IMG_SRC, label: 'Splash', featureIdx: -1, isSplash: true,
-      info: 'The image that greets you when Still opens -- a monk in silhouette at first light, reading the Word. The whole tradition compressed into one figure: alone, attentive, before dawn.' },
-    { src:'still-mobile/src/image/still_bg.jpg', label:'Still', featureIdx:-1,
-      info:'Still\'s own emblem: a gold teardrop suspended in perfect darkness, a single thread of light descending from above and continuing below into its own reflection. The hesychast tradition calls the quieted mind a mirror -- still enough to reflect the divine presence. St. Seraphim of Sarov called this acquisition the goal of the entire Christian life.' },
-    { src:'still-mobile/src/image/guestmaster_letter.jpg', label:'The Letter', featureIdx:-1,
-      info:'The Guestmaster\'s letter -- the first thing a guest receives upon arriving at Still. The monastery has always welcomed strangers. The letter is the beginning of the interior life offered here.' },
-    { src:'still-mobile/src/image/amma-sophia.jpg', label:'Amma Sophia', featureIdx:-1,
-      info:'Amma Sophia -- a woman who has walked the contemplative path for decades. She speaks from within the tradition. Warm, unhurried, grounded in experience. She has sat in the same silence long enough to know what it costs and what it gives.' },
-    { screen:'companion',    label:'The Companion',         featureIdx:0,
-      info:'A Desert Father kneels in prayer at dusk, staff beside him. The hesychast tradition teaches that unceasing prayer -- the Jesus Prayer repeated until it breathes itself -- transforms the whole person. The Companion speaks from this silence.' },
-    { screen:'rule',         label:'Rule of Life',          featureIdx:12,
-      info:'A Benedictine monk holds the Regula Sancti Benedicti -- written by Benedict of Nursia in 516 AD. "Listen carefully, my child, to my instructions." Seventy-three chapters governing prayer, work, humility, and community. The first rule ever written for ordinary Christians.' },
-    { screen:'autobiography',label:'Spiritual Autobiography',featureIdx:10,
-      info:'Story of a Soul lies open as roses rise from its pages into a violet lancet arch -- Thérèse of Lisieux\'s own promise fulfilled: \'After my death, I will let fall a shower of roses.\' She wrote her autobiography under obedience and died at twenty-four before it was published. It became one of the most widely read books in Christian history.' },
-    { screen:'breath',       label:'Breath Prayer',         featureIdx:7,
-      info:'A hesychast monk sits with hands at his heart, light emanating from within. The Jesus Prayer -- Lord Jesus Christ, Son of God, have mercy on me, a sinner -- is repeated until it synchronizes with the breath and continues even in sleep. The monk\'s entire life becomes a single unceasing prayer.' },
-    { screen:'deeper',       label:'Deeper',                featureIdx:14,
-      info:'A monk kneels in silent prayer beneath a lancet arch as light descends through a cross. The mysteries of Christ -- Incarnation, Passion, Resurrection -- are not propositions to be understood but depths to be entered. Deeper is the room at the bottom of the tradition.' },
-    { screen:'darkness',     label:'Darkness Mode',         featureIdx:6,
-      info:'A figure prostrate on cracked stone, arms folded, beneath the faint outline of a lancet arch. Psalm 88 ends without resolution. John of the Cross wrote his greatest theology in a cell six feet by ten feet. The dark night is not abandonment. It is the deepest form of proximity.' },
-    { screen:'lectio',       label:'Lectio Divina',         featureIdx:3,
-      info:'An illuminated manuscript lies open on a stone altar as light descends from a teal lancet arch and the living word rises from the page. Lectio Divina -- sacred reading -- is the practice of reading until one word catches and holds you. Not study. Not information. Contact. The word of God doing something to you that you cannot do to yourself.' },
-    { screen:'examen',       label:'The Examen',            featureIdx:4,
-      info:'A candle illuminates a vision: footprints, hands breaking bread, a cup offered, a solitary figure -- all within a lancet arch. Ignatius taught that God is present in every moment. The Examen is the practice of learning to see where. Five questions. The most honest four minutes of the day.' },
-    { screen:'witnesses', src:'assets/rosary/cloud-of-witnesses.jpg', label:'Rosary Meditations', featureIdx:2,
-      info:'A wooden rosary laid on stone, and above it the company it summons -- saints and angels gathered in cloud-light. Hebrews 12:1: so great a cloud of witnesses. Nobody prays the rosary alone; the image shows the room as it actually is.' },
-    { screen:'witnesses', src:'assets/rosary/madonna.jpg', label:'The Concluding Prayers', featureIdx:2,
-      info:'Our Lady in candlelight, where every rosary ends -- the Salve Regina, the Rosary Prayer, St. Michael. After five mysteries the words fall away and what remains is her: the Mother holding the Child, four flames keeping watch.' },
-  ];
-}
-
-let sacristyIdx = 0;
-let sacristyCurrent = [];
-let _sacristyLongTimer = null;
-
-function initSacristy() {
-  sacristyCurrent = buildSacristyImages();
-  // Build dots
-  const dots = document.getElementById('sacristyDots');
-  if (dots) {
-    dots.innerHTML = sacristyCurrent.map((_,i) =>
-      `<div onclick="sacristyGoto(${i})" id="sdot-${i}" style="width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .3s"></div>`
-    ).join('');
-  }
-  // Long-press on wordmark
-  const logo = document.getElementById('stillLogo');
-  if (!logo) return;
-  const start = () => { _sacristyLongTimer = setTimeout(openSacristy, 3000); };
-  const cancel = () => clearTimeout(_sacristyLongTimer);
-  logo.addEventListener('touchstart', e => { start(); }, { passive: true });
-  logo.addEventListener('touchend',   cancel);
-  logo.addEventListener('touchmove',  cancel);
-  logo.addEventListener('mousedown',  start);
-  logo.addEventListener('mouseup',    cancel);
-  logo.addEventListener('mouseleave', cancel);
-  // Swipe support
-  let _sx = 0;
-  const overlay = document.getElementById('screen-sacristy');
-  if (overlay) {
-    overlay.addEventListener('touchstart', e => { _sx = e.touches[0].clientX; }, { passive:true });
-    overlay.addEventListener('touchend',   e => {
-      const dx = e.changedTouches[0].clientX - _sx;
-      if (Math.abs(dx) > 50) dx < 0 ? sacristyNext() : sacristyPrev();
-    });
-  }
-}
-
-function openSacristy(idx) {
-  sacristyIdx = idx !== undefined ? idx : 0;
-  document.getElementById('screen-sacristy').style.display = 'block';
-  document.getElementById('sacristyInfoOverlay').style.display = 'none';
-  renderSacristySlide();
-}
-
-function closeSacristy() {
-  document.getElementById('screen-sacristy').style.display = 'none';
-}
-
-/* ═══════════════════════════════════════════
-   SHOP -- placeholder storefront
-═══════════════════════════════════════════ */
-function openShop() {
-  closeSacristy();
-  let s = document.getElementById('screen-shop');
-  if (!s) {
-    s = document.createElement('div');
-    s.id = 'screen-shop';
-    s.style.cssText = 'position:fixed;inset:0;z-index:8500;background:#030305;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 28px;text-align:center';
-    s.innerHTML = `
-      <button onclick="closeShop()" style="position:absolute;top:48px;left:28px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.55);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase">← Close</button>
-      <p style="font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.32em;text-transform:uppercase;color:rgba(200,146,12,.75);margin-bottom:28px">Still · Shop</p>
-      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(36px,7vw,52px);font-style:italic;color:#fff;line-height:1.05;margin-bottom:22px;max-width:520px">The storefront is being built.</h1>
-      <p style="font-family:'Heebo',sans-serif;font-size:15px;color:rgba(255,255,255,.55);line-height:1.7;max-width:440px;margin-bottom:36px">Prints, candles, and physical reminders of the practice will live here. Come back soon.</p>
-      <button onclick="closeShop()" style="background:none;border:1px solid rgba(200,146,12,.5);color:#f0c040;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.26em;text-transform:uppercase;padding:13px 28px;cursor:pointer;transition:all .2s">Return to Still</button>
-    `;
-    document.body.appendChild(s);
-  }
-  s.style.display = 'flex';
-}
-function closeShop() {
-  const s = document.getElementById('screen-shop');
-  if (s) s.style.display = 'none';
-}
-
-function renderSacristySlide() {
-  const entry = sacristyCurrent[sacristyIdx];
-  const imgEl = document.getElementById('sacristyImg');
-  // Resolve image source: entries can carry a direct `src`, or pull from a screen background
-  let resolvedSrc = entry.src || null;
-  if (!resolvedSrc && entry.screen) {
-    const screenEl = document.getElementById('screen-' + entry.screen);
-    const bgImg = screenEl ? screenEl.querySelector('img[src^="still-mobile/src/image"]') : null;
-    if (bgImg) resolvedSrc = bgImg.src;
-  }
-  if (imgEl && resolvedSrc) {
-    imgEl.style.opacity = '0';
-    setTimeout(() => { imgEl.src = resolvedSrc; imgEl.style.opacity = '1'; }, 100);
-  }
-  const lbl = document.getElementById('sacristyLabel');
-  if (lbl) lbl.textContent = entry.label;
-  sacristyCurrent.forEach((_,i) => {
-    const d = document.getElementById(`sdot-${i}`);
-    if (d) {
-      d.style.background = i===sacristyIdx ? 'rgba(255,255,255,.85)' : 'rgba(255,255,255,.28)';
-      d.style.width      = i===sacristyIdx ? '16px' : '5px';
-      d.style.borderRadius = i===sacristyIdx ? '3px' : '50%';
-    }
-  });
-}
-
-function sacristyNext() { sacristyIdx=(sacristyIdx+1)%sacristyCurrent.length; renderSacristySlide(); }
-function sacristyPrev() { sacristyIdx=(sacristyIdx-1+sacristyCurrent.length)%sacristyCurrent.length; renderSacristySlide(); }
-function sacristyGoto(i) { sacristyIdx=i; renderSacristySlide(); }
-
-function openSacristyInfo() {
-  const e = sacristyCurrent[sacristyIdx];
-  document.getElementById('sacristyInfoFeature').textContent = e.label;
-  document.getElementById('sacristyInfoText').textContent    = e.info;
-  // Splash entry has no associated practice -- hide the Enter button
-  const enterBtn = document.getElementById('sacristyInfoEnter');
-  if (enterBtn) enterBtn.style.display = e.isSplash ? 'none' : 'inline-block';
-  document.getElementById('sacristyInfoOverlay').style.display = 'flex';
-}
-function closeSacristyInfo() {
-  document.getElementById('sacristyInfoOverlay').style.display = 'none';
-}
-function enterFromSacristy() {
-  const entry = sacristyCurrent[sacristyIdx];
-  closeSacristy(); closeSacristyInfo();
-  if (entry.isSplash) return;                       // splash isn't a practice
-  if (entry.featureIdx === -1) {
-    setTimeout(() => showNightWatch(), 300);
-  } else {
-    setTimeout(() => enterFeature(entry.featureIdx), 300);
-  }
-}
+/* The Sacristy's code stood here -- buildSacristyImages, initSacristy and the
+   long-press that opened it, openSacristy/closeSacristy, renderSacristySlide,
+   the dots and the swipe, openSacristyInfo/closeSacristyInfo,
+   enterFromSacristy -- together with openShop and closeShop, which lived in the
+   middle of it because the Shop button was a child of the Sacristy's markup.
+   All removed. still-mobile/src/image/*.jpg and assets/rosary/*.jpg are
+   untouched; splash_bg, still_bg, guestmaster_letter and amma-sophia are now
+   unreferenced by any screen. */
 
 
 /* ═══════════════════════════════════════════
@@ -18033,7 +17841,7 @@ initTrial();
 checkOnboarding();
 initAuth();
 initRevenueCat();
-initSacristy();
+// initSacristy() was called here; the Sacristy is gone.
 
 // Restore bell preference
 setBell(bellEnabled);

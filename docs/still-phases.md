@@ -466,7 +466,22 @@ and neither obviously wrong:
   the intonation or may fight it. Exempting the intoned block from that
   substitution is a two-line change if it sounds wrong.
 
-### 7. CCC paragraph map · **open**
+### 7. Verify share cards end at a complete sentence · **open, untested**
+
+Seen cut off on the old phone build. The fix is in `76a713f` — whole-sentence
+truncation, the abbreviation-aware `window.stillSentences()`, and the card now
+carrying the invitation and the SOURCE line — but it has only been reasoned
+about and unit-tested, **never seen rendered**.
+
+Test all three voices — Companion, Amma Sophia, Deeper — **on web, before the
+native build**, each with an answer long enough to force truncation. Confirm the
+card ends on a sentence and carries "Read the full answer at stillprayer.app".
+
+**Amma Sophia is the one to watch.** Her entries in the card's `VOICES` map have
+`invitation: null` and `source: null`, so she takes a different path through
+`draw()` than the other two and exercises the change least.
+
+### 8. CCC paragraph map · **open**
 
 Citations link to the Catechism's table of contents, not the paragraph.
 Verified against `_INDEX.HTM`: vatican.va publishes the CCC as ~250 page files
@@ -480,7 +495,7 @@ rechecking if the Vatican re-publishes); or accept a host that supports
 per-paragraph anchors. **vatican.va was the stated requirement, so the second
 hasn't been pursued.**
 
-### 8. First-run "Hear it prayed" button · **idea, not built**
+### 9. First-run "Hear it prayed" button · **idea, not built**
 
 Add to the short Hour in the first session. Worth noting it would be the first
 thing in the run to depend on the network and on Render being warm — a cold
@@ -488,7 +503,7 @@ Render start is slow enough to blow the 90-second target, so it should be
 optional and never block the step. The Office's own `◎ Hear [Hour]` already
 exists one tap further in.
 
-### 9. Capacitor version mismatch · **open, low risk**
+### 10. Capacitor version mismatch · **open, low risk**
 
 `@capacitor/android` is pinned `^8.5.0` while `@capacitor/core`,
 `@capacitor/ios` and `@capacitor/cli` are `^8.3.4`. Same major, so the carets
@@ -496,7 +511,7 @@ resolve compatibly and nothing is known to be broken — but Android's pin is
 ahead of the toolchain's. Align them (raise the other three to `^8.5.0`, or drop
 android to `^8.3.4`) at the next dependency pass, and run `npx cap doctor`.
 
-### 10. OneSignal cleanup · **open**
+### 11. OneSignal cleanup · **open**
 
 `onesignal-cordova-plugin ^5.3.12` is still a dependency, and references remain
 in `index.html`, `bell-native.js`, `OneSignalSDKWorker.js`, `send-notifications.js`
@@ -509,7 +524,7 @@ nobody** — local notifications are the only delivery path.
 scheduled invocations a day doing nothing. Removing those four schedule blocks
 is the cheapest part of this cleanup and is independent of the plugin removal.
 
-### 11. Devotions entries awaiting a source · **open**
+### 12. Devotions entries awaiting a source · **open**
 
 Four of seven entries carry `[NEEDED: source]` and are injected with the
 "present nothing as a quotation" instruction until verified:
@@ -521,7 +536,7 @@ Four of seven entries carry `[NEEDED: source]` and are injected with the
 | Divine Mercy | Diary paragraph numbers and verbatim wording need the published Diary. |
 | Fifteen Promises of the Rosary | A critical source, if one exists. Ships with empty `items` by design. |
 
-### 12. Smaller things noticed, not acted on
+### 13. Smaller things noticed, not acted on
 
 - `obNext()`, `playDemoAudio()`, `stopDemoAudio()` and the empty
   `ONBOARDING_DEMOS` are now unreachable by the first-run flow. Dead but
