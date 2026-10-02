@@ -3146,9 +3146,9 @@ function pinDocument() {
    share sheet, or downloads it. No request, no save, no playback is touched. */
 (function () {
   var VOICES = {
-    companion: { name: 'The Companion', screen: 'screen-companion',     input: 'companionText', response: 'companionResponse', question: 'cQuestion',      reply: 'cResponseText',      watch: 'class' },
-    deeper:    { name: 'Deeper',        screen: 'screen-deeper',        input: 'deeperText',    response: 'deeperResponse',    question: 'dQuestion',      reply: 'dResponseText',      watch: 'class' },
-    sophia:    { name: 'Amma Sophia',   screen: 'screen-autobiography', input: 'mysticText',    response: 'mysticResponse',    question: 'mysticQuestion', reply: 'mysticResponseText', watch: 'style' }
+    companion: { name: 'The Companion', screen: 'screen-companion',     input: 'companionText', response: 'companionResponse', question: 'cQuestion',      reply: 'cResponseText',      invitation: 'cInvitation', source: 'cSource', watch: 'class' },
+    deeper:    { name: 'Deeper',        screen: 'screen-deeper',        input: 'deeperText',    response: 'deeperResponse',    question: 'dQuestion',      reply: 'dResponseText',      invitation: 'dInvitation', source: 'dSource', watch: 'class' },
+    sophia:    { name: 'Amma Sophia',   screen: 'screen-autobiography', input: 'mysticText',    response: 'mysticResponse',    question: 'mysticQuestion', reply: 'mysticResponseText', invitation: null,          source: null,      watch: 'style' }
   };
   function shown(v, el) { return v.watch === 'class' ? el.classList.contains('active') : el.style.display !== 'none'; }
   function keepQuestion(v) {
@@ -3191,34 +3191,58 @@ function pinDocument() {
     var cx = x - total / 2;
     for (i = 0; i < text.length; i++) { ctx.fillText(text[i], cx, y); cx += ctx.measureText(text[i]).width + spacing; }
   }
+  /* The reply is cut only at the end of a sentence. The card used to slice the
+     wrapped lines and drop an ellipsis wherever the cut happened to fall, which
+     is how one came to end "...but the...". Sentences are measured whole now:
+     the longest run of them that fits is what the card carries, and draw() then
+     says where the rest is. */
   function layout(ctx, question, reply, maxWidth, maxHeight) {
-    // the type scales down together, to a floor; past it the reply ends with an ellipsis
-    var scale, q, r, qh, rh, gap, lh = 1.42;
+    var lh = 1.42, scale;
+    function at(s, text) {
+      var qs = Math.round(46 * s), rs = Math.round(48 * s);
+      ctx.font = 'italic ' + qs + 'px ' + SERIF;
+      var q = wrap(ctx, question, maxWidth);
+      ctx.font = rs + 'px ' + SERIF;
+      var r = wrap(ctx, text, maxWidth);
+      var gap = q.length ? 72 : 0;
+      var h = (q.length ? q.length * qs * lh : 0) + gap + r.length * rs * lh;
+      return { qs: qs, rs: rs, q: q, r: r, gap: gap, lh: lh, h: h, ok: h <= maxHeight };
+    }
     for (scale = 1; scale >= 0.66; scale -= 0.04) {
-      var qs = Math.round(46 * scale), rs = Math.round(48 * scale);
-      ctx.font = 'italic ' + qs + 'px ' + SERIF; q = wrap(ctx, question, maxWidth);
-      ctx.font = rs + 'px ' + SERIF; r = wrap(ctx, reply, maxWidth);
-      qh = q.length ? q.length * qs * lh : 0; gap = q.length ? 72 : 0; rh = r.length * rs * lh;
-      if (qh + gap + rh <= maxHeight) return { qs: qs, rs: rs, q: q, r: r, lh: lh, gap: gap, truncated: false };
+      var whole = at(scale, reply);
+      if (whole.ok) { whole.truncated = false; return whole; }
     }
-    var qsMin = Math.round(46 * 0.66), rsMin = Math.round(48 * 0.66);
-    ctx.font = 'italic ' + qsMin + 'px ' + SERIF; q = wrap(ctx, question, maxWidth);
-    qh = q.length ? q.length * qsMin * lh : 0; gap = q.length ? 72 : 0;
-    ctx.font = rsMin + 'px ' + SERIF; r = wrap(ctx, reply, maxWidth);
-    var fit = Math.max(1, Math.floor((maxHeight - qh - gap) / (rsMin * lh)));
-    var truncated = r.length > fit;
-    if (truncated) {
-      r = r.slice(0, fit);
-      var last = r[fit - 1].replace(/[\s.,;:]+$/, '');
-      while (last && ctx.measureText(last + '\u2026').width > maxWidth) last = last.replace(/\s*\S+$/, '');
-      r[fit - 1] = last + '\u2026';
+    // at the floor: keep whole sentences, in order, for as long as they fit
+    var parts = (window.stillSentences ? window.stillSentences(reply) : [reply]);
+    var kept = '', used = 0, best = null;
+    for (var i = 0; i < parts.length; i++) {
+      var trial = kept ? kept + ' ' + parts[i] : parts[i];
+      var step = at(0.66, trial);
+      if (!step.ok) break;
+      kept = trial; used = i + 1; best = step;
     }
-    return { qs: qsMin, rs: rsMin, q: q, r: r, lh: lh, gap: gap, truncated: truncated };
+    if (!best) {
+      /* Not even the first sentence fits. Keep the lines of it that do -- this
+         is the one case the card cannot end on a sentence, and it still ends on
+         a whole word and sends the reader on. */
+      best = at(0.66, parts[0] || reply);
+      var room = Math.max(1, Math.floor((maxHeight - (best.q.length ? best.q.length * best.qs * lh : 0) - best.gap) / (best.rs * lh)));
+      best.r = best.r.slice(0, room);
+    }
+    best.truncated = used < parts.length;
+    return best;
   }
   function draw(key) {
     var v = VOICES[key]; if (!v) return Promise.reject(new Error('unknown voice'));
     var question = (document.getElementById(v.question) || {}).textContent || '';
-    var reply = (document.getElementById(v.reply) || {}).textContent || '';
+    /* Exactly what the screen shows, in the screen's order: the reply, then the
+       invitation beneath it. The card drew the reply alone, so a closing
+       sentence the voice had moved into the invitation was simply missing from
+       it. */
+    var invitation = v.invitation ? ((document.getElementById(v.invitation) || {}).textContent || '') : '';
+    var reply = [((document.getElementById(v.reply) || {}).textContent || '').trim(), invitation.trim()]
+                  .filter(Boolean).join(' ');
+    var srcLine = v.source ? ((document.getElementById(v.source) || {}).textContent || '').trim() : '';
     var hue = hueOf(v);
     var loads = [];
     try {
@@ -3243,9 +3267,13 @@ function pinDocument() {
       // the name: the sans micro, tracked
       ctx.fillStyle = '#d9a441'; ctx.font = '500 22px ' + SANS; ctx.textBaseline = 'alphabetic';
       tracked(ctx, v.name.toUpperCase(), W / 2, 296, 7);
-      // the exchange
+      // the exchange. The source line and, when the answer is cut, the line
+      // that says where the rest of it is, are both given their room first.
       var top = 392, bottom = H - 150, maxWidth = W - PAD * 2;
-      var L = layout(ctx, question, reply, maxWidth, bottom - top);
+      var CTA = 'Read the full answer at stillprayer.app';
+      var roomFor = function (cta) { return (srcLine ? 56 : 0) + (cta ? 62 : 0); };
+      var L = layout(ctx, question, reply, maxWidth, bottom - top - roomFor(false));
+      if (L.truncated) L = layout(ctx, question, reply, maxWidth, bottom - top - roomFor(true));
       var y = top;
       ctx.textAlign = 'left';
       if (L.q.length) {
@@ -3255,6 +3283,18 @@ function pinDocument() {
       }
       ctx.fillStyle = 'rgba(255,246,232,.94)'; ctx.font = L.rs + 'px ' + SERIF;
       L.r.forEach(function (line) { y += L.rs; ctx.fillText(line, PAD, y); y += L.rs * (L.lh - 1); });
+      // the source, small, under the text
+      if (srcLine) {
+        y += 40;
+        ctx.fillStyle = 'rgba(255,246,232,.46)'; ctx.font = '500 21px ' + SANS;
+        ctx.fillText(srcLine.toUpperCase(), PAD, y);
+      }
+      // where the rest of the answer is
+      if (L.truncated) {
+        y += srcLine ? 46 : 52;
+        ctx.fillStyle = 'rgba(217,164,65,.92)'; ctx.font = 'italic 31px ' + SERIF;
+        ctx.fillText(CTA, PAD, y);
+      }
       // the watermark
       ctx.fillStyle = 'rgba(255,246,232,.42)'; ctx.font = '500 22px ' + SANS;
       tracked(ctx, 'STILLPRAYER.APP', W / 2, H - 78, 6);
@@ -8078,6 +8118,9 @@ The Holy Spirit's specific office is the forgiveness of sins. To refuse His work
 ON THE BLASPHEMY AGAINST THE HOLY SPIRIT:
 Final impenitence is the complete and permanent closing of the will against repentance at death -- not a single hidden sin, not a dark thought, not a moment of doubt or rage. The soul that trembles with fear of having committed this sin has, by that fear, demonstrated it has not -- that fear is the cry of a soul that still wants God. A soul in true final impenitence does not want God at all, not secretly, not partially. The wanting is entirely gone. But do not let this comfort collapse into false reassurance: a soul can be devout in many things and deliberately closing one door, and this too is a form of refusing the Spirit. The trembling soul is not lost. The comfortable soul with one kept sin is in real danger. Hold both.
 
+ON THE PROMISES OF THE DEVOTIONS:
+Where a devotion carries promises the Church has long repeated, give them in their traditional wording and not in a paraphrase of your own. The Twelfth Promise of the Sacred Heart, made to St Margaret Mary, is the grace of FINAL PENITENCE for those who communicate on the first Friday of nine consecutive months -- that they shall not die in His disgrace nor without receiving their sacraments. Final penitence is a grace, and it is not final impenitence, the sin named above: the two words are opposites and must never stand in for one another.
+
 ON DETRACTION AND CRITICISM:
 When words about another person strip away their dignity, plant shame in their heart, or wound their reputation without just cause, this is not mere imprudence -- it is detraction, a sin against justice and charity (CCC 2477–2479). If the matter is grave and the damage significant it can reach mortal sin. But even when it does not, every harsh word about another grieves the Holy Spirit -- because every person spoken about is someone for whom Christ died. St. John Chrysostom: the tongue wounds more deeply than any sword, for it strikes at the person's sense of worth before God and man. Fraternal correction given in charity for a soul's good is not detraction. The test is always the same: am I speaking from love that seeks their good, or from something in myself -- pride, resentment, the need to feel superior?
 
@@ -8090,6 +8133,7 @@ If a question genuinely exceeds what can be answered faithfully, say exactly: "T
 RULES YOU NEVER BREAK:
 -- Write in clean prose only. No asterisks, no bold, no markdown, no labels, no structural headers visible to the person.
 -- Never use modern psychological language.
+-- Never open with a remark about the question. "You are asking a precise question", "This is a profound question", "What you describe is common" -- all of it is preamble, and it spends the one line that belonged to the person. Open on the substance: name what they are carrying, or begin with the truth itself.
 -- Never address the soul as "Scrupulous soul." Use "Beloved," or no direct address.
 -- Never end with more than one question. Never invite more conversation.
 -- Begin with: SOURCE: [specific CCC paragraph or Magisterial document]
@@ -8123,6 +8167,43 @@ function returnFromCompanion(){
   animateTo({r:82,g:20,b:140,i:.28});
 }
 
+/* ── Sentence ends, for the voices and for the share card ───────────────
+   A bare /[^.!?]+[.!?]+/ split, which both voices used, treats every period as
+   the end of a sentence. "a promise made to St. Margaret Mary herself." came
+   apart into "...made to St." and "Margaret Mary herself." -- and once the
+   invitation scan below lifted the first of those out, the second was left
+   behind as a dangling fragment. A period ends a sentence here only when a
+   space and the opening of a new sentence follow it, and the word before it is
+   not one of the abbreviations these voices actually write. */
+const STILL_ABBR = ['st','ss','bl','ven','fr','sr','jr','mr','mrs','ms','dr','rev','msgr',
+                    'card','bp','abp','pope','cf','vs','q','qq','a','v','vv','ch','no','ca',
+                    'etc','ibid','al','i.e','e.g'];
+window.stillSentences = function (text) {
+  const t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (!t) return [];
+  const out = [];
+  let start = 0;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (c !== '.' && c !== '!' && c !== '?') continue;
+    let j = i;
+    while (j + 1 < t.length && /[.!?]/.test(t[j + 1])) j++;        // "?!" and "..."
+    let k = j + 1;
+    while (k < t.length && /["'\u201d\u2019)\]]/.test(t[k])) k++;  // a closing quote or bracket
+    if (k >= t.length) { i = j; continue; }                        // the end of the text
+    if (t[k] !== ' ') { i = j; continue; }                         // "q.14", "2:1" -- not a boundary
+    if (!/[A-Z\u201c"(\u2018']/.test(t[k + 1] || '')) { i = j; continue; }   // lower case follows
+    const word = ((t.slice(start, j + 1).match(/([A-Za-z.]+)\.$/) || [])[1] || '').toLowerCase();
+    if (c === '.' && word && STILL_ABBR.indexOf(word.replace(/\.$/, '')) !== -1) { i = j; continue; }
+    out.push(t.slice(start, k).trim());
+    start = k + 1;
+    i = k;
+  }
+  const tail = t.slice(start).trim();
+  if (tail) out.push(tail);
+  return out.length ? out : [t];
+};
+
 async function askCompanion(){
   const input=document.getElementById('companionText').value.trim();
   if(!input){showError('companionErr','Speak first. Then the Fathers will answer.');return;}
@@ -8148,12 +8229,18 @@ async function askCompanion(){
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
     const src=srcMatch?srcMatch[1].trim():'The Fathers';
     const body=full.replace(/^SOURCE:\s*.+$/m,'').trim();
-    const sentences=body.match(/[^.!?]+[.!?]+/g)||[body];
-    let inv='',main=[];let foundInv=false;
-    for(let i=sentences.length-1;i>=0;i--){
-      if(!foundInv&&/sit with|return to|stillness|silence|prayer|jesus prayer|for a moment|breathe/i.test(sentences[i])){inv=sentences[i];foundInv=true;}
-      else main.unshift(sentences[i]);
-    }
+    const sentences=window.stillSentences(body);
+    /* The invitation is the closing sentence, and only ever that. The scan ran
+       backwards over the whole reply and lifted the first sentence that
+       matched, so a match in the middle was pulled out of the body and shown
+       after it -- the reply left with a hole, the card (which draws the reply
+       alone) left with a fragment. And when nothing matched, the fallback
+       below showed the last sentence a second time, under a body that still
+       contained it. Now: the last sentence moves to the invitation when it
+       reads like one, and nothing is ever taken from the middle. */
+    const main=sentences.slice();
+    let inv='';
+    if(main.length>1&&/sit with|return to|stillness|silence|prayer|jesus prayer|for a moment|breathe/i.test(main[main.length-1])){inv=main.pop();}
     companionUses=Math.max(0,companionUses-1);
     saveCompanionUses();
     trackEvent('companion');
@@ -8161,7 +8248,7 @@ async function askCompanion(){
     document.getElementById('cSource').textContent=src;
     document.getElementById('cResponseText').textContent=main.join(' ').trim()||body;
     if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
-    document.getElementById('cInvitation').textContent=inv||(sentences[sentences.length-1]||'');
+    document.getElementById('cInvitation').textContent=inv;
     document.getElementById('companionRate').textContent=`${companionUses} reflection${companionUses!==1?'s':''} remaining this week`;
     showCompanionState('companionResponse');
   }catch(err){
@@ -8528,12 +8615,18 @@ async function askDeeper(){
     const scriptureMatch=full.match(/^SCRIPTURE:\s*(.+)$/m);
     const scriptureRaw=scriptureMatch?scriptureMatch[1].trim():'';
     const body=full.replace(/^SOURCE:\s*.+$/m,'').replace(/^SCRIPTURE:\s*.+$/m,'').trim();
-    const sentences=body.match(/[^.!?]+[.!?]+/g)||[body];
-    let inv='',main=[];let foundInv=false;
-    for(let i=sentences.length-1;i>=0;i--){
-      if(!foundInv&&/sit with|return to|stillness|silence|prayer|confessor|director|bring this/i.test(sentences[i])){inv=sentences[i];foundInv=true;}
-      else main.unshift(sentences[i]);
-    }
+    const sentences=window.stillSentences(body);
+    /* The invitation is the closing sentence, and only ever that. The scan ran
+       backwards over the whole reply and lifted the first sentence that
+       matched, so a match in the middle was pulled out of the body and shown
+       after it -- the reply left with a hole, the card (which draws the reply
+       alone) left with a fragment. And when nothing matched, the fallback
+       below showed the last sentence a second time, under a body that still
+       contained it. Now: the last sentence moves to the invitation when it
+       reads like one, and nothing is ever taken from the middle. */
+    const main=sentences.slice();
+    let inv='';
+    if(main.length>1&&/sit with|return to|stillness|silence|prayer|confessor|director|bring this/i.test(main[main.length-1])){inv=main.pop();}
     document.getElementById('dSource').textContent=src;
     /* The reply as written, citations and all. The prose shown is cleaned of
        them, but they are harvested from this first and the journal keeps this
@@ -8552,7 +8645,7 @@ deeperRenderScripture(scriptureRaw);
 Memory.record('deeper', input, rawBody, src);   // ← save this exchange into the journey
 if (typeof bumpFonts === 'function') setTimeout(bumpFonts, 100);
 
-    const cleanInv = (inv||(sentences[sentences.length-1]||'')).replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
+    const cleanInv = inv.replace(/\(CCC\s*\d+[\d\-–]*\)/g,'').replace(/CCC\s*\d+[\d\-–]*/g,'').replace(/\(ST\s+[^)]+\)/g,'').trim();
 document.getElementById('dInvitation').textContent=cleanInv;
    showDeeperState('deeperResponse');
   }catch(err){
