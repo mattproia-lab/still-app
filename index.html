@@ -6184,6 +6184,35 @@ function hashText(text) {
 const OFFICE_TONE_LAMENT = '[slow] [reverent] [quiet] [sorrowful]';
 const OFFICE_TONE_RESET  = '[slow] [reverent]';
 
+/* ── Hymns, intoned ────────────────────────────────────────────────────
+   A hymn is sung, not read, so it is handed to the voice as singing and the
+   voice is handed back afterwards. The sequence is exact and was tested by ear
+   on Eleven v4 -- the long pause is what makes the transition land, in both
+   directions:
+
+     [long pause]
+     [intones, like a monastic hymn]
+     <the hymn>
+     [long pause]
+     [slowly and reverent]
+
+   ONLY for a hymn whose text has a verified public-domain source. A hymn still
+   awaiting one is not intoned and is not spoken at all: an unattributed text is
+   not improved by being sung. Vigils is in that state now -- its stanza was
+   removed for want of a source, and its section carries the seasonal line
+   alone.
+
+   Still to come, deliberately not done here: the traditional rite's Latin
+   hymns, chanted with "[chants softly]". They arrive from the Divinum Officium
+   corpus rather than from this file, and the English renderings travelling with
+   them have not been sourced, so neither half is intoned yet. */
+const OFFICE_HYMN_OPEN  = '[long pause]\n[intones, like a monastic hymn]';
+const OFFICE_HYMN_CLOSE = '[long pause]\n[slowly and reverent]';
+
+function officeHymnSpeak(text) {
+  return OFFICE_HYMN_OPEN + '\n' + String(text || '') + '\n' + OFFICE_HYMN_CLOSE;
+}
+
 /* The seven penitential psalms -- 6, 31, 37, 50, 101, 129, 142 -- plus 21, the
    psalm of the Passion, and 141, which stands beside 142 and is the same kind
    of prayer. BY VULGATE NUMBER, which is the number the Office's refs lead
@@ -17338,9 +17367,24 @@ function buildOffice(hour, rite, date) {
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
     divider();
 
+    /* "Lucis Creator optime", the Sunday Vespers hymn, attributed to Gregory I
+       (540-604); English by John Mason Neale, 1851. Neale died in 1866, and
+       Hymnary records this translation as public domain; it appears in thirteen
+       hymnals, meter LM, to BROMLEY. Caswall's 1849 translation of the same
+       Latin is a DIFFERENT text -- it runs "Who dost the dawn from darkness
+       bring" where Neale has "Who mak'st the day with radiance bright" -- so
+       the two must not be conflated or mixed.
+
+       Verified: the source, the translator, the public-domain status and the
+       first two lines. NOT yet collated line by line against a scan, so lines
+       three to eight are this file's transcription and nothing more. Worth a
+       pass against a printed hymnal; the attribution itself is settled. */
     add('eyebrow', 'Evening Hymn', 'Evening Hymn.');
-    add('text', `O blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\n\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.`,
-                `O blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.`);
+    /* Two spellings, as with the doxology: the screen breaks between the
+       stanzas, the sung form runs the lines on. */
+    const VESPERS_HYMN_SEEN  = `O blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\n\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.`;
+    const VESPERS_HYMN_SUNG  = `O blest Creator of the light,\nWho mak'st the day with radiance bright,\nAnd o'er the forming world didst call\nThe light from chaos first of all:\nWhose wisdom joined in meet array\nThe morn and eve, and named them Day:\nNight comes with all its darkling fears;\nRegard thy people's prayers and tears.`;
+    add('text', VESPERS_HYMN_SEEN, officeHymnSpeak(VESPERS_HYMN_SUNG));
     divider();
 
     add('eyebrow', 'Antiphon');
