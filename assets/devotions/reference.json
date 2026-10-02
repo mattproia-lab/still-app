@@ -1,0 +1,159 @@
+{
+  "_comment": "Devotional reference texts for Deeper. NOT YET WIRED IN -- see docs note below and the report to Matt. The point of this file is that Deeper stops paraphrasing promises it should be quoting, and stops presenting private revelation with the authority of doctrine.",
+
+  "_wiring_rule": "Match a Deeper question against `keywords`, then inject the matched entry into the system prompt with the instruction in `injection_instruction`. ONLY entries with \"wording\": \"verbatim\" or \"standard_printed\" AND \"verified\": true may be injected with an instruction to quote exactly. An entry whose `verified` is false must either be verified first or injected with `injection_instruction_unverified` instead, which tells Deeper to give the substance and NOT to present wording as a quotation.",
+
+  "injection_instruction": "Quote this traditional wording exactly; do not paraphrase the promise itself; note that it is private revelation, approved but not doctrine.",
+
+  "injection_instruction_unverified": "Give the substance of this faithfully, and do NOT present any sentence as a quotation -- Still has not verified the wording against a published source. Name what kind of authority it carries. If the person asks for the exact words, say they should be read in a published edition rather than taken from you.",
+
+  "_wording_values": {
+    "verbatim": "checked word for word against the cited published source",
+    "standard_printed": "the form that published English editions carry in common; not yet checked against a specific scan",
+    "summary": "a faithful statement of the substance in our own words -- never to be quoted as the text itself"
+  },
+
+  "_authority_values": {
+    "doctrine": "taught by the Church; binds the faithful",
+    "discipline": "Church law or norm; binds, but can change",
+    "private_revelation": "approved as worthy of belief; binds no one and defines nothing",
+    "private_revelation_disputed": "circulates as private revelation, but its provenance is questioned -- must be presented with that caveat"
+  },
+
+  "entries": [
+    {
+      "id": "sacred-heart-twelve-promises",
+      "title": "The Twelve Promises of the Sacred Heart",
+      "keywords": ["first friday", "first fridays", "nine fridays", "sacred heart", "twelve promises", "great promise", "margaret mary", "final penitence"],
+      "authority": "private_revelation",
+      "wording": "standard_printed",
+      "verified": false,
+      "source": "Compiled from the letters and writings of St Margaret Mary Alacoque (1647-1690). The twelve-item list is a later compilation, not a single text in her hand; it circulates in 19th-century English devotional editions. [NEEDED: source] -- a specific public-domain edition (page scan) to check each item word for word.",
+      "caution": "Private revelation. Approved and worthy of belief; it defines nothing and binds no one. The promises presuppose a life of faith and conversion -- they are not a mechanism, and the Church has never taught them as a guarantee independent of perseverance.",
+      "items": [
+        "I will give them all the graces necessary in their state of life.",
+        "I will establish peace in their homes.",
+        "I will comfort them in all their afflictions.",
+        "I will be their refuge during life and above all in death.",
+        "I will bestow abundant blessings upon all their undertakings.",
+        "Sinners shall find in My Heart the source and the infinite ocean of mercy.",
+        "Tepid souls shall grow fervent.",
+        "Fervent souls shall quickly mount to high perfection.",
+        "I will bless every place in which an image of My Heart shall be exposed and honoured.",
+        "I will give to priests the gift of touching the most hardened hearts.",
+        "Those who shall promote this devotion shall have their names written in My Heart, never to be blotted out.",
+        "I promise thee, in the excessive mercy of My Heart, that its all-powerful love will grant to all those who shall receive Communion on the first Friday of nine consecutive months the grace of final penitence; they shall not die in My displeasure, nor without receiving their Sacraments, My divine Heart becoming their assured refuge at that last hour."
+      ],
+      "notes": "The twelfth is the Great Promise, and the wording that matters is 'the grace of final penitence'. FINAL PENITENCE IS A GRACE. It is not 'final perseverance', which is a different theological term, and it is emphatically not 'final impenitence', which is the sin against the Holy Spirit. Deeper's system prompt uses 'final impenitence' throughout for the sin; the two must never be swapped."
+    },
+    {
+      "id": "nine-first-fridays",
+      "title": "The Nine First Fridays -- what the devotion requires",
+      "keywords": ["first friday", "first fridays", "nine fridays", "nine first fridays", "how do i make the first fridays"],
+      "authority": "private_revelation",
+      "wording": "summary",
+      "verified": true,
+      "source": "The practice as it follows from the Twelfth Promise above; the requirement itself is not in dispute.",
+      "caution": "Private revelation. A missed month means beginning the nine again; nothing in the devotion attaches a penalty to that.",
+      "items": [
+        "Receive Holy Communion on the first Friday of nine consecutive months.",
+        "Communion must be received worthily -- in a state of grace, which ordinarily means sacramental confession where there is grave sin.",
+        "The nine months must be consecutive and unbroken."
+      ]
+    },
+    {
+      "id": "five-first-saturdays",
+      "title": "The Five First Saturdays -- what the devotion requires",
+      "keywords": ["first saturday", "first saturdays", "five first saturdays", "immaculate heart", "fatima", "reparation"],
+      "authority": "private_revelation",
+      "wording": "summary",
+      "verified": true,
+      "source": "The Fatima apparitions (1917) and the Pontevedra apparition to Sr Lucia (10 December 1925). The four requirements are not in dispute. [NEEDED: source] for any verbatim quotation of Our Lady's words at Pontevedra.",
+      "caution": "Private revelation, approved. The intention of reparation to the Immaculate Heart is part of the devotion and not an optional extra.",
+      "items": [
+        "Sacramental confession (within about eight days before or after, with the intention of reparation).",
+        "Holy Communion on the first Saturday.",
+        "Five decades of the Rosary.",
+        "Fifteen minutes' meditation on one or more of the mysteries of the Rosary.",
+        "On the first Saturday of five consecutive months, with the intention of making reparation to the Immaculate Heart of Mary."
+      ]
+    },
+    {
+      "id": "rosary-fifteen-promises",
+      "title": "The Fifteen Promises of the Rosary",
+      "keywords": ["fifteen promises", "15 promises", "promises of the rosary", "alan de la roche", "st dominic rosary"],
+      "authority": "private_revelation_disputed",
+      "wording": "[NEEDED: source]",
+      "verified": false,
+      "source": "[NEEDED: source] -- DELIBERATELY NOT SUPPLIED. The list is attributed to Our Lady through St Dominic and Bl. Alan de la Roche, and its provenance is seriously questioned: the attribution to St Dominic is not supported by the earliest sources, and the fifteen-item list as circulated today cannot be traced to a text of Bl. Alan's with confidence.",
+      "caution": "This is the entry most likely to be misused, which is why it carries no text. The Church warmly commends the Rosary and has never canonised this list. One item as circulated promises 'whatever you ask' -- an unconditional reading that the tradition nowhere supports.",
+      "items": [],
+      "notes": "Deeper should NOT quote these. When asked, it should say what kind of thing the list is, that its origin is uncertain, that the Church's commendation of the Rosary does not extend to canonising it, and that no promise in the tradition is unconditional. If a verified critical source is ever found, the items can be added -- with the provenance caveat still attached."
+    },
+    {
+      "id": "brown-scapular",
+      "title": "The Brown Scapular promise",
+      "keywords": ["brown scapular", "scapular", "simon stock", "carmelite scapular", "sabbatine"],
+      "authority": "private_revelation_disputed",
+      "wording": "standard_printed",
+      "verified": false,
+      "source": "Attributed to Our Lady's words to St Simon Stock, traditionally dated 16 July 1251. [NEEDED: source] -- the earliest surviving text of the vision is considerably later than the event, and the attribution is disputed by historians.",
+      "caution": "Not a charm, and the Church has had to say so repeatedly. The promise presupposes a life of faith, conversion and perseverance in the devotion; it is not a guarantee attached to a piece of cloth. The separate 'Sabbatine privilege' has been the subject of explicit Church restraint about what may be preached of it.",
+      "items": [
+        "Whosoever dies clothed in this habit shall not suffer eternal fire."
+      ],
+      "notes": "If a person reads this superstitiously, correcting that reading is the charitable act -- the prompt's own rule on correction applies."
+    },
+    {
+      "id": "divine-mercy",
+      "title": "The Divine Mercy promises",
+      "keywords": ["divine mercy", "faustina", "chaplet", "mercy sunday", "feast of mercy", "hour of mercy", "three o'clock"],
+      "authority": "private_revelation",
+      "wording": "summary",
+      "verified": false,
+      "source": "The Diary of St Maria Faustina Kowalska (1905-1938). Promises attach to four things: the Feast of Mercy, the Chaplet, the Image, and the Hour of Mercy. [NEEDED: source] -- Diary paragraph numbers for each, and verbatim wording, require the published Diary; nothing here should be quoted as Faustina's words until that is checked.",
+      "caution": "Private revelation, approved. The Feast of Mercy (the Second Sunday of Easter) carries an indulgence granted by the Church, which is a distinct and stronger thing than the promise itself -- do not merge the two.",
+      "items": [
+        "The Feast of Mercy, kept on the Second Sunday of Easter, with Communion received that day and recourse to confession.",
+        "The Chaplet of Divine Mercy, prayed for the dying and for sinners.",
+        "The Image, venerated with the words 'Jesus, I trust in You'.",
+        "The Hour of Mercy, three o'clock in the afternoon, recalling the hour of the Lord's death."
+      ]
+    },
+    {
+      "id": "plenary-indulgence-conditions",
+      "title": "The usual conditions for a plenary indulgence",
+      "keywords": ["plenary indulgence", "indulgence", "indulgences", "temporal punishment", "enchiridion"],
+      "authority": "discipline",
+      "wording": "summary",
+      "verified": true,
+      "source": "Manual of Indulgences / Enchiridion Indulgentiarum, Normae; CCC 1471-1479. The conditions are not in dispute.",
+      "caution": "An indulgence remits the TEMPORAL PUNISHMENT due to sin already forgiven. It never forgives sin and is not a substitute for confession. A plenary indulgence may be applied to oneself or to the souls in purgatory, but not to another living person.",
+      "items": [
+        "Perform the indulgenced work.",
+        "Sacramental confession (one confession may serve for several plenary indulgences).",
+        "Eucharistic Communion (ordinarily on the same day as the work, for each indulgence).",
+        "Prayer for the intentions of the Supreme Pontiff.",
+        "Freedom from all attachment to sin, including venial sin -- without which the indulgence is partial, not plenary."
+      ],
+      "notes": "The fifth condition is the one almost always omitted in popular accounts, and omitting it is what makes plenary indulgences sound mechanical. Deeper should always include it."
+    },
+    {
+      "id": "precepts-of-the-church",
+      "title": "The Precepts of the Church",
+      "keywords": ["precepts of the church", "precepts", "obligation", "holy days of obligation", "easter duty", "sunday obligation", "fasting and abstinence"],
+      "authority": "discipline",
+      "wording": "summary",
+      "verified": true,
+      "source": "CCC 2041-2043. Stated here in substance; the Catechism's own wording should be cited by paragraph rather than quoted from this file.",
+      "caution": "These are the indispensable minimum, not the measure of a Christian life -- the Catechism says as much. They are Church law and can change; particular law varies by territory, so specifics of fasting and holy days should be referred to the local conference.",
+      "items": [
+        "Attend Mass on Sundays and holy days of obligation, and rest from servile labour.",
+        "Confess serious sins at least once a year.",
+        "Receive Holy Communion at least during the Easter season.",
+        "Observe the days of fasting and abstinence established by the Church.",
+        "Provide for the material needs of the Church, each according to his ability."
+      ]
+    }
+  ]
+}
