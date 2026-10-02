@@ -50,17 +50,12 @@
 [functions.send-notifications]
   schedule = "0 1 * * *"
 
-[functions.bell-vigils]
-  schedule = "0 * * * *"
-
-[functions.bell-lauds]
-  schedule = "0 * * * *"
-
-[functions.bell-vespers]
-  schedule = "0 * * * *"
-
-[functions.bell-compline]
-  schedule = "0 * * * *"
+# The four bell-*.js schedules are gone. They ran hourly -- 96 invocations a day
+# -- pushing through OneSignal, whose web SDK was removed in 2391f30 with
+# nothing put in its place, so every one of those pushes reached nobody. Bells
+# are delivered by on-device local notifications from bell-native.js, which is
+# the only path and needs no cron. The functions themselves are left on disk;
+# see the OneSignal cleanup item in docs/still-phases.md.
   
 [[redirects]]
   from = "/assets/*"
@@ -129,6 +124,136 @@
   to = "/404"
   status = 404
   force = true
+
+# ─────────────────────────────────────────────────────────────────────────
+# publish = "." means the repo root IS the web root, so everything committed is
+# served unless a forced 404 says otherwise. These are the paths that are not
+# meant to be public. `force = true` is the operative part in every one of them:
+# without it the real file on disk wins and the rule does nothing.
+#
+# Two of these exist because .gitignore was added AFTER the directory had
+# already been committed, and ignoring a tracked path does not untrack it:
+# node_modules/ (1,401 files) and ios/ (20 files) are both in .gitignore and
+# both still in the repo, and both were therefore being served.
+# ─────────────────────────────────────────────────────────────────────────
+
+# Developer documentation. Written for us, not for readers.
+[[redirects]]
+  from = "/docs/*"
+  to = "/404"
+  status = 404
+  force = true
+
+# Every markdown file, wherever it sits: CLAUDE.md, DESIGN.md, and anything
+# under a directory not already blocked. The splat crosses slashes.
+[[redirects]]
+  from = "/*.md"
+  to = "/404"
+  status = 404
+  force = true
+
+# The Capacitor build output -- a complete second copy of the app, which would
+# otherwise be crawlable at /www/index.html alongside the real one.
+[[redirects]]
+  from = "/www/*"
+  to = "/404"
+  status = 404
+  force = true
+
+# Tracked by accident (see the note above). Dependency source, and the iOS
+# project.
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/ios/*"
+  to = "/404"
+  status = 404
+  force = true
+
+# Build and project metadata: dependency versions, the Capacitor app id, and
+# this file, which maps the whole site including the corpus layout.
+[[redirects]]
+  from = "/package.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/capacitor.config.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404"
+  status = 404
+  force = true
+
+# Operator scripts that happen to live at the root, and one stray. Named
+# explicitly rather than globbed: a "/generate-*" pattern would overlap the
+# non-forced "/*.js" rewrite above, and being exact removes the question.
+[[redirects]]
+  from = "/generate-demo-audio.js"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/generate-bedtime-stories.js"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/diff.txt"
+  to = "/404"
+  status = 404
+  force = true
+
+# Git metadata.
+[[redirects]]
+  from = "/.gitignore"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/.gitattributes"
+  to = "/404"
+  status = 404
+  force = true
+
+# Pre-emptive: untracked today, so not deployed, but committing it would publish
+# it. gods-eye-view/ is an unrelated project that happens to sit in this repo.
+[[redirects]]
+  from = "/gods-eye-view/*"
+  to = "/404"
+  status = 404
+  force = true
+
+# NOT blocked, deliberately, because the app or the stores need them:
+#   index.html, assets/*, still-mobile/*, bell-native.js   -- the app itself
+#   practices/*, keep/*                                     -- public pages
+#   privacy.html, support.html, delete-account.html, reset.html -- store pages
+#   partners.html                                           -- gated in-browser
+#   robots.txt, sitemap.xml, icon-512.png
+#   OneSignalSDKWorker.js  -- nothing registers it now, but a stale service
+#                             worker in someone's browser may still fetch it
+#   partnerships.pdf       -- unreferenced by any page; left served in case the
+#                             URL is handed to partners directly. Block it if not.
+#   /.netlify/functions/*  -- the leading dot means /netlify/* cannot match it
+#   start/                 -- untracked today; meant to be public when it lands
 
 # Function SOURCE was publicly readable -- verified 2026-08-25, GET
 # /netlify/functions/office-corpus.js returned 200. publish = "." serves the

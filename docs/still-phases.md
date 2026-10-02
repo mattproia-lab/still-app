@@ -309,11 +309,34 @@ Untracked in the working tree and deliberately excluded from every commit:
 
 Still to decide for the landing page, from the original brief:
 
-- **Today's Lauds without duplicating texts.** The seam is `buildOffice()` plus
+- **Today's Office without duplicating texts.** The seam is `buildOffice()` plus
   `office-corpus.js`, which already reads `corpus/traditional/` through
   `included_files`. The recommendation was a shared endpoint (an
   `office-today.js`) rather than a second copy of the texts; **this was never
   formally proposed or approved.**
+
+  **Decided for the landing page (2026-10-02):**
+
+  - **The Hour follows the visitor's local clock, not always Lauds.** Use the
+    same rule the app uses — `setOfficeTime()` → `window._officeAutoHour`, with
+    the thresholds `<5` Vigils, `<17` Lauds, `<20` Vespers, else Compline. The
+    page shows whichever Hour the visitor is actually in. This is the rule the
+    onboarding door already reads for its edge grade and that `obHourNow()` uses
+    for the first session, so there are three callers and it should be shared,
+    not re-implemented a fourth time.
+  - **`◎ Hear [Hour]` sits at the very top of the Office section, above the
+    text** — matching what Phase 4b did in the app. The label names the Hour
+    being shown, so it changes with the clock.
+  - **An optional `?hour=` parameter overrides the clock**, accepting `lauds`,
+    `vespers`, `compline`, `vigils`, so a specific ad can open on a specific
+    Hour. Validate against that list and fall back to the clock on anything
+    else; don't trust the parameter into a lookup.
+
+  Two things to carry over from the app's own Office work, because the landing
+  page will hit both: Vigils has no traditional-rite audio (the corpus Matins is
+  ~26,000 spoken characters), and the rite should be forced to `modern` for a
+  first-time visitor, who has no traditional corpus cached and would otherwise
+  get a "still loading" office.
 - **Translation rights for public web display.** The traditional corpus is
   parsed from Divinum Officium and `assets/scripture/dr/` is public domain, but
   the modern-rite psalms and collects in `OFFICE_SEASONS` / `OFFICE_READINGS` /
