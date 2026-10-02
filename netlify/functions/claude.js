@@ -192,6 +192,24 @@ exports.handler = async function(event) {
     }
   }
 
+  /* The request as it goes upstream. `thinking` and `output_config` are
+     forwarded ONLY when the caller sends them, so every feature that does not
+     is byte-identical to what it was before this passthrough existed.
+
+     Deeper needs them: on claude-sonnet-5-5 thinking cannot simply be absent
+     -- omitting the parameter runs adaptive thinking, and thinking tokens are
+     billed against max_tokens, which at Deeper's 350 could consume the whole
+     budget and leave no reflection. index.html sends the thinking
+     configuration per DEEPER_MODE. */
+  const upstream = {
+    model: body.model || 'claude-sonnet-4-6',
+    max_tokens: body.max_tokens || 1024,
+    system: body.system || '',
+    messages: body.messages || [],
+  };
+  if (body.thinking) upstream.thinking = body.thinking;
+  if (body.output_config) upstream.output_config = body.output_config;
+
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -200,12 +218,7 @@ exports.handler = async function(event) {
         'x-api-key': key,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify({
-        model: body.model || 'claude-sonnet-4-6',
-        max_tokens: body.max_tokens || 1024,
-        system: body.system || '',
-        messages: body.messages || [],
-      })
+      body: JSON.stringify(upstream)
     });
 
     const data = await response.json();

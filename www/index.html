@@ -8565,6 +8565,135 @@ async function deeperRenderScripture(raw) {
   host.hidden = false;
 }
 
+/* ── The devotional reference ───────────────────────────────────────────
+   assets/devotions/reference.json carries the traditional wording of the
+   promises Deeper is most likely to paraphrase or to lend more authority than
+   they have. One entry, at most, is injected into the system prompt for a
+   question that matches it: two promise texts would crowd the theology out of
+   a 350-token answer.
+
+   How a text may be used is the entry's own business, not Deeper's. Each
+   carries a `wording` field and this module turns it into an instruction:
+     verbatim          quote exactly
+     standard_printed  quotable only with "in the commonly printed wording",
+                       because Still has not checked it against an edition --
+                       this is the Twelfth Promise's case, and the attribution
+                       is what makes quoting it honest
+     summary           never quoted; the substance only
+   Anything else, and any entry with no items (the Fifteen Promises of the
+   Rosary ship empty on purpose), gets the no-text rule: say what kind of
+   thing it is and invent nothing. */
+const Devotions = {
+  PATH: 'assets/devotions/reference.json',
+  _data: null,
+  _pend: null,
+
+  RULES: {
+    verbatim: 'Quote this traditional wording EXACTLY. Do not paraphrase the promise itself.',
+    standard_printed: 'You may quote this, but ONLY with the attribution "in the commonly printed wording". Still has not checked it against a particular edition, so you must never present it as a verbatim citation of a named source.',
+    summary: "This is Still's own faithful summary and NOT the text. Never present any part of it as a quotation; give the substance in your own words."
+  },
+  NO_TEXT_RULE: 'No wording is supplied for this and none may be invented or recalled. Say what kind of thing it is, that its origin is uncertain, and what the Church does and does not hold about it.',
+
+  AUTHORITY: {
+    doctrine: 'This is doctrine: taught by the Church, and it binds.',
+    discipline: 'This is Church discipline: it binds, and it can change. Particulars vary by territory, so refer specifics to the local conference.',
+    private_revelation: 'This is private revelation -- approved and worthy of belief, but NOT doctrine. It defines nothing and binds no one. Say so.',
+    private_revelation_disputed: 'This circulates as private revelation, but its provenance is questioned. Say so plainly and do not lend it the authority of doctrine.'
+  },
+
+  load() {
+    if (this._data) return Promise.resolve(this._data);
+    if (!this._pend) {
+      this._pend = fetch(this.PATH)
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then((j) => { this._data = j || { entries: [] }; return this._data; })
+        .catch(() => { this._data = { entries: [] }; return this._data; });
+    }
+    return this._pend;
+  },
+
+  /* At most one entry, ever. Score is how many of an entry's keywords the
+     question contains; the longest matched keyword breaks a tie, because
+     "nine first fridays" is a surer signal than "first friday". */
+  match(input, data) {
+    const q = ' ' + String(input || '').toLowerCase().replace(/\s+/g, ' ') + ' ';
+    let best = null;
+    (data.entries || []).forEach(function (e) {
+      let hits = 0, longest = 0;
+      (e.keywords || []).forEach(function (k) {
+        const key = String(k).toLowerCase();
+        if (q.indexOf(key) === -1) return;
+        hits++;
+        if (key.length > longest) longest = key.length;
+      });
+      if (!hits) return;
+      if (!best || hits > best.hits || (hits === best.hits && longest > best.longest)) {
+        best = { entry: e, hits: hits, longest: longest };
+      }
+    });
+    return best ? best.entry : null;
+  },
+
+  block(e) {
+    const items = (e.items || []).filter(Boolean);
+    const rule = this.RULES[e.wording];
+    const out = ['\n\n———\nA DEVOTIONAL TEXT BEARING ON WHAT THEY ASK — ' + (e.title || '') + ':'];
+    out.push(this.AUTHORITY[e.authority] || this.AUTHORITY.private_revelation);
+    if (items.length && rule) {
+      out.push(rule);
+      items.forEach(function (t, i) { out.push((items.length > 1 ? (i + 1) + '. ' : '') + t); });
+    } else {
+      out.push(this.NO_TEXT_RULE);
+    }
+    /* Requirements are always substance and never quotable, whatever the
+       entry's `wording` says about its items. */
+    const reqs = (e.requirements || []).filter(Boolean);
+    if (reqs.length) {
+      out.push('What the devotion requires -- substance only, never presented as a quotation:');
+      reqs.forEach(function (t, i) { out.push((i + 1) + '. ' + t); });
+      if (e.requirements_note) out.push(e.requirements_note);
+    }
+    if (e.caution) out.push('Caution: ' + e.caution);
+    if (e.notes) out.push('Note: ' + e.notes);
+    out.push('———');
+    return out.join('\n');
+  },
+
+  // '' whenever nothing matches, the file is unreachable, or it is malformed.
+  contextFor(input) {
+    return this.load()
+      .then((data) => { const e = this.match(input, data); return e ? this.block(e) : ''; })
+      .catch(() => '');
+  }
+};
+
+/* ── The model Deeper runs on ───────────────────────────────────────────
+   One word to change: DEEPER_MODE. 'legacy' is exactly what shipped before
+   this flag existed -- claude-sonnet-4-6 at 350 tokens with no thinking
+   parameter at all -- so flipping back is a one-word edit and nothing else.
+
+   claude-sonnet-5-5 will not let thinking simply be absent: omitting the
+   parameter runs ADAPTIVE thinking there, and thinking tokens are billed
+   against max_tokens. At the 350 this answer is tuned for, reasoning could
+   take the whole budget and leave a truncated reflection or none. So:
+
+     a  thinking off, through the one parameter that model accepts for it --
+        thinking.type 'between_tools'. {type:'disabled'} returns a 400 on
+        Sonnet 5.5, which is why it is not that. max_tokens stays 350.
+     b  thinking on at low effort, max_tokens raised to 1400 so roughly 350 is
+        still left for the reflection once the reasoning is paid for.
+
+   Both ride claude.js, which forwards `thinking` and `output_config` only when
+   a caller sends them. */
+const DEEPER_MODE = 'a';                 // 'a' | 'b' | 'legacy'
+const DEEPER_MODES = {
+  legacy: { model: 'claude-sonnet-4-6', max_tokens: 350 },
+  a:      { model: 'claude-sonnet-5-5', max_tokens: 350,  thinking: { type: 'between_tools' } },
+  b:      { model: 'claude-sonnet-5-5', max_tokens: 1400, thinking: { type: 'adaptive' }, output_config: { effort: 'low' } }
+};
+function deeperModelConfig() { return DEEPER_MODES[DEEPER_MODE] || DEEPER_MODES.legacy; }
+
 async function askDeeper(){
   trackEvent('deeper');
 
@@ -8579,10 +8708,20 @@ async function askDeeper(){
   document.getElementById('deeperErr').style.display='none';
   const token = await getValidToken();
   try{
+    const cfg = deeperModelConfig();
+    const devotion = await Devotions.contextFor(input);
+    const payload = {
+      feature:'deeper', access_token:token,
+      model: cfg.model, max_tokens: cfg.max_tokens,
+      system: DEEPER_SYSTEM + Memory.context(input,'deeper') + devotion,
+      messages:[{role:'user',content:input}]
+    };
+    if (cfg.thinking) payload.thinking = cfg.thinking;
+    if (cfg.output_config) payload.output_config = cfg.output_config;
     const res=await fetch(window.FN_BASE + '/.netlify/functions/claude',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({feature:'deeper',access_token:token,model:'claude-sonnet-4-6',max_tokens:350,system:DEEPER_SYSTEM + Memory.context(input,'deeper'),messages:[{role:'user',content:input}]})
+      body:JSON.stringify(payload)
     });
     const data=await res.json();
     if(res.status === 401 || data.error === 'Not authenticated.'){
@@ -8609,7 +8748,23 @@ async function askDeeper(){
       return;
     }
     if(data.error)throw new Error(data.error.message);
-    const full=data.content?.[0]?.text||'';
+    /* The first TEXT block, not the first block. Under DEEPER_MODE 'b' the
+       first block is a thinking block whose text is empty by default, so
+       content[0].text would paint a blank reflection. */
+    const full=(Array.isArray(data.content)?((data.content.find(b=>b&&b.type==='text')||{}).text):'')||'';
+    /* claude-sonnet-5-5 runs safety classifiers, and this voice is asked about
+       sin, despair and death. A decline arrives as HTTP 200 with a refusal
+       stop reason and no text -- met here the way the prompt's own ON LIMITS
+       rule meets a question it cannot answer, rather than as an error. */
+    if(data.stop_reason==='refusal'||!full.trim()){
+      document.getElementById('dResponseText').textContent =
+        'This question deserves more than I can offer here. Bring it to a confessor or spiritual director.';
+      document.getElementById('dSource').textContent = '';
+      document.getElementById('dInvitation').textContent = '';
+      deeperClearApparatus();
+      showDeeperState('deeperResponse');
+      return;
+    }
     const srcMatch=full.match(/^SOURCE:\s*(.+)$/m);
     const src=srcMatch?srcMatch[1].trim():'Catechism of the Catholic Church';
     const scriptureMatch=full.match(/^SCRIPTURE:\s*(.+)$/m);

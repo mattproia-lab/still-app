@@ -1,30 +1,38 @@
 {
   "_comment": "Devotional reference texts for Deeper. NOT YET WIRED IN -- see docs note below and the report to Matt. The point of this file is that Deeper stops paraphrasing promises it should be quoting, and stops presenting private revelation with the authority of doctrine.",
-
-  "_wiring_rule": "Match a Deeper question against `keywords`, then inject the matched entry into the system prompt with the instruction in `injection_instruction`. ONLY entries with \"wording\": \"verbatim\" or \"standard_printed\" AND \"verified\": true may be injected with an instruction to quote exactly. An entry whose `verified` is false must either be verified first or injected with `injection_instruction_unverified` instead, which tells Deeper to give the substance and NOT to present wording as a quotation.",
-
+  "_wiring_rule": "Match a Deeper question against `keywords`, then inject the matched entry into the system prompt with the instruction in `injection_instruction`. At most ONE entry per question. `wording` decides how the `items` may be used: \"verbatim\" quoted exactly, \"standard_printed\" quotable only with the attribution \"in the commonly printed wording\", \"summary\" never quoted. Any other value, and any entry with an empty `items`, means no wording is supplied and none may be invented. A `requirements` array is always substance, never quotable. One devotion gets one entry: a second entry for the same devotion can shadow the first on keyword score.",
   "injection_instruction": "Quote this traditional wording exactly; do not paraphrase the promise itself; note that it is private revelation, approved but not doctrine.",
-
   "injection_instruction_unverified": "Give the substance of this faithfully, and do NOT present any sentence as a quotation -- Still has not verified the wording against a published source. Name what kind of authority it carries. If the person asks for the exact words, say they should be read in a published edition rather than taken from you.",
-
   "_wording_values": {
     "verbatim": "checked word for word against the cited published source",
     "standard_printed": "the form that published English editions carry in common; not yet checked against a specific scan",
     "summary": "a faithful statement of the substance in our own words -- never to be quoted as the text itself"
   },
-
   "_authority_values": {
     "doctrine": "taught by the Church; binds the faithful",
     "discipline": "Church law or norm; binds, but can change",
     "private_revelation": "approved as worthy of belief; binds no one and defines nothing",
     "private_revelation_disputed": "circulates as private revelation, but its provenance is questioned -- must be presented with that caveat"
   },
-
   "entries": [
     {
       "id": "sacred-heart-twelve-promises",
       "title": "The Twelve Promises of the Sacred Heart",
-      "keywords": ["first friday", "first fridays", "nine fridays", "sacred heart", "twelve promises", "great promise", "margaret mary", "final penitence"],
+      "keywords": [
+        "first friday",
+        "first fridays",
+        "nine fridays",
+        "nine first fridays",
+        "sacred heart",
+        "twelve promises",
+        "great promise",
+        "margaret mary",
+        "final penitence",
+        "guaranteed",
+        "guarantee",
+        "promise of the sacred heart",
+        "how do i make the first fridays"
+      ],
       "authority": "private_revelation",
       "wording": "standard_printed",
       "verified": false,
@@ -44,27 +52,25 @@
         "Those who shall promote this devotion shall have their names written in My Heart, never to be blotted out.",
         "I promise thee, in the excessive mercy of My Heart, that its all-powerful love will grant to all those who shall receive Communion on the first Friday of nine consecutive months the grace of final penitence; they shall not die in My displeasure, nor without receiving their Sacraments, My divine Heart becoming their assured refuge at that last hour."
       ],
-      "notes": "The twelfth is the Great Promise, and the wording that matters is 'the grace of final penitence'. FINAL PENITENCE IS A GRACE. It is not 'final perseverance', which is a different theological term, and it is emphatically not 'final impenitence', which is the sin against the Holy Spirit. Deeper's system prompt uses 'final impenitence' throughout for the sin; the two must never be swapped."
-    },
-    {
-      "id": "nine-first-fridays",
-      "title": "The Nine First Fridays -- what the devotion requires",
-      "keywords": ["first friday", "first fridays", "nine fridays", "nine first fridays", "how do i make the first fridays"],
-      "authority": "private_revelation",
-      "wording": "summary",
-      "verified": true,
-      "source": "The practice as it follows from the Twelfth Promise above; the requirement itself is not in dispute.",
-      "caution": "Private revelation. A missed month means beginning the nine again; nothing in the devotion attaches a penalty to that.",
-      "items": [
+      "notes": "The twelfth is the Great Promise, and the wording that matters is 'the grace of final penitence'. FINAL PENITENCE IS A GRACE. It is not 'final perseverance', which is a different theological term, and it is emphatically not 'final impenitence', which is the sin against the Holy Spirit. Deeper's system prompt uses 'final impenitence' throughout for the sin; the two must never be swapped.",
+      "requirements": [
         "Receive Holy Communion on the first Friday of nine consecutive months.",
         "Communion must be received worthily -- in a state of grace, which ordinarily means sacramental confession where there is grave sin.",
         "The nine months must be consecutive and unbroken."
-      ]
+      ],
+      "requirements_note": "Substance, not a quotation: the practice as it follows from the Twelfth Promise. A missed month means beginning the nine again; nothing in the devotion attaches a penalty to that."
     },
     {
       "id": "five-first-saturdays",
       "title": "The Five First Saturdays -- what the devotion requires",
-      "keywords": ["first saturday", "first saturdays", "five first saturdays", "immaculate heart", "fatima", "reparation"],
+      "keywords": [
+        "first saturday",
+        "first saturdays",
+        "five first saturdays",
+        "immaculate heart",
+        "fatima",
+        "reparation"
+      ],
       "authority": "private_revelation",
       "wording": "summary",
       "verified": true,
@@ -81,7 +87,13 @@
     {
       "id": "rosary-fifteen-promises",
       "title": "The Fifteen Promises of the Rosary",
-      "keywords": ["fifteen promises", "15 promises", "promises of the rosary", "alan de la roche", "st dominic rosary"],
+      "keywords": [
+        "fifteen promises",
+        "15 promises",
+        "promises of the rosary",
+        "alan de la roche",
+        "st dominic rosary"
+      ],
       "authority": "private_revelation_disputed",
       "wording": "[NEEDED: source]",
       "verified": false,
@@ -93,7 +105,13 @@
     {
       "id": "brown-scapular",
       "title": "The Brown Scapular promise",
-      "keywords": ["brown scapular", "scapular", "simon stock", "carmelite scapular", "sabbatine"],
+      "keywords": [
+        "brown scapular",
+        "scapular",
+        "simon stock",
+        "carmelite scapular",
+        "sabbatine"
+      ],
       "authority": "private_revelation_disputed",
       "wording": "standard_printed",
       "verified": false,
@@ -107,7 +125,15 @@
     {
       "id": "divine-mercy",
       "title": "The Divine Mercy promises",
-      "keywords": ["divine mercy", "faustina", "chaplet", "mercy sunday", "feast of mercy", "hour of mercy", "three o'clock"],
+      "keywords": [
+        "divine mercy",
+        "faustina",
+        "chaplet",
+        "mercy sunday",
+        "feast of mercy",
+        "hour of mercy",
+        "three o'clock"
+      ],
       "authority": "private_revelation",
       "wording": "summary",
       "verified": false,
@@ -123,7 +149,13 @@
     {
       "id": "plenary-indulgence-conditions",
       "title": "The usual conditions for a plenary indulgence",
-      "keywords": ["plenary indulgence", "indulgence", "indulgences", "temporal punishment", "enchiridion"],
+      "keywords": [
+        "plenary indulgence",
+        "indulgence",
+        "indulgences",
+        "temporal punishment",
+        "enchiridion"
+      ],
       "authority": "discipline",
       "wording": "summary",
       "verified": true,
@@ -141,7 +173,15 @@
     {
       "id": "precepts-of-the-church",
       "title": "The Precepts of the Church",
-      "keywords": ["precepts of the church", "precepts", "obligation", "holy days of obligation", "easter duty", "sunday obligation", "fasting and abstinence"],
+      "keywords": [
+        "precepts of the church",
+        "precepts",
+        "obligation",
+        "holy days of obligation",
+        "easter duty",
+        "sunday obligation",
+        "fasting and abstinence"
+      ],
       "authority": "discipline",
       "wording": "summary",
       "verified": true,
