@@ -17066,31 +17066,37 @@ function buildOffice(hour, rite, date) {
     add('versicle', GLORIA_SEEN, GLORIA_HEARD);
     divider();
 
-    /* The hymn stanza that stood here is gone. It began "O Brightness of the
-       Father's face" and read "Immortal Light of Light begone" -- which means
-       "be gone" where it should confess Light from Light, and which cannot be
-       repaired by one word because the verse rhymes ABAB on begone/dawn.
+    /* "Nocte surgentes" -- THE ENGLISH HYMNAL (1906) No. 165, "Office Hymn.
+       Sundays and week-days. M." [Mattins], ascribed to St Gregory the Great,
+       6th cent., translated by P. D. -- Percy Dearmer. EH itself pairs it with
+       No. 51: immediately after this hymn it prints "The evening Office Hymn
+       for Sunday ... is: 51 O blest Creator of the light", which is why 165 is
+       the right hymn for Vigils and 51 for Vespers.
+       Source for every Office hymn here: THE ENGLISH HYMNAL (1906), cited by
+       its hymn number. Collated across two public-domain copies on the
+       Internet Archive -- englishhymnal00unse and theenglishhymnal00milfuoft
+       (the second is missing 79 pages) -- and the EH wording is used AS
+       PRINTED, because EH sometimes altered the older translations it carried.
+       Each hymn gives its first two stanzas; the number points at the rest.
 
-       It had no source. Nowhere in this repo or the vault, and no hymn begins
-       that way in Hymnary; the phrase appears only as the SECOND line of
-       "O Savior of our fallen race" by Gilbert E. Doan, a twentieth-century
-       translation still in copyright. The stanza recombined two phrases from
-       it and added two of its own, so it reads as composed for the app rather
-       than transcribed from a hymnal.
+       One punctuation judgement not settled by collation: copy 1 OCRs a full
+       stop after "over" where the sentence plainly continues, and the page is
+       among copy 2's missing 79. A comma is used. "send- ing" is a line-break
+       hyphen in the OCR, closed up here.
 
-       CLAUDE.md: never invent quotes or attributions. So it is removed rather
-       than left standing while a replacement is found -- a verified
-       public-domain Vigils hymn goes here, most likely Gregory the Great's
-       "Nocte surgentes" in Dearmer's 1906 English, once it has been checked
-       against a scan. The section keeps its shape and its spoken form so that
-       dropping a sourced stanza in is one edit. [NEEDED: source] */
+       The stanza this replaces had no source at all; see git history. */
+    const VIGILS_HYMN_SEEN = `Father, we praise thee, now the night is over,\nActive and watchful, stand we all before thee;\nSinging we offer prayer and meditation:\nThus we adore thee.\n\nMonarch of all things, fit us for thy mansions;\nBanish our weakness, health and wholeness sending;\nBring us to heaven, where thy Saints united\nJoy without ending.`;
+    const VIGILS_HYMN_SUNG = `Father, we praise thee, now the night is over,\nActive and watchful, stand we all before thee;\nSinging we offer prayer and meditation:\nThus we adore thee.\nMonarch of all things, fit us for thy mansions;\nBanish our weakness, health and wholeness sending;\nBring us to heaven, where thy Saints united\nJoy without ending.`;
     add('eyebrow', 'Hymn');
-    add('text', sData.vigils, true);
+    add('text', VIGILS_HYMN_SEEN, officeHymnSpeak(VIGILS_HYMN_SUNG));
     divider();
 
     todayPsalms.forEach((ps, i) => {
       add('eyebrow', `Psalm ${i + 1} · ` + ps.ref, ps.ref);
-      if (i === 0) add('versicle', sData.vigils);
+      /* The season's line is this psalm's antiphon, and the only place it
+         appears now: it used to sit in the hymn section as well, so it was on
+         screen twice, and the copy here carried no spoken form at all. */
+      if (i === 0) add('versicle', sData.vigils, true);
       add('text', ps.text, officePsalmSpeak(ps));
     });
 
@@ -17129,6 +17135,29 @@ function buildOffice(hour, rite, date) {
     add('eyebrow', 'Opening');
     add('versicle', `O God, come to my assistance.\n O Lord, make haste to help me.\n${GLORIA_SEEN}`,
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
+    divider();
+
+    /* "Splendor paternae gloriae" -- THE ENGLISH HYMNAL (1906) No. 52, "Office
+       Hymn ... Monday Morning", St Ambrose, 340-97, translated by T. H. (EH
+       prints the translator's initials only, and uses the same pair at No. 50).
+       Ambrose's own morning hymn, and the Lauds hymn proper: EH assigns it to
+       Monday MORNING, and its imagery is daybreak throughout -- the true Sun,
+       the Day that illumines all days. Chosen over EH 254 ("Now that the
+       daylight fills the sky", Tr. J. M. Neale), which is beautiful but is
+       EH's hymn for PRIME, not for Lauds.
+       Source for every Office hymn here: THE ENGLISH HYMNAL (1906), cited by
+       its hymn number. Collated across two public-domain copies on the
+       Internet Archive -- englishhymnal00unse and theenglishhymnal00milfuoft
+       (the second is missing 79 pages) -- and the EH wording is used AS
+       PRINTED, because EH sometimes altered the older translations it carried.
+       Each hymn gives its first two stanzas; the number points at the rest.
+
+       Collated clean across both copies, which settles two OCR slips in copy 1:
+       "gloiy" is glory, and "L'pon" is Upon. */
+    const LAUDS_HYMN_SEEN = `O Splendour of God's glory bright,\nO thou that bringest light from light,\nO Light of light, light's living spring,\nO Day, all days illumining,\n\nO thou true Sun, on us thy glance\nLet fall in royal radiance,\nThe Spirit's sanctifying beam\nUpon our earthly senses stream.`;
+    const LAUDS_HYMN_SUNG = `O Splendour of God's glory bright,\nO thou that bringest light from light,\nO Light of light, light's living spring,\nO Day, all days illumining,\nO thou true Sun, on us thy glance\nLet fall in royal radiance,\nThe Spirit's sanctifying beam\nUpon our earthly senses stream.`;
+    add('eyebrow', 'Hymn');
+    add('text', LAUDS_HYMN_SEEN, officeHymnSpeak(LAUDS_HYMN_SUNG));
     divider();
 
     add('eyebrow', 'Antiphon');
@@ -17175,18 +17204,23 @@ function buildOffice(hour, rite, date) {
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
     divider();
 
-    /* "Lucis Creator optime", the Sunday Vespers hymn, attributed to Gregory I
-       (540-604); English by John Mason Neale, 1851. Neale died in 1866, and
-       Hymnary records this translation as public domain; it appears in thirteen
-       hymnals, meter LM, to BROMLEY. Caswall's 1849 translation of the same
-       Latin is a DIFFERENT text -- it runs "Who dost the dawn from darkness
-       bring" where Neale has "Who mak'st the day with radiance bright" -- so
-       the two must not be conflated or mixed.
+    /* "Lucis Creator optime" -- THE ENGLISH HYMNAL (1906) No. 51, "Office
+       Hymn. Sunday, E." [Evensong], 6th cent., translated by J. M. Neale.
+       Source for every Office hymn here: THE ENGLISH HYMNAL (1906), cited by
+       its hymn number. Collated across two public-domain copies on the
+       Internet Archive -- englishhymnal00unse and theenglishhymnal00milfuoft
+       (the second is missing 79 pages) -- and the EH wording is used AS
+       PRINTED, because EH sometimes altered the older translations it carried.
+       Each hymn gives its first two stanzas; the number points at the rest.
 
-       Verified: the source, the translator, the public-domain status and the
-       first two lines. NOT yet collated line by line against a scan, so lines
-       three to eight are this file's transcription and nothing more. Worth a
-       pass against a printed hymnal; the attribution itself is settled. */
+       COLLATED: these two stanzas now match EH 51 word for word in both
+       copies, which is what this file already carried -- no wording changed.
+
+       Caswall's 1849 translation of the same Latin is a DIFFERENT text: it
+       runs "Who dost the dawn from darkness bring" where Neale has "Who
+       mak'st the day with radiance bright". Hymnary's main entry for this
+       first line is Caswall's, so looking the hymn up by its opening line
+       alone leads to the wrong translator. The two must never be mixed. */
     add('eyebrow', 'Evening Hymn', 'Evening Hymn.');
     /* Two spellings, as with the doxology: the screen breaks between the
        stanzas, the sung form runs the lines on. */
@@ -17263,6 +17297,24 @@ function buildOffice(hour, rite, date) {
     add('eyebrow', 'Opening');
     add('versicle', `O God, come to my assistance.\n O Lord, make haste to help me.\n${GLORIA_SEEN}`,
                     `O God, come to my assistance.\nO Lord, make haste to help me.\n${GLORIA_HEARD}`);
+    divider();
+
+    /* "Te lucis ante terminum" -- THE ENGLISH HYMNAL (1906) No. 264, "Office
+       Hymn. Compline. Before 8th cent.", translated by J. M. Neale. EH assigns
+       it to Compline itself, so the placement is EH's and not an inference.
+       Source for every Office hymn here: THE ENGLISH HYMNAL (1906), cited by
+       its hymn number. Collated across two public-domain copies on the
+       Internet Archive -- englishhymnal00unse and theenglishhymnal00milfuoft
+       (the second is missing 79 pages) -- and the EH wording is used AS
+       PRINTED, because EH sometimes altered the older translations it carried.
+       Each hymn gives its first two stanzas; the number points at the rest.
+
+       Collated across both copies, which settles copy 1's "Ave pray": copy 2
+       reads "we pray", and that is what is used. */
+    const COMPLINE_HYMN_SEEN = `Before the ending of the day,\nCreator of the world, we pray\nThat with thy wonted favour thou\nWouldst be our Guard and Keeper now.\n\nFrom all ill dreams defend our eyes,\nFrom nightly fears and fantasies;\nTread under foot our ghostly foe,\nThat no pollution we may know.`;
+    const COMPLINE_HYMN_SUNG = `Before the ending of the day,\nCreator of the world, we pray\nThat with thy wonted favour thou\nWouldst be our Guard and Keeper now.\nFrom all ill dreams defend our eyes,\nFrom nightly fears and fantasies;\nTread under foot our ghostly foe,\nThat no pollution we may know.`;
+    add('eyebrow', 'Hymn');
+    add('text', COMPLINE_HYMN_SEEN, officeHymnSpeak(COMPLINE_HYMN_SUNG));
     divider();
 
     add('eyebrow', 'Antiphon');
